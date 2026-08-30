@@ -1,39 +1,55 @@
-## Description: <br>
-🎣 AI钓鱼助手（钓点分析·鱼情分析·钓点分享）| Spot Analysis · Fish Activity · Share Spots — 拍水面分析鱼情，结合天气气压推荐鱼种·钓法·饵料。支持路亚、台钓、野钓、海钓，自动记录渔获和出钓报告，助你告别打龟。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BigFish is a fishing assistant that analyzes fishing spot photos, weather, pressure, and local knowledge to recommend target fish, techniques, bait, timing, and trip reports.
 
-## Publisher: <br>
-[kobenfang](https://clawhub.ai/user/kobenfang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kobenfang](https://clawhub.ai/user/kobenfang)
 
-## Use Case: <br>
-External fishing users use BigFish to analyze fishing spot photos, weather context, water conditions, and local fishing knowledge to receive target species, method, bait, timing, and spot recommendations. The skill can also help record catches and produce fishing trip summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fishing photos, city or spot information, weather context, and catch logs can reveal sensitive personal locations. <br>
-Mitigation: Prefer coarse locations for sensitive fishing spots and avoid recording private locations unless the agent's storage and sharing behavior is understood. <br>
+## Use Case:
 
+External fishing enthusiasts use this skill to evaluate potential fishing spots, choose target species and tackle, plan outing timing, and keep structured fishing logs. It supports freshwater, lure, shore, and sea-fishing scenarios using local knowledge files plus user-provided photos, location, weather, and catch history.
 
-## Reference(s): <br>
-- [BigFish ClawHub skill page](https://clawhub.ai/kobenfang/skills/bigfish) <br>
-- [kobenfang publisher profile](https://clawhub.ai/user/kobenfang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-formatted recommendations, ratings, fishing logs, and trip summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use user-provided fishing photos, city or spot context, weather context, and local YAML fishing knowledge files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Fishing photos, city or spot details, and catch history can reveal sensitive location or personal activity patterns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask users to share only the location precision needed for the recommendation and avoid retaining or repeating private spot details unless the user explicitly wants them in a trip log.
+
+Risk: Spot and fish-activity recommendations are probabilistic and can be wrong when photos, weather, or local conditions are incomplete.
+
+Mitigation: Present recommendations as evidence-based estimates and encourage users to verify conditions, access rules, and safety constraints before fishing.
+
+## Reference(s):
+
+- [BigFish ClawHub skill page](https://clawhub.ai/kobenfang/skills/bigfish)
+- [Publisher profile](https://clawhub.ai/user/kobenfang)
+- [Related weather skill](/skills/weather)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with structured recommendations and trip-report summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include species likelihood scores, timing ratings, bait and tackle suggestions, and structured fishing log entries.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

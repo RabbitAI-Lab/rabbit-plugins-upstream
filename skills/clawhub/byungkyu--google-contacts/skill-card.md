@@ -1,45 +1,65 @@
-## Description: <br>
-Google Contacts API integration with managed OAuth for managing contacts, contact groups, and address book searches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Contacts API integration with managed OAuth for managing contacts, contact groups, and address book search.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to read, create, update, and delete Google Contacts and contact groups through Maton's managed OAuth proxy. It is suited for address book lookup, contact maintenance, group management, and Google People API troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete contacts and contact groups in a connected Google account. <br>
-Mitigation: Confirm the active Google connection, target resource, and intended effect before any write operation. <br>
-Risk: Deleting a contact group with deleteContacts=true can also delete member contacts. <br>
-Mitigation: Use deleteContacts=false unless the user explicitly approves deleting both the group and its member contacts. <br>
-Risk: The integration depends on Maton as the OAuth proxy for Google Contacts. <br>
-Mitigation: Install and use the skill only when the user trusts Maton to broker the Google Contacts connection. <br>
+## Use Case:
 
+External users and developers use this skill to manage Google Contacts through Maton OAuth, including listing, creating, updating, deleting, and searching contacts and contact groups.
 
-## Reference(s): <br>
-- [Google People API Overview](https://developers.google.com/people/api/rest) <br>
-- [People Resource](https://developers.google.com/people/api/rest/v1/people) <br>
-- [Contact Groups Resource](https://developers.google.com/people/api/rest/v1/contactGroups) <br>
-- [Person Fields Reference](https://developers.google.com/people/api/rest/v1/people#Person) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with API endpoints, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can read and modify Google Contacts data through Maton-mediated access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, choose the narrowest available account and scopes, default to read and list calls, and confirm all write or delete operations with the user.
+
+Risk: Deleting a contact group with deleteContacts=true can delete the contacts in the group.
+
+Mitigation: Confirm the specific group, intended effect, and deleteContacts value before running the delete operation.
+
+Risk: Long-lived Maton API keys can be exposed through command lines, logs, shell history, or child processes when OAuth is not used.
+
+Mitigation: Use OAuth when possible; if raw HTTP is necessary, feed authorization headers through stdin, never print the key, and send it only to api.maton.ai.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-contacts)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google People API Overview](https://developers.google.com/people/api/rest)
+- [People Resource](https://developers.google.com/people/api/rest/v1/people)
+- [Contact Groups Resource](https://developers.google.com/people/api/rest/v1/contactGroups)
+- [Person Fields Reference](https://developers.google.com/people/api/rest/v1/people#Person)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Google Contacts connection.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

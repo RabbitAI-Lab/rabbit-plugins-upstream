@@ -1,43 +1,61 @@
-## Description: <br>
-车辆尽调报告 Pro（标准版）通过 VIN、车辆类型和事故/非法改装情况发起一次付费查询，生成包含车辆配置、登记信息、过户流转和车检估算的购前快检报告。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+一次付费通过 VIN 生成车辆配置档案、登记五项、过户流转和车检估算摘要的购前车辆尽调报告，并在付款前要求用户确认车辆类型与事故/非法改装情况。
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-Consumers, vehicle buyers, and finance or insurance reviewers use this skill to check a specific VIN before a vehicle transaction. It collects only the VIN, vehicle type, and accident/modification status needed for the paid report, then renders a structured Markdown summary for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends a VIN, vehicle type, and accident/modification status to a third-party vehicle-data provider and uses Alipay for payment. <br>
-Mitigation: Before installation and use, confirm the user is comfortable with that data flow; the skill limits collection to the stated fields, avoids extra personal data, and instructs agents not to store query data locally. <br>
-Risk: A paid query could be started with missing or invalid vehicle inputs. <br>
-Mitigation: Require VIN validation, explicit vehicle type, and explicit accident/modification status before any payment or provider request. <br>
-Risk: Vehicle report data may be incomplete, delayed, or unsuitable as the only basis for a purchase, lending, or insurance decision. <br>
-Mitigation: Present results as reference information, mask returned plate numbers, avoid deterministic buy/sell advice, and direct users to official vehicle registration and manufacturer sources for confirmation. <br>
+## Use Case:
 
+External users and agents use this skill to run paid pre-purchase vehicle due diligence from a VIN when they need configuration, registration, ownership-transfer history, and inspection-estimate information in one Markdown report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-vehicle-dd-pro-a2a) <br>
-- [Juhe A2A vehicle query endpoint](https://apis.juhe.cn/a2a/query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with tables, user-facing collection prompts, and HTTPS JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports must mask plate numbers, avoid raw JSON in user-facing output, and include reference-only caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The workflow shares VIN and vehicle-query details with Juhe and uses an Alipay payment flow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user consent, payment amount, vehicle type, and accident/illegal-modification status before sending the paid query.
+
+Risk: Vehicle reports may be mistaken for complete accident, theft, lien, valuation, or purchase-decision advice.
+
+Mitigation: Present the report as limited due-diligence information, avoid buy/sell recommendations, and keep disclaimers visible.
+
+Risk: Returned plate data or query details could expose sensitive vehicle information if displayed or logged verbatim.
+
+Mitigation: Mask license plates in all outputs and avoid storing full VIN, vehicle type, accident status, or raw query text in logs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-vehicle-dd-pro-a2a)
+- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query)
+- [README.md](artifact/README.md)
+- [PRODUCT.md](artifact/PRODUCT.md)
+- [OUT_FORMAT.md](artifact/OUT_FORMAT.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, API Calls, Guidance]
+
+**Output Format:** [Markdown report with structured tables and concise guidance after a paid API workflow]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user consent, valid VIN, vehicle type, accident/illegal-modification status, Alipay payment confirmation, and masked license-plate display.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

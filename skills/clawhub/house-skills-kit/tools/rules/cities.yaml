@@ -1,0 +1,225 @@
+# house-skills-kit 工具库 · 城市规则库（数据外置：改政策改这里，不改代码）
+# 铁律：每个数字标注 as_of（数据时点）；正式使用前须逐城核对当地官方最新公告
+rules_version: "2026.08.30-r1"
+as_of_note: "本文件所有档位为演示档位，正式使用前须逐城核对官方最新公告"
+
+default:
+  loan:
+    _as_of: "2026.08 通用档"
+    commercial_rate: 0.031        # 商贷首套参考利率（演示值）
+    provident_rate: 0.025         # 公积金 5 年以上首套
+    max_years_commercial: 30
+    max_years_provident: 30
+    downpay_min_first: 0.15       # 首套最低首付成数
+    downpay_min_second: 0.25
+  tax:
+    _as_of: "2026.01.01 增值税法施行（财政部 税务总局公告2025年第17号）；契税按2024年16号公告140㎡线"
+    deed_tax:                     # 契税（2024.12.01起全国140㎡线，首二套≤140均1%）
+      first_140le: 0.01           # 首套 ≤140㎡
+      first_140gt: 0.015          # 首套 >140㎡
+      second_140le: 0.01          # 二套 ≤140㎡
+      second_140gt: 0.02          # 二套 >140㎡
+      third_plus: 0.03            # 三套及以上
+    vat_full2: 0.0                # 满2年（含）免征：全国统一含北上广深
+    vat_rate: 0.03                # 未满2年：3%征收率（2025年17号公告，自5%下调）
+    vat_price_in: 1               # 1=含税价换算：税=价÷(1+3%)×3%
+    vat_extra_rate: 0.12          # 附加=增值税额×12%（城建7%+教育3%+地方2%，市区口径演示）
+    indiv_tax:
+      full5_unique: 0.0           # 满五唯一免
+      normal: 0.01                # 核定1%（或差额20%，提供原值时取低）
+    stamp_tax: 0.0                # 印花税率（住宅免征=0；非住宅 0.0005 双方各半）
+    fees:                         # 交易费用（真实交易不止税；均可--set覆盖）
+      agent_rate: 0.02            # 中介费率 2%——老何08-30批复：大多数城市1.5%-2%区间，统一取2%；
+                                  # 城市间差异用城市段覆盖或--set agent_rate=0.015即时改
+      agent_split: both           # 中介费承担：buyer/seller/both（both=双方各半，演示默认）
+      transaction_fee: 6          # 交易手续费 元/㎡（住宅，买卖双方各半）
+      registration: 80            # 不动产登记费 元/套（买方，住宅80）
+      mortgage_reg: 80            # 抵押登记费 元/套（买方贷款时）
+      appraisal_rate: 0.001       # 贷款评估费率（贷款额×0.1%演示）
+      guarantee_rate: 0.006       # 赎楼/担保费率（卖方未清余额×0.6%演示，各城差异大）
+      land_gain_rate: 0.02        # 土地收益金（房改房/经适房：成交价×2%，卖方）
+  newhome:                       # 一手房（新房）交易/交房费用（⑦-6）
+    _as_of: "2026.08 演示档：维修基金/物业费各城差异大，正式用前逐城核对"
+    repair_fund_mode: per_area    # 维修基金口径：per_area=按类型表元/㎡；per_price=总价百分比
+    repair_fund_table:            # 首期维修资金 元/㎡（按物业类型；城市段可整表覆盖）
+      walkup: 90                  # 多层/不带电梯（≤6层无电梯，演示档）
+      elevator: 110               # 高层/带电梯（≥7层，演示档）
+      nonresidential: 130         # 非住宅（小区内商铺/车位等，演示档）
+    repair_fund_per_area: 110     # 兼容旧参数：类型表缺档时的兜底
+    repair_fund_per_price: 0.0    # 维修基金 占总价比（per_price 模式用）
+    property_fee: 2.5             # 物业费 元/㎡/月（演示：普通住宅1.5-3.5）
+    prepaid_months: 12            # 交房预收物业费月数（常见3-12，演示取整年）
+    gas_install: 2800             # 燃气初装/开户费（元；已含在房价的城市段改0）
+    registration: 80              # 不动产登记费 元/套（住宅80，非住宅550；含首本不动产权证书）
+    cert_fee_extra: 10            # 证书工本费：首本免费，加发每本10元（共有/车位加证时）
+    agent_rate: 0                 # 一手房通常无中介费（渠道佣金开发商出）；渠道单可--set
+    transfer_tax_note: "一手房无增值税/个税（卖方是开发商，税费在开发商环节）"
+  discount:
+    _as_of: "2026.08 通用演示"
+    payment_discounts:            # 语义：优惠点数（0.02=一次性付款让2个点）
+      one_time: 0.02
+      mortgage: 0.0
+    development_discounts:       # 语义：支付因子（0.98=98折）演示
+      open_discount: 0.98
+      fullpay_quick: 0.99
+    order_note: "先楼层与付款等价格型修正，后营销型折扣依次相乘（折上折）"
+
+cities:
+  北京:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+    tax:
+      vat_extra: 0.006
+      _note: "增值税附加演示口径"
+    districts:
+      通州:
+        _note: "副中心政策演示样例（须核对）"
+  上海:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  深圳:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  广州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  昆明:
+    _as_of: "2026.08 演示档；维修资金档=老何08-30口径"
+    loan:
+      commercial_rate: 0.031
+    newhome:
+      _as_of: "昆明维修资金：高层90元/㎡（老何08-30口径）；其他类型为演示值待核对"
+      repair_fund_table:
+        walkup: 90                  # 多层/不带电梯（演示值，昆明官方档待核对）
+        elevator: 90                # 高层/带电梯=90元/㎡（老何08-30口径）
+        nonresidential: 130         # 非住宅（演示值待核对）
+  成都:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  武汉:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  杭州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  南京:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  重庆:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  西安:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  郑州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  长沙:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  合肥:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  青岛:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  宁波:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  福州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  厦门:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  天津:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  苏州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  无锡:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  佛山:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+    newhome:
+      _as_of: "南海区2026-09-01起维修资金新标准（佛山全市其他区可能不同）"
+      repair_fund_table:
+        walkup: 85                  # 住宅不带电梯 85元/㎡（南海区通告，2026-09-01施行）
+        elevator: 91                # 住宅带电梯 91元/㎡（南海区通告，2026-09-01施行）
+        nonresidential: 107         # 非住宅 107元/㎡（南海区通告，2026-09-01施行）
+  东莞:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  昆山:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  珠海:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.030
+  南宁:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  贵阳:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  太原:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  南昌:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  石家庄:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  长春:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  哈尔滨:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  大连:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  兰州:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031
+  乌鲁木齐:
+    _as_of: "2026.08 演示档"
+    loan:
+      commercial_rate: 0.031

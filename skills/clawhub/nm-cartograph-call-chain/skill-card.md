@@ -1,41 +1,53 @@
-## Description: <br>
-Traces execution paths through the code graph with criticality scoring and Mermaid charts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Traces execution paths through the code graph with criticality scoring and Mermaid charts.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to trace how functions and entry points propagate through a local codebase, inspect critical call paths, and produce call-chain summaries and Mermaid diagrams. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local codebase files to trace function calls and may expose sensitive implementation details in summaries or diagrams. <br>
-Mitigation: Use it only on repositories the agent is authorized to inspect, and review generated call-chain output before sharing it. <br>
-Risk: When gauntlet integration is available, the skill runs the local graph_query.py helper from the user's Claude plugins directory. <br>
-Mitigation: Keep the gauntlet plugin trusted and up to date, and fall back to static search when the local graph helper is unavailable or untrusted. <br>
+## Use Case:
 
+Developers and engineers use this skill to trace how functions and entry points propagate through a codebase, inspect call paths, and summarize criticality factors such as file spread, security sensitivity, external calls, test gaps, and depth.
 
-## Reference(s): <br>
-- [Cartograph homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-cartograph-call-chain) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown, code] <br>
-**Output Format:** [Markdown with inline shell commands, indented call trees, criticality breakdowns, and Mermaid flowcharts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read local codebase files and may invoke a local graph_query.py helper when the gauntlet plugin is installed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill may run repository search commands or a local graph query helper to inspect call chains.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for agents that should inspect the local codebase, and review command output before acting on criticality assessments.
+
+Risk: Missing gauntlet graph data can limit flow tracing to static text-search results.
+
+Mitigation: Use the documented fallback search path when graph data is unavailable, or build the graph before relying on graph-specific analysis.
+
+## Reference(s):
+
+- [Cartograph plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/cartograph)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with shell command snippets, indented call trees, Mermaid flowcharts, and criticality summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May rely on a local gauntlet graph query helper; falls back to text search when graph data is unavailable.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

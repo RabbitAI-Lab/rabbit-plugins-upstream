@@ -1,49 +1,62 @@
-## Description: <br>
-Optimizes SQL query performance for KaiwuDB time-series and relational engines using EXPLAIN analysis, query rewrites, pagination guidance, cross-model query review, and conditional configuration tuning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Optimizes SQL query performance for KaiwuDB time-series and relational engines by analyzing EXPLAIN output, anti-patterns, pagination, cross-model queries, and selected configuration tuning cases.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers, database administrators, and support engineers use this skill to diagnose slow KaiwuDB queries, identify time-series and relational anti-patterns, propose safer query rewrites, and review narrowly scoped storage configuration changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may propose cluster-wide database setting changes or schema-impacting examples. <br>
-Mitigation: Require database administrator review before applying SET CLUSTER SETTING, CREATE INDEX, DROP INDEX, or application-code changes, especially in production. <br>
-Risk: Configuration changes can affect memory, disk, CPU, write throughput, or query latency. <br>
-Mitigation: Confirm current resource availability and current setting values before suggesting changes, and validate accepted changes with targeted SHOW CLUSTER SETTING and EXPLAIN analysis. <br>
-Risk: Query rewrite advice can be incorrect if the table engine is misidentified. <br>
-Mitigation: Verify whether the query targets a time-series, relational, or mixed workload before recommending indexes, time filters, pagination changes, or cross-model rewrites. <br>
+## Use Case:
 
+Developers and database engineers use this skill to review slow KWDB SQL and EXPLAIN output, distinguish time-series, relational, or mixed workloads, and produce query rewrites with validation steps. It can also frame limited configuration tuning proposals after resource preconditions are confirmed.
 
-## Reference(s): <br>
-- [KWDB Performance Review on ClawHub](https://clawhub.ai/kwdb/skills/kwdb-performance-review) <br>
-- [KWDB Performance Optimization: Core Rules](artifact/references/key-rules.md) <br>
-- [EXPLAIN Output Analysis](artifact/references/query-analysis.md) <br>
-- [Time-Series Query Optimization](artifact/references/timeseries-optimization.md) <br>
-- [Pagination Optimization for Time-Series](artifact/references/pagination-optimization.md) <br>
-- [Relational Query Optimization](artifact/references/relational-optimization.md) <br>
-- [Cross-Model Query Optimization](artifact/references/cross-model-optimization.md) <br>
-- [Storage Configuration Optimization](artifact/references/config-optimization.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with SQL code blocks and review tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include EXPLAIN validation commands and SET CLUSTER SETTING statements for administrator review; it should not execute database changes automatically.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: ClawHub release metadata; skill frontmatter reports 0.2.0) <br>
+Risk: The skill may produce administrator-level configuration or DDL proposals such as SET CLUSTER SETTING, CREATE INDEX, or DROP INDEX.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat these outputs as review proposals only; a qualified database operator should assess and test them outside production before execution.
+
+Risk: Applying query, schema, or configuration advice to the wrong KWDB engine or workload can degrade performance or use unsupported operations.
+
+Mitigation: Confirm whether the target is time-series, relational, or mixed before acting, and validate changes with EXPLAIN or EXPLAIN ANALYZE.
+
+## Reference(s):
+
+- [KWDB Performance Review skill page](https://clawhub.ai/kwdb/skills/kwdb-performance-review)
+- [KWDB Performance Optimization: Core Rules](references/key-rules.md)
+- [EXPLAIN Output Analysis](references/query-analysis.md)
+- [Time-Series Query Optimization](references/timeseries-optimization.md)
+- [Pagination Optimization for Time-Series](references/pagination-optimization.md)
+- [Relational Query Optimization](references/relational-optimization.md)
+- [Cross-Model Query Optimization](references/cross-model-optimization.md)
+- [Storage Configuration Optimization](references/config-optimization.md)
+- [Configuration Tuning Examples](assets/example-configs.md)
+- [Example Queries for kwdb-performance-review](assets/example-queries.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Markdown with SQL code blocks and configuration review tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are advisory proposals and validation steps; database operators should review and test changes before execution.]
+
+## Skill Version(s):
+
+1.2.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

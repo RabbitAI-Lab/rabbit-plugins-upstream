@@ -1,46 +1,61 @@
-## Description: <br>
-Create deterministic hand-drawn, whiteboard, educational, and explainer MP4 animations from a JSON Animation DSL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create deterministic hand-drawn, whiteboard, educational, and explainer MP4 animations from a JSON Animation DSL.
 
-## Publisher: <br>
-[tobewin](https://clawhub.ai/user/tobewin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tobewin](https://clawhub.ai/user/tobewin)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn a requested hand-drawn, whiteboard, educational, or explainer animation into a validated JSON project and rendered MP4 using local SVG assets. It supports optional narration when remote Edge TTS processing is acceptable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Optional narration sends narration text to the Edge TTS service for remote processing. <br>
-Mitigation: Avoid private or regulated narration text unless remote processing is acceptable, or render without narration. <br>
-Risk: Untrusted SVG assets or third-party project files may introduce unsafe or unwanted rendering behavior. <br>
-Mitigation: Use trusted local SVG assets and review third-party project files and SVGs before validating or rendering. <br>
-Risk: The skill depends on npm and Python packages plus FFmpeg in the runtime environment. <br>
-Mitigation: Run the environment check before use and install dependencies only in trusted environments. <br>
+## Use Case:
 
+Developers and content creators use this skill to create, validate, render, and verify deterministic SVG-first MP4 whiteboard or explainer animations from a JSON project file.
 
-## Reference(s): <br>
-- [HandDraw Skill](artifact/SKILL.md) <br>
-- [Animation DSL v1](artifact/references/dsl.md) <br>
-- [Installing HandDraw Skill in Other Agents](artifact/references/agent-installation.md) <br>
-- [Narrative character system](artifact/references/narrative-character-system.md) <br>
-- [ClawHub skill page](https://clawhub.ai/tobewin/skills/handdraw-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with JSON project files and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces validated JSON Animation DSL projects and MP4 render commands; optional narration uses Edge TTS and FFmpeg.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Rendering unreviewed third-party SVG or project content may introduce unsafe or misleading content into the browser-based render path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Render only trusted project JSON and SVG assets, review third-party assets before use, and validate the project before rendering.
+
+Risk: Narration text can be sent to the external Edge TTS service when optional narration is enabled.
+
+Mitigation: Avoid sensitive or proprietary narration text, or omit narration for local-only rendering.
+
+Risk: Installation and sync scripts install dependencies and update local agent skill directories.
+
+Mitigation: Review dependency installation and sync scripts before running them.
+
+## Reference(s):
+
+- [Animation DSL v1](references/dsl.md)
+- [Installing HandDraw Skill in Other Agents](references/agent-installation.md)
+- [Narrative character system](references/narrative-character-system.md)
+- [Server-resolved GitHub provenance](https://github.com/ToBeWin/HandDraw-Skill)
+- [ClawHub skill page](https://clawhub.ai/tobewin/skills/handdraw-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with JSON DSL snippets and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces or edits local project JSON, SVG asset guidance, render commands, and MP4 verification steps.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

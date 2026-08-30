@@ -1,8 +1,8 @@
 {
   "name": "subgraph-registry-mcp",
-  "version": "0.8.19",
+  "version": "0.9.4",
   "mcpName": "io.github.PaulieB14/subgraph-registry-mcp",
-  "description": "MCP server for agent-friendly subgraph discovery on The Graph Network. 14,733 classified subgraphs with x402 query URLs ($0.01 USDC on Base, no API key required), reliability scoring, and protocol classification.",
+  "description": "MCP server for agent-friendly subgraph discovery on The Graph Network. 15,330 classified subgraphs with x402 query URLs ($0.01 USDC on Base, no API key required), reliability scoring, and protocol classification.",
   "type": "module",
   "bin": {
     "subgraph-registry-mcp": "src/index.js"
@@ -11,13 +11,16 @@
     "src/",
     "data/registry.db",
     "data/openapi.json",
-    "data/models/all-MiniLM-L6-v2/**",
+    "data/models/Xenova/all-MiniLM-L6-v2/**",
     "openapi.yaml"
   ],
   "scripts": {
     "start": "node src/index.js",
     "start:http": "node src/index.js --http",
-    "start:http-only": "node src/index.js --http-only"
+    "start:http-only": "node src/index.js --http-only",
+    "test": "node --test test/",
+    "sync:server": "node scripts/sync-server-json.js",
+    "version": "node scripts/sync-server-json.js && node scripts/gen-openapi.js && git add server.json openapi.yaml data/openapi.json"
   },
   "keywords": [
     "mcp",

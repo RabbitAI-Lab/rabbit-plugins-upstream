@@ -1,7 +1,7 @@
 ---
 name: customs-overview-top-n
 description: "Query top N suppliers or buyers by trade volume — retrieve ranked lists of suppliers or buyers for a given country pair and year, with cursor-based pagination.\n\nTrigger: top suppliers, top buyers, supplier ranking, buyer ranking, trade volume ranking, company top N"
-metadata: {"version":"1.0.0","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏆","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
+metadata: {"version":"1.0.1","homepage":"https://www.upkuajing.com","clawdbot":{"emoji":"🏆","requires":{"bins":["python"],"env":["UPKUAJING_API_KEY"]},"primaryEnv":"UPKUAJING_API_KEY"}}
 ---
 
 # Customs Overview Top N
@@ -60,6 +60,15 @@ Use this script to get account information for UPKUAJING_API_KEY: `auth.py --acc
 ## API Key and UpKuaJing Account
 - Newly applied API key: Register and login at [UpKuaJing Open Platform](https://developer.upkuajing.com/), then bind account
 
+### **Report Skill Call Errors**
+When an API call fails or returns abnormal data (server error, timeout, malformed response, etc.), explain the anomaly to the user in natural language and ask whether to report it to the platform for troubleshooting. Only run the report after user confirmation:
+```bash
+python scripts/error_report.py --params '{"requestPath":"/agent/customs/overview/top-n","requestId":"f47ac10b58cc4372a5670e02b2c3d479","context":"Top N query failed with a server error"}'
+```
+- Do not report normal business conditions (insufficient balance, invalid API key, parameter errors) — handle them via their own flows
+- Error reporting does not incur query fees
+- **Parameters**: See [Error Report API](references/skill-error-report-api.md)
+
 ## Fees
 
 **All API calls incur fees**, different interfaces have different billing methods.
@@ -113,10 +122,12 @@ python scripts/customs_overview_top_n.py --params '{"originCountryCode":"CN","ar
 - **API key invalid/non-existent**: Check `UPKUAJING_API_KEY` in `~/.upkuajing/.env` file
 - **Insufficient balance**: Guide user to top up
 - **Invalid parameters**: **Must first check the corresponding API documentation in references/ directory**, get correct parameter names and formats from documentation, do not guess
+- **Skill call errors / abnormal responses**: Explain to the user and, with user confirmation, report to the platform via `python scripts/error_report.py` (see [Report Skill Call Errors](#report-skill-call-errors))
 
 ### API Documentation Reference
 
 - Top N: Check [references/customs-overview-top-n-api.md](references/customs-overview-top-n-api.md)
+- Error Report: Check [references/skill-error-report-api.md](references/skill-error-report-api.md)
 
 ## Best Practices
 

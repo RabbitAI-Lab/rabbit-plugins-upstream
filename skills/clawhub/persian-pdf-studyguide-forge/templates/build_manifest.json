@@ -1,0 +1,43 @@
+{
+  "source": {
+    "pdf": "authorized-input.pdf",
+    "sha256": "MEASURE_WITH_sha256sum",
+    "pages": 0,
+    "authorization_confirmed": false
+  },
+  "extraction": {
+    "logical_engine": "PyMuPDF-or-pdftotext",
+    "ocr_engine": "Tesseract fas+eng",
+    "ocr_dpi": 180,
+    "display_dpi": 82,
+    "display_jpeg_quality": 60
+  },
+  "reasoning_team": {
+    "network_approved": false,
+    "provider_config": "providers.json",
+    "primary_batch_pages": 6,
+    "proof_batch_pages": 12,
+    "cache_and_resume": true
+  },
+  "content": {
+    "kept_pages": 0,
+    "dropped_pages": [],
+    "sessions": 0,
+    "tables": 0,
+    "flashcards": 0,
+    "mnemonics": 0,
+    "review_points": 0,
+    "quizzes": 0,
+    "scenarios": 0
+  },
+  "output": {
+    "html": "studyguide.html",
+    "self_contained_images": true,
+    "zip": "final-studyguide.zip"
+  },
+  "qa": {
+    "fidelity_report": "fidelity.json",
+    "qa_gate_report": "qa.json",
+    "all_claims_measured": false
+  }
+}

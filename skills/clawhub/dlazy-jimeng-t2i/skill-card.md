@@ -1,46 +1,60 @@
-## Description: <br>
-Generates images from text prompts with Jimeng through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Text-to-image generation with Jimeng, quickly converting text prompts into high-quality image outputs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to generate Jimeng text-to-image outputs through dLazy, optionally supplying reference images and size parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy API key is stored locally in the CLI configuration. <br>
-Mitigation: Use per-invocation credentials where appropriate, keep config file permissions restricted to the OS user, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Prompts and selected local files can be sent to dLazy API and media storage endpoints. <br>
-Mitigation: Pass only intended prompts and files, avoid sensitive inputs unless approved for external processing, and use dry-run or explicit invocation before executing generation. <br>
-Risk: Pipe references such as @stdin and @* can forward broad upstream context. <br>
-Mitigation: Avoid broad pipe references unless the forwarded content is understood; prefer explicit prompt and file arguments. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate Jimeng text-to-image outputs through the dLazy CLI and hosted API, with options to save image assets or poll asynchronous jobs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-t2i) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [CLI commands and JSON responses containing generated image URLs or async task identifiers] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; local media paths passed as inputs may be uploaded to dLazy storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill can store a billable dLazy API key in the local user configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer per-invocation credentials or verify restrictive permissions on ~/.dlazy/config.json, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: The CLI may upload provided local files to dLazy media storage for model processing.
+
+Mitigation: Confirm file paths and data sensitivity with the user before passing local files to the command.
+
+Risk: Generation requests may consume credits on the user's dLazy organization.
+
+Mitigation: Confirm paid generation actions before execution and use dry-run or balance checks when cost is uncertain.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-t2i)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [JSON response containing generated image URLs, with optional downloaded image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task identifiers when --no-wait is used; generated outputs are hosted on files.dlazy.com.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release metadata; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

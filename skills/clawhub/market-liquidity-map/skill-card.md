@@ -1,41 +1,58 @@
-## Description: <br>
-Identify institutional stop clusters and max pain zones. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identify institutional stop clusters and max pain zones.
 
-## Publisher: <br>
-[ssidharhubble](https://clawhub.ai/user/ssidharhubble) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ssidharhubble](https://clawhub.ai/user/ssidharhubble)
 
-## Use Case: <br>
-Developers and external users use this skill to request market liquidity analysis for an asset ticker, including institutional stop clusters and max pain zones. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts an external service for ticker analysis. <br>
-Mitigation: Install only when external API calls for ticker analysis are acceptable for the deployment environment. <br>
-Risk: Premium responses may include a cryptocurrency payment request to a fixed wallet address. <br>
-Mitigation: Do not send cryptocurrency unless the payment flow, recipient, amount, and refund or support terms are independently verified outside the tool output. <br>
+## Use Case:
 
+Developers and agents use this skill to request liquidity-map signals for asset tickers such as BTC, SPY, or TSLA and summarize stop-cluster and max-pain zones. Outputs should be treated as unverified market signals, not financial advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ssidharhubble/market-liquidity-map) <br>
-- [Premium signal pricing](https://ssyopros.zo.space/pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Code, Guidance] <br>
-**Output Format:** [JSON response or payment-required error object] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a ticker string and calls an external liquidity-analysis API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: Ticker queries are sent to a third-party API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential trading interests or sensitive watchlists, and review outbound network use before deployment.
+
+Risk: Premium responses may request crypto payment for signals.
+
+Mitigation: Verify the pricing page and payment destination before sending funds; do not rely on payment prompts returned by the skill alone.
+
+Risk: Market signals may be misleading if treated as financial advice.
+
+Mitigation: Validate results independently and apply appropriate financial-review controls before acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ssidharhubble/skills/market-liquidity-map)
+- [Premium signal pricing](https://ssyopros.zo.space/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, API Calls, Guidance]
+
+**Output Format:** [JSON response or JSON-formatted payment-required message]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a ticker input; premium signals may return a 402 payment-required response.]
+
+## Skill Version(s):
+
+1.1.2 (source: ClawHub release metadata; package.json declares 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

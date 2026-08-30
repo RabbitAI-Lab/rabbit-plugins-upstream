@@ -1,39 +1,54 @@
-## Description: <br>
-Creates behavioral rules in markdown to block dangerous commands or restrict AI behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates behavioral rules in markdown to block dangerous commands or restrict AI behavior.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to draft persistent Hookify rules for Claude Code sessions, including guardrails that warn about or block risky commands, file edits, and prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent block rules can affect later agent commands until they are disabled or deleted. <br>
-Mitigation: Review generated .claude/hookify.*.local.md files before relying on them, and disable or delete rules that are too broad. <br>
+## Use Case:
 
+Developers and agent users use this skill to define persistent local guardrail rules that warn on or block risky commands, file edits, prompts, or stop events.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-hookify-writing-rules) <br>
-- [Hookify homepage](https://github.com/athola/claude-night-market/tree/master/plugins/hookify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with YAML frontmatter examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance and rule-file examples for .claude/hookify.*.local.md files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: A broad or incorrect block rule can interfere with normal agent work or command execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each generated .claude/hookify.*.local.md rule before enabling it, test the pattern, and start with warning rules when practical.
+
+Risk: Persistent local guardrail rules may continue affecting future sessions after the original task is complete.
+
+Mitigation: Name rules descriptively, document their intent, and disable or delete rules that are no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-hookify-writing-rules)
+- [Hookify Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/hookify)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with YAML frontmatter examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local Hookify rule guidance for .claude/hookify.*.local.md files; review generated rules before enabling.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

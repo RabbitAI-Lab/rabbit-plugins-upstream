@@ -85,13 +85,21 @@ ENDPOINTS = {
     "create_folder": ("POST", "/list/create_folder"),
     "create_doc": ("POST", "/list/create_doc"),
     "get_doc": ("POST", "/document/edit/get"),
-    "save_doc": ("POST", "/doc/save"),
+    # v1.3.9（2026-08-04）：save_doc 从已废弃的 /doc/save（服务端签名校验
+    # 一律返回 code:17 illegal request）切换至网页端真实写接口 /v3/api/colla/events。
+    # 端点形态与请求体逆向自网页端 DocEditor chunk（抓包复核）。
+    "save_doc": ("POST", "/colla/events"),
+    # v1.3.9（2026-08-04）：文档重命名走独立端点 /list/rename_doc（与 /list/rename_folder
+    # 同族）。注意：不可把 nameChanged 事件塞进 colla/events —— 该事件仅用于协同实时
+    # 同步，显式重命名会被服务端拒绝 illegal request（已真机验证）。
+    "rename_doc": ("POST", "/list/rename_doc"),
     # 真机验证（2026-07-15）：删除必须区分类型，且端点为 delete_folder / delete_doc，
     # 原推测的 /list/delete 实测返回 code 17 illegal request。
     "delete_folder": ("POST", "/list/delete_folder"),
     "delete_doc": ("POST", "/list/delete_doc"),
-    # move 端点尚未经真机验证（返回 illegal request），保留原推测值，待抓包确认
-    "move": ("POST", "/list/move"),
+    # move 端点已抓包确认（2026-08-04）：真实为 /list/custom/drag，旧推测的
+    # /list/move 实测返回 code 17 illegal request。body 见 client.move()。
+    "move": ("POST", "/list/custom/drag"),
 }
 
 # 网络重试配置（T5）

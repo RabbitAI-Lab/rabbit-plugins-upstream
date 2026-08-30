@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0.0",
+  "skill": "paper-check",
+  "default_environment": "cqccjy",
+  "environments": ["cqccjy", "fanyu"],
+  "limits": {
+    "daily_new_tasks": 50,
+    "max_file_bytes": 52428800,
+    "supported_extensions": [".doc", ".docx", ".txt", ".pdf", ".wps", ".rtf"]
+  },
+  "security": {
+    "login_required": false,
+    "api_key_required": false,
+    "allow_user_supplied_url": false,
+    "allow_user_supplied_provider": false,
+    "auto_pay": false
+  },
+  "lanes": ["character-count", "vip", "wanfang", "cnki", "aigc", "reduction", "report-verify", "guidance"]
+}

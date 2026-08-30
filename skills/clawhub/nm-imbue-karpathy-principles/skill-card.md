@@ -1,41 +1,54 @@
-## Description: <br>
-Pre-implementation gate covering think-first, simplicity, surgical edits, and verifiable goals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pre-implementation gate covering think-first, simplicity, surgical edits, and verifiable goals.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill as a pre-implementation and review gate for non-trivial coding tasks. It prompts assumption checks, scope control, surgical diffs, and verifiable success criteria before and after implementation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may slow or over-constrain trivial coding tasks because some triggers are broad. <br>
-Mitigation: Apply the tradeoff guidance and keep the gate lightweight for obvious typo fixes, throwaway spikes, documentation-only edits, time-boxed prototypes, and urgent production fixes. <br>
-Risk: Companion Night Market or Claude Code plugin components may introduce behavior outside this skill's markdown guidance. <br>
-Mitigation: Review and scan any companion plugin agents, hooks, or commands before enabling them. <br>
+## Use Case:
 
+Developers and engineers use this skill before, during, and after coding tasks to surface assumptions, prefer simple scoped changes, and define verifiable success criteria.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-imbue-karpathy-principles) <br>
-- [Claude Night Market imbue plugin](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code] <br>
-**Output Format:** [Markdown guidance with checklists, scope rationale, and verification criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assumptions, tradeoff notes, diff-trace checks, and test or command suggestions for verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+Risk: Broad trigger phrases may activate the checklist when explicit invocation would be preferred.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable or rename broad triggers if a team wants opt-in use only.
+
+Risk: The checklist can slow trivial, exploratory, documentation-only, prototype, or incident-response work.
+
+Mitigation: Use the documented tradeoff guidance to skip or time-box the gate when speed is more important than full pre-flight review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-karpathy-principles)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, text]
+
+**Output Format:** [Markdown guidance and checklist text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; no code execution.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

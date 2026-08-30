@@ -1,12 +1,16 @@
 # GridTRX
 
-**Built specifically for agent use as a double-entry, full-cycle accounting suite and reporting framework. You prompt in plain english -> agent completes the books correctly.**
+**[Watch the demo: Full accounting cycle in 15 minutes](https://youtu.be/9mmHbgEB3PQ)**
 
-GridTRX is a bookkeeping system primarily built for AI agents first, and human accountants second. Feed it a bank statement or an Excel file, and the system produces a full set of auditable books: balance sheet, income statement, general ledger, trial balance. No subscriptions, no cloud, full privacy and security. Full GUI for humans, and CLI for agents.
+**Built for agent use as a double-entry, full-cycle accounting suite and reporting framework. You prompt in plain English -> the agent completes the books correctly.**
+
+GridTRX is a bookkeeping system built for AI agents first and human accountants second. Feed it a bank statement, and the system produces a full set of auditable books: balance sheet, income statement, general ledger, trial balance. No subscriptions, no cloud, full privacy. Your books are one SQLite file on your own disk.
+
+**The whole install story:** unzip this, then tell your AI agent — *"Read SKILL.md and do my books."* The agent handles the rest.
 
 ## Built by a CPA
 
-GridTRX was built by a cross-border tax CPA practitioner who does dual-citizen and international tax returns for a living. Not a developer who read an accounting textbook. A real accountant who got tired of watching the industry bolt chatbots onto QuickBooks and call it AI. The chart of accounts, the import rules, the report structures, and the suspense workflow all comes from doing real client work, not from a product spec.
+GridTRX was built by a cross-border tax CPA practitioner who does dual-citizen and international tax returns for a living. Not a developer who read an accounting textbook. A real accountant who got tired of watching the industry bolt chatbots onto QuickBooks and call it AI. The chart of accounts, the import rules, the report structures, and the suspense workflow all come from doing real client work, not from a product spec.
 
 ## What You Get
 
@@ -16,24 +20,28 @@ GridTRX was built by a cross-border tax CPA practitioner who does dual-citizen a
 - General Ledger with running balances and cross-account references
 - Trial Balance — always ties, debits equal credits
 - Adjusting Journal Entry report
-- Retained Earnings rollforward and YE close
+- Statement of Retained Earnings — computed, always current
 - Sales tax reporting
-- All reports exportable to CSV and PDF. For any time period. Just ask your agent for the report, and GridTRX can produce it.
+- All reports export to CSV and PDF, for any time period. Just ask your agent.
 
 **Full Accounting Cycle**
+- Opening balances module for bringing an existing business across
 - Import bank data from CSV, OFX, and QBO files with auto-categorization
-- customizable import rules match vendors to accounts automatically
-- Unrecognized transactions land in Suspense (EX.SUSP) for human review and clearing. Tell the AI what the suspense items are and it will clear them. Or clear them yourself through the GUI.
-- Year-end close with retained earnings rollover
-- editable lock date enforcement for closed periods.
-- Reconciliation tracking
-- Sales tax code support (GST, HST with automatic net + tax splitting)
+- Customizable import rules match vendors to accounts automatically
+- Unrecognized transactions land in Suspense (EX.SUSP) for review and clearing — tell the agent what they are, or clear them yourself in the browser
+- Adjusting journal entries as a first-class module, including CaseWare-style AJE import
+- **Perpetual retained earnings — there is no year-end close ritual.** Retained earnings are always correct by construction; you move the working year forward and the statements follow. Nothing to run, nothing to undo.
+- Editable lock-date enforcement for closed periods
+- Bank reconciliation with statement-by-statement continuity checks
+- Sales tax code support (GST/HST with automatic net + tax splitting)
 
 **Architecture**
-- Each client is one SQLite file. Copy it, back it up, email it.
+- Each client is one SQLite file. Copy it, back it up. Treat it as what it is — confidential financial records. Don't transmit it over channels the client hasn't approved.
 - Amounts stored as integers (cents). No floating-point rounding.
 - Every transaction balances. Sum of all lines = 0. Always.
 - One data layer (`models.py`) — CLI, MCP server, and browser UI all call the same functions.
+
+**Agent safety:** destructive commands respect the lock date, every import is tagged as a single batch (undoable whole in the browser UI), and each book is snapshotted daily on first open. Agents are instructed (SKILL.md) to confirm with their human before deleting, re-importing, or changing lock dates.
 
 ## How It Works
 
@@ -57,23 +65,21 @@ No clicking. No menus. No login. Just a conversation.
 
 ## Three Interfaces, One Engine
 
-**MCP Server (preferred for agents)** — Structured JSON tools for AI agents. 19 tools (12 read, 7 write) wrapping `models.py` directly. No text parsing, typed parameters, deterministic output.
+**MCP Server (preferred for agents)** — 58 structured JSON tools for AI agents, wrapping `models.py` directly. No text parsing, typed parameters, deterministic output.
 
-**CLI (fallback for agents, power users)** — One-shot shell commands. Zero dependencies beyond Python 3.7+. Any terminal-based agent can drive it via subprocess. Humans can use it too.
+**CLI (fallback for agents, power users)** — Interactive shell and one-shot commands. Zero dependencies beyond the Python standard library. Any terminal-based agent can drive it via subprocess.
 
-**Browser UI (for humans)** — Flask web interface at `localhost:5000`. Ledger browsing, report viewer with drill-down, comparative reports up to 13 columns, bank import with rule preview, reconciliation marking, dark mode. Same database, same data.
+**Browser UI (for humans)** — Flask web interface at `localhost:5000`. Ledger browsing with inline editing and keyboard navigation, report viewer with drill-down, comparative reports up to 13 columns, bank import with rule preview, reconciliation marking, print-ready PDF output, dark mode. Same database, same data.
 
 All three hit the same `models.py` data layer. Nothing is out of sync. MCP and CLI enforce a workspace boundary when `GRIDTRX_WORKSPACE` is set.
 
 ## Quick Start
 
-### MCP Server (for Claude Desktop / Claude Code)
+### Agents
 
-```bash
-pip install mcp
-```
+Point your agent at this folder and say: **"Read SKILL.md and do my books."** SKILL.md and ai.txt are the complete operating manual — commands, conventions, and the rules of the house. They are maintained with the engine and are always current.
 
-Add to `claude_desktop_config.json`:
+### MCP Server (Claude Desktop / Claude Code)
 
 ```json
 {
@@ -87,98 +93,34 @@ Add to `claude_desktop_config.json`:
 }
 ```
 
-Set `GRIDTRX_WORKSPACE` to restrict database access to a specific directory. The MCP server rejects any path outside the workspace.
+Set `GRIDTRX_WORKSPACE` to restrict database access to one directory. The MCP server rejects any path outside it.
 
 ### CLI
 
 ```bash
-# Create new books
+# Create new books, then work in them
 python cli.py
 Grid> new ~/clients/acme "Acme Corp"
-
-# Post a transaction
 Grid/Acme Corp> post 2025-01-15 "Office supplies" 84.00 EX.OFFICE BANK.CHQ
-
-# Import a bank statement
 Grid/Acme Corp> importcsv ~/downloads/jan2025.csv BANK.CHQ
-
-# Import OFX/QBO from your bank
-Grid/Acme Corp> importofx ~/downloads/jan2025.qbo BANK.CHQ
-
-# Trial balance
 Grid/Acme Corp> tb
-
-# Balance sheet
 Grid/Acme Corp> report BS
 
-# Income statement for a period
-Grid/Acme Corp> report IS 2025-01-01 2025-12-31
-```
-
-One-shot mode for agents:
-
-```bash
+# One-shot mode for agents
 python cli.py ~/clients/acme tb
-python cli.py ~/clients/acme report BS
+python cli.py ~/clients/acme report IS 2025-01-01 2025-12-31
 python cli.py ~/clients/acme importcsv ~/downloads/jan2025.csv BANK.CHQ
 ```
 
-## CLI Commands
+The full command set (accounts, ledgers, AJEs, imports, rules, reconciliation, opening balances, exports) is documented in [SKILL.md](SKILL.md) — the same document the agent reads.
 
-| Command | Description |
-|---------|-------------|
-| `new <folder> ["Name"] [MM-DD]` | Create new books with full chart of accounts |
-| `open <path>` | Open existing books |
-| `post <date> <desc> <amt> <dr> <cr>` | Post a 2-line transaction |
-| `postx <date> <desc>` | Post a multi-line (compound) transaction |
-| `tb [date]` | Trial balance |
-| `report <name> [from] [to]` | Run a report (BS, IS, AJE, TRX, RE.OFS) |
-| `ledger <acct> [from] [to]` | Account ledger with running balance |
-| `balance <acct> [from] [to]` | Single account balance |
-| `importcsv <file> <acct>` | Import bank CSV with auto-categorization |
-| `importofx <file> <acct>` | Import bank OFX/QBO with auto-categorization |
-| `accounts [posting\|total]` | List chart of accounts |
-| `find <query>` | Search accounts by name/description |
-| `search <query>` | Search transactions by description/reference |
-| `rules` | List import rules |
-| `addrule <kw> <acct> [tax] [pri]` | Add an import rule |
-| `ye <date>` | Year-end rollover |
-| `lock [date]` | Show or set lock date |
-| `exportcsv <report> [file]` | Export report to CSV |
-| `exporttb [file] [date]` | Export trial balance to CSV |
-| `reconcile <acct>` | Reconciliation summary |
-| `taxcodes` | List tax codes |
+### Browser UI
 
-Full CLI reference: [CLI_README.txt](CLI_README.txt)
+```bash
+python run.py
+```
 
-## MCP Tools
-
-### Read Tools
-| Tool | Purpose |
-|------|---------|
-| `list_accounts(db_path, query?)` | List/search chart of accounts |
-| `get_balance(db_path, account_name, date_from?, date_to?)` | Single account balance |
-| `get_ledger(db_path, account_name, date_from?, date_to?)` | Account ledger with running balance |
-| `trial_balance(db_path, as_of_date?)` | Trial balance — all accounts, Dr/Cr columns |
-| `generate_report(db_path, report_name, date_from?, date_to?)` | Run a report (BS, IS, AJE, etc.) |
-| `get_transaction(db_path, txn_id)` | Single transaction with all journal lines |
-| `search_transactions(db_path, query, limit?)` | Search by description/reference |
-| `list_reports(db_path)` | List available reports |
-| `list_rules(db_path)` | List import rules |
-| `get_info(db_path)` | Company name, fiscal year, lock date |
-
-### Write Tools
-| Tool | Purpose |
-|------|---------|
-| `post_transaction(db_path, date, description, amount, debit_account, credit_account)` | Post a simple 2-line entry |
-| `delete_transaction(db_path, txn_id)` | Delete a transaction (respects lock date) |
-| `add_account(db_path, name, normal_balance, description?)` | Add a posting account |
-| `add_rule(db_path, keyword, account_name, tax_code?, priority?)` | Add an import rule |
-| `delete_rule(db_path, rule_id)` | Delete an import rule |
-| `import_csv(db_path, csv_path, bank_account)` | Import bank CSV |
-| `import_ofx(db_path, ofx_path, bank_account)` | Import bank OFX/QBO |
-| `year_end(db_path, ye_date)` | Year-end rollover |
-| `set_lock_date(db_path, lock_date?)` | Show or set the lock date |
+Opens at `http://localhost:5000`.
 
 ## Display Format
 
@@ -192,38 +134,20 @@ Positive = debit. Parentheses = credit. No sign-flipping. What you see is what's
 
 ## Account Naming
 
-GridTRX uses descriptive account names, not numeric codes. When importing a trial balance or creating accounts, always use GridTRX naming conventions. If source data has numeric codes (1010, 5800, etc.), ignore them and map by description.
+GridTRX uses descriptive account names, not numeric codes. If source data has numeric codes (1010, 5800, etc.), ignore them and map by description.
 
 | Prefix | Type | Examples |
 |--------|------|----------|
 | `BANK.xxx` | Bank accounts | `BANK.CDN`, `BANK.US`, `BANK.CHQ` |
 | `REV.xxx` | Revenue | `REV`, `REV.SVC`, `REV.FOREIGN` |
-| `EX.xxx` | Expenses | `EX.PHONE`, `EX.OFFICE`, `EX.VEHICLE`, `EX.WAGES` |
+| `EX.xxx` | Expenses | `EX.PHONE`, `EX.OFFICE`, `EX.WAGES` |
 | `GST.xxx` | Tax accounts | `GST.IN`, `GST.OUT`, `GST.CLR` |
 | `AR.xxx` | Accounts receivable | `AR` |
 | `AP.xxx` | Accounts payable | `AP`, `AP.CC` |
 | `SHL.xxx` | Shareholder loans | `SHL.DANA` |
-| `RE.xxx` | Retained earnings | `RE`, `RE.OPEN`, `RE.CLOSE` |
+| `RE.xxx` | Retained earnings | `RE`, `RE.OB` |
 
 If no existing account matches, create one using the `EX.` or `REV.` prefix convention.
-
-## Browser UI
-
-For visual work, start the web interface:
-
-```bash
-python run.py
-```
-
-Opens at `http://localhost:5000`. Same database, same data.
-
-- Account ledgers with inline editing
-- Report viewer with drill-down
-- Multi-column comparative reports (up to 13 columns)
-- Bank CSV import with rule matching preview
-- Print-ready report output
-- Reconciliation marking
-- Dark mode
 
 ## OpenClaw Skill
 
@@ -233,11 +157,13 @@ See [SKILL.md](SKILL.md) for the full skill definition.
 
 ## Requirements
 
-**CLI only:** Python 3.7+ (standard library only — no pip install needed)
+**CLI only:** Python 3.9+ (standard library only — no pip install needed)
 
-**MCP Server:** Python 3.7+ and `pip install mcp`
+**MCP Server:** Python 3.9+ and `pip install mcp`
 
-**Browser UI:** Python 3.7+ and Flask (`pip install flask`, or just run `run.py` and it installs automatically)
+**Browser UI:** Python 3.9+ and `pip install flask`
+
+All dependencies are declared in `requirements.txt`. Install before first use — nothing is installed at runtime.
 
 ## License
 

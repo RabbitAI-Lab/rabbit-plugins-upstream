@@ -1,42 +1,60 @@
-## Description: <br>
-Uses the Flyelep AI Tool API to partially redraw an image from a source image URL, a natural-language edit prompt, and an optional replacement reference image URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the Flyelep AI Tool API to redraw selected areas of an image from a text prompt and, when provided, a reference replacement image.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and developers use this skill when they need an agent to call Flyelep's partial image redrawing API for localized image edits, background replacement, or reference-guided region replacement while preserving the main subject. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends image URLs, edit prompts, optional reference image URLs, and a Flyelep API key to Flyelep. <br>
-Mitigation: Avoid sensitive or private images unless third-party processing is acceptable, and provide the API key only at runtime. <br>
-Risk: Saving the Flyelep secret key in shared files or examples could expose credentials. <br>
-Mitigation: Keep the secret key out of skill files, repositories, and persistent configuration. <br>
+## Use Case:
 
+External users and developers use this skill to prepare image inpainting requests, upload local images when needed, and call Flyelep to replace backgrounds or redraw specified image regions while preserving the intended subject.
 
-## Reference(s): <br>
-- [Flyelep partial redrawing API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/partialRedrawing) <br>
-- [Flyelep controlboard](https://www.flyelep.cn/controlboard) <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/flyelep-partial-redrawing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces API request guidance and returns or presents the redrawn image URL from Flyelep.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill sends user-provided images and edit prompts to Flyelep's external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for images and prompts suitable for Flyelep processing, and avoid sensitive private content unless that transfer is acceptable.
+
+Risk: The security evidence notes that uploaded local images become persistent public URLs according to the skill text.
+
+Mitigation: Prefer already public, non-sensitive image URLs or use the provider's deletion or retention workflow when public persistence is not acceptable.
+
+Risk: The skill requires a Flyelep secretKey at runtime.
+
+Mitigation: Ask the user for the key only at execution time and do not store it in skill files, examples, or persistent configuration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/flyelep-partial-redrawing)
+- [Flyelep control board](https://www.flyelep.cn/controlboard)
+- [Flyelep partial redrawing API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/partialRedrawing)
+- [Flyelep file upload API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with JSON and curl examples plus a returned image URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a runtime Flyelep secretKey and public image URLs; local uploads may become persistent public URLs.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -35,17 +35,17 @@ JSON 模板：同目录 [`campaign-create-template.json`](campaign-create-templa
 
 用户给了投放方案文件时，**必读** `references/google-ads/rules/google-ads-plan-source-fidelity.md`，并遵守：
 
-| 坑 | 正确做法 |
-| -- | -------- |
-| 编造 `targetedLocations[].id` 或对 30 国逐条 `geo search` | **一次** `ad geo resolve --from-file … --json-out`；见 `google-ads-plan-source-fidelity.md` |
-| 对话里手写完整 campaign JSON | Agent **写转换脚本** Excel → `campaign.json`（落盘），再 validate |
-| 方案有 Exact/Phrase，JSON 却一律 `BROAD` | 转换脚本按方案列/词面写入 EXACT/PHRASE/BROAD 分块 |
-| validate 失败后未问用户就改词/消重标题/截断 | **询问**「您自己改还是我帮您改？」；见 `google-ads-plan-source-fidelity.md` § 用户方案不合规 |
-| 代改后只说「创建成功」不交代改了啥 | 创建完成后出报告：创建清单 + **从 xxx→xxx + 原因**（代改时维护变更账本） |
+| 坑                                                        | 正确做法                                                                                     |
+| --------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 编造 `targetedLocations[].id` 或对 30 国逐条 `geo search` | **一次** `ad geo resolve --from-file … --json-out`；见 `google-ads-plan-source-fidelity.md`  |
+| 对话里手写完整 campaign JSON                              | Agent **写转换脚本** Excel → `campaign.json`（落盘），再 validate                            |
+| 方案有 Exact/Phrase，JSON 却一律 `BROAD`                  | 转换脚本按方案列/词面写入 EXACT/PHRASE/BROAD 分块                                            |
+| validate 失败后未问用户就改词/消重标题/截断               | **询问**「您自己改还是我帮您改？」；见 `google-ads-plan-source-fidelity.md` § 用户方案不合规 |
+| 代改后只说「创建成功」不交代改了啥                        | 创建完成后出报告：创建清单 + **从 xxx→xxx + 原因**（代改时维护变更账本）                     |
 
 **多词短语（与 `keyword-negative-create` 同类误判）**：`KeywordText` 是 **JSON 字符串数组**，**空格多词完全合法**（如 `"how to make"`、`"home cooking"`）。PHRASE 写 `"\"vegan recipe\""` 或裸词 + `MatchTypeV2: "PHRASE"`（validate 会补引号）。**禁止**因「多词」就省略否词或让用户去 Google Ads 后台手补——那是 Agent 误判，不是 `campaign-create` 限制。
 
-投放方案 Markdown 中 §3.3 关键词矩阵 → `KeywordsForBatchJob`；§3.3 系列级否定词 / §3.4 账户级否定词 → `NegativeKeywordsForBatchJob`（账户级列表仍须在 Google 后台单独应用）。
+投放方案 Markdown 中 §3.3 关键词矩阵 → `KeywordsForBatchJob`；§3.3 系列级否定词 → `NegativeKeywordsForBatchJob`。**§3.4 账户级否定词**：`campaign-create` 批量接口不支持账户级，需在系列创建完成后**另行**执行 `ad keyword-negative-create --level Account`。
 
 ### CLI 参数（勿混用）
 
@@ -121,17 +121,17 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 
 ## 外层字段（CampaignCreationRecord）
 
-| 字段                 | 类型           | 必填 | 说明                                                                                                                                                                           |
-| -------------------- | -------------- | :--: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `account`            | string         |  ✅  | 媒体账户 ID；提交时转为数字 `customerId`（勿依赖引号字符串）。**仅出方案**（未确认创建、无账户）可填 `"[PENDING_ACCOUNT]"` 或 `""`，见 `google-ads-campaign-plan.md` §仅出方案；**create/validate 前**须换成真实 `mediaCustomerId`                                                                                                                   |
-| `customerName`       | string         |      | 展示/智投用客户名；**可省略**——`campaign-create` / `batch publish` 会按 `account` 调 `list-accounts` 自动填入 `mediaCustomerName`。若填写则须与之一致，否则提交时 CLI 自动更正 |
-| `name`               | string         |      | 智投 `campaignName`；缺省取 `campaign.Name`；账户内不得与已有在投/暂停系列重名，否则 BatchJob 系列创建失败                                                                     |
-| `url`                | string         |      | 智投展示用 URL；后端只读，用于回显                                                                                                                                             |
-| `locations`          | string[]       |      | 展示用地区名（后端只读，可空数组）；**若填写非空**则长度须与 `campaign.targetedLocations` 一致（validate 硬校验）                                                              |
-| `productWords`       | string[]       |      | 智投/推荐用产品核心词                                                                                                                                                          |
-| `googleDataRecordId` | string \| null |      | 智投记录 ID；省略时提交 `""`（CLI 默认）                                                                                                                                       |
-| `draft`              | boolean        |      | `false`（默认）立即发布到 Google；`true` 仅保存草稿，需后续 `ad batch publish`                                                                                                 |
-| `campaign`           | object         |  ✅  | 内层 Campaign 对象，见下表                                                                                                                                                     |
+| 字段                 | 类型           | 必填 | 说明                                                                                                                                                                                                                               |
+| -------------------- | -------------- | :--: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `account`            | string         |  ✅  | 媒体账户 ID；提交时转为数字 `customerId`（勿依赖引号字符串）。**仅出方案**（未确认创建、无账户）可填 `"[PENDING_ACCOUNT]"` 或 `""`，见 `google-ads-campaign-plan.md` §仅出方案；**create/validate 前**须换成真实 `mediaCustomerId` |
+| `customerName`       | string         |      | 展示/智投用客户名；**可省略**——`campaign-create` / `batch publish` 会按 `account` 调 `list-accounts` 自动填入 `mediaCustomerName`。若填写则须与之一致，否则提交时 CLI 自动更正                                                     |
+| `name`               | string         |      | 智投 `campaignName`；缺省取 `campaign.Name`；账户内不得与已有在投/暂停系列重名，否则 BatchJob 系列创建失败                                                                                                                         |
+| `url`                | string         |      | 智投展示用 URL；后端只读，用于回显                                                                                                                                                                                                 |
+| `locations`          | string[]       |      | 展示用地区名（后端只读，可空数组）；**若填写非空**则长度须与 `campaign.targetedLocations` 一致（validate 硬校验）                                                                                                                  |
+| `productWords`       | string[]       |      | 智投/推荐用产品核心词                                                                                                                                                                                                              |
+| `googleDataRecordId` | string \| null |      | 智投记录 ID；省略时提交 `""`（CLI 默认）                                                                                                                                                                                           |
+| `draft`              | boolean        |      | `false`（默认）立即发布到 Google；`true` 仅保存草稿，需后续 `ad batch publish`                                                                                                                                                     |
+| `campaign`           | object         |  ✅  | 内层 Campaign 对象，见下表                                                                                                                                                                                                         |
 
 > 提交时 CLI 另附 `KeywordRecommendationsV2`：`[{ Key: <广告组 Name>, Value: [] }, …]`，由 CLI 自动附加；JSON 文件内无需手写。
 
@@ -152,17 +152,17 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 
 ### 预算与出价
 
-| 字段                           | 类型                                                                                                                     | 必填条件           | 说明                          |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------ | ----------------------------- |
-| `Budget`                       | number                                                                                                                   | ✅ > 0             | 日预算（元）                  |
-| `BudgetShared`                 | boolean                                                                                                                  |                    | 共享预算时为 true             |
-| `BudgetId`                     | number / string                                                                                                          |                    | 共享预算 id                   |
-| `BudgetBudgetDeliveryMethodV2` | "STANDARD" \| "ACCELERATED" \| "UNSPECIFIED" \| "UNKNOWN"                                                                |                    | 默认 STANDARD                 |
-| `BiddingStrategyTypeV2`        | "TARGET_SPEND" \| "MANUAL_CPC" \| "TARGET_CPA" \| "TARGET_ROAS" \| "MAXIMIZE_CONVERSIONS" \| "MAXIMIZE_CONVERSION_VALUE" | ✅                 | 出价策略                      |
-| `TargetSpend_BidCeilingAmount` | number                                                                                                                   | TARGET_SPEND 时 ✅ | 每次点击费用上限（元）        |
-| `TargetCpa_BidingAmount`       | number                                                                                                                   | TARGET_CPA 时 ✅   | 目标 CPA（元）                |
-| `TargetRoas`                   | number                                                                                                                   | TARGET_ROAS 时 ✅  | 目标 ROAS（如 2.5 表示 250%） |
-| `ManualCpc_EnhancedCpcEnabled` | boolean                                                                                                                  |                    | 是否增强 CPC                  |
+| 字段                           | 类型                                                                                                                     | 必填条件           | 说明                                                                     |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------ | ------------------------------------------------------------------------ |
+| `Budget`                       | number                                                                                                                   | ✅ > 0             | 日预算（元）                                                             |
+| `BudgetShared`                 | boolean                                                                                                                  |                    | 共享预算时为 true                                                        |
+| `BudgetId`                     | number / string                                                                                                          |                    | 共享预算 id                                                              |
+| `BudgetBudgetDeliveryMethodV2` | "STANDARD" \| "ACCELERATED" \| "UNSPECIFIED" \| "UNKNOWN"                                                                |                    | 默认 **STANDARD**；`ACCELERATED` 多数账户会被 Google 拒（validate 警告） |
+| `BiddingStrategyTypeV2`        | "TARGET_SPEND" \| "MANUAL_CPC" \| "TARGET_CPA" \| "TARGET_ROAS" \| "MAXIMIZE_CONVERSIONS" \| "MAXIMIZE_CONVERSION_VALUE" | ✅                 | 出价策略                                                                 |
+| `TargetSpend_BidCeilingAmount` | number                                                                                                                   | TARGET_SPEND 时 ✅ | 每次点击费用上限（元）                                                   |
+| `TargetCpa_BidingAmount`       | number                                                                                                                   | TARGET_CPA 时 ✅   | 目标 CPA（元）                                                           |
+| `TargetRoas`                   | number                                                                                                                   | TARGET_ROAS 时 ✅  | 目标 ROAS（如 2.5 表示 250%）                                            |
+| `ManualCpc_EnhancedCpcEnabled` | boolean                                                                                                                  |                    | 是否增强 CPC                                                             |
 
 ### 网络（后端硬约束）
 
@@ -175,15 +175,15 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 
 ### 地理 / 语言 / 平台
 
-| 字段                    | 类型                                     | 必填 | 说明                                                            |
-| ----------------------- | ---------------------------------------- | :--: | --------------------------------------------------------------- |
+| 字段                    | 类型                                     | 必填 | 说明                                                                                     |
+| ----------------------- | ---------------------------------------- | :--: | ---------------------------------------------------------------------------------------- |
 | `targetedLocations`     | `{ id: string, bidModifier?: number }[]` |  ✅  | 至少 1 个；**id 必须来自** `siluzan-tso ad geo search -a <acct> -q <地区名>`（禁止编造） |
-| `excludedLocations`     | 同上                                     |      | 排除地区                                                        |
-| `targetedLanguages`     | `{ id: number }[]`                       |  ✅  | 英语 1000，中文 1017                                            |
-| `targetedPlatforms`     | `{ id: number, bidModifier?: number }[]` |      | 30001 桌面 / 30002 平板 / 30000 移动                            |
-| `excludedIpAddresses`   | string[]                                 |      | 排除 IP                                                         |
-| `PositiveGeoTargetType` | number                                   |      |                                                                 |
-| `NegativeGeoTargetType` | number                                   |      |                                                                 |
+| `excludedLocations`     | 同上                                     |      | 排除地区                                                                                 |
+| `targetedLanguages`     | `{ id: number }[]`                       |  ✅  | 英语 1000，中文 1017                                                                     |
+| `targetedPlatforms`     | `{ id: number, bidModifier?: number }[]` |      | 30001 桌面 / 30002 平板 / 30000 移动                                                     |
+| `excludedIpAddresses`   | string[]                                 |      | 排除 IP                                                                                  |
+| `PositiveGeoTargetType` | number                                   |      |                                                                                          |
+| `NegativeGeoTargetType` | number                                   |      |                                                                                          |
 
 ### 时间与 DSA
 
@@ -197,11 +197,18 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 
 ### 子结构
 
-| 字段                          | 类型     | 说明                                                                              |
-| ----------------------------- | -------- | --------------------------------------------------------------------------------- |
-| `AdGroupsForBatchJob`         | object[] | **至少 1 组**；见下                                                               |
+| 字段                          | 类型     | 说明                                                                                                                                             |
+| ----------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AdGroupsForBatchJob`         | object[] | **至少 1 组**；见下                                                                                                                              |
 | `NegativeKeywordsForBatchJob` | object[] | 系列级否词；元素：`{ KeywordText: string[], MatchTypeV2: "BROAD"\|"PHRASE"\|"EXACT", FinalURL: "" }`；**KeywordText 可含空格多词**（见模板示例） |
-| `ExtensionsForBatchJob`       | object[] | 附加信息；`Properties` 须 **string→string**（勿用数组值）。SITELINK 见下表        |
+| `ExtensionsForBatchJob`       | object[] | 附加信息；`Properties` 须 **string→string**（勿用数组值）。SITELINK / STRUCTURED_SNIPPET 见下                                                    |
+
+#### STRUCTURED_SNIPPET（`typeV2` / `AssetFieldType` = `STRUCTURED_SNIPPET`）
+
+| 字段                                            | 说明                                                                                                                          |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `Properties.StructuredSnippetHeaderValue.Key`   | **须为合法英文标头**（`ad extension snippet-headers`）。非法值如 `Features` 会被 `campaign-validate` 拦截（建议 `Amenities`） |
+| `Properties.StructuredSnippetHeaderValue.Value` | 非空字符串数组（各条目有长度上限）                                                                                            |
 
 #### SITELINK（`ExtensionsForBatchJob[i]`，`typeV2` / `AssetFieldType` = `SITELINK`）
 
@@ -261,7 +268,7 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 | 规则                    | 说明                                                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | 基础                    | `customerName` / `campaign` 非空；`Budget > 0`；地理/语言至少 1 项                                                             |
-| 地域一致性              | 外层 `locations` 非空时，长度须等于 `targetedLocations`；每个 location `id` 须为数字字符串                                       |
+| 地域一致性              | 外层 `locations` 非空时，长度须等于 `targetedLocations`；每个 location `id` 须为数字字符串                                     |
 | 网络                    | `TargetPartnerSearchNetwork` 须 false；不可同时关闭 Google 搜索与搜索网络                                                      |
 | RSA / 关键词 / 附加信息 | 标题 **15** 条、描述 **4** 条（须写满）；字符上限、词面非空；RSA `Path1`/`Path2` 必填；SITELINK 行长度限制                     |
 | 否词误填                | `KeywordsForBatchJob` 含常见否词词根或与 `NegativeKeywordsForBatchJob` 重复 → **warnings**（不阻断，须 Agent 修正后再 create） |

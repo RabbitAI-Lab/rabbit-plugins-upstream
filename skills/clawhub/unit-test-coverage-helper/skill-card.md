@@ -1,53 +1,58 @@
-## Description: <br>
-Helps software maintainers, QA engineers, open-source contributors, and product teams add useful unit tests, raise test coverage, and verify that changes do not break existing behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps software teams add useful unit tests, improve test coverage, and produce practical workflows, checklists, analysis, implementation support, and verification notes for existing codebases.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-Developers, maintainers, QA engineers, and product teams use this skill to plan and produce unit-test coverage improvements, regression checks, implementation notes, and verification commands for existing codebases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad implicit invocation can route unrelated prompts involving testing, regression, or quality to this skill. <br>
-Mitigation: Narrow or disable implicit invocation in environments with many development skills, and prefer explicit invocation for unit-test coverage work. <br>
-Risk: Generated test plans, code changes, or shell commands may be incomplete or unsuitable for a specific repository. <br>
-Mitigation: Review proposed changes before execution and run the repository's normal test and coverage commands before relying on the output. <br>
+## Use Case:
 
+Developers, software maintainers, QA engineers, open-source contributors, and product teams use this skill to plan and add regression-focused unit tests, raise coverage, and document how the result was verified.
 
-## Reference(s): <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [Skill listing](https://clawhub.ai/kyro-ma/skills/unit-test-coverage-helper) <br>
-- [GitHub issue: Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12) <br>
-- [GitHub issue: WAL replay query plan caching](https://github.com/verveguy/liminis-context-graph/issues/238) <br>
-- [GitHub issue: Multi-Outcome Markets contract](https://github.com/Arena1X/InsightArena/issues/1329) <br>
-- [GitHub issue: integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499) <br>
-- [GitHub issue: Table UI definition](https://github.com/kitamura-tetsuo/outliner/issues/4238) <br>
-- [GitHub issue: Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597) <br>
-- [GitHub issue: Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598) <br>
-- [Hacker News: Clinical failure rates over the decades](https://news.ycombinator.com/item?id=49056211) <br>
-- [Hacker News: LLM Usage in Debian](https://news.ycombinator.com/item?id=49053737) <br>
-- [Hacker News: Harden AI changes before review](https://news.ycombinator.com/item?id=49053524) <br>
-- [Hacker News: Engineering management after code cost changed](https://news.ycombinator.com/item?id=49050839) <br>
-- [Hacker News: Buz fork of Bun](https://news.ycombinator.com/item?id=49045975) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with optional code snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assumptions, checklists, implementation steps, verification notes, and follow-up risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.120312 (source: server release evidence) <br>
+Risk: Broad implicit activation may trigger the skill during unrelated developer conversations about testing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and narrow implicit triggers or invocation policy before deployment when tighter routing is required.
+
+Risk: Generated unit tests or coverage plans may miss project-specific behavior when repository context is incomplete.
+
+Mitigation: Require the agent to restate assumptions, inspect available constraints, and provide verification commands for code changes.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [Coding Agents killed my identity. How do you feel?](https://news.ycombinator.com/item?id=49389408)
+- [We had a unit test once which only failed on Sundays (2015)](https://qntm.org/unit)
+- [Writing Great Unit Tests: Best and Worst Practices](https://segmentfault.com/a/1190000009709754)
+- [Scaffold Dramula parseSeries Strategy](https://github.com/titanaprilian/private-movie/issues/243)
+- [SQA V2 Meta: Unit Tests for Test Utilities, Factories & Mock Handlers](https://github.com/arslan9024/White-Caves/issues/2327)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with optional code blocks, shell commands, checklists, and verification notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the user's repository context, constraints, assumptions, and success criteria.]
+
+## Skill Version(s):
+
+0.20260830.92238 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

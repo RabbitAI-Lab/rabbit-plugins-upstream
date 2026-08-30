@@ -1,44 +1,59 @@
-## Description: <br>
-Grades tomato and strawberry ripeness from fruit images or videos by detecting color, colored-area ratio, gloss, and relative size, then returns maturity grades and harvest-window guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grades tomato and strawberry fruit ripeness from images or videos by analyzing visual cues such as color, colored-area ratio, gloss, and relative size, then returning a structured maturity grade and harvest-window guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Growers, greenhouse operators, home gardeners, and produce cooperatives use this skill to assess tomato or strawberry ripeness from submitted media and receive structured grading plus harvest-timing guidance. Agents can invoke it for image or video analysis, report generation, and cloud report-history lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted fruit images, videos, or URLs may be processed by configured LifeEmergence cloud services. <br>
-Mitigation: Use only media appropriate for external processing, and avoid sensitive content until the publisher documents retention, deletion, and account controls. <br>
-Risk: The skill can silently create or reuse a local workspace identity and link cloud report history to that identity. <br>
-Mitigation: Review identity and report-state behavior before installation, and run in a dedicated workspace when separation from other activity matters. <br>
-Risk: Evidence.security marks this release as suspicious because account creation, token storage, report retention, and leftover pet/video-analysis references need review. <br>
-Mitigation: Install only after reviewing the publisher documentation and configured service endpoints, and reassess after those behaviors are clarified or cleaned up. <br>
+## Use Case:
 
+Growers, greenhouse operators, cooperatives, and agents supporting agricultural workflows use this skill to assess tomatoes or strawberries from uploaded media and produce ripeness grades, structured results, report links, and cloud-backed history lookups.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fruit-ripeness-grading-analysis) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-oriented structured analysis reports, with optional Markdown tables for report history] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return ripeness grades, harvest recommendations, report links, and saved report output when an output path is supplied.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and target metadata; artifact frontmatter states 1.0.5) <br>
+Risk: Media files or private media URLs may be sent to the Life Emergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive images and private internal URLs unless the publisher clarifies retention, processing, and deletion behavior.
+
+Risk: The skill can query cloud report history and silently create or reuse a user identity.
+
+Mitigation: Review account creation and report-history access behavior before deployment, and restrict use to the intended workspace or account.
+
+Risk: A local workspace database may retain generated or reused identity tokens.
+
+Mitigation: Inspect and manage local token storage according to organizational policy before sharing or archiving the workspace.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fruit-ripeness-grading-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-formatted structured analysis text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can include report links and cloud-backed history lists; default detail level is json.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; SKILL.md frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

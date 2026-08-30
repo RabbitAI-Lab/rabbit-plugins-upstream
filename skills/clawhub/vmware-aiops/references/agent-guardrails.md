@@ -10,7 +10,7 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-aiops are specific to this skill.
 
@@ -120,7 +120,7 @@ checklist when evaluating any local model against these skills:
 | Adds generic recommendations unsupported by results | The "analysis discipline" rules. |
 | Drops requested fields or reorders results | State the required fields and ordering in the request itself, not only in the system prompt. |
 | Multi-tool workflows take 30–50s end to end | Prefer the aggregate tools — `cluster_health_summary`, `vm_investigation_bundle`, `host_investigation_bundle`, `datastore_investigation_bundle`, `cross_vcenter_attention` — which collapse a 3-4 call sequence into one round trip. |
-| Picks a write tool for a question that only reads | Route read questions to vmware-monitor. A model that can see 42 write tools will sometimes reach for one to "check" something. |
+| Picks a write tool for a question that only reads | Route read questions to vmware-monitor. A model that can see 43 write tools will sometimes reach for one to "check" something. |
 | Treats a long-running task's "still running" reply as a failure and re-issues the write | The `vm_task_status` rule above. A re-issued clone or delete is the worst outcome in this skill. |
 | Assumes an alarm reset cleared only the alarm it named | Report `scope` from the response. The clear is entity-type-wide by design. |
 
@@ -130,4 +130,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-AIops/issues](https://github.com/zw008/VMware-AIops/issues).
+[github.com/vmware-skills/VMware-AIops/issues](https://github.com/vmware-skills/VMware-AIops/issues).

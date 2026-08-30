@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "omni-ecom://schemas/team-bootstrap-1.0.json",
+  "title": "Omni E-commerce Team Bootstrap Receipt",
+  "type": "object",
+  "required": ["schema_version", "run_id", "team_version", "status", "team_name", "created_at", "host_mode"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "run_id": { "type": "string", "minLength": 3 },
+    "team_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "status": { "const": "team_created" },
+    "team_name": { "type": "string", "minLength": 3 },
+    "team_create_task_id": { "type": "string", "minLength": 1 },
+    "host_mode": { "enum": ["interactive", "non_interactive", "unknown"] },
+    "created_at": { "type": "string", "format": "date-time" }
+  },
+  "additionalProperties": false
+}

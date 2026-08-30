@@ -1,45 +1,60 @@
-## Description: <br>
-Guides agents to post social content through the Claw Post API across X, LinkedIn, Facebook, and TikTok, including Facebook group search, join, membership checks, and group posting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Post to X, LinkedIn, Facebook, TikTok, and Instagram through the Claw Post API, comment on Reddit threads through the user's browser, and post to Facebook groups the user already belongs to.
 
-## Publisher: <br>
-[daydreamnationtechlabs](https://clawhub.ai/user/daydreamnationtechlabs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[daydreamnationtechlabs](https://clawhub.ai/user/daydreamnationtechlabs)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to configure agents to publish approved social posts, upload media, poll job status, and manage Facebook group discovery, join, and posting workflows through Claw Post. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause real public posts, media uploads, and Facebook group joins through the user's logged-in browser session. <br>
-Mitigation: Require explicit user approval for each post, target platform, media upload, and Facebook group join before making the corresponding API request. <br>
-Risk: The paired browser extension acts through social accounts already logged in to the browser. <br>
-Mitigation: Review extension permissions and Claw Post terms before installation, and use the extension only with accounts intended for agent-assisted posting. <br>
-Risk: The CLAWPOST_API_KEY grants access to Claw Post actions for the account. <br>
-Mitigation: Store the key only in an environment variable or secret store, never commit it to skill files, and rotate it when access is no longer needed. <br>
-Risk: Uploaded media may carry sensitive content or metadata. <br>
-Mitigation: Avoid sensitive media unless the user accepts the metadata and retention implications for the upload and posting workflow. <br>
+## Use Case:
 
+Developers and agent operators use this skill to publish social posts, upload media, poll publishing jobs, and submit Reddit comments through a paired Claw Post browser extension and API.
 
-## Reference(s): <br>
-- [Claw Post API Docs](https://clawpost.net/api-docs) <br>
-- [ClawHub Skill Page](https://clawhub.ai/daydreamnationtechlabs/clawpost) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, API calls, code] <br>
-**Output Format:** [Markdown with HTTP request snippets and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the CLAWPOST_API_KEY environment variable and a paired browser extension for external posting actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server release metadata) <br>
+Risk: The skill can publish posts and Reddit comments through real logged-in browser sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for every post, comment, upload, and target destination before submitting a job.
+
+Risk: Facebook group automation may be misused if an agent searches for groups, joins them, and posts without human intent.
+
+Mitigation: Restrict use to Facebook group URLs supplied by the user and do not permit automated search-to-join-to-post workflows.
+
+Risk: The required Claw Post API key authorizes actions for a single account.
+
+Mitigation: Store CLAWPOST_API_KEY in the agent's secret store or environment, rotate it from the dashboard when needed, and never paste live keys into skill files.
+
+## Reference(s):
+
+- [Claw Post API documentation](https://clawpost.net/api-docs)
+- [Claw Post MCP endpoint](https://mcp.clawpost.net/mcp)
+- [ClawHub skill listing](https://clawhub.ai/daydreamnationtechlabs/skills/clawpost)
+- [ClawHub publisher profile](https://clawhub.ai/user/daydreamnationtechlabs)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API examples and HTTP request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires CLAWPOST_API_KEY for REST API use, or MCP OAuth for compatible MCP clients.]
+
+## Skill Version(s):
+
+2.2.0 (source: target metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

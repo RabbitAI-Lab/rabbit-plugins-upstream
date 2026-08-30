@@ -8,46 +8,31 @@ description: >
   customer communication, and benchmark against AIA, Ping An, and Alibaba Cloud training systems.
   Keywords: 智能陪练, 代理人培训, 保险训练, 产品陪练, 话术训练, 角色扮演, 技能评估, AIA培训, 平安培训, 代理人展业, 保险销售, 客户面谈, 异议处理, 保险培训系统, 学习路径.
 slug: insurance-agent-trainer
-version: 5.2.3
-allowed-tools:
-  - python-scripts
-  - file-processing
+version: 5.2.4
+allowed-tools: []
 capabilities:
   - educational-reference
-  - analytical-framework
+  - advisory-only
   - requires-human-review
-  - training-content-generation
+  - no-executable-code
 ---
 
 # Insurance Agent Intelligent Trainer / 保险代理人智能陪练系统
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Training framework with reference scripts — provides educational content generation and assessment templates
-> - **Bundled scripts:** Product parser, question generator, and training scheduler (Python) for local educational use
+> **⚠️ SECURITY NOTICE / 安全声明**
+> - **Type:** Educational reference / analytical framework ONLY
+> - **No executable code, scripts, or binaries are included in this skill**
 > - **No persistent storage, network calls, background execution, or credential collection**
 > - **All outputs are for reference only and require human review before real-world application**
 > - **This skill does NOT provide financial, legal, or insurance advice**
 > - **Users must exercise their own judgment and consult qualified professionals**
 >
-> **⚠️ 使用声明**
-> - 本技能提供保险代理人的培训辅导框架，附带产品解析、题库生成、训练调度等参考脚本
-> - 所有脚本仅供本地教育参考使用，**不涉及外部API调用、数据采集或网络通信**
+> **⚠️ 数据安全警告**
+> - 本技能仅提供保险代理人的培训辅导参考框架，**不执行任何代码或脚本**
+> - 所有文档解析、日程分析、画像评估的描述均为**教学参考框架**，**不包含实际的OCR或PDF解析引擎**
 > - 不会自动访问、存储或处理用户的任何培训数据或个人信息
 > - 培训计划和话术建议需结合用户实际业务场景调整，**不能替代专业培训师**
 > - **销售话术和异议处理仅为培训参考，实际使用须遵守《保险法》及相关监管规定，不得以AI输出替代合规审核**
-
-### 保险监管最新动态 [2026-07-18更新]
-
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-|---------|---------|---------|---------|
-| 监管施行 | 分红险演示利率上限由3.9%下调至3.5%，各公司须在6月30日前完成变更备案或停售 | 2026-07-01 | 代理人培训需更新分红险话术与利益演示 |
-| 监管施行 | 《保险产品适当性管理自律规范》正式施行，产品P1-P5五级管理 | 2026-07-01 | 代理人需按资质等级销售对应产品 |
-| 监管施行 | 银保渠道65号文费用新规全面执行，全口径分项备案 | 2026-07-01 | 银保销售流程与费用管理全面规范 |
-| 监管发布 | 金融监管总局发布《银行业保险业AI安全开发应用指导意见》 | 2026-06-18 | 保险AI培训系统需符合合规要求 |
-| 草案发布 | 《金融业网络安全管理办法(征求意见稿)》发布，8章72条 | 2026-07-03 | 培训系统数据安全合规升级 |
-
-> **数据截止**: 2026-07-18 | 来源：国家金融监督管理总局、中国保险行业协会
-> **声明**: 以上动态供参考，具体以官方最新发布为准
 
 
 
@@ -80,7 +65,7 @@ capabilities:
 
 ## Core System Architecture / 核心系统架构
 
-### 0. 2025-2026 代理人销售环境最新变化
+### 0. 2025-2026 代理人销售环境最新变化（截至2026-08）
 
 | 变化 | 内容 | 话术调整建议 |
 |------|------|------------|
@@ -89,6 +74,9 @@ capabilities:
 | **健康险新规上线** | 2025年商业健康险管理办法修订 | 健康告知流程需更规范，禁止误导性说明 |
 | **代理人资格考试升级** | 2025年加入AI伦理、数字化服务模块 | 新人需补充数字化能力培训 |
 | **企微客户触达合规** | AI外呼需标注身份，营销需客户授权 | 培训合规营销话术，避免违规外呼 |
+| **预定利率进一步下调至2.0%** | 2026年监管引导普通型人身险预定利率上限降至2.0%，分红/万能演示利率同步压降 | 话术从"锁定3.0%"转为"锁定2.0%长期确定+浮动分红对冲通胀" |
+| **营销宣传合规强化** | 2026年整治"炒停售""夸大收益"，自媒体/直播带货纳入监管 | 培训合规表达，禁用绝对化收益承诺与演示红线 |
+| **养老金融与税优扩容** | 个人养老金、商业养老金试点扩围，税优额度可期上调 | 强化养老规划与税优测算话术，绑定家庭现金流诊断 |
 
 
 
@@ -125,18 +113,6 @@ capabilities:
 ```
 
 ---
-
-
-### 保险监管最新动态 [2026-06-28更新]
-
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-|---------|---------|---------|---------|
-| 监管发布 | 金融监管总局发布《关于银行业保险业人工智能安全开发应用的指导意见》，界定承保理赔、风险管理等为AI高风险应用场景 | 2026-06-18 | 保险AI应用合规与风险管控 |
-| 监管计划 | NFRA发布《2026年规章制定工作计划》：保险资金运用管理办法、偿付能力管理办法纳入修订，流动性风险、网络安全管理办法新制定 | 2026-06-23 | 保险监管全链条 |
-| 监管施行 | NFRA 2026年第2号令《银行保险机构许可证管理办法》6月1日起施行，取消保险许可证统一为金融许可证 | 2026-06-01 | 保险业务资质与合规管理 |
-
-> **数据截止**: 2026-06-28 | 来源：国家金融监督管理总局、行业公开信息
-> **声明**: 以上动态供参考，具体以官方最新发布为准
 
 ## Core Capabilities / 核心能力
 
@@ -199,6 +175,33 @@ Document Upload
   "compliance_notes": ["需双录(录音录像)", "犹豫期15天", "等待期90天"],
   "difficulty_tags": ["新人友好", "需强化健康告知", "财务规划综合能力"]
 }
+
+**示例产品画像 2（重大疾病保险）：**
+```json
+{
+  "product_name": "XX康健终身重疾险(2026版)",
+  "product_type": "critical illness insurance",
+  "insurer": "国联人寿",
+  "target_customers": ["28-50岁家庭经济支柱", "有重疾保障缺口人群"],
+  "coverage": {
+    "ci_types": "120种重疾+20种中症+40种轻症",
+    "multiple_payout": "重疾1次+中症2次+轻症3次，累计最高260%保额",
+    "death_benefit": "身故赔已交保费或现金价值较大者"
+  },
+  "premium": {
+    "sample": "30岁男，50万保额，30年缴，年缴约 6800 元",
+    "payment_periods": ["10年","20年","30年"]
+  },
+  "key_selling_points": [
+    "重疾+中症+轻症三重递进保障",
+    "轻中症豁免后续保费",
+    "可附加恶性肿瘤二次赔付"
+  ],
+  "exclusions": ["投保前已患重疾", "遗传性疾病（条款约定）", "等待期内出险"],
+  "compliance_notes": ["重疾定义以监管规范为准", "需明确告知等待期90-180天", "如实健康告知义务"],
+  "difficulty_tags": ["健康告知敏感", "条款专业度高", "需结合医疗知识"]
+}
+```
 ```
 
 ---
@@ -209,11 +212,11 @@ Document Upload
 
 **Three skill tiers:**
 
-| Tier | Level | Description | Training Focus |
-|------|-------|-------------|----------------|
-| 🌱 **L1 - 入门级** | Beginner | < 1 year experience, struggles with product details and objection handling | Foundation: product knowledge, basic sales scripts, simple objection responses |
-| ⚡ **L2 - 进阶级** | Intermediate | 1-3 years, solid product knowledge but inconsistent closing rate | Application: complex scenarios, multi-product combination, competitive replacement, high-net-worth clients |
-| 🎯 **L3 - 专家级** | Advanced | 3+ years, high performance, needs strategy for complex cases | Mastery: enterprise/group clients, tax planning, estate planning, competitive stealing, mentoring skills |
+| Tier | Level | Description | Training Focus | 建议训练时长/周 |
+|------|-------|-------------|----------------|----------------|
+| 🌱 **L1 - 入门级** | Beginner | < 1 year experience, struggles with product details and objection handling | Foundation: product knowledge, basic sales scripts, simple objection responses | 5-8 小时（晨会快练+情景对练） |
+| ⚡ **L2 - 进阶级** | Intermediate | 1-3 years, solid product knowledge but inconsistent closing rate | Application: complex scenarios, multi-product combination, competitive replacement, high-net-worth clients | 3-5 小时（聚焦弱项情景对练） |
+| 🎯 **L3 - 专家级** | Advanced | 3+ years, high performance, needs strategy for complex cases | Mastery: enterprise/group clients, tax planning, estate planning, competitive stealing, mentoring skills | 2-3 小时（策略复盘+带教新人） |
 
 **Profile structure:**
 
@@ -256,6 +259,32 @@ Document Upload
     {"time": "16:00-17:30", "activity": "缘故客户C（教育金规划）", "location": "咖啡厅"}
   ]
 }
+
+**示例画像 2（L3 专家级）：**
+```json
+{
+  "agent_id": "AG20230088",
+  "name": "李华",
+  "level": "L3",
+  "level_label": "专家级",
+  "tenure_years": 6,
+  "certifications": ["保险代理人资格证", "CFP国际金融理财师", "私人银行家"],
+  "performance": {
+    "monthly_premium_target": 200000,
+    "monthly_premium_actual": 235000,
+    "closing_rate": 0.48,
+    "avg_policy_size": 86000,
+    "new_customer_rate": 0.62
+  },
+  "product_mastery": {
+    "term_life": 0.95, "whole_life": 0.92, "critical_illness": 0.90,
+    "medical_insurance": 0.93, "annuity": 0.88, "investment_linked": 0.82
+  },
+  "weak_points": ["家族信托等复杂传承架构经验不足", "跨境税务筹划需外部专家协同"],
+  "strong_points": ["高净值客户经营", "企业团险开拓", "复杂方案设计"],
+  "coaching_focus": ["传承架构进阶", "监管合规红线强化", "带教新人方法论"]
+}
+```
 ```
 
 ---
@@ -270,26 +299,28 @@ Document Upload
 
 **By Category:**
 
-| Category | Description | Example |
-|----------|-------------|---------|
-| **产品知识** | Product features, terms, coverage | "XX福的等待期是多久？" |
-| **客户画像** | Target customer identification | "什么样的客户适合购买这款产品？" |
-| **异议处理** | Objection handling scripts | "客户说'我已经有社保了，不需要商业保险'，如何回应？" |
-| **案例分析** | Real case discussion | "40岁国企中层，年薪50万，如何用这款产品做养老规划？" |
-| **合规话术** | Compliance-approved scripts | "如何向客户解释犹豫期和退保损失？" |
-| **竞品对比** | vs. competitors | "相比平安福，这款产品的核心优势是什么？" |
-| **促成话术** | Closing techniques | "客户表现出购买意向，如何自然促成？" |
-| **交叉销售** | Multi-product combination | "如何将主险与医疗险组合销售？" |
+| Category | Description | Example | 考核重点 |
+|----------|-------------|---------|---------|
+| **产品知识** | Product features, terms, coverage | "XX福的等待期是多久？" | 条款准确性、关键利益点无误 |
+| **客户画像** | Target customer identification | "什么样的客户适合购买这款产品？" | 需求诊断与匹配逻辑 |
+| **异议处理** | Objection handling scripts | "客户说'我已经有社保了，不需要商业保险'，如何回应？" | 共情+数据化反驳能力 |
+| **案例分析** | Real case discussion | "40岁国企中层，年薪50万，如何用这款产品做养老规划？" | 方案完整性与定制化 |
+| **合规话术** | Compliance-approved scripts | "如何向客户解释犹豫期和退保损失？" | 红线词零触发 |
+| **竞品对比** | vs. competitors | "相比平安福，这款产品的核心优势是什么？" | 客观不贬损竞品 |
+| **促成话术** | Closing techniques | "客户表现出购买意向，如何自然促成？" | 时机把握自然度 |
+| **交叉销售** | Multi-product combination | "如何将主险与医疗险组合销售？" | 保障缺口覆盖度 |
+| **养老规划** | 养老现金流与替代率测算 | "客户55岁期望退休月领8000，如何测算缺口？" | 测算逻辑与工具使用 |
+| **税优保险** | 个人养老金/税优健康险政策应用 | "年缴1.2万养老金，节税多少？" | 政策准确、不夸大节税 |
 
 **By Difficulty (5 tiers):**
 
-| Level | Target Audience | Question Complexity |
-|--------|----------------|---------------------|
-| ⭐ 基础 | L1新人 | 单一产品，单一问题，直接答案 |
-| ⭐⭐ 入门 | L1-L2 | 单一产品，1-2个知识点，需要解释 |
-| ⭐⭐⭐ 进阶 | L2 | 单一产品，3-5个知识点，需组合分析 |
-| ⭐⭐⭐⭐ 高阶 | L2-L3 | 多产品组合，竞争替换，高净值客户 |
-| ⭐⭐⭐⭐⭐ 专家 | L3 | 综合方案，税务筹划，财富传承 |
+| Level | Target Audience | Question Complexity | 建议题量/次 |
+|--------|----------------|---------------------|------------|
+| ⭐ 基础 | L1新人 | 单一产品，单一问题，直接答案 | 10-15 题 |
+| ⭐⭐ 入门 | L1-L2 | 单一产品，1-2个知识点，需要解释 | 15-20 题 |
+| ⭐⭐⭐ 进阶 | L2 | 单一产品，3-5个知识点，需组合分析 | 20-30 题 |
+| ⭐⭐⭐⭐ 高阶 | L2-L3 | 多产品组合，竞争替换，高净值客户 | 25-35 题 |
+| ⭐⭐⭐⭐⭐ 专家 | L3 | 综合方案，税务筹划，财富传承 | 30-40 题 |
 
 #### Question Bank Generation Prompt:
 
@@ -313,6 +344,12 @@ Based on the product profile provided, generate a question bank with:
    - Evaluation criteria (excellent/good/needs-improvement)
    - Coaching tips for the trainer
 ```
+
+**示例生成题目（养老规划类别 / ⭐⭐⭐ 进阶）：**
+- **题目**：客户 55 岁，当前社保养老金预计月领 3500 元，期望退休后月生活支出 8000 元，如何测算商业养老金缺口？
+- **参考答案**：缺口 = (8000 - 3500) × 12 × 退休年限（按 25 年计）≈ 135 万；结合预期投资收益率反推年缴/趸交金额，并叠加通胀与医疗支出弹性。
+- **评分**：优秀（准确测算+工具使用）/ 良好（逻辑正确但忽略通胀）/ 待改进（未考虑长寿风险）。
+- **教练提示**：引导代理人用"替代率"概念切入，避免直接推销产品。
 
 ---
 
@@ -419,6 +456,43 @@ def generate_daily_training_plan(agent_profile, daily_schedule, products):
     "方案组合完整性（3单以上产品覆盖）"
   ]
 }
+
+**示例计划 2（健康险异议攻坚日）：**
+```json
+{
+  "date": "2026-08-12",
+  "agent": "李华",
+  "level": "L3",
+  "total_minutes": 60,
+  "sessions": [
+    {
+      "time": "13:00-13:20",
+      "duration": 20,
+      "type": "午间强化",
+      "mode": "异议攻关",
+      "focus": "健康险'已有社保'高频异议",
+      "scenario": "客户：'我有医保，重疾险没必要'",
+      "level": "⭐⭐⭐ 进阶",
+      "coaching_tips": "用'医保目录外用药+收入补偿'双轴拆解，量化缺口而非否定客户"
+    },
+    {
+      "time": "18:00-18:40",
+      "duration": 40,
+      "type": "晚间复盘",
+      "mode": "案例研讨 + 角色扮演",
+      "focus": "高净值客户重疾+医疗+寿险组合",
+      "scenario": "50岁企业主，家庭年收入300万，已有多张保单如何查漏补缺？",
+      "level": "⭐⭐⭐⭐ 高阶",
+      "model_response_guide": "从企业资产与家庭资产隔离、重疾收入补偿、医疗高端资源三维度切入"
+    }
+  ],
+  "key_metrics_to_track": [
+    "异议处理响应时间（目标<25秒）",
+    "方案组合维度（目标≥4个）",
+    "合规红线触发（目标0次）"
+  ]
+}
+```
 ```
 
 ---
@@ -427,13 +501,14 @@ def generate_daily_training_plan(agent_profile, daily_schedule, products):
 
 **Session modes:**
 
-| Mode | Description | Duration | Best For |
-|------|-------------|----------|----------|
-| **快问快答** | Rapid-fire Q&A | 5-10 min | Pre-meeting warmup |
-| **情景对练** | Role-play (client vs. agent) | 15-30 min | Skill practice |
-| **案例研讨** | Real case analysis | 20-40 min | Advanced agents |
-| **异议攻关** | Objection busting focus | 10-15 min | Weak point training |
-| **综合考核** | Full simulation exam | 30-60 min | Level assessment |
+| Mode | Description | Duration | Best For | 适用场景 |
+|------|-------------|----------|----------|---------|
+| **快问快答** | Rapid-fire Q&A | 5-10 min | Pre-meeting warmup | 晨会热身、拜访前激活产品知识 |
+| **情景对练** | Role-play (client vs. agent) | 15-30 min | Skill practice | 健康险/养老险高频异议实战 |
+| **案例研讨** | Real case analysis | 20-40 min | Advanced agents | 高净值综合保障方案设计 |
+| **异议攻关** | Objection busting focus | 10-15 min | Weak point training | 单一弱项（如"已有社保"）专项突破 |
+| **综合考核** | Full simulation exam | 30-60 min | Level assessment | 晋升/季度能力认证 |
+| **直播带练** | 模拟自媒体/直播讲保险 | 15-25 min | 数字化展业 | 合规表达与镜头前讲产品 |
 
 **Real-time coaching during training:**
 
@@ -469,19 +544,29 @@ Agent Response
 5. 行动 (5%)   → 下次拜访的具体行动计划
 ```
 
+**示例对练对话片段（健康险异议攻关）：**
+```
+AI(客户): "我单位福利好，重疾险真没必要买。"
+Agent: "您说的对，单位福利是重要保障。不过重疾理赔是'确诊即付'的一笔钱——您想过没有，万一需要长期康复，单位会不会照发全额工资？"
+AI(客户): "那倒不会，病假工资大概只发底薪……"
+Agent: "这就是缺口。重疾险补的正是'收入中断+自费药'这两块。我们按您月支出算一下具体差额？"
+[实时点评] ✅ 共情到位；✅ 用'收入补偿'替代'恐吓式'话术；⚠️ 下一步应主动给出测算而非直接推产品。
+```
+
 ---
 
 ### 6. Effect Assessment & Progress Tracking / 效果评估与进度追踪
 
 **Metrics tracked per session:**
 
-| Metric | Definition | Target |
-|--------|------------|--------|
-| **产品知识得分** | 知识点正确率 | L1: ≥70%, L2: ≥80%, L3: ≥90% |
-| **异议处理时效** | 从异议提出到满意回答的时间 | < 30秒 |
-| **促成成功率** | 能否自然引入促成信号 | ≥ 1次有效尝试 |
-| **话术合规率** | 合规敏感词使用正确性 | 100% |
-| **方案完整性** | 保障覆盖广度 | ≥ 3个维度 |
+| Metric | Definition | Target | 评估方式 |
+|--------|------------|--------|---------|
+| **产品知识得分** | 知识点正确率 | L1: ≥70%, L2: ≥80%, L3: ≥90% | 自动判分题库 + 人工抽检 |
+| **异议处理时效** | 从异议提出到满意回答的时间 | < 30秒 | 对话时间戳测算 |
+| **促成成功率** | 能否自然引入促成信号 | ≥ 1次有效尝试 | 教练引擎标记 + 主管复核 |
+| **话术合规率** | 合规敏感词使用正确性 | 100% | 合规词库实时监测 |
+| **方案完整性** | 保障覆盖广度 | ≥ 3个维度 | 结构化评分表 |
+| **合规红线触发率** | 触碰禁语/误导表述次数 | 0 次 | 实时拦截 + 事后复盘 |
 
 **Progress report structure:**
 

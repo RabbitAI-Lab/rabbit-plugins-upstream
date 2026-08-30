@@ -1,45 +1,61 @@
-## Description: <br>
-Generates condensed time-lapse album highlight reports from local or URL videos by extracting segments that match user-specified keywords or targets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates condensed album highlights based on specified keywords or targets, extracting target segments from long videos and compiling them into a summary.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agents use this skill when a user wants to find and summarize people, pets, scenes, or events in long videos, or retrieve prior time-lapse analysis reports linked to the current account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send videos, video URLs, and prompts to a cloud analysis service. <br>
-Mitigation: Use it only with media that is appropriate for the listed cloud processing behavior, and avoid sensitive personal media unless that handling is acceptable. <br>
-Risk: The skill silently creates or reuses an account-like identifier and stores account tokens locally. <br>
-Mitigation: Run it in an environment where local account persistence is expected, and clear the skill data store when account linkage should not persist. <br>
-Risk: The skill can retrieve account-linked historical reports with limited user control. <br>
-Mitigation: Review history-query requests before use and avoid sharing the resulting report list or links outside the intended account context. <br>
+## Use Case:
 
+External users and agents use this skill to analyze local videos or video URLs, find clips matching requested people, scenes, events, or keywords, and produce condensed time-lapse album summaries. It can also return account-scoped history and report links through the configured cloud service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown report text with embedded JSON and report links; optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history and export links; detail can be basic, standard, or json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter declares 1.0.8) <br>
+Risk: The skill sends videos or video URLs to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for media that is acceptable to process with that service, and avoid sensitive family, private, or regulated media unless the account, retention, and authorization model is acceptable.
+
+Risk: The skill creates or reuses local identity state and stores service tokens in the workspace data directory.
+
+Mitigation: Review local workspace data handling before installation and restrict access to token and identity state.
+
+Risk: The skill can list prior account-scoped reports.
+
+Mitigation: Confirm that report-history lookup behavior matches the intended account and privacy expectations before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis)
+- [Publisher Profile](https://clawhub.ai/user/18072937735)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files]
+
+**Output Format:** [Markdown or JSON analysis output with report links; optional file output when an output path is provided.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports basic, standard, and json detail levels.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact SKILL.md frontmatter: 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

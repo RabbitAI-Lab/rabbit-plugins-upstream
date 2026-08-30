@@ -54,12 +54,12 @@ Each operation is classified by autonomy level per the Enterprise Harness Engine
 |:-:|---|---|---|
 | **L1** | Read-only, raw data | Always auto-run | `list_virtual_machines`, `list_esxi_hosts`, `get_alarms`, `get_events`, `list_all_datastores`, `list_all_clusters`, `host_performance` |
 | **L2** | Read + analysis / recommendation | Always auto-run | `cluster_health_summary`, `cross_vcenter_attention`, `snapshot_aging`, the three `*_investigation_bundle` tools, scheduled scan reports, log pattern matching (error/fail/critical/panic/timeout), alarm correlation, daemon-driven webhook digests |
-| **L3** | Single write — user must approve | *N/A* | — *(use [vmware-aiops](https://github.com/zw008/VMware-AIops) for write operations)* |
-| **L4** | Multi-step plan / apply workflow | *N/A* | — *(use [vmware-pilot](https://github.com/zw008/VMware-Pilot) for orchestration)* |
+| **L3** | Single write — user must approve | *N/A* | — *(use [vmware-aiops](https://github.com/vmware-skills/VMware-AIops) for write operations)* |
+| **L4** | Multi-step plan / apply workflow | *N/A* | — *(use [vmware-pilot](https://github.com/vmware-skills/VMware-Pilot) for orchestration)* |
 | **L5** | Auto-remediation from learned pattern | *N/A* | — *(remediation is out of scope by design)* |
 
 **Notes**:
-- All tools are safe for agents to call without confirmation — the skill is code-level read-only.
+- All tools are safe for agents to call without confirmation — the skill is read-only, enforced by the allowlist gate in `tests/eval/regression/test_read_only_enforcement.py`.
 - Test file `test_no_destructive_operations.py` enforces this invariant on every commit.
 
 ## 0. Cluster Health Summary (triage)
@@ -185,14 +185,14 @@ item is a ready-to-use hint pointing to the correct companion skill and tool:
 
 | Feature | Details |
 |---------|---------|
-| Code-Level Isolation | Independent repository — zero destructive functions in codebase |
+| Code-Level Isolation | Independent repository — zero destructive functions in codebase, gated by an AST allowlist over every vSphere call |
 | Audit Trail | All queries logged to `~/.vmware/audit.db` (SQLite WAL, via vmware-policy) |
 | Password Protection | `.env` file loading with permission check (warn if not 600) |
-| SSL Self-signed Support | `disableSslCertValidation` — **only** for ESXi hosts with self-signed certificates in isolated lab/home environments. Production environments should use CA-signed certificates with full TLS verification enabled. |
+| SSL Self-signed Support | `verify_ssl: false` — **only** for ESXi hosts with self-signed certificates in isolated lab/home environments. Production environments should use CA-signed certificates with full TLS verification enabled. |
 
 ## FORBIDDEN Operations — DO NOT EXIST IN CODEBASE
 
-These operations **cannot** be performed with this skill — zero destructive code paths exist:
+These operations are **not** performed by this skill — no code path here does them, and the allowlist gate fails if one is added:
 
 - `vm power-on/off`, `vm reset`, `vm suspend`
 - `vm create/delete/reconfigure`

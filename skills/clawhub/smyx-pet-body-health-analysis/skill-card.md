@@ -1,44 +1,64 @@
-## Description: <br>
-Identifies obesity, emaciation, external injuries, skin abnormalities, and abnormal mental states to help pet owners detect potential health issues promptly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies obesity, emaciation, external injuries, skin abnormalities, and abnormal mental states, helping pet owners detect health issues promptly.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners and care workflows use this skill to analyze pet images or videos for body-condition concerns, visible injuries, skin abnormalities, abnormal mental state, and historical report lookup. The output is health-reference guidance and should not replace professional veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, and report history are processed through the Life Emergence cloud service. <br>
-Mitigation: Use only with media and report data appropriate for cloud processing, and inform users that outputs are health-reference guidance rather than veterinary diagnosis. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity and store authentication tokens locally. <br>
-Mitigation: Review local workspace data and token storage before deployment, especially where credential handling, deletion controls, or shared workspaces are sensitive. <br>
+## Use Case:
 
+Pet owners and care teams use this skill to analyze pet images or videos for body condition, skin abnormalities, external injuries, mental-state indicators, and historical report lookup. Results are health reference outputs and are not veterinary diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-body-health-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Detailed API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured health analysis reports, including report links for historical queries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video files or media URLs; documented media formats include jpg, png, jpeg, mp4, avi, and mov with a 10 MB limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release evidence; artifact frontmatter reports 1.0.8) <br>
+Risk: Pet photos, videos, and identity-linked metadata are sent to publisher backend services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when users are comfortable with publisher-hosted processing of pet media and associated metadata.
+
+Risk: The skill silently creates or reuses local user identities and stores tokens or user records locally.
+
+Mitigation: Review local identity storage and token handling before installation, especially in shared workspaces.
+
+Risk: Default configuration includes non-HTTPS private-network development endpoints.
+
+Mitigation: Correct endpoint configuration for normal use and prefer HTTPS/TLS service URLs.
+
+Risk: Health analysis output may be mistaken for a veterinary diagnosis.
+
+Mitigation: Treat reports as health reference information and consult a veterinarian when abnormalities are detected.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-body-health-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json]
+
+**Output Format:** [Markdown or JSON analysis report with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May output historical report lists as Markdown tables; media inputs are limited to supported image/video formats and size limits documented by the artifact.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact frontmatter is 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

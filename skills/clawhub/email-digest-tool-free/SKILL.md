@@ -1,36 +1,31 @@
 ---
-slug: email-digest-tool-free
-name: email-digest-tool-free
-version: 1.0.0
-displayName: 邮件日报免费版
-summary: "自动生成每日邮件摘要，支持主流邮箱，快速了解重要邮件。邮件日报免费版是一款面向个人用户的邮件摘要生成工具，通过浏览器自动化登录邮箱，"
+
+name: "email-digest-tool-free"
+description: "自动生成每日邮件摘要，支持主流邮箱，快速了解重要邮件。Use when 需要消息发送、通知推送、邮件短信、通信集成时使用。不适用于垃圾信息群发。适用于独立开发者、企业团队和自动化工作流场景。支持中文交互，无需复杂配置即开即用。输出结果可直接使用，减少二次加工成本。提供结构化输出和错误处理机制。支持多场景应用和灵活配置。"
 license: Proprietary
-edition: free
-description: '邮件日报免费版是一款面向个人用户的邮件摘要生成工具，通过浏览器自动化登录邮箱，
-
-  自动获取最新邮件列表并生成每日邮件总结报告，帮助用户快速了解当日邮件概况。核心能力:
-
-  - 支持 Gmail、Outlook、QQ邮箱、163邮箱等主流邮箱
-
-  - 复用浏览器已登录会话。Use when 需要消息发送、通知推送、邮件短信、通信集成时使用。不适用于垃圾信息群发。'
-tags:
-  - 沟通协作
-  - 邮件管理
-  - 邮件摘要
-  - 个人效率
-  - 邮件
-  - 通信
-  - 工具
-  - browser-use
-  - https
-  - mail
+allowed-tools: read exec
+compatibility: "Requires LLM with tool-use capability"
+metadata:
+  displayName: "邮件日报免费版"
+  version: "1.0.0"
+  summary: "自动生成每日邮件摘要，支持主流邮箱，快速了解重要邮件"
+  tags:
+    - "沟通协作"
+    - "邮件管理"
+    - "邮件摘要"
+    - "个人效率"
+  source: "SkillHub"
+  converted_at: "2026-07-22T17:58:36"
 tools:
-  - read
   - exec
-  - write
-homepage: ""
-category: "Communication"
+  - read
+  - browser
+
 ---
+
+> **功能说明**: 本技能涵盖 中文交互 等核心能力。
+
+
 # 邮件日报免费版
 
 **版本**: 1.0.0
@@ -41,8 +36,10 @@ category: "Communication"
 
 ## 概述
 
-邮件日报免费版是一款帮助个人用户自动生成每日邮件摘要的工具。通过浏览器自动化技术登录邮箱，获取最新邮件列表并生成包含未读统计、发件人分类与建议操作的总结报告。工具支持复用浏览器已登录会话，无需在脚本中存储邮箱密码，兼顾便利性与安全性.
-本工具支持 Gmail、Outlook、QQ邮箱、163邮箱、126邮箱等主流邮箱服务，生成的摘要报告包含邮件统计概览、重要邮件列表与分类汇总，帮助用户在早晨用最少时间掌握邮箱全貌.
+邮件日报免费版是一款帮助个人用户自动生成每日邮件摘要的工具。通过浏览器自动化技术登录邮箱，获取最新邮件列表并生成包含未读统计、发件人分类与建议操作的总结报告。工具支持复用浏览器已登录会话，无需在脚本中存储邮箱密码，兼顾便利性与安全性。
+
+本工具支持 Gmail、Outlook、QQ邮箱、163邮箱、126邮箱等主流邮箱服务，生成的摘要报告包含邮件统计概览、重要邮件列表与分类汇总，帮助用户在早晨用最少时间掌握邮箱全貌。
+
 ---
 
 ## 核心能力
@@ -53,16 +50,16 @@ category: "Communication"
 - 手动登录流程（headed 模式可见操作过程）
 - 支持主流邮箱服务
 
-**处理**: 解析邮箱登录的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回邮箱登录的响应数据,包含状态码、结果和日志.
+**输出**: 返回邮箱登录的执行结果,包含操作状态和输出数据。
+
 ### 邮件获取
 
 - 自动获取收件箱最新邮件列表
 - 统计未读邮件数量
 - 提取发件人、主题、摘要、时间信息
 
-**处理**: 解析邮件获取的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回邮件获取的响应数据,包含状态码、结果和日志.
+**输出**: 返回邮件获取的执行结果,包含操作状态和输出数据。
+
 ### 摘要生成
 
 - 生成每日邮件统计概览
@@ -70,8 +67,8 @@ category: "Communication"
 - 生成邮件列表截图存档
 - 输出文本格式摘要报告
 
-**处理**: 解析摘要生成的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回摘要生成的响应数据,包含状态码、结果和日志.
+**输出**: 返回摘要生成的执行结果,包含操作状态和输出数据。
+
 ### 邮件统计
 
 - 未读邮件计数
@@ -80,39 +77,34 @@ category: "Communication"
 
 ---
 
-**处理**: 解析邮件统计的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回邮件统计的响应数据,包含状态码、结果和日志.
-**技术参数**：使用`input_params`和`output_format`参数控制执行行为,支持`json`/`text`/`csv`输出格式.
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：自动生成每日邮件、快速了解重要邮件、邮件日报免费版是、一款面向个人用户、的邮件摘要生成工、通过浏览器自动化、登录邮箱、自动获取最新邮件、列表并生成每日邮、件总结报告、帮助用户快速了解、当日邮件概况、核心能力、Gmail、Outlook、邮箱等主流邮箱、Use、when、需要消息发送、通知推送、邮件短信、通信集成时使用、不适用于垃圾信息等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
+**输出**: 返回邮件统计的执行结果,包含操作状态和输出数据。
+**技术参数**：使用`input_params`和`output_format`参数控制执行行为,支持`json`/`text`/`csv`输出格式。
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：自动生成每日邮件、快速了解重要邮件、邮件日报免费版是、一款面向个人用户、的邮件摘要生成工、通过浏览器自动化、登录邮箱、自动获取最新邮件、列表并生成每日邮、件总结报告、帮助用户快速了解、当日邮件概况、核心能力、Gmail、Outlook、邮箱等主流邮箱、Use、when、需要消息发送、通知推送、邮件短信、通信集成时使用、不适用于垃圾信息等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
+
 ## 使用场景
 
 ### 场景一：每日早晨邮件快速浏览
 
-每天早晨打开电脑后，快速生成 Gmail 邮件摘要，了解 overnight 收到的重要邮件.
-## 输入格式
-| 参数名 | 类型 | 必填 | 说明 |
-|---|---|---|---|
-| input | string | 是 | 邮件日报免费版处理的输入数据或指令 |
-| options | object | 否 | 附加配置选项,如模式选择、格式偏好等 |
-| callback_url | string | 否 | 异步处理完成后的回调通知URL |
+每天早晨打开电脑后，快速生成 Gmail 邮件摘要，了解 overnight 收到的重要邮件。
 
 ```bash
 # 使用已登录的浏览器会话打开 Gmail
 browser-use --browser real open https://mail.google.com
-# ...
+
 # 等待页面加载
 sleep 3
-# ...
+
 # 获取邮箱当前状态
 browser-use state
-# ...
+
 # 截图保存收件箱
 browser-use screenshot emails_$(date +%Y%m%d).png
 ```
 
 ### 场景二：生成未读邮件统计
 
-快速统计当前邮箱的未读邮件数量与可见邮件总数.
+快速统计当前邮箱的未读邮件数量与可见邮件总数。
+
 ```bash
 # 获取邮件统计数据
 browser-use eval "
@@ -140,7 +132,8 @@ browser-use eval "
 
 ### 场景三：提取邮件列表信息
 
-提取前20封邮件的发件人、主题与摘要信息.
+提取前20封邮件的发件人、主题与摘要信息。
+
 ```bash
 browser-use eval "
   const emails = [];
@@ -171,7 +164,8 @@ browser-use install
 
 ### 第二步：在浏览器中登录邮箱
 
-使用 Chrome 浏览器手动登录你的邮箱账户（Gmail、Outlook、QQ邮箱等），确保登录状态保持.
+使用 Chrome 浏览器手动登录你的邮箱账户（Gmail、Outlook、QQ邮箱等），确保登录状态保持。
+
 ### 第三步：生成邮件摘要
 
 ```bash
@@ -186,28 +180,28 @@ browser-use screenshot daily_digest.png
 创建 `email_digest.sh` 脚本：
 
 ```bash
-#!/bin/bash
-# ...
+#!/bin/sh
+
 DATE=$(date +%Y-%m-%d)
 TIME=$(date +%H:%M:%S)
 OUTPUT_DIR="./email_summaries"
 mkdir -p "$OUTPUT_DIR"
-# ...
+
 echo "=========================================="
 echo "📧 邮件日报生成中..."
 echo "日期: $DATE $TIME"
 echo "=========================================="
-# ...
+
 sleep 3
-# ...
+
 echo ""
 echo "📋 当前邮箱状态:"
 browser-use state
-# ...
+
 echo ""
 echo "📸 保存截图..."
 browser-use screenshot "$OUTPUT_DIR/inbox_$DATE.png"
-# ...
+
 echo ""
 echo "📊 邮件统计:"
 browser-use eval "
@@ -219,7 +213,7 @@ querySelectorAll('.zE').length;
   });
 })()
 "
-# ...
+
 echo ""
 echo "✅ 完成！截图保存至: $OUTPUT_DIR/inbox_$DATE.png"
 browser-use close
@@ -232,7 +226,7 @@ browser-use close
 ### 支持的邮箱服务
 
 | 邮箱服务 | 登录 URL | 收件箱 URL |
-|:-----|:-----|:-----|
+|:---------|:---------|:-----------|
 | Gmail | https://accounts.google.com | https://mail.google.com |
 | Outlook | https://login.live.com | https://outlook.live.com |
 | QQ邮箱 | https://mail.qq.com | https://mail.qq.com |
@@ -246,7 +240,7 @@ browser-use close
 # 自定义输出目录
 OUTPUT_DIR="$HOME/Documents/email-digests"
 mkdir -p "$OUTPUT_DIR"
-# ...
+
 # 截图命名规则
 SCREENSHOT_NAME="inbox_$(date +%Y%m%d_%H%M%S).png"
 ```
@@ -257,25 +251,25 @@ SCREENSHOT_NAME="inbox_$(date +%Y%m%d_%H%M%S).png"
 
 ```bash
 browser-use --headed open https://accounts.google.com
-# ...
+
 # 查看页面元素
 browser-use state
-# ...
+
 # 输入邮箱
 browser-use input <email_input_index> "your-email@gmail.com"
 browser-use click <next_button_index>
-# ...
+
 # 输入密码
 browser-use input <password_input_index> "your-password"
 browser-use click <login_button_index>
-# ...
+
 # 打开邮箱
 browser-use open https://mail.google.com
 ```
 
 ---
 
-## 最佳实践
+## 优选实践
 
 ### 安全优先原则
 
@@ -285,7 +279,7 @@ browser-use open https://mail.google.com
 
 ```bash
 # 安全做法：复用会话
-# ...
+
 # 完成后关闭
 browser-use close
 ```
@@ -297,7 +291,7 @@ browser-use close
 DAILY_DIR="./email_summaries/$(date +%Y/%m)"
 mkdir -p "$DAILY_DIR"
 browser-use screenshot "$DAILY_DIR/inbox_$(date +%d).png"
-# ...
+
 # 定期清理旧截图（保留30天）
 find ./email_summaries -name "*.png" -mtime +30 -delete
 ```
@@ -321,7 +315,8 @@ find ./email_summaries -name "*.png" -mtime +30 -delete
 Error: Element not found
 ```
 
-**原因**: 页面尚未完全加载.
+**原因**: 页面尚未完全加载。
+
 **解决**: 增加等待时间，确保页面加载完成：
 
 ```bash
@@ -348,14 +343,15 @@ browser-use close --all
 ```bash
 uv pip install browser-use[cli]
 browser-use install
-# ...
+
 # 验证安装
 browser-use --version
 ```
 
 ### 问题4：截图为空白
 
-**原因**: 截图时页面尚未渲染完成.
+**原因**: 截图时页面尚未渲染完成。
+
 **解决**: 增加等待时间后再截图：
 
 ```bash
@@ -365,7 +361,8 @@ browser-use screenshot inbox.png
 
 ### 问题5：不同邮箱页面结构不同
 
-**解决**: 不同邮箱的邮件列表 HTML 结构不同，需要调整选择器。建议先用 `browser-use state` 查看页面结构，再调整提取脚本中的 CSS 选择器.
+**解决**: 不同邮箱的邮件列表 HTML 结构不同，需要调整选择器。建议先用 `browser-use state` 查看页面结构，再调整提取脚本中的 CSS 选择器。
+
 ---
 
 ## 输出报告示例
@@ -376,25 +373,25 @@ browser-use screenshot inbox.png
 ==========================================
 📧 邮件日报 - 2026-07-18
 ==========================================
-# ...
+
 📊 统计概览:
 - 未读邮件: 12 封
 - 可见邮件: 50 封
 - 截图: inbox_20260718.png
-# ...
+
 📬 重要未读邮件:
 1. 来自 boss@company.com
    主题: 项目进度汇报 - 紧急
    时间: 09:30
-# ...
+
 2. 来自 finance@bank.com
    主题: 账单提醒
    时间: 08:15
-# ...
+
 💡 建议操作:
 - 回复 boss@company.com 的邮件
 - 处理需要审批的邮件
-# ...
+
 ==========================================
 ```
 
@@ -412,7 +409,7 @@ browser-use screenshot inbox.png
 ### 第三方依赖
 
 | 依赖项 | 类型 | 是否必需 | 获取方式 |
-|---:|---:|---:|---:|
+|:-------|:-----|:---------|:---------|
 | LLM API | API | 必需 | 由Agent内置LLM提供 |
 | browser-use | CLI工具 | 必需 | `uv pip install browser-use[cli]` |
 | Chrome 浏览器 | 浏览器 | 必需 | 官方网站下载安装 |
@@ -432,7 +429,7 @@ browser-use screenshot inbox.png
 ## 错误处理
 
 | 错误场景 | 原因 | 处理方式 |
-|:---:|:---:|:---:|
+|---------|------|---------|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |
@@ -443,3 +440,22 @@ browser-use screenshot inbox.png
 - 复杂业务场景建议结合人工经验判断
 - 执行效率受模型能力与网络环境影响
 - 当前为免费版本,如需完整功能请升级到付费版获取全部能力
+
+## 安全注意事项
+
+| 风险类型 | 防范措施 |
+|----------|---------|
+| API密钥泄露 | 通过环境变量配置，禁止硬编码到代码或配置文件中 |
+| 命令执行风险 | 仅执行白名单命令，避免拼接用户输入到命令行参数中 |
+| 网络通信安全 | 使用HTTPS协议，验证SSL证书有效性 |
+| 敏感数据暴露 | 输出结果中不包含密钥、令牌等敏感信息 |
+
+使用前请确认已阅读依赖说明章节，确保运行环境满足安全要求。
+
+## 核心功能
+
+- **自动化执行**: 基于指令驱动的自动化流程
+- **文件处理**: 支持多种文件格式的读取、解析和写入操作
+- **API集成**: 通过标准化接口调用外部服务并处理响应
+- **命令执行**: 在安全沙箱中执行系统命令并收集结果
+- **信息检索**: 快速搜索和过滤目标数据

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/local-code-review",
   "slug": "local-code-review",
   "ownerHandle": null,
-  "version": "0.1.1",
-  "updatedAt": 1778492706596,
-  "contentHash": "0b337a6db16497303076fbd9e9853579206174af397ed9800442584e7539b544",
-  "fetchedAt": "2026-07-26T19:22:46.998Z"
+  "version": "0.1.2",
+  "updatedAt": 1787993266095,
+  "contentHash": "57d14b1abffc5a42de721edf0c5b25845b7a5c60f84847699d1763aa5ceaccf9",
+  "fetchedAt": "2026-08-30T13:03:34.658Z"
 }

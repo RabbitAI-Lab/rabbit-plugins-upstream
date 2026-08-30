@@ -1,46 +1,65 @@
-## Description: <br>
-查询分页的国家贸易列表数据，获取国家级别的贸易分解，包含年度、季度和月度贸易量，用于市场分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询分页的国家级贸易列表数据，返回年度、季度和月度贸易量以及供应商和采购商数量，用于国家间进出口市场分析。
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade teams, market researchers, and trade analysts use this skill to query paginated country-level import and export breakdowns from Upkuajing for country comparison, market penetration analysis, and growth opportunity discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses paid Upkuajing API calls and each page query may incur a charge. <br>
-Mitigation: Tell the user a charge will occur, obtain explicit confirmation in a separate message before each charged query, and use the pricing command or pricing page for current costs. <br>
-Risk: The skill stores and reads the UPKUAJING_API_KEY from ~/.upkuajing/.env when an environment variable is not set. <br>
-Mitigation: Keep the local key file permission-restricted, avoid sharing the key, and rotate it if it may have been exposed. <br>
-Risk: Trade search parameters and account or recharge requests are sent to Upkuajing services. <br>
-Mitigation: Use the skill only when the user is comfortable sharing the requested trade parameters with Upkuajing and review account or payment links before opening them. <br>
+## Use Case:
 
+External trade teams, market researchers, and trade analysts use this skill to query paginated country-level customs trade data, compare origin and arrival countries, and analyze trade volume patterns across annual, quarterly, and monthly views.
 
-## Reference(s): <br>
-- [国家贸易列表 API 参考](references/customs-overview-trade-list-api.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/upkuajing/skills/customs-overview-trade-list-zh) <br>
-- [Upkuajing homepage](https://www.upkuajing.com) <br>
-- [Upkuajing developer platform](https://developer.upkuajing.com/) <br>
-- [Upkuajing OpenAPI pricing](https://www.upkuajing.com/web/openapi/price.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries return paginated country trade records and fee information when the API call succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The skill handles an Upkuajing API key and reads or writes local files under ~/.upkuajing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable granting access to the Upkuajing account, keep the API key out of shared logs and messages, and review local credential storage before use.
+
+Risk: Trade-list queries and recharge-order workflows can involve paid API usage.
+
+Mitigation: Confirm paid queries and recharge orders in a separate explicit user message, and use the platform price information before estimating costs.
+
+Risk: Diagnostic error reports can include request context, request data, or response data related to business activity.
+
+Mitigation: Approve diagnostic reports only after checking that the submitted context and payload do not contain secrets or sensitive business information.
+
+Risk: The security verdict is suspicious because API keys, recharge orders, diagnostics, and automatic version checks deserve manual review before installation.
+
+Mitigation: Review the security summary and script behavior before deployment, especially network calls and local ~/.upkuajing state changes.
+
+## Reference(s):
+
+- [国家贸易列表 API 参考](artifact/references/customs-overview-trade-list-api.md)
+- [Agent 调用 Skill 异常上报 API 参考](artifact/references/skill-error-report-api.md)
+- [Upkuajing Homepage](https://www.upkuajing.com)
+- [跨境魔方开放平台](https://developer.upkuajing.com/)
+- [开放平台价格说明](https://www.upkuajing.com/web/openapi/price.html)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and UPKUAJING_API_KEY; successful trade-list calls include paginated data, fee details, and request identifiers.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

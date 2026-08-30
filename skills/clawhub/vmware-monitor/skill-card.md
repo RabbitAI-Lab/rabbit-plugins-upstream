@@ -1,49 +1,72 @@
-## Description: <br>
-Provides read-only VMware vCenter/ESXi monitoring, inventory, health triage, alarm and event review, performance and capacity checks, and object-centered investigation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+vmware-monitor provides read-only VMware vCenter and ESXi monitoring for inventory, health, alarms, events, performance, capacity, and object-centered investigations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, infrastructure engineers, and operations teams use this skill to query VMware vCenter/ESXi inventory, health, alarms, events, capacity, and object-centered investigations without write operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: VMware inventory, sessions, events, and host logs can expose sensitive operational information. <br>
-Mitigation: Run the skill with a least-privilege read-only VMware account and restrict local configuration and audit files to authorized users. <br>
-Risk: Continuous monitoring and webhook notifications can send aggregated alert metadata outside the local agent environment when enabled. <br>
-Mitigation: Start the daemon only when continuous monitoring is required and configure Slack, Discord, or webhook URLs only for approved destinations. <br>
-Risk: Per-target VMware credentials are configured through local environment files. <br>
-Mitigation: Keep the environment file access-restricted, avoid plaintext secrets for production deployments where possible, and review configuration before installation. <br>
+## Use Case:
 
+Infrastructure operators, SREs, and developers use this skill to query VMware vCenter and ESXi inventory and health, triage alarms and events, and produce read-only investigation summaries before choosing any remediation path.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-monitor) <br>
-- [VMware Monitor Repository](https://github.com/zw008/VMware-Monitor) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Cluster Health Summary Display Template](references/health-summary-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance, CLI commands, structured JSON-style tool results, rendered tables, and optional self-contained HTML snapshot files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only VMware monitoring output may include inventory, alarms, events, performance samples, capacity checks, suggested actions, and audit-aware command guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: The skill connects to VMware infrastructure and requires target credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only vCenter or ESXi account, keep ~/.vmware-monitor/.env locked down, or inject credentials from a secret manager.
+
+Risk: Optional Slack or Discord webhooks can send aggregated infrastructure alert metadata to configured destinations.
+
+Mitigation: Configure webhooks only for approved destinations and start the daemon only when scheduled alert delivery is intended.
+
+Risk: Disabling TLS verification can hide connection integrity problems.
+
+Mitigation: Keep TLS verification enabled in production and reserve verify_ssl: false for isolated lab or home systems with self-signed certificates.
+
+Risk: Read-only source-level enforcement does not replace infrastructure permissions.
+
+Mitigation: Deploy with VMware accounts that are permissioned read-only so platform controls enforce the same operating boundary.
+
+Risk: Large inventory or event results may be truncated or bounded by the backing VMware API.
+
+Mitigation: Check returned, total, truncated, and hint fields before treating a list result as complete.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-monitor)
+- [Project Homepage](https://github.com/vmware-skills/VMware-Monitor)
+- [Setup Guide](artifact/references/setup-guide.md)
+- [Capabilities Reference](artifact/references/capabilities.md)
+- [CLI Reference](artifact/references/cli-reference.md)
+- [Agent Guardrails](artifact/references/agent-guardrails.md)
+- [Investigation Protocol](artifact/references/investigation-protocol.md)
+- [Health Summary Template](artifact/references/health-summary-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, CLI tables, MCP JSON envelopes, and optional self-contained HTML snapshots.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only VMware monitoring output; list-style MCP tools include returned, limit, total, truncated, and hint fields.]
+
+## Skill Version(s):
+
+1.8.14 (source: evidence.json release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

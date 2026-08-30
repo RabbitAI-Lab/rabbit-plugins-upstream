@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-debug",
   "slug": "vmware-debug",
   "ownerHandle": null,
-  "version": "1.8.7",
-  "updatedAt": 1784637383507,
-  "contentHash": "22ffdc596e9194df93b1187d1f9bf98864094763b1c2b4f9cbd3e364eb0d00fa",
-  "fetchedAt": "2026-07-26T18:09:00.497Z"
+  "version": "1.11.1",
+  "updatedAt": 1788082671297,
+  "contentHash": "aab3c494f84ccdc77738f678a844a983ec62a075e027e7cc9f7ca0b99555b7bc",
+  "fetchedAt": "2026-08-30T13:00:31.839Z"
 }

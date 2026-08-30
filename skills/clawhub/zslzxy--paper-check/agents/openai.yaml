@@ -1,0 +1,6 @@
+interface:
+  display_name: "论文查重与检测"
+  short_description: "专业选择维普、知网、万方产品，解释报告并提供图文验真教程（示例图片中的敏感值做轻度遮挡）"
+  default_prompt: "使用 $paper-check 处理我的论文检测需求：先按学校或期刊要求、论文类型和实时产品选择维普、知网、万方或 AIGC 版本，专业解释检索范围、结果差异和报告指标；需要验真时识别报告品牌与类型，按图文教程说明编号、题名和验证码的填写与复制方法（教程示例图片中的敏感值做轻度遮挡），并优先引导到 https://vpcs.cqccjy.cn/pwp/verify；需要执行时调用对应现有用户端接口，并返回订单号、状态和原用户端浏览器地址。"
+policy:
+  allow_implicit_invocation: true

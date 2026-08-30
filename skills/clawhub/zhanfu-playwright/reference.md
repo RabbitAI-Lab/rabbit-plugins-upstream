@@ -23,7 +23,7 @@ HTTP 入口：`POST http://127.0.0.1:{api_port}`，Body 为 JSON。
 | `action` | 接口动作名 |
 | `module` | 固定为 `WebDriverModule` |
 | `args` | JSON 字符串，承载业务参数 |
-| `browserId` | 部分接口需要的店铺 ID（与 `mall_id` 相同） |
+| `browserId` | 部分接口需要的店铺 ID（与 `mall_id` 相同）；**必须为 JSON 字符串**（如 `"3514488"`），**禁止**传数字 |
 
 ### 响应结构
 
@@ -49,7 +49,7 @@ HTTP 入口：`POST http://127.0.0.1:{api_port}`，Body 为 JSON。
 
 | 返回类型 | 判断方式 |
 |----------|----------|
-| `{ success, msg, ... }` | 以 `returnObj.success` 为准（如 `Login`、`GetMallByName`、`GetBrowserWebDriver`） |
+| `{ success, msg, ... }` | 以 `returnObj.success` 为准（如 `Login`、`GetMallByName`、`UpdateAccount`、`GetBrowserWebDriver`） |
 | `true` / `false` | 如 `OpenBrowser`：成功 `returnObj === true`，失败 `returnObj === false` |
 | `null` | 如 `CloseBrowser`、`ExitClient` 成功时 `returnObj` 为 `null`；`CloseBrowser` 失败时 `returnObj === false` |
 
@@ -63,22 +63,38 @@ Login → SetInstallPlugins（可选，仅 Windows）→ GetBrowserList / GetMal
 ```
 
 > **macOS 暂不支持**：`SetDownLoadPath`、`ClearCacheFolder`、`ClearCache`、`SetInstallPlugins`。Agent 不得在 Mac 上调用这些 action。
+>
+> **macOS 内核**：`KernalNumber ≤ 130` 的店铺**不支持**自动化；须提示切换到 130 以上内核（或主账号切换）并让客户**手动重启站斧**。
 
 ## 启动站斧
 
-**Windows**：
+**Windows**（**四项缺一不可，禁止减少/省略任一参数**）：
 
 ```
 站斧.exe --multip --run_type=web_driver --ipc_type=http --httpport={api_port}
 ```
 
-**macOS**（对齐官方 Playwright demo；**不含** `--multip`）：
+| 参数 | 可否省略 |
+|------|----------|
+| `--multip` | **否** |
+| `--run_type=web_driver` | **否** |
+| `--ipc_type=http` | **否** |
+| `--httpport={api_port}` | **否**（值可变，键不可少） |
+
+**macOS**（**四项缺一不可，禁止减少/省略任一参数**，与 Windows 相同；用 `open -a` 启动）：
 
 ```
-open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --httpport={api_port}
+open -a /Applications/站斧.app --args --multip --run_type=web_driver --ipc_type=http --httpport={api_port}
 ```
 
-也可：`open -a 站斧 --args --run_type=web_driver --ipc_type=http --httpport={api_port}`
+也可：`open -a 站斧 --args --multip --run_type=web_driver --ipc_type=http --httpport={api_port}`
+
+| 参数 | 可否省略 |
+|------|----------|
+| `--multip` | **否** |
+| `--run_type=web_driver` | **否** |
+| `--ipc_type=http` | **否** |
+| `--httpport={api_port}` | **否**（值可变，键不可少） |
 
 `{api_port}` = `get_available_port(首选)`，首选默认 `12678`（占用则递增）。
 
@@ -87,6 +103,7 @@ open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --
 - Windows：`taskkill /f /t /im 站斧.exe`
 - macOS：`killall 站斧`
 
+- **禁止减少启动参数**（Windows / macOS 均不得去掉 `--multip` / `--run_type` / `--ipc_type` / `--httpport` 任一）
 - `run_type` 必须为 `web_driver`
 - `ipc_type` 必须为 `http`
 - 冷启动端口写入 Skill 目录 `api_port.json`
@@ -290,6 +307,64 @@ open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --
 
 创建成功后需**等待列表同步**，再 `GetMallByName` 取 `mall_id` 并 `OpenBrowser`。
 
+## UpdateAccount
+
+根据店铺 ID（`browserId`）修改店铺登录账号与密码。`browserId` 为店铺 `mall_id`；`args.username` 对应 `mall_account`，`args.password` 对应 `mall_password`（可空字符串）。
+
+请求：
+
+```json
+{
+  "action": "UpdateAccount",
+  "module": "WebDriverModule",
+  "browserId": "3061488",
+  "args": "{\"username\":\"admin\",\"password\":\"cyt123456A\"}"
+}
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `browserId` | string | 店铺 `mall_id` |
+| `username` | string | 店铺账号（对应 `mall_account`，可空） |
+| `password` | string | 店铺密码（对应 `mall_password`，可空） |
+
+成功：
+
+```json
+{
+  "action": "UpdateAccount",
+  "ret": 200,
+  "returnObj": {
+    "success": true,
+    "data": {},
+    "msg": ""
+  },
+  "module": "WebDriverModule"
+}
+```
+
+失败：
+
+```json
+{
+  "action": "UpdateAccount",
+  "ret": 200,
+  "returnObj": {
+    "success": false,
+    "msg": "缺少 browserId"
+  },
+  "module": "WebDriverModule"
+}
+```
+
+| 字段 | 说明 |
+|------|------|
+| `success` | 是否修改成功 |
+| `msg` | 提示信息 |
+| `data` | 成功时的接口返回数据 |
+
+以 `returnObj.success` 为准；`success != true` → 立即结束并原样报告 `msg`。调用前须 resolve `mall_id`（先读 `mall_cache.json`，未命中再 `GetMallByName`）。
+
 ## OpenBrowser
 
 根据店铺 `mall_id` 打开店铺。
@@ -305,7 +380,7 @@ open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --
 
 | 字段 | 说明 |
 |------|------|
-| `browserId` | 店铺 `mall_id` |
+| `browserId` | 店铺 `mall_id`；**必须为 JSON 字符串**（`"3061488"`），**禁止**传数字 `3061488` |
 | `isDownLoadConfirm` | 下载前是否询问每个文件的保存位置 |
 | `isOpenMallIndex` | 是否默认打开店铺首页 |
 | `isSwitchDynamicNetwork` | 绑定了动态 IP 的店铺，传 `true` 则切换动态网络 |
@@ -332,6 +407,8 @@ open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --
 }
 ```
 
+> **`browserId` 必须为 JSON 字符串**（`"2786463"`），**禁止**传数字。从 API/`mall_cache` 取到的 `mall_id` 一律先 `str(mall_id)` 再写入。
+
 需在店铺**已打开**后调用（OpenBrowser 前探测时：未开或超时则视为未确认已开）。
 
 响应：
@@ -355,11 +432,20 @@ open -a /Applications/站斧.app --args --run_type=web_driver --ipc_type=http --
 |------|------|
 | `WebDriverPort` | 外部 WebDriver 开发端口（Playwright CDP 用） |
 | `MainHandle` | 主窗口句柄 |
-| `KernalNumber` | 内核版本 |
+| `KernalNumber` | 内核版本；**macOS** 下若 **≤ 130** 则**不支持** Playwright 自动化，须提示客户切换到 **130 以上**内核（或主账号切换）并**手动重启站斧**后停止 |
 
 失败示例：`returnObj.success === false`，`msg` 如「浏览器未启动」。
 
 Playwright 使用 `WebDriverPort`：`connect_over_cdp("http://127.0.0.1:{WebDriverPort}")`
+
+> **macOS 内核限制**：拿到 `WebDriverPort` 后进入 CDP 前，必须检查 `KernalNumber`。`KernalNumber ≤ 130` → 立即停止并提示：
+>
+> ```
+> 当前为 macOS，店铺 {mall_name} 的内核为 {kernel}（≤130），暂不支持自动化。
+> 请将该店铺切换到 130 以上内核；若无权限请让主账号切换。切换完成后请您手动重启站斧，再告诉我继续。
+> ```
+>
+> **Windows** 无此限制。Agent **禁止**在低内核场景下自行改内核或自动重启站斧。
 
 ## CloseBrowser
 
@@ -538,7 +624,7 @@ SetInstallPlugins([]) → ClearCache（browserId=mall_id）→ OpenBrowser
 
 ## 注意事项（文档 5.x）
 
-1. 客户端版本要求：**Windows ≥ 5.2.12**，**macOS > 5.2.10**；安装技能时向客户说明「客户使用指南」（见 `SKILL.md`）。冷启动后 8s 内未能建立 WebDriver 通讯时，提示客户确认上述版本要求后再说「打开站斧」（**禁止**再说「WebDriver 版且不低于 5.2.12」）。
+1. 客户端版本要求：**Windows ≥ 5.2.12**，**macOS > 5.2.10**；安装技能时向客户说明「客户使用指南」（见 `SKILL.md`）。冷启动后 8s 内未能建立 WebDriver 通讯时，按 `SKILL.md`「通讯失败对客户话术」提示（版本无误、卡顿可延迟时可再试，请客户说「打开站斧」；**禁止**再说「WebDriver 版且不低于 5.2.12」）。
 2. **首次**打开店铺会下载内核，建议客户先在站斧客户端手动打开一次；不同内核的店铺需分别手动打开一次后再自动化。
 3. 同时安装普通版与 WebDriver 版时，需使用 WebDriver 版。
 4. 用 `GetBrowserList` **能取到数据**判断站斧已打开；**禁止**用 `LoadSuccess` 判断。确认为站斧 WebDriver 时**勿杀进程重启**；打开/关闭店铺均继续 HTTP。仅目标端口无响应、被非站斧占用、或客户明确要求时才冷启动（**空闲端口**，优先 12678，占用则递增）。**打开站斧且探测未打开/非站斧占用时，立刻清空 `opening_malls.json`**；安装目录须按快捷方式/常见目录查找，找不到则向客户索要。**禁止**因 12678 被占用而要求客户先停掉其他服务。
@@ -551,3 +637,6 @@ SetInstallPlugins([]) → ClearCache（browserId=mall_id）→ OpenBrowser
 11. **清空插件列表**（`installPlugins: []`）后，若插件曾通过自动化安装，须再对该店铺调用 **`ClearCache`** 清除本地缓存后重新 `OpenBrowser`，清空才生效。
 12. Agent 阶段 A **只用 Python requests**，禁止为通断探测切换 PowerShell/curl；杀进程后最多等 1s（Win:`taskkill` / Mac:`killall 站斧`），勿固定等 3s。
 13. **macOS** 不得调用 `SetDownLoadPath` / `ClearCacheFolder` / `ClearCache` / `SetInstallPlugins`（目前不支持）。
+14. **macOS** 打开/复用店铺后若 `GetBrowserWebDriver.KernalNumber ≤ 130`：立即停止自动化，提示客户切换到 **130 以上**内核（或请主账号切换），并请客户**手动重启站斧**后再继续。
+15. **启动参数禁止减少**：Windows / macOS **均须四项齐全**：`--multip --run_type=web_driver --ipc_type=http --httpport=`（macOS 通过 `open -a … --args` 传入）。
+16. **`OpenBrowser` / `GetBrowserWebDriver` 的 `browserId` 必须为 JSON 字符串**（如 `"3514488"`），**禁止**传数字；resolve 后一律 `str(mall_id)`。

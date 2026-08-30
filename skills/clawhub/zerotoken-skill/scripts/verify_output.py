@@ -28,18 +28,12 @@ from typing import List, Tuple
 
 
 # ── 安全打印（解决 #6: GBK 控制台 UnicodeEncodeError）──
-_STDOUT_ENCODING = getattr(sys.stdout, 'encoding', 'utf-8') or 'utf-8'
+# 统一实现见 safe_io.py（ensure_utf8_stdio / safe_print），此处仅复用。
+from safe_io import ensure_utf8_stdio, safe_print
 
+sp = safe_print  # 兼容本文件既有的调用名
 
-def sp(*args, **kwargs) -> None:
-    """safe_print：GBK 环境不崩溃。"""
-    try:
-        print(*args, **kwargs)
-    except UnicodeEncodeError:
-        sa = [a.encode(_STDOUT_ENCODING, errors='replace').decode(
-              _STDOUT_ENCODING, errors='replace')
-              if isinstance(a, str) else str(a) for a in args]
-        print(*sa, **kwargs)
+ensure_utf8_stdio()
 
 
 def write_verify_results(
@@ -88,7 +82,7 @@ def write_verify_results(
     content = "\n".join(lines) + "\n"
 
     os.makedirs(os.path.dirname(out_path) or '.', exist_ok=True)
-    with open(out_path, 'w', encoding='utf-8') as f:
+    with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
         f.write(content)
 
     abs_path = os.path.abspath(out_path)
@@ -113,13 +107,15 @@ def grep_check(
         label = pattern
 
     try:
-        # 安全读取
+        # 安全读取：显式 UTF-8，失败时抛错而非静默替换
         with open(file_path, 'rb') as f:
             raw = f.read()
-        try:
+        if raw.startswith(b'\xef\xbb\xbf'):
+            content = raw.decode('utf-8-sig')
+        elif raw.startswith(b'\xff\xfe') or raw.startswith(b'\xfe\xff'):
+            content = raw.decode('utf-16')
+        else:
             content = raw.decode('utf-8')
-        except:
-            content = raw.decode('utf-8', errors='replace')
 
         count = content.count(pattern)
         if count >= expected_min:

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-provenance",
   "slug": "skill-provenance",
   "ownerHandle": null,
-  "version": "4.9.0",
-  "updatedAt": 1778491670926,
-  "contentHash": "5777ac41202291304515c5d772a248b106bd4ba7c94f6ba65c228686797f0fae",
-  "fetchedAt": "2026-07-26T20:18:23.615Z"
+  "version": "6.2.0",
+  "updatedAt": 1787970343177,
+  "contentHash": "3c148a481b14898726e5583cdffc67c4561e663242b4eab167e3a5692054d45d",
+  "fetchedAt": "2026-08-30T13:05:22.964Z"
 }

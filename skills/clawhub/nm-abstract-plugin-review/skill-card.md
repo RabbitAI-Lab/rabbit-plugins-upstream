@@ -1,43 +1,54 @@
-## Description: <br>
-Review plugin quality with tiered checks and dependency scoping for PR and pre-release audits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews plugin quality with tiered checks and dependency-aware scoping for PR and pre-release audits.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and maintainers use this skill to scope changed plugins, run tiered quality gates, and summarize pass, warning, or fail results before merge or release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad review, quality, validation, testing, and architecture triggers may activate the skill on general audit requests. <br>
-Mitigation: Use explicit tier and scope wording, and review the planned checks before allowing the agent to proceed. <br>
-Risk: The skill can guide an agent to run repo-local validation, test, lint, typecheck, git diff, and dependency-map commands. <br>
-Mitigation: Run it only in compatible repositories where local quality checks are appropriate, and inspect commands before execution. <br>
-Risk: Some checks depend on Night Market configuration, scripts, or evaluator skills that may not exist in other repositories. <br>
-Mitigation: Confirm required config and scripts are present; when unavailable, report skipped checks rather than treating them as completed. <br>
+## Use Case:
 
+Developers and engineers use this skill to review plugin changes with branch, PR, and release-level quality gates, including dependency scoping, test/lint/type checks, scorecards, and remediation summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-plugin-review) <br>
-- [clawdis homepage: claude-night-market abstract plugin](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown review report with tables, verdicts, scorecards, and inline shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include quality gate exit-code guidance and tier-specific remediation actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+Risk: Generic activation triggers may bring the skill into unrelated review, quality, validation, testing, or architecture discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it deliberately for plugin review workflows and confirm the intended tier and repository scope before acting on its recommendations.
+
+Risk: The workflow proposes local git, make, and repository-specific script commands for branch, PR, and release checks.
+
+Mitigation: Review commands before running them, confirm required scripts and dependency maps exist, and prefer dry-run or scoped execution where available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-plugin-review)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown review reports with command snippets and optional YAML configuration.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tiered branch, PR, and release review modes with quality-gate exit code guidance.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

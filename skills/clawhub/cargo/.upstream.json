@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo",
   "slug": "cargo",
   "ownerHandle": null,
-  "version": "1.15.0",
-  "updatedAt": 1785007172509,
-  "contentHash": "10c749c1fc162fc26284077b2a36f2529b4a4ee16d1ebd4828a8b3dad7f34dfa",
-  "fetchedAt": "2026-07-26T18:03:53.036Z"
+  "version": "1.23.0",
+  "updatedAt": 1787874449083,
+  "contentHash": "66fdb696c9b78cd10398d945ca251b24f2b8368d974dbb40306bc0751430384c",
+  "fetchedAt": "2026-08-30T13:11:07.165Z"
 }

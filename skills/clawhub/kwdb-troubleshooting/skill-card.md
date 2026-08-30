@@ -1,49 +1,65 @@
-## Description: <br>
-Use when diagnosing KWDB incidents from logs, metrics, or system evidence, especially crashes, OOM, slow SQL, restarts, and cluster-wide availability symptoms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when diagnosing KWDB incidents from logs, metrics, or system evidence, especially crashes, OOM, slow SQL, restarts, and cluster-wide availability symptoms.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers and support engineers use this skill to diagnose KWDB incidents from logs, metrics, system evidence, SQL statements, and optional source code while keeping the result limited to diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated diagnostic reports may contain SQL literals, customer identifiers, tenant names, tokens, or sensitive log snippets. <br>
-Mitigation: Redact sensitive incident data before sharing reports outside the incident team. <br>
-Risk: The skill is designed to answer in Chinese, which may be unsuitable for some environments or review workflows. <br>
-Mitigation: Install and use the skill only where Chinese diagnostic output is acceptable. <br>
-Risk: Optional local commands or scripts proposed during diagnosis could inspect logs, metrics, source code, or git history. <br>
-Mitigation: Review and approve any optional local command or script before allowing the agent to run it. <br>
+## Use Case:
 
+Developers, operators, and support engineers use this skill to triage KWDB incidents from logs, metrics, system evidence, SQL evidence, and optional source code. It guides diagnosis of functional failures, performance issues, mixed incidents, and cluster-level availability symptoms while keeping conclusions tied to available evidence.
 
-## Reference(s): <br>
-- [KWDB source repository](https://gitee.com/kwdb/kwdb) <br>
-- [Key Rules](references/key-rules.md) <br>
-- [Intake Gate](references/intake-gate.md) <br>
-- [Path Discovery](references/path-discovery.md) <br>
-- [Triage Playbook](references/triage-playbook.md) <br>
-- [Fault Localization Chain](references/fault-localization.md) <br>
-- [Evidence Rules](references/evidence-rules.md) <br>
-- [Output Modes](references/output-modes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Chinese Markdown diagnostic reports with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Diagnosis-only output; unknown or unsupported findings are marked as pending rather than invented.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Incident materials can contain sensitive logs, SQL text, object names, process arguments, metrics, secrets, or customer-specific details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact secrets and customer-specific details before pasting evidence into chats, tickets, or generated reports, and limit access to the evidence and outputs.
+
+Risk: The skill is designed to answer in Chinese, which can be unsuitable for teams that cannot review Chinese diagnostic output.
+
+Mitigation: Install it only for teams comfortable reviewing Chinese incident analysis or route output through an approved translation and review process.
+
+Risk: A diagnosis may be incomplete when fault time, evidence roots, metrics, SQL text, node logs, or source access are missing.
+
+Mitigation: Use the intake gate to request the smallest missing evidence set and keep unsupported conclusions explicitly partial.
+
+## Reference(s):
+
+- [KWDB Troubleshooting Skill Page](https://clawhub.ai/kwdb/skills/kwdb-troubleshooting)
+- [Official KWDB Source Repository](https://gitee.com/kwdb/kwdb)
+- [Key Rules](artifact/references/key-rules.md)
+- [Intake Gate](artifact/references/intake-gate.md)
+- [Path Discovery](artifact/references/path-discovery.md)
+- [Triage Playbook](artifact/references/triage-playbook.md)
+- [Fault Localization Chain](artifact/references/fault-localization.md)
+- [Evidence Rules](artifact/references/evidence-rules.md)
+- [Output Modes](artifact/references/output-modes.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, code, guidance]
+
+**Output Format:** [Chinese Markdown diagnostic report with optional inline shell commands and source-path references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Diagnosis-only output; unknown fields are marked as 待补充, and recovery, repair, decommission, and reproduction plans are excluded unless the user has provided confirmed reproduction details for a requested template.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

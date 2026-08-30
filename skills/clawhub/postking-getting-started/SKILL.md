@@ -1,185 +1,60 @@
 ---
-name: postking-getting-started
-description: First-run flow for PostKing — authenticate, top up credits, onboard a brand from a URL, connect socials, and ship a first post.
+name: postking
+description: Router skill for PostKing — confirms the active brand, then hands off to the right specialist skill for posts, blogs, landing pages, SEO, or setup.
 license: MIT-0
 compatibility: "Works with any MCP-compatible client connected to postking-mcp (local stdio or hosted at https://mcp.postking.app/mcp); the pking CLI is an optional fast path when a shell is available."
 metadata:
-  icon: https://raw.githubusercontent.com/bitsandtea/postking-skills/main/assets/icons/postking-getting-started.svg
+  icon: https://raw.githubusercontent.com/bitsandtea/postking-skills/main/assets/icons/postking.svg
   category: marketing
 ---
 
-# Getting Started
+# PostKing
 
-The full zero-to-first-post path: connect, authenticate, fund the balance, onboard a brand from its website, connect socials, and ship a first scheduled post. This is the first skill to run for any new user or freshly-connected agent.
+PostKing is a hosted content platform for social posts, blogs, landing pages, SEO/GEO, marketing campaigns, competitor intelligence, and Reddit community engagement — driven through MCP tool calls (or the `pking` CLI as an optional fast path) across ~140 commands / 200+ tools. This skill is deliberately a thin router: it gets the active brand sorted out, then hands off to whichever specialist skill actually owns the procedure. Don't try to execute social/blog/landing-page flows from here — read the sibling skill instead.
 
 ## When to Use
 
-Use this as the very first skill for any new user or freshly-connected agent session: checking auth state, funding credits, onboarding the first brand, connecting social accounts, or shipping the first post. Also use it any time you hit `UNAUTHORIZED`, `INSUFFICIENT_CREDITS`, or `TRIAL_EXPIRED` from another skill and need to route back through auth/billing.
+Reach for this skill first on almost any PostKing request — it's the default landing spot before you know which specialist skill applies, and the place to come back to whenever you're unsure which skill owns a task or need to pick/switch the active brand.
 
-## When NOT to Use
+## Pick the active brand
 
-Not for day-to-day content work once a brand is onboarded and funded — hand off to the `postking-social`/`postking` skill for calendar review, posts, blogs, and repurposing. Not for SEO, campaigns, competitor research, Reddit, or voice/quality passes — those are their own skills (`postking-seo`, `postking-storylines`, `postking-competitor-intel`, `postking-reddit`, `postking-brand-voice`).
+Every brand-scoped tool call needs an active brand. Do this before anything else:
 
-## Minimal tool subset
+1. `list_brands({})` — if there's exactly one brand, it's already active; continue.
+2. Multiple brands → ask the user which one, then `set_active_brand({ brandId })`.
+3. Zero brands → stop here and use the `postking-getting-started` skill to onboard one before doing anything else.
 
-This skill needs 17 tools out of PostKing's 200+, grouped by stage:
+## Where to go next
 
-**Auth**
-- `health` — no-auth status check; always call this first.
-- `login_start`, `login_complete` — stdio device-flow authentication.
+| Intent | Use skill |
+|---|---|
+| Social posts — generate/approve/schedule, content weeks (Smart Week), repurposing to social, post visuals, trend hooks | `postking-social` |
+| Blogs — publications, generate/iterate/publish articles (PostKing-hosted or WordPress/Medium/Substack) | `postking-blog` |
+| Landing pages — generate, edit/vibe-edit, side pages, custom domains, publish | `postking-landing-pages` |
+| SEO / GEO — keyword research through published articles | `postking-seo` |
+| Multi-channel marketing campaigns (Storylines: brief → strategy → execute) | `postking-storylines` |
+| Competitor discovery, registration & analysis | `postking-competitor-intel` |
+| Subreddit pool, content-to-community matching, native Reddit rewrites | `postking-reddit` |
+| Applying/listing saved voice profiles, de-slop / AI-detection pass | `postking-brand-voice` |
+| First-time auth, credits/billing, brand onboarding from a URL, connecting socials | `postking-getting-started` |
 
-**Credits & billing**
-- `get_credits` — check balance and free-tier status.
-- `billing_list_packs` — list one-off credit packs.
-- `billing_topup` — buy a pack.
-- `billing_wallet` — check the unified credit balance.
-- `billing_list_tiers` — list subscription tiers.
-- `billing_subscribe` — start a subscription.
+Do not duplicate those skills' procedures here — this skill only routes to them.
 
-**Brand onboarding**
-- `onboard_brand` — crawl a website, analyze audience, generate themes.
-- `create_brand` — manual brand creation without a website crawl.
-- `get_onboarding_status` — poll onboarding progress.
-- `list_themes` — review generated content themes.
+Every brand carries a `contentLanguage` (`en`/`es`/`pt-BR`/`de`/`fr`/`cs`; absent means `en`) that generation tools use by default — read it with `get_brand_content_language({ brandId })`, change it with `set_brand_content_language({ brandId, language })`. Most generation tools (`generate_post`, `generate_blog_post`, `generate_landing_page`, `repurpose_content`, and others) also accept a per-call `language` override that beats the brand default for that one call only.
 
-**Socials**
-- `check_social_accounts` — see what's connected.
-- `generate_connect_link` — get an OAuth link for a platform.
+A brand can also publish in more than one language at once — its enabled set (the language roster) is a separate concept from the single `contentLanguage` default above. `get_brand_languages({ brandId })` returns `{ defaultLanguage, languages, maxAllowed }` (plan caps: Trial/Growth 1, Pro 2, Enterprise 5); `add_brand_language({ brandId, language })` enables one (idempotent, settings-only — doesn't generate anything); `remove_brand_language({ brandId, language })` disables one (the default language can't be removed this way, and neither add nor remove touches already-published content). This matters for tools that take an explicit per-resource `languageCode` rather than the per-call `language` override above: `create_publication`'s `languageCode`, for example, is rejected with a 403 if that language isn't already on the roster — call `add_brand_language` first, then retry.
 
-**First post**
-- `generate_post` — draft post variations.
-- `approve_post` — lock in a variation and schedule.
-
-(`whoami` and `logout` are also available if you need to confirm identity or sign out, but aren't required for this flow.)
-
-## Prerequisites
-
-None — this is the first skill to run when connecting to PostKing.
-
-## Pacing rules
-
-This is a multi-stage flow. Obey these rules throughout:
-
-1. **One stage per turn.** Run the current stage, present the result, then stop and wait for the user. Don't chain into the next stage in the same turn, even on success.
-2. **Never reuse remembered values without confirmation.** Brand names, website URLs, social handles, theme choices, and post topics must be reconfirmed in the current conversation — don't pull them from prior sessions or long-term memory without surfacing the value and asking the user to confirm it.
-3. **Fail loudly, never silently retry.** If a stage fails, stop, surface the error verbatim, and ask the user how to proceed.
-4. **Zero brands means onboarding is required**, not optional — never skip ahead to other work without a brand.
-
-## Procedure
-
-### Step 1 — Check health first
-
-Call `health`. This requires no authentication and tells you whether you're already logged in and what to do next. Always start here.
-
-- **Remote/OAuth transport** (client connected to `https://mcp.postking.app` via an OAuth-aware host): `health` reports that authentication already happened at the connector. Do not call `login_start` — there's no in-session login step.
-- **Local stdio transport**: `health` reports whether a token is stored. If not, continue to Step 2.
-
-### Step 2 — Authenticate (stdio only)
-
-Call `login_start`. It returns a URL and a short code and begins polling on its own — the tool call itself waits for the browser approval step and reports success or timeout; you don't need a separate confirmation turn.
-
-Show the URL and code to the user verbatim (no paraphrasing or redaction) and tell them to open it and approve. Use `login_complete` only if your client's flow separates "start" from "poll" — most stdio clients handle both in one `login_start` call.
-
-### Step 3 — Check credits
-
-Call `get_credits` (`detail: "short"` for just the number, `"full"` for complete billing context).
-
-- Healthy balance → continue to Step 5 (brand onboarding).
-- `0`, or a later operation returns `INSUFFICIENT_CREDITS` → go to Step 4.
-
-### Step 4 — Fund the balance
-
-Ask the user once which they prefer: a one-off credit pack (agent-native default, instant off-session charge) or a subscription.
-
-**One-off pack:**
-1. `billing_list_packs` — SKUs `agent_4`/`agent_5`/`agent_25`/`agent_50` = $4/160cr, $5/220cr, $25/1200cr, $50/2600cr. The $5 pack covers a full demo run (a week of posts + SEO pipeline + a landing page). Show the options and let the user pick — don't guess.
-2. `billing_topup({ packSku: "<chosen>" })`:
-   - **`status: "paid"`** (common case, card on file) — instant off-session charge; response includes the new `balance`. Done immediately, do not poll.
-   - **`checkoutUrl` returned** (no card on file) — present the URL, have the user complete Stripe Checkout, then poll `billing_wallet` every few seconds (cap ~5 minutes) until `credits` rises by the expected amount. Hosted Checkout sessions expire after ~30 minutes of inactivity — call `billing_topup` again for a fresh URL if that happens.
-
-**Subscription:**
-1. `billing_list_tiers` — GROWTH / PRO / ENTERPRISE. Ask which tier.
-2. `billing_subscribe({ tier, interval })` (`interval: "month"` or `"year"`) — returns a `checkoutUrl`. Human-completion is the cleanest path: the user completes Checkout, the webhook provisions the account (grants credits, activates the plan).
-3. Poll `billing_wallet` (or `get_credits`) every few seconds (cap ~5 minutes) until the subscription is active. The agent spends from the same unified `User.credits` pool either way — there's no separate agent wallet.
-
-### Step 5 — Onboard a brand
-
-- `get_onboarding_status` (or check via `health`/prior context) to see whether a brand already exists. If the user has zero brands, onboarding is required — don't proceed to anything else.
-- If zero brands: ask the user two questions in the current conversation, one at a time if the UI supports it — (1) "What's the name of the brand?", (2) "What's the website URL to analyze?" If a plausible value exists from prior context, surface it as a suggestion only ("Last time you mentioned `acme.com` — still right, or different?") and wait for explicit confirmation. Never onboard silently on remembered values.
-- `onboard_brand({ websiteUrl, name })` — crawls the site, analyzes audience, generates themes. Typically 30–90s.
-- Or `create_brand({ name, description, tone, audience })` for manual setup without a crawl.
-- `get_onboarding_status({ brandId })` — poll until analysis/theme generation finishes.
-- `list_themes({ brandId })` — surface the generated themes (titles + one-line gloss each) and ask the user whether to keep, edit, or regenerate. Don't proceed silently.
-- If the user already has ≥1 brand with none active, don't auto-onboard — ask which existing brand to use, or whether to add a new one.
-
-**Deeper brand & theme editing (optional, outside this skill's minimal subset)** — `get_brand_info` for the full audience/positioning reveal, `edit_theme`/`delete_theme`/`generate_themes` for individual theme edits or regeneration. These are covered in the `postking` skill; use them there once onboarding is complete if the user wants finer control.
-
-### Step 6 — Connect socials
-
-- `check_social_accounts({ brandId })` — see what's connected.
-- Ask the user which platform(s) they want connected before running anything — don't pick a default silently.
-- `generate_connect_link({ brandId, platform })` — platforms: `linkedin`, `x`, `instagram`, `threads`, `facebook`. Show the URL and ask the user to confirm once they've completed OAuth.
-
-### Step 7 — First post
-
-- Confirm with the user which connected platform and which reviewed theme to use — don't pick silently.
-- `generate_post({ brandId, platform, variations: 3 })` — show the variations.
-- `approve_post({ postId, variation, schedule })` — locks it in.
-- Hand off to the `postking` skill from here for calendar review and everything else day-to-day.
-
-## CLI fast path
-
-If a shell is available, the same flow via `pking` (npm package `postking-cli`):
-
-```
-pking me                                          # check auth
-pking login-start                                 # print URL+code (device flow)
-pking login-finish                                # complete after user approves
-pking user credits                                # check balance
-pking billing packs                                # list one-off packs
-pking billing topup --pack <sku>                   # buy a pack
-pking billing tiers                                # list subscription tiers
-pking billing subscribe --tier <TIER> [--interval year]
-pking onboard <websiteUrl> --name "<Name>"         # crawl + analyze + themes
-pking brand create <name> --description "..." --tone "..." --audience "..."   # manual
-pking brand themes list                            # review generated themes
-pking social check                                 # see connected accounts
-pking social connect-platform --platform <linkedin|x|instagram|threads|facebook>
-pking posts generate --platform <p> --variations 3
-pking posts approve <postId> --variation <n> --schedule <iso>
-```
-
-`pking login` (unsplit) blocks for up to 15 minutes polling — prefer `login-start` / `login-finish` in an agent context to avoid timeouts. For new users without an account yet, `pking register-start --email <email>` / `pking register-finish` runs the equivalent magic-link registration flow.
-
-## Expected Output
-
-- Confirmed auth state (already-authenticated via transport, or freshly authenticated via device flow).
-- A funded balance — instant charge, completed Checkout, or active subscription.
-- A populated brand profile (tone, audience, reviewed themes).
-- 1+ connected social platform.
-- At least one scheduled post.
-
-## Pitfalls
-
-- `INSUFFICIENT_CREDITS` (HTTP 402) — balance too low. Run Step 4.
-- `RATE_LIMITED` — back off using the `retryAfter` value in the error envelope before retrying.
-- `UNAUTHORIZED` — the stored token is invalid or expired. Re-run `login_start` (stdio) or reconnect the connector (remote/OAuth transport).
-- `TRIAL_EXPIRED` — upgrade via the `checkoutUrl` returned in the error envelope.
-- `VALIDATION` — invalid email format or a missing required field.
-- `NOT_FOUND` on the onboarding/audience status — analysis hasn't finished yet; wait briefly and retry once on the user's say-so, don't loop silently.
-- Stripe Checkout session expired (~30 min inactivity) — call `billing_topup` or `billing_subscribe` again for a fresh `checkoutUrl`.
+See also: **BrandMind**, PostKing's agentic brand-knowledge assistant in the dashboard, draws on the brand knowledge base reachable via the `knowledge_list` / `knowledge_create` / `knowledge_get` / `knowledge_update` / `knowledge_delete` tools. **Brand Truth** is a separate, more atomic store — durable facts/observations about the brand (hard facts, audience truths, strategy notes, negative space, content insights, topics) that PostKing mines from free-form text and reuses to ground generation: `brand_truth_list` / `brand_truth_get` to browse, `brand_truth_create({ brandId, text })` to submit plain-language prose (an LLM extraction pipeline decides what atomic truths to keep, reports `skipped` with reasons), `brand_truth_update` for a direct field edit (no re-extraction), `brand_truth_delete` to remove one (also records rejection memory so it isn't re-suggested). **Audience / ICP** is the brand's mined audience intelligence: `get_audience({ brandId })` reads the current ICP/persona/positioning; `preview_audience_edit({ brandId, prompt })` is a read-only dry run that discovers which `sections`/`subsections` a change would touch; `edit_audience({ brandId, prompt, sections })` is the async AI edit itself (`sections` required, poll `get_job`). **Social Performance**, the post-performance analytics dashboard, has no MCP tool surface — point the user to the PostKing dashboard for it.
 
 ## Verification
 
-- `health` should return successfully and report the current auth state before doing anything else.
-- After onboarding, `get_onboarding_status({ brandId })` should report a terminal (non-running) state.
-- `check_social_accounts({ brandId })` should reflect the platform just connected.
+After picking a brand, these should always succeed:
 
-## Next steps
+- `get_credits({ detail: "short" })` — returns the authenticated user's balance and free-tier status.
+- `list_brands({})` — returns at least one brand (active brand marked).
 
-Once authenticated, funded, and onboarded:
+If both succeed, the platform connection is healthy — proceed to the relevant specialist skill above.
 
-- `postking` — day-to-day content: posts, content weeks, repurposing, blogs, landing pages, visuals, trends.
-- `postking-seo` — SEO / GEO from seed keywords to published articles.
-- `postking-storylines` — multi-channel marketing campaigns (Storylines).
-- `postking-competitor-intel` — discover, register, and analyze a brand's competitors.
+## Full command reference
+
+For the complete `pking` CLI surface (every group, every flag), read `references/commands.md` in this skill. The agent should consult it before running an unfamiliar CLI command.
