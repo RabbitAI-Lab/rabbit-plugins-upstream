@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/binance/binance-skills-hub/fiat",
+  "repo": "binance/binance-skills-hub",
+  "skillId": "fiat",
+  "branch": "main",
+  "pushedAt": "2026-08-28T03:29:03Z",
+  "contentHash": "33e999b25b0ef01556a4afeec66302b8cf97c8e8aa59c5fad718ab47ba071464",
+  "fetchedAt": "2026-08-30T13:00:20.312Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-stt",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-stt",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "da232844797761bb971d03f4655d0fa93be71a43b11ac04bf1772c4720df33dc",
+  "fetchedAt": "2026-08-30T12:59:00.063Z"
+}

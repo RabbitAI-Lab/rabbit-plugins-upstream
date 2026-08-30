@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/principle-separate-before-serializing-shared-state",
+  "repo": "cursor/plugins",
+  "skillId": "principle-separate-before-serializing-shared-state",
+  "branch": "main",
+  "pushedAt": "2026-08-28T17:12:06Z",
+  "contentHash": "e97bbe294f9ad179e86fa3d6173f939618e53d1cf066508eab9330e86edc4088",
+  "fetchedAt": "2026-08-30T13:00:16.093Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/technical-writing",
+  "repo": "cursor/plugins",
+  "skillId": "technical-writing",
+  "branch": "main",
+  "pushedAt": "2026-08-28T17:12:06Z",
+  "contentHash": "03f1af504286f7a18e7cd5e99b26ad2df84c048caa187dc82bb05aa6e4478550",
+  "fetchedAt": "2026-08-30T13:00:16.123Z"
+}

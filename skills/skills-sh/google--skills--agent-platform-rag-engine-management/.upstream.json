@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-rag-engine-management",
+  "repo": "google/skills",
+  "skillId": "agent-platform-rag-engine-management",
+  "branch": "main",
+  "pushedAt": "2026-08-28T23:32:13Z",
+  "contentHash": "21bd94e97278542deee23414c38e02324e7ec567aafe9d0956a01e5fe6033d36",
+  "fetchedAt": "2026-08-30T13:00:16.878Z"
+}

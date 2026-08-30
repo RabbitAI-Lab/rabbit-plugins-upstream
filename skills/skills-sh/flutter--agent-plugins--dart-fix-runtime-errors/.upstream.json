@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/dart-fix-runtime-errors",
+  "repo": "flutter/agent-plugins",
+  "skillId": "dart-fix-runtime-errors",
+  "branch": "main",
+  "pushedAt": "2026-08-29T00:33:30Z",
+  "contentHash": "adee03688ff8b29d91bc6abbadc9be9e77a1b2cf5d5290a5ea8a93fa8f64d7ca",
+  "fetchedAt": "2026-08-30T12:59:02.123Z"
+}
