@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/web-search",
+  "repo": "inference-sh/skills",
+  "skillId": "web-search",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "b109c08615159ca7560826fef94bdfa182d77eefafe4a2de991a30b0757fb89d",
+  "fetchedAt": "2026-08-31T15:10:53.302Z"
+}

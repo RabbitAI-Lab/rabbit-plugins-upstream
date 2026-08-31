@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/terraform-test",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "terraform-test",
+  "branch": "main",
+  "pushedAt": "2026-08-27T17:06:57Z",
+  "contentHash": "f9ef9e192a101a63460d2c7b5c34208007a59c6fa623b3b759156857ef230998",
+  "fetchedAt": "2026-08-31T15:12:26.687Z"
+}
