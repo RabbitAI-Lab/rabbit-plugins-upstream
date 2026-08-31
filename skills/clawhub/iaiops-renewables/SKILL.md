@@ -55,10 +55,18 @@ rotor_speed / pitch / yaw / state_of_charge 等可再生类别(`opcua_discover_t
 - 基线：`baseline_learn` `baseline_check` `baseline_record_change` `baseline_status`
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish`
   `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`
-- 元：`protocols_supported`
+- 元：`protocols_supported`(产品能做什么)· `site_readiness`(这个站点今天能跑什么、还差什么;零联网)
+- 调查层（§13，八步证据闭环）：`investigation_readiness` `investigation_open` `investigation_show`
+  `investigation_list` — 「真出事时这个站能走到第几步、每个缺口还差什么」，以及对一个**已过去的窗口**
+  逐步走完并留档（不碰设备）。缺口分两种:**你没供**(给命令) 与 **产品供不了**。
+- 产线关系与机制库：`line_relation_declare` `line_relations_list` `mechanism_library_check`
+  `mechanism_library_list` — 上下游由**人声明**（D25:线上下游共现是必然，推不出因果）；
+  机制库按 ISO 14224 分 mode/mechanism/cause，**可排除、绝不确认**，
+  库里没有这条原因 → `nothing_known`（不是「无异议」）。
+
 
 ## Workflows
 
@@ -74,5 +82,5 @@ rotor_speed / pitch / yaw / state_of_charge 等可再生类别(`opcua_discover_t
 |---|---|---|---|---|---|
 | Modbus-TCP | `pymodbus>=3.5,<4` | App 1.1b3;FC 1/2/3/4/5/6/15/16 | 逆变器/汇流箱/风机/表计 | TCP/502 | ✅ |
 | Modbus-RTU | `pymodbus>=3.5,<4` + `pyserial>=3.5` | Modbus serial (RTU) | 串口从站/表计 | RS-485/serial | ✅ socat PTY;物理 RS-485 待核实 |
-| OPC-UA | `asyncua>=1.0,<2` | OPC UA 1.0x（DA+HA+AC 子集） | 全站 SCADA / PLC 网关 | opc.tcp | ✅ mock+HDA |
+| OPC-UA | `asyncua>=2.0,<3` | OPC UA 1.0x（DA+HA+AC 子集） | 全站 SCADA / PLC 网关 | opc.tcp | ✅ mock+HDA |
 | MQTT-Sparkplug B | `paho-mqtt>=2.0,<3`（extra） | Sparkplug B 3.0 | 电站遥测 / IoT 网关 UNS | MQTT/1883/8883 | ✅ broker mock |

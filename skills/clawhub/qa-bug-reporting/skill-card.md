@@ -1,37 +1,57 @@
-## Description: <br>
-Helps QA practitioners write complete bug reports with reproducible steps, expected and actual results, root-cause notes, impact assessment, and attachment guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+QA Bug Reporting helps testers, developers, and product teams create reproducible bug reports with clear prerequisites, reproduction steps, expected and actual results, impact assessment, root-cause hypotheses, and supporting attachments.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and product teams use this skill to draft or improve bug reports that developers can reproduce and triage with less follow-up. It is useful when a bug report was rejected as incomplete or when a team wants a consistent defect-reporting structure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bug reports and attachments can include production secrets, customer personal data, payment details, screenshots, logs, or HAR files. <br>
-Mitigation: Redact sensitive data before sharing reports or attachments, and run any capture commands only in a controlled test environment. <br>
+## Use Case:
 
+QA engineers, developers, and product teams use this skill to draft or improve bug reports when defects need precise reproduction details, environment context, evidence attachments, and impact assessment.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown bug-report structure with checklist-style guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bug IDs, test case IDs, reproduction steps, expected versus actual results, root-cause notes, impact assessments, and attachment lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: Bug reports may include logs, screenshots, network traces, order examples, payment examples, or other sensitive evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use sanitized test data and mask customer, financial, identity, and production information before sharing or attaching evidence.
+
+Risk: Packet-capture or Bash examples may be unnecessary or inappropriate for some defects.
+
+Mitigation: Run shell commands or capture network traffic only in controlled environments and only when that evidence is clearly needed for the report.
+
+Risk: Root-cause hypotheses or impact assessments can mislead triage if they are not verified.
+
+Mitigation: Label hypotheses clearly and confirm reproduction steps, environment details, and evidence before submitting the bug report.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-bug-reporting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown bug report templates, structured checklists, and concise guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include reproduction evidence descriptions, log excerpts, screenshot notes, network trace notes, and sanitized attachment lists.]
+
+## Skill Version(s):
+
+1.7.5 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Qa Req Deconstruction breaks vague requirement descriptions into testable input, operation, state, output, and rule dimensions while surfacing implicit and derived requirements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Req Deconstruction helps QA and development teams break vague or incomplete requirements into testable dimensions, identify explicit, implicit, and derived requirements, structure business rules, and surface risks and open questions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and product teams use this skill to turn PRDs, URLs, file paths, or short requirement descriptions into structured requirement IDs, explicit requirements, implicit requirements, derived requirements, business rules, five-dimension breakdowns, risks, and open questions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requirement inputs may contain production data, customer information, payment details, or identity data. <br>
-Mitigation: Redact or mask sensitive data before using the skill, and prefer sanitized requirement examples. <br>
-Risk: Broad trigger wording may activate the skill for general requirement-analysis requests. <br>
-Mitigation: Confirm the user wants QA-focused requirements decomposition before applying the workflow. <br>
-Risk: Implicit or derived requirements can be mistaken for confirmed product requirements. <br>
-Mitigation: Label inferred items as assumptions or pending confirmation and review them with product or QA owners. <br>
+## Use Case:
 
+QA engineers, testers, product reviewers, and developers use this skill to deconstruct requirements documents, URLs, file paths, or brief feature descriptions into structured requirement analysis before test design.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown requirement decomposition tables and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes requirement IDs, risk IDs, five-dimension breakdowns, and assumption labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: User-provided requirements may contain customer, payment, identity, production, or other sensitive data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or remove sensitive data before use, and avoid submitting real customer, payment, identity, or production data unless it is properly protected.
+
+Risk: Broad requirement-analysis triggers may activate the skill for inputs that are incomplete or ambiguous.
+
+Mitigation: Review generated explicit, implicit, and derived requirements against the source requirement material before using the output for test planning or delivery decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-req-deconstruction)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with structured tables and requirement, rule, risk, and traceability identifiers]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces QA requirement deconstruction artifacts including explicit, implicit, and derived requirements, five-dimension analysis, business rules, risk points, open questions, and test-case table guidance.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

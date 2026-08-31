@@ -7,6 +7,51 @@ the project's specific patch / minor / major rules.
 
 ## [Unreleased]
 
+## [3.1.10] — 2026-08-25
+
+> 官方全家桶对齐 patch：`guanskill` 0.1.26→**0.1.29**，核心是 `guancli` **1.0.53** 的企业 OIDC、安全凭据、SuperApp 整包下载与多行 SQL 输入，以及 `guanvis` **0.1.41** 的页面/目录原地管理。无本 skill 自身护城河逻辑变更，既有写入与删除安全闸保持不变。
+
+### Changed
+
+- 官方六组件 pin 刷新：`guancli` **1.0.53** / `guanvis` **0.1.41** / `guanetl` **0.1.29** / `guanwf` **0.1.828** / `guands` **0.1.28** / `guanmetric` **0.1.10**。
+  - **`guancli` 1.0.51 → 1.0.53**：资源全局搜索与 URL 获取；指标详情、表单筛选与字段歧义修复；企业 OIDC 与安全凭据管理；SuperApp 列表/整包下载；`ds execute-sql` 支持从文件或标准输入读取多行 SQL；下载改为原子写入并保留完整服务端错误；自动关联卡片继承筛选条件。
+  - **`guanvis` 0.1.38 → 0.1.41**：附加卡片计算字段序列化修复；自定义图表最小 SDK 与视觉验收说明；页面目录及页面本身支持创建、改名、移动、删除；`publish` 可指定目标目录并拒绝残留生成器占位符；修复卡片/筛选器自有计算字段绑定误判；自动关联卡片继承筛选；支持企业 OIDC。
+  - **`guanetl` 0.1.27 → 0.1.29**：改进 Skill 自动安装反馈、确认交互和 Windows 兼容性；ETL 调度保存适配会拦截原生 PUT 的客户网络代理；支持企业 OIDC 认证上下文。
+  - **`guanwf` 0.1.826 → 0.1.828**：Skill 自动安装反馈与跨平台兼容；企业 OIDC 认证上下文。`--confirm` 写入门禁不变。
+  - **`guands` 0.1.26 → 0.1.28**：派生字段场景 CSV 追加/替换 Schema 修复；新增 `calc-field apply` 以期望态协调新增、更新和保留计算字段；完善数据集目录创建/改名/删除；受限代理下保留后端错误；部分或全部建集失败返回非零。
+  - **`guanmetric` 0.1.8 → 0.1.10**：Skill 自动安装与跨平台兼容；企业 OIDC 认证上下文。
+- 路由表、Part B 当前兼容基线、Part D `guanvis` 公网版本引用、README 双语版本记录、manifest/package/marketplace、AGENTS 与架构图统一刷新到本版。
+- 架构图六组件卡刷新为 **1.0.53 / 0.1.41 / 0.1.29 / 0.1.828 / 0.1.28 / 0.1.10**；标题、本 skill 徽章和日期刷新为 **v3.1.10 / 2026-08-25**。
+- 本机全局树已验证只有 `@guandata/guanskill@0.1.29` 一个顶层条目，六个 bin 逐个回读均与上述版本一致；`guanskill install-skill` 已刷新官方 AI skills。PromptScript 不支持全局安装的提示为官方 installer 已知兼容性噪声，不影响已成功安装的 Codex/Claude/CodeBuddy/WorkBuddy 等目标。
+
+### Notes
+
+- 本次仍是“官方对齐 = patch”。页面/目录删除能力属于官方 `guanvis` / `guands` 新命令，不改变本 skill 的删除授权：任何不可逆删除仍须明确目标、确认影响并回读结果。
+- npm 不属于本次公开分发范围；公开代码真源仍是 GitHub，SkillHub 与 ClawHub沿历史 `guanyuan-majia` 条目独立同步。
+
+## [3.1.9] — 2026-08-19
+
+> 官方全家桶 **07-24 以来 9 个聚合包版本一次性对齐** patch —— `guanskill` 0.1.17→**0.1.26**。本机 CLI 已是 latest；本次补齐 skill 路由表 / 架构图 / 官方 AI skill（`guanskill install-skill`）。无本 skill 自身护城河逻辑变更。`guanwf` `--confirm` 门禁沿用 0.1.820，本批无新破坏性变更。护城河零删减。
+
+### Changed
+
+- **官方全家桶 07-25～08-13 对齐**（`@guandata/guanskill@0.1.17→0.1.26`）。路由总表、manifest/README/package/marketplace 版本 pin 全部刷新：
+  - **`guancli` 1.0.43 → 1.0.51**：指标搜索多关键词（名称/业务口径/业务属性，回显命中位置与优先级）+ `auth status` 遵循根级 `--profile`/`GUANCLI_PROFILE` + 卡片预览应用页面默认筛选（多页面映射须确认）+ 可用卡片内重命名表头筛选 + **`insight page/card` 仪表板智能洞察** + **`insight agent` Dashboard Agent 问答**（与 ChatBI 主题洞察相互独立）+ **指标查询加速回显**（>1000 行默认落文件）+ 按 Domain/URL 定位 Profile + 子表追加突破 10000 行。
+  - **`guanvis` 0.1.33 → 0.1.38**：`preview` 默认精简摘要（完整结果落工程目录，**依赖旧版完整输出的脚本必须 `--full`**）+ 发布后返回页面访问地址 + 图表/页面视觉 DSL 大幅扩展（背景图本地上传、筛选栏/卡片组/Tab/表格主题/柱宽圆角等）+ 发布前 **`fdId` 线上活性校验** + **新增 `live` 系列**（桌面端 对话式构建：`live project validate/publish` 走完整 DSL；仅 KPI/基础柱折/明细表才用 `live page/card` 低延迟路径，**不得用 P0 命令模拟自定义图表**）+ 指标图/进度图/迷你图/地图等专项属性 + 系统图标查询引用。
+  - **`guanetl` 0.1.21 → 0.1.27**：写操作回显实际目标环境 + `task cancel` 变更前提示 + 多节点并行 preview + 运行中任务可直接跟踪（无需管理员全局任务权限）+ 执行后核验新增输出字段已物化可查 + **输出落位闭环 / JOIN 未知类型拦截** + `save` 影响报告字段级变更明细 + 首次运行后临时输出集完成生成再做字段检查。
+  - **`guanwf` 0.1.822 → 0.1.826**：**Python 节点输出可绑定/追加已有数据集**（保持下游引用稳定）+ 输出落位闭环（目录预检 + 目标资源存在性）+ 修复输出绑定字段错位。`--confirm` 门禁沿用 0.1.820。
+  - **`guands` 0.1.23 → 0.1.26**：填报表单 **TABLE 子表及子表字段** + 保真迁移空选项下拉/系统保留名业务字段 + 目录树 keyword+depth + 填报数据集结构同步增强 + 表单原样更新数字格式补入修复。
+  - **`guanmetric` 0.1.3 → 0.1.8**：**`metric-tree` 指标树 CRUD**（创建/查看/改名/移动/`update-config`，维度拆解/公式拆解/复合展开，写操作预览计划 + 原地更新）+ **`accelerate` 查询加速管理**（`create`/`edit`/`priority`/`delete`，筛选可用 `--filter-json`/`--filter-file`）；加速命中回显与 `metric accelerate list` 仍走 `guancli`。
+- **Part B 实证基线声明刷新至 `guancli@1.0.51`**；Part B 实测边界 callout 补 0.1.21–0.1.27；Part D guanvis 公网版本引用刷新至 0.1.38，并注明 `live` 与 C-12/60004/phoneLayout 并存（live 不覆盖 custom chart）。
+- **架构图刷新**（`docs/architecture.svg` + PNG 重渲）：6 卡版本号刷到 08-13 批次（**1.0.51 / 0.1.38 / 0.1.27 / 0.1.826 / 0.1.26 / 0.1.8**）；标题版本 v3.1.8→v3.1.9、日期改 2026-08-19、「本 skill」徽章 3.1.8→3.1.9；guanvis 卡能力行改为「live · checkout 回写」，guanmetric 卡改为「指标树 · 查询加速」；guanwf 卡保留「实例诊断 · --confirm 门禁」。
+- 版本号 3.1.8 → 3.1.9（SKILL.md frontmatter + 版本行 + 自身行 / manifest.json / package.json / marketplace.json / AGENTS.md / README 双语徽章 / 架构图 alt）；顶部 🆕 callout 与 📋 版本记录段按发布纪律收敛到最新 3 条（V3.1.6 归档至本 CHANGELOG）。
+- **本机官方 AI skill 刷新**：`guanskill install-skill`（此前停在 2026-07-26，落后 CLI 约 8 个版本，缺 `live` / Dashboard Agent / 指标树文档）。PromptScript 不支持全局安装，属官方 installer 已知噪声，不影响 Cursor/Claude/Codex。
+
+### Notes
+
+- 本次为**官方对齐 patch**（07-25～08-13 九个聚合包合并记一版，无本 skill 自身护城河逻辑变更），遵循 SKILL.md「官方全家桶更新 SOP」Step 4 的版本号规则（官方对齐 = patch）。`guanvis live` / `guancli insight` / `guanmetric metric-tree` 属官方家族新命令，本 skill 的响应是路由表标注 + 与 C-12/Part D 并存注记，自身能力边界不变。
+- `guanvis preview` 默认输出从完整 payload 改为精简摘要是**官方 CLI 行为变更**（0.1.34），依赖旧版完整 stdout 的脚本必须加 `--full`；本 skill 模板未依赖该 stdout，无需改脚本。
+
 ## [3.1.8] — 2026-07-24
 
 > 官方全家桶 **07-15 + 07-24 两批次一次性对齐** patch（两批合并记一版）—— **`guanwf` 带破坏性变更（写操作 `--confirm` 门禁，0.1.820 引入）** 随批延续至 **0.1.822**；07-24 批 `guanetl`（→0.1.21）与 `guanmetric`（→0.1.3）也首次跟进（07-15 本批未动）。本机 `npm i -g @guandata/guanskill@latest`（0.1.12→**0.1.17**）+ `guanskill install-skill` 已落地，官方 skill 定义（含统一入口 `guandata-cli-suite`）同步刷新。护城河零删减。

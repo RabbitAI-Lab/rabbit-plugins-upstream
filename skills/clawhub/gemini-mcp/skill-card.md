@@ -1,45 +1,54 @@
-## Description: <br>
-Gemini MCP helps agents generate and edit images, video, and music with Google Gemini models through an MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates and edits images, video, and music with Google Gemini models through an MCP server.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure and operate a Gemini MCP server for image generation and editing, iterative media refinement, short video generation, and music or audio clip generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Gemini API key and can incur billing through media-generation calls. <br>
-Mitigation: Install only trusted package/source versions, store GEMINI_API_KEY deliberately, and confirm billing expectations before running generation workflows. <br>
-Risk: User-provided media, local paths, clipboard content, URLs, or prior interaction context may be sent to Gemini as part of requested workflows. <br>
-Mitigation: Review inputs before use, choose local file paths and clipboard access intentionally, and avoid continue_last when prior context should not be reused. <br>
-Risk: Generated outputs may be written to local directories selected by configuration or tool parameters. <br>
-Mitigation: Set output directories intentionally and review saved media before sharing or reusing it. <br>
+## Use Case:
 
+External users and developers use this skill to configure an agent to call Gemini media-generation tools for creating, editing, iterating on, and saving images, short videos, and audio clips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gemini-mcp) <br>
-- [npm package referenced by the artifact](https://www.npmjs.com/package/@chrischall/gemini-mcp) <br>
-- [Source repository referenced by the artifact](https://github.com/chrischall/gemini-mcp) <br>
-- [Google AI Studio API key setup](https://aistudio.google.com/apikey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP calls that save generated images, video, or audio to disk when the Gemini server is installed and configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The MCP server uses a Gemini API key and sends prompts, reference media, and generation requests to Gemini/Google services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data flow is acceptable, avoid sensitive prompts or media unless approved, and manage the API key as a secret.
+
+Risk: Local files, uploaded media, and generated outputs may be saved in the workspace or retained by the Files API for the documented retention window.
+
+Mitigation: Use explicit output directories or inline output when appropriate, track generated file paths, and delete uploaded files when they should not remain available.
+
+## Reference(s):
+
+- [npm package: @chrischall/gemini-mcp](https://www.npmjs.com/package/@chrischall/gemini-mcp)
+- [Google AI Studio API key setup](https://aistudio.google.com/apikey)
+
+## Skill Output:
+
+**Output Type(s):** [Files, API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets, tool-call examples, shell commands, generated media file paths, and optional inline media metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated images are saved as PNG or JPEG, video as MP4, and audio as MP3 or WAV; inline output can return bytes with metadata.]
+
+## Skill Version(s):
+
+1.12.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

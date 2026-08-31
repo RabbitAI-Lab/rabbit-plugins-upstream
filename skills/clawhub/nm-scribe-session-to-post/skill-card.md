@@ -1,44 +1,58 @@
-## Description: <br>
-Converts a Claude Code session into a blog post, case study, or Reddit post. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a Claude Code session into a blog post, case study, or Reddit post
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to turn completed Claude Code coding sessions into publishable blog posts, case studies, social threads, or Reddit posts grounded in git history, file changes, test results, and conversation context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session context, git history, or changed files may contain secrets, private customer data, or internal details that should not be published. <br>
-Mitigation: Review the source session material before drafting and remove sensitive details from any generated post. <br>
-Risk: Generated drafts may be written under docs/posts/ and could be committed or published before review. <br>
-Mitigation: Review every generated file under docs/posts/ before committing, sharing, or publishing it. <br>
+## Use Case:
 
+Developers and engineers use this skill after a meaningful Claude Code session to turn git history, file changes, test output, metrics, and conversation context into shareable engineering posts. It supports blog posts, case studies, social threads, and Reddit posts.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-scribe-session-to-post) <br>
-- [Homepage metadata: claude-night-market scribe plugin](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Artifact documentation: session extraction](artifact/modules/session-extraction.md) <br>
-- [Artifact documentation: narrative structure](artifact/modules/narrative-structure.md) <br>
-- [Artifact documentation: Reddit format](artifact/modules/reddit-format.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown with inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write publishable draft files under docs/posts/ when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+Risk: Generated posts can expose repository history, diffs, test output, metrics, or conversation details that were not intended for public release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review every draft before sharing and remove secrets, private roadmap details, customer or internal identifiers, unreleased work, and unintended conversation-derived claims.
+
+Risk: Published drafts may contain unsupported metrics or claims about what happened in the session.
+
+Mitigation: Use the skill's proof-of-work and verification steps, keep evidence for concrete claims, and remove claims that cannot be verified.
+
+Risk: External community posts may be misaligned with subreddit or forum expectations.
+
+Mitigation: Confirm the target community's rules and norms before posting, and prepare links or setup details as follow-up material instead of overloading the main post.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-session-to-post)
+- [Homepage listed in ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown drafts with inline shell command snippets and publication notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include blog, case study, social thread, Reddit post, quality-gate report, and first-comment content depending on the selected format.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

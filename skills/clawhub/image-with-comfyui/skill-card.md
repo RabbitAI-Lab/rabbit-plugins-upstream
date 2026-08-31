@@ -1,44 +1,56 @@
-## Description: <br>
-Call a local ComfyUI instance for text-to-image (T2I), image-to-image/edit (I2I), and image-to-video (I2V) generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to generate, edit, or animate images and videos through a configured ComfyUI server using Z-Image, SD3.5 Medium, Qwen Image Edit, and Wan2.2 workflows.
 
-## Publisher: <br>
-[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images from text, edit supplied images, or create short videos from an image and prompt through an existing ComfyUI server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The default configuration can send prompts and user images to a non-local ComfyUI server. <br>
-Mitigation: Review config.json before installation and set COMFYUI_URL to a ComfyUI server you control, preferably localhost. <br>
-Risk: Sensitive images or generated outputs may be stored in the configured media directory. <br>
-Mitigation: Do not use sensitive images unless that endpoint and output location are acceptable for the use case. <br>
+## Use Case:
 
+Developers and external users use this skill to route image generation, image editing, and image-to-video requests through an existing ComfyUI deployment. It is suited for agent workflows that need visual media output from text prompts or source images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui) <br>
-- [README.md](README.md) <br>
-- [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) <br>
-- [ComfyUI WAS Nodes](https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git) <br>
-- [ComfyUI Manager](https://github.com/comfyanonymous/ComfyUI-Manager.git) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Shell commands, Guidance] <br>
-**Output Format:** [Generated image or video files with brief text status and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are saved under the configured media directory; image-edit and image-to-video modes send source images and prompts to the configured ComfyUI endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: server release and openclaw metadata) <br>
+Risk: Prompts and uploaded source images may be sent to the configured ComfyUI endpoint, which may be non-local.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or change COMFYUI_URL and config.json before use, use only trusted ComfyUI endpoints, and avoid sensitive photos unless endpoint control and retention are understood.
+
+Risk: Generated files and edited source media may be retained by the configured endpoint or output directory.
+
+Mitigation: Use an output location with appropriate access controls and clean up generated media according to the deployment's retention requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui)
+- [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack)
+- [ComfyUI WAS Nodes](https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git)
+- [ComfyUI Manager](https://github.com/comfyanonymous/ComfyUI-Manager.git)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; runtime outputs are image or video files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is saved to the configured output directory and should be delivered as an attachment when appropriate.]
+
+## Skill Version(s):
+
+1.7.0 (source: server release metadata and OpenClaw frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

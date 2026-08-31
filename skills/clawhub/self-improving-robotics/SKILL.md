@@ -107,7 +107,7 @@ When robotics learnings prove broadly applicable, promote them:
 
 ### Optional: Enable Hook
 
-For automatic reminders at session start:
+Opt-in and project-scoped. Enabling a hook persists across future sessions; skip this unless you need reminders:
 
 ```bash
 cp -r hooks/openclaw ~/.openclaw/hooks/self-improving-robotics
@@ -392,7 +392,8 @@ When a learning is broadly applicable (not a one-off fix), promote it to permane
 
 1. **Distill** the learning into concise operational rule or checklist item
 2. **Place** it in the right target document
-3. **Update** original entry:
+3. **Show a reviewed diff and apply only after explicit user approval**
+4. **Update** original entry:
    - Change `**Status**: pending` to `**Status**: promoted`
    - Add `**Promoted**: safety checklist` (or calibration playbook, tuning runbook, `SOUL.md`, `AGENTS.md`, `TOOLS.md`)
 
@@ -464,7 +465,7 @@ rg -n "Area\\*\\*: safety" .learnings/ROBOTICS_ISSUES.md
 7. **Track sim-to-real assumptions** - list what simulator omitted or simplified
 8. **Treat power and thermal as first-class constraints** - degraded compute can mimic software defects
 9. **Prefer minimal, actionable entries** - concise and precise entries are easier to promote
-10. **Promote aggressively when recurrence appears** - repeated failures should become standards, not isolated notes
+10. **Promote after review when recurrence appears** - repeated failures should become standards, not isolated notes
 
 ## Resolution Workflow
 
@@ -493,6 +494,8 @@ Follow this workflow for each `ROB` or `LRN` item:
 
 Enable automatic reminders through agent hooks. This is opt-in.
 
+Hooks persist across sessions once installed. Keep them **project-scoped**. Do **not** install user-level or global hooks. Never use an empty `matcher`. `PostToolUse` inspects command output in-process; do not log raw output, secrets, or transcripts.
+
 ### Quick Setup (Claude Code / Codex)
 
 Create `.claude/settings.json` in your project:
@@ -501,7 +504,7 @@ Create `.claude/settings.json` in your project:
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "robot|localization|planner|control|safety|sensor|lidar|imu|thermal",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-robotics/scripts/activator.sh"
@@ -511,7 +514,7 @@ Create `.claude/settings.json` in your project:
 }
 ```
 
-This injects a robotics-focused reminder after each prompt (~50-100 tokens overhead).
+This injects a robotics-focused reminder after matching prompts (~50-100 tokens overhead).
 
 ### Advanced Setup (With Error Detection)
 
@@ -519,7 +522,7 @@ This injects a robotics-focused reminder after each prompt (~50-100 tokens overh
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "robot|localization|planner|control|safety|sensor|lidar|imu|thermal",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-robotics/scripts/activator.sh"
@@ -548,6 +551,8 @@ Enable `PostToolUse` when you want automatic scan of command output for robotics
 See `references/hooks-setup.md` for complete setup and troubleshooting.
 
 ## Automatic Skill Extraction
+
+Extracted skills are untrusted until a human reviews the generated `SKILL.md`. Do not keep or publish an extracted skill without explicit user approval.
 
 When a robotics learning is valuable enough to become reusable, extract it.
 
@@ -636,3 +641,7 @@ When guidance conflicts, apply:
 ### Ownership Rules
 - This skill writes only to `.learnings/robotics/` in stackable mode.
 - It may read other skill folders for cross-linking, but should not rewrite their entries.
+- Standalone mode writes to this project's `.learnings/*.md` log files only.
+- Stackable mode writes only to the namespaced folder above and must not rewrite other skills' log entries.
+- Promotion into `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `MEMORY.md`, rules, hooks, or generated skills is not a logging write. Show a reviewed diff and apply only after explicit user approval.
+

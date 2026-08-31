@@ -1,4 +1,5 @@
 # Go
+
 ## Contents
 
 - CLI 工作流（collect → Agent → render）
@@ -19,6 +20,7 @@
 - 附录：与 CLI 拉数对照（可选）
 
 ---
+
 ogle Ads 账户诊断报告
 
 > 账户诊断报告纲要：配合 `google-analysis` CLI 拉数后填充。  
@@ -49,17 +51,17 @@ siluzan-tso google-ads-diagnosis render \
   --out ./snap-p1/google-ads-diagnosis-report.html
 ```
 
-| 子命令   | 说明                                                                 |
-| -------- | -------------------------------------------------------------------- |
+| 子命令    | 说明                                                                                                                       |
+| --------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `collect` | 拉 google-analysis + 对比周期 + 着陆页（先 TSO Lighthouse，失败则 CLI 简易诊断）；输出 `google-ads-diagnosis-collect.json` |
-| `render`  | 读取 Agent 产出的 `google-ads-diagnosis.json`，注入 `GoogleAdsDiagnosisReport.html` |
+| `render`  | 读取 Agent 产出的 `google-ads-diagnosis.json`，注入 `GoogleAdsDiagnosisReport.html`                                        |
 
 **collect 选项**：
 
-| 选项 | 说明 |
-| ---- | ---- |
+| 选项                         | 说明                                                                |
+| ---------------------------- | ------------------------------------------------------------------- |
 | `--no-fetch-previous-period` | 不拉上一周期 campaigns/geographic/keywords 对比数据（环比列将为空） |
-| `--skip-landing-page` | 不拉取着陆页（跳过 TSO Lighthouse + CLI 简易诊断） |
+| `--skip-landing-page`        | 不拉取着陆页（跳过 TSO Lighthouse + CLI 简易诊断）                  |
 
 **collect 行为约束**：
 
@@ -68,7 +70,7 @@ siluzan-tso google-ads-diagnosis render \
 - 若环比列全为 `null`，检查落盘目录是否存在上一周期文件（如 `campaigns-<id>_20260503-20260602.json`）；不存在则**重新执行 collect**（勿用手动拼装或 Python 脚本绕过 CLI）。
 
 - **render 自动合并（默认开启）**：若同目录存在 `google-ads-diagnosis-collect.json`，且 Agent 改坏了 `campaigns` / `geographic` / `keywords` 的 `items`（缺 `title`/`currentCost` 或环比写成字符串）或整体覆盖丢弃了 `landingPageAnalysis.desktop`/`mobile`，CLI **自动从 collect.reportData 恢复**，保留 Agent 的 `analysis`/`suggestions`。可用 `--no-merge-collect` 关闭；`--collect <file>` 指定 collect 路径。
-- **render 硬校验**：合并后对比表仍不完整则 **exit 1**（避免 HTML 表体全空）；`campaigns/geographic/keywords.items` 默认同目录 collect **整表覆盖** Agent 改动（Agent 只填 analysis/suggestions）；`summary.keyIssues` / `diagnosisOverview.disadvantages` 与事实字段矛盾，或出现「否词=0 / 着陆页测速缺失」禁写项、预算/创意建议千篇一律、§07 写成关键词洞察时同样 **exit 1**。
+- **render 硬校验**：合并后对比表仍不完整则 **exit 1**（避免 HTML 表体全空）；`campaigns/geographic/keywords.items` 默认同目录 collect **整表覆盖** Agent 改动（Agent 只填 analysis/suggestions）；`summary.keyIssues` / `diagnosisOverview.disadvantages` 与事实字段矛盾，或出现「否词相关 / 着陆页测速缺失」禁写项、预算/创意建议千篇一律、§07 写成关键词洞察时同样 **exit 1**。
 
 - **禁止**在 `collect` 阶段生成或写入 `analysis` / `suggestions` / `diagnosisOverview` / `summary` 等建议性文案。
 - **禁止**跳过 Agent 直接 `render` collect 产物（`render` 会校验全部叙事 / 建议字段；调试可加 `--lenient`）。
@@ -144,7 +146,7 @@ siluzan-tso google-ads-diagnosis render \
   - 结论涉及「转化跟踪/GA 关联」→ 核对 `goldAccount.gaConfigured` / `goldAccount.conversionTrackingQualified`（按第 4 条 `true`=已达标）。
   - 结论涉及「着陆页测速/性能」→ 先看 `landingPageAnalysis.source`：`api` 才可用 desktop/mobile 的 score/FCP；`simple` 只能写简易诊断信号（`simpleDiagnosis`），**禁止**把 fetchMs 当 FCP 或编造性能指数；`none` 写「数据未获取」。
 - **禁止写入 keyIssues / disadvantages（render 硬拦截）**：
-  - 「否定关键词数量为 0 / 缺少否词过滤」——`structure.negativeKeywordCount` 可在结构表展示，**不要**抬升为核心问题；有搜索词浪费时在 §08 按具体搜索词写。
+  - 「否定关键词数量为 0 / 缺少否词过滤」——本报告 **collect 未拉取否词数据**，结构表与黄金账户**不展示否词项**；禁止据此下结论。有搜索词浪费时仅在 §08 按具体搜索词写。
   - 「着陆页性能数据缺失 / 无法评估加载速度」——测速未获取是采集降级，**不是**投放核心问题；只在 §07 `analysis` 说明即可。
 - `render` 会对已知矛盾与上述禁写模式做**硬校验**，命中直接 `exit 1`——须按提示改写，**禁止**删字段绕过。
 
@@ -243,10 +245,9 @@ siluzan-tso google-ads-diagnosis render \
 | 有效关键字 (Effective Keywords)       |      |
 | 有效广告 (Effective Ads)              |      |
 | 附加链接 (Sitelinks)                  |      |
-| 否定关键字 (Negative Keywords)        |      |
 | 有效国家 (Effective Countries)        |      |
 
-**对应字段**：`structure.campaignCount`、`adGroupCount`、`keywordCount`、`adCount`、`extensionCount`、`negativeKeywordCount`、`countriesWithConversionsCount`
+**对应字段**：`structure.campaignCount`、`adGroupCount`、`keywordCount`、`adCount`、`extensionCount`、`countriesWithConversionsCount`（**不含**否词计数；collect 未拉否词）
 
 ### 3.3 指标检测
 
@@ -329,9 +330,10 @@ siluzan-tso google-ads-diagnosis render \
 | 附加链接           |             |          |
 | 附加宣传信息       |             |          |
 | 附加电话信息       |             |          |
-| 否定词添加         |             |          |
 | 受众群体设置       |             |          |
 | 出价策略           |             |          |
+
+> 黄金账户表**不含**「否定词添加」（`adsNegativeQualified`）：collect 未拉取否词数据，render 会剥离该字段。
 
 **得分**：`goldAccountScore`；**未达标项数**：若有 `goldAccountUnqualifiedCount` 可注明。
 
@@ -349,19 +351,19 @@ siluzan-tso google-ads-diagnosis render \
 
 ### 竞争力表
 
-| 指标 (Metric) | 报告值 (Report Value) | 健康标准 (Health Benchmark) | 优化策略 (Optimization Strategy) |
-| ------------- | --------------------- | --------------------------- | -------------------------------- |
+| 指标 (Metric) | 报告值 (Report Value) | 健康标准 (Health Benchmark) | 优化策略 (Optimization Strategy)        |
+| ------------- | --------------------- | --------------------------- | --------------------------------------- |
 |               |                       |                             | **按行填写 `strategy`，禁止整列同一句** |
 
 示例差异化方向（须代入本账户数字，勿照抄）：
 
-| metric | 策略侧重点 |
-| ------ | ---------- |
-| `budgetUtilizationRate` | 日预算是否打满、是否需调日预算/排期 |
-| `searchImpressionShare` | 份额偏低时优先查预算丢失 vs 排名丢失占比 |
-| `searchBudgetLostImpressionShare` | 预算丢失高 → 加预算/拆核心系列预算 |
-| `searchRankLostImpressionShare` | 排名丢失高 → 出价/质量分/落地页，而非只加预算 |
-| 核心系列 IS 目标 | 对照公式与目标差距，列可执行的系列级动作 |
+| metric                            | 策略侧重点                                    |
+| --------------------------------- | --------------------------------------------- |
+| `budgetUtilizationRate`           | 日预算是否打满、是否需调日预算/排期           |
+| `searchImpressionShare`           | 份额偏低时优先查预算丢失 vs 排名丢失占比      |
+| `searchBudgetLostImpressionShare` | 预算丢失高 → 加预算/拆核心系列预算            |
+| `searchRankLostImpressionShare`   | 排名丢失高 → 出价/质量分/落地页，而非只加预算 |
+| 核心系列 IS 目标                  | 对照公式与目标差距，列可执行的系列级动作      |
 
 ---
 
@@ -465,8 +467,8 @@ siluzan-tso google-ads-diagnosis render \
 
 ### 创意表
 
-| 广告 | Headlines | Descriptions | 优化建议 |
-| ---- | --------- | ------------ | -------- |
+| 广告              | Headlines                            | Descriptions                               | 优化建议                                                  |
+| ----------------- | ------------------------------------ | ------------------------------------------ | --------------------------------------------------------- |
 | `items[].adTitle` | `headlinesCount` / `headlinesStatus` | `descriptionsCount` / `descriptionsStatus` | **`items[].suggestion`**（逐条，HTML 表格「优化建议」列） |
 
 - **模块级**分析 / 建议：`adCreativeOptimization.analysis`、`adCreativeOptimization.suggestions`（区块下方段落）
@@ -480,6 +482,7 @@ siluzan-tso google-ads-diagnosis render \
 **数据**：`newFeatures.items`（collect 来自 campaign-types；过滤 `strategy === "AiMax"` 的行）
 
 **items 行字段**：
+
 - collect 事实（勿改）：`strategy`（如 `PerformanceMax`）、`strategyName`（如 `效果最大化`）、`accountStatus`（**boolean**，`true`=已启用）
 - Agent 只填：`optimizerRecommendation`
 - **禁止**用 `feature` 替代 `strategyName`（render 模板会兜底读 `feature`，但 collect 合并校验会告警）
@@ -498,7 +501,7 @@ siluzan-tso google-ads-diagnosis render \
 ### 12.1 核心问题总结
 
 - `summary.keyIssues`：逐条列出（或写「暂无核心问题」）
-- **不要写**：否词数量=0；着陆页测速数据缺失（见撰写硬约束第 5 条）
+- **不要写**：否词数量/缺少否词（本报告无否词数据）；着陆页测速数据缺失（见撰写硬约束第 5 条）
 
 ### 12.2 优先级优化路线图
 
@@ -517,12 +520,12 @@ siluzan-tso google-ads-diagnosis render \
 }
 ```
 
-| 字段 | 说明 |
-| ---- | ---- |
-| `priority` | P0/P1/P2… 或「P0（立即）」等可读标签 |
-| `focusArea` | 优化重点（表格「优化重点」列） |
-| `actionItems` | 字符串数组，关键行动列表 |
-| `expectedOutcome` | 预期效果 |
+| 字段              | 说明                                 |
+| ----------------- | ------------------------------------ |
+| `priority`        | P0/P1/P2… 或「P0（立即）」等可读标签 |
+| `focusArea`       | 优化重点（表格「优化重点」列）       |
+| `actionItems`     | 字符串数组，关键行动列表             |
+| `expectedOutcome` | 预期效果                             |
 
 > 若 Agent 暂写 `"第 1 周：…"` 字符串，render 会尽力拆成 focusArea + actionItems，但**仍须补全 `expectedOutcome` 对象格式**以获得完整表格。
 

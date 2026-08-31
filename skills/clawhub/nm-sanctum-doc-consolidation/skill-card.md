@@ -1,47 +1,54 @@
-## Description: <br>
-Merges ephemeral report and analysis artifacts into permanent documentation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Merges ephemeral report and analysis artifacts into permanent documentation.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to identify temporary LLM-generated markdown reports, extract durable findings or decisions, and consolidate them into permanent project documentation after review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Approved execution can modify repository documentation and delete temporary source report files. <br>
-Mitigation: Review the consolidation plan, source files, and destinations before approval, and keep a backup or Git commit for valuable reports. <br>
-Risk: Candidate detection may select files that are untracked, partially staged, or intentionally temporary. <br>
-Mitigation: Confirm the candidate list and exclude files that are already permanent documentation, scratch notes, or should preserve their original report format. <br>
-Risk: Merged content can introduce inaccurate, stale, or poorly placed guidance into permanent documentation. <br>
-Mitigation: Inspect generated diffs, verify the merged content against the source report, and run any available documentation checks before committing. <br>
+## Use Case:
 
+Developers and technical writers use this skill to find temporary LLM-generated report markdown, plan which useful content belongs in permanent documentation, and execute approved documentation merges.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-sanctum-doc-consolidation) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Candidate detection module](artifact/modules/candidate-detection.md) <br>
-- [Content analysis module](artifact/modules/content-analysis.md) <br>
-- [Destination routing module](artifact/modules/destination-routing.md) <br>
-- [Merge execution module](artifact/modules/merge-execution.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown prose with tables and inline code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update documentation files and delete approved temporary source reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Approved consolidation can delete source report files after merging, and deleted sources are not automatically restorable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed destination files and deletion list before approval; keep a backup or commit or stash source reports when they must be retained.
+
+Risk: Merged report content may add outdated, low-value, or misplaced analysis to permanent documentation.
+
+Mitigation: Review the consolidation plan for selected chunks, destinations, and skipped content before execution, then review generated or updated docs before committing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-doc-consolidation)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown plans, documentation edits, shell command snippets, and execution summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update markdown documentation and delete approved source artifacts after successful consolidation.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

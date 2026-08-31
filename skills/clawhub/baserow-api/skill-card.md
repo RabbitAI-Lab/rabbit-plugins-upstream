@@ -1,47 +1,64 @@
-## Description: <br>
-Baserow API integration with managed API key authentication for managing database rows, fields, and tables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Baserow API integration with managed API key authentication for reading, creating, updating, deleting, and querying database rows, fields, and tables through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to read, create, update, delete, filter, sort, batch-process, and upload files for Baserow data through Maton's managed API-key proxy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, change, delete, batch-process, and upload data in the connected Baserow account through Maton's proxy. <br>
-Mitigation: Use a least-privileged Baserow token and approve writes, deletes, batch operations, and file uploads only after checking the exact target and effect. <br>
-Risk: The skill requires MATON_API_KEY and relies on Maton to proxy Baserow requests and manage the connected Baserow credential. <br>
-Mitigation: Install only if you trust Maton for this integration, keep MATON_API_KEY secret, and rotate credentials if exposure is suspected. <br>
-Risk: Multiple Baserow connections can cause requests to affect the wrong account or workspace. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header when relevant and verify the target table, row, or file before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Baserow databases through managed Maton authentication, including listing, filtering, creating, updating, and deleting rows, fields, tables, and files. It is intended for API-backed workflows where the agent should prefer read/list calls and get user approval before new connections or data-changing actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/baserow-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Baserow API documentation](https://baserow.io/api-docs) <br>
-- [Baserow Database API](https://baserow.io/user-docs/database-api) <br>
-- [Baserow API spec](https://api.baserow.io/api/redoc/) <br>
-- [Baserow database tokens](https://baserow.io/user-docs/personal-api-tokens) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, API paths, Python snippets, JavaScript snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Maton-managed Baserow connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The connected account can read or change Baserow data available to that account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, connect only the account needed for the task, prefer read/list calls first, and confirm the target database, table, row, payload, and intended effect before write or delete calls.
+
+Risk: New Baserow connections can grant the skill access to account data.
+
+Mitigation: Create connections only after explicit user approval, choose the least privileged scopes available, specify the intended connection when multiple connections exist, and revoke unused Maton or Baserow connections.
+
+Risk: Credentials or provider-issued tokens could be exposed if handled outside the Maton CLI flow.
+
+Mitigation: Prefer Maton OAuth, keep credentials in the operating system credential store, do not print or persist tokens, and send raw API keys only to api.maton.ai when the CLI cannot be installed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/baserow-api)
+- [Maton Homepage](https://maton.ai)
+- [Baserow API Documentation](https://baserow.io/api-docs)
+- [Baserow Database API](https://baserow.io/user-docs/database-api)
+- [Baserow API Spec (OpenAPI)](https://api.baserow.io/api/redoc/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API payload snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Baserow connection.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

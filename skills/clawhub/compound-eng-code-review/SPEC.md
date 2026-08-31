@@ -2,7 +2,7 @@
 
 ## Intent
 
-`ia-code-review` is a `discipline`-class skill (an engineering practice not tied to one stack). Structured code reviews with severity-ranked findings and deep multi-agent mode. Use when performing a code review, auditing code quality, or critiquing PRs, MRs, or diffs.
+`ia-code-review` is a `discipline`-class skill (an engineering practice not tied to one stack). It performs severity-ranked review, including outcome-integrity checks that catch weakened gates, golden regeneration, policy bypasses, demo hard-coding, and process work presented as feature delivery.
 
 ## Scope
 
@@ -33,7 +33,7 @@ Out of scope:
 Authoritative sources:
 
 - `SKILL.md` -- runtime instructions and reference routing.
-- `references/*.md` -- bundled supplementary content (10 file(s)).
+- `references/*.md` -- bundled supplementary content (14 file(s)).
 - `distillery/tests/fixtures/triggers/ia-code-review.jsonl` -- positive and negative trigger phrasings under regression test.
 - `plugins/whetstone/hooks/skill-patterns.sh` -- regex pattern that fires this skill.
 - `distillery/.eval-data/ia-code-review/` -- harvested session examples (when present).
@@ -50,7 +50,11 @@ Data that must not be stored in this skill or its references:
 |---|---|---|
 | Trigger fixtures | complete | distillery/tests/fixtures/triggers/ia-code-review.jsonl (>=5 should_trigger, >=5 should_not_trigger) |
 | Hook regex pattern | complete | plugins/whetstone/hooks/skill-patterns.sh (`SKILL_PATTERNS[ia-code-review]`) |
-| Reference architecture | complete | 10 file(s) under references/ |
+| Reference architecture | complete | 14 file(s) under references/ |
+| File coverage contract | complete | `SKILL.md` Coverage gate + `references/scope-resolution.md` Review coverage ledger |
+| Reviewer trust boundary | complete | `references/reviewer-trust-boundary.md` + `references/deep-review.md` specialist prompts |
+| Deterministic stack routing | complete | `references/language-profiles.md` routing precedence + `references/deep-review.md` route map |
+| Outcome-integrity review | complete | `SKILL.md` Verification-mechanism carve-out and Outcome-integrity lens |
 | Real-usage signal | <!-- populated by harvest-sessions when sessions exist --> | distillery/.eval-data/ia-code-review/ (created by harvest-sessions) |
 
 ## Evaluation
@@ -76,9 +80,11 @@ Acceptance gates:
 
 ## Known Limitations
 
-<!-- to fill in over time as drift surfaces. Default rule: any time diagnose-negatives
-     surfaces a recurring failure pattern, document it here so future maintainers
-     understand the trade-off the current implementation accepts. -->
+- Coverage certifies that a correctness review unit inspected each selected file; it does not certify semantic completeness or absence of defects.
+- Standard-review coverage is held in model context unless the invoking workflow provides transient artifact storage, so harness interruption can prevent a terminal verdict.
+- The trust boundary is prompt-enforced when a harness cannot restrict specialist tool permissions; the orchestrator must still avoid granting unnecessary write-capable tools.
+- Stack routing depends on repository evidence and intentionally falls back to the generic profile for unsupported or ambiguous frameworks.
+- Whether a process artifact gates a real capability can require repository-specific release context that the diff does not contain.
 
 ## Maintenance Notes
 

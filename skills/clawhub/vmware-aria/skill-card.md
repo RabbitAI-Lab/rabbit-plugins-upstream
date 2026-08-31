@@ -1,49 +1,63 @@
-## Description: <br>
-Use this skill when an agent needs VMware Aria Operations data for performance metrics, alerts, capacity planning, anomaly detection, and automated reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill when an agent needs VMware Aria Operations or VCF Operations data for performance metrics, alerts, capacity planning, anomaly detection, and automated reports.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operations teams use this skill to inspect VMware Aria Operations environments, investigate alerts, analyze capacity and anomalies, and generate reports. It is read-heavy, with audited write actions limited to alert state changes, alert definition management, and report generation or deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access VMware Aria Operations data and includes limited administrative write actions. <br>
-Mitigation: Install it only for agents that should access VMware Aria Operations, use least-privilege or read-only service accounts unless writes are required, and review the audit log for acknowledged, canceled, generated, or deleted objects. <br>
-Risk: Credentials may be stored in local VMware Aria configuration files. <br>
-Mitigation: Keep ~/.vmware-aria/.env locked down and prefer external secret injection when stronger protection is required. <br>
-Risk: Disabling TLS verification can weaken protection for production connections. <br>
-Mitigation: Keep SSL verification enabled in production. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to query VMware Aria Operations data, investigate alerts, check capacity forecasts, identify anomalies, and generate operational reports from Aria data.
 
-## Reference(s): <br>
-- [VMware Aria source homepage](https://github.com/zw008/VMware-Aria) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-aria) <br>
-- [Publisher profile](https://clawhub.ai/user/zw008) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include VMware Aria metric summaries, alert and capacity analysis, report workflow steps, and configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server-resolved release metadata) <br>
+Risk: The skill can perform limited write actions, including alert cancellation, alert definition changes, report generation, and deletion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation before those actions and use least-privilege or read-only Aria accounts when possible.
+
+Risk: Aria Operations credentials are needed for configured targets.
+
+Mitigation: Protect the .env credential file and avoid storing passwords in config files.
+
+Risk: Disabling TLS verification can reduce connection assurance outside isolated labs.
+
+Mitigation: Keep verify_ssl:true for normal deployments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-aria)
+- [VMware Aria GitHub Repository](https://github.com/vmware-skills/VMware-Aria)
+- [Capabilities](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+- [Investigation Protocol](references/investigation-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Text]
+
+**Output Format:** [Markdown and text with inline shell commands and operational findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Aria Operations metrics, alert summaries, capacity forecasts, anomaly findings, report links, and setup guidance.]
+
+## Skill Version(s):
+
+1.9.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

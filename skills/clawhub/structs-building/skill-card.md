@@ -1,47 +1,64 @@
-## Description: <br>
-Builds and manages structures in Structs. Handles construction, activation, deactivation, movement, defense positioning, stealth, and generator infusion. Use when building a struct, activating or deactivating structs, moving structs between slots, setting defense assignments, enabling stealth, or infusing generators. Build times range from ~17 min (Command Ship) to ~6.4 hours (World Engine). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds and manages Structs game buildings, including construction decisions, activation and deactivation, Command Ship movement, defense assignment, stealth, generator infusion, and build-time planning.
 
-## Publisher: <br>
-[abstrct](https://clawhub.ai/user/abstrct) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[abstrct](https://clawhub.ai/user/abstrct)
 
-## Use Case: <br>
-Structs players and operators use this skill to prepare and verify building-related Structs CLI transactions, including initiating builds, completing proof-of-work, moving structures, setting defense assignments, enabling stealth, and infusing generators. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill helps prepare real Structs CLI transactions that can spend resources or change in-game state. <br>
-Mitigation: Confirm the signing key, target IDs, costs, slots, and timing before approving any transaction command. <br>
-Risk: Generator infusion is irreversible and can expose infused matter if the generator is raided. <br>
-Mitigation: Escalate before infusing and verify the generator's defense posture before approval. <br>
-Risk: Background build compute jobs can complete after game state changes and may conflict if multiple jobs use the same signing key. <br>
-Mitigation: Log background job PIDs, follow reconnect checks before launching new work, and run only one compute job per signing key at a time. <br>
+## Use Case:
 
+External players and developers use this skill to plan Structs building operations and prepare safe structsd commands for construction, movement, defense, stealth, activation, and generator infusion.
 
-## Reference(s): <br>
-- [Structs Building skill page](https://clawhub.ai/abstrct/structs-building) <br>
-- [Structs async operations](https://structs.ai/awareness/async-operations) <br>
-- [Structs building mechanics](https://structs.ai/knowledge/mechanics/building) <br>
-- [Structs power mechanics](https://structs.ai/knowledge/mechanics/power) <br>
-- [Struct type reference](https://structs.ai/knowledge/entities/struct-types) <br>
-- [structsd install skill](https://structs.ai/skills/structsd-install/SKILL) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires structsd on PATH and a configured signing key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence) <br>
+Risk: Irreversible actions such as trash and generator infusion can permanently destroy a struct or convert Alpha Matter.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval after checking the signer, struct ID, amount, power budget, and defense posture before proposing these transactions.
+
+Risk: Background build-compute jobs may complete and auto-activate later after game state has changed.
+
+Mitigation: Confirm the struct ID and power headroom before starting the job, then query chain state after completion instead of treating broadcast as success.
+
+Risk: Power or charge shortfalls can cause transactions to fail or leave a built struct offline.
+
+Mitigation: Run the documented power-budget and state queries before proposing build, activation, movement, defense, stealth, or infusion commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/abstrct/skills/structs-building)
+- [Structs conventions](https://structs.ai/skills/conventions)
+- [Struct types catalog](https://structs.ai/knowledge/entities/struct-types)
+- [Building mechanics](https://structs.ai/knowledge/mechanics/building)
+- [Hashing mechanics](https://structs.ai/knowledge/mechanics/hashing#worked-example-fresh-vs-aged-anchor)
+- [Structs energy](https://structs.ai/skills/structs-energy/SKILL)
+- [Structs combat](https://structs.ai/skills/structs-combat/SKILL)
+- [structsd install](https://structs.ai/skills/structsd-install/SKILL)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and command tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires structsd on PATH and a signing key; includes transaction approval checks and background compute instructions.]
+
+## Skill Version(s):
+
+1.25.0 (source: server release evidence and target metadata; artifact/_meta.json reports 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

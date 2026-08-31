@@ -1,0 +1,71 @@
+{
+  "evidence_kind": "replynodes/social-data-skills/publication-evidence",
+  "evidence_version": 1,
+  "package_name": "appstore-api",
+  "package_version": "1.0.4",
+  "contract_version": "v1",
+  "readonly_only": true,
+  "publication_status": {
+    "published_to_any_registry_or_marketplace": true,
+    "external_publication_evidence_attached": true,
+    "registry": "ClawHub",
+    "package": "@replynodes-ai/replynodes-appstore",
+    "version": "1.0.4",
+    "moderation": "clean",
+    "public_discovery": false,
+    "note": "Publication and moderation were verified; public discovery is not claimed without registry inspect evidence."
+  },
+  "prohibited_claims": [
+    "registry or marketplace publication",
+    "live upstream API availability or success rates",
+    "official platform partnership or endorsement",
+    "purchase, review-submission, account, login, or other write/authenticated capabilities"
+  ],
+  "validation_commands": [
+    "bash services/social-data-skills/contracts/validate.sh",
+    "bash services/social-data-skills/catalog/check.sh",
+    "bash services/social-data-skills/catalog/package_check.sh",
+    "bash services/social-data-skills/catalog/check_appstore.sh",
+    "bash services/social-data-skills/catalog/package_check_appstore.sh"
+  ],
+  "capabilities_declared": 3,
+  "unsupported_declared": 6,
+  "artifacts": [
+    {
+      "path": "CHECKSUMS.txt",
+      "sha256": "e834cdff30ad8bfad1161245ae97c0645d0a6a596d0d5de8103505c2748469ae"
+    },
+    {
+      "path": "INSTALL.md",
+      "sha256": "0ed1e9fd3601d369f31830301b4ba49058199e0e528ea7c35d1f467f2331fd0c"
+    },
+    {
+      "path": "PUBLICATION.md",
+      "sha256": "87e9564951cc95fdf9fbe967b6a1f2e9ae55ca1fce9644eb1176bf2e4317f7ea"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "dc91b299ecbd7867e795a4946b40b54fd16bb5c7d3c19191b1ca32980c914bad"
+    },
+    {
+      "path": "llms.txt",
+      "sha256": "81e2643ad73714df33fac5ead74392c6abb5da5771833cc3a02474cab121ee4f"
+    },
+    {
+      "path": "manifest.json",
+      "sha256": "4e547df95edf48c66dcc6a4f5bbe42f9ccc71a866ec36ae6be868cc73524714c"
+    },
+    {
+      "path": "references/appstore-mcp.schema.json",
+      "sha256": "6ee12d1d79001e2b64e00578be4ad15b45ad3b1ec0ad5ae64abbe63f7f5c6478"
+    },
+    {
+      "path": "references/appstore-public-v1.openapi.json",
+      "sha256": "35b663430009cc3cd7a77817a7de18f2b5a93b80ed634ddbcaa2e82393382a8d"
+    },
+    {
+      "path": "references/endpoints.md",
+      "sha256": "a9bbf5b81a443daa96cef5d3ad3e27ca4ff7e1dc83f5db66575cda9a1ba018ca"
+    }
+  ]
+}

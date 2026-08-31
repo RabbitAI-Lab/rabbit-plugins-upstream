@@ -2,33 +2,25 @@
 name: "Credit Review Digital Employee"
 slug: credit-review-digital-employee
 description: "覆盖准入规则扫描、风险规划、案件接件审核、抵质押风险管理、关联交易检测、贷前分析、审查备忘录全流程。帮助信贷审查人员提升风险识别能力。"
-version: "2.0.1"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 2.1.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - analytical-framework
+  - no-executable-code
 ---
 
 # Credit Review Digital Employee / 信贷审查专家数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断## Skill Overview / 技能概览
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
+## Skill Overview / 技能概览
 
 信贷审查专家数字员工，集成以下7项核心能力模块：
 
@@ -64,7 +56,7 @@ capabilities:
 1. 确认客户身份:提取客户名称或ID
 2. 确认目标产品:提取产品名称或编码
 3. 检查必填字段:客户名称、目标产品、申请授信金额(建议)
-4. 运行验证脚本: `python scripts/validate_admission_scan.py --check-customer --check-product`
+4. 以对话方式逐项核对输入完整性（本技能不含任何脚本，不执行代码）
 5. 若必填字段缺失,输出缺失清单,要求用户补充,停止后续流程
 6. 验证通过后进入步骤1
 
@@ -233,7 +225,7 @@ capabilities:
 
 ## 审计追踪 (Audit Trail)
 
-每次执行后生成审计日志 `audit/{customer_name}_{date}_admission_scan_audit.json`:
+如机构需要留痕，可参考以下要点由用户自行记录（本技能不写文件）： `audit/{customer_name}_{date}_admission_scan_audit.json`:
 
 ```json
 {
@@ -276,7 +268,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少 3 年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 
@@ -446,7 +438,7 @@ capabilities:
 2. 确认案件编号:提取案件编号
 3. 确认目标产品:提取产品名称或编码
 4. 检查必填字段:客户名称、案件编号、目标产品、申请金额、申请材料清单
-5. 运行验证脚本: `python scripts/validate_intake_check.py --check-customer --check-materials`
+5. 以对话方式逐项核对输入完整性（本技能不含任何脚本，不执行代码）
 6. 若必填字段缺失,输出缺失清单,要求用户补充,停止后续流程
 7. 验证通过后进入步骤1
 
@@ -647,7 +639,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**: 至少 3 年,与授信案件档案同步保存。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 
@@ -1042,7 +1034,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 
@@ -1349,7 +1341,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## 踩坑记录 (Gotchas)
 
@@ -1752,7 +1744,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**: 至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 
@@ -2194,7 +2186,7 @@ XX集团贷后预警触发,发现与3家关联企业频繁资金往来,请深度
 }
 ```
 
-**审计日志保留期限**: 至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 
@@ -2647,7 +2639,7 @@ XX集团贷后预警触发,发现与3家关联企业频繁资金往来,请深度
 
 1. 列出所有输入数据源:贷款申请信息、可选文件清单、宏观策略、产品规则
 2. 确认贷款申请必填字段: applicant、company、industry、product、amount、purpose
-3. 运行验证脚本: `python scripts/validate_risk_plan.py --check-required --check-consistency`
+3. 以对话方式逐项核对输入完整性（本技能不含任何脚本，不执行代码）
 4. 若必填字段缺失,输出 `need_info` 提示,说明缺失字段及填写要求,停止后续流程
 5. 验证通过后进入步骤1
 
@@ -2800,7 +2792,7 @@ XX集团贷后预警触发,发现与3家关联企业频繁资金往来,请深度
 
 ## 审计追踪 (Audit Trail)
 
-每次执行后生成审计日志 `audit/{customer_name}_{date}_risk_plan_audit.json`:
+如机构需要留痕，可参考以下要点由用户自行记录（本技能不写文件）： `audit/{customer_name}_{date}_risk_plan_audit.json`:
 
 ```json
 {
@@ -2848,7 +2840,7 @@ XX集团贷后预警触发,发现与3家关联企业频繁资金往来,请深度
 }
 ```
 
-**审计日志保留期限**: 至少 3 年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ---
 

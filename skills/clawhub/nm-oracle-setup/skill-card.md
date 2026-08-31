@@ -1,41 +1,58 @@
-## Description: <br>
-Provisions the oracle ML inference daemon with onnxruntime via uv. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provisions the oracle ML inference daemon with onnxruntime via uv.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to set up the oracle plugin's local ONNX inference environment for skill quality evaluation by creating a uv-managed Python environment, installing onnxruntime, and verifying provisioning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Provisioning relies on external oracle plugin code that performs the actual environment setup and may control daemon startup behavior. <br>
-Mitigation: Review the referenced oracle plugin code before running the uv command and install only when local ONNX inference setup is intended. <br>
-Risk: Initial setup downloads Python dependencies and can fail when uv or network access is unavailable. <br>
-Mitigation: Confirm uv is installed and network access is available, then report provisioning errors clearly to the user. <br>
+## Use Case:
 
+Developers and engineers use this skill to provision and verify the local ONNX runtime environment needed by the oracle ML inference daemon.
 
-## Reference(s): <br>
-- [Nm Oracle Setup on ClawHub](https://clawhub.ai/athola/skills/nm-oracle-setup) <br>
-- [Oracle plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/oracle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with an inline bash command block] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports provisioning success or failure and surfaces uv, network, and external plugin review guidance to the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The setup process creates a local Python virtual environment and downloads onnxruntime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when you intend to provision the oracle plugin's local inference environment and are comfortable with uv-managed dependency downloads.
+
+Risk: The skill calls the oracle plugin's provisioning function.
+
+Mitigation: Review the referenced oracle plugin before use if you have not already trusted that plugin.
+
+Risk: Provisioning can fail when uv or network access is unavailable.
+
+Mitigation: Confirm uv is installed and network access is available before running setup; report any returned error to the user.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-oracle-setup)
+- [Oracle plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/oracle)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown with inline bash code blocks and short status guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports provisioning success or failure and suggests checks for uv and network availability.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

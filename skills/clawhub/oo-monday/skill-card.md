@@ -1,43 +1,55 @@
-## Description: <br>
-monday (monday.com) lets an agent read, create, update, and delete monday data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+monday (monday.com). Use this skill for ANY monday request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate monday.com workspaces through an OOMOL-connected account, including board, item, document, dashboard, team, audit log, and activity log workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or delete monday.com data. <br>
-Mitigation: Confirm the exact payload, target, and effect before approving write or destructive actions. <br>
-Risk: The skill can access sensitive monday.com workspace or account data, including audit logs on enterprise accounts. <br>
-Mitigation: Install and use it only for monday accounts and workspaces where the agent is authorized to operate. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to let an agent work with monday.com boards, items, workspaces, dashboards, docs, forms, teams, users, updates, and departments through an OOMOL-connected account. It supports read workflows and state-changing workflows, with explicit confirmation expected before write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-monday) <br>
-- [monday homepage](https://monday.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires fetching the connector action schema before constructing payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release and skill metadata) <br>
+Risk: The skill can operate a user's monday.com account and includes actions that write, archive, delete, deactivate, or change memberships and account structures.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed payloads carefully and approve only actions whose target and effect are clear, especially for delete, archive, deactivate, membership, workspace, board, item, and department changes.
+
+Risk: Incorrect payloads or misunderstood targets could modify the wrong monday.com data.
+
+Mitigation: Fetch the live connector schema before constructing a payload and confirm the exact payload and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-monday)
+- [monday homepage](https://monday.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include connector execution results as JSON with data and metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

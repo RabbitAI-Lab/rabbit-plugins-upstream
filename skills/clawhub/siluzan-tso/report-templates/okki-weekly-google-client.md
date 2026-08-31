@@ -5,7 +5,11 @@
 > 同义：`OKKI 周报`、`okki 周报模板`、`运营 OKKI 周报`。  
 > **媒体**：当前模板仅规范 **Google**（`mediaCustomerId`）。其他媒体用各自 `*-period-report.md`。  
 > **Excel 版式基准**：与运营样表《**数据复盘分析**》类 xlsx 对齐（如 `2025.12数据复盘分析.xlsx`）；工作簿 5 个 Sheet、顺序与表头以下文规范为准。
-
+>
+> **默认交付（硬性，缺文件 = 任务未完成）**：磁盘上的 **5 Sheet `.xlsx`** + 对话内客户话术。  
+> 「表格形式 / 表格 / 各维度表格 / 表 / 做成表」= **Excel `.xlsx`**，**不是**对话 Markdown 表，**不是**手写 HTML/PDF。  
+> 仅当用户明确「只要话术 / 不要文件 / 不要 Excel」时才省略 xlsx。  
+> **禁止**：用对话 Markdown 表、手写 HTML、PDF 代替 `.xlsx`；禁止假设存在 CLI `excel` 子命令。
 
 ## Contents
 
@@ -19,7 +23,7 @@
 
 ---
 
-识别到上述意图时：**不要**再走 `google-period-report.md` 的「默认 8 维 + 追问追加」流程；按本文**固定维度 + 默认客户话术（可用户自定义）**交付（数据全部来自 CLI 落盘 JSON，见 `references/analytics/account-analytics.md`）。
+识别到上述意图时：**不要**再走 `google-period-report.md` 的「默认 8 维 + 追问追加」流程；按本文**固定维度 + 默认客户话术（可用户自定义）+ 5 Sheet `.xlsx`** 交付（数据全部来自 CLI 落盘 JSON，见 `references/analytics/account-analytics.md`）。**先写 xlsx 再发话术**；没有 `.xlsx` 路径不得收口。
 
 ---
 
@@ -29,16 +33,17 @@
 2. **统计区间**：`--start` / `--end`（用户未给齐时按 SKILL 反问；授权默认时可用「上一完整自然周」白名单并写明）。
 3. **询盘口径**：默认使用区间内 `conversions`（转化次数，来自 `stats` 或 `overview`）。若运营定义为某类转化，须在首段脚注说明（必要时补拉 `google-analysis --sections conversion-actions` 仅作说明）。
 4. **日期写法**：`2026.4.1`、`2026/4/1` 等先规范为 `YYYY-MM-DD`（如 `2026-04-01`）再传 `--start` / `--end`。
-5. **交付**：用户要可复制话术 → 优先纯文本；否则默认话术 + Excel。
+5. **交付**：默认 **客户话术 + 5 Sheet `.xlsx`（必产）**。「表格形式」一律当 Excel。仅用户明确只要可复制话术、不要文件时，才省略 xlsx。
 
 ---
 
 ## 架构约定 · Excel 由谁生成
 
 - **`siluzan-tso` 不提供**「一键生成 OKKI Excel」的子命令，**也不要**在 CLI 里新增。
-- 需交付 Excel 时：由 **Agent（含 WorkBuddy 编排）** 在下列 CLI **`--json-out` 落盘后**，自行编写 **Node.js / Python** 脚本（如 `exceljs`、`xlsx`、`openpyxl`）读取 JSON → 写 `.xlsx`。
+- **默认必产 Excel**：由 **Agent（含 WorkBuddy 编排）** 在下列 CLI **`--json-out` 落盘后**，自行编写 **Node.js / Python** 脚本（如 `exceljs`、`xlsx`、`openpyxl`）读取 JSON → 写 `.xlsx`。没有写出 `.xlsx` = 未完成。
 - **数值一律来自落盘 JSON，禁止在脚本里写死业务数字。**
 - **所有 ID 列写字符串（文本）**，禁止 Excel 数字类型（防科学计数法）；见 `references/core/agent-conventions.md`。
+- **样式（必须）**：`import` `report-templates/excel-style-kit.mjs`，用 `createExcelWorkbook({ accent: "google" })` + `titleBar`/`sectionBar`/`tableHeader`/`dataRow`/`noteRow` 组件搭版面（`noteRow` 用于「分析」「数据复盘」文字块），**禁止**裸写无样式单元格。规范见 `report-templates/excel-style-guide.md`。
 
 ---
 
@@ -178,7 +183,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | R1               | `设备报告`                                                                                                                                                                                                                                                                                                                                                           |
 | R2               | 统计区间                                                                                                                                                                                                                                                                                                                                                             |
 | R3（A→M，13 列） | `设备` \| `级别` \| `广告系列` \| `出价调整` \| `展示次数` \| `点击次数` \| `点击率` \| `平均每次点击费用` \| `费用` \| `所有转化次数` \| `转化次数` \| `每次转化费用` \| `转化率`                                                                                                                                                                                   |
-| R4…              | `campaign-device-*.json`（`devices[]`）：`deviceType`→设备；`campaignName` / `adGroupName`→「广告系列」等；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；`ctr` / `conversionRate` 直接写入；**出价调整**：bidModifier（0.5 表示降低 50%，1.1 表示提高 10%，在表格中分别为 -50%、+10%）；**级别**列按运营约定（如填 `广告系列` 或 `账户`，全文一致） |
+| R4…              | `campaign-device-*.json`（`items[]`）：`deviceType`→设备；`campaignName` / `adGroupName`→「广告系列」等；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；`ctr` / `conversionRate` 直接写入；**出价调整**：写 `bidModifierDisplay`（与 Google 后台一致：未设置=`—`，`0.6`=`-40%`）。禁止把倍率当正百分比，禁止把未设置的 `0` 写成 `-100%`；**级别**列按运营约定（如填 `广告系列` 或 `账户`，全文一致） |
 | 表末「分析」     | **总结**：各设备（Mobile/Desktop/Tablet 等）消耗与转化占比、系列×设备高消耗组合、移动端 vs 桌面 CPA/CPC 差异。**建议**：设备出价系数调整或系列预算倾斜（须引用设备类型与表中费用/转化），1～3 条                                                                                                                                                                     |
 
 ---
@@ -260,5 +265,5 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | 项       | `google-period-report.md` | 本文 OKKI 周报                                                                                                 |
 | -------- | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | 默认维度 | 8 维 + 主动追问追加       | **固定** `overview,campaigns,keywords,search-terms,campaign-device,campaign-geo-matched` + `stats` + `balance` |
-| 输出形态 | 长文分析报告              | **默认客户话术（可自定义）** + Excel 数据复盘 + **多 Sheet Excel（Agent 脚本写）**                             |
+| 输出形态 | 长文分析报告（默认 HTML） | **必产** 5 Sheet `.xlsx` + 客户话术；「表格形式」= Excel；**禁止**对话 Markdown 表 / 手写 HTML 代替 |
 | 典型用户 | 内部分析                  | **发客户**的同步简报                                                                                           |

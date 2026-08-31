@@ -1,5 +1,6 @@
 #!/bin/bash
 # Security Self-Improvement Error Detector Hook (Optional)
+# Inspects CLAUDE_TOOL_OUTPUT in-process only. Never writes tool output, secrets, or transcripts to disk.
 # Conservative detector for high-signal security failures only.
 # Reads CLAUDE_TOOL_OUTPUT (when provided by PostToolUse).
 

@@ -1,47 +1,67 @@
-## Description: <br>
-Dknowc Official Doc Writer helps agents draft, revise, review, and produce Word-format Chinese official documents and formal administrative materials, using DKnowc outline and search services when policy, data, standards, or case support is needed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+深知公文写作 is a formal-document writing assistant for office, administrative, secretary, materials, enterprise, and public-sector users that helps draft, revise, polish, review, format, and deliver official documents, reports, summaries, speeches, meeting minutes, plans, research materials, Word documents, and optional traceable source reports.
 
-## Publisher: <br>
-[dylanzhangzx](https://clawhub.ai/user/dylanzhangzx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dylanzhangzx](https://clawhub.ai/user/dylanzhangzx)
 
-## Use Case: <br>
-External users, employees, and agents use this skill to prepare Chinese official documents, administrative materials, policy-supported reports, Word deliverables, red-head documents, and supporting source-note HTML when DKnowc search results are used. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive writing requests, drafts, personal data, internal case details, or policy material may be sent to DKnowc services when outline or search features are used. <br>
-Mitigation: Use the skill only when external processing by DKnowc is permitted, and avoid submitting confidential or personal data unless approved. <br>
-Risk: Local configuration, profile, outline result, and search result files may retain sensitive operational data after use. <br>
-Mitigation: Periodically review or delete config.ini, config/user_profile.json, official-docs/outline-results, and official-docs/search-results files as appropriate. <br>
+## Use Case:
 
+Employees and external workplace users use this skill to turn notes, meeting records, research material, or rough drafts into structured formal Chinese documents. It supports drafting, revision, review, Word delivery, optional red-head formatting, and source-trace reporting when search-backed evidence is used.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dylanzhangzx/skills/dknowc-official-doc-writer) <br>
-- [DKnowc manual registration page](https://platform.dknowc.cn/auth/#/register?channel=2787E171-B0E5-4328-9946-47AC52434D1F&type=6) <br>
-- [DKnowc dependable search endpoint](https://open.dknowc.cn/dependable/search/) <br>
-- [Output guide](artifact/reference/output_guide.md) <br>
-- [Search policy](artifact/reference/search_policy.md) <br>
-- [Review checklist](artifact/reference/review_checklist.md) <br>
-- [Task router](artifact/reference/task_router.md) <br>
-- [Material usage guidance](artifact/reference/material_usage_guidance.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON search or outline artifacts, Word .docx files, and HTML source-note files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Normal output may include official-document text, generated .docx files, optional red-head .docx files, DKnowc search result JSON, outline JSON, and source-note HTML.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.1 (source: server evidence and changelog, released 2026-07-24) <br>
+Risk: Search onboarding asks the user for a phone number and SMS code and provisions access with a provider-managed API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that account flow is acceptable for the deployment; prefer platform-managed secrets or manual token setup where policy requires it.
+
+Risk: The skill may send search and outline queries to dknowc services.
+
+Mitigation: Do not send confidential draft content or sensitive organizational material as search queries unless the organization explicitly allows it.
+
+Risk: The registration helper can persist an API key in ~/.zshrc.
+
+Mitigation: Use a platform secret store or manually managed token when possible, and remove or rotate the local key if the skill is no longer used.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dylanzhangzx/skills/dknowc-official-doc-writer)
+- [Publisher profile](https://clawhub.ai/user/dylanzhangzx)
+- [README](artifact/README.md)
+- [Skill instructions](artifact/SKILL.md)
+- [Search policy](artifact/reference/search_policy.md)
+- [Output guide](artifact/reference/output_guide.md)
+- [Review checklist](artifact/reference/review_checklist.md)
+- [Revision workflow](artifact/reference/revision_workflow.md)
+- [Official document standards index](artifact/reference/standards/00_index.md)
+- [Dknowc trusted search endpoint](https://open.dknowc.cn/dependable/search/)
+- [Dknowc MCP endpoint](https://mcp.dknowc.cn/s6/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown prose, command snippets, JSON helper-script status, DOCX files, and HTML source-trace reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search-backed work may require DKNOWC_API_KEY; the artifact can generate Word documents and HTML trace reports and can store user-authorized local writing preferences or materials.]
+
+## Skill Version(s):
+
+3.4.5 (source: frontmatter and server release evidence, released 2026-08-27)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

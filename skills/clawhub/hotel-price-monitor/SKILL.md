@@ -5,18 +5,18 @@ description: 酒店降价监控与多平台比价助手，同时搜索多个旅�
 version: 1.1.1
 tags: [酒店比价, 酒店降价, 价格监控, 订贵了, 酒店捡漏]
 tools:
-  - name: search_hotels
+  - name: searchHotels
     description: 按城市和日期搜索酒店列表，返回价格、评分和预订链接
     parameters:
       - name: city
         type: string
         description: 目的地城市，如"上海""三亚"
         required: true
-      - name: check_in
+      - name: checkIn
         type: string
         description: 入住日期 YYYY-MM-DD
         required: true
-      - name: check_out
+      - name: checkOut
         type: string
         description: 退房日期 YYYY-MM-DD
         required: true
@@ -24,7 +24,7 @@ tools:
         type: string
         description: 关键词，如"外滩""亲子"
         required: false
-  - name: compare_hotel_prices
+  - name: compareHotelPrices
     description: 按酒店名和日期查询多个平台实时价格并对比
     parameters:
       - name: hotel
@@ -35,18 +35,18 @@ tools:
         type: string
         description: 城市名
         required: true
-      - name: check_in
+      - name: checkIn
         type: string
         description: 入住日期 YYYY-MM-DD
         required: true
-      - name: check_out
+      - name: checkOut
         type: string
         description: 退房日期 YYYY-MM-DD
         required: true
-  - name: create_price_watch
+  - name: createPriceWatch
     description: 输出结构化监控请求，由宿主Agent承接定时复查和降价通知
     parameters:
-      - name: hotel_name
+      - name: hotelName
         type: string
         description: 酒店名称
         required: true
@@ -54,11 +54,11 @@ tools:
         type: string
         description: 城市名
         required: true
-      - name: check_in
+      - name: checkIn
         type: string
         description: 入住日期
         required: true
-      - name: check_out
+      - name: checkOut
         type: string
         description: 退房日期
         required: true

@@ -1,39 +1,53 @@
-## Description: <br>
-This skill helps testers observe test execution across function behavior, interface responses, logs, UI rendering, data consistency, and performance, then record anomalies and follow-up questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners observe functional behavior, API responses, logs, UI rendering, data consistency, and performance during test execution, then record anomalies and follow-up questions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill during test execution to capture structured observations, correlate each observation with a test case, and identify anomalies across functional, log, UI, data, dependency, and performance signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad troubleshooting or test-execution language may activate this workflow when the user intended a narrower task. <br>
-Mitigation: When the task is ambiguous, explicitly confirm whether to use this observation workflow before allowing shell or log-inspection steps. <br>
-Risk: The workflow may involve shell commands, log inspection, screenshots, or external monitoring in the target test environment. <br>
-Mitigation: Run it in a controlled environment and review requested commands, logs, and tool access before execution. <br>
+## Use Case:
 
+QA testers and test engineers use this skill during test execution to monitor multiple signal streams, compare actual behavior with expected results, and produce observation records that identify anomalies and follow-up questions.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown execution observation report with traceable observation IDs, test-case links, anomaly lists, and environment issue notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Observations should use unique OBS-XXXX IDs and link to TC-XXXX test case IDs; command or tool use should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Log, monitoring, and database checks could expose secrets, personal data, or production data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use approved test or sanitized environments, prefer read-only database access, and redact sensitive values from copied logs and reports.
+
+Risk: External monitoring or screenshot tools may capture sensitive application state when used during QA observation.
+
+Mitigation: Run the skill only in controlled QA workflows and confirm that any external tools are approved for the target environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-execution-observation)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown observation reports with tables, checklists, anomaly lists, and environment issue notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Observation records should include unique OBS IDs, related test case IDs, observed results, anomalies, environment issues, and coverage caveats.]
+
+## Skill Version(s):
+
+1.7.5 (source: artifact frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

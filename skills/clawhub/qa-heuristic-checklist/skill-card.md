@@ -1,41 +1,54 @@
-## Description: <br>
-Provides reusable QA heuristic checklist templates for common feature types such as forms, lists, shopping carts, payments, imports and exports, approvals, notifications, and permissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides reusable QA checklist templates for common feature types including forms, lists, carts, payments, imports and exports, approvals, notifications, and permissions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill to identify the right checklist for a feature type and avoid missing common test areas, especially when starting test design for an unfamiliar feature. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad testing-related prompts where a deeper QA strategy skill would be more appropriate. <br>
-Mitigation: Use this skill for checklist coverage, and choose a more specific QA skill for scenario design, boundary analysis, or deeper test strategy. <br>
-Risk: Example checklist items may describe destructive test actions such as deleting cart items or changing permissions. <br>
-Mitigation: Treat those items as test design prompts and execute them only in appropriate test environments with review of affected data. <br>
+## Use Case:
 
+QA engineers, testers, and developers use this skill to identify relevant heuristic test points and produce structured test-case guidance when evaluating common product features.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-heuristic-checklist) <br>
-- [Functional heuristic checklists](references/checklists.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown checklist guidance with covered areas, uncovered areas, and exploration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should mark covered heuristic areas and avoid creating new unique traceability IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate on broad testing or checklist requests when a more specialized QA workflow is needed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a specialized QA skill for deeper scenario generation, boundary analysis, or domain-specific testing.
+
+Risk: Checklist examples may describe create, update, or delete operations against a tested product.
+
+Mitigation: Treat these examples as test-design guidance and avoid executing destructive actions against production data.
+
+## Reference(s):
+
+- [Feature-Type Heuristic Checklist Reference](artifact/references/checklists.md)
+- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-heuristic-checklist)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown with structured test-case tables and checklist sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include heuristic checklist items, covered and uncovered areas, exploration guidance, and risk levels.]
+
+## Skill Version(s):
+
+1.7.5 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

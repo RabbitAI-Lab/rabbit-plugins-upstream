@@ -1,45 +1,54 @@
-## Description: <br>
-Provides standardized pytest config, reusable fixtures, and CI integration patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides standardized pytest config, reusable fixtures, and CI integration patterns.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to set up or audit pytest configuration, reusable test fixtures, and CI workflows for Python plugin test infrastructure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may activate the skill during general testing or configuration conversations. <br>
-Mitigation: Confirm the project needs pytest or CI setup guidance before applying suggested changes. <br>
-Risk: Suggested pytest configuration, fixtures, or CI workflows may not match a project's layout or quality thresholds. <br>
-Mitigation: Review generated configuration and run collection, marker, and coverage checks before committing changes. <br>
+## Use Case:
 
+Developers and engineers use this skill to configure pytest for Python projects, including reusable fixtures, test markers, coverage settings, Git testing helpers, mock tool fixtures, and CI integration patterns.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-leyline-pytest-config) <br>
-- [Leyline Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Conftest Patterns](modules/conftest-patterns.md) <br>
-- [Git Testing Fixtures](modules/git-testing-fixtures.md) <br>
-- [Mock Fixtures](modules/mock-fixtures.md) <br>
-- [CI Integration](modules/ci-integration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with TOML, Python, YAML, Makefile, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include pytest configuration, reusable fixtures, CI workflow examples, and verification commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Pytest, GitHub Actions, and Codecov snippets may not match a project's package layout, CI permissions, or coverage policy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and adapt the snippets before applying them, especially CI upload behavior and coverage thresholds.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-pytest-config)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+- [Conftest Patterns](artifact/modules/conftest-patterns.md)
+- [Git Testing Fixtures](artifact/modules/git-testing-fixtures.md)
+- [Mock Fixtures](artifact/modules/mock-fixtures.md)
+- [CI/CD Integration](artifact/modules/ci-integration.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with TOML, Python, YAML, Makefile, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only skill that provides patterns and snippets for users to review before applying.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

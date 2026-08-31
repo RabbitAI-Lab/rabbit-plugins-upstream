@@ -1,0 +1,1284 @@
+# Changelog / 变更日志
+
+All notable changes to the `meta-analysis` skill are recorded here. Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), versioning follows [Semantic Versioning](https://semver.org/).
+
+---
+
+## [2.2.30] — 2026-08-29 — coze 回传结构迁移 §20.8 模式 B（完整 JSON 单文件外置，删除 manifest 外置）
+
+> 触发：ct-base §20.8 由「两种已批准模式（A manifest / B 完整 JSON 单文件）」收窄为**仅模式 B**（2026-08-29 用户拍板删除模式 A）。meta-analysis 原 coze 端实现模式 A（manifest 外置），现迁移到模式 B 以对齐单一标准；coze 端需重新部署。
+
+### Changed（coze 端 `adapters/coze_project/src/graphs/nodes/meta_analysis.py`）
+- **删除 `_externalize_to_manifest`**（含 `_collect_always` / `_collect_stats` / `_move` / `_discard_fallback` 及其 `_coze_manifest` 契约），整体替换为 §20.8 模式 B 三函数：
+  - `_build_inline(out)`：内联轻量信封 = 删 `figures`/`repro`，其余字段（status/stats/warnings/notes/task）保留，恒内联 `_coze_version`。
+  - `_trim_inline_to_limit(inline)`：内联超 4000 时从大到小丢 `stats` 子块直到 < 4000；**循环条件与 narrative 额度均把 `_coze_truncated` 标记自身大小计入预算**，末尾兜底逐条缩减标记，确保最终（含标记）恒 < 4000（沿用 ct-samplesize v5.3.14 的 ⑤ 修复）。meta-analysis 信封无顶层 narrative，故无 narrative 截断分支。
+  - `_externalize_full(out, timeout=90)`：完整信封整体写单个 S3 文件（md5 摘要命名），内联挂 `_coze_full = {storage:"s3", url}`；S3 不可用/失败/超时降级无 `_coze_full` 的内联删减版。90s daemon 超时守护不变。
+- `meta_analysis_node`：`_externalize_to_manifest` → `_externalize_full`，并在调用前注入 `out["_coze_version"]`（恒内联诊断透出，本地不再比对）。
+- 常量：`_CORE_INLINE` 由 `{status,task,_coze_truncated,_coze_manifest}` 改为 `{status,task,_coze_truncated,_coze_full,_coze_version}`；新增 `_COZE_ENVELOPE_VERSION` / `_S3_URL_EXPIRE`；删除 `_EXTERNALIZE_MIN_BYTES`。
+
+### Changed（本地 `adapters/coze_client.py`）
+- 新增 `_fetch_full_json(parsed, timeout=30)`：优先经 `_coze_full` 下载完整 JSON 作分析源（含 figures/repro，零删减）；失败/无链接返回 None。
+- `run_meta` 解析路径：`_fill_external_svgs(parsed)` → `full = _fetch_full_json(parsed); parsed = full if full is not None else _fill_external_svgs(parsed)`。内联删减版仅作飞书日志/老版本兼容。
+- `_fill_external_svgs` 降级为**兜底**入口（仅当响应无 `_coze_full` 的旧 coze 响应才走 manifest 重组 / 旧 figures[].url·repro.url 回填），保留 `_reassemble_from_manifest` 向后兼容。
+- `health()` 探测包**注入 Bearer token**：此前探测包无 token，被 coze 网关在鉴权层挡回 401、请求根本进不了 langgraph，probe 短路逻辑实际是"睡着"的（靠 401 兜底判定可达，但 probe 短路从未生效）。现经 `_resolve_token` 取 token 后挂 `Authorization` 头，probe 能越过鉴权真正进图、在 `meta_analysis` 节点短路（不调 R 引擎、不写飞书），既验证可达性又零算力零日志污染。token 解析失败 / 返回空时降级为无 token 探测（401 仍算可达，判定语义不变）。coze 端无需改动（probe 字段已于 2.2.28+ 引入）。
+
+### Verified
+- `verify_meta_full.py`（FakeS3 + file:// 全链路）**21/21 PASS**：① `_externalize_full` 内联 < 4000、无 figures/repro、含 `_coze_full`，S3 完整数据含 figures/repro 且 svg 全等；② 本地 `_fetch_full_json` 经 `_coze_full` 还原完整 JSON（figures/repro 全等、剔除 `_coze_full`）；③ 旧 `_coze_manifest` 内联 → `_fetch_full_json` 返回 None（降级旧契约）；④ S3 不可用 → 降级内联删减版（无 `_coze_full`）< 4000；⑤ 内联超 4000 → 丢 stats 子块、含标记后恒 < 4000。
+- 两侧 `py_compile` 通过；coze 端已无 `_externalize_to_manifest` 残留（本地 `_reassemble_from_manifest` 仅旧响应兜底保留）。
+
+### 部署注意
+- **coze 端已改动，必须重新部署**（旧 `20260829a.zip` 不含本次模式 B 迁移）。升级包见 `meta-analysis_coze_2.2.30.zip`。
+
+## [2.2.29] — 2026-08-29 — 契约漂移检测：移除版本号比对（对齐 ct-base §20.9 修订）
+
+> 触发：ct-base §20.9 由「版本漂移 + 结构漂移」双信号修订为**仅数据内容/结构不一致触发**——版本号不同不再提醒。
+
+### Changed
+- **`_assess_contract` 移除版本漂移检测**：删除 `EXPECTED_COZE_ENVELOPE_VERSION` 常量与 `_coze_version` / `_contract_version` 的比对分支（原第 4 项）。版本由 coze 端随发布同步，本地不比对 —— 任何**仅版本号差异**（无数据内容/结构变化）一律不提示，避免无谓打扰。检测信号自此只剩一条：**coze 返回的数据内容/结构与本地消费接口是否一致**（字段别名自适应归一化）。
+- **零噪音边界写入 docstring**：`_coze_version` 高于/低于本地、coze 未注入版本标记、结构一致且无别名映射 —— 三种情况均不提示。
+
+### Unchanged（刻意保留，勿"顺手改回去"）
+- 结构漂移自适应（`quality_gate` / `checks` / `pooled` / `figures` 别名映射）、`_needs_upgrade` / `_contract_drift` 机器标记、`rendering.py` 的 HTML 横幅唯一出口 —— 均按 ct-base §20.9 原样保留，横幅文案本就只描述"结构不一致"，无需改动。
+- meta 的 coze 端本就**未注入** `_coze_version`（实测 `grep -r _coze_version adapters/coze_project/src` 无匹配），故本次是纯本地清理：**coze 端无需改动、无需重新部署**，已出的 `20260829a.zip` 不受影响。
+
+### Verified
+- `_assess_contract` 单测 9 例全通过：版本更高 / 更低 / 旧标记 / 缺标记 / 结构一致 → 全部 **零 drift**；`pooled` 别名 / `qgate` 别名 / `figures` dict→list → **触发 drift**；「版本更高 + 结构漂移」混合场景**只报结构**，断言文案不含"版本"字样。
+- `py_compile` 通过；`deploy_retest --offline` / `--mock` 各 46/46 回归通过。
+
+---
+
+## [2.2.28] — 2026-08-29 — 归因不再为空 + 短窗幂等去重
+
+> 触发：飞书后台发现 02:54 两条几乎同时、且 `query_origin` 均为空的 `pairwise_meta` 记录（数据完全相同，仅 `figure.plots` 差一个 `funnel`）。
+
+### Fixed
+- **空归因（主因）**：`query_origin` 此前只在 `run_analysis.py` 计算并作为参数传入；直接调 `coze_client.run_meta` 的路径（`__main__` 自测入口 / `coze_integration_test` / `deploy_retest --live` / 外部脚本）都不传 → coze 端 `state.query_origin or ""` 兜底成空串。后果不止"日志无法溯源"——**空值会绕过按 `query_origin` 计的限流**。现把计算下沉为 `coze_client._default_query_origin()`，`run_meta` 在入参为 `None` 时自动填充；`run_analysis.py` 改为复用同一函数（单一实现，消除两处逻辑漂移）。
+- **调试/冒烟流量污染生产日志表**：`coze_integration_test.run_one` 与 `deploy_retest.call_one` 原为裸 POST（46 个 case 全空归因）。现统一经新增的 `with_trace()` 注入归因 + `request_id` + `_debug: true`，归因带 `debug:` 前缀——飞书归因列可直接筛出非生产流量。
+
+### Added
+- **短窗幂等去重**：对 `(task, data, params, figure)` 做 SHA-256 指纹（忽略 `request_id`/`_debug`/`query_origin` 等观测字段），`COZE_META_DEDUP_WINDOW`（默认 60s，≤0 关闭）内同指纹直接复用上次结果、不再打 coze。命中时结果附 `_dedup_hit: true` + `_dedup_original_request_id`。**仅缓存 ok/warn 结果**，失败不入缓存（避免偶发失败毒化窗口内的真实重试）；上限 32 条、按最旧淘汰；返回深拷贝，调用方互不影响。作用域为进程内（与 `_acquire_rate_limit` 同级；跨进程需文件锁，未实现）。
+- **请求追踪 ID**：每次调用生成 UUID 写入 `request_id`，随结果以 `_request_id` 返回——相邻两条飞书记录可据此区分「两次独立调用」还是「一次调用的重放」。coze 端 `state.py` 未加该字段（pydantic `extra='ignore'` 静默忽略，实测不报错），故**暂不进飞书**；如需落表须改 `state.py` + `feishu_write_node` 并重新部署（发布动作，待授权）。
+
+- **连通性探测标记 `probe`（coze 端消费 → 需重新上传部署包才生效）**：客户端 `health()` 每次启动都 POST 一次 `/run`（SKILL.md 要求启动探测），此前 coze 端照单全收 → 飞书日志表被空 `querystr` 记录污染，排查时无法与真实调用区分。现 `health()` 探测包带 `probe: true` + `debug:` 归因；coze 端 `meta_analysis` 节点识别后**直接返回探针结果、不调用 R 引擎**，`feishu_save` 节点**跳过飞书写入**。兜底：老客户端发 `{}`（无 `probe` 字段）时，靠 `data`/`params`/`figure` 三者全空的"空信封"特征识别。规则抽在 `src/graphs/nodes/_skip_rules.py`（**零第三方依赖，可本地单测**——节点模块依赖 langchain/langgraph，本地 import 不了）。
+  - ⚠️ **未部署前不生效**：老 coze 端不认识 `probe` 字段（pydantic `extra='ignore'`），仍会写一条记录，但带 `debug:` 归因前缀可筛出，不再是空白归因 —— 平滑过渡，两侧独立发布互不影响。
+
+### Removed
+- **`coze_client.py` 的 `__main__` 自测入口**：删除原「硬编码 sample 调 `run_meta`」逻辑 —— 它就是飞书 08-29 两条空归因记录的来源（注释还停留在「需要本地已启动 coze 服务」的年代，端点早已换成公网，于是调试动作直接往生产日志表写记录），且与 `case1_pairwise_binary` 完全重复、无独立价值。CLI 保留 `--health` 子命令（仅探测可达性，不发起分析请求）；无参数时只打印用法、**零副作用**。冒烟改用 `python scripts/run_meta.py <request.json>`（走生产路径，自动带归因 + 去重）。
+
+### Changed
+- **调用方收敛（4 入口 → 3 入口，凭据/端点重复逻辑清零）**：`coze_integration_test` 与 `deploy_retest` 不再自建 `resolve_token` 与 `DEFAULT_ENDPOINT` 字面量，统一 `from coze_client import _resolve_token / _endpoint / DEFAULT_ENDPOINT`（保留 import 失败时的等价兜底实现）。端点从「模块导入时固化」改为**运行时**解析，与生产路径行为一致——旧写法在运行中途改 `COZE_META_ENDPOINT` 时生产生效、测试不生效。
+- **`--endpoint` 默认留空**，由 `_endpoint()` 运行时读取；`deploy_retest` 报告记录**实际**端点（旧写法会把 `endpoint` 写成空字符串，事后看不出这一轮跑的是哪个端点）。
+- **语义差异就地固化注释**：测试侧 `_post`（300s / 捕获 HTTPError 继续跑 / payload 原样发送）与生产侧 `_post_run`（600s / 抛异常触发端点回退 / 归一化+脱敏+强制 svg+指纹去重）的差异是**有意保留**的 —— 测试必须绕过客户端加工才能测到 coze 端真实行为（典型：`run_meta` 的 `byvar→subgroup` 归一会让「coze 只认 subgroup、byvar 静默失效」这个坑永远测不出来）。差异已写成对照表注释，避免后人误「统一」。
+- 文档同步：`references/ADVANCED.md` / `ADVANCED_zh-CN.md` 的自测命令由 `python adapters/coze_client.py` 改为 `--health` + `scripts/run_meta.py`。
+
+### Verified（mock + 真实 coze 链路）
+- 归因：`sha256:<64hex>` 71 字符；`debug=True` → `debug:sha256:...`；`run_analysis` 与 `coze_client` 同源一致。
+- 指纹：换 `request_id` 同指纹、换 `figure.plots` 不同指纹。
+- 去重：第二次完全相同调用 **POST 次数保持 1**（`_dedup_hit=True`，复用自首次 `request_id`）；改 `figure` 后正常发起第二次；失败结果不入缓存；窗口置 0 可关闭。
+- 真实链路：`python adapters/coze_client.py` 端到端 `status=ok`，统计值与飞书历史记录逐字一致（pooled logOR −0.626 / OR 0.5347，k=2，I²=0），coze 端对新增字段无 422/报错。
+- 编译：`py_compile` 四个改动文件全通过。
+- 收敛后回归：`python adapters/coze_client.py`（无参数）零副作用、不发请求；集成测试端点/token 解析走 `coze_client` 实现（端点 `https://ct-meta.coze.site/run`、token 739 字符）；`deploy_retest --offline` / `--mock` 各 46/46 通过；`COZE_META_ENDPOINT` 覆盖在报告中生效（`https://example.invalid/run`）；屏蔽 `coze_client` 导入后兜底分支功能完整（token 739 字符、归因与主路径同源 `sha256:b8cae3d46…`）。
+- `probe` 跳过规则单测 9 例全通过：probe / 空信封 / 空信封+probe（probe 优先）/ 真实 rows 请求 / 仅 params / 仅 figure / csv_path / `{"rows":[]}` / 仅 colmap —— 前 3 例跳过，后 6 例**照常写入**（数据为空但结构完整的请求有排查价值）。
+- `health()`：探测包实测 `{"probe": true, "query_origin": "debug:sha256:…"}`；端点不可达仍返回 `False`、4xx/5xx 仍视为可达 —— **判定语义未因包体变化而改变**。
+- 部署包 `meta-analysis-coze_project-20260829a.zip`：70 文件 = 基准 69 + `_skip_rules.py`，内容变化 4 个（`state.py` / `meta_analysis.py` / `feishu_save_node.py` / `coze_contract.md`），无 `__pycache__`、无 `Rplots.pdf`，包内关键改动自校验通过，整包 MD5 `711446dbf3b2dd95de50482da3943cd9`。
+
+### Fixed
+- **部署包夹带 R 垃圾产物**：`src/r_engine/Rplots.pdf`（R 默认图形设备的落盘产物）此前会进部署包。打包时已排除，并同步排除 `__pycache__` / `*.pyc` / `.Rout` / `.RData` / `.Rhistory` / `.venv`。
+
+---
+
+## [2.2.27] — 2026-08-28 — coze 调用纪律 + 提示收敛 + 修复
+
+### Added
+- **coze 调用并发限流**：所有出站调用串行化，相邻两次间隔 ≥1s（`coze_client.py` 模块级 `threading.Lock` + 单调时钟；主端点 + 回退端点均约束；间隔可由 `COZE_META_MIN_INTERVAL` 覆写、≤0 关闭）。已写入 ct-base §20.10 全库通用标准。
+
+### Fixed
+- **classify 全角括号缺陷**：query 含全角括号（如 `region（Asia…）`）导致 subgroup 静默退化为 None；`_extract_subgroup` 前瞻断词补全 `（）`，亚组分析恢复（case5 实测 χ²=2.40, p=0.3008）。
+- **质量评估版式**：`rendering.py` 质量卡由单列 `<ul>` 改为两列 `.kv`（左检查项带圆点、右着色状态词），所有案例两端对齐。
+
+### Changed
+- **coze 响应契约漂移 → 收敛到 HTML 唯一出口**：合并「版本漂移（`_coze_version`/旧 `_contract_version` 比对）」与「结构漂移（字段别名自适应）」为单入口 `_assess_contract`；检测到漂移时先自适应产出可用结果，**用户可见提示只在 HTML 报告顶部 `.banner` 出现一次**——删除 stderr 提示与 notes 污染；缺版本标记不误报。
+- **端点回退提示同样收敛**：主端点 token 不一致回退备用端点时，提示仅写机器标记 `_coze_endpoint_notice` 并由 HTML 横幅渲染，不再写 stderr / 不污染 notes。
+- **SKILL.md 正文翻译**：§5.1 残留中文说明按 ct-base 全英文规范译为英文（双语回显块 `当前分析设定 / Current analysis settings` 按要求保留）。
+
+## [2.2.26] — 2026-08-28 — figures/repro 无条件外置（无论是否超 4000）
+
+### Changed（coze 端 `meta_analysis.py::_externalize_to_manifest`）
+- **figures/repro 恒外置**：不再「仅超限才外置」——**只要存在** svg 图元素 / repro.r，就**无条件**移出主返回体（原位替换为 `{storage:s3,type:block}` 引用），原值入 manifest。主返回体恒为「stats 数值 + manifest 链接」，更轻、更一致。
+- **stats 子块按需外置**：figures/repro 移完后仍 > 4000，才依次把 stats 子元素从大到小移入同一 manifest，直到 < 4000。
+- 契约不变：`_coze_manifest={storage:s3,url}` + manifest list `[{path,value}]`；本地 `_reassemble_from_manifest` **无需改动**。
+
+### Verified（R 引擎 + mock HTTP server）
+- 324 字符（未超限）+ 有 svg/repro → 两者**仍被无条件外置**，stats.pooled 内联，manifest 挂载；本地重组 **FULLY EQUAL=True**。
+- 无 figures/repro + 未超限 → 原样、无 manifest、0 上传。
+- 无 figures/repro + 超限 → stats 子块（big_str）外置为 block、k 保留、无丢弃。
+- 本地/coze 衔接契约（path/占位/manifest 结构）与 2.2.25 完全一致，发布前已核验。
+
+### 部署
+- coze 端 `meta_analysis.py` → 重新上传 coze 包（`meta-analysis-coze_project-20260828e.zip`）。本地端无改动（契约未变）。
+
+## [2.2.25] — 2026-08-28 — coze 截断收敛为「统一 manifest」方案（svg/r/stats 单文件外置）
+
+### Changed（coze 端 `meta_analysis.py` + 本地 `coze_client.py`）
+用户进一步提案的**统一 manifest 方案**取代 2.2.24 的「逐块外置 `_coze_externalized`」：
+
+- **coze 端**：`_externalize_to_manifest()`（替代 `_externalize_figures`/`_externalize_repro`/`_trim_to_limit` 三套）。
+  超 4000 时——先把 figures（含 svg）、repro（含 r 代码）移动为 `{storage:s3,type:block}` 引用，再依次把
+  `stats` 下一级元素从**最大开始**移动，直到总量 < 4000；所有被移元素（含 path+原值）组成一个 list，
+  **存为单个 S3 文件**，主返回体挂 `_coze_manifest={storage:s3,url}`。核心数值（pooled/heterogeneity/k/sm）始终内联。
+- **本地端**：`_reassemble_from_manifest()`——GET manifest → 按 path 逐项写回 → **重组为原始 JSON**（含 svg/r/统计值），
+  一次还原、零丢失。`_fill_external_svgs` 作为入口：优先走 manifest，无则回退旧契约（figures.url/repro.url/`_coze_externalized`）。
+- **删旧代码**：`_externalize_figures`/`_externalize_repro`/`_trim_to_limit`/`_externalize_all_with_timeout` 及其
+  `_coze_externalized` 逐块契约全部移除（用户约定：不留遗留实现）。
+
+### Verified（单测 + mock HTTP server，含 svg/r 代码）
+- 5652 字符超限体 → 外置 figures[0] 等块至 2861 字符（<4000），pooled/k 内联，manifest 挂载；
+  本地重组后 **FULLY EQUAL = True**（figures[0].svg / figures[1].svg / repro.r / stats.subgroups 全部还原）。
+- 未超限响应：原样返回、不产生 manifest、不上传 S3、svg/r 保持内联。
+- 只移必要的块（够小就不动，如 repro 未触及）。
+
+### 部署
+- coze 端 `meta_analysis.py`（manifest 外置）→ 重新上传 coze 包（`meta-analysis-coze_project-20260828d.zip`）。
+- 本地 `coze_client.py`（manifest 重组 + 兼容）→ 随技能本体发布。
+
+## [2.2.24] — 2026-08-28 — coze 4000 截断改为「超限外置最大块」，零数据丢失
+
+### Changed（coze 端 `meta_analysis.py` + 本地 `coze_client.py`）
+用户提案的**泛化截断兜底**取代原「按优先级丢弃」：超 4000 时**不再丢数据**，而是迭代「找最大字符块 → 外置 S3 → 原位替换为 `{storage:s3,type:block,url}` 引用」，直到 < 4000，被外置路径记入 `out['_coze_externalized']=[{path,url}]`。
+
+- **核心内联**：`status`/`task`/标记 + `stats` 容器（pooled/heterogeneity/k/sm/model…）整体永不外置，只下钻其子块（subgroups/quality_gate.checks/bias…）——关键数值始终内联可取。
+- **兜底丢弃**：仅当 S3 不可用或所有可外置块已外置仍超限，才从大到小丢 stats 子字段并记 `_coze_truncated`（保 status 与最小数值核心）。
+- **本地回填**：`coze_client.py` 新增 `_inflate_externalized()`（对称于 `_fill_external_svgs`），按 `_coze_externalized` 的 `{path,url}` 逐个 GET 回填还原；失败保留 url 并标 `_inflate_failed`，绝不中断分析。`run_meta` 在 `_fill_external_svgs` 末尾自动调用。
+
+### Verified（单测 + R 4.6.1 真实数据）
+- 单测：4169 字符超限体 → 外置 `stats.subgroups`、pooled/k 保持内联、回填后与原始完全相等（零丢失）。
+- 真实 `_inflate_externalized` + mock HTTP server：从 url 正确还原 `stats.subgroups`，k/pooled 未动。
+- R 引擎真实跑用户 7-RCT 亚组数据：figures/repro 外置后返回体 1783 字符 < 4000，`subgroups` 内联、Q_between=3.8522 完整。
+- 用户案例截断根因（gate_json 冗余）已在 2.2.23 删除；本方案提供**任意胖字段**的通用兜底（不再依赖人工预判优先级）。
+
+### 部署
+- coze 端改 `meta_analysis.py`（外置逻辑）→ 需重新上传 coze 包（`meta-analysis-coze_project-20260828c.zip`）生效。
+- 本地改 `coze_client.py`（回填）→ 随技能本体发布。
+
+## [2.2.23] — 2026-08-28 — 修复亚组分析 coze 4000 截断裁掉 stats.subgroups
+
+### Fixed（coze 端 R / Python，需重新上传 coze 部署包生效）
+- **删除 `quality_gate.gate_json` 冗余**：`run_quality_gate` 不再生成 quality_gate 结构的字符串化 JSON 副本，`.quality_gate` 转发去掉 `gate_json`。该字段是 `checks/status/k/I2` 的重复，每次分析徒增 ~400 字符，是 `subgroup_analysis` 等 stats 较胖任务触发 coze 4000 字符截断、尾部裁掉 `stats.subgroups` 的主因。已 grep 确认本地渲染层无任何 `.py` 依赖 gate_json。
+- **重排 `_trim_to_limit` 截断优先级**（`src/graphs/nodes/meta_analysis.py`）：亚组数值 `stats.subgroups / subgroup_test / bias` 列为高保真对象（亚组分析核心交付物），仅先丢 null 的 `notes/warnings/task` 与补充性 `stats.quality_gate`；超限时 subgroups 不再被优先丢弃。
+
+### Verified（R 4.6.1 本地实测，非假设）
+- 跑用户同款 7-RCT 按 PD-L1 分亚组案例：修复后 `stats` 序列化 979 字符、gate_json 消失，估算 coze 返回体 **~3459 < 4000**，`subgroups`（high/low 含 estimate/CI/k）完整返回。
+- Python 单测：构造 4311 字符超限体，`_trim_to_limit` 丢弃顺序 `notes→warnings→task→quality_gate`，**subgroups 保留**、pooled/heterogeneity 完好。
+- 注：本修复属 coze 端代码，未含在 SkillHub 2.2.22 发布包（coze_project 被 gitignore）；需重新打 coze 部署 zip 上传。
+
+## [2.2.22] — 2026-08-28 — coze 部署复测全绿 + §8.5 门控两处修复
+
+### Fixed（`tests/deploy_retest.py` 部署复测门控 §8.5）
+- **图形 judge 只认内联 `svg` → 误杀所有图形案例**：coze 生产响应把 svg **外置为 S3 `url`**（不含内联 svg）。原规则「至少一个 figure 含有效 svg」会把图形任务全判空壳失败。改为**图形有效 = 内联 `svg` 或可达的外置 `url`**，新增 `_verify_fig_url()` GET 校验（HTTP 非 200 判死链失败，网络抖动不误杀）。
+- **`_has_nan` 把 R 合法缺失标注 `"NA"` 当失败 → 误杀单组 meta / selmodel**：R 在 p 值缺省（单组无对照）、子模型 CI 缺失时输出字符串 `"NA"`，属预期缺失而非计算崩溃。改为**只拦 `NaN`/`Inf` 字面量 + 裸 NaN/Inf**，把 `"NA"` 移出失败判定。
+
+### Verified（coze 主站点 `ct-meta` 部署后全量 `--live` 门控）
+- **46/46 通过，0 失败**。确认本次 R 引擎修复已上云生效：
+  - `diagnostic_meta` 现返回 sroc + **sens_forest + spec_forest**（escalc `PLO` 修复）；
+  - `bayesian_pairwise` 森林图正常出图（`metafor::forest(x=)` 修复）；
+  - netleague 中文映射、各方法默认图形扩充、函数化重构均随部署生效。
+- 验证方法遵循 §20.2.5 / §20.6：开 `result` 字段真内容确认，不看 HTTP 200 假绿。
+
+## [2.2.21] — 2026-08-28 — 端到端回归测试发现并修复 bayesian_pairwise 森林图 bug
+
+### Fixed（`adapters/coze_project/src/r_engine/run_task.R`）
+- **`bayesian_pairwise` 森林图不渲染（真实 bug）**：v2.2.20 新增的 bayes 森林图用
+  `metafor::forest(yi = res$y, ...)`，但 **metafor 5.0.1 的 `forest()` 要求位置参数 `x`**（效应量），
+  不认 `yi=` 具名参数（那是 `meta::forest` 的约定）→ 报 "argument 'x' is missing"，被 `.safe_fig`
+  静默吞掉 → 返回 figures=0。改为 `metafor::forest(x = res$y, vi = res$sigma^2, ...)` 后正常出图。
+
+### Verified（全量端到端回归，重构后引擎真实 R subprocess 跑 46 coze_cases + 4 增强 case）
+- 全部 task 正确分发、`status ∈ {ok,warn}`；重构核心 task 逐项实测：
+  - `metainc`（forest+funnel+radial+influence 4 图）、`survival_meta`（forest+funnel+radial 3 图 +
+    **bias 正常填充** egger_p/begg_p）、`diagnostic_meta`（sroc+sens_forest+spec_forest 3 图）、
+    `bayesian_pairwise`（修复后 forest 出图）。
+  - 共享块 pairwise/单组/亚组/metareg/nma/留一/累积/剂量反应/TSA/power 等全部 status=ok。
+- **说明**：测试框架报告的 case12/19 "NaN/NA" 与 case16 "netleague 缺失" 均为**误报**——stats 里的
+  `"NA"` 是字符串（非数值 NaN，metamean 路径 p 值缺省，既有行为）；`netleague` 按设计进
+  `stats.extra.league_table`（表格）而非 figure。`case38_rob2` 报 error 因本地缺 `robvis` 包
+  （coze 服务端才有），非重构回归。
+- 测试框架经验：`subprocess.run` 反复 spawn R 在本机触发资源耗尽崩溃、且共享 temp 文件会交叉污染；
+  改为 bash 分批（每批 5 案例）+ 唯一 temp 文件后稳定。临时文件用后即清。
+
+---
+
+## [2.2.20] — 2026-08-28 — sens/spec 改 PLO 规范写法 + R 引擎函数化去重
+
+### Changed（`adapters/coze_project/src/r_engine/run_task.R`）
+- **`diagnostic_meta` sens/spec forest 修正 measure**：coze 直连实测 + 本地验证确认 `metafor::escalc`
+  全 family（OR/SMD/PR/PLO 等）正常；`PLOD` 非合法 measure（metafor 报 Unknown measure），
+  敏感度/特异度森林图改用标准的 **`escalc(measure="PLO")`**（logit 比例，xi=TP/ni=TP+FN 等），
+  与 `meta_analysis_core.R` 既有 PLO 用法一致。
+- **R 引擎函数化去重（纯机械提取，零行为改变）**：
+  - 新增 `.safe_fig(figs, draw, type, w, h)`：收敛全库 13 处 `tryCatch(c(figs, list(.render_fig(...))))`
+    出图安全包装 → 统一调用（sucra/contribution/nodesplit/egger/loo/cumulative/forest/sens/spec/influence 等）。
+  - 新增 `.meta_to_rma(fit, model)`：收敛 meta 对象 → metafor::rma.uni 桥接（供 radial/influence 诊断），
+    已传 rma 对象则原样返回；应用于 metainc 与共享块 influence 分支。
+  - 新增 `.bias_test(fit, model, warns, plots, figs)`：收敛共享块与 survival_meta 两处 ~30 行几乎重复的
+    Egger/Begg `regtest`/`ranktest` + egger_p<0.10 警告 + egger 图逻辑 → 一处定义两处调用。
+  - 新增 `.quality_gate(fit, te_vec, se_vec, df, stats, bias_gate)`：收敛两处 `es_gate` 构造 +
+    `run_quality_gate` 调用 + 结果回填 → 一处定义两处调用。
+  - 新增 `.bayes_summary(res)`：收敛 bayesian_pairwise 分支 20+ 行 bayesmeta $summary 矩阵解析
+    （兼容版本间行列方向差异）→ 一处定义一处调用。
+  - 新增 `.col_name(colmap, role, default)`：列名解析（区别于 .col 的取值），dose_resp 手写 7 行
+    `tolower(cm$x %||% ...)` 改用该 helper。
+
+### Verified
+- 本机 R 4.6.1 + metafor 5.0.1 实测：`escalc`（OR/SMD/PR/PLO）全部正常，**无段错误**——此前段错误
+  为 Git Bash `-e` 多行引号破坏假象，非真实问题。PLO 版 sens/spec 森林图完整跑通（rma.uni 合并 + forest 绘制）。
+- 冒烟测试通过：`.bias_test`（meta 对象 → rma 桥接 + bias + warns + egger 图）、`.bayes_summary`（NA 兜底）、
+  `.col_name`（含 default 回退）、sens/spec PLO 森林图绘制。
+- `run_task.R` Rscript `parse()` 通过；`.safe_fig` 14、`.meta_to_rma` 2、`.bias_test` 2、`.quality_gate` 2、
+  `.bayes_summary` 1、`.col_name` 7 处调用确认。
+
+### 说明
+- 本次改动均为本地代码镜像 `adapters/coze_project`，**未部署到 coze 云端**（云端 `run_task.R` 仍是旧版，
+  实测 `diagnostic_meta` 只返回 sroc，未含 sens_forest/spec_forest）。需在 coze 平台侧同步代码后生效。
+
+---
+
+## [2.2.19] — 2026-08-28 — 直接改 coze R 引擎，为单分支 task 增加默认伴侣图
+
+### Changed（`adapters/coze_project/src/r_engine/run_task.R` + `scripts/build_request.py` + `adapters/rendering.py`）
+上一版（2.2.18）核查发现 `survival_meta`/`diagnostic_meta`/`metainc`/`ipd_meta`/`bayesian_pairwise` 在 coze
+R 引擎各自独立分支只渲染一种图。本次**直接改 coze 端 R 代码**（用户授权）为这些 task 补默认伴侣图：
+
+- **`metareg`**：放宽 `run_task.R:577` 的 bubble gate（`task == "bubble_plot"` → `task %in% c("bubble_plot","metareg")`），
+  让 metareg 也能渲染气泡图（meta 回归标志性图）。默认 `["forest","funnel"]` → `["forest","funnel","bubble"]`。
+- **`survival_meta`**：R 分支补 `funnel` + `radial`（rma.uni 对象，引擎支持）。默认 → `["forest","funnel","radial"]`。
+- **`diagnostic_meta`**：新增 `.diag_sens_forest` / `.diag_spec_forest` helper（手算 logit + 0.5 连续性校正，
+  规避 escalc measure 兼容性，规避弃用依赖），补敏感度/特异度森林图。默认 → `["sroc","sens_forest","spec_forest"]`。
+- **`bayesian_pairwise`**：该分支此前从未调用 `render_fig`，默认 `["forest"]` 实为空跑不出图。现用
+  `res$y`/`res$sigma` 绘制个体研究森林图（metafor 已依赖），默认出图。
+- **`metainc`**：补 `funnel`/`radial`/`influence`（meta 对象经 `rma.uni(fit$TE, fit$seTE)` 桥接）。默认 →
+  `["forest","funnel","radial","influence"]`。
+- **`ipd_meta`**：补 `funnel`/`influence`（rma.glmm 对象）。默认 → `["forest","funnel","influence"]`。
+
+同步更新：`build_request.py` 的 `DEFAULT_PLOTS` 与 `VALID_PLOTS`（新增 `sens_forest`/`spec_forest`）、
+`rendering.py` 的 `_I18N`/`type_names`（新增敏感度/特异度森林图中英文标题）。
+
+### Verified
+- `py_compile` 通过；`_default_plots_for` 输出确认（见下方表格）。
+- `run_task.R` 经 Rscript `parse()` 通过；敏感度/特异度森林图 helper 在本地 R 4.6.1 + metafor 5.0.1 完整跑通
+  （rma.uni 合并 + forest 绘制，敏感度 pooled=0.857 / 特异度=0.894 合理）。
+- ⚠️ 说明：本机 metafor 5.0.1 经 `Rscript -e` 多行传参曾误报段错误，实为 Git Bash 引号破坏所致；
+  改用临时 `.R` 文件执行全部正常，非代码问题。
+
+---
+
+## [2.2.18] — 2026-08-28 — 默认图形增强 + netleague 中文映射
+
+### Added / Changed（`scripts/build_request.py` + `adapters/rendering.py`）
+- **`netleague` 中文/英文标题映射补全**：`rendering.py::_I18N` 新增 `fig_netleague`（zh=网络证据表 /
+  en=Network evidence table），`type_names` 取值 `netleague` → 该图在 HTML 模板中不再回退显示原始英文 type 名。
+- **默认图形增强（仅动 coze 共用渲染大块内、引擎已支持的 task，不碰 R 端）**：
+  - `single_group_meta`：`["forest"]` → `["forest","funnel","influence"]`（主森林图 + 漏斗图 + 影响诊断；
+    baujat/radial 对 metaprop/metacor 对象不稳，不强行加）。
+  - `subgroup_analysis`：`["forest"]` → `["forest","funnel","baujat","radial","trimfill","influence"]`
+    （含 by-subgroup 分层森林图 + 异质性/发表偏倚/剪补/敏感性全套诊断，与 pairwise_meta 诊断集对齐）。
+  - `metareg`：`["forest"]` → `["forest","funnel"]`（bubble 被锁死在 `bubble_plot` task，metareg 拿不到，
+    见下方"需 R 端改动"项；此处加 funnel 作发表偏倚诊断）。
+- **引擎能力核查结论**：`survival_meta`/`diagnostic_meta`/`metainc`/`ipd_meta`/`bayesian_pairwise` 在
+  `run_task.R` 各自独立分支仅写了一种图的 `render_fig`（bayesian_pairwise 甚至无图），这些 task 想再加默认图
+  需改 R 端，不在本次纯默认值调整范围内。
+
+### Verified
+- `py_compile` 通过；`_default_plots_for` 输出确认：single_group_meta=[forest,funnel,influence]、
+  subgroup_analysis=[forest,funnel,baujat,radial,trimfill,influence]、metareg=[forest,funnel]、
+  pairwise_meta(OR)=[forest,funnel,baujat,radial,labbe,trimfill]、nma=[netgraph,netleague]。
+- `rendering._I18N['zh']['fig_netleague']` = 网络证据表；`['en']` = Network evidence table。
+
+---
+
+## [2.2.17] — 2026-08-28 — 图形默认出图与渲染健壮性修复
+
+### Fixed（脚本 `scripts/build_request.py` + 呈现层 `adapters/rendering.py`）
+- **`influence` 任务默认图不显示（核心 bug）**：旧 `DEFAULT_PLOTS["influence"] = []`，但 coze 端
+  `run_task.R` 第 574 行 `if ("influence" %in% plots)` 才出影响力诊断面板——空 plots 仅返回 stats，
+  面板永不显示，与注释"coze 自动渲染影响力诊断面板"不符。改为 `DEFAULT_PLOTS["influence"] = ["influence"]`，
+  显式请求后 coze 正常出图；同步修正设计注释（influence 不再归入"空 plots 自渲染"组）。
+- **`content_bbox` 健壮性加固（呈现层）**：原仅扫描 text/rect/line/circle/polyline。ggplot2 / 网络图
+  主内容多为 `<path>`（曲线、edge），若漏扫会导致动态 viewBox 裁掉内容。新增：
+  ① 解析 `<path d=...>` 绝对坐标对；② 将计算 bbox 与**原始 viewBox 取并集（union）**——既保留
+  forest 负坐标溢出扩展，又保证 svglite 实际绘制区域（设备坐标恒在原 viewBox 内）不被裁。
+  `build_figure_widget` 与 `svg_to_png` 两处调用均已传入原始 `vb`。
+
+### Verified
+- 审计脚本覆盖全部 23 个 coze 实际返回的 figure `type`（forest/funnel/labbe/baujat/radial/trimfill/
+  influence/bubble/egger/netgraph/contribution/nodesplit/sucra/dose_resp/sroc/loo/cumulative/drapery/
+  prisma_flow/gosh/tsa/power/rob2）：在 `render_html_report` 中**均以本地化标题正常显示**（无原始 type 兜底）。
+- `content_bbox` 对森林图负坐标溢出（x∈[-140,644]）正确扩展；对纯 path 图形与原 viewBox 并集后不裁图。
+
+---
+
+## [2.2.16] — 2026-08-27 — 云端二次重建回归闭环确认（两项修复端到端生效）
+
+### Verified（云端端到端，coze 节点用 coze_project_fixed_v2.zip 重建后）
+- 用 6 研究 SMD+REML 亚组用例 POST `https://ct-meta.coze.site/run` 回归（cloud_regression_v2.json）：
+  - `subgroup_test` = {Q_between=15.5055, df=1, p_between=0.0001, n_groups=2, model=random} —— 与本地 4.6.1 完全一致，**已生效**。
+  - 亚组 short = -2.0473 [-2.395, -1.700]；long = -2.8913 [-3.127, -2.656]（长期降得更明显）。
+  - pooled(REML) = -2.4631 [-2.875, -2.051]，p≈9.9e-32。
+  - **森林图 SVG 头条闭环**：含 "Random effects model" ×3（short/long 亚组合并 + 总合并）、不含 "Common effect model"；头条数值 = -2.46（REML 合并量，非固定效应 -2.43）。问题二在云端彻底生效。
+- 结论：coze_project_fixed_v2.zip 的两处修复（①森林图 `common=FALSE,random=TRUE` + 判断条件 `fit$random`；②`subgroup_test` 走 `Q.b.random` 原生槽位）在 coze 同款 R 4.6.1 + meta 8.5.0 环境下**端到端闭环**，不再需要 v1 或本地兜底。
+
+---
+
+## [2.2.15] — 2026-08-27 — 森林图头条二次修复：.forest_plot_theme 判断条件对齐 meta 8.5.0
+
+### Fixed（coze 镜像 run_task.R）
+- **根因（对 [2.2.14] 的纠正）**：[2.2.14] 修好了 `common/random` 形参与 `col.subgroup`，但 `.forest_plot_theme` 的分支判断条件
+  `if (isTRUE(fit$comb.random))` **未同步修改**。meta 8.5.0 已弃用 `comb.random` 槽位（返回 NULL），
+  故该判断恒为 FALSE → 永远走 `common=TRUE, random=FALSE` 分支，森林图头条仍画"Common effect model"（固定效应），
+  与请求的 REML 随机效应口径不符、误导读图。
+  ⚠️ [2.2.14] 第 19 行"头条=REML"为**误判**——当时本地验证未 grep SVG 模型名，仅依 subgroup_test 数值推断。
+- **修复**：`.forest_plot_theme` 判断条件改为 `if (isTRUE(fit$random) || isTRUE(fit$comb.random))`，
+  兼容 8.5.0 的 `random` 槽位（`fit$random=TRUE` 时即走 `common=FALSE, random=TRUE` 画随机效应头条）。
+
+### Verified
+- 本地 R 4.6.1 全流程跑 6 研究 SMD+REML 亚组用例：**SVG 含 "Random effects model"、不含 "Common effect model"**，证明头条修复生效。
+- 云端回归（重建节点后）：`subgroup_test` 已在上一轮重建生效（Q_between=15.5055, p=0.0001, model=random）；
+  森林图头条修复需**用本包（v2）再次重建 coze 节点**后方在云端生效（当前云端回归的森林图仍是 Common effect，因上一轮漏改判断条件）。
+
+---
+
+## [2.2.14] — 2026-08-27 — coze 镜像对齐 meta 8.5.0 破坏性变更（col.subgroup / Q.b.* 槽位）
+
+### Fixed（coze 镜像 run_task.R + 本地验证环境升 R 4.6.1）
+- **根因（部署环境 R 4.6.1 + meta 8.5.0 + metafor 5.0.1 的破坏性变更）**：历史镜像代码基于旧版 meta 假设，在 8.5.0 下行为失真：
+  1. `meta::forest` 的 `col.by` 参数**已移除**（8.5.0 仅认 `col.subgroup`）→ 旧代码传 `col.by` 主题色静默失效（不报错但亚组分隔色丢失）。
+  2. 亚组 `metacont/metabin` 结果对象的组间异质性槽位**更名为 `Q.b.random` / `Q.b.common`**（旧版为 `Q.between.random` 且旧版根本无该槽位）→ 历史 `subgroup_test` 主路径取 `fit$Q.between.random` 恒为 NULL，静默落兜底，与森林图 "Test for subgroup differences" 图例口径偶发不一致。
+  3. （附带）`metacont(..., comb.random=)` 8.5.0 已弃用（改用 `random=`）；调用处写 `random = mm$comb.random`（值正确赋给新参数名），未触发弃用告警，无需改。
+- **修复（run_task.R）**：
+  - `.forest_plot_theme`：`col.by = th$by` → `col.subgroup = th$by`（3 处：comb.random / random 两分支 + tryCatch 兜底）。
+  - `subgroup_analysis` 分支 `subgroup_test` 主路径：`fit$Q.between.random/.common` → `fit$Q.b.random/.common`（及 `pval.Q.b.*` / `df.Q.b.*`）；`rf` 判断改 `isTRUE(mm$random %||% mm$comb.random)` 兼容 8.5.0 的 `random` 槽位。
+- **本地验证环境对齐**：旧版本地 R 4.5.1（meta 旧版）无法暴露这些槽位、也不吃 `common` 形参，验证无效；按用户要求本地验证环境升级到 R 4.6.1（与 coze 同款），实测：
+  - subgroup_test 走 8.5.0 原生 `Q.b.random` 主路径 → `Q_between=15.5055, df=1, p=0.0001, model=random`，与云端此前 15.51 / <0.0001 完全对齐；
+  - 森林图成功出图、无 `col.by` 告警、头条=REML（common=FALSE, random=TRUE）。
+
+### Verified
+- 本地 R 4.6.1 跑 6 研究 SMD+REML 亚组用例：subgroup_test 主路径生效、亚组 short=-2.0473 / long=-2.8913、pooled=-2.4631，全部正确；无 col.by / comb.random 告警。
+
+---
+
+## [2.2.13] — 2026-08-27 — 默认图形随分析方法自动适配（不再写死森林图）
+
+### Fixed（build_request.py + coze_contract.md 文档同步；coze 镜像无需改动）
+- **根因**：旧 `build_request.py` 永远发 `figure.plots=["forest"]`，且用户 plots 只能追加 `funnel`。coze 镜像 `run_task.R` dispatch **严格按 `figure.plots` 出图**，其各 task 默认图（nma→netgraph+netleague、diagnostic→sroc 等）仅在 `plots` 为空时触发——而 `plots` 永远非空 `["forest"]`，故兜底从不触发，所有 task 只落森林图。下游 HTML（`rendering.render_html_report`）只是内联 coze 返回的 `figures[]`，无硬编码，故"coze 与 HTML 都只给森林图"是同一根因的两层表现。
+- **修复**：`build_request.py` 新增 `DEFAULT_PLOTS`（每 task 默认图，对齐 `coze_contract.md §3`）与 `VALID_PLOTS`（用户显式覆盖时的合法图名校验）。
+  - 用户未指定 → 按 `spec.task` 取 `DEFAULT_PLOTS`（pairwise→forest+funnel、subgroup/metareg/bayesian/survival/single_group→forest、nma→netgraph+netleague、nma_rank→sucra、diagnostic→sroc、dose_resp→dose_resp、gosh→gosh 等）。
+  - 用户显式 `params_extra.plots` → 采用（过滤 `VALID_PLOTS` 中的非法名；全非法则回退该 task 默认）。
+- **文档同步**：`coze_contract.md §3` 三处与镜像矛盾修正——`metareg` 默认图 `bubble`→`forest`（`run_task.R:494` 的 bubble 图仅对 `task=="bubble_plot"` 生效、metareg 不发）；`nma_rank`/`dose_resp` 默认图由 `—` 补全为 `sucra`/`dose_resp`（`run_task.R` 对应分支空 plots 时即默认出此图，与代码一致）。
+- **验证**：11 个分析方法默认图 + 用户覆盖（forest only / nma+contribution）+ 非法回退，共 14 用例冒烟全过（ALL_OK）。
+
+---
+
+## [2.2.12] — 2026-08-27 — build_request 不诚实字段清理：diagnostic_meta / survival_meta 跳过 params.sm
+
+### Fixed（build_request.py + coze_contract.md 文档同步；coze 镜像无需改动）
+- **`params.sm` 噪音字段清理**：经核对 coze 镜像 run_task.R 一手代码，`diagnostic_meta`（`mada::reitsma`，合成灵敏/特异度/SROC，不读 sm）与 `survival_meta`（`metafor::rma.uni(logHR)`，固定合 HR，不读 sm）**不消费 `params.sm`**。旧逻辑 `sm = measure_override or spec.measure or "OR"` 对所有 task 无差别写 `OR`，对这两 task 是镜像永不读的噪音字段，且 `coze_contract.md §3` 列 `sm` 为「所有 task 通用可选」会误导用户以为诊断/生存也能按 OR 换尺度。
+  - 新增 `NON_SM_TASKS = {"diagnostic_meta", "survival_meta"}`；`build_request.py` 的 `params` 构造段对这两 task **跳过写 sm**，request 诚实。
+  - ⚠️ **nma 仍消费 sm**（netmeta `sm` 参数，run_task.R:581 `sm <- params$sm %||% "OR"`），且连续型 nma 须显式 MD|SMD——**不剔除**，仅 diagnostic/survival 清理。
+- `coze_contract.md` §3 同步：
+  - `params.sm` 字段表加注「`diagnostic_meta`/`survival_meta` 不消费此字段」。
+  - `nma` 行注明**消费** sm（二分类默认 OR / 连续型须显式 MD|SMD）。
+  - `survival_meta` 行注明不消费 sm（HR 即效应尺度）。
+  - `diagnostic_meta` 行注明不消费 sm（合成灵敏/特异度，非 OR 类）。
+
+### Verified
+- 实测 4 用例：`pairwise_meta`/`nma` → `params` 含 `sm=OR`（保留）；`diagnostic_meta`/`survival_meta` → `params` **不含 sm**（已剔除）。回归：classify + build_request import 无语法错误。
+
+---
+
+## [2.2.11] — 2026-08-27 — NMA 三格式自动探测：连续型/对比格式不再需 --colmap 回灌
+
+### Fixed（build_request.py 本地修复；coze 镜像 run_task.R .nma_prep 已原生支持三种输入格式，无需改动）
+- **NMA 列格式自动探测（消除 [2.2.10] Known limitation）**：`build_request.py` 对 `task=="nma"` 不再盲信 classify 固定的 arm-based 二分类列模板，改用新增 `_detect_nma_format()` 按数据实际列名自动选格式，对齐 run_task.R `.nma_prep` 与 coze_contract.md §3：
+  - 对比二分类 `treat1/treat2 + event1/n1/event2/n2`
+  - 对比连续 `treat1/treat2 + TE/seTE`（亦认 `te`/`sete`）
+  - arm-based 二分类 `treatment + event + n`
+  - arm-based 连续 `treatment + te + sete`
+  - 同组（对比 / arm）内 binary 与 continuous 取「完整命中」者；均无完整命中则取命中列最多者交 LLM 兜底（exit 2，红线：有边界兜底、不破快路径）。
+- 新增 `NMA_FORMATS` 列契约表 + 中/英别名（处理1/干预1/事件1/样本量1…），覆盖常见中文列名。
+- `_coerce_rows` 增加 `non_numeric` 参数：对比格式的 `treat1`/`treat2` 臂标签列改为字符串透传（此前仅 `treatment`），避免 float 强转报错。
+- 修正 nma 分支 `subgroup` 未初始化导致的 `UnboundLocalError`。
+
+### Verified
+- 实测 6 用例：T1 对比二分类 / T2 对比连续(TE/seTE) / T3 arm二分类(中文别名) / T4 arm连续 / T5 对比(中文别名) 全部正确探测+归一化为 coze 期望的小写规范列名；T6 无结构列正确走 `needs_llm_fallback`(exit 2)。四种格式现均无需 `--colmap` 即可直接装配 request.json。
+
+---
+
+## [2.2.10] — 2026-08-26 — 契约联调修复：task 名对齐 coze + build_request 列透传缺陷
+
+### Fixed（与 coze 镜像 run_task.R / coze_contract.md §3 联调，修正一批会导致 unknown_task / 静默失效的真实 bug）
+- **classify.py task 名契约断点（最致命）**：原 `network_meta` / `diagnostic` 与 coze 端点 task 白名单不符（coze 只认 `nma` / `diagnostic_meta`），NMA 与诊断 meta 会直接 `unknown_task` 失败。已改为 `nma` / `diagnostic_meta`（与 coze_contract.md §3、run_task.R dispatch 一致）。
+- **classify.py 诊断 data_type 回归**：改 task 名时漏改 `if task == "diagnostic"` 守卫 → 诊断 query 错误回退 `data_type=binary`、列模板变成 `event_exp/n_exp…` 而非 `tp/fp/fn/tn`。已同步为 `if task == "diagnostic_meta"`；实测 `classify("做诊断试验meta分析")` 现返回 `task=diagnostic_meta / data_type=diagnostic / colmap=[tp,fp,fn,tn]`。
+- **build_request.py 亚组变量列被丢弃（静默失效 bug）**：`_coerce_rows` 只输出 colmap 数值列，亚组变量列（如 `age`/`region`）不在 colmap 内被丢弃 → coze 收不到该列、`subgroup_analysis` 静默降级为主分析。已新增 `carry_cols` 原样透传亚组列；实测 `subgroup_analysis` 现正确携带 `params.subgroup` 对应列。
+- **build_request.py 分类列被强制 float（nma 报错）**：`_coerce_rows` 对全部列 `float()` 强转，nma 的 `treatment` 臂标签列（字符串）直接报错。新增 `NON_NUMERIC_KEYS={"treatment"}` 透传字符串列；实测 arm-based 二分类 nma 数据现正常装配 `task=nma` + `treatment/event/n`。
+- **classify.py nma 默认列模板错误**：nma 未单设 data_type，默认套用二分类 `event_exp/n_exp/event_ctrl/n_ctrl`（coze `.nma_prep` 不接受配对格式）。已加 `data_type="nma"` + `COLMAP["nma"]=["treatment","event","n"]`（arm-based 二分类默认；连续/对比格式走 `--colmap` 兜底）。
+- **coze_client.py `byvar`→`subgroup` 兜底映射补回**：CHANGELOG `pending-2.2.1` 记录此修复但代码从未落地；`run_meta()` 现对 `params.byvar` 做 `subgroup` 归一化，兼容历史 spec，避免静默失效。
+
+### Docs（与代码同步）
+- SKILL.md §5.0 端点能力边界整段重写：以 coze_contract.md §3 + run_task.R 为准，`metareg` ✅已接线（需 `te`/`sete` + `params.cov`）、`nma`/`nma_rank`/`survival_meta`/`diagnostic_meta` ✅，删去原"metareg 未接线 / nma·diagnostic 未注册"过时错误。
+- SKILL.md §5.1 + references/interactive_menu.md §6 回显块/范例：占位 task 名 `forest`→`pairwise_meta`、`subgroup`→`subgroup_analysis`；`byvar=`→`subgroup=`（§5.0 明令 byvar 静默失效）；补 `task=sensitivity` 实为未注册 task、应复用 `pairwise_meta` 做 leave-one-out 的说明。
+- `pending-2.2.1` 标记已由本版落实，并更正其 `metareg 未接线` / `diagnostic 未注册` 两条与镜像实测矛盾的旧结论（`diagnostic_meta` 已注册）。
+
+### Known limitation（本版未改，待后续）
+- ~~nma 连续型 / 对比格式需 --colmap 回灌~~ → **已在 [2.2.11] 修复**：`build_request.py` `_detect_nma_format()` 按数据实际列名自动探测四种 NMA 输入格式（对比二分类/对比连续/arm二分类/arm连续），无需 `--colmap`。
+- diagnostic_meta 默认 `params.sm=OR`（mada reitsma 通常忽略 sm，无害）。
+
+### Verified
+- 实测 6 用例：classify(诊断) / pairwise OR / diagnostic_meta / subgroup(age 透传) / nma(arm-based) 全部产出 task 名与列映射对齐 coze_contract.md §3 的 request.json；无 unknown_task 风险。
+
+---
+
+## [2.2.9] — 2026-08-27 — 长上下文保护：§0 规则 1 跨轮引用 carve-out（合法使用对话历史回填参数，不破速度纪律）
+
+### Added（解决"严格纪律在长对话里误伤引用前文轮次"的缺口）
+- **规则 1 carve-out**：「禁止深度思考」仅约束计算/呈现阶段；用户显式引用前文（"用之前的数据""和刚才一样"）时，LLM 允许回看对话历史提取既有数据/spec **用于回填 `--data-json`/参数**，但禁止据此重新推导数值或重路由。
+- **延迟不变量补"跨轮回填例外"**：回看对话历史构造 `--data-json` 属构造入参、非额外工具调用，不计入火前 ≤1 次数；回填后仍是 1 次 `build_request.py`。仅放宽数据来源，不放宽计算/呈现禁令。
+- **背景**：确认当前方案对长上下文交互无系统性负面影响（路由确定性 + 对话流零图形双保险），但"引用前文"轮次会被严格纪律误伤——本补丁收窄该缺口，速度内核不变。
+
+---
+
+## [2.2.8] — 2026-08-27 — 有边界 LLM 兜底：build_request.py 列名别名自动匹配 + needs_llm_fallback + --colmap/--measure/--model 回灌
+
+### Added（错误触发、范围受限，不破默认快路径）
+- **`COLUMN_ALIASES`**：中/英同义列名表（实验组事件数/处理组事件/trt_ev…），先自动模糊匹配，吃掉大部分"列名不符"。
+- **`needs_llm_fallback`**：别名仍解析不出 → 发结构化 JSON（exit 2，含 `unresolved_columns`/`available_columns`/`partial_spec`/`hint`）。
+- **回灌参数**：`--colmap`（列映射）/ `--measure` / `--model`，LLM 仅补缺映射或纠正参数后重跑；`_resolve_colmap` 优先采用 override。
+- **错误分流**：列缺失走兜底路径；值非数值/缺值等用户数据错误为硬错误（exit 1），不兜底。
+- **文档**：SKILL.md §0 规则 7（有边界 LLM 兜底）+ 延迟不变量补"兜底例外"；顶部红线注释同步。
+- **实测**：中文列名别名匹配✅、陌生列名发 fallback✅、--colmap 回灌成功✅、非数值硬错误✅、原 4 项 OR 回归同构✅。
+
+---
+
+## [2.2.7] — 2026-08-27 — Phase 2 闭环：scripts/build_request.py（compute 轨 request.json 一键装配）
+
+### Added（消灭"LLM 手写 request.json"，让延迟不变量真正可达）
+- **新增 `scripts/build_request.py`**：计算轨归一化/装配脚本，**零 LLM 决策、零计算、零出网**。一次本地调用内完成：调 `classify.py` 出 spec → 校验数据列 → 装配 `run_analysis` 的 `request.json`。
+  - 输入：`--query`（内部 classify）或 `--spec`；研究数据 `--data path.csv/.json` 或 `--data-json '[{...}]'`；输出 `--out request.json`。
+  - 映射：`measure`→`params.sm`、`model` REM-L→REML(common:false,random:true) / MH→MH(common:true,random:false)、亚组变量→`params.subgroup`、funnel→`figure.plots`（forest 恒含）。
+  - 红线：选题轨（`track==topic`）直接拒；缺列报错列名；`--data` 已给时覆盖 classify 仅凭 query 文本判的 `needs_clarify`（避免误报缺字段）。
+- **§0 双轨门控 / 延迟不变量更新**：计算轨火前唯一动作显式写为一次 `build_request.py` 调用（内部含 classify），彻底取代"classify + LLM 手写 request.json = 2 次"的旧路径；§1 Triage 说明同步更新为"LLM 不再手写 request.json"。
+- 实测（本地、零出网）：4 项 OR 随机效应 / 固定效应 RR / 亚组按年龄+漏斗图 / 选题轨拒 / 缺列报错——5 用例全过。
+- 受影响文件：`scripts/build_request.py`（新增）、`SKILL.md`（§0 / §1）、`CHANGELOG.md`（本条）。
+
+---
+
+## [2.2.6] — 2026-08-26 — Phase 2 代码：scripts/classify.py 双轨路由脚本
+
+### Added（把"火前路由犹豫"也压成代码，对齐 ct-advisor route.py）
+- **新增 `scripts/classify.py`**：确定性 NL→spec 映射脚本，**零 LLM 决策、零计算、零出网**。输入用户 query，输出 `spec` JSON（`track` / `task` / `measure` / `model` / `data_type` / `params_extra` / `needs_clarify` / `missing_fields` / `colmap`）。
+  - 关键词表覆盖：选题轨、数据类型（binary/continuous/diagnostic/survival/ipd）、效应量（OR/RR/RD/MD/SMD/HR）、模型（REM-L 默认 / MH）、task 覆盖（pairwise_meta/subgroup_analysis/metareg/network_meta/survival_meta/diagnostic）、plots（funnel/egger）、亚组变量抽取。
+  - 判定顺序：track → task → data_type → measure → model → plots/subgroup → 数据迹象校验（`\d+/\d+` 或含数据词 + 数字；compute 轨无数据即 `needs_clarify=true`，仅回缺字段）。
+  - `colmap` 给出默认列名建议（binary→`event_exp/n_exp/event_ctrl/n_ctrl` 等），agent 直接套用归一化。
+- **§1 Triage 顶部加说明**：路由已由 `classify.py` 代码完成，LLM 不再决策；附表仅供理解。
+- 延迟不变量兑现：计算轨 fire 前本地工具调用 ≤1 可由一次 `classify.py` 调用承担（取代此前翻 SKILL/references/adapter 的 10–20 轮火前拖拽）。
+- 受影响文件：`scripts/classify.py`（新增）、`SKILL.md`（§1 说明）、`CHANGELOG.md`（本条）。
+
+---
+
+## [2.2.5] — 2026-08-26 — 流程控制：双轨门控 + 延迟不变量 + 选题红线（Phase 1，纯文档）
+
+### Added（消灭"火前拖拽 / 返回后二次组装"两个反模式，借鉴 ct-advisor route.py + ct-base Type-Compute）
+- **§0 新增 `### 0.0 Two-track gating / 双轨门控`**：首条消息经 `python scripts/classify.py "<query>"` 确定性分流（LLM 不决策路由）。两轨——`compute`（Simple/清晰 Complex→描述即执行：归一化→`run_analysis`→`present_files`）与 `topic`（Vague/没方向/可行性→`literature_probe.py`→`generate_topic_report.py`）。规则 1–6 显式标注适用范围=计算轨；选题轨单列"代码接地、不靠思考"规则。
+- **§0 新增 `### Latency invariants / 延迟不变量`**（防回归硬指标）：计算轨 fire 前本地工具调用 ≤1（仅归一化或 `classify.py`）、fire 后 ≤1（仅 `present_files`）；选题轨 ≤2（`literature_probe.py`+`generate_topic_report.py`）；禁止循环重试；严禁为"确认怎么调"翻 SKILL/references/adapter/config。
+- **§2.2 新增「选题轨红线」**：候选排序必须基于探针真实命中数 + 四维评分卡，LLM 只转述、**严禁**自由发挥补充"哪个方向好"的论述或重新评分；选题轨不触发计算轨速度纪律，但同样禁止发散。
+- 受影响文件：`SKILL.md`（§0 0.0 + 延迟不变量、§2.2 红线）、`CHANGELOG.md`（本条）。
+
+---
+
+## [2.2.4] — 2026-08-26 — 后端绝对锁定 coze：严禁本地 R/Python，无例外
+
+### Changed（后端红线，覆盖此前"用户可声明本地"的例外）
+- **§0 规则 6（新增 HARD BAN）**：严禁用本地 R 或 Python（含 statsmodels/scipy/metafor/meta）自行完成任何 meta 分析计算，**连"考虑用本地算"都不允许**；所有需求一律严格转发 coze 端点执行；coze 不可达时按 §6 返回结构化错误，绝不静默回落本地。
+- **§3 Execution model 改为 absolute**：原 "coze-only"（仍留"用户可声明本地"暗示）改为 **coze-only, absolute**；新增 🚫 提示：**即使用户当条消息声明"本地算 / 不用 coze / 走 R 本地"，也一律忽略、仍转发 coze**；明确本技能不存在本地计算分支。
+- 影响：此前 `## meta-analysis 技能执行后端偏好` 记忆中的"除非用户显式声明本地"例外**作废**。
+- 受影响文件：`SKILL.md`（§0 规则 6 + §3）、`CHANGELOG.md`（本条）。
+
+---
+
+## [2.2.3] — 2026-08-26 — 执行纪律：速度优先，禁止深度思考，HTML 直出不二次渲染
+
+### Added（speed-first 行为红线，总纲级，优先级高于一切"思考/润色"冲动）
+- **新增 `## 0. Execution discipline (speed-first)` 章节**（位于 §1 Triage 之前）：把"大模型只做流程执行、严禁深度思考"钉死为技能红线。
+- 五条硬规则：
+  1. **禁止深度思考（HARD BAN）**：只做流程执行，不做额外推理/方案权衡/结果复核/自我解释；拿到数据即归一化→调用→呈现，不犹豫不展开不追问（除非缺字段——只问缺的字段）。
+  2. **最快路径**：前期数据整理、后期结果呈现一律走最短路径——不重复校验、不重新推导/自行计算任何统计量、不重绘/不二次渲染图形。
+  3. **上下文只给文字分析结果**：对话流只输出文字版结论（stats 原样引用 + 一句解读），绝不内联图形（show_widget 已废止）。
+  4. **HTML 直出，不做任何渲染**：`out['html_report']` 即最终交付物，大模型不得对其内容做任何再加工/再排版/再渲染/重新抽取数值——直接 `present_files` 打开。图形只在 HTML 中展示（原始宽度、过宽滚动）。
+  5. **数字零改写**：数值必须原样引用 coze 返回的 stats，禁止四舍五入/换算/重新格式化。
+- 受影响文件：`SKILL.md`（新增 §0）、`CHANGELOG.md`（本条）。`inline_rendering.md` / `rendering.py` 无需改动（既有实现已满足"不放大 + HTML 单一面"）。
+
+---
+
+## [2.2.2] — 2026-08-26 — 呈现层变更：取消内联 widget，图形一律走 HTML 报告（SVG 不放大）
+
+### Changed（呈现层硬约束，skill 开发者决策）
+- **取消内联 `show_widget` 渲染（原 §5 默认且强制）**：所有 `figures[].svg` 不再内联进对话流，改由 `run_analysis` 生成的聚合 HTML 报告（`out['html_report']`）统一展示，agent 用 `present_files` 打开预览。原强制内联规则（"figures must NOT be delivered merely as file cards" / 约束 #4 "Figures inline by default (mandatory)"）改为 "Figures in HTML report (mandatory)"。
+- **SVG 宽度规则**：图保持自然内容宽度，**绝不放大到固定画幅**（如为 680px 容器而拉伸 504px 图）。嵌入按 `content_bbox` 算出的实际内容宽度，装不下即横向滚动。该行为由 `rendering.py` 的 `build_figure_widget` / `render_html_report` 已实现（SVG `width:{w}px`，`w = max_x - min_x`，无 680px 固定画布）；本次仅把规范对齐到既有实现，并废止此前为满足 show_widget 680px viewBox 而手动拉伸 SVG 的做法。
+- 受影响文件：`SKILL.md` §5（Rendering + 约束 #4 + figure_mode 说明）、`references/inline_rendering.md`（标题与 §1/§3/§8 改为"HTML 报告唯一面 + 不放大"）。
+
+### Verified
+- 既有 `rendering.py` 无 680px 固定画布；`build_figure_widget` 输出 `width:{w}px`（w=自然内容宽）。本次仅改文案，渲染链零改动。
+
+---
+
+## [2.2.1] — 2026-08-26 — 契约对齐：亚组参数键 byvar→subgroup + 端点能力边界实测（已由 2.2.10 落实；metareg/diagnostic_meta 结论已更正）
+
+### Fixed（本地契约 bug，实测发现）
+- **亚组分析静默失效（契约 bug）**：SKILL.md §5.1 跨轮 spec 字段名写 `byvar`、task 名写 `subgroup`；但 coze 端点实际（2026-08-26 线上探测）只认 `subgroup_analysis` task + `subgroup` 参数键（`byvar`/`group`/`by`/`strata` 全部静默忽略，仅回主分析合并值）。修复方式双保险：
+  1. `adapters/coze_client.py` `run_meta()` 在发请求前做 `byvar`→`subgroup` 兜底映射（兼容历史 spec 字段名，避免静默失效）；
+  2. SKILL.md §5.1 的 spec 字段、回显块、task 切换示例全部对齐到实测契约（`byvar`→`subgroup`，`task:subgroup`→`task:subgroup_analysis`）。
+
+### Documented（端点能力边界，实测标注，非本地可修）
+- `pairwise_meta` ✅ 完整（异质性 I²/τ²、Egger/Begg、漏斗、质量门）；
+- `subgroup_analysis` ✅ 正常（参数键 `subgroup`）；
+- `metareg` ✅ **已接线**（2026-08-26 实测 + coze_contract.md §3 对齐）：需提供已算效应量列 `te`/`sete` + 协变量列，并以 `params.cov` 传协变量列名；仅给原始二分类/连续列会静默降级为 `pairwise_meta`。原 pending 记录"15 键均不返回 regression"系历史探测误判，已更正。
+- `nma` ✅ 注册（需每研究 ≥2 臂）；
+- `sensitivity` / `pub_bias` / `publication_bias` ❌ 未注册（`unknown_task`）；发表偏倚已内嵌进 `pairwise_meta` 自动算，无需单独 task。**更正**：`diagnostic` 未注册但 `diagnostic_meta` ✅ 已注册（原 pending 把两者混为一谈，已更正）；classify.py 现发 `diagnostic_meta`。
+
+### Verified
+- 线上实测：20 项 MDD RCT（OR），`subgroup_analysis`+`{"subgroup":"region"}`→ Asia/Europe/NorthAmerica 三亚组效应量正确分层；`metareg` 15 键均不返回 `regression`；`sensitivity`/`pub_bias` 返回 `unknown_task`。
+
+---
+
+## [2.2.0] — 2026-08-26 — 图形回归修复 + 扩充影响诊断 / 节点拆分 / 剪补法漏斗
+
+### Fixed（coze 端图形回归，线上实测发现）
+- **`.render_fig` 未打印 ggplot 对象**：原函数对 `function() .sucra_plot(rk)` / `.egger_plot()` / `.bubble_plot()` 这类「返回 ggplot」的工厂直接调用并丢弃返回值 → SVG 为空。线上实测 sucra/egger/bubble 三个图均返回 0 字节 SVG。改为捕获函数返回值、若为 ggplot 则 `print()`，基础绘图函数（forest/funnel/netgraph 等副作用绘制）不受影响。
+- **NMA 贡献图静默失败**：`netmeta::netgraph(fit, contribution = TRUE, seq = TRUE)` 在 netmeta 3.6.1 不支持（`contribution` 被当图形参数忽略、`seq` 触发「argument is not interpretable as logical」），原 tryCatch 静默吞错 → `figures` 为空。改用 `.contribution_plot()`：优先原生 `netgraph(contribution=TRUE)`（新版本），否则走 `decomp.design()` 取各比较对不一致性的贡献（Q.inc.design）以 ggplot 条形图呈现，version-independent。
+
+### Added（进一步扩充支持范围）
+- **影响诊断图 `influence`**（pairwise_meta 等分支，`plots:["influence"]`）：`metafor::influence(rma_fit)` 多面板（Cook 距离 / 杠杆 / CovRatio / DFFITS / hat），7×9 SVG。
+- **节点拆分图 `nodesplit`**（nma 分支，`plots:["nodesplit"]`）：`netsplit(fit)` → `forest()` 呈现局部不一致性（直接 vs 间接 vs 网络估计），netmeta 已依赖。
+- **剪补法漏斗图 `trimfill`**（pairwise_meta 分支，`plots:["trimfill"]`）：`meta::trimfill(fit)` 后画漏斗，呈现发表偏倚校正后估计。
+- 渲染层 `rendering.py` 双语图注补齐 `fig_influence` / `fig_nodesplit` / `fig_trimfill`，`type_names` 映射同步；现支持 **23 种** coze figure type 全图注。
+
+### Verified
+- R `parse()` 通过；本地 R 4.6.1 跑 `run_task.R` 真路径：sucra 5121 / egger 11439 / contribution 4903 / loo 8962 / cumulative 8963 / influence 43986 / nodesplit 12066 / trimfill 19967 / bubble 7017 字节 SVG 全部非空；`render_html_report` 23 种 type 双语自测 raw_hits=[] 且 missing=[]。
+
+---
+
+## [2.1.7] — 2026-08-26 — coze 端点重构：ct-meta2 主 / ct-meta 回退 + per-endpoint token
+
+### Added
+- **主工作流端点切换为 ct-meta2、回退 ct-meta**：`DEFAULT_ENDPOINT=https://ct-meta2.coze.site/run`（用户新 token，aud=`5v9HMQWtTSzxrEeZjI7kJJEzeMPrHXny`）；`FALLBACK_ENDPOINT=https://ct-meta.coze.site/run`（旧端点，保留旧 token，aud=`oxwSsfwdtRRfByYIM8Xg3U4RQH5OgEjO`）。
+- **token 改为按端点分别解析**：`coze_token.get_token_for(endpoint)` 按 URL 映射不同工作流 JWT（ct-meta2 用新、ct-meta 用旧），不再全局共用；`_resolve_token(endpoint)` / `_headers(endpoint)` 接收端点参数，回退时用回退端点专属 token。优先级：`COZE_META_TOKEN`（全局覆盖）> 端点专属内嵌 blob > 历史默认 blob。
+- **回退触发条件**：主端点因 token 不一致（401/403 + token/auth/invalid 关键字）失败时自动回退重试；回退成功结果附 `_coze_endpoint_notice` 并追加 notes「主分析工作流地址已切换，本次分析已自动回退到备用 coze 端点完成」。双端均 token 失败则抛错提示更新技能。
+- `config.json` 白名单：移除 `wr65rdbc4w`，加入 `ct-meta2`（现三项：ct-meta2 / ct-meta / ct-bugreport）。
+
+### Changed
+- `coze_token.get_token` 重构为 `get_token_for(endpoint)` + `ENDPOINT_TOKEN_MAP`，支持 per-endpoint 凭据；`SKILL.md` / `README*` / `coze_integration_test.py` 同步更新旧默认端点引用。
+
+### Verified
+- 模块编译；`get_token_for("ct-meta2")`→aud=`5v9HMQWtTSzxrEeZjI7kJJEzeMPrHXny`、`get_token_for("ct-meta")`→aud=`oxwSsfwdtRRfByYIM8Xg3U4RQH5OgEjO`（二者不同）；线上探测两端点均 HTTP 200 + `unknown_task`（token 被接受）。
+
+---
+
+## [2.1.8] — 2026-08-26 — 聚合 HTML 报告（结果展示改进）
+
+### Added
+- **`rendering.render_html_report(out, out_dir="output")`**：把分析结果拼成单文件聚合 HTML 报告（内联 SVG 图形 + 统计结果明细表 + `<details>` 折叠可复现 R 代码），固化在**本地 agent 侧**。coze 返回体仅含 `stats`+S3 `url`，**不受 4000 截断与 S3 链接过期影响**；`_coze_truncated` 存在时报告顶部附截断告警 banner。
+- 复用 `build_figure_widget`（含 content_bbox 扩展 viewBox、clip 移除、points 拆分与同名 CSS 变量），并自包含浅色主题 CSS（定义 `--color-text-primary` 等变量确保内联 SVG 区块在独立文件里正确着色）。
+- `run_analysis.run_analysis` 成功分支自动调用，结果 `out['html_report']` 写入报告路径；生成失败不影响主结果（try/except 静默）。
+
+### Changed
+- `run_analysis` 顶部 import 增加 `render_html_report`。
+
+### Verified
+- 离线验证：真实森林图(8056B)+漏斗图(6321B) SVG 正确固化进单文件 HTML(17.5KB)，统计表 / 折叠 R 代码 / 截断 banner / CSS 变量解析 / `.format` 占位符清理均正确；`run_analysis` import 链编译无误。
+
+### Fixed
+- **PRISMA 流程图 `prisma_flow` 渲染崩溃（线上实测 status=error：`object 'label' not found`）**：`plot_prisma_flow`（`adapters/coze_project/src/r_engine/advanced_functions.R`）把 `label` 设在 `ggplot(df, aes(..., label = label))` 的**全局美学**里，被第 3 层 `geom_segment` 继承，而该层自己的 data.frame（x/y/xe/ye）无 `label` 列 → 渲染期报错。改为把 `label = label` 移入 `geom_text(aes(label = label))` 局部美学，`geom_segment` 不再继承 `label`。本地 R 4.6.1 复现并修复：ggsave 输出 5588 字节 SVG 正常。
+- **SKILL.md `description` 与 `summary` 对齐**：`summary` 已含「等共 23 种分析图形」，`description` 中文段原缺失该表述 → 已补齐，英文段同步加「for a total of 23 analysis figures」，保留 ` / ` 双语分隔。
+
+---
+
+## [2.1.9] — 2026-08-26 — 新增四张图形（SUCRA / Egger / 贡献图 / 留一法·累积）并补齐 HTML 双语展示
+
+### Added
+- **SUCRA 排名图（`sucra`）**：NMA 排序图。在 `nma_rank` 分支接线 `if("sucra" %in% plots || (task=="nma_rank" && length(plots)==0))`；新增 `.sucra_plot(rk)`（ggplot 水平条形图，读 `rk$Pscore.random`/`Pscore`，零新增包）。
+- **Egger 回归散点图（`egger`）**：在 `pairwise_meta`/`funnel_plot`/`trimfill`/`subgroup_analysis`/`metareg` 的偏倚块内接线 `if("egger" %in% plots)`，复用已算 `rma_fit`；新增 `.egger_plot(rma_fit)`（ggplot 散点 + `geom_smooth(lm)`，x=1/SE，y=yi/SE）。
+- **NMA 贡献图（`contribution`）**：在 NMA 分支接线 `if("contribution" %in% plots)`，调用 `netmeta::netgraph(fit, contribution=TRUE, seq=TRUE)`。
+- **留一法影响图（`loo`）/ 累积 Meta 图（`cumulative`）**：分别在 `leave_one_out` / `cumulative_meta` 分支接线（默认出图），用现有 `loo_df`/`cu_df` 经 `metafor::forest` 画 forest 变体。
+- **HTML 双语展示补齐**：`rendering.py` 的 `_I18N`（zh/en）与 `type_names` 新增 `sucra`/`egger`/`contribution`/`loo`（`cumulative` 此前已在字典内，本次真正出图）。`locale="en"` 时对应英文 caption 生效。
+
+### Changed
+- 所有新增 `figs <- c(figs, list(.render_fig(...)))` 均用 `tryCatch(..., error=function(e) figs)` 包裹：单图出错仅静默降级、不影响其他图形与整体返回（`.render_fig` 自身无错误保护）。
+- 后续发布不再带本地 R 引擎，图形一律由 coze 端 R 引擎（`adapters/coze_project/src/r_engine/`）生成，故改动落在 coze_project 代码而非本地 r_engine。
+
+### Verified
+- R 语法：`parse()` 通过 `meta_analysis_core.R` / `run_task.R` / `network_meta_analysis.R`。
+- 渲染层：合成多 type figures 调 `render_html_report(locale=zh/en)`，12 项 caption 断言全 OK（含 `L'Abbe` / `Egger's` 撇号转义归一化），`type_names` 无回退到裸 type。
+- **未做**：coze 容器端到端 SVG 生成（需重新部署到 ct-meta2 端点；按发布红线未自动部署）。
+
+---
+
+## [2.1.6] — 2026-08-26 — 图形默认内联 + 停止 SVG 精简
+
+### Changed
+- **图形默认内联（强制）**：`SKILL.md` §5 明确 `figures[].svg` **默认内联渲染进对话流**，agent 须用 `show_widget` 内联展示，不得退化为仅文件卡片/附件；S3 外置仅影响传输层，不改变内联默认行为（`coze_client._fill_external_svgs` 默认回填内联 SVG）。
+- **停止 SVG 精简、原样输出**：`run_task.R` 的 `.render_fig` 移除 `minify` 形参与 `.minify_svg` 调用，直接透传 svglite 原始字符串（`.minify_svg` 保留为 DEPRECATED 死代码，不再被调用）。`coze_contract.md` §5 同步声明 `figures[].svg` 为 svglite 原始输出、不做任何 minify。
+- 4000 截断防护改为完全依赖 S3 外置（传输层）+ 字段重排 + `_trim_to_limit` 兜底，不再依赖体积精简。
+
+### Verified
+- `run_task.R` 源码自洽：`.render_fig` 透传、`minify` 调用已删、`.minify_svg` 仅注释保留，无悬空引用。
+
+---
+
+## [2.1.5] — 2026-08-26 — README 去除内部框架注解
+
+### Changed
+- `README.md` / `README_zh-CN.md` 示例 1 段落移除面向用户的代码关联注解：
+  - 删除反引号文件路径引用 `` `references/topic-selection.md` ``；
+  - 删除英文代码标签 `(Topic Selection)`、`(upstream gate)`、`Stage 1 Gate 1`、`Rule R7`；
+  - `Full Assessment` 代码阶段名改写为可读描述「完整选题评估 / full topic assessment」。
+- 保留用户可点击的 `references/ADVANCED*.md` 导航链接（非注解，正常文档链接）。
+
+---
+
+## [2.1.4] — 2026-08-26 — README 示例1 校正（改为探针真实证据）
+
+### Changed
+- `README.md` / `README_zh-CN.md` **示例 1 答案重写**：原答案把「非糖尿病 CKD」列为首选（新颖性 5、总分 18，称其为真实缺口），
+  与 in-skill 去重探针实测矛盾——探针显示非糖尿病 CKD（Cochrane 20 / PubMed 2402）与透析/晚期 CKD（22 / 1067）**均已高度饱和**。
+  改为基于探针真实命中数的结论：首选 **IgA 肾病肾保护**（4 / 224）、次选 **净获益框架**（5 / 442）、
+  条件型 **特定肾小球疾病**（FSGS 0 / 膜性 1 / ADPKD 2 / 狼疮 3）；并保留「先用 ct-literature 全量确证缺口」的提示。
+- 示例 1 下方「说明」同步明确：候选方向基于**自含去重探针（Cochrane + PubMed 真实命中数）**核查（R7 规则）。
+- 全文简化，未机械复制候选地图。
+
+---
+
+## [2.1.3] — 2026-08-26 — 探针 ↔ ct-literature 无缝对接 + 快速检索提示
+
+### Added
+- `adapters/literature_probe.py`：输出新增 `ct_handoff` 块（Cochrane / PubMed 两层的 ct-literature 复现命令
+  + 原始 Europe PMC 查询串 + “快速检查 vs 全面检索”提示）；`probe()` 单层与 `dedup_probe()` 均携带该块。
+- `references/dedup-search.md`：新增「快速检查 vs 全面检索（何时用 ct-literature）」段，明确本探针只是
+  选题去重快速检查，全面检索先走 ct-literature，并给出可直接复制的命令。
+- `SKILL.md` §2.2：选题去重 self-contained 说明补一句——“快速去重检查，非全面检索；全面检索先使用 ct-literature”。
+
+### Changed
+- 回写 **ct-literature（v0.10.1）**：新增 `--cochrane` 检索能力（Europe PMC 期刊过滤，过滤串与探针
+  **完全一致**，Cochrane 计数跨技能一致），使「选题去重（meta-analysis）→ 全面检索（ct-literature）」
+  形成无缝闭环。
+
+### Verified
+- meta-analysis 探针 live 测试：`ct_handoff` 命令串正确、Cochrane 查询与 ct-literature `--cochrane` 同源；
+  ct-literature `--cochrane` 全链路 live 测试（NSCLC）合并 10 篇 → Cochrane 过滤后 5 篇，publication 全为
+  Cochrane、`is_cochrane` 全 True；两技能 `py_compile` 通过。
+
+## [2.1.2] — 2026-08-26 — 选题去重自包含（in-skill Europe PMC 探针）
+
+### Added
+- **`adapters/literature_probe.py`**：选题去重自包含探针（不依赖其他技能、不依赖 coze）。直接调
+  Europe PMC 公开 REST（MEDLINE/PubMed，无需密钥），仅用标准库 `urllib/json/re/time/datetime`，
+  字段映射与查询语法复用 ct-literature `adapters/fetch_europepmc.py`、重试/退避复刻其 `http_utils`
+  （429 读 `Retry-After` + 指数退避），但**独立实现在本技能内、不 import ct-literature 包**。
+  两层：`cochrane`（按 `JOURNAL:"The Cochrane database of systematic reviews"` 精准过滤，
+  经验证避免短语匹配虚高）+ `pubmed`（`systematic review OR meta-analysis`，近 5 年）。
+  返回真实 `hit_count` + top titles；`dedup_probe()` 一次性出 Cochrane+PubMed 双层去重信号。
+- 选题（Stage 4 / R7）改为**默认真实联网、自包含**：不再默认只给模板、不再委派 ct-literature/ct-registry。
+  PROSPERO 与中文库仍保留为「手动/模板」步骤（无干净公开 API，如实标注），符合「技能不假装包办一切」的边界。
+
+### Changed
+- `references/dedup-search.md`：网络说明从「从不自动检索、只给模板」翻转为「默认 in-skill 探针真实检索」；
+  三层去重表重写（Layer1–2 = in-skill 实时，Layer3/中文 = 手动模板）；新增「Run the in-skill probe」段与真实输出示例。
+- `references/topic-selection.md`：Stage 4 改写，明确去重自包含（Cochrane+PubMed 走探针），R7 的「真实去重筛查」落到探针。
+- `SKILL.md` §2.2：选题去重标注 self-contained，移除「Dedup searches run ONLY on user opt-in; otherwise deliver query templates」。
+- `adapters/README.md`：文件树补 `literature_probe.py` 并注明为选题去重自包含探针。
+
+### Verified
+- 真实联网端到端测试通过：选题「PD-1 inhibitors NSCLC second line」→ Cochrane `hit_count=36`
+  （全部 `is_cochrane=True`）、PubMed SR/MA `hit_count=5358`；`py_compile` 通过。
+
+## [2.1.1] — 2026-08-25 — 文档清理收尾 + 三平台统一发布
+
+### Changed
+- **版本号升 2.1.1**：SkillHub 已占用 2.1.0（早期发布），且 SkillHub 不允许同版本重发；为保持 GitHub / SkillHub / ClawHub 三平台版本一致，升到 2.1.1 统一发布。
+- **对外文档清理收尾**（本轮发布前）：SKILL.md §5.1 跨轮连续性协议全文英文化并删除 `ct-base/references/*` 死链；`## Language` 段改为符合 ct-base skeleton 标准表述（双语指针单行 + 核心语义句 "answer language follows the user's question language"）；`references/interactive_menu.md` 与 `README_zh-CN.md` 清除同类死链。
+- 版本号引用统一：SKILL frontmatter + metadata + README（中/英）+ interactive_menu/ADVANCED + bug-report 示例统一为 2.1.1。
+- **文档与代码对齐（2026-08-26 收尾）**：默认计算路径统一描述为 coze（终端用户零本地依赖）；requirements.txt 改为「默认零依赖」清单（cairosvg 仅 PNG 可选，R 包降为 coze 端/开发者维护说明）；ADVANCED.md / ADVANCED_zh-CN.md / r_packages.md 的 coze 项目 R 引擎维护命令（`Rscript src/r_engine/*`）移至 `adapters/coze_project/DEV.md`（git/clawhub 忽略、不发布）；**取消本地 R 回退**——`run_analysis.py` 重写为 coze-only（coze 不可达/未授权直接返回结构化错误，不再兜底本地），原 `adapters/local_engine.py` 移至 `adapters/_dev/local_engine.py`（git/clawhub 双重忽略、不随发布包分发，仅开发调试参考，已不在运行路径）；同步更新 SKILL.md（network_note/data 改 coze-only 无回退）、AGENTS.md（Execution backend / 环境检测 / 代码执行 / 安全红线 / Outbound calls / 目录树 全部翻转）、adapters/README.md（路由图/文件清单/配置/用法清除回退）、data_templates.md（移除 `prefer="local"` 引导）；AGENTS.md / SKILL.md 版本号对齐 2.1.1。
+
+## [2.1.0] — 2026-08-25 — 跨轮上下文交互能力完善 + 发布自包含修复（ct-base 模式 A / Type-Compute）
+
+### Fixed / 发布自包含（P0-2）
+- **`merge_spec.py` 注入发布包**：`ct-base/scripts/publish_inject.py` 的 `SHARED_ASSETS` 清单补 `scripts/merge_spec.py`，发布时注入 `meta-analysis/scripts/merge_spec.py`；SKILL.md §5.1 命令与描述改为相对路径 `scripts/merge_spec.py`（不再悬空引用 `ct-base/scripts/`，符合 AGENTS §5 发布后不假设 ct-base 存在）。
+- **`ct-base/references/*` 悬空引用加注**（P1）：SKILL.md §5.1 声明"开发底座文档、发布包不含、关键规则已内联"，消除用户/审阅者困惑。
+- **版本号统一**：SKILL frontmatter + metadata + README（中/英）+ interactive_menu/ADVANCED + bug-report 示例统一为 2.1.0。
+
+### Added / 跨轮连续性协议（发布前完善，沿用 2.0.6 条目）
+- **SKILL.md §5.1 升级为可操作协议**：定义跨轮 spec 字段集（task/data_path/measure/model/method/yi/sei/slab/byvar + params 透传）、回显块强制格式与位置、数据集指针继承、列映射显式继承（最高风险点：漏带 = 效应量错配 = 结论级静默不一致）、task 切换字段规则；`merge_spec.py` 从「可选」提为「推荐」并给调用范式。
+- **interactive_menu.md 新增 §6 多轮连续性实战样板**：四轮 few-shot（forest→subgroup→sensitivity→metareg），每轮回显块演示「读最近块、只改变化字段、列映射零丢失」；含漏带 `yi=eff` 导致静默错配反例。
+- **ct-base 回写（家族标准）**：`compute_menu.md` 补 §6.3（数据集指针继承）/ §6.4（列映射与 task 切换字段规则）；`continuity.md` §1.4 加交叉指针；`continuity_lint.py` 已验证 `meta-analysis` COMPLIANT。
+
+### Added / 跨轮连续性协议（发布前完善）
+- **SKILL.md §5.1 升级为可操作协议**：定义跨轮 spec 字段集（task/data_path/measure/model/method/yi/sei/slab/byvar + params 透传）、回显块强制格式与位置、数据集指针继承、列映射显式继承（最高风险点：漏带 = 效应量错配 = 结论级静默不一致）、task 切换字段规则；`merge_spec.py` 从「可选」提为「推荐」并给调用范式。
+- **interactive_menu.md 新增 §6 多轮连续性实战样板**：四轮 few-shot（forest→subgroup→sensitivity→metareg），每轮回显块演示「读最近块、只改变化字段、列映射零丢失」；含漏带 `yi=eff` 导致静默错配反例。
+- **ct-base 回写（家族标准）**：`compute_menu.md` 补 §6.3（数据集指针继承）/ §6.4（列映射与 task 切换字段规则）；`continuity.md` §1.4 加交叉指针；`continuity_lint.py` 已验证 `meta-analysis` COMPLIANT。
+
+---
+
+## [2.0.5] — 2026-08-24 — 发布前合规整改（ct-base §16 检查 + 文档对齐）
+
+### Changed / 发布前整改（2026-08-24 逐项落实）
+- **清理 i18n `install.*` 残留键组**：删除 `scripts/i18n.py` 中 6 个无引用的 `install.*` 键（`cmd_header` / `cran_warning` / `confirm_prompt` / `manual_alt` / `network_warning_en` / `code_header`）——它们引用已不存在的 `--run-install` 本地 R 安装参数（coze-only 形态已移除），且 `install.cran_warning` 文案"（即本技能唯一会联网的操作）"与当前默认走 coze 云端的架构严重矛盾。删除后语法校验通过（§16.8 legacy 死参数清理）。
+- **版本 bump**：2.0.0 → **2.0.5**（SKILL.md frontmatter + metadata 同步），CHANGELOG 补本条目（此前正文已提"修复见 2.0.1"的 dose_resp 修复，本次统一为 2.0.5 发布）。
+- **SKILL.md 文档重构（§13.3/§4 对齐）**：9 段式框架（Triage→引导→初始化→核心→输出→安全→上传→Bug→元信息）；`## Language` 精简为链接；`## Bug Reporting` 只留行为规则；正文英文化（保留运行时用户双语文案 + 触发词）。
+- **README 结构重排（§13.3）**：对话示例前置、出站披露收敛为「数据与隐私」节；实测记录迁至 ADVANCED。
+- **ct-base 注解清理**：对外文档（README/SKILL/AGENTS/interactive_menu）清除 `（ct-base §X）` 引用；内部技术文档（ADVANCED/units 等）保留溯源（§4 文档清理边界）。
+- **安全审计披露矛盾修复（SkillSpector §16.0）**：修正 `data:` 字段"no external data transmission"、README"never touches raw datasets"、bug-report"本地保存+邮件作者"等声明与实际不符处。
+- **执行模式变更（安全预览 → 自动执行，2026-08-24）**：技能从「默认展示 R 代码、需说『请直接计算』才执行」改为**自动执行**——用户描述需求后技能自动完成分析并返回结果，无需触发词。同步更新 README（中/英）顶部简介、示例注记、FAQ、原「安全预览」节（改为「执行机制」）、出站披露触发时机（改为自动发送 + 每会话首次出站前披露一次）；AGENTS.md 执行规范（AUTO-EXECUTE）；interactive_menu.md 对应节。出站授权红线不变（默认端点白名单自动执行、自定义端点首次弹确认）。
+- **本地引擎改为内部备用（2026-08-24）**：本地 R 兜底引擎（`adapters/local_engine.py` + `adapters/coze_project/src/r_engine/` 镜像）**代码保留**，但**不再对外文档说明**——README（中/英）、SKILL.md、interactive_menu.md 移除全部"本地引擎 / 本地兜底 / `prefer="local"` / 数据不出域可走本地"的用户导向表述，统一呈现为纯 coze 云端执行；AGENTS.md 标注 "internal only, not advertised"。本地兜底仅作 coze 不可用时的内部备用（不向用户宣传）。
+
+---
+
+## [2.0.0] — 2026-08-22 — 升级为云端模式 + 补齐 bug report 接入
+
+### Added / 云端模式全面测试（ct-update 模式 B，按功能点 2 案例扩展）
+- **模式 B 联调（ct-meta.coze.site/run 线上端点）**：按"每个功能点覆盖、每 task 至少 1 标准 + 1 变体"原则，将 `adapters/coze_cases/` 从 10 例扩展至 **46 个案例**，覆盖 contract §3 全部 **24 个 task 类型**（pairwise_meta / single_group_meta / subgroup_analysis / metareg / forest_plot / funnel_plot / labbe_plot / baujat_plot / radial_plot / bubble_plot / influence / trimfill / nma / nma_rank / survival_meta / dose_resp / diagnostic_meta / bayesian_pairwise / gosh / tsa / power / rob2 / esc / prisma_flow / prisma_checklist / grade / metainc / nnt / leave_one_out / cumulative_meta / selmodel / rve_meta / multilevel_meta / multivariate_meta）+ 维度变体（locale 中英 / colmap 自定义 / 多图组合）。
+- **结果**：**44/46 通过**（含 2 个预期 `warn`：Egger 检验偏倚提示，属 Quality Gate 正常非阻断输出）；**2 个失败 = dose_resp（case19 continuous / case45 binary），属 R 端 `run_dose_resp` dosresmeta NSE 集成缺陷，待修复 R 端代码**（见 Pending）。其余 44 例功能完整。
+
+### Fixed / bug report 接入缺漏（ct-base §20.3.5）
+- **问题**：`adapters/config.json` 的 `auto_approve_endpoints` 仅含 `https://ct-meta.coze.site/run`，**缺少**统一 bug-report 端点 `https://ct-bugreport.coze.site/run`，违反 §20.3.5（每个技能须将该端点列入自动批准白名单）。
+- **修复**：`auto_approve_endpoints` 追加 `https://ct-bugreport.coze.site/run`。
+- **已合规项确认**：`adapters/bug_report.py` 已含 §20.3.7 的 `confirm_thanks()` / `build_followup()` / `parse_history()`；SKILL.md §20.3 章节与 README §5/§20.3 出站披露均已就位。
+
+### Pending / 待确认（非阻断，记入发布报告）
+- **clawhub_security_audit MEDIUM**：SKILL.md 第 91 行 + `scripts/i18n.py` 读取 `~/.workbuddy/MEMORY.md` 用于 R config（用户已授权、仅取 R 相关键、不发送个人内容）。审计认为超出技能窄范围，建议移除或收窄。属预存在设计，改动可能影响 R 配置功能，标记待用户确认，未擅改。
+- **dose_resp R 端缺陷（模式 B 抓出，2026-08-23，**已修复见 2.0.1**）**：`adapters/coze_project/src/r_engine/advanced_functions.R` 的 `run_dose_resp` 用 dosresmeta 公式法 `(cases/n) ~ dose`（LHS 表达式），触发 2.2.0 内部 bug（`unique() applies only to vectors` / `'x' must have positive length`；as.name/字符串列名均不行）。case19（continuous）与 case45（binary）失败。**非测试设计错误，是技能 R 端代码缺陷**，修复见 2.0.1（v4：预计算效应量列 + 裸列名 + 参考组 se=NA + type factor，R 4.6.1 实测通过）。
+
+---
+
+## [2.0.1] — 2026-08-23 — dose_resp 崩溃修复（v4：dosresmeta 官方写法，R 4.6.1 实测验证）
+
+### Fixed / coze 端 dose_resp「死机」——R 进程 segfault（根因链完整闭环）
+- **第一层根因（文件版本错位）**：`run_task.R` dose_resp 分支已改**字符串列名**，但 `advanced_functions.R` 的 `run_dose_resp` 内部仍用 **`as.name()`** 转符号 → dosresmeta 内部崩溃。本机实测 as.name 版 exit=139 Segfault（进程崩溃 → Python 侧等不到 result → coze 画布卡死）。
+- **第二层根因（dosresmeta 2.2.0 正确用法，R 4.6.1 实测推翻 v2 字符串方案）**：字符串列名也会崩（`non-numeric argument to binary operator`，因 dosresmeta 对独立参数 `eval(mf.id, data)` 会把字符串当字面量）。**正确写法**：
+  1. formula LHS 用**预计算效应量列**（binary: `logrr=log(cases/n)`；continuous: `yi`），不能用 `(cases/n) ~ dose` 表达式（触发 `unique() applies only to vectors` / `'x' must have positive length`）；
+  2. 独立参数 id/cases/n/sd/se 传**裸列名**（写入 df 后传 `_id_f`/`_cases`/`_n`/`_se_use` 等短名列），不传字符串也不传 as.name；
+  3. binary 参考剂量组（dose 最小）**se 置 NA**（Greenland-Longnecker 约定），type 转 factor；
+  4. covariance: binary=`"gl"`（需 cases/n），continuous=`"md"`（需 sd/n）。
+- **修复**：`run_dose_resp` 重写为 v4（预处理 df → 短名列 → 官方调用）；`run_task.R` dose_resp 分支 plot 条件对齐（plots 空也默认出图）。
+- **验证（R 4.6.1 + 干净 PATH，完整复现 coze 环境）**：case45 binary `status=ok figures=1`（coef=-0.0191, p<0.0001, SVG 8535 字符）；case19 continuous `status=ok figures=1`（coef=0.0145, p<0.0001）；pairwise_meta 回归 k=5 I2=0% OR=1.221 无破坏。
+- **case 数据修正**：case19/45 原"每剂量点一个研究"（S1-S5）是错误结构，dosresmeta 需**单研究×多剂量点**——已统一 id 为 S1。
+- **交付**：`meta-analysis-coze-full-v4.zip`（完整工程 113 文件 + 修正 case19/45）。
+
+---
+
+## [1.12.2] — 2026-08-20
+
+### Fixed / 部署环境候选列表过时（libicu76）
+
+- **问题（2026-08-20 部署日志暴露）**：`scripts/setup.sh` 的 libicu 多候选列表为 `libicu74|libicu72|libicu71|libicu70`（注释误标"Debian13=libicu74"），但实际 **Debian 13 (trixie) 为 libicu76** → 4 次尝试全失败（`E: Unable to locate package libicu74/72/71/70`），依赖符号链接兜底（`.76 → .74`）才通过——能工作但属 ABI hack。
+- **修复**：候选列表 `libicu76` 前置（trixie 直接命中，跳过无谓失败 + 免符号链接）；`libgsl28` 前置（trixie 为 28，避免先试 27 失败噪音）；注释同步修正。
+- **验证**：`bash -n` 语法 OK；线上 v1.12.1 当前运行正常（兜底生效、回归 6/6），本修复随下次部署生效，无需重启线上。
+
+### Added / README 对话示例实测（ct-base §16.6 实测闸门留痕）+ 新增「选择候选方向」示例
+
+- **实测（2026-08-20，coze 端点 `https://ct-meta.coze.site/run`）**：按 §16.6 逐个实测两份 README 的对话示例，**7/7 通过**——计算类示例 1（OR 配对）/2（d→logOR=1.451）/3（SMD+亚组）/6（PRISMA 流程图，`prisma_flow` task 实测可用）均返回真实 `stats`+`figures`+`repro`；行为类示例 4（Complex 路由菜单）/5（Vague grill-me）与 SKILL.md Triage 一致。完整报告：`meta_readme_test/README_EXAMPLES_TEST_REPORT.md`。
+- **新增示例 7（中英 README + interactive_menu.md）**：「选择候选 Meta 分析方向」——应用 `references/topic-selection.md` Stage 1 Gate 1 产出 1–3 候选方向 + 四维评分 + Meta 类型决策树，属分析前上游门控、不调用 R 计算。
+- **修复（§5 / §16.6 文档-行为一致性）**：README「安全预览」§4 原「所有计算均在本地——不上传任何用户数据」为 coze-only 形态前的旧文案，与默认云端 R 引擎 + 数据出站矛盾——已改为「默认云端 coze R 引擎 + 按 §5 出站披露；本地/离线走 `prefer="local"`」；`interactive_menu.md` 开头与 §4 同步修正。
+- **标记待确认（未擅改）**：README 尾部版本号 v1.9.7 滞后于 SKILL.md/CHANGELOG v1.12.2（§16.5 一致性），版本号统一属发布决策，等用户确认后统一。
+- **契约枚举补充（2026-08-20）**：coze_contract.md §3 补 `prisma_flow`（四阶段流程图，params: records/duplicates/screened/excluded_title/assessed/excluded_elig/included/reports）与 `prisma_checklist`（27 项检查表，params: `done`=已完成项 id 列表）两行——实现早已存在，契约枚举滞后，现已同步。
+- **更正（2026-08-20，用户确认）**：本机有 R 4.5.1（`C:/Tools/R-4.5.1/bin/Rscript.exe`，仅开发双轨使用、不在 PATH），**发布形态为 coze-only**（本地 R 只用于开发）——早前实测记录"无本地 R"为 PATH 探测误判，已更正。
+
+### Changed / 发布前合规审计（ct-base §5 / §13 / §16，2026-08-21）
+
+基于 `ct-base` 治理规范对 `meta-analysis` 作发布前检查与修正（coze-only 发布形态，归 ct 花名册 A 档）：
+
+- **版本对齐（§16.5/§16.6）**：`AGENTS.md` / `README.md` / `README_zh-CN.md` / `SKILL.md` frontmatter（`metadata.version` + `version`）统一为 `1.12.2`；此前 README 尾部 v1.9.7 滞后已修正。
+- **SAFE PREVIEW 双语义（§4 / Example 1 / FAQ）**：纠正 coze-only 形态前的旧表述"生成并展示 R 代码、不执行 / 说 `--yes` 才运行"——改为"生成并展示**分析请求信封**（task/data/params/figure），由自然语言触发发送（"请直接计算"）；**无 `--yes` 参数**（coze 为无状态远程引擎，发送动作由纯语言指令驱动）。两份 README 同步。
+- **出站元数据披露（§5）**：两份 README 出站披露块补充 `query_origin`（主机名 SHA-256 哈希，仅服务端归因/限流，非明文主机名）+ `locale`（OS 语言，双语用）说明。
+- **§13.1 保密声明块补回**：A/B 两档 CT 全系列保密声明 + 固定联系方式 `medstatstar@gmail.com` 加入两份 README 末尾（1.8.0 曾以"非 ct 技能"误删，现归 ct 花名册 A 档须含）。
+- **§13.6 适用人群块**：两份 README 插入 `## Who This Is For`（药企临床试验从业者 / 医护 / 医学生）。
+- **§13.10 保密数据 FAQ 块**：两份 README 插入"数据要保密怎么办"——只发汇总统计量；不出域走本地引擎 `prefer="local"`；可获可复现 R 代码。
+- **§8.6 query_origin 客户端实现**：`adapters/run_analysis.py` 默认 coze 分支客户端计算 `sha256(hostname)`（71 字符 `"sha256:"`+64hex）随请求发送，coze 端不兜底生成（客户端唯一真相源）；`coze_client.run_meta(..., query_origin=...)` 签名已支持。
+- **§16.1 SKILL.md 瘦身（≤200 行）**：24 行 Core Functions 表外迁 `references/advanced_api.md`（长参考外迁 remedy）+ Interactive Guide / 渲染计时冗余压缩 → **216 → 187 行**。
+- **§16.8 干净包清理**：取消跟踪废弃 R 脚本（`scripts/r_*.py` + `scripts/check_integrity.sh`，为 `adapters/coze_project` 镜像的重复件）、`tests/*`（保留物理、gitignored）、`assets/icon.png`（SkillHub 窄白名单拒绝 .png、且非 live 图标）；物理删除调试产物 `Rplots.pdf`。`.gitignore` / `.clawhubignore` 补充发布排除项。
+- **network 一致性（§16.6）**：frontmatter `network: optional` + 已修正 `network_note`（"有本地兜底（需本机 R）时才 optional；多数终端用户走 coze"）属可接受表述，与 README 出站披露一致。
+
+### Changed / 发布前合规审计第二轮（bugreport 合规 + §16.9 收口 + §3 统一，2026-08-22）
+
+因 bugreport 功能上线（ct-base §20.3），重新以 ct-base 治理规范复检并修正：
+
+- **§20.3 bug_report.py 同步最新模板**：补齐 `confirm_thanks()` / `parse_history()` / `build_followup()` 历史回执三件套及对应 `_MSGS`（thank/done/pending 中英），`send_to_endpoint()` 现回传 `history`（与统一端点历史回执协议对齐）；保留叶子技能内嵌公共 token（`get_endpoint_token()`，§5 XOR+base64 混淆，用户授权发布）。
+- **§20.3.1 触发词**：SKILL.md frontmatter `triggers` 补 `上报bug` / `report a bug` / `错误报告`；Bug Reporting 章节补「发送后历史回执」说明（`confirm_thanks()` + `build_followup(parse_history(resp["history"]))`）。
+- **§5 / §13 出站披露补全**：两份 README 出站披露块新增「错误报告端点披露」——说明 bug 报告仅发 11 键脱敏信封至 `https://ct-bugreport.coze.site/run`、不含分析数据/PII、附 `query_origin`+`locale`、拒绝则不出站、无云端调用则本地保存。
+- **§16.9 出站收口**：`scripts/pdf_fetch.py`（Unpaywall API 外站检索）迁出"纯本地"的 `scripts/` → 归入出站专用目录 `adapters/pdf_fetch.py`；同步更新 `SKILL.md:123` 与 `references/review_workflow.md:110` 路径引用（CHANGELOG 历史条目保留原路径）。
+- **§3 frontmatter 统一**：`description` 中文部分补齐与 `summary` 一致的「中英双语自动切换（默认英文/中文环境切中文）」一句，英文部分同步补 `Auto-switches language (defaults to English, switches to Chinese in zh-* environments)`；双语文档一致性保持。
+- **§16.1 SKILL.md ≤200 行**：新增触发词 +3 行 + 历史回执说明，复验仍 **≤200 行**（通过）。
+- **§16.8 干净包复验**：`git archive HEAD` 重建包无 `.png/.R/.pdf/.pyc/.dat` 泄漏；`adapters/bug_report.py` / `adapters/coze_token.py` / `adapters/config.json` / `adapters/pdf_fetch.py` 均含于包内。
+- **§20.3.5 端点设计文档补齐**：新增 `references/bug_report_endpoint.md`（统一报告端点协议——信封/11 键白名单/服务端分派流程/响应信封/治理与合规），示例 skill 改写 `meta-analysis`；SKILL.md Bug Reporting 章节加指针。此前审计标记缺失，本轮补建入包。
+
+## [1.12.1] — 2026-08-20
+
+### Fixed / UTF-8 环境防御（jsonlite toJSON 中文损坏）
+
+- **问题（实测复现）**：Windows `LC_CTYPE=C` 时 `jsonlite::toJSON` 把 UTF-8 中文按 Latin-1 转码——"检验"→`f#`（字节 `66 23`）、产生 `\u0010e` 控制字符、NUL 截断；**R 内存中叙述正常、写出 JSON 乱码，会骗过本地验证**（coze Linux 服务器不受影响，故部署端正常而本地误判/漏判）。
+- **修复（`run_task.R` 顶部）**：`try(Sys.setlocale("LC_CTYPE", "en_US.UTF-8"))` + `try(Sys.setlocale("LC_ALL", "en_US.UTF-8"))`（`en_US.UTF-8` 在 Windows R 4.2+ 自动映射为系统 UTF-8 locale，实测有效）；引擎文件 `source(..., encoding = "UTF-8")` 显式指定编码。
+- **验证**：模拟 `LC_CTYPE=C` 启动 → 修复代码生效后 toJSON 中文完整（"成功合并 5 项研究（随机效应 OR）。"、"检验"无损）；真实引擎 locale=zh 输出中文 JSON 正常（无 NUL/损坏）；回归 12/12 通过。
+
+## [1.12.0] — 2026-08-20
+
+### Changed / 方案 C 落地：R 出双语模板 + LLM 润色 + SVG 恒英文 + 本地渲染中文
+
+**最终方案（用户决策 2026-08-20）**：coze 端 R 引擎按请求 `locale` 参数直出双语模板（数值 + 标准 label 精确），本地 LLM 收到后只做两件事——组织通顺的用户语言 + 按需补充解释；SVG 一律英文；中文（如项目名/研究名）由本地渲染层替换字体。
+
+| 改动 | 说明 |
+|---|---|
+| **locale 参数驱动双语**（`run_task.R` 入口） | `params$locale`（支持 zh/zh-CN/cn/en/en-US，缺省 en）→ `.MA_LANG` 全局切换；**不读环境变量**（coze 容器语言 ≠ 用户语言）。语言决策权在本地 LLM |
+| **`.msg` 双语模板恢复** | 面向用户的叙述（notes/warns/stop/PRISMA 27 项/GRADE 理由/quality gate 检查）按 locale 出中/英双语；164 处中文硬编码叙述包入 `.msg("en","zh")` |
+| **`.msg_plot`（SVG 恒英文）** | 图内文字（图标题/轴标签/图例/"Pooled"/Study 标签/PRISMA flow label 等 42 处）一律恒英文，不受 locale 影响——规避 cairosvg/字体回退的中文渲染依赖 |
+| **统一语言机制** | 删除 4 个引擎文件中的 10 处 local `.MA_LANG`/`.msg` 定义（环境变量检测旧机制），统一走 global locale 驱动版 |
+| **本地渲染中文**（`adapters/rendering.py`，v1.11.2 已落） | `_fix_cjk_fonts`：SVG→PNG 时把含中文的 `<text>` 字体族替换为中文字体族（Win: Microsoft YaHei / macOS: PingFang SC / Linux: Noto Sans CJK SC / `RENDERING_CJK_FONT` 可覆盖），英文图零变化 |
+
+**验证**：locale=zh → 顶层 notes="成功合并 5 项研究（随机效应 OR）。"、quality gate msg="k=5 通过"/"建议补充剪补法（k>=5）"、SVG 无中文字符（恒英文）；locale=en → 全英文；最终回归 21/21 通过。
+
+> ⚠️ 实现注记：本轮曾尝试"coze 端语言中性（zh2en 214 处转英文）"（方案 A 实验），因用户最终选定方案 C 且 zh2en 批量脚本存在实现缺陷（误替换 .msg 参数/引号转义），已从 v1.11.1 上传包解出干净基线重建——引擎现为"v1.11.1 全部修复 + 方案 C 双语"。
+
+---
+
+## [1.11.2] — 2026-08-20
+
+### Changed / 语言与中文渲染（coze 端语言中性 + 本地渲染中文支持）
+
+**原则（用户决策 2026-08-20）**：coze 端只负责计算、不做语言输出决策；语言转换与呈现由本地大模型完成；SVG 图内文字中文支持由本地渲染层处理。
+
+| 改动 | 说明 |
+|---|---|
+| R 引擎语言中性 | `.MA_LANG` 恒 `"en"`（不再读 LANG/LC_ALL 环境变量），`.msg(en, zh)` 恒返回 en；zh 参数保留作注释参考。coze 输出稳定英文结构化结果，不受容器语言影响 |
+| R 引擎 214 处中文→英文 | 引号内硬编码中文（notes/warns/stop/PRISMA 27 项/GRADE 条目/图标签/可复现脚本模板）全部替换为英文；仅行内代码注释保留中文（不影响输出）。回归 19/19 通过 |
+| **本地渲染中文支持**（`adapters/rendering.py`） | 新增 `_fix_cjk_fonts()`：SVG→PNG 路径把**含中文的 `<text>`** 字体族替换为中文字体族（Windows: Microsoft YaHei / macOS: PingFang SC / Linux: Noto Sans CJK SC；可用 `RENDERING_CJK_FONT` 覆盖）；纯英文/数字 text 不动 → 英文图像素零变化 |
+| 中文字体实测 | coze SVG（font-family 恒 DejaVu Sans）经 cairosvg 渲染中文 study 标签为空白；`_fix_cjk_fonts` 后中文正常（像素验证：study 区深色 0.03→0.05~0.07）；英文 SVG 经 `_fix_cjk_fonts` 返回原字符串（零变化） |
+
+**实测证据（2026-08-20）**：coze 端 svglite 输出中文数据完整（`<text>` 含"研究一"~"研究五"），但 font-family 恒 `"DejaVu Sans"` 无中文字体回退 → cairosvg 渲染空白。替换字体族后同图中文立即正常。浏览器内联渲染依赖系统字体回退，通常正常；PNG 转换场景由 `_fix_cjk_fonts` 兜底。
+
+---
+
+## [1.11.1] — 2026-08-20
+
+### Removed / 清理（ct-base §5 凭据规范对齐）
+
+- **删除历史遗留 `config/coze.dat`**：该文件是早期「落盘混淆」方案残留。凭据已内嵌 `adapters/coze_token.py` 的 `EMBEDDED_SECRETS`（§5 第 63 行规范：公开凭据须内嵌 `.py`，任何平台不丢）；`.dat` 不在 SkillHub 窄白名单（仅 `.svg/.py/.md/.json/.yaml/.txt/.toml/.csv`），发布时被服务端**静默剥离** → 属「无法发布」的遗留文件，且代码不依赖（`coze_token.py` 内嵌链 `CLI > env > 文件 > 内嵌`，删除后自动回退内嵌）。
+- **`.gitignore` / `.clawhubignore` 新增 `config/coze.dat` 兜底排除**：防止未来 `store_token()` 本地覆盖再生成后误打包；`config/` 目录现为空。
+- 验证：删除后 `get_token()` 内嵌解析 OK（非空）、coze 端点 health=True，功能零影响。
+
+---
+
+## [1.11.0] — 2026-08-20
+
+### Added / 实现（终审清单剩余 10 项全部清零；用户决策「全部修正实现」）
+
+| 项 | 实现 | 验证 |
+|---|---|---|
+| **A1** F→d | `.esc_convert` 加 `f→d`（F=t² → d=√F·√((n1+n2)/(n1·n2))） | F=6.25/n=30 → d=0.6455 ✅ |
+| **A2** NNT | 新 task `nnt`：二分类 → metabin RD 合并 → NNT=1/\|RD\| + 95%CI | NNT=14.1，CI [8.4, 43.7] ✅ |
+| **A3** metacor | `single_group_meta` 加 `r/n` 形态 → meta::metacor（单组相关系数） | k=6，ZCOR=0.523 ✅ |
+| **A4** quality filter | `leave_one_out` 接线 quality 列：numeric ≥阈值（默认 6）/ "low risk" 筛选重合并 → extra.high_quality | k=4，est=0.263 ✅ |
+| **A5** subgroup power | `power` 加 `subgroup_effects/subgroup_k` → 各亚组功效近似 | effect 0.3/k5→0.918、0.5/k8→1.0 ✅ |
+| **A6** HK 修正 | `.meta_method` 加 hakn（model ∈ hk/hakn/knha）→ metabin/metacont/metagen 传 hakn；metafor 路径加 `.rma_test`（knha） | model=HK 正常拟合 ✅ |
+| **A7** 95% PI | `.extract_meta`（fit$lower/upper.predict）与 `.extract_rma`（predict() pi.lb/pi.ub）加 pooled_pi | PI [0.147, 0.423]（exp [1.158, 1.527]）✅ |
+| **A9** JC prior | `run_bayes_pairwise` tau_prior 加 `jeffreys/jc`（Half-Cauchy 近似，bayesmeta 无内置槽位） | post_mean=0.2866 ✅ |
+| **A10** 结构矩阵 | `multivariate_meta` 加 `structure` 参数（UN/CS/HCS/AR1/ID/DIAG → rma.mv struct） | UN 拟合 ✅ |
+| **A11** 真多结局 | `multivariate_meta` 检测 outcome 列 → rma.mv(mods=~outcome−1, random=~outcome|study, struct) → by_outcome + rho | OS 0.333 / PFS 0.434，rho=0.843 ✅ |
+
+### Regression / 回归
+
+- 最终重跑 20 个代表用例（覆盖二分类/连续/预计算/别名/亚组/元回归/NMA/贝叶斯/TSA/功效/RoB/可视化）**20/20 通过**，零破坏。
+- 引擎 task 达 **40 个**（38 + nnt + multivariate 语义升级）。
+
+### Notes / 说明
+
+- 终审清单（meta_doc_impl_audit.md）**全部清零**：A1–A11 已实现；B1/B2 已实现；A8 中 Digitize 按用户决策不做；B3 环境限制维持。
+- 待部署（发布动作须确认）：`run_task.R`/`advanced_functions.R` 本地镜像全部改动。
+
+## [1.10.3] — 2026-08-20
+
+### Added / 实现（终审清单 B1/B2/A8；用户决策：Digitize 不做，IPD 走 coze）
+
+**B1 · 效应量 + CI 输入形态（零依赖）**
+- 引擎数据形态新增 `has_ci`：接受 `te + ci_low + ci_high` 列，`seTE=(ci_high−ci_low)/(2·Φ⁻¹(0.975))` 换算后走 metagen（与 te 同尺度，log 尺度给 log CI）。验证：te+CI → OR=1.405（与直接给 seTE 一致）。
+
+**B2 · IPD Meta 真实实现（走 coze；用户原则：技能只实现功能+披露，安全决策归用户）**
+- `ipd_meta` 由"安全边界提示"改为真实分析：个体行（`study/trt/event`）→ 按 study×arm 聚合 2×2 → `metafor::rma.glmm(measure="OR")` 一阶段 GLMM（核心包零新增依赖）。验证：4 研究 / 1560 个体 → OR=2.175 [1.758, 2.690] + 森林图。
+- SKILL.md Security & Scope / §6.7.3 同步：删除"不传输 IPD"绝对化表述，改为「数据出域决策归用户；技能负责实现 + 透明披露；coze 可满足安全合规；用户要求不出域时提供本地路径」。
+
+**A8 · PDF 批量下载 + Screening（Digitize 按用户决策不做）**
+- 新增 `scripts/pdf_fetch.py`（stdlib-only，opt-in）：DOI → Unpaywall 开放获取全文、PMID → NCBI elink → PMC 全文；逐条独立容错、无 OA 如实报告、不绕过付费墙。验证：CLI/错误处理/假 DOI 容错通过。
+- `references/review_workflow.md` 新增「AI 辅助文献筛选（Screening）」agent 行为层流程（纳入/排除判定表 + 一致性规则）。
+
+**原则写入 ct-base（用户决策）**：`ct-base/docs/02-governance-redlines.md` §6.7.4「功能实现 vs 安全决策分离」（§5 级全库原则）——技能只实现功能 + 透明披露，不因数据敏感预设"不提供"红线；是否出域由用户决策；出站披露/确认/PII 脱敏照常；用户要求不出域时提供本地路径。
+
+### Regression / 回归
+
+- B1/B2 改动后重跑 18 个代表用例 **18/18 通过**（含别名 colmap、te+CI、IPD）。
+
+### Notes / 说明
+
+- 待部署（发布动作须确认）：`run_task.R`（has_ci + ipd_meta 真实现）+ `scripts/pdf_fetch.py` + 文档（SKILL.md/review_workflow.md/coze_contract）+ ct-base §6.7.4。
+- 终审清单剩余未做：A3 metacor / A5 subgroup power / A6 HK / A7 95%PI / A9 JC prior / A10 rma.mv 结构 / A11 真多结局（另行评估）；A8 中 Digitize 明确不做；B3 环境限制维持。
+
+## [1.10.2] — 2026-08-20
+
+### Changed / 收紧（出图格式约定：coze 恒 SVG，PNG 本地转换）
+
+**用户确认的设计**：图形处理时 coze 默认只发送 SVG；需要 PNG 时由本地处理。
+
+**改动**：
+- `adapters/coze_client.py` `run_meta`：payload 强制 `figure.format="svg"`（覆写任何 png 请求）——coze 端**恒返回 SVG，零 png 路径**（不再可能回 png_base64）。
+- `adapters/local_engine.py` `run_meta`：同样强制 `figure.format="svg"`（一致性）。
+- `SKILL.md` Output 新增「出图格式约定」说明；coze_contract.md §5 png 选项注明"适配层强制 svg"。
+
+**验证**：
+- 请求 `figure.format="png"` → coze 返回 `figures[].format=['svg','svg']`，无 png_base64 ✅
+- 本地 PNG 链 `render_figures(mode="png_file")`（cairosvg 2.9.0）：forest.png 78KB / funnel.png 38KB，0.43s ✅
+- 说明：PNG 转换依赖本地 cairosvg（`pip install cairosvg`）；未装时 `rendering.svg_to_png` 给出明确安装提示（原行为保留）。
+
+### Notes / 说明
+
+- 待部署（发布动作须确认）：改动在 `adapters/{coze_client,local_engine}.py` + 文档。
+
+## [1.10.1] — 2026-08-20
+
+### Fixed / 修复（W1：Quality Gate 引擎侧接线，走查发现）
+
+**缺陷**：`run_quality_gate` 在 dispatch **零调用**——SKILL.md 声称"coze 侧 R 运行 run_quality_gate → gate JSON → 红灯阻断"，但分析响应不产出 gate JSON，红灯判定完全依赖 agent 呈现层手动执行（流程走查 W1，P3）。
+
+**修复**（`run_task.R`）：
+- 合并类分支（`pairwise_meta`/`funnel_plot`/`trimfill`/`subgroup_analysis`/`metareg` + `survival_meta`）在 stats 产出后调用 `run_quality_gate(es_data, fit, bias_gate)`，结果写入 `stats$quality_gate`（含 `gate_json` 字符串，可直接喂 `scripts/quality_gate.py [--yes]` 人工签字门）。
+- 偏倚核查扩展：`metareg`（rma 对象兼容，`fit$yi/fit$se` 兜底）与 `survival_meta` 补 Egger/Begg（此前无 `stats$bias`，会让 Quality Gate 误判红灯"偏倚清单缺失"）。
+- bias 映射：`stats$bias`（egger_p/begg_p）→ `bias_gate`（egger/begg 键，匹配 `run_quality_gate` 期望结构）；`trimfill` 任务附加 trimfill 键。
+- `capture.output` 包裹调用以吞掉 `run_quality_gate` 的 `cat(gate_json)` 日志噪音。
+
+**验证**（本地 R 4.5.1）：
+- 三态正确：k=2 → **red**（pooled_presentable=false，k 检查红灯）；k=5（有偏倚核查）→ **yellow**（证据体较小）；k=6 survival → yellow（建议 trimfill）；fd09_a trimfill（含 trimfill 键）→ **green**。
+- **闭环**：引擎产出 `gate_json` → `quality_gate.py`：red 无 `--yes` exit=2（阻断）、`--yes` exit=0（放行）。
+- 回归：合并类 4 例带 gate 正常；非合并类（nma/bayesian/tsa/rob2/图）正确无 gate；状态均 ok/warn。
+
+### Notes / 说明
+
+- 待部署（发布动作须确认）：改动在本地镜像 `run_task.R`；部署后线上合并类响应将含 `stats.quality_gate`。
+- 4 类非计算流程域走查完成：Triage / Topic Selection / 上传文件全绿，Quality Gate 本次修复后闭环。
+
+## [1.10.0] — 2026-08-20
+
+### Added / 新增（补齐 13 项文档-实现缺口，本地引擎验证通过）
+
+> 背景：ct-update §18 测试盘点确认「文档声明但引擎无 task」13 项（此前均返回 `unknown_task`），本次全部补实现；用户决策「文档不降级，补齐实现」。
+
+| 新 task | 实现 | 本地验证 |
+|---|---|---|
+| `leave_one_out` | metafor::leave1out（逐项剔除敏感性） | ok（k=8，含逐项 estimate/CI/I²） |
+| `cumulative_meta` | metafor::cumul（累积 Meta） | ok（k=8） |
+| `selmodel` | metafor::selmodel（选择模型，发表偏倚校正） | ok（estimate + LRT_p，多版本槽位 tryCatch） |
+| `bootmeta` | 手写非参数 Bootstrap（B 次重采样，REML） | ok（boot_mean/sd/CI） |
+| `drapery` | 复用 plot_drapery（α 稳健性图） | ok（drapery 图） |
+| `rve_meta` | robumeta::robu + clubSandwich::vcovCR(CR2)（RVE 稳健方差） | ok（CI 经 reg_table 提取，含 dfs） |
+| `multilevel_meta` / `multivariate_meta` | metafor::rma.mv（研究随机截距，UN 结构） | ok（k=8，n_study=4） |
+| `metainc` | 双形态：两组 `meta::metainc`(IRR) / 单组 `meta::metarate`(IR) | ok（IR=0.118） |
+| `grade` | 自实现简化 GRADE（5 降级 + 3 升级因素） | ok（RCT+偏倚+I²80%+事件200+偏倚可能 → Moderate） |
+| `prisma_checklist` | PRISMA 2020 检查表（27 项，可传已完成项） | ok（27 项，done 可标记） |
+| `prisma_flow` | PRISMA 2020 四阶段流程图（ggplot 自绘） | ok（prisma_flow 图） |
+| `ipd_meta` | 安全模型边界提示（coze 形态不收 IPD，明确引导本地引擎/汇总效应量） | warn（预期，含出域提示） |
+
+### Fixed / 修复（4 项 P2 偏差）
+
+| P2 | 问题 | 修复 | 验证 |
+|---|---|---|---|
+| esc 扩展 | 仅 6 种转换；d→logOR/mean→d/t→d 返回空 | 补 `mean→d`（合并 SD）、`t→d`、`d↔logOR`（d·π/√3）、`r↔d` 公式 | d→logOR=1.451、mean→d=0.500、t→d=0.635 ✅ |
+| nma_rank rank | `rk$rank` 恒 NULL（netmeta 3.6.1 无此槽位） | 改用 `ranking.random` + `Pscore.random` | rank/pscore 均返回（A/B/C P-score 0.098/0.652/0.750）✅ |
+| rob2 tool | tool 参数未使用，三工具渲染相同 | 域标签按工具映射（ROB2 5 域/ROB1 6 域/ROBINS-I 7 域）+ 标题带工具名 | ROB2/ROB1/ROBINS-I 均 ok，标签差异化 ✅ |
+| Forest 主题 | `figure$theme` 0 引用，5 主题纯文档承诺 | 新增 `.theme_map` + `.forest_plot_theme`（revman/default/lancet/nejm/classic 配色映射到 meta::forest col.*） | theme=lancet 正常出图 ✅ |
+
+### Regression / 回归
+
+- 修复后本地引擎重跑 **28 个代表性用例（含全部 P0/P1 修复项）28/28 通过**，零破坏。
+- 13 新 task + 4 P2 修复全部本地 CLI 验证（R 4.5.1；robumeta 装临时库，coze 镜像已含）。
+
+### Notes / 说明
+
+- **待部署**：全部改动在本地镜像 `adapters/coze_project/src/r_engine/{run_task,advanced_functions}.R`；部署属发布动作，须显式确认（重打包 → 部署 → §18.6 线上回归）。
+- 引擎 task 由 25 → **38 个**；文档-实现缺口 13 项清零；P2 偏差 4 项清零。
+- 剩余未覆盖：Topic Selection / Quality Gate / 上传文件 / Triage 四类非计算流程域（另行走查）。
+
+## [1.9.9] — 2026-08-20
+
+### Fixed / 修复（ct-update §18 全功能 NL 测试发现，83 例；本地引擎验证通过，待部署）
+
+| 缺陷 | 根因 | 修复 | 验证 |
+|---|---|---|---|
+| **P0-1** NMA 二分类 arm-based 全挂（`object 'TE' not found`） | `.nma_prep` arm-based 二分类分支返回 `event1/n1` 形式，dispatch 却用 netmeta `TE/seTE` 对比接口 | arm-based 二分类分支改 **Haldane 校正自算 logOR/SE**（与对比输入分支一致） | fd11_a/c 本地 ok（k=4/6，n_treat=3） |
+| **P0-2** NMA 别名列名必挂（`Treatments must be different`） | `.nma_prep` 仅解析 `cm$treatment`，study/event/n 未按 colmap 解析（study 退化为单研究 → 跨研究同处理对） | study/event/n 均按 colmap 解析（`tolower(cm$study/event/n)` 兜底） | fd11_b 本地 ok（k=5，n_treat=4） |
+| **P0-3** 贝叶斯配对后验提取错误（`post_mean=2, CI=[0.1,3.9]`，真后验 0.287 [0.151,0.422]） | `bayesmeta$mu` 槽位实为 `mu.prior` 参数向量 `c(mean,sd)`，`mean(res$mu)`/`quantile(res$mu)` 取到先验参数；且不同版本 `$summary` 行列方向不同 | 一律从 `$summary` 提取，兼容参数行×统计列 / 统计行×参数列两种方向 | fd14_a/b/c 本地 ok，后验 0.2866/0.2847/0.2844 ✅ |
+| **P1-4** Egger/Begg 发表偏倚检验未实现（`stats.bias` 承诺缺失） | `funnel_plot`/`pairwise_meta` 等分支仅合并+画漏斗图，从未调用偏倚检验（`run_task.R` grep `regtest|ranktest` 零命中） | **补实现**：`funnel_plot`/`pairwise_meta`/`trimfill`/`subgroup_analysis` 拟合后调 `metafor::regtest()`/`ranktest()` 写入 `stats.bias`（metafor 为核心依赖，零新增安装；k≥3 才计算，tryCatch 兜底 NA；Egger p<0.10 加偏倚警告） | fd08 对称数据 p=0.547 不警告 / 不对称 p=0.029、0.0002 正确警告 ✅ |
+
+**回归**：修复后本地引擎重跑 18 个代表性用例（二分类/连续/预计算/生存/单组率/亚组/元回归/剪补/敏感性/TSA/功效/RoB/可视化），18/18 通过，零破坏。
+
+### Notes / 说明
+
+- 由 `meta_test` NL 测试套件驱动（ct-update §18：60 首轮 + 23 补测 = 83 例）；用例/执行器/复现脚本待归档至 `tests/`。
+- **待部署**：修复仅落地本地镜像 `adapters/coze_project/src/r_engine/run_task.R`（唯一源，无其它同步副本）；部署属发布动作，须显式确认后执行（三端同步已无 → 重打包 → 重部署 → §18.6 线上 83 例回归）。
+- **未处理（另行评估）**：13 项文档声明但引擎无 task 的功能（multilevel/multivariate/IPD/cumulative/leave_one_out/selmodel/bootmeta/drapery/grade/prisma_checklist/prisma_flow/rve_meta/metainc → 均 `unknown_task`）；P2 偏差 4 项（Forest 5 主题 `figure$theme` 未消费、rob2 `tool` 参数未使用、esc 扩展转换返回空、nma_rank rank 提取 None）。
+
+## [1.9.7] — 2026-08-19
+
+### Added / 新增（上传文件处理对齐 ct-base §6.7）
+
+- **SKILL.md 新增「上传文件处理 / User-Uploaded Files (ct-base §6.7)」章节**：区分两类上传——
+  - **结构化数据文件（csv/xlsx/xls）**：走既有 Type 4 数据模板验证路径（`references/data_templates.md`），不适用文档→md 转换，但 §6.7.2 信息透明与 §6.7.3 保密边界生效；
+  - **文档/模板类（docx/pptx/pdf/doc）**：先按 §6.7.1 分层转 md 再提取研究数据（`.docx/.pptx` → 共享转换器 `scripts/office_to_md.py`；`.pdf` → 环境 pdf 技能；`.doc` → 提示安装 word-reader/antiword；扫描件 → 提示提供文字版）；
+  - **转换前必向用户展示 §6.7.2 提示**（PPT 转换丢非文本元素）；
+  - **保密处理（§6.7.3）**：技能不主动拦截，coze 仅收汇总统计量（不含 IPD），用户明确要求数据不出域时引导本地引擎（`prefer="local"`）。
+- **`references/data_templates.md` Type 4 补充文档上传指针**：非结构化文档不属 Type 4 范围，指引到 ct-base §6.7。
+- **新增 `scripts/office_to_md.py`**（ct-base §6.7 共享件副本，stdlib-only，docx/pptx → md 单一解析器，与底座字节级一致）。
+- **SKILL.md frontmatter 版本对齐**：1.8.3 → 1.9.7（消除长期漂移，与 CHANGELOG 一致）。
+
+## [1.9.6] — 2026-08-19
+
+### Changed / coze 端工作流调整（内部实现，细节不随发布）
+
+- coze 端进行工作流调整（含运行日志记录机制与 skillname 更正 `meta`）。相关实现位于 `adapters/coze_project/`（Coze 远端镜像，§16.7 目录级排除、**不随技能发布**）；接口契约见镜像内 `coze_contract.md`（不发布）。本条目仅保留功能性概要，不披露内部实现细节。
+
+## [1.9.7] — 2026-08-19
+
+### Added / 新增（出图模式 + 渲染计时）
+
+- **`figure_mode` 出图模式选项**（`adapters/run_analysis.py` 新增 `render_figures()`）：
+  - `svg_inline`（默认）— `figures[].svg` 原样保留，agent 内联渲染
+  - `png_file` — 本地 `cairosvg` 转 PNG 文件存 `out_dir/`，figures 替换为 `{type, format:"png", path}`；不占 LLM 上下文、界面渲染更快，但变位图
+- **渲染计时（★ 本地渲染阶段，非 coze 计算）**：
+  - `coze_client.run_meta` 仍测 coze 往返但**改名 `coze_elapsed_seconds`**（仅诊断参考）
+  - `render_figures()` 新增 `render_elapsed_seconds` = 拿到 SVG → 处理 → widget/PNG 就绪的秒数（本地精确测）；界面浏览器渲染无法在 agent 侧计时，用 `render_svg_kb` 作代理
+  - 阈值常量 `RENDER_SVG_THRESHOLD=30s` / `RENDER_SVG_KB_THRESHOLD=200KB`，超阈值自动生成 `render_hint`（中文），提示切 `png_file`
+- **svglite 2.2.2 缺 `</g>` 修复**（`rendering.py` 新增 `_fix_xml()`）：用标签栈补齐缺失闭合（浏览器宽容但 cairosvg 严格解析失败；仅 PNG 路径使用）
+- **SKILL.md Output 章节**更新：figure_mode 选项 + 渲染计时规则 + agent 必须在回复中体现 render_hint
+- **inline_rendering.md §7** 新增：出图模式 + 渲染计时完整说明；坑列表补 svglite 缺闭合
+
+### Notes / 说明
+
+- coze 端**零改动**（png_file 是呈现层本地转换）；coze_elapsed_seconds / render_elapsed_seconds 语义分离，避免混淆"哪个时间"
+
+## [1.9.8] — 2026-08-19
+
+### Added / 新增（ct-base §5 coze 出站授权规范落地）
+
+- **出站披露（§5 强制）**：SKILL.md 执行模型 + README/README_zh-CN 双份新增"数据将发送至 https://ct-meta.coze.site/run"披露声明（发送内容 = 分析数据，不含 PII）；杜绝"出站却声称零出域"
+- **首次出站授权门控（§5 AUTH-BLOCK 范式）**：`coze_client.py` 新增 `_auth_gate()` / `approve_endpoint()` / `AuthRequiredError`——端点不在白名单 → stderr 输出 AUTH-BLOCK + 统一确认文案（目标服务器/发送内容/本地资料有限说明）；用户确认后写入 `adapters/config.json` `auto_approve_endpoints`（agent 绝不代写）；默认端点已**作者预置**（正常用户无感），自定义端点才弹确认
+- **未授权不阻断（§5）**：`run_analysis.py` 捕获 AuthRequiredError → 优先本地兜底（notes 注明"本次未使用云端分析"）；本地不可用返回 `_source=auth_blocked` 明确提示（授权问题可解决，不抛 RuntimeError）
+- **出站 payload 脱敏（§5）**：`sanitize_payload()` 发送前剥离 PII（身份证/手机号/邮箱，递归清理嵌套结构）
+- **agent 行为规则（§5 出站全程确认）**：SKILL.md 新增——forward 前**恰好一条**流程通知；coze 失败**先问用户**是否允许诊断，拒绝则交付本地答案 + 显著警告
+
+### Notes / 说明
+
+- 凭据本就符合 §5（coze_token.py XOR+base64 混淆，README 声明非真加密）；config.json 仅含白名单（无凭据），随技能发布（作者预置设计）
+
+---
+
+## [1.9.5] — 2026-08-19
+
+### Added / 新增（结果呈现规范）
+
+- **内联渲染规范** `references/inline_rendering.md`：所有 `figures[].svg` 默认**内联渲染进对话流**（非附件），含：
+  - **根因修复**：①svglite 内容超界（森林图实测 x∈[-140,644]，实际宽 785px 而 viewBox 仅声明 504px）→ `content_bbox()` 扫描内容极值动态扩展 viewBox；②**内部 clipPath 裁剪**（svglite 固定 0..504 clip 裁掉左右文字列，viewBox 扩展也无效）→ `_strip_clip()` 移除；③transform 旋转文本纳入 bbox（translate 锚点 + textLength 双向扩展）
+  - **正式模块** `adapters/rendering.py`：`extract_svg` / `_strip_clip` / `content_bbox` / `build_figure_widget`（标准库零依赖，含 points 超长行拆分、px 后缀、transform 文本保守覆盖等实测处理）
+  - **宽度策略**：SVG 固定实际内容宽度不缩放 + 外层 `overflow-x:auto` —— 容器装不下（含正常对话窗）即出横向滚动条；`margin:0 auto` 水平居中（窄容器自动回左对齐可滚动）；**y 方向 pad_y=24 上下留白（所有图统一）**；备选自适应模式仅在用户明确要求铺满时启用
+  - 可选缩放控件（− / 适应 / ＋）
+- SKILL.md `## Output` 更新：默认呈现 = 内联渲染（引用 inline_rendering.md），同时 output/ 落盘供下载/编辑
+- **统一要求上收 `ct-base/BASE.md §19`**（docs/06-inline-rendering.md，全库强制）——本技能 `rendering.py` 为 §19.6 参考实现
+
+### Notes / 说明
+
+- 内联渲染由 agent 侧（LLM 呈现层）消费 `figures[].svg` 字符串完成，**coze 端无需改动**（返回已是标准 SVG）
+
+---
+
+## [1.9.4] — 2026-08-19
+
+### Fixed / 修复（coze 端点默认值误报不可达）
+
+**缺陷**：`adapters/coze_client.py` 的 `DEFAULT_ENDPOINT` 写死本地开发占位 `http://localhost:5000/run`；真实端点 `https://ct-meta.coze.site/run` 只记录在 `coze_integration_test.py` 注释。用户未配置 `COZE_META_ENDPOINT` 时，请求打到本机被拒 → `run_analysis` 误判 coze 不可达 → 错误回退本地（用户侧排查确认：401 仅缺 token，连接本身正常）。
+
+**修复**：
+1. `coze_client.py`：`DEFAULT_ENDPOINT` → `https://ct-meta.coze.site/run`（零配置即用）；docstring/错误提示同步。
+2. `coze_client.py health()`：探测 `/health` 路由（自定义域名未必存在）→ 探测 `/run` 可达性（2xx/4xx/5xx 均视为可达，仅网络层错误判不可达）。
+3. `SKILL.md` / `adapters/README.md`：默认端点描述同步。
+
+**验证**：无环境变量下 `_endpoint()`=真实端点、`health()`=True、`run_meta` 跑通（status=ok + repro 返回）。
+
+**补充修复（同日）**：`run_meta()` 的 URL 拼接 `_endpoint() + "/run"` 在 `COZE_META_ENDPOINT`/`DEFAULT_ENDPOINT` **已带 `/run` 后缀**时会拼成 `/run/run` → HTTP 404 `{"detail":"Not Found"}`，与 1.9.4 的默认值修复叠加后仍会误判 coze 不可达。修复：endpoint 以 `/run` 结尾时直接使用，否则自动拼接。验证：`health()`=True；真实分析（5 项 RCT pairwise_meta）经默认端点跑通，status=ok。
+
+---
+
+## [1.9.3] — 2026-08-19
+
+### Changed / 变更（删除冗余 r_engine/，引擎统一到镜像）
+- **技能根 `r_engine/` 删除（用户决策）**：本地引擎唯一来源 = `adapters/coze_project/src/r_engine/`（coze 远端双向同步唯一源）；本地测试/开发直接调用镜像内引擎，消除双份副本漂移风险。
+- `adapters/local_engine.py` 默认 `META_LOCAL_ENGINE_DIR` 改为 `<skill>/adapters/coze_project/src/r_engine`（实测 fd01_a 通过：status=ok + repro 字段返回）。
+- 文档同步：SKILL.md / AGENTS.md / adapters/README.md / coze_client.py 全部 r_engine 引用改为镜像路径；.gitignore 删除 `r_engine/*.R` 规则（目录已不存在，镜像整体已排除）。
+
+---
+
+## [1.9.2] — 2026-08-19
+
+### Changed / 变更（coze 项目镜像统一到技能内）
+- **镜像位置统一（用户决策）**：coze 项目本地镜像迁至 `adapters/coze_project/`（含 `coze_contract.md`、`src/r_engine/*.R`、`scripts/`、`docker/`），**作为与 coze 远端双向同步的唯一源**；不再使用工作区 `coze_meta_project/` 作为主镜像（保留为历史快照）。
+- **发布排除（红线）**：`.gitignore` 重写（修正过时"Python 模板内嵌"注释）+ 新增 `.clawhubignore`——`adapters/coze_project/` 与 `r_engine/*.R` 均不随技能发布（`coze_contract.md` 属 ct-base §16.7 红线）。git archive 实测发布包 0 命中。
+- **adapters/README.md**：路由策略更新为「发布 coze-only + 本地兜底仅开发者用」；新增「coze 项目镜像双向同步约定」章节（本地→coze 打包部署 / coze→本地导出覆盖 / diff 一致性基准）。
+- 一致性验证：`adapters/coze_project/src/r_engine/` ≡ 技能 `r_engine/`（diff 为空）。
+
+---
+
+## [1.9.1] — 2026-08-19
+
+### Changed / 变更（发布形态决策 + 复现性增强）
+- **发布形态决策（用户拍板）**：对外发布 **coze-only（thin client）**——所有 R 计算经 coze 工作流，本地 LLM 仅做需求标准化/数据整理/结果呈现；**最终用户无需安装 R**。本地 `r_engine/` 保留为**开发/复现镜像**（与 coze 字节级同源，开发者经 `META_LOCAL_ENGINE_DIR` 启用）。SKILL.md Initialization 同步更新。
+- **复现性（必须满足）**：每次分析输出新增 `repro` 字段 = ①可复现 R 脚本（`deparse(df)` 数据构造 + 按 task 的核心调用 + R/包版本报告，本地 R 直接 source 即可复现）②`r_version` ③`packages`（核心包版本号）。实现于 `run_task.R .repro_script()`，覆盖全部 16 个 task 分支（nma 用 `prep` 对比格式、dose_resp 用 `yi ~ dose` 公式等）。
+- **coze 端版本报告**：`http_run.sh` 健康检查升级——打印 `R.version.string` + 核心 14/可选 2 包版本号（`[启动] R 版本 / 包 xxx ✅ vX.Y.Z`），下次部署日志即得基线版本。
+- **coze_contract.md**：§4 出参 schema 增加 `repro` 字段说明；新增 **§8 coze 端环境版本**（R 4.6.1 实测基线 + 本地复现差异注意，以部署日志为准）。
+- 96 例 dryrun 无回归（ok=87 err=0）；5 个代表案例 repro 脚本实测可执行。
+
+---
+
+## [1.9.0] — 2026-08-19
+
+### Changed / 变更（coze 96 例联调闭环：依赖瘦身 + 15 处引擎修复 + 用例修正）
+- **R 包清单瘦身**（单一可信源 `docker/r_packages.txt`）：核心 14（metafor/meta/netmeta/bayesmeta/dosresmeta/mada/robumeta/clubSandwich/ggplot2/svglite/forestploter/jsonlite/dplyr/scales）+ 可选 2（ggrepel/robvis）。移除：`esc`（effect_size_conversions.R 重写为 metafor::escalc + 标准公式，输出结构不变）、`metagear`/`gridExtra`（零引用）、`gemtc`/`rjags`/`multinma`（贝叶斯 NMA 后端移除，coze 容器无 root 无法装 JAGS——`bayesian_nma` 为已知环境限制，联调 MANIFEST 标记 `expected`）。
+- **run_task.R 引擎修复**（96 例联调驱动，15 处）：colmap 统一小写（数据形态识别）；metaprop method 映射（meta≥8 仅 Inverse/GLMM）；metacont/metagen/metamean 移除已废弃 method 形参；method.tau 回退 "DL"；`.bubble_plot` ggplot 自实现（metafor::bubble 未导出）；influence 改 metafor::rma.uni 路径；`.nma_prep` 二分类 Haldane 校正自算 logOR（netmeta 统一对比路径）；netrank 用 `rk$rank` 提取；dose_resp 透传 cases/n/se/sd/type；bayesian_pairwise 后验稳健提取；tsa 传 data.frame；rob2 交通灯图 ggplot2 自绘（去 robvis 依赖）；esc 自实现 `.esc_convert`；`.engine_dir` 防御 `nzchar(NA)` 陷阱（source 调试场景）。
+- **advanced_functions.R 修复**：run_diagnostic_meta 列名小写归一（tp/fp/fn/tn）；mada SROC 改 S3 泛型绘图；`.rob_colour` + ggplot2 自绘交通灯/汇总图。
+- **用例生成器 `gen_meta_cases.py`**：dose_resp 用例修正（dosresmeta gl 法要求每 study 参考剂量组 se=0，否则 grl 崩溃——用例数据 bug）；MANIFEST.csv 新增 status 列（`expected` 豁免）。
+- **`coze_contract.md`**：§6 包清单同步核心 14+可选 2；task 枚举表全量更新为实际实现。
+- **`adapters/coze_integration_test.py`**：判分对齐 ct-base §18.4（ok/warn/None 通过）；新增 MANIFEST expected 豁免。
+- **线上验证**：96 例联调全绿（90 ok + 3 warn[esc 近似] + 3 expected[bayesian_nma]），对比修复前 53 ok/43 error。相关标准已沉淀至 ct-base §18（BASE.md v1.1.41）。
+
+---
+
+## [1.8.3] — 2026-08-17
+
+### Changed / 变更（执行后端双轨化：coze 默认优先 + 本地 R 兜底）
+- **Reversed 1.8.2 "full coze transfer"**: 技能重新保留本地 R 分析能力，但默认一律优先调用 coze 工作流；
+  本地分析仅作为 **coze 调用失败时的自动兜底**，或 **用户明确要求本地/离线分析** 时启用。
+- 统一入口 `adapters/run_analysis.py`：`prefer="coze"`（默认）先调 coze，失败自动回退本地并标记 `_source="local_fallback"`；
+  `prefer="local"` 仅本地、不触 coze。返回结果统一带 `_source` 字段（coze / local_fallback / local）。
+- 新增 `adapters/local_engine.py`：subprocess 调用技能内置 `r_engine/run_task.R`（与 coze `src/r_engine/` 字节级同源，靠 `coze_contract.md` 同步）。
+- 技能 `r_engine/` 重新放回（统一 dispatcher `run_task.R` + 各引擎 .R），作为本地兜底镜像（非权威副本）。
+- `SKILL.md` / `AGENTS.md` / `adapters/README.md` 同步更新：双轨执行模型、环境检测、安全红线、目录结构。
+
+---
+
+## [1.8.0] — 2026-08-02
+
+### Added / 新增
+- **ct-base alignment**: comprehensive alignment with `ct-base` BASE.md specification.
+  - Added `AGENTS.md` (English-only agent-facing rules: environment, execution, language, security, reuse, menu triage, traceability).
+  - Added `CHANGELOG.md` (this file).
+  - Added `references/units.md` (atomic task unit index for pipeline).
+  - Added `scripts/i18n.py` (from ct-base — bilingual EN/ZH helper with auto locale detection).
+  - Added `scripts/r_libs.py` (from ct-base — R invocation + validation + sanitization helper).
+  - Added `references/language_policy.md` (from ct-base — detailed bilingual policy).
+  - Added `references/report_template.md` (from ct-base — report skeleton reference).
+
+### Changed / 变更
+- **SKILL.md**: frontmatter enriched with `required_commands: [Rscript, python]`. Body remains English-only agent-facing.
+- **README files**: renamed `README_ZH.md` → `README_zh-CN.md` per ct-base naming convention.
+- **Language detection**: migrated to `i18n.py`'s unified `is_chinese_os()` (covers env vars + Windows API + Python locale fallback).
+- **User menus & README (UI polish)**: SKILL.md Triage §5.2 now explicitly lists the "③ Can't decide? → explain the differences between these choices" routing-menu entry; README Complex popup-menu / Vague grill-me examples made more human-friendly so carbon-based users find it easier to use.
+
+### Fixed / 修复
+- Removed stale `README_ZH.md` references across SKILL.md, README.md, README_zh-CN.md.
+- **English README untranslated Chinese**: translated all residual Chinese in `README.md` (Example 1 "You say", Scenario Index "Try saying" tables, §4 title) to English; synced version string to `1.8.0` in both READMEs.
+- **Security-audit doc alignment** (SkillSpector 10 Medium/Low findings — all documentation-consistency, no malicious code):
+  - Removed the `Confidentiality Notice` block from `README.md` — eliminates the "summary stats only" vs "supports IPD patient-level data" trust-boundary contradiction, and also complies with the earlier user instruction that non-`ct-` skills omit confidentiality statements (the zh-CN README never had it).
+  - Added PDF-batch-download warnings (network access / local write / copyright) in both READMEs (§7).
+  - Clarified the high-friction trigger rule in both READMEs' FAQ: code runs only when you explicitly say "execute"/"请直接计算"; casual mentions do not trigger execution.
+  - Clarified the language-switch note: default follows OS locale and only affects display language, no extra authorization needed.
+  - Tightened `SKILL.md` Memory-read scope note: "(R config keys only; no personal info is read or sent)".
+- **ClawHub display-name fix**: republished with a clean top-level directory name `meta-analysis` so the ClawHub page title shows the correct skill name instead of the previous temp publish-folder name "Meta Analysis Strip V180".
+
+---
+
+## [1.8.1] — 2026-08-02
+
+### Fixed / 修复
+- **ClawHub display-name fix**: republished with a clean top-level directory name `meta-analysis`, correcting the ClawHub page title that wrongly showed "Meta Analysis Strip V180" (caused by the previous temp publish-folder name, which ClawHub used as the display name fallback).
+- **Carries the v1.8.0 GitHub documentation-alignment to the marketplaces**: English README residual Chinese fully translated; `Confidentiality Notice` removed (resolves IPD-vs-summary-stats trust-boundary contradiction, complies with the non-`ct` no-confidentiality rule); added PDF-batch-download warnings, high-friction trigger clarification, and language-switch note in both READMEs; tightened `SKILL.md` Memory-read scope note.
+
+---
+
+## [Unreleased] — 2026-08-15
+
+### Changed / 变更
+- **Architecture restructure (ct-base §16.9 / future Coze workflow prep)**: all R-software-invoking code moved out of `scripts/` into a dedicated **`r_engine/`** folder (templates `r_*.py` + generated `*.R` + `r_libs.py` + `check_integrity.sh`). `scripts/` now holds only pure-local Python (`i18n.py`, `generate_topic_report.py`, example JSON). A reserved **`adapters/`** folder documents the future unified Coze workflow call layer (see `adapters/README.md`; `ct-samplesize`-style backend selection planned). All references updated: `SKILL.md`, `AGENTS.md`, `references/*.md` (`source("r_engine/*.R")`), `tests/*.R`, `.gitignore` (`r_engine/*.R`). `r_libs.py` gained a sys.path bootstrap to keep importing `scripts/i18n.py`. `check_integrity.sh` multi-line `_msg` quoting fixed (pre-existing latent bug, surfaced by bash strict mode).
+
+### Added / 新增
+- **Quality Gate (human sign-off + R red-light, ct-update upgrade A)**: numeric trustworthiness hardening inspired by O0000-code/meta-analysis-skill. New R function `run_quality_gate(es_data, model, bias_result)` (r_engine/meta_analysis_core.py) computes red/yellow/green flags **in R** (never LLM-read): k<3 red, I²>75% red → pooled estimate NOT presented, publication-bias checklist (Egger/Begg) missing → red; zero-dependency hand-written JSON output. New `scripts/quality_gate.py` consumes the gate JSON as the human sign-off gate: red → blocked (exit 2), `--yes` records human sign-off (exit 0), yellow → warn (exit 1), green → pass. SKILL.md Output section documents the gate; SKILL.md kept at 199 lines.
+- **Topic Selection module（选题评估 · upstream gate）** — reference-designed from the public `meta-analysis-topic-selector` skill (ClawHub @wenhan9739), adapted to this skill's local-first architecture:
+  - Dual path entry: **Quick** (≤30 min, 1-page decision card) / **Full** (5-stage workflow with decision gates).
+  - Four-dimension scoring model (clinical value / methodological feasibility / data availability / novelty, 0–5 each, total 0–20, any ≤2 = veto).
+  - Cross-check rules R1–R6 (automatically detected internal contradictions force re-review).
+  - PICO/PECO operational decomposition (`references/pico-guide.md`).
+  - Three-layer dedup search (PROSPERO → Cochrane → PubMed; non-English opt-in) + near-duplicate judgment matrix + increment statement (`references/dedup-search.md`).
+  - PRISMA 2020 (11 key items) + AMSTAR-2 (7 critical domains) topic-stage pre-check (`references/compliance-precheck.md`).
+  - Meta-type decision tree (pairwise / NMA / IPD / dose-response / DTA / single-group…).
+  - 11-section topic report via `scripts/generate_topic_report.py` (JSON → Markdown/HTML, stdlib only) + manual template (`references/topic-report-template.md`) + PROSPERO field mapping (`references/prospero-mapping.md`).
+  - New references: `topic-selection.md`, `pico-guide.md`, `dedup-search.md`, `compliance-precheck.md`, `topic-report-template.md`, `prospero-mapping.md`; example input `scripts/topic_report.example.json`.
+  - `SKILL.md`: Level-1 menu gains `0️⃣ Topic Selection`, Triage Vague row routes "无选题/可行性评估" to the module, References table updated (SKILL.md kept at 200 lines).
+- **ct-update competitor registration (2026-08-15)**: added `meta-analysis-topic-selector` (★★★★★) and `meta-analysis-journal-selector` (★★★★) (ClawHub @wenhan9739) to the meta-analysis competitor list with seed keywords.
+
+### Changed / 变更
+- `SKILL.md`: Language section compressed; Initialization integrity-check block inlined; Level-1/Level-2 menus reformatted to fit the new entry while keeping ≤200 lines.
+
+---
+
+## [1.8.3] — 2026-08-02
+
+### Fixed / 修复
+- **IPD trust-boundary contradiction (SkillSpector finding)**: rewrote `AGENTS.md` §4 security red-line — the old line stated "no patient-level data" while the skill advertises IPD meta. New wording clarifies that **all data you provide, including IPD, is processed locally from your own files and never uploaded or sent anywhere**; IPD is fully supported and handled the same local-only way. This closes the real source of the "summary stats vs IPD" divergence finding (the earlier `README.md` Confidentiality Notice removal addressed a duplicate copy of the same phrase).
+
+---
+
+## [1.7.0] — 2026-08-01
+
+### Added / 新增
+- Full bilingual auto-switch: default English, auto-switch to Chinese on `zh-*` locale (`.msg(en, zh)` pattern in R files + Python i18n).
+- `permissions` block declaration in SKILL.md frontmatter.
+- `references/svg_editing.md` — SVG editing tools & journal format conversion guide.
+- `references/advanced_api.md` — reusable API reference for TSA / dose-response / survival / Bayesian NMA wrappers.
+
+### Changed / 变更
+- Effect size conversion module (`esc`) expanded: d ↔ g ↔ logOR ↔ r ↔ Fisher's z, batch mode + Hedges' g correction.
+
+---
+
+## [1.6.0] — 2026-07-25
+
+### Added / 新增
+- Bayesian NMA: `multinma` (Stan) + `gemtc` (JAGS) full workflows.
+- TSA: self-implemented `run_tsa()` with O'Brien-Fleming boundaries.
+- Survival meta: `survmeta` wrapper + KM pseudo-IPD reconstruction.
+- Dose-response: `dosresmeta` wrapper.
+
+---
+
+## [1.5.0] — 2026-07-15
+
+### Added / 新增
+- Initial public release on GitHub / ClawHub / SkillHub.
+- Full RevMan 5.x 1:1 code mapping.
+- Stata `metareg` / `mvmeta` equivalents.
+- Network meta: `netmeta` + `gemtc` + `multinma`.
+- Single-group meta: `metaprop` / `metamean` / `metainc` / `metacor`.
+- Diagnostic meta: `mada::reitsma` bivariate + SROC.
+
+---
+
+## [1.0.0] — 2026-06-01
+
+### Added / 新增
+- Initial version. Core pairwise meta-analysis with `metafor` / `meta`.

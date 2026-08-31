@@ -1,39 +1,53 @@
-## Description: <br>
-Reviews AI-generated test cases before release by sampling and checking business validity, scenario completeness, and executability, then produces corrections and prompt-optimization feedback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews AI-generated test cases before final release by sampling and checking business validity, scenario completeness, and executability, then requiring closure on any systemic issues found.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and release reviewers use this skill to perform final expert review of AI-generated test cases before they are accepted for use. It supports sampling strategy selection, issue classification, correction recommendations, and prompt-improvement feedback loops. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad QA or final-review trigger phrases may activate the skill outside its intended test-case review context. <br>
-Mitigation: Use it only when reviewing AI-generated test cases or related requirements and correction history. <br>
-Risk: Review guidance could introduce incorrect or misleading QA recommendations if accepted without review. <br>
-Mitigation: Have a qualified reviewer validate findings before changing release-ready test suites, correction records, or prompt libraries. <br>
+## Use Case:
 
+QA engineers, test leads, and development teams use this skill to perform final expert review of AI-generated test cases before release. It produces review findings, corrections, learning points, and prompt optimization feedback for improving future test generation.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review report with tables, correction items, learning points, and prompt-optimization recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include review IDs, sampling rates, issue lists, traceability IDs, corrections, and follow-up learning points.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Broad trigger phrases could cause the QA review template to be used for general document checking instead of final test-case review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invoke the skill explicitly for final review of AI-generated test cases after output critique and blindspot compensation.
+
+Risk: Expert review findings can affect release readiness if systemic coverage or executability issues are found.
+
+Mitigation: Route systemic issues back through correction, record them as prompt optimization feedback, and re-run sampling before treating the test set as release-ready.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-expert-review)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown report with tables, issue lists, corrections, learning points, and prompt optimization suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a unique review ID, sampling rate, traceable test case identifiers, severity-style correction markers, and coverage statements tied to the provided requirements or input documents.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

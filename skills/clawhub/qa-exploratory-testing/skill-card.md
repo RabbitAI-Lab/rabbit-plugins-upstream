@@ -1,40 +1,53 @@
-## Description: <br>
-Guides agents through structured exploratory QA testing with session charters, scenario tours, role play, failure-path exploration, findings lists, bug report drafts, and coverage notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through structured exploratory QA testing using charters, timeboxed sessions, scenario tours, role play, failure paths, and session notes to find issues missed by scripted tests.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and product teams use this skill to run time-boxed exploratory testing when scripted tests may miss usability, workflow, security, or edge-case issues. It helps produce session charters, notes, findings, bug report material, and coverage records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Exploratory testing notes may include sensitive customer, payment, identity, screenshot, or production data. <br>
-Mitigation: Use anonymized or masked test data and avoid pasting real production, customer, financial, or identity information into session notes. <br>
-Risk: Findings from exploratory sessions can be incomplete, non-reproducible, or misleading if the scope and charter are unclear. <br>
-Mitigation: Define a clear test target, exploration scope, time box, environment, and EXP-XXXX session ID before recording findings or drafting bug reports. <br>
+## Use Case:
 
+QA engineers, developers, and product teams use this skill to plan and document exploratory testing sessions for new features, high-risk areas, and gaps left by scripted test cases. It helps produce exploration charters, session notes, findings, bug reports, coverage notes, and structured test-case tables.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-exploratory-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown session notes, findings lists, bug report drafts, and coverage notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Session outputs include EXP-XXXX traceability identifiers; users should avoid including real customer, payment, identity, or production data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: Exploratory testing may expose customer, payment, identity, production screenshot, or other sensitive data during QA investigation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for authorized QA work, prefer test or staging systems, and mask or avoid real customer, payment, identity, financial, and production screenshot data.
+
+Risk: Findings from exploratory sessions can be mistaken for confirmed defects without enough reproduction detail.
+
+Mitigation: Record the charter, environment, exploration path, observations, evidence, and reproduction notes before converting findings into bug reports or regression tests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-exploratory-testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with structured tables and session notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include exploration charters, EXP-style session identifiers, findings, bug reports, and coverage notes.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

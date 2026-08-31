@@ -52,7 +52,6 @@ from huahua_mcp_runtime.portfolio_adapter import (  # noqa: E402,F401 -- compati
     is_empty_plain_object as _is_empty_plain_object,
     is_restorable_fund as _is_restorable_fund,
     is_valid_fund_code_value as _is_valid_fund_code_value,
-    parse_sync_payload as _parse_sync_payload,
     portfolio_payload_source as _portfolio_payload_source,
     summarize_sync_payload as _summarize_sync_payload,
     unwrap_sync_payload as _unwrap_sync_payload,
@@ -99,7 +98,7 @@ mcp._mcp_server.version = __version__
 
 async def _fetch_estimates(
     codes: list,
-    default_data_source_mode: str = "huahua",
+    default_data_source_mode: str = "source_a",
     data_source_mode_by_code: Optional[dict] = None,
 ) -> dict:
     return await _fetch_estimates_impl(

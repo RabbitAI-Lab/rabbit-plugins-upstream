@@ -1,45 +1,61 @@
-## Description: <br>
-Tox Tunnel Ops helps agents plan, configure, verify, and diagnose encrypted ToxTunnel TCP tunnels for remote SSH, desktop, database, web service, homelab, proxy, metrics, and failover use cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents design, generate, verify, and troubleshoot encrypted ToxTunnel TCP tunnels for SSH, remote desktop, databases, web services, homelab access, and temporary maintenance.
 
-## Publisher: <br>
-[agentx-icu](https://clawhub.ai/user/agentx-icu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentx-icu](https://clawhub.ai/user/agentx-icu)
 
-## Use Case: <br>
-Developers, operators, and homelab administrators use this skill to produce ToxTunnel client/server YAML, scoped access-control rules, verification commands, and troubleshooting guidance for encrypted remote TCP access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote network exposure and persistent services can create high-impact access paths. <br>
-Mitigation: Review generated rules so they allow only exact friends, hosts, and ports, and avoid enabling persistent services until the configuration is reviewed. <br>
-Risk: Installer shortcuts or unpinned packages can increase supply-chain risk. <br>
-Mitigation: Prefer manually downloaded, version-pinned release packages with checksums over one-line installers. <br>
-Risk: Diagnostic cleanup commands can remove important identity data if the target path is wrong. <br>
-Mitigation: Do not run rm -rf diagnostics without verifying and backing up the exact target path. <br>
+## Use Case:
 
+Developers, operators, and administrators use this skill to configure and diagnose self-hosted ToxTunnel access for remote services without exposing server ports directly. It supports SSH/RDP, database, web, NAS, SOCKS5, monitoring, and temporary contractor access workflows.
 
-## Reference(s): <br>
-- [ToxTunnel project homepage](https://github.com/agentx-icu/tox-tcp-tunnel) <br>
-- [ClawHub skill page](https://clawhub.ai/agentx-icu/skills/tox-tunnel-ops) <br>
-- [Diagnose Reference](references/diagnose.md) <br>
-- [Execute Reference](references/execute.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include client/server configs, rules.yaml snippets, diagnostic checklists, and verification commands; requires the toxtunnel binary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.10 (source: server release evidence) <br>
+Risk: Generated tunnel configurations can expose sensitive services if local forwards bind beyond loopback or rules allow broad host and port access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated rules before use, keep forwards loopback-bound or firewalled, and prefer narrow friend, host, and port allowlists.
+
+Risk: Setup guidance may include package installation, service registration, or other privileged local changes.
+
+Mitigation: Run privileged commands only after explicit operator approval and review the intended system change before execution.
+
+Risk: A remote tunnel can preserve access longer than intended if existing sessions are not terminated during revocation.
+
+Mitigation: Use reloads to block new sessions, and restart the tunnel service or revoke access at the target service when live access must end immediately.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/agentx-icu/skills/tox-tunnel-ops)
+- [Publisher profile](https://clawhub.ai/user/agentx-icu)
+- [ToxTunnel project homepage](https://github.com/agentx-icu/tox-tcp-tunnel)
+- [Diagnose reference](references/diagnose.md)
+- [Execute reference](references/execute.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with YAML and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces operational recommendations and configuration examples for a user-approved ToxTunnel deployment.]
+
+## Skill Version(s):
+
+0.4.14 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

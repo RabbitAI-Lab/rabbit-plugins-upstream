@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/patent-disclosure-skill",
   "slug": "patent-disclosure-skill",
   "ownerHandle": null,
-  "version": "2.0.0",
-  "updatedAt": 1784890390901,
-  "contentHash": "f1168f02a1e4a8223935a0ad6075a3a928f9bed630468fb295f5a71412e94848",
-  "fetchedAt": "2026-07-26T18:05:17.366Z"
+  "version": "3.9.0",
+  "updatedAt": 1787880713266,
+  "contentHash": "a93df6cb4c740e0a854b6e2b2ca036166a1c67b2f2e0bf9b7fdd0452aecfb37f",
+  "fetchedAt": "2026-08-31T15:51:39.406Z"
 }

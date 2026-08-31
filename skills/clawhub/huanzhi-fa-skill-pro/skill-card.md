@@ -1,50 +1,67 @@
-## Description: <br>
-A Chinese-first fundraising advisor for founders that diagnoses financing readiness, analyzes term-sheet risks, and provides Capital EQ negotiation and emotional-support guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HuanZhi FA Pro helps Chinese startup founders assess fundraising readiness, analyze term-sheet risks, and practice investor negotiation with Capital EQ guidance.
 
-## Publisher: <br>
-[ai-innopower](https://clawhub.ai/user/ai-innopower) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ai-innopower](https://clawhub.ai/user/ai-innopower)
 
-## Use Case: <br>
-External founders and startup operators use this skill to assess fundraising readiness, interpret investor terms, prepare negotiation responses, and track financing progress. It is oriented toward Chinese-language startup fundraising scenarios and should not replace professional legal, accounting, investment, or financial advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks users to provide sensitive founder profiles, BP materials, diagnosis history, and term-sheet context that may be stored locally under data/users/. <br>
-Mitigation: Use redacted materials when possible, confirm how locally stored files are deleted, and avoid confidential uploads until storage and deletion expectations are clear. <br>
-Risk: Fundraising, investment, legal, and financial guidance may be incomplete, stale, or unsuitable for a user's specific deal. <br>
-Mitigation: Treat outputs as decision support only and review important financing, term-sheet, legal, tax, or accounting decisions with qualified professionals. <br>
-Risk: The security evidence notes broad triggers, scheduled follow-ups, and inconsistent audit claims in the artifact. <br>
-Mitigation: Review reminder and follow-up behavior before use, disable it where inappropriate, and rely on the marketplace security status rather than artifact audit claims. <br>
+## Use Case:
 
+External founders and startup operators use this skill to evaluate fundraising readiness, identify risky financing terms, prepare negotiation responses, and receive emotional support around fundraising decisions. The skill is informational and does not replace legal, financial, or investment professionals.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/ai-innopower/huanzhi-fa-skill-pro) <br>
-- [Xiaping Coze distribution page](https://xiaping.coze.com/skill/b8e65963-a64b-4ffe-87ab-f85a31c615a4) <br>
-- [Output schemas](references/outputs-schema.md) <br>
-- [Configuration guide](references/config-guide.md) <br>
-- [Known limitations](references/known-limitations.md) <br>
-- [Failure handling](references/failure-handling.md) <br>
-- [Knowledge base](references/knowledge-base.md) <br>
-- [Response templates](references/response-templates.md) <br>
-- [Determinism details](references/determinism-details.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown-style Chinese responses with structured sections, plus JSON payloads for fundraising diagnosis and term-sheet analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local profile and progress configuration, deterministic scoring paths, output validation with one retry, and fallback guidance for failure cases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.9.4 (source: server release evidence; artifact frontmatter and skill.json show 2.9.3) <br>
+Risk: Founder profiles, business plans, and term-sheet materials may be stored locally and can contain sensitive company information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only redacted documents unless local storage, retention, and deletion behavior are acceptable for the deployment environment.
+
+Risk: The artifact claims a passed security audit, while the authoritative security evidence reports a suspicious verdict and says that claim should not be treated as verified.
+
+Mitigation: Review the skill before installing and do not rely on the audit claim without independent confirmation.
+
+Risk: Memory, reminders, and broad triggers can preserve or resurface sensitive fundraising context.
+
+Mitigation: Limit stored profile data and reminder content to non-sensitive summaries, or disable those capabilities where confidentiality requirements are strict.
+
+Risk: Financing, legal, and negotiation guidance may be incomplete or unsuitable for a specific transaction.
+
+Mitigation: Treat outputs as informational support and consult qualified legal, financial, or investment professionals for key decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ai-innopower/skills/huanzhi-fa-skill-pro)
+- [Publisher Profile](https://clawhub.ai/user/ai-innopower)
+- [Output Schema](artifact/references/outputs-schema.md)
+- [Configuration Guide](artifact/references/config-guide.md)
+- [Failure Handling](artifact/references/failure-handling.md)
+- [Known Limitations](artifact/references/known-limitations.md)
+- [Determinism Details](artifact/references/determinism-details.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance and structured JSON reports, with optional shell commands for the local funding diagnosis script.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Financing diagnosis and term-sheet analysis outputs are expected to follow documented JSON schemas and self-validation behavior.]
+
+## Skill Version(s):
+
+2.9.5 (source: server release metadata, SKILL.md frontmatter, skill.json, CHANGELOG released 2026-08-25)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

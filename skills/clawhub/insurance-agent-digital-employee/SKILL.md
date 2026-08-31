@@ -2,33 +2,25 @@
 name: "Insurance Agent Digital Employee"
 slug: insurance-agent-digital-employee
 description: "融合12项核心技能的保险代理人全能AI助手——覆盖客户画像、需求分析、保障缺口诊断、计划书生成、条款解读、异议处理、健康告知、投保核查、展业计划、续期维护、产品知识库、社媒营销全链路。一站式赋能代理人的展业、服务和客户经营全流程。"
-version: "1.0.4"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 1.1.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - code-examples-reference
+  - no-executable-code
 ---
 
 # Insurance Agent Digital Employee / 保险代理人数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断## Skill Overview / 技能概览
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
+## Skill Overview / 技能概览
 
 本技能将保险代理人展业全流程所需的12项核心能力整合为一个统一的数字员工。你不需要在多个技能间切换，只需自然描述你的需求，系统会自动路由到对应的能力模块。
 
@@ -239,7 +231,7 @@ capabilities:
 | 第二步：数据加载 | `customer-system.get_interaction_history` | 获取客户交互历史 | customer_id, start_date, end_date | 用于交互行为标签与意向等级评估 |
 | 第四步：缺口分析 | `policy-system.query_policy` | 根据保单号查询保单基本信息 | policy_no | 用于核验保单详情，辅助缺口计算 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -483,7 +475,7 @@ capabilities:
 | 第二步：破冰/第三步：需求挖掘 | `customer-system.get_customer_profile` | 获取客户360度画像 | customer_id, include_tags | 辅助了解客户背景，制定差异化破冰策略 |
 | 第三步：需求挖掘 | `customer-system.get_interaction_history` | 获取客户交互历史 | customer_id, start_date, end_date | 辅助分析客户历史关切点与沟通偏好 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -636,7 +628,7 @@ capabilities:
 | 持仓诊断 | `customer-system.get_customer_policies` | 获取客户名下所有保单列表 | customer_id | 用于现有保障诊断与缺口计算基准 |
 | 配置建议 | `product-system.search_products` | 按条件搜索产品 | category, age_min, age_max | 用于缺口配置时匹配可投保产品 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -896,7 +888,7 @@ capabilities:
 | 第四步：利益演示 | `product-system.get_premium_rate` | 查询产品费率 | product_code, age, gender, coverage_amount, payment_period | 用于利益演示表中的保费与现金价值计算 |
 | 第三步：合规校验 | `product-system.get_product_clause` | 获取产品条款原文 | product_code, clause_type | 用于合规声明和免责条款引用 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -1104,7 +1096,7 @@ capabilities:
 | 第二步：条款拆解 | `product-system.get_product_clause` | 获取产品条款原文 | product_code, clause_type | 用于保障责任、免责条款、等待期等结构化解读 |
 | 第二步：条款拆解 | `product-system.get_product_info` | 获取产品基本信息 | product_code | 用于产品概览与核心卖点讲解 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -1344,7 +1336,7 @@ capabilities:
 | 模式B问答/模式C演练 | `product-system.get_product_clause` | 获取产品条款原文 | product_code, clause_type | 用于条款解读、责任范围说明与话术生成 |
 | 模式B问答/模式D话术 | `product-system.search_products` | 按条件搜索产品 | category, age_min, age_max | 用于知识查询和话术场景构建 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -1662,7 +1654,7 @@ capabilities:
 |---------|---------|---------|---------|---------|
 | 异议识别（可选） | `customer-system.get_customer_profile` | 获取客户360度画像 | customer_id, include_tags | 可选获取客户画像，辅助制定更精准的异议回应策略 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -2137,7 +2129,7 @@ capabilities:
 | 投保单核查 | `policy-system.query_policy` | 根据保单号查询保单基本信息 | policy_no | 用于核验保单状态与基本信息一致性 |
 | 健康告知核查 | `product-system.get_underwriting_rules` | 获取产品核保规则 | product_code, rule_type | 用于校验健康告知填写逻辑是否符合产品要求 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -2432,7 +2424,7 @@ capabilities:
 | 节点提醒 | `customer-system.get_interaction_history` | 获取客户最近交互时间 | customer_id, last_n_days | 计算沉默天数，判断是否触发唤醒提醒 |
 | 节点提醒 | `customer-system.get_renewal_reminders` | 获取续期提醒 | days_ahead=7 | 识别7天内需续期的客户，生成续期节点提醒 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -2682,7 +2674,7 @@ capabilities:
 | 续期节点管理 | `customer-system.get_renewal_reminders` | 获取客户保单续期提醒列表 | customer_id, days_ahead | 用于制定续期跟进时间轴与优先级排序 |
 | 续期节点管理 | `customer-system.get_customer_policies` | 获取客户名下所有保单列表 | customer_id | 用于续期状态追踪与加保机会识别 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -2740,7 +2732,7 @@ capabilities:
 
 扮演保险社交媒体营销专家。为保险代理人自动获取热点新闻，生成高质量内容，帮助代理人打造专业且有温度的个人IP。
 
-> **⚠️ 教学说明**：以下内容中提到的"自动发布""Playwright""登录状态"等为**概念设计参考**，展示社媒营销自动化的工作流程思路。实际使用时，所有社媒发布操作均需用户手动执行，本技能不执行任何自动发布或API调用。
+> **⚠️ 教学说明**：以下内容中提到的"自动发布""自动化工具（概念设计参考）""登录状态"等为**概念设计参考**，展示社媒营销自动化的工作流程思路。实际使用时，所有社媒发布操作均由用户手动执行，本技能不执行任何自动发布或API调用。
 
 ## 触发条件
 
@@ -2758,7 +2750,7 @@ capabilities:
 在开始工作前，确认以下条件满足：
 1. 用户已确认发布数量和内容主题偏好
 2. 联网搜索工具已配置，或接受降级为静态数据
-3. 如选择自动发布，小红书登录状态已就绪
+3. 本技能不执行自动发布：所有内容由用户预览确认后手动发布
 4. 如果缺失关键信息，主动向用户索要，不要假设或估算
 
 ## 工作流程
@@ -2772,13 +2764,13 @@ capabilities:
 | 发布数量 | 1-5条 | 3条 |
 | 内容主题 | 社保/养老/重疾/理赔/健康/综合 | 综合 |
 | 风格偏好 | 干货科普/热点关联/真实案例/混合 | 混合 |
-| 发布时间 | 立即/定时 | 立即 |
+| 发布时间 | 由用户自行安排 | 由用户自行安排 |
 | 图片生成 | 是/否 | 是 |
-| 自动发布 | 是/否（需先完成登录） | 否（预览后确认） |
+| 发布方式 | 仅支持手动发布 | 手动（预览后确认） |
 
 ### 第二步：热点新闻获取与筛选
 
-使用WebSearch搜索当日保险相关热点，从结果中筛选最有价值的内容。
+参考用户自行检索并提供（或由用户明确发起联网搜索）的当日保险热点，从中筛选最有价值的内容。
 
 **联网搜索工具说明**：
 
@@ -2841,15 +2833,13 @@ No watermark, high quality.
 
 | 用户选择 | 执行动作 |
 |---------|---------|
-| 全部发布 | 3条笔记自动发布（间隔60-120秒） |
+| 全部发布 | 3条笔记由用户手动依次发布 |
 | 选择发布 | 追问发布哪几条，再执行 |
 | 修改后发布 | 追问修改意见，修改后再展示 |
 | 仅保存不发布 | 保存图文素材到本地，结束 |
 
 **发布命令**：
-```bash
-python scripts/xiaohongshu_publish.py batch moments_output/YYYY-MM-DD/notes.json
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 脚本自动在每条笔记间等待60-120秒，避免触发风控。
 
@@ -2939,14 +2929,14 @@ python scripts/xiaohongshu_publish.py batch moments_output/YYYY-MM-DD/notes.json
 
 | 依赖系统 | 作用 | 必需 |
 |---------|------|------|
-| 外部内容服务（Tavily/Bing/ | 联网搜索保险热点与行业动态 | 否 |
-| 社媒API（Playwright） | 小红书图文自动发布 | 否 |
+| 联网搜索（用户自行执行） | 检索保险热点与行业动态 | 否 |
+| 社媒发布（自动化工具（概念设计参考） 等仅为概念设计参考） | 全部由用户手动执行 | 否 |
 
 ## MCP工具调用
 
-本技能主要依赖外部搜索API（Tavily/Bing/和社媒发布工具（Playwright），不调用内部MCP服务器工具。在工作流程中，AI通过外部内容服务获取热点信息，通过社媒API执行发布操作。
+本技能不调用任何外部搜索API或社媒发布工具。热点信息由用户自行检索并提供；所有社媒内容仅生成图文素材与文案，发布操作一律由用户手动完成。
 
-> **降级策略**：当外部搜索工具不可用时，AI使用本地静态示例数据生成内容，并标注"未联网"。当社媒API不可用时，仅生成图文素材保存到本地，提示用户手动发布。
+> **降级策略**：当外部搜索工具不可用时，AI使用本地静态示例数据生成内容，并标注"未联网"。所有图文素材与文案以对话内容呈现，发布一律由用户手动完成（本技能不保存文件、不调用社媒API）。
 
 ## 关联技能
 
@@ -2992,7 +2982,7 @@ python scripts/xiaohongshu_publish.py batch moments_output/YYYY-MM-DD/notes.json
 ## 测试用例
 
 ### 用例1：日常营销笔记生成
-- **输入**: 发布3条，内容主题"综合"，风格"混合"，图片生成"是"，自动发布"否"
+- **输入**: 发布3条，内容主题"综合"，风格"混合"，图片生成"是"，手动发布"否"
 - **预期输出**: 3条小红书文案+3张封面图+预览确认界面
 - **验证点**: 文案合规无违规用语，图片尺寸正确(1024x1280)，内容覆盖不同主题
 

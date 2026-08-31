@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/commit-tidy",
   "slug": "commit-tidy",
   "ownerHandle": null,
-  "version": "0.4.3",
-  "updatedAt": 1784204984986,
-  "contentHash": "6b741fc19066205f8f22509863f4fadb58c48c549e1b1cf863474091901a2151",
-  "fetchedAt": "2026-07-26T18:13:11.392Z"
+  "version": "0.6.0",
+  "updatedAt": 1788088497705,
+  "contentHash": "6cb1223ffa6b884be1fa6fd4206dd087aa762a0ca151e3568def1c7c68a7a4f2",
+  "fetchedAt": "2026-08-31T15:43:41.196Z"
 }

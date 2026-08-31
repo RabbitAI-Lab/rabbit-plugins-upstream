@@ -1,42 +1,60 @@
-## Description: <br>
-Files.com helps an agent read, create, update, and delete Files.com data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Files.com (files.com). Use this skill for ANY Files.com request - reading, creating, updating, and deleting data. Whenever a task involves Files.com, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Files.com folders, listings, file metadata, and deletions through the OOMOL files_com connector after account connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive connector actions can change or delete Files.com data. <br>
-Mitigation: Confirm exact paths, payloads, and intended effects with the user before creating folders, updating metadata, or deleting files. <br>
-Risk: Connector access depends on the user's OOMOL and Files.com connection scopes and credential state. <br>
-Mitigation: Review the connected account scopes and resolve authentication, connection, or billing errors before retrying actions. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent operate a connected Files.com account through OOMOL for folder listing, metadata lookup, file download, folder creation, metadata updates, and deletion workflows.
 
-## Reference(s): <br>
-- [ClawHub Files.com Skill](https://clawhub.ai/oomol/skills/oo-files-com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Files.com Homepage](https://www.files.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent commands use the oo CLI and live action schema inspection before connector calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Write actions can create folders or update Files.com metadata in the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact action payload and expected effect with the user before running write actions.
+
+Risk: The destructive delete action can remove a Files.com file or folder path.
+
+Mitigation: Require explicit user approval for the target path before running delete_file.
+
+Risk: The skill operates a user's Files.com account through OOMOL-connected credentials.
+
+Mitigation: Install only when the agent is intended to operate Files.com through OOMOL, and review write, delete, and metadata payloads carefully before approval.
+
+## Reference(s):
+
+- [ClawHub Files.com Skill Page](https://clawhub.ai/oomol/skills/oo-files-com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Files.com Homepage](https://www.files.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

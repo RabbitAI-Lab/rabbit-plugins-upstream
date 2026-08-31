@@ -1,40 +1,57 @@
-## Description: <br>
-Provides QA teams with guidance for managing authorized non-production test environments, diagnosing environment issues, and preparing traceable test data checklists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA and engineering teams manage non-production test environments and test data by producing environment health checks, environment requirements, design guidance, configuration guidance, maintenance plans, and data preparation checklists.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill when a test environment is unstable, unavailable, newly deployed, or requires prepared test data. It helps structure environment requirements, health checks, configuration guidance, maintenance planning, and data preparation for non-production testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated cleanup, restart, or configuration guidance could be applied to the wrong environment. <br>
-Mitigation: Use only in authorized non-production environments and confirm the target environment name or address before acting. <br>
-Risk: Data cleanup or reset guidance could remove useful test data or affect shared testing workflows. <br>
-Mitigation: Confirm backups and approvals before data changes, prefer a dry run first, and coordinate shared-environment windows with affected teams. <br>
+## Use Case:
 
+QA practitioners, developers, and DevOps engineers use this skill when test environments are unstable, insufficient, or need prepared data. It supports environment deployment and configuration management, health checks, issue triage, multi-environment planning, and routine test data preparation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-env-data) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown checklist and structured guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Environment configurations should include traceable ENV-XXXX identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Environment restarts, repairs, or configuration changes could affect the wrong or shared environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only authorized non-production environments, verify the exact target environment name or address, obtain explicit approval, coordinate shared-environment windows, and record the operation.
+
+Risk: Data cleanup, reset, or archival guidance could remove data needed for testing or team workflows.
+
+Mitigation: Confirm backups before changes, prefer dry runs in low-risk environments, start with a small scope, and verify results before broader cleanup.
+
+Risk: Environment issues may be mistaken for code defects, or code defects may be hidden by unstable dependencies.
+
+Mitigation: Run the environment health checklist across services, databases, caches, message queues, dependencies, network, configuration, and data readiness before remediation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-env-data)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration, Shell commands, Guidance]
+
+**Output Format:** [Markdown checklists, tables, and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include environment IDs, environment requirements, environment design, configuration guidance, maintenance plans, and data preparation or cleanup checklists.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

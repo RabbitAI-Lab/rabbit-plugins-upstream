@@ -1,41 +1,54 @@
-## Description: <br>
-Bollinger Bands Pro provides volatility analysis and mean reversion signals for ticker symbols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Volatility analysis and mean reversion signals.
 
-## Publisher: <br>
-[ssidharhubble](https://clawhub.ai/user/ssidharhubble) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ssidharhubble](https://clawhub.ai/user/ssidharhubble)
 
-## Use Case: <br>
-External users and developers use this skill to request Bollinger Band-style market signals for asset tickers such as SPY, BTC, or TSLA. Premium responses may require a 402 payment proof before the provider returns the signal. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requested ticker symbols are sent to the provider's external API. <br>
-Mitigation: Review provider trust and data-sharing expectations before using sensitive or proprietary ticker requests. <br>
-Risk: Premium signal responses ask for a SOL payment and the returned market signal could be relied on for financial decisions. <br>
-Mitigation: Verify the provider and pricing page before paying, and independently review any market signal before acting on it. <br>
+## Use Case:
 
+External users and developers use this skill to request Bollinger Bands based volatility analysis and mean reversion signals for asset tickers.
 
-## Reference(s): <br>
-- [Bollinger Bands Pro on ClawHub](https://clawhub.ai/ssidharhubble/bollinger-bands-pro) <br>
-- [Provider pricing page](https://ssyopros.zo.space/pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Guidance] <br>
-**Output Format:** [JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns provider API JSON for successful requests or a 402 payment-required object with a pricing URL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: The skill contacts an external zocomputer.io API with the ticker supplied by the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review external API use before deployment and avoid sending sensitive or restricted ticker inputs.
+
+Risk: Premium results may require a SOL payment.
+
+Mitigation: Verify the provider identity, pricing page, wallet destination, and payment terms before sending funds.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ssidharhubble/skills/bollinger-bands-pro)
+- [Pricing page](https://ssyopros.zo.space/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [JSON object containing Bollinger Bands signal data, or a JSON payment-required response for premium signals]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Ticker input is sent to an external zocomputer.io API.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,58 @@
-## Description: <br>
-机票降价监控与多平台比价助手，搜索多平台实时价格对比，支持航线搜索、指定航班精确比价、低价日历、降价监控，帮你把握最佳购票时机。暑期机票价格监控。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Flight price monitoring and comparison assistant that searches multi-platform real-time fares, compares specific flights, scans low-price calendars, and helps prepare price-watch requests.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search flight routes, compare real-time prices across multiple booking sources, identify cheaper travel dates, and prepare price-watch requests for later follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight search details such as city pairs, dates, and optional target prices are sent to external proxy services. <br>
-Mitigation: Install only when that data flow is acceptable, and avoid using unrelated personal or corporate secrets for PROXY_TOKEN. <br>
-Risk: Same-price booking results may place commission-linked sources first, and prices can change after the skill reports them. <br>
-Mitigation: Review all returned platform options and confirm final price and booking terms on the destination booking page before purchase. <br>
+## Use Case:
 
+Travelers and travel-planning agents use this skill to compare flight prices across listed travel platforms, evaluate buying timing, find lower-price departure dates, and prepare price-watch requests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/flight-price-track) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [JSON results and concise agent guidance with optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include flight search results, platform price comparisons, low-price calendar summaries, and structured price-watch requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: server release evidence) <br>
+Risk: Travel route, date, and flight-search details are sent to publisher-operated proxy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for searches that can be shared with the publisher's proxy services, and avoid submitting unnecessary personal or sensitive travel details.
+
+Risk: The security review notes an embedded shared token and unclear disclosure of external endpoints.
+
+Mitigation: Prefer a release that requires a user-provided token and clearly names external endpoints before commercial deployment.
+
+Risk: Returned booking links and same-price ordering may be affiliate-influenced.
+
+Mitigation: Compare displayed platform prices independently before booking and treat booking links as convenience links rather than neutral recommendations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/flight-price-track)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON results and Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include booking links, route/date price summaries, price status analysis, and structured price-watch request details.]
+
+## Skill Version(s):
+
+2.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

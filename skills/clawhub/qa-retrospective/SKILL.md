@@ -1,6 +1,8 @@
 ---
 name: qa-retrospective
-version: 1.6.0
+slug: qa-retrospective
+displayName: Retrospective
+version: 1.7.5
 description: >-
   当一个迭代结束、一个项目完成、或者发生线上事故需要事后分析时使用此技能。通过系统性的回顾会议和数据复盘，把个人和团队的经验教训转化为可复用的组织资产。不要沦为"说说好话走个形式"——有效的复盘需要有数据支撑（缺陷趋势/漏测分析/效率数据）、有根因分析（为什么出问题）和有 action items（下次怎么做不一样）。输出复盘报告和改进项追踪表。
 
@@ -31,6 +33,9 @@ output_format:
   traceability:
     - 每次复盘带唯一ID（RETRO-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - retrospective_report: 复盘报告
     - what_went_well: 做得好的事项
     - improvement_areas: 改进领域

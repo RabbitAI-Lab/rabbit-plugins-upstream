@@ -1,6 +1,8 @@
 ---
 name: qa-release-risk-governance
-version: 1.6.0
+slug: qa-release-risk-governance
+displayName: Release Risk Governance
+version: 1.7.5
 description: >-
   当版本要发布了、需要决定"能不能发"、或者需要设计灰度/回滚方案时使用此技能。系统化评估变更风险（变更范围/影响面/回退成本），设计灰度发布策略（按用户/区域/流量比例），制定回滚方案和线上监控计划。不要问"这个版本稳不稳"——要问"如果出问题了，我们能在几分钟内发现并回滚"。产出发布风险评估报告和灰度发布方案。
 
@@ -33,6 +35,9 @@ output_format:
   traceability:
     - 每次发布评估带唯一ID（REL-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - release_decision: 发布决策建议
     - risk_summary: 风险摘要
     - blocking_issues: 阻塞性问题清单

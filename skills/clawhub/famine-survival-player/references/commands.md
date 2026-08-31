@@ -15,7 +15,7 @@ python3 scripts/famine_agent.py do --state-version VERSION --command-id ID --arg
 
 Optional global settings:
 
-- `--api-base`: override `FAMINE_API_BASE_URL` for the current invocation. The default is `https://famine.aicadegalaxy.com`.
+- `--api-base`: override `FAMINE_API_BASE_URL` for the current invocation. The default is `https://famine.aipmedia.cn`.
 - `--timeout`: request timeout in seconds, default 20.
 - `--state-file`: idempotency recovery file, default platform user-state directory.
 

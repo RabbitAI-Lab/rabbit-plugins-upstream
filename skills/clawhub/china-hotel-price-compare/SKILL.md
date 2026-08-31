@@ -5,7 +5,7 @@ description: 先浏览再比价，飞猪+途牛+同程+美团+RollingGo五源并
 version: 4.1.1
 tags: [酒店, 酒店比价, 订酒店, 住宿, 旅行, 特价酒店, 酒店预订]
 tools:
-  - name: hotel_compare
+  - name: hotelCompare
     description: 多平台酒店比价，先浏览选定酒店再启动飞猪/途牛/同程/RG多平台比价
     primaryEnv: HOTEL_COMPARE_PROXY_URL
     env:
@@ -20,11 +20,11 @@ tools:
         type: string
         description: 目标城市，如"上海""北京""成都"
         required: true
-      - name: check_in
+      - name: checkIn
         type: string
         description: 入住日期，格式YYYY-MM-DD
         required: false
-      - name: check_out
+      - name: checkOut
         type: string
         description: 退房日期，格式YYYY-MM-DD
         required: false
@@ -32,19 +32,19 @@ tools:
         type: string
         description: 搜索关键词，支持区域（如"外滩""三里屯"）、地标（如"迪士尼"）、品牌（如"全季""亚朵"），不填则搜索全城
         required: false
-      - name: hotel_name
+      - name: hotelName
         type: string
         description: 选定的酒店名称。不填→第一步浏览模式，展示酒店列表；填写→第二步比价模式，在多个旅游平台查找该酒店最低价
         required: false
-      - name: max_price
+      - name: maxPrice
         type: number
         description: 价格上限（元），如1000表示只看1000元以内的酒店，不填则不限价格
         required: false
-      - name: poi_name
+      - name: poiName
         type: string
         description: 兴趣点或景点名称，如"东方明珠""西湖"，会搜索该景点附近的酒店
         required: false
-      - name: min_score
+      - name: minScore
         type: number
         description: 最低评分要求，如4.5表示只看4.5分及以上的酒店，不填则不限评分
         required: false

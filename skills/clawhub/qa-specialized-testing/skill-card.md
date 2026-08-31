@@ -1,38 +1,53 @@
-## Description: <br>
-Guides agents through specialized QA after functional testing, covering performance, security, and compatibility test planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents design specialized QA test plans for performance, security, and compatibility after functional testing is complete.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test agents use this skill after functional testing is complete to plan performance, security, and compatibility testing. It helps produce reusable specialized test plans, performance scenarios, security cases, and compatibility matrices with traceable test case IDs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security and load-testing guidance could be misused or applied to systems without authorization. <br>
-Mitigation: Use only on systems the user owns or has explicit written authorization to test, with targets, scope, and test environment clearly defined before testing. <br>
+## Use Case:
 
+Developers, QA engineers, and test automation agents use this skill to plan deeper quality validation after functional testing, including performance scenarios, authorized security checks, and compatibility matrices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-specialized-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured QA plan sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces specialized_test_plan, performance_cases, security_cases, and compatibility_matrix outputs with traceable test case IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Security testing guidance could be applied to systems without authorization or outside the approved scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm written authorization, define targets and boundaries, and use only approved test environments before applying security test cases.
+
+Risk: Performance, stress, or security testing could affect service availability if run against production systems.
+
+Mitigation: Prefer a dedicated test environment, agree on test limits, and monitor system health during execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-specialized-testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown test plans, test case tables, performance scenarios, security cases, and compatibility matrices]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are advisory QA artifacts and require review against the authorized test scope and environment.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

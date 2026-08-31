@@ -1,39 +1,56 @@
-## Description: <br>
-TODO Tracker maintains a persistent workspace TODO.md scratch pad with priority, completion, removal, listing, and heartbeat summary support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Persistent TODO scratch pad for tracking tasks across sessions. Use when the user asks to add, list, complete, remove, or summarize tasks in a portable workspace Markdown file. Uses stable task IDs and exact matching; heartbeat reporting is opt-in and count-only.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
+
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users, developers, and agents use this skill to maintain a local Markdown TODO tracker across sessions, including adding, listing, completing, removing, and summarizing tasks. It is suited for portable workspace task tracking without a service or database.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill mutates the path selected by TODO_FILE and adjacent .bak, .lock, and .next-id files.
+
+Mitigation: Choose TODO_FILE deliberately, quote the path, and keep the task file with its adjacent ID counter when moving or restoring the tracker.
+
+Risk: Task removal is destructive.
+
+Mitigation: Use the preview flow first, show the resolved stable ID and task text to the user, and remove only after explicit confirmation of the same ID.
+
+Risk: Concurrent or interrupted writes can leave a lock or recoverable backup state.
+
+Mitigation: Do not remove an active lock; investigate the writer and retry only after the lock is known to be stale, using the backup for recovery when needed.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and agent users use this skill to keep a simple persistent task list across sessions, prioritize pending work, mark items complete, remove entries, and surface stale or high-priority items during heartbeat checks. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally creates and updates a persistent TODO.md file in the workspace. <br>
-Mitigation: Install only when persistent workspace task tracking is desired, and review TODO.md before relying on or deleting entries. <br>
-Risk: Pattern-based done and remove commands may match unintended TODO items, especially with complex regex-like text. <br>
-Mitigation: Use explicit item text for done and remove actions, and review the affected entry before destructive changes. <br>
+**Output Format:** [Markdown task-file updates, count-only text summaries, and inline bash command guidance]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Writes are local to TODO_FILE and adjacent backup, lock, and ID-counter files; heartbeat output is opt-in and count-only.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Maintains TODO.md with priority sections, completion dates, added dates, and heartbeat summaries.] <br>
+1.1.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

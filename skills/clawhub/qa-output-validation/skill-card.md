@@ -1,40 +1,54 @@
-## Description: <br>
-Qa Output Validation performs a final anti-hallucination check on generated test cases by verifying requirement IDs, consistency, executability, and source traceability before final output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validates generated QA test cases before final output by checking factual grounding, consistency, executability, and traceability to source requirements.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill as a final quality gate after AI-generated test cases are produced. It checks whether cases are grounded in the requirement decomposition, internally consistent, executable, and traceable before release or reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad requests to verify or check quality. <br>
-Mitigation: Use it as a final QA gate for generated test cases and confirm that the requested validation scope matches the available source materials. <br>
-Risk: Recommendations to delete or mark test cases could remove valid coverage if the source material is incomplete. <br>
-Mitigation: Review deletion or marking recommendations manually, confirm source traceability, and back up source data before changing test assets. <br>
+## Use Case:
 
+QA engineers, test developers, and agents use this skill as a final quality gate for generated test cases before publication or handoff. It identifies hallucinated requirements, inconsistent cases, vague execution steps, and missing traceability.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-output-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown validation report with pass/fail status, check results, issue tables, and traceability notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Issue lists are tied to original test case IDs and the skill does not assign new unique IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Trigger phrases about output quality may activate the skill in broad QA discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review trigger phrases before deployment and align them with the intended workflow.
+
+Risk: Flagged hallucinations could lead users or agents to remove or change generated test cases too quickly.
+
+Mitigation: Confirm the source requirements and preserve the original data before removing or changing flagged cases.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-output-validation)
+- [Publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown validation report with pass/fail status, check results, issue lists, and traceability notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces QA validation findings for generated test cases; does not create new persistent identifiers.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
