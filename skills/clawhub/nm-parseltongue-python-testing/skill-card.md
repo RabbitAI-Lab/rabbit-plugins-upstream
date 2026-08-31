@@ -1,40 +1,54 @@
-## Description: <br>
-Python testing patterns with pytest, fixtures, TDD, mocking, async and integration tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Python testing patterns with pytest, fixtures, TDD, mocking, async and integration tests.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to write, audit, and maintain Python test suites with pytest, including unit tests, fixtures, mocking, async testing, coverage configuration, and CI workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest dependency installs, CI workflow changes, or pre-commit hooks that affect a project environment. <br>
-Mitigation: Review proposed commands and configuration for project fit before applying them. <br>
+## Use Case:
 
+Developers and engineers use this skill to create, configure, and audit Python pytest suites, including unit tests, fixtures, mocking, async tests, coverage checks, and CI workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-parseltongue-python-testing) <br>
-- [Publisher profile](https://clawhub.ai/user/athola) <br>
-- [Skill homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; suggested commands and configuration should be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The CI example can upload coverage reports to Codecov if copied into a repository workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether Codecov use fits the repository and organization policy before enabling that workflow step.
+
+Risk: The banner references an external Claude Code plugin for a fuller experience.
+
+Mitigation: Review that external plugin separately before installing or enabling it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-parseltongue-python-testing)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/parseltongue)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with Python, TOML, YAML, bash, and Makefile snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only skill; examples include pytest dependencies, project configuration, coverage commands, and CI snippets.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

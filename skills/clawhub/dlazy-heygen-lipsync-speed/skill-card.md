@@ -1,45 +1,60 @@
-## Description: <br>
-Runs dLazy's HeyGen Lipsync Speed workflow through the dLazy CLI for fast lip-sync generation from user-supplied media. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HeyGen Lipsync Speed is a dLazy CLI skill for fast lip-sync generation when quick turnaround is important.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to run a hosted lip-sync generation workflow when rapid video and audio synchronization is needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in a local user configuration file when authenticated. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY where appropriate, and rotate or revoke organization keys from the dLazy dashboard if access changes. <br>
-Risk: Video and audio inputs supplied to the command are uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Confirm the selected media is appropriate for third-party cloud processing before invoking the skill. <br>
-Risk: A persistent global install adds a pinned third-party CLI binary to the user's environment. <br>
-Mitigation: Use the pinned npx invocation when a temporary execution path is preferred. <br>
+## Use Case:
 
+External users and developers use this skill to run dLazy's HeyGen Lipsync Speed model from an agent workflow, supplying video and audio inputs for cloud-hosted lip-sync generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON with generated media URLs or async task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted files.dlazy.com media URLs; async mode returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends prompts, parameters, and provided media files to dLazy cloud API endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit media you are comfortable uploading to dLazy, and review the service's data handling expectations before use.
+
+Risk: Authentication may save a dLazy API key in local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY for one-off execution when a saved local key is not desired, and rotate or revoke organization keys when needed.
+
+Risk: The workflow depends on a pinned third-party CLI package.
+
+Mitigation: Review the pinned @dlazy/cli package before installation in managed or sensitive environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-heygen-lipsync-speed)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is returned as hosted file URLs; asynchronous runs may return a generation ID for later polling.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

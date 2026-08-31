@@ -1,6 +1,8 @@
 ---
 name: qa-test-reporting
-version: 1.6.0
+slug: qa-test-reporting
+displayName: Test Reporting
+version: 1.7.5
 description: >-
   输出面向不同受众的测试报告——日报给团队同步进度、周报给项目经理、质量报告给管理层决策。当测试执行完成需要汇总结果、或者上级问"质量怎么样"的时候使用此技能。不同角色关心的数据不同：开发关心Bug明细，经理关心通过率和趋势，老板关心风险和发版决策。报告内容适配受众，关键指标量化呈现，风险区域必须醒目标注。
 
@@ -29,8 +31,11 @@ input_format:
 output_format:
   traceability:
     - 每份测试报告带唯一ID（RPT-XXXX）
-    - - 聚合用例ID、缺陷ID、需求ID
+    - 聚合用例ID、缺陷ID、需求ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - executive_summary: 执行摘要
     - test_results: 测试结果统计
     - defect_analysis: 缺陷分析

@@ -1,40 +1,53 @@
-## Description: <br>
-Qa Combination Strategy helps QA teams reduce combination-test explosion with Pairwise, orthogonal testing, and risk-weighted matrices while identifying coverage gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs efficient QA combination-test coverage using pairwise testing, orthogonal arrays, and decision tables to reduce combinatorial explosion while documenting coverage gaps.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill to turn scenario trees, requirement decompositions, and optional risk assessments into smaller combination coverage plans for parameter-heavy features and environment matrices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Examples or inputs may include customer, payment, identity, financial, screenshot, or production data. <br>
-Mitigation: Use masked or synthetic inputs and avoid pasting real customer, payment, identity, financial, or production data. <br>
-Risk: Reduced combination matrices can miss important high-risk interactions if used without review. <br>
-Mitigation: Review generated matrices, prioritize high-risk combinations, and supplement Pairwise or orthogonal coverage with full coverage where risk warrants it. <br>
+## Use Case:
 
+QA engineers and developers use this skill when requirements contain many input, environment, or state combinations and exhaustive testing is impractical. It helps select pairwise, orthogonal-array, risk-weighted, or full-combination strategies and produce traceable coverage matrices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-combination-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown with structured combination matrices, coverage gaps, traceability IDs, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces COMBO and scenario-linked matrix entries for human review; use masked or synthetic test data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: Users may paste real customer, payment, ID, or production data while asking for QA scenarios.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized or masked test data and avoid including real customer, financial, identity, or production records in prompts.
+
+Risk: Generated combination matrices can under-cover critical interactions if parameters, constraints, or risk levels are incomplete.
+
+Mitigation: Review parameter lists, business constraints, high-risk combinations, and coverage gaps before using the output as a test plan.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-combination-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown tables and structured text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes combination matrices, pairwise combinations, n-way analysis, coverage gaps, and traceable test case rows.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,54 @@
-## Description: <br>
-Guides when to ask clarifying questions versus proceed autonomously to reduce unnecessary clarifying questions when intent is clear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides when to ask clarifying questions versus proceed autonomously, reducing unnecessary questions when intent is clear.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to decide when to ask clarifying questions and when to proceed with a standard, reversible implementation. It is intended to reduce unnecessary interruptions while preserving explicit confirmation for destructive, security-critical, migration, deployment, or otherwise high-impact work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may make an agent more proactive and reduce clarifying questions. <br>
-Mitigation: Require explicit approval before the agent changes external systems, deletes data, deploys code, handles credentials, or makes security-sensitive changes. <br>
-Risk: Proceeding autonomously on ambiguous or high-impact requests can produce incorrect or unsafe changes. <br>
-Mitigation: Use dry runs, previews, backups, incremental changes, and explicit confirmation for destructive, security-critical, migration, breaking-change, or production deployment work. <br>
+## Use Case:
 
+Agents and agent operators use this skill to decide when clarification is necessary and when routine, reversible work can proceed with documented assumptions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-decisive-action) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown] <br>
-**Output Format:** [Markdown guidance with decision tables, checklists, examples, and concise response patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No API keys, MCP tools, or credential environment variables were detected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: The skill may encourage autonomous action when a user expected clarification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply it to routine or reversible work, and ask when ambiguity would materially affect correctness.
+
+Risk: Destructive, security-critical, data migration, breaking change, or production deployment work could be mishandled if confirmation gates are skipped.
+
+Mitigation: Require explicit confirmation for high-stakes or irreversible actions before proceeding.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-decisive-action)
+- [Claude Night Market conserve plugin](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Markdown guidance and decision checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance-only behavior; no external tools, API calls, or credentials are required.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

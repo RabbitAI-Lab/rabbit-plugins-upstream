@@ -1,44 +1,68 @@
-## Description: <br>
-Fireflies.ai GraphQL API integration with managed OAuth for accessing meeting transcripts, summaries, users, contacts, and AI-powered meeting analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fireflies.ai GraphQL API integration with managed OAuth for accessing meeting transcripts, summaries, users, contacts, and AI-powered meeting analysis.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to Fireflies.ai through Maton so they can retrieve meeting transcripts, summaries, participant, user, and contact data, and perform AskFred meeting analysis. It also provides examples for approved GraphQL mutations such as transcript updates, audio uploads, user role changes, and live-meeting actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Fireflies meeting transcripts, audio, video URLs, participant data, and account metadata through Maton. <br>
-Mitigation: Install only when that access is acceptable, keep MATON_API_KEY private, and request only the transcript or account fields needed for the user task. <br>
-Risk: GraphQL mutations can create, update, delete, change roles, or affect live-meeting resources. <br>
-Mitigation: Require explicit user confirmation of the target resource and intended effect before any create, update, delete, role-change, or live-meeting action. <br>
+## Use Case:
 
+Developers, operators, and agent users use this skill to retrieve Fireflies meeting data, search or analyze transcripts with AskFred, and manage meeting recordings through Maton-mediated API calls.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/fireflies-api) <br>
-- [Fireflies API Documentation](https://docs.fireflies.ai/) <br>
-- [Fireflies GraphQL API Reference](https://docs.fireflies.ai/graphql-api) <br>
-- [Fireflies Developer Program](https://docs.fireflies.ai/getting-started/developer-program) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, GraphQL, JSON, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Fireflies connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can access Fireflies meeting transcripts, contacts, summaries, and recordings through a connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable granting Maton-mediated Fireflies access, use OAuth where possible, and select the least privilege scopes and accounts needed for the task.
+
+Risk: New Fireflies connections and mutations can change account state or expose meeting content.
+
+Mitigation: Require explicit user approval before creating a connection or running any mutation, and describe the target resource, payload, and intended effect before execution.
+
+Risk: The raw API-key fallback increases exposure of a long-lived credential if the CLI cannot be used.
+
+Mitigation: Prefer the Maton CLI OAuth flow; use the API-key fallback only when necessary, avoid printing or persisting the key, and send it only to the Maton API.
+
+Risk: Fireflies content returned by the API can contain untrusted instructions or adversarial text.
+
+Mitigation: Treat API responses as data, do not execute or follow instructions embedded in retrieved content, and keep endpoint and recipient choices under user control.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/fireflies-api)
+- [Maton homepage](https://maton.ai)
+- [Fireflies API Documentation](https://docs.fireflies.ai/)
+- [Fireflies GraphQL API Reference](https://docs.fireflies.ai/graphql-api)
+- [Fireflies Developer Program](https://docs.fireflies.ai/getting-started/developer-program)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell, GraphQL, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Maton CLI/API usage guidance and request examples; does not create local files as part of normal skill behavior.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

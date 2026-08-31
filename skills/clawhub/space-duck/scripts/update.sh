@@ -32,6 +32,7 @@
 #   14  = listener bounce failed
 #   15  = post-install self-test failed (listener not pulsing)
 #   16  = registry lookup failed AND no installed version found
+#   17  = restart did not take effect (running != installed)
 #   20  = unexpected error (caught by trap)
 #
 # Authored 2026-06-15 — Apple-grade update story Phase 1 of 5.
@@ -202,7 +203,13 @@ for p in "${LISTENER_CANDIDATES[@]}"; do
 done
 
 # Detect already-running listeners (regardless of script presence)
-RUNNING_LISTENERS=$(pgrep -fa 'telegram_listener\.py\|peck_responder\.py\|peck_listener\.py' 2>/dev/null | grep -v "$0" || true)
+# 0.8.13 [RUN-0813] — `pgrep -f` uses ERE, where `\|` is a LITERAL pipe, not
+# alternation. The old BRE-style pattern matched nothing, so RUNNING_LISTENERS
+# was always empty and step 9 always took the "start fresh" branch — meaning
+# `--restart` was never called and a running listener kept executing the OLD
+# bytecode after every update. Single-character bug, fleet-wide effect.
+RUNNING_LISTENERS=$(pgrep -fa 'telegram_listener\.py|peck_responder\.py|peck_listener\.py' 2>/dev/null | grep -v "$0" || true)
+RUNNING_PIDS_BEFORE=$(echo "$RUNNING_LISTENERS" | awk 'NF{print $1}' | sort -n | tr '\n' ' ')
 
 if [[ -z "$LISTENER_SCRIPT" ]]; then
   if [[ -n "$RUNNING_LISTENERS" ]]; then
@@ -272,6 +279,99 @@ if [[ "$PULSE_OK" != "1" ]]; then
 fi
 ok "Listener is alive"
 
+# ─── 10b. Verify running == installed ─────────────────────────────────────────
+# "A listener process exists" is ALSO true when the bounce silently failed and
+# the old process kept serving. Each listener stamps the version it is actually
+# executing into running-version.json at startup (0.8.13 [RUN-0813]); read it
+# back and refuse to report success on a stale stamp.
+#
+# [RUN-0813 critique F1/F2/F3/F7] Three ways this check used to lie:
+#   F1 partial restart — one component bounced, the other survived on old
+#      bytecode. A "some entry is fresh" test passed. Now every stamped
+#      component whose PID is STILL ALIVE must be fresh, or we fail.
+#   F3 one-shot invocations (`listener.py --help`) stamp before argparse, so a
+#      dead pid could forge a fresh stamp. Stamps are now cross-checked against
+#      live PIDs; a dead pid's stamp counts for nothing.
+#   F2 empty pgrep under `pipefail` fired the ERR trap and reported exit 20
+#      ("unexpected error") for the ordinary case of a listener having died.
+#   F7 NEW_VERSION=unknown turned a warn into a confusing exit 17.
+step "Verifying running version matches installed"
+RUNNING_VERSION_FILE="$HOME/.space-duck/running-version.json"
+RUNNING_VERSION=""
+STALE_COMPONENTS=""
+
+if [[ "$NEW_VERSION" == "unknown" ]]; then
+  warn "Installed version unknown — skipping running-vs-installed verification."
+  RUNNING_VERSION="unknown"
+else
+  for i in {1..10}; do
+    LIVE_PIDS=$(pgrep -f 'telegram_listener\.py|peck_responder\.py|peck_listener\.py' 2>/dev/null | tr '\n' ' ') || true
+    if [[ -r "$RUNNING_VERSION_FILE" ]]; then
+      VERIFY_OUT=$(python3 - "$RUNNING_VERSION_FILE" "$LIVE_PIDS" <<'PYEOF' 2>/dev/null
+import json, sys, time
+try:
+    d = json.load(open(sys.argv[1]))
+except Exception:
+    sys.exit(1)
+live = {p for p in sys.argv[2].split() if p}
+now = time.time()
+fresh, stale = {}, []
+for name, v in d.items():
+    if not isinstance(v, dict):
+        continue
+    # A stamp only counts if the process that wrote it is STILL RUNNING —
+    # otherwise `--help`-style one-shots forge a passing stamp (F3).
+    if str(v.get('pid') or '') not in live:
+        continue
+    if (now - int(v.get('started_at') or 0)) < 300:
+        fresh[name] = str(v.get('version') or '')
+    else:
+        # Alive, stamped, but did NOT restart during this update (F1).
+        stale.append(name)
+if not fresh and not stale:
+    sys.exit(1)
+print(",".join(sorted(set(fresh.values()))))
+print(",".join(sorted(stale)))
+PYEOF
+) || true
+      RUNNING_VERSION=$(echo "$VERIFY_OUT" | sed -n '1p')
+      STALE_COMPONENTS=$(echo "$VERIFY_OUT" | sed -n '2p')
+    fi
+    [[ -n "$RUNNING_VERSION" || -n "$STALE_COMPONENTS" ]] && break
+    sleep 1
+  done
+fi
+
+if [[ -n "$STALE_COMPONENTS" ]]; then
+  fail "Restart did not take effect for: $STALE_COMPONENTS (still running pre-update)"
+  hint "Installed v$NEW_VERSION; those components are serving older bytecode."
+  hint "Recover: for c in ${STALE_COMPONENTS//,/ }; do pkill -f \"\$c.py\"; done; $LISTENER_SCRIPT"
+  hint "Log: $LISTENER_LOG"
+  exit 17
+elif [[ -z "$RUNNING_VERSION" ]]; then
+  warn "No fresh running-version stamp found."
+  hint "Expected: $RUNNING_VERSION_FILE"
+  hint "Pre-0.8.13 listeners do not write one — restart again after this update."
+  RUNNING_VERSION="unknown"
+elif [[ "$RUNNING_VERSION" == "unknown" ]]; then
+  : # verification skipped above
+elif [[ "$RUNNING_VERSION" != "$NEW_VERSION" ]]; then
+  fail "Restart did not take effect — running v$RUNNING_VERSION, installed v$NEW_VERSION"
+  hint "The old process is still serving. Recover: pkill -f telegram_listener.py; $LISTENER_SCRIPT"
+  hint "Log: $LISTENER_LOG"
+  exit 17
+else
+  ok "Running v$RUNNING_VERSION == installed v$NEW_VERSION"
+fi
+
+if [[ -n "$RUNNING_PIDS_BEFORE" ]]; then
+  RUNNING_PIDS_AFTER=$( { pgrep -f 'telegram_listener\.py|peck_responder\.py|peck_listener\.py' 2>/dev/null || true; } | sort -n | tr '\n' ' ')
+  if [[ "$RUNNING_PIDS_AFTER" == "$RUNNING_PIDS_BEFORE" ]]; then
+    warn "Listener PIDs unchanged ($RUNNING_PIDS_AFTER) — process was never re-executed."
+    hint "Version stamp says v$RUNNING_VERSION; treat with suspicion and bounce manually."
+  fi
+fi
+
 # ─── 11. Final report ─────────────────────────────────────────────────────────
 echo
 echo "${C_GREEN}${C_BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${C_RESET}"
@@ -280,7 +380,7 @@ echo "${C_GREEN}${C_BOLD}━━━━━━━━━━━━━━━━━━�
 echo
 echo "  Previous: v$CURRENT_VERSION"
 echo "  Current:  v$NEW_VERSION"
-echo "  Listener: alive"
+echo "  Listener: alive (running v${RUNNING_VERSION:-unknown})"
 if [[ -n "${BACKUP_DIR:-}" ]]; then
   echo "  Backup:   $BACKUP_DIR"
 fi

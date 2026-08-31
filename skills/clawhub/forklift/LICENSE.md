@@ -1,87 +1,102 @@
-﻿<!--
+<!--
 Copyright (c) 2026 杨鹏飞 / 微信公众号「叉车技术老炮」
-Licensed under CC BY-NC 4.0 + 附加条款 - 严禁商用 - 完整协议见 ../LICENSE.md
+Licensed under the MIT License - 完整协议见下文
 -->
 # 授权协议 / License
 
-> 本文件是 forklift-expert Skill 包(以下简称"本作品")的授权协议。
-> 使用、复制、修改、分发本作品前,请仔细阅读本协议。
+> 本文件是 forklift-expert Skill 包（以下简称"本作品"）的授权协议。
+> 本作品采用 **MIT License**（麻省理工学院许可证）发布,这是一份宽松、
+> 商业友好的开源协议。
 
-## 协议组成
+---
 
-本协议由两部分组成:
-1. **基础协议**:Creative Commons 署名-非商业 4.0 国际 (CC BY-NC 4.0)
-2. **附加条款**:作者专门为本作品增加的额外限制
-
-当两部分冲突时,**以附加条款为准**。
-
-## 一、基础协议摘要(CC BY-NC 4.0)
-
-完整 CC BY-NC 4.0 协议请见:
-- https://creativecommons.org/licenses/by-nc/4.0/legalcode.zh-Hans
-- 官方解释:https://creativecommons.org/licenses/by-nc/4.0/
-
-核心要点:
-- ✅ **共享** — 任何媒介复制、分发本作品
-- ✅ **演绎** — 修改、转换本作品,基于本作品进行再创作
-- ✅ **署名** — 需在显著位置标明原作者:**杨鹏飞**,公众号**叉车技术老炮**
-- ❌ **非商业** — 不得用于商业目的
-
-## 二、附加条款(本作品专属)
-
-### 第 1 条:商业使用禁令(强约束)
-
-**严禁**将本作品或其衍生作品用于任何商业用途,包括但不限于:
-
-1. **直接商业化**
-   - 将本 Skill 整体或部分内容出售、租赁
-   - 通过订阅、付费下载、付费 API 调用等方式提供本作品内容
-   - 包装为"专业版""企业版"等收费产品
-
-2. **嵌入商业产品**
-   - 将本作品内容集成到任何商业软件、SaaS、APP 中(免费或付费)
-   - 用于商业培训、付费课程、商业咨询报告
-   - 用于商业自媒体内容并通过该内容获利(广告、流量分成、带货等)
-
-3. **品牌混淆**
-   - 不得移除或修改本作品中的作者署名、版权声明、协议链接
-   - 不得将本作品署名为他人或匿名分发
-   - 不得将本作品冒充为"官方""权威""认证"内容
-   - 不得基于本作品创建竞争性产品(同样定位的工业 Skill)
-
-4. **数据滥用**
-   - 不得将本作品中的数据批量抓取后,用于训练商用 AI 模型
-   - 不得将本作品内容作为竞品分析材料的"免费素材"
-
-### 第 2 条:署名要求
-
-任何使用、引用、转载、再创作,均需满足:
+## 一、MIT License（English, Official）
 
 ```
-显著位置标注:
-作者:杨鹏飞
-公众号:叉车技术老炮
-原文出处:微信公众号"叉车技术老炮"
+MIT License
+
+Copyright (c) 2026 杨鹏飞 / 微信公众号「叉车技术老炮」
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
-如用于文章,建议格式:
-> "本文内容参考自杨鹏飞/叉车技术老炮维护的 forklift-expert Skill 包"
+---
 
-### 第 3 条:派生作品
+## 二、MIT 协议核心要点（中文摘要）
 
-- 允许基于本作品进行修改、扩展、衍生
-- 衍生作品**必须**采用本协议或更严格的协议
-- 衍生作品**必须**显著标注原作者
+### 允许 ✅
 
-### 第 4 条:法律救济
+| 行为 | 说明 |
+|------|------|
+| 商业使用 | 可将本作品用于商业产品、SaaS、付费服务 |
+| 修改 | 可修改源代码或翻译、扩展内容 |
+| 分发 | 可复制、再分发本作品或衍生作品 |
+| 私有使用 | 可在公司内部、私有项目中使用 |
+| 嵌入产品 | 可集成到自有软件、APP、平台中 |
+| 销售 | 可出售本作品的副本或衍生品 |
+| 训练 AI | 可用于训练开源或商用 AI 模型 |
 
-违反本协议者,作者保留追究法律责任的权利,包括但不限于:
-- 要求停止侵权
-- 公开声明消除影响
-- 主张经济赔偿
-- 移交司法机关处理
+### 唯一条件 📌
 
-### 第 5 条:免责声明
+- **保留版权声明**:在所有副本或实质性部分中,必须保留上述版权声明
+  和本许可声明（即保留"Copyright (c) 2026 杨鹏飞"和 MIT 协议全文）。
+
+### 不承诺 ⚠️
+
+- 作者不承诺软件的**准确性、完整性、适用性、可用性**。
+- 使用本作品产生的任何直接或间接损失,作者**不承担责任**。
+
+---
+
+## 三、与原协议（CC BY-NC-4.0 + 附加条款）的差异
+
+| 项目 | 原协议 | MIT（新） |
+|------|--------|----------|
+| 商业使用 | ❌ 禁止 | ✅ 允许 |
+| 修改后闭源 | ❌ 须同样非商业 | ✅ 允许 |
+| 嵌入付费产品 | ❌ 须授权 | ✅ 允许 |
+| 训练商用 AI | ❌ 须授权 | ✅ 允许 |
+| 唯一要求 | 署名 + 非商业 | 仅保留版权声明 |
+
+> 本协议变更后,**仅适用于 v2.3 及以后版本**;v2.2 及之前版本仍沿用
+> 原 CC BY-NC-4.0 + 附加条款。
+
+---
+
+## 四、协议兼容性表
+
+| 场景 | 是否允许 | 条件 |
+|------|---------|------|
+| 个人学习 | ✅ | 保留版权声明 |
+| 团队内部使用 | ✅ | 保留版权声明 |
+| 自媒体引用 | ✅ | 保留版权声明 |
+| 商业培训课程 | ✅ | 保留版权声明 |
+| 商业软件集成 | ✅ | 保留版权声明 |
+| 出售副本/衍生品 | ✅ | 保留版权声明 |
+| 训练开源 AI 模型 | ✅ | 保留版权声明 |
+| 训练商用 AI 模型 | ✅ | 保留版权声明 |
+| 修改后闭源分发 | ✅ | 保留版权声明 |
+| 学术论文引用 | ✅ | 注明出处 |
+
+---
+
+## 五、免责声明
 
 本作品"按现状"提供,作者不承诺:
 
@@ -101,41 +116,29 @@ Licensed under CC BY-NC 4.0 + 附加条款 - 严禁商用 - 完整协议见 ../L
 
 请在使用前由专业人士审核。
 
-### 第 6 条:商用授权
+---
 
-如需商用(违反第 1 条),必须事先获得作者书面授权。
+## 六、署名建议（非强制但推荐）
 
-联系渠道:
-- 微信公众号:**叉车技术老炮** — 通过公众号留言或菜单获取联系方式
+虽然 MIT 协议只要求"保留版权声明",但作者**强烈建议**在显著位置
+标注原始作者,以体现对原创贡献的尊重:
 
-### 第 7 条:协议变更
+```
+原始作者:杨鹏飞
+公众号:叉车技术老炮
+```
 
-作者保留随时更新本协议的权利。协议变更后:
-- 新版本仅适用于变更后发布的内容
-- 已在使用的版本沿用变更前的协议
+文章引用建议格式:
+> "本文内容参考自杨鹏飞/叉车技术老炮维护的 forklift-expert Skill 包"
 
-## 三、协议兼容性表
+---
 
-| 场景 | 是否允许 | 条件 |
-|------|------|------|
-| 个人学习 | ✅ | 保留作者署名 |
-| 团队内部培训 | ✅ | 保留作者署名 + 不得收费 |
-| 自媒体引用 | ✅(免费内容) | 保留作者署名 + 不得通过该内容直接获利 |
-| 自媒体引用 | ❌(付费内容/打赏) | 需商用授权 |
-| 商业培训课程 | ❌ | 需商用授权 |
-| 商业咨询报告 | ❌ | 需商用授权 |
-| 商业软件集成 | ❌ | 需商用授权 |
-| 二手交易/出售 | ❌ | 需商用授权 |
-| 学术论文引用 | ✅ | 注明出处 |
-| 教学材料(非营利) | ✅ | 保留作者署名 |
-| 训练开源 AI 模型 | ✅ | 保留作者署名 + 衍生模型也需非商业 |
-| 训练商用 AI 模型 | ❌ | 需商用授权 |
+## 七、版本
 
-## 四、版本
-
-- 协议版本:v1.0
-- 发布日期:2026-06
-- 适用作品:forklift-expert Skill v2.1 及后续版本
+- 协议版本:v2.0（MIT 化）
+- 发布日期:2026-08
+- 适用作品:forklift-expert Skill v2.3 及后续版本
+- 此前版本(≤v2.2):沿用 CC BY-NC-4.0 + 附加条款
 
 ---
 

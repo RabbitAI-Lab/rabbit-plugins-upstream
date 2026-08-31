@@ -1,6 +1,8 @@
 ---
 name: qa-test-automation-arch
-version: 1.6.0
+slug: qa-test-automation-arch
+displayName: Test Automation Arch
+version: 1.7.5
 description: >-
   当需要设计自动化测试框架、或者现有框架维护成本太高需要重构时使用此技能。运用 PageObject、分层测试、关键字驱动、数据驱动等模式设计可维护可扩展的自动化架构。不要直接写测试代码——先设计架构：选型（UI/API/单元）、分层（测试层/业务层/基础设施层）、数据管理（测试数据与脚本分离）和 CI 集成方案。好的自动化架构应该让写用例的人不需要懂底层实现。
 
@@ -31,6 +33,9 @@ output_format:
   traceability:
     - 每份架构设计带唯一ID（ARCH-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - automation_architecture: 自动化测试架构设计
     - framework_selection: 框架选择建议
     - layer_design: 分层设计

@@ -1,6 +1,8 @@
 ---
 name: qa-tech-debt-management
-version: 1.6.0
+slug: qa-tech-debt-management
+displayName: Tech Debt Management
+version: 1.7.5
 description: >-
   当自动化用例频繁维护、跑一次就倒下一批、或者发现团队的测试资产维护成本越来越高时使用此技能。系统化识别测试自动化债务和测试资产技术债，评估每项债务的利息（维护成本）和本金（重写成本），给出分阶段的还款规划。不要追着 flaky test 修——技术债务管理解决的是"为什么有这么多 flaky test"的系统性问题。
 
@@ -29,6 +31,9 @@ output_format:
   traceability:
     - 本技能评估债务，每个债务项沿用关联的缺陷ID或自动化架构ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - debt_inventory: 技术债务清单
     - impact_analysis: 影响分析
     - repayment_plan: 偿还计划

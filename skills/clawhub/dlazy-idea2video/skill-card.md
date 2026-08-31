@@ -1,45 +1,60 @@
-## Description: <br>
-Turns a user's idea into a video-generation workflow plan covering story, characters, scenes, shots, keyframes, shot videos, and final concatenation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a user's idea into a video-production workflow covering story, characters, portraits, scenes, shots, keyframes, shot videos, and final concatenation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to turn a video idea into a staged production plan, canvas-ready workflow shapes, and dLazy CLI generation steps. It is intended for agent-assisted media planning and generation with explicit user confirmation before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill combines canvas-planning guidance with mandatory terminal-based generation, which may exceed what a user expects from a planning workflow. <br>
-Mitigation: Require explicit confirmation before running generation commands and keep each proposed command visible for review. <br>
-Risk: Prompts and referenced media may be sent to dLazy API services and uploaded to dLazy media storage. <br>
-Mitigation: Use the skill only with inputs suitable for dLazy services, avoid sensitive media, and review uploaded inputs before approving commands. <br>
-Risk: Using a globally installed CLI may persist tooling and API configuration on the local system. <br>
-Mitigation: Prefer the pinned npx invocation when a global install is not desired, and rotate or revoke dLazy API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users, creators, and developers use this skill to turn a creative seed into a review-gated video generation plan and canvas workflow using dLazy services.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-idea2video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands, workflow configuration details, and generated media URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create canvas workflow shapes and propose or run dLazy CLI commands after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.9 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Prompts and selected media are sent to dLazy services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive prompts and files, and review inputs before running generation commands.
+
+Risk: The dLazy API key may be stored in a local CLI configuration file.
+
+Mitigation: Use an environment variable or rotate and revoke stored keys when long-lived local credentials are not acceptable.
+
+Risk: The skill can ask the agent to run dLazy CLI commands.
+
+Mitigation: Require explicit user review before terminal execution and prefer npx when a persistent global install is not desired.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-idea2video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured plan summaries, inline commands, and generated workflow data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces review-gated plan summaries before expanding the workflow; generated media is returned through dLazy-hosted URLs.]
+
+## Skill Version(s):
+
+1.3.14 (source: server release evidence; artifact frontmatter lists 1.3.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

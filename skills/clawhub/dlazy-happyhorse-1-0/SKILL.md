@@ -1,14 +1,13 @@
 ---
 name: dlazy-happyhorse-1.0
 version: 1.3.4
-description: Happy Horse 1.0 video model — one model covers text-to-video (t2v), first-frame-to-video (i2v), reference-to-video (r2v), and video editing (edit). The selected mode is automatically routed to the matching sub-model. Happy Horse 1.0 视频模型，一站式覆盖文生视频（t2v）、首帧生视频（i2v）、参考图生视频（r2v）与视频编辑（edit）：根据所选模式自动路由到对应子模型。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy happyhorse-1.0 -h for help."}}
+description: "Happy Horse 1.0 video model — one model covers text-to-video (t2v), first-frame-to-video (i2v), reference-to-video (r2v), and video editing (edit). The selected mode is automatically routed to the matching sub-model. Happy Horse 1.0 视频模型，一站式覆盖文生视频（t2v）、首帧生视频（i2v）、参考图生视频（r2v）与视频编辑（edit）：根据所选模式自动路由到对应子模型。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy happyhorse-1.0 -h for help."}}
 ---
 
-# dlazy-happyhorse-1.0
+# 视频生成 快马 Happyhorse 1.0
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Happy Horse 1.0 video model — one model covers text-to-video (t2v), first-frame-to-video (i2v), reference-to-video (r2v), and video editing (edit). The selected mode is automatically routed to the matching sub-model.
@@ -47,7 +46,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -91,6 +90,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -103,7 +103,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "happyhorse-1.0",
-    "modelId": "happyhorse-1.0",
+    "modelId": "happyhorse-1-0",
     "outputs": [
       {
         "type": "image",

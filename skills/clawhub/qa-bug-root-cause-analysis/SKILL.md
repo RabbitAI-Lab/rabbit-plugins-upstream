@@ -1,6 +1,8 @@
 ---
 name: qa-bug-root-cause-analysis
-version: 1.6.0
+slug: qa-bug-root-cause-analysis
+displayName: Bug Root Cause Analysis
+version: 1.7.5
 description: >-
   当某个 Bug 频繁复现、线上有缺陷需要做事后分析、或者发现同一类问题反复出现需要根治时使用此技能。从症状出发用 5Why、因果图和鱼骨图等方法系统化定位缺陷根源，区分直接原因、间接原因和系统原因。不要只修症状——根因分析的价值在于找到让同类 Bug 不再发生的系统性改进措施，同时分析漏测原因来优化测试设计。 ⚠️ 本技能示例可能调用外部日志/监控工具，请在受控环境执行。
 when_to_use: 用户说"Bug根因"、"根因分析"、"为什么出Bug"、"深层原因"、"定位问题"、"排查方向"、需要分析Bug根因、反复出现同类问题需要根因改进时
@@ -29,8 +31,11 @@ input_format:
 output_format:
   traceability:
     - 每个根因分析带唯一ID（ROOT-XXXX）
-    - 关联Bug ID（BUG-XXXX）
+    - 关联Bug ID（TC_{缺陷模块缩写}_{功能缩写}_{序号}，如 TC_BUG_LOGIN_001；缺陷追溯保留 BUG 前缀）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - root_cause: 根因分析结论
     - contributing_factors: 促成因素清单
     - impact_assessment: 影响范围评估

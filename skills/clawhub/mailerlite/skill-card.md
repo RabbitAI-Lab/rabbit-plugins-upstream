@@ -1,49 +1,66 @@
-## Description: <br>
-MailerLite API integration with managed OAuth for managing email subscribers, groups, campaigns, automations, forms, fields, segments, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailerLite API integration with managed OAuth for managing email subscribers, groups, campaigns, automations, forms, fields, segments, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to a MailerLite account through Maton-managed OAuth and perform subscriber, group, campaign, automation, form, segment, field, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform real MailerLite account-changing actions such as sends, deletes, webhook changes, automation changes, and subscriber changes. <br>
-Mitigation: Require explicit user confirmation before any create, update, delete, send, schedule, webhook, automation, or subscriber-change action. <br>
-Risk: The skill requires sensitive credentials and proxies access through Maton-managed OAuth. <br>
-Mitigation: Keep MATON_API_KEY private and install only when the user trusts Maton to proxy the connected MailerLite account. <br>
-Risk: Multiple MailerLite connections can cause requests to affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one MailerLite account is connected. <br>
+## Use Case:
 
+External users and developers use this skill to operate MailerLite accounts through Maton OAuth, including subscriber, group, campaign, automation, form, field, segment, and webhook tasks.
 
-## Reference(s): <br>
-- [ClawHub MailerLite skill page](https://clawhub.ai/byungkyu/mailerlite) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton settings](https://maton.ai/settings) <br>
-- [MailerLite API Documentation](https://developers.mailerlite.com/docs/) <br>
-- [MailerLite Subscribers API](https://developers.mailerlite.com/docs/subscribers.html) <br>
-- [MailerLite Groups API](https://developers.mailerlite.com/docs/groups.html) <br>
-- [MailerLite Campaigns API](https://developers.mailerlite.com/docs/campaigns.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid MailerLite OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: MailerLite writes can affect customers or external recipients, especially campaign scheduling, webhooks, subscriber deletion, and automation changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact account, connection, target resource, payload, and intended effect before any write operation.
+
+Risk: Credential exposure can occur if API keys or tokens are printed, stored, or passed through shell arguments.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid raw HTTP fallback unless the CLI cannot be used, and never print or persist credentials.
+
+Risk: Using an ambiguous default account or connection can send changes to the wrong MailerLite workspace.
+
+Mitigation: List and verify available connections first, then specify the intended Maton profile and MailerLite connection for account-sensitive operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/mailerlite)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [MailerLite API Documentation](https://developers.mailerlite.com/docs/)
+- [MailerLite Subscribers API](https://developers.mailerlite.com/docs/subscribers.html)
+- [MailerLite Groups API](https://developers.mailerlite.com/docs/groups.html)
+- [MailerLite Campaigns API](https://developers.mailerlite.com/docs/campaigns.html)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline bash, JSON, and curl examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent guidance for Maton CLI and MailerLite API operations; API responses depend on the connected MailerLite account.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

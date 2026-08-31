@@ -1,43 +1,54 @@
-## Description: <br>
-Guides QA and engineering teams through shift-left testing activities across requirements, design, and development to produce early testing checklists, quality gates, and intervention records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners and development teams shift testing earlier by reviewing requirement testability, planning development-stage test design, assessing technical risks, and producing shift-left checklists and intervention records.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and project teams use this skill during requirements, design, and active development to plan shift-left testing, assess testability, define early quality gates, and document phased intervention activities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may activate the skill during unrelated QA conversations. <br>
-Mitigation: Use explicit invocation or narrow trigger wording when installing it in contexts with many QA skills. <br>
-Risk: The skill declares Bash access even though the artifact is primarily a document-review and planning aid. <br>
-Mitigation: Avoid granting Bash unless the operating environment needs it; use read-only document review for checklist generation where possible. <br>
-Risk: Shift-left recommendations can become misleading if source requirements, timelines, or quality targets are incomplete. <br>
-Mitigation: Review generated checklists and quality gates with product, engineering, and QA owners before treating them as project controls. <br>
+## Use Case:
 
+QA engineers, developers, and engineering teams use this skill during requirement, design, and development phases to identify defects earlier, define testable acceptance criteria, plan unit and API testing support, and document shift-left quality gates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-shift-left) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown checklists and structured planning notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes traceability to requirements review IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill may activate on broad testing or bug-reduction requests and provide planning guidance outside the user's intended scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the project phase, requested QA activity, and available project inputs before applying its checklists or plans.
+
+Risk: An agent using the skill may choose to inspect or run project commands because Bash is listed as an allowed tool.
+
+Mitigation: Review any proposed shell command before execution and avoid running commands that change project state unless explicitly needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-shift-left)
+- [ClawHub publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown checklists, tables, and planning guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a nine-column test case table, shift-left test plan, early intervention activities, quality gates, and team enablement plan.]
+
+## Skill Version(s):
+
+1.7.5 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

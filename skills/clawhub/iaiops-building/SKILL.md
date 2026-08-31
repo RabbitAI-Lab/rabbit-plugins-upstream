@@ -83,11 +83,19 @@ Bearer/token 从加密 secret store 按 key 取（`secret_name`），不走明�
   （change-log 基线：拒学薄历史、只报持续越带、每次告警必引基线样本 —— 非黑盒异常检测）
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
   `historian_push` `export_data`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`（解读导出的 ST/AWL/L5X 程序,只读文件,强制引用行号）
 - 医疗设施（healthcare facility 安全）：`isolation_room_check` — 隔离病房压差合规（ASHRAE 170 / CDC：空气传染隔离 AII 负压、保护性环境 PE 正压，≥2.5 Pa）；检出反向/不足/低裕度,worst-first,每项引用读数。读数来自 `bacnet_read_points` 的压差 AI 点或历史库,纯分析。
-- 元：`protocols_supported`
+- 元：`protocols_supported`(产品能做什么)· `site_readiness`(这个站点今天能跑什么、还差什么;零联网)
+- 调查层（§13，八步证据闭环）：`investigation_readiness` `investigation_open` `investigation_show`
+  `investigation_list` — 「真出事时这个站能走到第几步、每个缺口还差什么」，以及对一个**已过去的窗口**
+  逐步走完并留档（不碰设备）。缺口分两种:**你没供**(给命令) 与 **产品供不了**。
+- 产线关系与机制库：`line_relation_declare` `line_relations_list` `mechanism_library_check`
+  `mechanism_library_list` — 上下游由**人声明**（D25:线上下游共现是必然，推不出因果）；
+  机制库按 ISO 14224 分 mode/mechanism/cause，**可排除、绝不确认**，
+  库里没有这条原因 → `nothing_known`（不是「无异议」）。
+
 
 ## Workflows
 

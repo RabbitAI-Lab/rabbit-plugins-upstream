@@ -1,46 +1,62 @@
-## Description: <br>
-WordPress.com API integration with managed OAuth for managing posts, pages, sites, and site content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WordPress.com API integration with managed OAuth for managing posts, pages, sites, and content.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to interact with WordPress.com through Maton-managed OAuth, including listing, creating, updating, and deleting posts and pages and managing site and account content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API keys and WordPress.com OAuth connections can authorize broad account and content access. <br>
-Mitigation: Install only if you trust Maton to mediate OAuth access, keep MATON_API_KEY private, and review the connected WordPress.com account before use. <br>
-Risk: Write-capable endpoints can publish, edit, delete, like or unlike content, list site users, or change account settings. <br>
-Mitigation: Require explicit user confirmation before any write operation or sensitive account action, including the target resource and intended effect. <br>
-Risk: When multiple WordPress.com connections exist, requests may affect the wrong account or site. <br>
-Mitigation: Use the Maton-Connection header for multi-account setups and confirm the target connection, site, and resource before executing requests. <br>
+## Use Case:
 
+Developers and external users use this skill to connect an agent to a WordPress.com account through Maton OAuth so it can list, create, update, or delete posts, pages, site data, and user settings with approval for write actions.
 
-## Reference(s): <br>
-- [ClawHub WordPress Skill](https://clawhub.ai/byungkyu/wordpress-api) <br>
-- [WordPress.com REST API Overview](https://developer.wordpress.com/docs/api/) <br>
-- [WordPress.com REST API Getting Started](https://developer.wordpress.com/docs/api/getting-started/) <br>
-- [WordPress.com REST API Reference](https://developer.wordpress.com/docs/api/rest-api-reference/) <br>
-- [WordPress.com OAuth Authentication](https://developer.wordpress.com/docs/oauth2/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid WordPress.com OAuth connection mediated by Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can call WordPress.com APIs for the connected account, including content publication, deletion, and user-setting changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the site, connection, endpoint, payload, and intended effect before any write action; default to read and list calls first.
+
+Risk: Long-lived Maton API keys can leak through logs, shell history, process listings, or persisted environment files when OAuth or the CLI is not used.
+
+Mitigation: Prefer OAuth through the Maton CLI; when raw HTTP is necessary, never print, log, persist, or pass the key on a command line, and send it only to api.maton.ai.
+
+Risk: WordPress.com content returned by the API may contain untrusted instructions or data.
+
+Mitigation: Treat API responses as data, validate values before reuse, and never execute or interpolate returned content into shell commands or follow-up requests.
+
+## Reference(s):
+
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [WordPress.com REST API Overview](https://developer.wordpress.com/docs/api/)
+- [WordPress.com REST API Reference](https://developer.wordpress.com/docs/api/rest-api-reference/)
+- [WordPress.com OAuth Authentication](https://developer.wordpress.com/docs/oauth2/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval before creating connections or performing write operations.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata; frontmatter metadata version 1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

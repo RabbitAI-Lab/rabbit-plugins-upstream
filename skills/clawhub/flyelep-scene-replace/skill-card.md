@@ -1,42 +1,60 @@
-## Description: <br>
-Scene Replace guides an agent to call the Flyelep AI Tool API to replace an image background using a public source image URL, scene reference image URL, and prompt text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent call the Flyelep AI Tool API to replace an image background scene with a target scene using a reference image and text prompt.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and developers use this skill when they need an agent to replace the background scene of an image, such as changing a product display environment while preserving the subject. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends selected image URLs, reference image URLs, prompt text, and a Flyelep API key to Flyelep. <br>
-Mitigation: Use it only with images and prompts suitable for that provider, and keep the secretKey private. <br>
-Risk: The API requires publicly reachable image URLs, so private or expiring links may fail or expose content to a third-party service. <br>
-Mitigation: Provide only intended public image links and avoid sensitive images unless the provider's handling is acceptable. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to gather required image URLs, prompt text, and a Flyelep secretKey, then call Flyelep's scene replacement API and return the generated image URL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/flyelep-scene-replace) <br>
-- [Flyelep scene replacement API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/sceneReplace) <br>
-- [Flyelep controlboard](https://www.flyelep.cn/controlboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns the generated image URL from the Flyelep API response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requires a user-provided Flyelep secretKey for API calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide the secretKey only at runtime, do not store it in skill files or persistent configuration, and rotate it if it is exposed.
+
+Risk: Uploading local images can create permanent public URLs accessible to anyone with the link.
+
+Mitigation: Avoid confidential, personal, or proprietary images unless that exposure is acceptable; prefer already-public image URLs for sensitive workflows.
+
+Risk: Incorrect inputs can cause failed calls or poor scene replacement results.
+
+Mitigation: Confirm required parameters with the user, keep modelType set to 9, provide exactly one optional reference image, and use a specific textPrompt.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/flyelep-scene-replace)
+- [Flyelep scene replacement API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/sceneReplace)
+- [Flyelep file upload API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+- [Flyelep control board](https://www.flyelep.cn/controlboard)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with HTTP, JSON, shell, and PowerShell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the scene replacement result as an image URL when the API call succeeds.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,88 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    container_name: iranchem_app
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+    volumes:
+      - httrack_mirrors:/var/lib/iran_chem_db/mirrors
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SEARCH_API_KEY=${SEARCH_API_KEY}
+
+  crawler:
+    build: .
+    container_name: iranchem_crawler
+    command: celery -A src.tasks.celery_app worker --loglevel=info --concurrency=4
+    volumes:
+      - httrack_mirrors:/var/lib/iran_chem_db/mirrors
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on:
+      - redis
+      - postgres
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SEARCH_API_KEY=${SEARCH_API_KEY}
+
+  scheduler:
+    build: .
+    container_name: iranchem_scheduler
+    command: celery -A src.tasks.celery_app beat --loglevel=info
+    depends_on:
+      - redis
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: iranchem_db
+    environment:
+      POSTGRES_DB: iran_chem_db
+      POSTGRES_USER: chemdb
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    container_name: iranchem_redis
+    ports:
+      - "6379:6379"
+
+  dashboard:
+    build: .
+    container_name: iranchem_dashboard
+    command: streamlit run src/dashboard/app.py --server.port=8501 --server.address=0.0.0.0
+    volumes:
+      - httrack_mirrors:/var/lib/iran_chem_db/mirrors:ro
+    ports:
+      - "8501:8501"
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:alpine
+    container_name: iranchem_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+      - dashboard
+
+volumes:
+  httrack_mirrors:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/iran_chem_db/mirrors
+  pgdata:

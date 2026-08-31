@@ -1,6 +1,8 @@
 ---
 name: qa-ci-cd-testing
-version: 1.6.0
+slug: qa-ci-cd-testing
+displayName: Ci Cd Testing
+version: 1.7.5
 description: >-
   当需要把测试集成到 CI/CD 流水线中、或者现有流水线的测试环节跑起来效率低不可靠时使用此技能。覆盖流水线各阶段的分层测试卡点设计（提交检查→单元测试→接口测试→UI 测试→回归测试）、工具集成策略和质量门禁配置。不要在 CI 里堆满慢的 UI 测试——而是构建测试金字塔：提交阶段跑最快的（<5min），合码阶段跑核心的（<15min），夜间跑全量的。
 
@@ -29,6 +31,9 @@ output_format:
   traceability:
     - 每条流水线带唯一ID（PIPE-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - pipeline_design: CI/CD流水线设计
     - test_stages: 各阶段测试配置
     - quality_gates: 质量门禁设置

@@ -1,40 +1,54 @@
-## Description: <br>
-Identifies testing areas that may look simple but carry high risk, then helps prioritize limited QA resources with risk levels and mitigation suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies QA areas that may look simple but carry high testing risk, helping teams prioritize limited testing effort across change, business, data, integration, and technical risk signals.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to triage test focus when time is limited, requirements are changing, or a feature may hide business, data, integration, or technical risk. It produces prioritized risk areas, a probability-impact matrix, and mitigation suggestions for test planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may frame broad testing requests through a risk-assessment lens even when the user needs a general test plan. <br>
-Mitigation: Use it when risk prioritization is desired, and choose a general test-planning skill when the goal is comprehensive test design. <br>
-Risk: A risk assessment can miss high-risk areas if the requirements or scenario tree are incomplete. <br>
-Mitigation: Supplement the requirement decomposition and scenario context, then rerun the risk assessment before relying on the priority list. <br>
+## Use Case:
 
+QA engineers and developers use this skill to assess feature or release risk, rank high-risk modules, and choose focused test coverage when time or staffing is limited.
 
-## Reference(s): <br>
-- [Risk Signals Radar and Checklist](references/risk-signals.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown risk assessment report with risk matrix tables and mitigation suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each risk point is expected to include a unique risk ID and a linked requirement ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can read project files when asked to assess testing risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit inputs to relevant project materials and avoid unnecessary sensitive data in the files provided for review.
+
+Risk: The artifact contains inconsistent risk formulas and broad trigger wording, which can make scores or coverage targets appear more precise than the evidence supports.
+
+Mitigation: Review scoring, coverage recommendations, and trigger matches against project context before using them to allocate testing effort.
+
+## Reference(s):
+
+- [Risk Signals Reference](references/risk-signals.md)
+- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-risk-intuition)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown risk assessment report and test-case table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes risk IDs, probability and impact levels, a risk matrix, high-risk areas, and mitigation suggestions.]
+
+## Skill Version(s):
+
+1.7.5 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

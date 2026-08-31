@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/oo-aws-s3",
   "slug": "oo-aws-s3",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781000577231,
-  "contentHash": "eecb5a4645f14354c1d699a2387a358435f5497bcf4eb7aa5eef90d9ff13cfb1",
-  "fetchedAt": "2026-07-26T18:30:31.540Z"
+  "version": "1.0.2",
+  "updatedAt": 1787633222084,
+  "contentHash": "293995e63834f48d7a6b8ccf87e7426764add1cbabab4914ac498717bf24a0f9",
+  "fetchedAt": "2026-08-31T16:02:17.602Z"
 }

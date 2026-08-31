@@ -1,39 +1,59 @@
-## Description: <br>
-根据用户提供的居民身份证号码调用聚合数据付费接口，解析性别、出生日期、户口所在地等编码自带基础信息，并明确不提供证件真伪或公安实名核验。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up basic information encoded in a Chinese resident ID number through Juhe's paid API, returning sex, birth date, household registration area, and optional format-validation notes.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and their agents use this skill to perform a paid, consent-based lookup of basic coding-derived information from a Chinese resident ID number. It supports single-query parsing of sex, birth date, and registered-region information, not identity verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to local laws and availability of Alipay payment and Juhe API services. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-idcard-query-a2a) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/juhemcp) <br>
-- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
+External users query a 15- or 18-digit resident ID number to retrieve encoded sex, birth date, and household registration area after consent and payment. The result is for reference only and is not identity verification or authenticity checking.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown result summary and tables, with a curl-style API request example for the agent workflow.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Masks the queried ID number, uses only Juhe API return fields, and appends a disclaimer that results cannot prove document authenticity.] <br>
+China
 
-## Skill Version(s): <br>
-1.1.0 (source: server evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill sends the queried ID number to Juhe's API.
+
+Mitigation: Use only after consent and only when the user is comfortable sending the queried ID number to Juhe's API.
+
+Risk: The skill uses an Alipay payment workflow before returning paid results.
+
+Mitigation: Proceed only when the user accepts the payment flow and understands that access depends on completing payment.
+
+Risk: Results could be misused as identity verification or authenticity checks.
+
+Mitigation: Do not use this skill for identity verification, authenticity checks, bulk lookups, or queries involving someone else's ID without lawful basis and consent.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-idcard-query-a2a)
+- [Publisher profile](https://clawhub.ai/user/juhemcp)
+- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown tables and status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Masks the queried ID number and includes parsed sex, birth date, household registration area, optional format-validation notes, and a fixed disclaimer.]
+
+## Skill Version(s):
+
+1.1.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

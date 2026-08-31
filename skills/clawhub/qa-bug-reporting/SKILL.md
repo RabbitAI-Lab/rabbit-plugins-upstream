@@ -1,6 +1,8 @@
 ---
 name: qa-bug-reporting
-version: 1.6.0
+slug: qa-bug-reporting
+displayName: Bug Reporting
+version: 1.7.5
 description: >-
   当发现了一个 Bug 需要提交、自己提的 Bug 被开发打回来了、或者团队 Bug 质量参差不齐需要统一规范时使用此技能。一个高质量的 Bug 报告应该让开发看一遍就能复现并定位，不需要来回追问。包含清晰的复现步骤（从环境准备到操作序列到预期/实际结果）、根因推测、影响范围评估和必要附件。 ⚠️ 本技能示例可能调用外部抓包/日志工具，请在受控环境执行。
 when_to_use: 用户说"提Bug"、"写Bug报告"、"Bug描述"、"报告格式"、"复现步骤"、"加附件"、需要编写或优化Bug报告、开发打回Bug报告需要改进时
@@ -30,9 +32,12 @@ input_format:
       description: 相关执行日志
 output_format:
   traceability:
-    - 每个Bug带唯一ID（BUG-XXXX）
-    - 关联执行用例ID（TC-XXXX）
+    - 每个Bug带唯一ID（TC_{缺陷模块缩写}_{功能缩写}_{序号}，如 TC_BUG_LOGIN_001；缺陷追溯保留 BUG 前缀）
+    - 关联执行用例ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - bug_title: 缺陷标题
     - severity: 严重级别
     - priority: 优先级

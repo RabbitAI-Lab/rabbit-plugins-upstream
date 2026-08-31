@@ -1,45 +1,64 @@
-## Description: <br>
-Captures learnings about GenAI/LLM configuration, model selection, inference optimization, fine-tuning, RAG pipelines, prompt engineering, multimodal processing, and cost management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures learnings about GenAI/LLM configuration, model selection, inference optimization, fine-tuning, RAG pipelines, prompt engineering, multimodal processing, and cost management.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers and AI engineers use this skill to capture recurring model behavior, prompt patterns, inference problems, RAG issues, evaluation findings, and AI capability requests. It helps teams maintain project learning logs and promote proven patterns into model selection, prompt, configuration, or runbook guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent learning logs may capture sensitive prompts, customer data, API keys, or model access tokens if users paste raw content into entries. <br>
-Mitigation: Record only redacted summaries and metrics; do not store API keys, access tokens, customer data, raw sensitive prompts, or PII. <br>
-Risk: Global or broad prompt hooks can create reminders across projects where AI learning capture was not intended. <br>
-Mitigation: Use project-level hooks with AI-specific matchers and enable global hooks only when cross-project reminders are intentional. <br>
-Risk: Promoting learnings into AGENTS.md, SOUL.md, TOOLS.md, or model configuration files can change agent behavior if entries are inaccurate or too broad. <br>
-Mitigation: Review proposed promotions and model configuration changes before applying them to shared project guidance. <br>
+## Use Case:
 
+Developers and AI engineers use this skill to capture model behavior, prompt, RAG, inference, fine-tuning, multimodal, evaluation, and guardrail learnings as local markdown records. It also provides optional project-scoped reminders for reviewing and promoting recurring AI/LLM patterns.
 
-## Reference(s): <br>
-- [Self-Improving AI ClawHub Page](https://clawhub.ai/jose-compu/self-improving-ai) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON configuration snippets, and optional generated skill scaffold files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Opt-in hooks can emit short reminder blocks; persistent entries are written to local .learnings files only when the user or agent records them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Learning logs may accidentally include API keys, model access tokens, customer data, PII, or sensitive model outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact sensitive content before logging, avoid raw transcripts, and review tracked .learnings files before sharing or committing them.
+
+Risk: Optional hooks can add recurring reminders across sessions if installed too broadly.
+
+Mitigation: Enable hooks deliberately, keep them project-scoped, avoid empty matchers, and prefer the minimal UserPromptSubmit reminder unless error detection is needed.
+
+Risk: Promoted learnings or generated skills can encode incorrect model guidance if adopted without review.
+
+Mitigation: Review generated diffs, scan new skills before use, and require explicit approval before applying model configuration, prompt, policy, or skill changes.
+
+Risk: Live production model testing or cross-skill reading can raise privacy and operational concerns.
+
+Mitigation: Treat those actions as requiring explicit approval and privacy review before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jose-compu/skills/self-improving-ai)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local learning, model issue, and feature request entries; optional hooks emit reminder text when deliberately enabled.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,65 @@
-## Description: <br>
-Detects people in target areas from monitoring videos or video URLs and returns structured human-detection reports for access monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically detects personnel in target areas based on computer vision, supports real-time video stream detection, and produces structured monitoring reports for parks, offices, and restricted areas.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and site security teams use this skill to analyze fixed-camera monitoring footage for personnel presence, counts, intrusion indicators, and prior report lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Monitoring footage or video URLs may be sent to a configured remote service. <br>
-Mitigation: Use only footage approved for this service and avoid workplace, restricted-area, or personally identifiable media unless retention and processing controls have been reviewed. <br>
-Risk: The skill can silently create or reuse a local identity and persist account tokens in a workspace SQLite database. <br>
-Mitigation: Run it in an environment where token storage is acceptable, access to the workspace database is controlled, and persisted identities can be reviewed or cleared. <br>
-Risk: Historical cloud report lookup may expose prior analysis records associated with the resolved identity. <br>
-Mitigation: Limit use to authorized operators and verify that cloud report access aligns with organizational privacy and access-control requirements. <br>
+## Use Case:
 
+Developers, operators, and external users can use this skill to submit surveillance video files or URLs for regional person detection, person counts, intrusion signals, and structured report output. It can also query previously generated cloud reports associated with the resolved user identity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-detection-analysis) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text reports, with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured detection results, report links, and historical report tables; video inputs are documented as mp4, avi, or mov up to 10MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.10) <br>
+Risk: Surveillance media or media URLs are sent to a Life Emergence remote service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage approved for that service, avoid sensitive or regulated environments until retention and handling terms are documented, and review the remote endpoint configuration before deployment.
+
+Risk: The skill silently manages cloud identity and can store generated user identity, tokens, and profile fields in a local workspace database.
+
+Mitigation: Run the skill in an isolated workspace, protect or rotate stored tokens, and clear the workspace data store when the deployment or user context changes.
+
+Risk: Historical report queries retrieve cloud report history associated with the resolved user identity.
+
+Mitigation: Limit access to agents and users authorized to view that report history, and confirm the expected identity before using report-listing workflows.
+
+Risk: Bundled API reference material contains mismatched pet-health endpoints instead of only human-detection API documentation.
+
+Mitigation: Validate operational endpoints against the scripts and publisher documentation before relying on the reference docs for integration or incident review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-detection-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API reference](references/api_doc.md)
+- [Common analysis API reference](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, JSON, shell commands, files, guidance]
+
+**Output Format:** [Markdown status text with structured JSON analysis results and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports basic, standard, and json detail levels; accepts mp4, avi, and mov inputs up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter reports 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

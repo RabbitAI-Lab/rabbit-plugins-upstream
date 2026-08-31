@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-deck",
   "slug": "image-deck",
   "ownerHandle": null,
-  "version": "0.1.20",
-  "updatedAt": 1784734126800,
-  "contentHash": "16cc6bdb881ab364932b9cbb761d9befd88a7054e62506de02aee6a673b22862",
-  "fetchedAt": "2026-07-26T18:07:53.169Z"
+  "version": "0.1.32",
+  "updatedAt": 1788149758870,
+  "contentHash": "e4f1c1720ed51d27f83efbd86abdeb6fe665bef47f64574dd8ae9493f72eff17",
+  "fetchedAt": "2026-08-31T15:41:19.119Z"
 }

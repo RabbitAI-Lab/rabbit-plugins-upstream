@@ -1,47 +1,63 @@
-## Description: <br>
-Analyzes authorized fixed-camera video, with optional audio, from pregnancy home or prenatal waiting-room settings to identify emotion-related signals and return structured reports and soothing-action guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes opted-in fixed-camera and optional microphone inputs for pregnancy-related emotion signals, produces structured reports, and can guide soothing actions such as low-volume audio, warm lighting, or user-approved contact notifications.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and care teams use this skill to submit authorized local files or URLs for pregnancy emotion-signal analysis, historical report lookup, and structured recommendations without producing a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive pregnancy-related camera/audio inputs and remote processing may expose intimate health and household data. <br>
-Mitigation: Use only with explicit consent from the pregnant person and anyone recorded, confirm the listed LifeEmergence remote services are acceptable, and avoid deployments without notice and opt-out controls. <br>
-Risk: Local identity or token persistence may create account-linkage exposure. <br>
-Mitigation: Run the skill only in controlled workspaces where local credential persistence is allowed, and review token storage, rotation, and revocation before installation. <br>
-Risk: Claimed smart-speaker and contact-alert interventions are not established by the security evidence. <br>
-Mitigation: Treat intervention outputs as advisory until the publisher separately proves opt-in controls, retention limits, and audit logs. <br>
-Risk: Pregnancy emotion inference can be mistaken for medical diagnosis or emergency assessment. <br>
-Mitigation: Keep outputs limited to observed behavior and soothing guidance, and route recurring or severe concerns to qualified clinicians or appropriate hotlines. <br>
+## Use Case:
 
+External users and care-support developers use this skill to analyze consented pregnancy home or prenatal waiting-room audio-video, identify emotion-related behaviors, and produce structured reports or soothing-action guidance. It is intended for support workflows and must not be used to make medical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pregnancy-emotion-soothing-analysis) <br>
-- [Pregnancy emotion soothing API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Plain text or Markdown with JSON-formatted report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write the generated result to a caller-provided output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill handles sensitive pregnancy-related home or clinic audio-video and may upload content for cloud analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only where the pregnant person has explicitly opted in, camera or microphone capture is clearly posted, and cloud upload and retention terms are acceptable.
+
+Risk: The skill may send spouse or emergency-contact notifications based on emotion-related detections.
+
+Mitigation: Require user-selected notification recipients and revocable consent before enabling contact notifications.
+
+Risk: Local identity token storage may be present on the machine running the skill.
+
+Mitigation: Deploy only on machines where local token storage is acceptable, and review token cleanup or rotation procedures for shared environments.
+
+Risk: Security evidence flags the release as suspicious because sensitive monitoring controls need careful review.
+
+Mitigation: Perform a privacy and security review before installation, with special attention to consent, retention, notification routing, and local credentials.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pregnancy-emotion-soothing-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links, historical report tables, and recommended soothing actions.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

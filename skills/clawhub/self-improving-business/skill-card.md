@@ -1,44 +1,59 @@
-## Description: <br>
-Captures business administration issues, policy gaps, KPI misalignment, decision delays, handoff failures, and stakeholder misalignment to improve operational decision quality. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures business administration issues, policy gaps, KPI misalignment, decision delays, handoff failures, and stakeholder misalignment to improve operational decision quality.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers, operators, and business administrators use this skill to capture operational learnings, business issues, and process-improvement requests in structured markdown logs. It supports governance, KPI alignment, handoff review, policy consistency, and reminder-only escalation planning without authorizing business decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional broad hooks may inject reminders in mixed-use workspaces more often than intended. <br>
-Mitigation: Enable hooks deliberately and prefer a narrow matcher or dispatcher instead of a blank matcher in shared or mixed-use workspaces. <br>
-Risk: Learning logs can contain sensitive business context. <br>
-Mitigation: Keep .learnings out of shared repositories when entries may include sensitive operational, financial, vendor, or governance details. <br>
-Risk: Users may mistake reminder-only recommendations for business approval or authorization. <br>
-Mitigation: Require explicit human approval for spending, vendor commitments, payroll, legal actions, policy sign-offs, and other high-impact decisions. <br>
+## Use Case:
 
+Developers and business operations teams use this skill to capture structured local learnings, business issues, and feature requests for process governance, KPI alignment, SLA delays, budget variance, vendor handoffs, and policy drift. It supports reminder-only logging and recommendations while leaving approvals and high-impact business decisions with human owners.
 
-## Reference(s): <br>
-- [OpenClaw Business Integration](references/openclaw-integration.md) <br>
-- [Business Hook Setup Guide](references/hooks-setup.md) <br>
-- [Business Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured log-entry templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or appends local .learnings markdown files and can inject reminder text through optional hooks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Optional persistent hooks can create broad business-term reminders and PostToolUse can inspect command output transiently.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable hooks only in projects where automatic business reminders are useful, keep them project-scoped with narrow matchers, and avoid PostToolUse when command output may contain sensitive material.
+
+Risk: Business findings or recommendations could be mistaken for approvals, commitments, payroll actions, legal actions, procurement commitments, or policy sign-offs.
+
+Mitigation: Treat entries as documentation and reminders only; require explicit human approval for high-impact business decisions.
+
+Risk: Local learning logs may capture sensitive operational context if users paste raw business data or command output.
+
+Mitigation: Record concise summaries, source attribution, owners, and next actions instead of secrets, transcripts, or raw sensitive outputs.
+
+## Reference(s):
+
+- [Business Entry Examples](references/examples.md)
+- [Business Hook Setup Guide](references/hooks-setup.md)
+- [OpenClaw Business Integration](references/openclaw-integration.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, local Markdown log entries, shell commands, and optional hook configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reminder-only; may create or append local .learnings Markdown files and can scaffold business skill files when explicitly invoked.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

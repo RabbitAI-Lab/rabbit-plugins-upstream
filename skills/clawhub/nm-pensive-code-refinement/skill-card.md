@@ -1,39 +1,62 @@
-## Description: <br>
-Improves code quality across duplication, efficiency, and architectural fit. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Improves code quality across duplication, efficiency, and architectural fit.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to analyze working code for duplication, algorithmic inefficiency, clean-code issues, architectural fit, error handling gaps, and refactoring opportunities before releases or technical-debt reduction work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags an under-disclosed module that can publish repository findings to GitHub Discussions. <br>
-Mitigation: Review before installing, use only where repository-wide analysis and possible refactoring are acceptable, and enable insight posting only after checking findings for sensitive paths, snippets, or internal issues. <br>
+## Use Case:
 
+Developers and engineers use this skill to review living codebases for duplication, algorithmic inefficiency, clean-code issues, architectural misfit, error-handling gaps, and AI-generated overengineering. It can produce prioritized refactoring plans and, when explicitly requested, apply selected low-risk fixes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-code-refinement) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with file references, code snippets, proposed refactoring plans, and optional shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or apply refactors when explicitly invoked to execute findings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The skill can inspect broad repository scope and may make broad code changes when execution modes are requested.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it on a controlled branch, review the generated plan before execution, and require tests or manual review before accepting changes.
+
+Risk: The insight-generation module can post code-analysis findings externally.
+
+Mitigation: Do not use external posting unless the exact findings, destination, and approval are reviewed first.
+
+Risk: All-wave or persistent execution modes may continue beyond a small refactoring scope.
+
+Mitigation: Set explicit scope, stop conditions, and approval gates before enabling broad execution modes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-code-refinement)
+- [Source Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+- [Algorithm Efficiency Module](artifact/modules/algorithm-efficiency.md)
+- [Architectural Fit Module](artifact/modules/architectural-fit.md)
+- [Clean Code Checks Module](artifact/modules/clean-code-checks.md)
+- [Duplication Analysis Module](artifact/modules/duplication-analysis.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown with code snippets, shell commands, findings, plans, and optional code edits]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include prioritized findings, evidence references, refactoring plans, and repository changes when execution is explicitly requested.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

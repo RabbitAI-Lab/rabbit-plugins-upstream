@@ -1,41 +1,57 @@
-## Description: <br>
-Operate Twilio through an OOMOL-connected account for account lookup, message reads, usage reporting, and outbound SMS or MMS sending. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Twilio lets agents operate an OOMOL-connected Twilio account to read account, call, message, and usage data and to send outbound messages or calls through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate their connected Twilio account through OOMOL, including reading account and message data, listing usage, and preparing confirmed outbound messages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send outbound SMS or MMS messages through the connected Twilio account, which can contact unintended recipients or incur cost. <br>
-Mitigation: Before running send_message or any other write action, verify the recipient, message body, account or project, full payload, and potential cost with the user. <br>
-Risk: Broad Twilio invocation wording could be mistaken for permission to make changes. <br>
-Mitigation: Treat broad Twilio requests as routing context only, and require explicit user confirmation before write or destructive actions. <br>
+## Use Case:
 
+Developers and agents use this skill to access Twilio account, call, message, and usage records and to create outbound SMS/MMS messages or voice calls through an OOMOL-connected credential.
 
-## Reference(s): <br>
-- [Twilio homepage](https://www.twilio.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before connector actions; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Outbound SMS/MMS messages and voice calls can affect recipients and billing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact action payload and expected effect with the user before approving write actions.
+
+Risk: The skill depends on an active OOMOL/Twilio account connection.
+
+Mitigation: Install only when OOMOL-connected Twilio access is intended, and revoke the connection when it is no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-twilio)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Twilio Homepage](https://www.twilio.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash command examples and JSON payloads/results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads and asks for user confirmation before write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

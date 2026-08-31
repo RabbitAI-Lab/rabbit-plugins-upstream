@@ -1,38 +1,49 @@
-## Description: <br>
-Helps QA testers turn incomplete requirements into structured questions for product managers and developers before test design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Question Framework helps QA practitioners ask targeted questions to clarify requirements, boundaries, business rules, technical details, and bug-report context before test design.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and testers use this skill when requirements are unclear or incomplete and they need structured prompts for requirement discovery, boundary confirmation, business-rule exploration, technical-detail follow-up, test-case review, bug reporting, or retrospective analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may provide sensitive customer, identity, payment, screenshot, or production data while gathering QA context. <br>
-Mitigation: Mask or remove real sensitive data before use, and avoid providing production data unless it has been sanitized. <br>
+## Use Case:
 
+QA testers, developers, and product teams use this skill when requirements are incomplete or unclear and they need structured prompts for requirement discovery, boundary confirmation, rule exploration, technical follow-up, test case review, bug reporting, and retrospectives.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-question-framework) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured question lists, exploration areas, and clarification needs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces question frameworks rather than unique traceability IDs; question depth is adjusted to the size of the information gap.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Users may include sensitive production, customer, identity, payment, or credential data while asking for QA clarification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or omit sensitive records, screenshots, IDs, phone numbers, payment details, and production credentials before using the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-question-framework)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with structured question lists, checklists, and QA table guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces question lists, exploration areas, clarification needs, and guidance for nine-column QA test case tables.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

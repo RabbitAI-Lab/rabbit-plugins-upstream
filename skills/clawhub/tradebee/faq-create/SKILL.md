@@ -66,7 +66,7 @@ FAQ summary as plain text, up to 500 characters.
 
 #### `faq.answer` (string, **Required**)
 
-HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `faq.answer`. Follow the returned rule payload instead of guessing layout, styling, or structure rules. Do not use inline style attributes as the main styling method.
+HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `faq.answer`. Follow the returned rule payload instead of guessing layout, styling, or structure rules. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links.
 
 #### `faq.seo` (object, Optional)
 

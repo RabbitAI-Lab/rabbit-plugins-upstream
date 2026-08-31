@@ -1,40 +1,57 @@
-## Description: <br>
-Helps QA teams estimate testing effort from requirement complexity, change scope, historical baselines, and risk factors, producing phased estimates with confidence intervals and risk buffers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This Chinese-language skill helps QA teams estimate release testing effort using requirement complexity, change scope, historical baselines, risk factors, confidence ranges, and risk buffers.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and project managers use this skill during release planning to estimate testing person-hours or person-days for smoke, functional, regression, and specialized testing. It is intended to turn scoped requirements and test strategy inputs into traceable estimates rather than approved schedule changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Testing estimates could be mistaken for approved release schedules or staffing commitments. <br>
-Mitigation: Treat outputs as planning estimates and require project manager confirmation before changing schedules, release plans, or resource allocations. <br>
-Risk: The skill may activate on broad scheduling or resource-planning requests that are not specifically about QA test effort. <br>
-Mitigation: Confirm the request is about testing effort before relying on the estimate for project planning. <br>
+## Use Case:
 
+QA engineers, project managers, and release planners use this skill to turn requirements scope, test strategy, historical data, and team capacity into structured estimates for smoke, functional, regression, and specialized testing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-estimation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured estimation report sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an EST-XXXX traceability ID, estimation result, work breakdown, risk buffer, confidence level, and safety guidance for human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may read relevant workspace documents to estimate QA effort.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review which project documents are in scope before use and provide only the materials needed for the estimate.
+
+Risk: Ambiguous scheduling requests could be treated as QA testing estimation rather than broader project planning.
+
+Mitigation: Confirm the request is specifically for QA testing effort estimation when schedule intent is unclear.
+
+Risk: Generated estimates can influence release plans or staffing decisions.
+
+Mitigation: Treat estimates as decision support and require project manager review before changing release dates, staffing, or execution plans.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-estimation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or structured text with estimation tables, effort breakdowns, confidence notes, and risk buffers]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include traceability IDs, phased estimates, risk reservations, and coverage caveats.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

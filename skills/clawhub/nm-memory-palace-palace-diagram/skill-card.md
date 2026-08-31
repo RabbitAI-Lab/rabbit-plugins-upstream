@@ -1,43 +1,58 @@
-## Description: <br>
-Generates Mermaid and ASCII diagrams of palace structure, knowledge topology, and synapse connectivity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Mermaid and ASCII diagrams of palace structure, knowledge topology, and synapse connectivity.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents working with memory-palace data use this skill to visualize palace structure, entity relationships, synapse strength, and knowledge topology. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic trigger words such as memory, visualization, mermaid, diagram, and graph may invoke the skill unintentionally. <br>
-Mitigation: Install and enable it only when memory-palace visualization is desired, and review invocation context before using generated diagrams. <br>
-Risk: Mermaid rendering can expose generated diagram contents to the configured rendering tool or service. <br>
-Mitigation: Use a trusted local or approved private Mermaid renderer for sensitive palace data, or remove sensitive contents before rendering. <br>
-Risk: The artifact states the skill contract is unwired and may not be invoked by a palace command. <br>
-Mitigation: Use the documented PalaceRenderer or palace_manager.py path directly until command integration is available. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect memory-palace graph structure, entity relationships, synapse strength, and palace layout as Mermaid diagrams or inline ASCII overviews.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-palace-diagram) <br>
-- [Memory palace plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Mermaid diagram text, ASCII diagrams, and Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require configured memory-palace data and a trusted Mermaid rendering tool for rendered diagrams.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Generic memory or diagram requests may activate this skill when the user did not intend to visualize palace data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user wants a memory-palace diagram before generating Mermaid or ASCII output.
+
+Risk: Generated diagrams can expose knowledge-graph details, especially when rendered through Mermaid Chart MCP.
+
+Mitigation: Use only palace data intended for visualization and review diagram content before sharing or rendering externally.
+
+Risk: The artifact states the skill contract is unwired and direct command integration is pending.
+
+Mitigation: Use the referenced palace manager or renderer workflow directly until command wiring is available.
+
+## Reference(s):
+
+- [Memory Palace plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [palace-diagram ClawHub listing](https://clawhub.ai/athola/skills/nm-memory-palace-palace-diagram)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown containing Mermaid flowchart code or ASCII text diagrams]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use Mermaid Chart MCP for rendering Mermaid diagrams; ASCII output can be displayed inline.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

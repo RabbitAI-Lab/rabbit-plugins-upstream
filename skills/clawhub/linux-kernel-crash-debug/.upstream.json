@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/linux-kernel-crash-debug",
   "slug": "linux-kernel-crash-debug",
   "ownerHandle": null,
-  "version": "1.3.2",
-  "updatedAt": 1781443310574,
-  "contentHash": "1721074f93e70e8d5475c82d2f9df5bea92796fb5005f669f0356afd3506b7e0",
-  "fetchedAt": "2026-07-26T18:28:56.929Z"
+  "version": "1.4.3",
+  "updatedAt": 1788004010359,
+  "contentHash": "ee478dd3fc10b634c6bfa7151c8270c3fbb628398645c04e87ed136615de0034",
+  "fetchedAt": "2026-08-31T15:45:32.908Z"
 }

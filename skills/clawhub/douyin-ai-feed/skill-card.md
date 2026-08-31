@@ -1,42 +1,59 @@
-## Description: <br>
-AI抖音信息源 scans AI-related Douyin posts, filters high-engagement content, clusters topics, and generates a local HTML daily report with cover images, metrics, direct links, and optional daily subscription. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI抖音信息源 scans AI-related Douyin posts, ranks them by engagement, clusters topics, and generates a local HTML daily report with cover images, metrics, and optional daily subscription.
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-External content operators, AI creators, and industry observers use this skill to monitor AI trends on Douyin, review high-engagement posts, and generate archived visual reports for daily tracking or historical analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The optional subscription mode installs a persistent scheduled job and may store REDFOX_API_KEY on disk on macOS. <br>
-Mitigation: Prefer manual report generation with --no-open unless daily automation is required; inspect LaunchAgents or crontab entries and remove the subscription when no longer needed. <br>
-Risk: The skill requires a RedFox API key and sends query requests to redfox.hk. <br>
-Mitigation: Confirm the key source, scope, validity period, and revocation path before use, and keep the key out of code, prompts, logs, and shared output. <br>
+## Use Case:
 
+Content operators, AI creators, and industry analysts use this skill to track Douyin AI trends, search by keyword or date range, and produce reports for trend monitoring, competitor review, and historical analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/douyin-ai-feed) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFox API service](https://redfox.hk) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Terminal status text and tables, plus generated local HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY, writes reports under ~/Downloads/QoderReports by default, and can optionally install or remove a daily scheduled job.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Search parameters and API-key-authenticated requests are sent to RedFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a revocable REDFOX_API_KEY only after confirming the key source, scope, validity period, and reset process.
+
+Risk: Subscription mode persists scheduled execution and may write the API key into a plaintext macOS LaunchAgent file.
+
+Mitigation: Avoid subscription mode for valuable keys; review the created LaunchAgent or crontab entry and use --unsubscribe when scheduled reporting is no longer needed.
+
+Risk: Generated local HTML reports may contain unescaped remote content and can be opened automatically.
+
+Mitigation: Treat reports as untrusted external-service content; use --no-open or inspect generated files before opening them in a browser.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/douyin-ai-feed)
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub)
+- [RedFox service](https://redfox.hk)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Terminal text plus a local HTML report; agent summaries may preserve Markdown links from the script output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires REDFOX_API_KEY; writes reports to ~/Downloads/QoderReports by default and can optionally install a daily 16:00 subscription task.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

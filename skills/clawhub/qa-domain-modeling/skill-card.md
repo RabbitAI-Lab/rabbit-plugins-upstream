@@ -1,39 +1,52 @@
-## Description: <br>
-Helps QA and engineering teams model complex business logic and system boundaries with state machines, data-flow views, and service-dependency views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds QA domain models from complex requirements by mapping state transitions, data flows, and service dependencies so testers can reason about business logic and system boundaries.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, QA engineers, and test designers use this skill to turn complex business requirements or scenario trees into state-machine, data-flow, and service-dependency models for test planning.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill may activate on broad modeling-related wording and steer general modeling tasks toward QA domain-modeling behavior.
+
+Mitigation: Use explicit prompts for QA domain modeling or disable the skill where general modeling language should not trigger this behavior.
+
+Risk: Generated domain models can omit subsystems, implicit rules, or exception paths when the input requirements are incomplete.
+
+Mitigation: Review the state, data-flow, and service-dependency outputs against the source requirements and scenario IDs, then return to the scenario tree to fill gaps before using the models for test scope decisions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, QA engineers, and requirements analysts use this skill to turn complex requirements or scenario-tree inputs into domain models that expose object states, data movement, service dependencies, and missing business rules. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause the agent to apply the skill to general modeling requests where a narrower skill would be enough. <br>
-Mitigation: Use the skill when the request involves complex requirements, subsystem interaction, state transitions, data flow, or service dependencies. <br>
-Risk: A domain model may omit subsystems, states, data paths, or failure impacts that are not explicit in the source requirements. <br>
-Mitigation: Cross-check outputs against the scenario tree or requirements, use the included completion checklist, and retry modeling after filling any gaps. <br>
+**Output Format:** [Markdown tables and text diagrams describing state transitions, data flows, service dependencies, traceability IDs, and coverage notes]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Outputs include model IDs, scenario IDs, domain-model views, and coverage qualifications based on the provided requirements.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with text diagrams and structured tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces state-machine, data-flow, and service-dependency views with traceability IDs when source scenarios are available.] <br>
+1.7.5 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

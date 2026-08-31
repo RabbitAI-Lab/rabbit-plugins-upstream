@@ -207,7 +207,7 @@ def download_skill_zip(name: str, version: str = None, request_id: str = None, a
     if not request_id:
         request_id = _load_last_search_request_id()
 
-    params = {"name": name, "ref": "clawhub"}
+    params = {"name": name, "ref": "meyo"}
     if version:
         params["version"] = version
     if request_id:

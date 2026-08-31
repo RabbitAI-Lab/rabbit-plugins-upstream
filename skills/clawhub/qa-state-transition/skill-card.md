@@ -1,40 +1,53 @@
-## Description: <br>
-Guides agents through systematic state-machine testing for valid, invalid, boundary, and concurrent state transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates state-transition test designs for valid, invalid, boundary, and concurrent state-machine flows, including triggers, preconditions, postconditions, and verification points.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and developers use this skill to design coverage for business-object state machines, including legal, illegal, boundary, and concurrent transitions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad requests about state or status changes may invoke this skill when a narrower testing skill would fit better. <br>
-Mitigation: Confirm the task is about business-object lifecycle or state-machine coverage before relying on the guidance. <br>
-Risk: Generated state-transition examples could be mistaken for instructions to change a live system. <br>
-Mitigation: Treat examples as test-design guidance and review proposed transitions before applying them to any system. <br>
+## Use Case:
 
+Developers, QA engineers, and test designers use this skill to turn scenario trees and requirement analysis into state-transition coverage for business objects with multiple lifecycle states.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-state-transition) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown or structured text with state diagrams, transition lists, and test scenario tables.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes traceability IDs for state transitions and related scenarios.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate on broad state-testing language and produce test designs that are not tailored enough for a specific system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that the request is about state-transition testing and review generated cases against the actual requirements before use.
+
+Risk: Examples involving payments, refunds, or account states could be mistaken for instructions to change real system state.
+
+Mitigation: Treat generated content as test-design guidance only and do not apply examples to production systems without human review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-state-transition)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown test-case tables, state-transition lists, state diagrams, and scenario guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs include traceability IDs, priority distribution guidance, coverage caveats, valid transitions, invalid transitions, and state-transition test scenarios.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

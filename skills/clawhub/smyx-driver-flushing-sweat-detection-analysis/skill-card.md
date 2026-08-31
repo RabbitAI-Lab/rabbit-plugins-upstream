@@ -1,46 +1,65 @@
-## Description: <br>
-Analyzes in-cabin DMS driver face video for facial flushing and sweat/reflection indicators, then returns visual health-risk reminders and suggested rest or escalation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes in-cabin driver face video or images for visible facial flushing and abnormal sweating signals, then returns structured visual health-risk reminders without making a medical diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, fleet operators, and developers use this skill to analyze driver face video from DMS cameras for visual indicators of facial flushing or abnormal sweating. The output is an assistive health-risk reminder and structured report, not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Driver face video or video URLs are sent to the configured lifeemergence.com cloud service for analysis. <br>
-Mitigation: Use only with informed driver or employee consent, appropriate privacy controls, and policies for retention, access, and encryption of video and reports. <br>
-Risk: The skill can create or reuse a persistent local identity and stores service tokens for cloud requests. <br>
-Mitigation: Run it in an isolated workspace, restrict access to local skill data, and review or remove stored identity and token data when deprovisioning. <br>
-Risk: The security scan verdict is suspicious because sensitive biometric-style analysis is linked to persistent identities and service tokens. <br>
-Mitigation: Review the skill and cloud-service trust boundary before deployment, and install it only when the data-sharing model is acceptable. <br>
-Risk: Visual flushing and sweating indicators may be affected by lighting, tinted windows, skin-tone variation, occlusion, masks, or infrared-only video. <br>
-Mitigation: Treat results as assistive visual alerts, combine them with baseline and duration checks, and avoid using the skill as a sole medical or safety decision system. <br>
+## Use Case:
 
+Developers and vehicle-safety teams use this skill to analyze driver DMS camera media for visible facial flushing, sweat-glare area, and related warning indicators. It supports driver-facing alerts, fleet event records, and historical report review while remaining an auxiliary visual reminder rather than a medical diagnostic tool.
 
-## Reference(s): <br>
-- [Driver Flushing/Sweat Detection API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-driver-flushing-sweat-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown-wrapped structured JSON with report links; optionally saved to a text output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report export links and historical report lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: The skill processes sensitive driver face media and health-related visual indicators through remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit driver or employee consent, confirm the backend environment before sending media, and follow applicable privacy and retention requirements.
+
+Risk: The skill can automatically create or reuse identity records and store local tokens.
+
+Mitigation: Review local identity and token storage before deployment and require an operational process to disable, rotate, or delete stored credentials and records.
+
+Risk: Remote URL inputs may cause backend services to fetch arbitrary media locations.
+
+Mitigation: Restrict inputs to trusted media sources and avoid arbitrary remote URLs.
+
+Risk: Visual flushing and sweating signals can be affected by lighting, tinted glass, masks, camera quality, and individual skin differences.
+
+Mitigation: Treat outputs as auxiliary visual alerts only and require professional medical evaluation for health decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-driver-flushing-sweat-detection-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Driver flushing and sweat API documentation](references/api_doc.md)
+- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown status text with structured JSON analysis fields and optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save analysis output to a user-specified file and may query cloud report history.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence; artifact frontmatter reports 1.0.11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,56 @@
-## Description: <br>
-Terraform and OpenTofu configuration, modules, testing, state management, and HCL review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Terraform and OpenTofu configuration, modules, testing, state management, and HCL review for agents working with Terraform, OpenTofu, HCL, tfvars, tftest, state migration, or IaC patterns.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[iliaal](https://clawhub.ai/user/iliaal)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and infrastructure engineers use this skill for Terraform/OpenTofu module authoring, HCL review, testing, state-management guidance, and safe IaC workflow checks.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Generated Terraform or OpenTofu changes can alter live infrastructure, create cost, or destroy resources if applied without review.
+
+Mitigation: Review generated HCL, plans, and module changes before applying them, and require explicit user confirmation before any real apply operation.
+
+Risk: State operations such as import, force-unlock, refresh-only apply, or replace can affect existing infrastructure state.
+
+Mitigation: Treat state-changing commands as user-directed work, confirm the target workspace and resource address, and verify no competing operation is running before lock or state changes.
+
+Risk: Terraform state, plan files, and provider configuration can contain sensitive values.
+
+Mitigation: Keep state remote and encrypted, do not commit state or plan files, and use role assumption, OIDC, or secrets managers rather than hardcoded credentials.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to write, review, test, troubleshoot, and maintain Terraform or OpenTofu modules, HCL, tfvars, tftest files, and state-management workflows. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Terraform or OpenTofu recommendations can affect infrastructure, state, access controls, or cloud costs when applied by an agent or operator. <br>
-Mitigation: Review generated configuration and plans before apply, use least-privilege credentials, keep remote state encrypted and locked, and run validation and scanning commands such as terraform fmt, terraform validate, tflint, trivy, or checkov. <br>
-Risk: The release security guidance notes that use of operational workflows may involve configured API tokens, admin CLIs, or local notes. <br>
-Mitigation: Install only when the publisher is trusted for the intended workflows and use least-privilege tokens for any connected services. <br>
+**Output Format:** [Markdown with inline HCL and bash code blocks]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Guidance should be reviewed before applying infrastructure changes.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with HCL and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent guidance for Terraform and OpenTofu workflows; does not include executable automation in the artifact.] <br>
+4.5.0 (source: release evidence)
 
-## Skill Version(s): <br>
-4.2.0 (source: release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

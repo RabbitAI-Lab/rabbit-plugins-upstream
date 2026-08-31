@@ -1,44 +1,58 @@
-## Description: <br>
-Helps QA and release teams design shift-right validation for production releases using canary monitoring, synthetic checks, A/B validation, user feedback, chaos engineering, alert thresholds, and rollback triggers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+QA Shift Right helps agents design post-release validation plans using production monitoring, synthetic checks, A/B validation, canary metrics, alert thresholds, rollback triggers, and chaos engineering.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and release owners use this skill when a feature is live or entering canary release and they need a production validation plan covering monitoring, synthetic checks, feedback loops, chaos experiments, alerts, and rollback criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Production validation guidance could be mistaken for permission to change monitoring, rollout, or experiment settings. <br>
-Mitigation: Use the skill only with release ownership and explicit approval for production monitoring, rollout changes, and chaos experiments. <br>
-Risk: User behavior analysis or feedback collection could involve personal or sensitive data. <br>
-Mitigation: Confirm consent, data handling requirements, and applicable privacy obligations before collecting or analyzing user data. <br>
-Risk: Chaos experiments or canary releases can affect live users if the blast radius is too broad. <br>
-Mitigation: Start in non-production, shadow, or narrowly scoped canary environments, then expand only with circuit breakers and rollback criteria in place. <br>
-Risk: A production rollout plan without clear rollback thresholds can delay recovery from regressions. <br>
-Mitigation: Define rollback triggers for error rate, latency, business metrics, and user feedback before rollout begins, and rehearse the rollback path. <br>
+## Use Case:
 
+Developers, QA engineers, and release teams use this skill to plan production validation after a release or during canary rollout. It guides the agent to produce monitoring metrics, synthetic test cases, alert thresholds, feedback loops, rollback triggers, and chaos experiment safeguards.
 
-## Reference(s): <br>
-- [Qa Shift Right on ClawHub](https://clawhub.ai/kokxi/skills/qa-shift-right) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown plan with monitoring metrics, synthetic checks, alert thresholds, rollback triggers, feedback loops, and traceability notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Planning guidance only; no production action is executed by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Production monitoring, canary release, user behavior analysis, or chaos experiment guidance could affect live systems if applied without authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit organizational approval before use on real systems.
+
+Risk: User behavior analysis and feedback collection can create privacy or regulatory exposure.
+
+Mitigation: Confirm user consent and applicable privacy compliance before collecting or analyzing production user data.
+
+Risk: Canary rollout or chaos experiment plans can increase incident impact if blast radius and rollback paths are not controlled.
+
+Mitigation: Start with narrow scope, define measurable rollback triggers, use circuit breakers where appropriate, and validate rollback procedures before expanding exposure.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-shift-right)
+- [ClawHub publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown with structured tables, checklists, metrics, thresholds, and rollout guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a shift-right validation plan covering canary strategy, monitoring dashboard, feedback loop, synthetic checks, alert thresholds, rollback triggers, and chaos engineering controls.]
+
+## Skill Version(s):
+
+1.7.5 (source: server release metadata and skill frontmatter, released 2026-08-30)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

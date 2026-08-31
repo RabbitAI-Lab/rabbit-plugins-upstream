@@ -1,0 +1,12 @@
+{
+  "mode": "voice-design",
+  "language": "Chinese",
+  "voices": {
+    "narrator": {"instruct": "温暖沉稳的成年中文旁白，讲故事时咬字清晰，节奏舒缓。"},
+    "character": {"instruct": "成年中文角色，情绪克制真诚，语气符合历史故事。"}
+  },
+  "segments": [
+    {"id": "01", "speaker": "narrator", "text": "从前，有一位善于思考的人。", "output": "audio/example/01-voice.wav"},
+    {"id": "02", "speaker": "character", "text": "我明白该怎么做了。", "output": "audio/example/02-voice.wav"}
+  ]
+}

@@ -1,48 +1,59 @@
-## Description: <br>
-Turn rough AI image ideas into structured GPT Image 2 prompt packs, reference-image edit instructions, product photo prompts, UI mockup prompts, and debugging loops. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research real GPT Image 2 prompt examples and turn rough image ideas into structured prompt packs, reference-image edit instructions, product visuals, layouts, and debugging loops.
 
-## Publisher: <br>
-[aitools101](https://clawhub.ai/user/aitools101) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gpt-img-2](https://clawhub.ai/user/gpt-img-2)
 
-## Use Case: <br>
-External creators, marketers, designers, and developers use this skill to turn rough image briefs into structured GPT Image 2 prompt packs, variants, and revision guidance for ecommerce, UI, poster, social media, storyboard, and image-to-video source-frame workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the third-party GPTImg2.art prompt workflow for an official OpenAI tool or for provider account, payment, API, or support guidance. <br>
-Mitigation: Present it as third-party prompt-writing guidance only, and verify model capabilities, account actions, payments, and API integration details against authoritative provider documentation before use. <br>
-Risk: Marketplace capability tags include purchase and crypto labels even though the artifact is a text-only prompt-writing skill. <br>
-Mitigation: Do not use this skill to make purchases, conduct crypto activity, or authorize financial actions; limit use to drafting and revising image prompts. <br>
-Risk: Prompt packs can still produce off-brief images, poor text rendering, brand issues, or unsupported model-setting claims. <br>
-Mitigation: Human-review generated prompts before production use, keep exact text and brand constraints explicit, and remove unsupported model settings or official-provider claims. <br>
+## Use Case:
 
+External users, creators, designers, and developers use this skill to convert rough GPT Image 2 ideas into concise prompt packs for product visuals, reference-image edits, readable-text layouts, storyboards, and second-pass debugging.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/aitools101/gpt-image-2-prompt-architect) <br>
-- [GPT Image 2 Prompt Architect Documentation](https://gptimg2.art/docs/gpt-image-2-prompt-architect) <br>
-- [GPT Image 2 Demo](https://gptimg2.art/models/gpt-image-2) <br>
-- [GPT Image 2 Prompt Gallery](https://gptimg2.art/prompts/gpt-image-2) <br>
-- [GPT Image 2 Prompt Guide](https://gptimg2.art/blog/gpt-image-2-prompt-guide) <br>
-- [GPT Image 2 Product Photo Prompts](https://gptimg2.art/blog/gpt-image-2-product-photo-prompts) <br>
-- [GPT Image 2 Image-to-Video Workflow](https://gptimg2.art/blog/gpt-image-2-image-to-video-workflow) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt packs with structured fields, variants, avoid lists, and revision moves] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only guidance; no scripts, binaries, required environment variables, or autonomous network calls are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and OpenClaw metadata) <br>
+Risk: The optional Image3 Prompt MCP requires running an npx package from GitHub.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when prompt research is needed, keep access limited to the listed read-only tools, and verify the MCP with the host's diagnostic command before use.
+
+Risk: Prompt outputs may imply image generation if the host lacks an actual image-generation capability.
+
+Mitigation: Treat the skill's core output as text prompt guidance and use a separate available image-generation capability for final images.
+
+## Reference(s):
+
+- [Image3 GPT Image 2 Prompt Architect Docs](https://image3.org/docs/gpt-image-2-prompt-architect)
+- [Image3 GPT Image 2 Prompt Gallery](https://image3.org/prompts/gpt-image-2)
+- [GPT Image 2 Prompt Guide](https://image3.org/blog/gpt-image-2-prompt-guide)
+- [GPT Image 2 Product Photo Prompts](https://image3.org/blog/gpt-image-2-product-photo-prompts)
+- [GPT Image 2 Image-to-Video Workflow](https://image3.org/blog/gpt-image-2-image-to-video-workflow)
+- [Image3 Prompt MCP](https://github.com/gpt-img-2/image3-prompt-mcp)
+- [ClawHub Skill Listing](https://clawhub.ai/gpt-img-2/skills/gpt-image-2-prompt-architect)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Structured Markdown prompt packs with optional shell commands for read-only MCP setup]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces prompt variants, avoid lists, revision moves, and source-attributed example references when available.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata and OpenClaw metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

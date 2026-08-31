@@ -19,7 +19,7 @@ installer:
   package: vmware-debug
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"bins":["vmware-debug"]},"optional":{"env":["VMWARE_AUDIT_APPROVED_BY","VMWARE_AUDIT_RATIONALE"],"bins":["vmware-policy"]},"primaryEnv":"NONE","homepage":"https://github.com/zw008/VMware-Debug","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"bins":["vmware-debug"]},"optional":{"env":["VMWARE_AUDIT_APPROVED_BY","VMWARE_AUDIT_RATIONALE"],"bins":["vmware-policy"]},"primaryEnv":"NONE","homepage":"https://github.com/vmware-skills/VMware-Debug","os":["macos","linux"]}}
 ---
 
 # VMware Debug
@@ -100,23 +100,151 @@ a recommended plan.
 - **MCP** (in an agent): the agent calls the other skills' read tools, then `incident_timeline` to correlate. This is the primary mode — that's where the cross-skill "联动" happens.
 - **CLI** (humans): `vmware-debug triage --events events.json` correlates a JSON array you collected yourself.
 
-## MCP Tools (2 — 2 read, 0 write)
+## MCP Tools (14 — 7 read, 7 write)
+
+**Correlation** — stateless, for a single look:
 
 | Tool | What |
 |---|---|
 | `incident_timeline` | [READ] Correlate pre-fetched events → timeline + spikes + ranked hypotheses + next-check ideas |
 | `list_symptom_categories` | [READ] List recognised symptom categories + what to check for each |
 
+**Investigation ledger** — for an incident you will reason about over time:
+
+| Tool | What |
+|---|---|
+| `case_open` | [WRITE] Define the event; returns a case id and the grade this environment can reach |
+| `case_readiness` | [READ] What grade this environment can reach, per symptom category, **before** you start |
+| `case_knowledge` | [READ] Which knowledge formats are accepted, what is mounted, and which entries apply to a case |
+| `case_plan` | [READ] What to fetch next — skill, tool and purpose per step; recomputed from the case's current state |
+| `case_list` | [READ] Cases, newest first |
+| `case_get` | [READ] One case: scope, ledger sizes, grade history |
+| `case_hypotheses` | [WRITE] Register a candidate explanation, or read the ledger of what supports and refutes each |
+| `case_submit_evidence` | [WRITE] Record one retrieved fact, with its source, query and time basis |
+| `case_record_gap` | [WRITE] Record what could **not** be retrieved, and how to close it |
+| `case_timeline` | [WRITE] Correlate everything the case has collected into one timeline |
+| `case_grade` | [WRITE] Recompute the conclusion grade from the ledger and record it |
+| `case_close` | [WRITE] Record the final grade, archive, and name what was left open |
+
+The four writes go to `$OPS_HOME` (default `~/.vmware/cases/`) and nowhere else.
+
 **List envelope** (output of `list_symptom_categories`): `{items, returned, limit, total, truncated, hint}` — read the rows from `items`. `truncated` is always `false` here, which is the point: it states that the catalogue is complete instead of leaving you to infer it.
 
 **Event envelope** (input to `incident_timeline`): `{ts, source, severity, entity, text, fields}`.
 See `references/event-envelope.md`. The agent normalises each source's events into this
 shape; debug stays source-agnostic and has no dependency on the other packages.
+Keep each event's `event_type` in `fields` — the classifier matches it as well as
+the message, and on a modern `EventEx` it is the only thing that says what the
+event was.
 
-## Read-Only by Design
+## The Investigation Ledger
 
-Both tools here are reads — zero write tools, zero network access of its own.
-Running with local or small models? See
+Correlating events answers "what happened together". A case answers "what do we
+believe, on what evidence, and what is still missing" — and keeps answering it
+across sessions and across people.
+
+The case folder is the deliverable, not an implementation detail. Everything in
+it but the index is plain text, so a customer can take the folder away and audit
+how a conclusion was reached with none of this installed:
+
+```
+~/.vmware/cases/<case-id>/
+├── scope.json    what is being investigated, and how that was decided
+├── evidence/     one file per fact: source skill, exact query, time basis
+├── gaps.json     what could NOT be obtained, what it blocks, how to close it
+├── conclusion.md the grade, appended — including every time it went down
+└── timeline.md · hypotheses.md · plan.jsonl · case.json
+```
+
+Hypotheses get ids (H1, H2, …), and those ids are what `case_record_gap(blocks=…)`
+and `case_submit_evidence(falsifies=…)` refer to. **An id that was never
+registered is refused, not ignored** — a dangling reference blocks nothing and
+falsifies nothing, which quietly reports a stronger case than you have.
+
+**You cannot state a conclusion level.** `case_grade` has no parameter for one;
+the grade is recomputed from the ledger on every call. To change it, change the
+ledger — submit the missing evidence, or record the gap that is blocking it.
+
+- **Candidate** — a hypothesis exists
+- **Probable** — ≥2 *independent* sources agree (two calls to one skill are one
+  source) and nothing outstanding could overturn it
+- **Confirmed** — that, plus a decisive item: a direct hardware diagnostic, a
+  version-checked knowledge-base entry, or a vendor SR; and no gap left open
+- **Excluded** — an observation that actually rules it out. "We looked and found
+  nothing" is a gap, not an exclusion
+
+`case_plan` is not a checklist: submit evidence and the next plan is shorter,
+lose a source and it routes around it. Its `unavailable` half is the important
+one — a source this install cannot reach is listed there with how to supply it,
+so the gap is visible now rather than when the conclusion refuses to firm up.
+
+`case_readiness` answers this per symptom category rather than as one number —
+"storage reaches Probable, hardware reaches Candidate" can be acted on;
+"readiness 78%" cannot. Two classes served by the *same* skill count as one
+source, so it agrees with what `case_grade` will actually award.
+
+### Mounting a knowledge library
+
+`case_knowledge` answers "what can I add" without anyone reading this file.
+Entries go under `$OPS_HOME/knowledge/{kb,runbook,sr,cases}/`:
+
+| Format | How metadata travels |
+|---|---|
+| `.md` `.markdown` | YAML front-matter between `---` fences, body below — **preferred** |
+| `.yaml` `.yml` | the whole file is one entry |
+| `.json` | one entry per file |
+| `.jsonl` | one JSON object per line — what ticketing systems export |
+| `.csv` `.tsv` | one entry per row; use dotted columns (`driver.version`) for nested constraints |
+| `.txt` `.log` | a sibling `<name>.yaml` carries the metadata |
+
+PDF, DOCX, PPTX and HTML must be converted to Markdown first — `case_knowledge`
+names them rather than ignoring them.
+
+**Every entry needs an `applies_to` block to be decisive:**
+
+```yaml
+---
+id: KB-2026-0417
+applies_to:
+  product: vsphere
+  build: ">=8.0.3, <9.0"
+  driver: {name: nvme_pcie, version: ">=1.2.4"}
+  firmware: {vendor: dell, version: ">=52.26"}
+---
+```
+
+`product`, `build`, `driver` and `firmware` are the constraints the checker
+evaluates. **Any other key leaves the entry non-decisive** — including a typo —
+because an unverified constraint is not a satisfied one, and `case_knowledge`
+names the key it could not check.
+
+Knowledge evidence must say **which** entry it is
+(`case_submit_evidence(source_skill="knowledge-kb", knowledge_entry_id="KB-…")`)
+— "some applicable entry is mounted somewhere" is a different claim from "this
+one applies", and only the second can carry a conclusion.
+
+Matching is **by version applicability, never by similarity** — an entry written
+for the wrong build reads exactly like the right one, and similarity is the only
+thing that would let it through. An entry with no `applies_to` can support a
+hypothesis but can never make a case Confirmed. A constraint the case scope
+cannot answer is not a match either: silence is not a pass.
+
+> **On a stock install the ceiling is Probable.** Confirmed needs a decisive
+> source, and there is neither a hardware-diagnostic channel (no Redfish/BMC, no
+> SMART/NVMe) nor a knowledge library mounted — `~/.vmware/knowledge/` ships
+> empty. Every tool that can reach the ceiling says so in its output rather than
+> letting you wonder why a well-supported case never goes higher. Mount a
+> knowledge library and the ceiling rises on its own.
+
+Recording a gap is meant to be free: a missing confirmation caps the grade, it
+does not demote it. Only a gap that could *overturn* the hypothesis holds a case
+at Candidate.
+
+## No Network, By Design
+
+vmware-debug connects to nothing and holds no credentials. The calling agent
+fetches with the other skills' read tools and submits the results here. Its only
+writes are to the local case ledger. Running with local or small models? See
 [`references/agent-guardrails.md`](references/agent-guardrails.md).
 
 ## CLI Quick Reference
@@ -131,8 +259,10 @@ vmware-debug mcp                                # start stdio MCP server (proxy-
 ## Troubleshooting
 
 - **`incident_timeline` raises "event[N] could not be normalised"** — event N is missing a timestamp or has an unparseable one. Every event needs `ts` (ISO-8601, epoch seconds, or millis).
-- **All hypotheses come back "uncategorized"** — the symptom isn't in the catalogue yet; widen the window and pull from another source (aria anomalies, log-insight). Consider adding a signature (see `references/routing.md`).
-- **No spikes detected on an obvious burst** — you need ≥3 time bins for a baseline; shrink `bin_seconds`.
+- **Most events come back "uncategorized"** — read `classification` in the result: it says how many, what share, and quotes the texts that matched nothing. Do **not** widen the window; a wider window adds baseline, not signal. The spikes still tell you *when*, which is answerable without a category. If the samples name a subsystem the taxonomy does not know, add a signature (see `references/routing.md`).
+- **No spikes detected on an obvious burst** — check `binning` for the resolution you were given. The width is chosen from event density so that bins average ≥4 events; a burst shorter than one bin can still be flattened by it. Pass `bin_seconds` to narrow. Below three bins there is no baseline at all and nothing is reported.
+- **`case_timeline` says zero events after you submitted results** — check `payload_events` in each `case_submit_evidence` reply. Events are read from a bare list, or from `items`/`events`/`rows`; a *summary* of a tool's result carries none. `note` names which items carried nothing and what keys they held instead.
+- **`case_readiness` says a skill you have is not installed** — both spellings are accepted (`monitor` and `vmware-monitor`). A name it did not recognise comes back in `unrecognised_skills` rather than being read as missing.
 - **It won't execute the fix** — by design. Route to vmware-aiops or vmware-pilot.
 
 ## Audit & Safety

@@ -1,41 +1,56 @@
-## Description: <br>
-A wealth-management copilot skill for financial professionals that provides reference workflows for client opportunity scans, outreach, allocation strategy, investor education, asset diagnostics, portfolio optimization, work reviews, and ongoing investment support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Covers customer opportunity scanning, outreach, allocation strategy, investor education, portfolio diagnostics, asset allocation optimization, work review, and investment companion workflows for wealth advisors.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Wealth-management professionals at licensed financial institutions use this skill as a workflow and drafting aid for client segmentation, product discussion preparation, market explanations, portfolio diagnostics, allocation planning, service summaries, and customer-facing education drafts. Outputs are intended for qualified human review before use with clients.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Financial data tools and document rendering may expose sensitive customer or portfolio information if used outside approved institutional controls.
+
+Mitigation: Deploy only where those tools are explicitly approved, logged, access-controlled, and governed by the institution's retention and data-handling policies.
+
+Risk: The skill produces finance-focused recommendations, scripts, reports, and customer-facing drafts that may be mistaken for final professional advice.
+
+Mitigation: Treat all outputs as drafts and require review by qualified, licensed staff before client use or business action.
+
+Risk: The artifact contains both advisory-only capability statements and workflow sections that describe tool calls, file operations, chart generation, PDF generation, audit logs, and client notes.
+
+Mitigation: Make the deployment boundary explicit: any data access, tool invocation, file creation, logging, or retention is performed by authorized users in their approved environment, not automatically by the skill.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Financial professionals use this skill to draft client opportunity scans, outreach scripts, product briefings, investor education answers, asset diagnostics, allocation references, review summaries, and investment support content. Outputs are reference frameworks for qualified human review and do not replace financial, legal, insurance, compliance, or suitability review. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance, configuration]
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive client financial information may be sent to remote MCP services despite a no-network disclosure. <br>
-Mitigation: Confirm all MCP data recipients, require client-data consent and minimization for KYC and portfolio fields, and avoid identifiable client records until the disclosure and report-export controls are corrected. <br>
-Risk: Reference workflows may be mistaken for regulated financial, legal, insurance, or compliance advice. <br>
-Mitigation: Require qualified human review before client use and keep outputs framed as reference-only analysis rather than professional advice or guarantees. <br>
+**Output Format:** [Markdown templates, structured analysis, talking points, client-service drafts, and report outlines]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/wealth-copilot-digital-employee) <br>
-- [Qieman MCP service endpoint](https://dashscope.aliyuncs.com/api/v1/mcps/Qieman/sse) <br>
+**Other Properties Related to Output:** [May reference user-authorized financial data workflows and chart or PDF generation steps; outputs require professional review.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured advisory templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only output requiring human review before real-world use] <br>
+2.0.3 (source: ClawHub release metadata; artifact frontmatter says 2.1.0)
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server-resolved release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
