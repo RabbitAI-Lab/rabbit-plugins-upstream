@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-android-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-android-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-28T20:23:28Z",
+  "contentHash": "faa7847c1b78b3b437e5b258c50605e56f2ffd23d1e08d8c0ee458e4458faad9",
+  "fetchedAt": "2026-08-31T15:12:48.407Z"
+}

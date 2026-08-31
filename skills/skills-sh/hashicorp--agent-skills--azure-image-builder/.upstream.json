@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/azure-image-builder",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "azure-image-builder",
+  "branch": "main",
+  "pushedAt": "2026-08-27T17:06:57Z",
+  "contentHash": "7dd101a597be4eeee5ff66f7c1aec410bbfe722a445aa383d01407b11da81751",
+  "fetchedAt": "2026-08-31T15:12:26.699Z"
+}

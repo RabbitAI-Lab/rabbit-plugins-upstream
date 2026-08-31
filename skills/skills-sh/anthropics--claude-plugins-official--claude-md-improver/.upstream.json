@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/claude-md-improver",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "claude-md-improver",
+  "branch": "main",
+  "pushedAt": "2026-08-31T07:41:34Z",
+  "contentHash": "9ee8331ef4af7313c64ac916ce5b7ce1fa12417a659542d5809729afc5a6b7ef",
+  "fetchedAt": "2026-08-31T15:12:07.557Z"
+}

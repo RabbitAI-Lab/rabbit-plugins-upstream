@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/code-reviewer",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "code-reviewer",
+  "branch": "main",
+  "pushedAt": "2026-08-31T01:30:30Z",
+  "contentHash": "a2257b814a88d6f517743fcf36b4dd0f56f72125cb966929347dcdcc4b5d3260",
+  "fetchedAt": "2026-08-31T15:12:34.792Z"
+}
