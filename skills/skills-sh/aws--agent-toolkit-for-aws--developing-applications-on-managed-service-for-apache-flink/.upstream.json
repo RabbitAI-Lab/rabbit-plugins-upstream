@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/developing-applications-on-managed-service-for-apache-flink",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "developing-applications-on-managed-service-for-apache-flink",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "a243bdf1e22569aa79e2db4be80dc7767ab7bbf109e920a9a092a58bf8824431",
+  "fetchedAt": "2026-09-01T12:40:27.414Z"
+}

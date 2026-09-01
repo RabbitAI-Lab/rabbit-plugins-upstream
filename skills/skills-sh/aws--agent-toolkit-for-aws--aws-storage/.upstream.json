@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-storage",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-storage",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "dfe5a3bea59592310ee042dd236a49024264b61fe3ccf8c978c5c9a3077c2aab",
+  "fetchedAt": "2026-09-01T12:40:27.978Z"
+}

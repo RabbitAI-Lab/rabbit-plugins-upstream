@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/video-outpainting",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "video-outpainting",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "b7c0b84156640c48b819917c4c12849b881edaa5b6eb81694af3d4b869d99c26",
+  "fetchedAt": "2026-09-01T12:37:42.523Z"
+}

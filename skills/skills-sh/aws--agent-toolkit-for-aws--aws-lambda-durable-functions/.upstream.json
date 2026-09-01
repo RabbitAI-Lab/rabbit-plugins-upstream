@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-lambda-durable-functions",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-lambda-durable-functions",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "00e6fe70e7e74586060b61b08f5b0558418399c1ec4e814121bd5f8a79c6cd84",
+  "fetchedAt": "2026-09-01T12:40:27.230Z"
+}

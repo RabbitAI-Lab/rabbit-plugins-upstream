@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-deploy",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-deploy",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "ceeab63a6eec266bb1d4b928cc0811f30ad48251079d79baedbe8a82bf7e2094",
+  "fetchedAt": "2026-09-01T12:40:27.753Z"
+}

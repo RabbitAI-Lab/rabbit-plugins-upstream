@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-get-started",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-get-started",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "3ebb6d7eba0c91f69a326e103c1020363f36bd71b7484544131fa670bac1b07f",
+  "fetchedAt": "2026-09-01T12:40:27.798Z"
+}
