@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-braket",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-braket",
+  "branch": "main",
+  "pushedAt": "2026-09-01T05:16:01Z",
+  "contentHash": "6e46cd04a6ae6430d33438e070c7a0d6ee24a6d39f34c0a7919ae03614659ad6",
+  "fetchedAt": "2026-09-01T12:40:27.958Z"
+}

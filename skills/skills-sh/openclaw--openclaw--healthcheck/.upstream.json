@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openclaw/openclaw/healthcheck",
+  "repo": "openclaw/openclaw",
+  "skillId": "healthcheck",
+  "branch": "main",
+  "pushedAt": "2026-09-01T12:36:21Z",
+  "contentHash": "908c5f83c518540073d027956a784e7255ffde3ceeb53eea70ac16a3e34a32ea",
+  "fetchedAt": "2026-09-01T12:39:22.915Z"
+}
