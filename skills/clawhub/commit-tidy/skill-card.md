@@ -1,45 +1,67 @@
-## Description: <br>
-Analyze staged and committed Git changes and recommend split, squash, amend, staging, secret-scan, and commit-message strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze staged/committed changes and recommend split, squash, or commit-message strategy.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to keep Git commit history atomic, reviewable, and aligned with repository-specific commit rules. It helps plan split or squash strategies, draft structured commit messages, audit staged files, and apply safer history-rewrite workflows when needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: History-rewrite or force-push guidance can disrupt shared or protected branches if applied without coordination. <br>
-Mitigation: Use rewrite steps only on branches you own or after coordinating with collaborators, verify CI state, and prefer force-with-lease when a force push is required. <br>
-Risk: Optional hook installation changes local commit behavior. <br>
-Mitigation: Review any hook before enabling it and install it only when the pre-commit blocking behavior matches the repository workflow. <br>
+## Use Case:
 
+Developers and coding agents use this skill to evaluate staged or committed Git changes, decide whether to split or squash commits, draft Conventional Commit messages, and run pre-commit staging and security checks.
 
-## Reference(s): <br>
-- [Commit Tidy on ClawHub](https://clawhub.ai/drumrobot/skills/commit-tidy) <br>
-- [interactive-amend.md](artifact/interactive-amend.md) <br>
-- [message-discipline.md](artifact/message-discipline.md) <br>
-- [security-scan.md](artifact/security-scan.md) <br>
-- [soft-reset-amend.md](artifact/soft-reset-amend.md) <br>
-- [staging-discipline.md](artifact/staging-discipline.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and commit-message drafts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include split or squash recommendations, staged-file audits, rewrite procedures, and pre-commit security checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.3 (source: server release metadata and changelog, released 2026-07-16) <br>
+Risk: The skill may recommend history-rewriting Git operations such as amend, soft reset, rebase replay, or force push.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before executing commit, push, amend, reset, or force-push steps, and verify branch state and CI status before any force push.
+
+Risk: The packaged post-commit review trigger and hook guidance can create persistent cross-project agent behavior.
+
+Mitigation: Do not enable hooks or settings unless persistent behavior is intended; document how to remove any installed hook before adoption.
+
+Risk: Pre-commit secret scanning is pattern-based and may miss secrets or flag benign examples.
+
+Mitigation: Treat the scanner as a first-line check only; manually review staged diffs and sanitize any credential-like content before committing to public repositories.
+
+Risk: GitHub PR lookups and public-repo language checks can expose or depend on repository metadata.
+
+Mitigation: Use these checks only in repositories where querying repository metadata is acceptable, and avoid applying public-repo rules to private or regional projects without confirmation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/commit-tidy)
+- [Hunk Split](hunk-split.md)
+- [Interactive Amend](interactive-amend.md)
+- [Message Discipline](message-discipline.md)
+- [Security Scan](security-scan.md)
+- [Soft Reset Amend](soft-reset-amend.md)
+- [Staging Discipline](staging-discipline.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and commit-message drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend history-rewriting Git operations and hook configuration that require explicit human approval before execution.]
+
+## Skill Version(s):
+
+0.6.0 (source: release metadata and CHANGELOG, released 2026-08-29)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

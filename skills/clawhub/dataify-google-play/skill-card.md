@@ -1,40 +1,55 @@
-## Description: <br>
-Turns Google Play search and ranking requests into confirmed Dataify Scraper API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Play for apps, rankings, or store results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to prepare and confirm Google Play search, category, ranking, pagination, and device-browsing requests before sending them through Dataify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Dataify Google Play API Reference](references/google_play_api.md) <br>
-- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-play) <br>
+External users and developers use this skill to turn Google Play app-search, category, ranking, language, country, and device requests into Dataify Scraper API calls and receive compact app-result summaries or requested raw output.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Text] <br>
-**Output Format:** [Markdown confirmation table followed by the raw Dataify API response body.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user confirmation before API calls and a private Dataify API token; confirmed requests are sent to Dataify.] <br>
+Global
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill uses a Dataify API token from the environment and sends Google Play search parameters to Dataify.
+
+Mitigation: Configure DATAIFY_API_TOKEN as an environment variable, do not paste it into chat, and install only if this token and request-data flow is acceptable.
+
+Risk: Broad, multi-page, media-download, or ambiguous requests can materially change scope or credit usage.
+
+Mitigation: Ask for confirmation when scope, cost, or required search input is unclear; show only user-facing values that affect target, scope, output, or cost.
+
+## Reference(s):
+
+- [Dataify Google Play API Reference](references/google_play_api.md)
+- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify Dashboard Login](https://dashboard.dataify.com/login?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, shell command snippets, parameter tables, JSON, or HTML depending on the user's requested output mode.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Google Play search parameters and a Dataify API token; raw JSON or HTML is returned only when explicitly requested.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

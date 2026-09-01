@@ -1,45 +1,67 @@
-## Description: <br>
-Clockify API integration with managed OAuth for tracking time and managing projects, clients, tasks, workspaces, and workspace members. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clockify API integration with managed OAuth for tracking time and managing projects, clients, tasks, workspaces, and workspace members.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Clockify through Maton-managed OAuth, including reading user, workspace, project, client, tag, task, and time-entry data. With explicit user approval, it can help create, update, or delete Clockify resources through API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key is a sensitive credential that grants access to connected Clockify data. <br>
-Mitigation: Keep MATON_API_KEY private, avoid logging it, and install only if you trust Maton as the OAuth proxy. <br>
-Risk: When multiple Clockify connections exist, requests may target the wrong account. <br>
-Mitigation: Use the Maton-Connection header to select the intended Clockify connection before sending account-specific requests. <br>
-Risk: Create, update, and delete operations can change billing, project, task, workspace, or time-tracking records. <br>
-Mitigation: Confirm the target resource and intended effect with the user before any write or delete request. <br>
+## Use Case:
 
+External ClawHub users and agents use this skill to access a connected Clockify account through Maton for listing and updating time entries, projects, clients, tasks, tags, workspaces, and workspace members. It is intended for read/list workflows by default, with user confirmation before connection creation or write/delete operations.
 
-## Reference(s): <br>
-- [Clockify API Documentation](https://docs.clockify.me/) <br>
-- [Clockify Time Entry API Reference](https://docs.clockify.me/#tag/Time-entry) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Clockify Skill on ClawHub](https://clawhub.ai/byungkyu/clockify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with HTTP examples and inline Python, JavaScript, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Clockify OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill enables an agent to access a user's Clockify account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Clockify access through Maton is intended, and review connection creation before authorizing it.
+
+Risk: Write or delete operations can change workspaces, projects, tasks, clients, tags, time entries, or member access.
+
+Mitigation: Confirm the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE operation.
+
+Risk: Credentials or provider-issued tokens could be exposed if printed, persisted, or passed through shell arguments.
+
+Mitigation: Prefer OAuth with the operating system credential store, avoid inspecting stored credentials, and use stdin-based raw HTTP fallback only when the CLI cannot be installed.
+
+Risk: Multiple Maton or Clockify connections can cause actions to apply to the wrong account.
+
+Mitigation: List available connections first and specify the intended connection or profile before making account-specific calls.
+
+## Reference(s):
+
+- [ClawHub Clockify Skill](https://clawhub.ai/byungkyu/skills/clockify)
+- [Maton Homepage](https://maton.ai)
+- [Clockify API Documentation](https://docs.clockify.me/)
+- [Clockify Time Entry API Reference](https://docs.clockify.me/#tag/Time-entry)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides API calls through the Maton CLI and managed OAuth; no typed Clockify command wrapper is documented.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

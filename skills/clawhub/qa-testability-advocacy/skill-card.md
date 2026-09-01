@@ -1,39 +1,53 @@
-## Description: <br>
-Chinese-language QA guidance skill for evaluating software testability across controllability, observability, isolation, automation, and diagnosability, then producing assessment reports, improvement suggestions, refactoring guidance, and best practices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Testability Advocacy helps QA engineers and developers assess whether a system is controllable, observable, isolatable, automatable, and diagnosable, then produce testability assessment reports and improvement recommendations.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when features are difficult to test or architecture reviews need testability advocacy. It helps assess testability gaps and turn them into traceable improvement suggestions and implementation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest cleanup of test data as part of improving data-layer testability. <br>
-Mitigation: Review cleanup suggestions before applying them and limit any cleanup to non-critical test data. <br>
-Risk: Guidance may omit some testability issues for complex systems. <br>
-Mitigation: Supplement the assessment with code review when gaps are suspected, then rerun the improvement planning step. <br>
+## Use Case:
 
+QA engineers, test leads, and developers use this skill during architecture reviews, test planning, or defect triage to identify testability gaps and advocate concrete improvements across interfaces, data, logs, configuration, and dependencies.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured assessment sections and traceable suggestion IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a testability assessment, improvement suggestions, refactoring guidance, and best-practice recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may read project documentation or code while preparing a testability review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only relevant project materials and apply the organization's normal data-handling rules for internal code and documentation.
+
+Risk: Cleanup and test-data recommendations could be harmful if applied directly to real environments or important data.
+
+Mitigation: Treat cleanup guidance as planning advice and manually verify environment scope, data criticality, and rollback options before taking action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-testability-advocacy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown report with assessment tables, prioritized recommendations, refactoring guidance, and best-practice sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations are advisory and should be manually reviewed before changes are applied to environments, data, or code.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

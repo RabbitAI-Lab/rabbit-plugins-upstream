@@ -1,8 +1,8 @@
 ---
 name: cargo-connection
-description: Manage connectors and integrations using the Cargo CLI. Use when the user wants to list, create, update, or remove connectors, discover available integrations, or understand what connector actions are available for use in workflows.
-version: "1.2.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Connect Cargo to an external system and find out what it can do — authenticate connectors, browse the integration catalog, and resolve the `connectorUuid` and `actionSlug` a workflow node needs. Triggers: \"connect my HubSpot\", \"is Salesforce connected\", \"what integrations do you support\", \"can Cargo talk to <tool>\", \"what actions does <provider> have\", \"I need the connector UUID\", \"set up the API key for\", \"it is asking for credentials again\", \"why is this connector failing auth\", \"list my connectors\". Integrations: amplemarket, amplitude, attio, bigQuery, calendly, closecom, contrast, csv, customerio, dbt, emailBison, expandi, googleAds, googleSheets, heyReach, http, hubspot, hubspotMcp, instantly, instantlyV2, intercom, jira, kitt, lemlist, lgm, linkedinAds, linkedinMatchedAudience, livestorm, manus, marketo, metabase, microsoftTeams, mixpanel, netsuite, netsuiteSoap, notionMcp, octave, onesignal, outreach, pipedrive, postgresql, redshift, resend, rift, salesforce, salesforceMcp, salesloft, Sendgrid, sillage, slack, smartlead, snowflake, sql, stripe, and 83 more. Skip when: choosing between enrichment providers for a GTM job — use cargo-gtm and its provider playbooks."
+version: "1.4.0"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -28,25 +28,65 @@ Connector and integration management: listing connectors, discovering available 
 > See `references/examples/integrations.md` for listing available integrations and OAuth flows.
 > For third-party connector rate limit handling and retry config in workflows, see `cargo-orchestration/references/polling.md` and `cargo-orchestration/references/troubleshooting.md`. Native integrations do not have rate limits.
 
+## Bootstrap
+
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
+
 ## Key concepts
 
 **Integration:** The external service type (e.g. HubSpot, Clearbit, Salesforce). Integrations define what actions are available.
 
 **Connector:** An authenticated instance of an integration. One integration can have multiple connectors (e.g. two different HubSpot accounts). Connectors are what you reference in workflow node graphs.
 
-## Prerequisites
-
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
-
 ## Discover resources first
+
+**Looking for an action? Search for it — don't browse the catalog.** Two keyword
+searches cover the whole surface, and both beat paging `integration list` or
+reading a whole `integration get` payload:
+
+```bash
+cargo-ai orchestration action list <query>                # START HERE — connector + native + tools + agents.
+                                                          # Returns a ready-to-run action object (connectorUuid
+                                                          # resolved) and the action's credit costs.
+cargo-ai connection action search <query> --credits-only  # connector catalog only, but filters by category
+                                                          # and by "is it paid" — which `action list` cannot.
+```
+
+Reach for the catalog commands when you need the *integration*, not an action —
+its auth fields, its extractors, or the full input schema of an action you have
+already picked:
 
 ```bash
 cargo-ai connection connector list                        # all authenticated connectors
 cargo-ai connection integration list                      # all available integration types
 cargo-ai connection integration list --search "hubspot"   # search by name
-cargo-ai connection integration get <slug>                # third-party-specific actions (e.g. HubSpot)
+cargo-ai connection integration get <slug>                # one integration's actions + input schemas
 cargo-ai connection native-integration get                # built-in Cargo actions only (NOT third-party)
 ```
+
+### Which action search?
+
+| | `orchestration action list` | `connection action search` |
+|---|---|---|
+| Covers | connector, native, **tools, agents** | connector catalog only |
+| Returns | a runnable `action` object with `connectorUuid`, workspace connectors, `credits`, autocompletes | `integrationSlug` + `actionSlug`, category, `credits` — you assemble the action yourself |
+| Filters | `--kind`, `--integration-slug`, `--limit` | `--category`, `--integration`, **`--credits-only`**, `--limit` |
+| Needs | CLI ≥ 1.0.66 | CLI ≥ 1.0.36 |
+
+Default to `action list` — it is the one that hands you something you can execute.
+Switch to `action search` for the two questions it alone answers: *which paid
+actions match this?* (`--credits-only`) and *what does this category offer?*
+(`--category`). Both rank an action-slug or name hit above an integration hit,
+above a description hit, and require **all** query terms to match.
 
 ### `integration get` vs `native-integration get`
 
@@ -114,8 +154,8 @@ cargo-ai connection integration list --category enrichment
 # Search by name
 cargo-ai connection integration list --search "hubspot"
 
-# Find by exact slug
-cargo-ai connection integration list --slug clearbit
+# Find by exact slug(s)
+cargo-ai connection integration list --slugs clearbit
 
 # Only integrations that have actions (usable in workflow nodes)
 cargo-ai connection integration list --has-actions true
@@ -262,7 +302,8 @@ Connector actions are used as nodes in workflow graphs. To use an action:
 cargo-ai connection connector list
 # → Filter the output by integrationSlug to find the right connector
 
-# 2. Discover available actions for the integration
+# 2. Discover the action — search first, and only then read its schema
+cargo-ai orchestration action list <keywords> --integration-slug <integration-slug>
 cargo-ai connection integration get <integration-slug>
 # → actions are keyed by actionSlug, with config.jsonSchema (input) for each
 # → many actions also carry output.schema — the JSON Schema of what the action
@@ -287,7 +328,7 @@ cargo-ai connection integration get linkedin \
 
 Two footguns:
 
-- **For a top-level action (`action execute` / `execute-batch`), the input values go in `--data`, NOT in the action's `config`.** The action definition's `config` (`{"kind":"connector",…,"config":{}}`) stays `{}`; the fields described by `config.schema` are the `--data` payload. Passing them in `config` fails with `A top-level action does not use action.config; pass the action's inputs via data instead.` (Inside a workflow **node graph** those same fields go in the node's `config` — see `cargo-orchestration/references/nodes.md`. The "`--data`, not `config`" rule is specific to `action execute`/`execute-batch`.)
+- **For a top-level action (`action execute` / `execute-batch`), the input values go in `--data`, NOT in the action's `config`.** The fields described by `config.schema` are the `--data` payload; the action definition carries no `config` key at all. **Misplacing them is no longer a loud failure:** older backends rejected the call with `A top-level action does not use action.config; pass the action's inputs via data instead.`, newer ones drop `config` on the way in and run the action with **no inputs at all** — you get a missing-required-field error from the provider, or an empty result, not a message about `config`. If an action comes back empty for no obvious reason, check that the inputs are in `--data`. (Inside a workflow **node graph** those same fields go in the node's `config` — see `cargo-orchestration/references/nodes.md`. The "`--data`, not `config`" rule is specific to `action execute`/`execute-batch`.)
 - **Some inputs must be resolved first via autocomplete.** If a field's `uiSchema` carries `IntegrationAutocompleteWidget`, fetch its values with `connector autocomplete` (above). Notably, LinkedIn engagement/extraction actions (`connectProfile`, `visitProfile`, `extractEventAttendees`, `extractProfileViewers`) require `identityIds` — the connected account that *acts* — resolved via the `listIdentityIds` autocomplete. A `must match format "uuid"` error means that identity is missing.
 
 Example connector node (Clearbit company enrichment):

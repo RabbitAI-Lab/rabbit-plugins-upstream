@@ -1,0 +1,4 @@
+interface:
+  display_name: "English Learning Animation"
+  short_description: "Produce and quality-check animated English shorts with Qwen3-TTS."
+  default_prompt: "Create a content-paced English-learning animation with distinct character voices, layered cartoon motion, an English-only cover, audio-driven timing, and complete automated quality checks. Let the dialogue determine the runtime."

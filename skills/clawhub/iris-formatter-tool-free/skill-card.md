@@ -1,40 +1,49 @@
-## Description: <br>
-Provides InterSystems IRIS/ObjectScript code formatting, style review, and basic standards checks for naming, locks, transactions, formatting, and comments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+InterSystems IRIS ObjectScript code formatting and basic standards review for developers working with IRIS/Cache ObjectScript.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers working with InterSystems IRIS or Cache use this skill to format ObjectScript, review code against basic project conventions, and receive suggested fixes for naming, lock, transaction, formatting, and comment issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill declares read, exec, and write capabilities, so formatting or validation work could affect local project files or run commands if the agent is allowed to proceed. <br>
-Mitigation: Keep use scoped to intended project files, review proposed edits before applying them, and allow command execution only when compile or environment validation is explicitly needed. <br>
-Risk: ObjectScript formatting and review recommendations may not match every team's IRIS conventions or business-specific constraints. <br>
-Mitigation: Treat review output as guidance, confirm changes against local standards, and validate important code in the target IRIS environment. <br>
+## Use Case:
 
+Developers and engineers use this skill to format, review, and propose corrections for InterSystems IRIS/Cache ObjectScript code, including naming, locking, transaction, comment, and spacing conventions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/iris-formatter-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with ObjectScript code blocks and optional JSON summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose edits, IRIS compile validation, or environment checks when explicitly requested; review before applying changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill asks for command and write capability while describing broad development/deployment triggers and create, modify, delete, and save operations beyond simple formatting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for IRIS/ObjectScript formatting or style review, keep use scoped to selected files, review edits before applying them, and avoid broad shell commands or deployment tasks unless explicitly requested and understood.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/iris-formatter-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown responses with ObjectScript code blocks and review findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include formatted ObjectScript, compliance findings, and suggested corrections; IRIS compilation validation requires an IRIS/Cache environment.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

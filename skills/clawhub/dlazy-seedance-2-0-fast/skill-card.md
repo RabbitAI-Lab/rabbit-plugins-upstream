@@ -1,45 +1,60 @@
-## Description: <br>
-Fast version of ByteDance's Seedance 2.0 for generating videos from text prompts, reference media, or first and last frame inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Seedance 2.0 Fast videos through the dLazy CLI with text prompts, multimodal references, first/last-frame inputs, and configurable resolution, aspect ratio, duration, and audio.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate short videos with Seedance 2.0 Fast through the dLazy CLI. It supports text-to-video, multimodal reference inputs, first/last frame workflows, selectable aspect ratios, durations, and asynchronous polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths provided to the CLI may be uploaded to dLazy for processing. <br>
-Mitigation: Avoid submitting sensitive or unauthorized content, and review dLazy service terms before use. <br>
-Risk: The dLazy API key can be stored locally in the CLI configuration. <br>
-Mitigation: Use OS account protections, prefer per-invocation credentials when appropriate, and rotate or revoke the organization API key if exposure is suspected. <br>
-Risk: Generated outputs are hosted by dLazy. <br>
-Mitigation: Review generated media URLs and sharing practices before distributing outputs. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate short videos through dLazy's hosted Seedance 2.0 Fast command, optionally using text, image, video, audio, or first/last-frame references.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is hosted by dLazy; local media paths supplied to the CLI may be uploaded for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts and local media passed to the command are uploaded to dLazy cloud endpoints for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are authorized to send to dLazy, avoid sensitive inputs unless approved, and review dLazy service terms before use.
+
+Risk: Authentication may save a dLazy API key in the local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY per invocation when local key persistence is not acceptable, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Installing the pinned global CLI adds a third-party executable to the user's environment.
+
+Mitigation: Use the pinned npx @dlazy/cli@1.2.3 alternative for on-demand execution and review the pinned CLI source before installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON CLI result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns hosted file URLs; async mode returns a generateId for polling; --save can download output to a local path.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

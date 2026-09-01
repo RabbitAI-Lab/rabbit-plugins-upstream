@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-context",
   "slug": "cargo-context",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1781245217858,
-  "contentHash": "4a5ebd9b9404430af318a16abdcfbdfea3342265a1c986fd059132fbd6dbbe57",
-  "fetchedAt": "2026-07-26T18:29:32.764Z"
+  "version": "1.2.2",
+  "updatedAt": 1787874338949,
+  "contentHash": "f3a2261435c502f28bbd2e4e787ddb3bb3009cc77962f19cf84dad8e6f952214",
+  "fetchedAt": "2026-09-01T12:58:09.528Z"
 }

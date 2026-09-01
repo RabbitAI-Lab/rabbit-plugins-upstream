@@ -1,41 +1,55 @@
-## Description: <br>
-Guides an agent through using Pruna's p-video-animate API to animate a reference image with motion from a source video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a photo to move like another video: motion transfer, dance remixes, or performance variations from a template clip.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to prepare prompts, upload source media, and call Pruna's API for motion-transfer video generation from one image and one motion-template video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill sends selected images and videos to Pruna's API with the user's PRUNA_API_KEY. <br>
-Mitigation: Use only media the user is allowed to upload and confirm credentials before making API calls. <br>
-Risk: Generated prompts or optional fields can change outputs or trigger paid API calls. <br>
-Mitigation: Review generated prompts and key parameters before submission, especially when the instruction prompt is not already locked. <br>
-Risk: The artifact exposes an optional disable_safety_checker field. <br>
-Mitigation: Be cautious with safety-check settings and keep default protections enabled unless the user has a justified need. <br>
+## Use Case:
 
+External users and developers use this skill to animate a still reference image with motion from a source video through Pruna's p-video-animate model. It helps agents collect required media inputs, prepare faithful motion-transfer prompts, and issue the documented Pruna API calls.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline curl examples and parameter notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a PRUNA_API_KEY and user-provided image and video URLs or uploaded Pruna file URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+Risk: Selected video, image, and prompt details are sent to Pruna for remote processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid uploading sensitive or regulated media, or images of people without permission.
+
+Risk: The Pruna API key authorizes remote API calls if exposed.
+
+Mitigation: Keep PRUNA_API_KEY private and avoid placing it in shared logs, prompts, or committed files.
+
+## Reference(s):
+
+- [p-video-animate ClawHub release page](https://clawhub.ai/pruna-ai/skills/p-video-animate)
+- [Pruna files API endpoint](https://api.pruna.ai/v1/files)
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown guidance with inline bash and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY and user-supplied image and video assets; remote output duration follows the source video.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

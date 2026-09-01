@@ -1,43 +1,64 @@
-## Description: <br>
-Mubu Integration helps agents authenticate with Mubu, manage documents and folders, and import or export outlines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrates Mubu with Obsidian and agent workflows by importing Mubu outlines into Obsidian, syncing Markdown to Mubu, and querying or exporting Mubu notes.
 
-## Publisher: <br>
-[liuboacean](https://clawhub.ai/user/liuboacean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liuboacean](https://clawhub.ai/user/liuboacean)
 
-## Use Case: <br>
-Developers, engineers, and agents use this skill to perform explicit Mubu note operations such as listing, creating, saving, moving, searching, and converting outline documents between Mubu structures and Markdown, OPML, or FreeMind XML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Mubu account credentials and a local token to access real Mubu documents. <br>
-Mitigation: Install only if account-level Mubu access is acceptable, keep MUBU_PHONE, MUBU_PASSWORD, and ~/.mubu_token private, and use the skill only for explicit Mubu actions. <br>
-Risk: Save, move, delete, and purge operations can affect real remote content, and purge is irreversible. <br>
-Mitigation: Review document and folder IDs before action, rely on the guarded soft-delete workflow for delete, and treat purge --yes as a deliberate irreversible operation. <br>
+## Use Case:
 
+Developers, knowledge workers, and AI-agent users use this skill to read, export, import, and update Mubu outlines as Markdown for Obsidian workflows, backups, and account-backed note management.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liuboacean/skills/mubu-integration) <br>
-- [README](README.md) <br>
-- [Weekly outline example](examples/weekly.md) <br>
-- [Mubu API base endpoint](https://api2.mubu.com/v3/api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON, CLI text, shell commands, OPML, and FreeMind XML] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-stream agent responses and CLI output; document exports may include Markdown, JSON, OPML, or FreeMind XML.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release metadata and scripts/mubu/__init__.py) <br>
+Risk: The skill can access private Mubu outlines using the configured account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted agent workflows, keep token and environment files private, and avoid exposing account credentials in prompts, scripts, or logs.
+
+Risk: Create, save, move, rename, and purge actions can modify account content, and purge is irreversible.
+
+Mitigation: Confirm target document or folder IDs before write actions; use purge only when the item and type have been verified and explicit confirmation is intended.
+
+Risk: Automatic trigger wording is broad for a skill that can read and modify private notes.
+
+Mitigation: Invoke the skill deliberately for Mubu-specific tasks after credentials, target IDs, and intended read or write scope are clear.
+
+Risk: The integration relies on unofficial Mubu web endpoints that may change or rate-limit requests.
+
+Mitigation: Review failures before retrying at scale, keep request volume reasonable, and verify endpoint behavior before relying on write-heavy workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liuboacean/skills/mubu-integration)
+- [README](artifact/README.md)
+- [Changelog](artifact/CHANGELOG.md)
+- [Mubu API base endpoint](https://api2.mubu.com/v3/api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; CLI outputs may include Markdown, JSON, OPML, or FreeMind XML.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Mubu account credentials; read, export, and write actions operate on account content.]
+
+## Skill Version(s):
+
+1.3.15 (source: server release metadata, package __version__, CHANGELOG released 2026-08-28)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

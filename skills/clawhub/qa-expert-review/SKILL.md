@@ -1,8 +1,11 @@
 ---
 name: qa-expert-review
-version: 1.6.0
+slug: qa-expert-review
+displayName: 测试专家评审
+version: 1.7.5
 description: >-
   当 AI 生成的测试用例已经过输出评审和盲区补盲、准备终审上线时使用此技能。由资深测试对 AI 输出的用例做人工抽样校验，从业务有效性、场景完整性、可执行性三个维度做最后把关。⚠️ 如果发现系统性问题（比如遗漏了某个关键模块），需要回退修正并记录到 Prompt 优化反馈库。专家评审不是走形式——发现的问题必须闭环。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"专家评审"、"用例审查"、"校正反馈"、"评审用例"、"检查用例"、"终审"、需要对AI输出进行质量把关、用例上线前需要终审时
 allowed-tools: Read Grep Glob
@@ -27,6 +30,9 @@ input_format:
       description: 历史评审的校正记录，用于模式分析
 output_format:
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - review_id: "REV-XXXX"
     - review_summary: "评审摘要"
     - sampling_rate: "抽样比例"
@@ -36,8 +42,8 @@ output_format:
     - prompt_optimization: "Prompt优化建议"
   traceability:
     - 每次评审带唯一ID（REV-XXXX）
-    - 关联用例ID（TC-XXXX）
-    - 关联需求ID（REQ-XXXX）
+    - 关联用例ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
+    - 关联需求ID（TC_{需求模块缩写}_{功能缩写}_{序号}）
 depth_requirement_quantification:
   reference_value: "根据项目重要性和风险等级调整评审深度：简单x1/中等x2/复杂x3"
   minimum: "至少覆盖功能完整性、边界充分性、异常覆盖性3个维度"
@@ -46,6 +52,8 @@ error_recovery_guidance:
   on_failure: "评审发现系统性问题时回退到输出评审步骤修正"
   retry_behavior: "修正后重新抽样校验"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 专家评审与元学习
 
 ## 核心原则

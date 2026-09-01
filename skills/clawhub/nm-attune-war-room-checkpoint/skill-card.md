@@ -1,40 +1,55 @@
-## Description: <br>
-Assesses decision reversibility and risk at critical checkpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses decision reversibility and risk at critical checkpoints.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill when command workflows reach high-stakes branches and need a structured checkpoint for reversibility, escalation, confidence, and user-confirmation decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Checkpoint and War Room audit logs may persist workflow context, including affected file paths, rationale, confidence, and escalation history, under the user's home directory. <br>
-Mitigation: Use only in workspaces where local audit records are acceptable, and review or periodically clean the documented ~/.claude/memory-palace/strategeion paths on shared machines. <br>
+## Use Case:
 
+Developers and engineering teams use this skill inside higher-level commands to assess the reversibility, blast radius, and confidence of consequential decisions before continuing or escalating to a War Room deliberation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-war-room-checkpoint) <br>
-- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
-- [Publisher profile](https://clawhub.ai/user/athola) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown with structured checkpoint response fields and YAML-style examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include reversibility score, escalation mode, recommendation or orders, confidence, and user-confirmation status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: Checkpoint and War Room details may be saved locally under ~/.claude, including affected files and decision rationale.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid using the skill on highly confidential projects unless that local audit trail is acceptable or separately controlled.
+
+Risk: The skill may provide incorrect or misleading decision guidance if the supplied context is incomplete or inaccurate.
+
+Mitigation: Review checkpoint outputs before acting on escalations, recommendations, or auto-continue decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-war-room-checkpoint)
+- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+- [Publisher profile](https://clawhub.ai/user/athola)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Configuration, Guidance]
+
+**Output Format:** [Structured Markdown with YAML-style response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include escalation mode, reversibility score, confidence, recommendation or orders, and whether user confirmation is required.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

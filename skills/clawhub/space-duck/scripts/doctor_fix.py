@@ -117,9 +117,12 @@ class Card:
 
 def load_cfg():
     try:
-        return json.loads(CONFIG.read_text())
+        cfg = json.loads(CONFIG.read_text())
     except Exception:
         return None
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 
 def check_identity(card, cfg):

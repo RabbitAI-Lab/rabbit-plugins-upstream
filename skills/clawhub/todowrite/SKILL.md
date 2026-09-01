@@ -4,8 +4,10 @@ metadata:
   author: es6kr
   version: "0.1.0"
 depends-on:
+  - cleanup
   - wip
-description: Route TODO checklists to the right storage + TaskList conversational discipline. session - in-session tracking via /wip, file - persistent TODO (fix_plan.md, TODO.md), issue - team-shared via GitHub Issues, conversation-id - subject-prefix references in user-visible output (no internal TaskList IDs), completion-report - TaskUpdate completion message format + file-change disclosure, fix-plan-sync - two-way sync between task medium and checklist medium, priority-prefix - encode task priority + execution order via subject prefix when TaskUpdate has no priority field, media-separation - 3-layer model: tracking (files) vs recording (RAG) vs knowledge (Wiki) [media-separation.md]. "TODO management", "checklist", "todowrite", "fix_plan cleanup", "register as issue", "task ID", "completion report", "task transfer", "task priority", "prefix ordering", "3-layer separation", "RAG vs wiki", "work record media" triggers.
+description: |
+  Route TODO checklists to the right storage + TaskList conversational discipline. Topics — session (/wip), file (fix_plan.md), issue (GitHub Issues), completion-report, fix-plan-sync, priority-prefix, media-separation (tracking vs recording vs knowledge). Use when: "TODO management", "checklist", "todowrite", "fix_plan cleanup", "register as issue", "completion report", "task priority", "media-separation".
 ---
 
 # TodoWrite
@@ -28,11 +30,12 @@ New TODO arrives
 | session | TaskCreate/TodoWrite | Session | → `/wip` skill |
 | file | fix_plan.md, TODO.md | While file exists | Write/Edit |
 | issue | GitHub Issues | Permanent | `gh issue create` |
-| conversation-id | — | Always-on | [conversation-id.md](./conversation-id.md) — subject-prefix references in user-visible output |
+| conversation-id | — | Always-on | [conversation-id.md](./conversation-id.md) — subject-prefix references in user-visible output. Enforced by `resources/block-tasklist-id-in-conversation.sh` (PreToolUse:AskUserQuestion, registered in `settings.json`) |
 | completion-report | — | Always-on | [completion-report.md](./completion-report.md) — TaskUpdate completion format + file-change disclosure |
 | fix-plan-sync | — | Always-on | [fix-plan-sync.md](./fix-plan-sync.md) — two-way sync between task medium and checklist medium |
 | priority-prefix | — | Always-on | [priority-prefix.md](./priority-prefix.md) — priority/order via subject prefix (`P{n}`, PR-anchored, `fix-*` > P0) |
 | media-separation | — | On-demand | [media-separation.md](./media-separation.md) — 3-layer model: tracking files vs RAG vs LLM Wiki |
+| claude-task | Task JSON CLI | Permanent / Standalone | [claude-task.md](./claude-task.md) — standalone Python CLI tool (`claude-task.py`) for managing Task JSON files directly from terminal shell |
 
 ## Skip exceptions
 

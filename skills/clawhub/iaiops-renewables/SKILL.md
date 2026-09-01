@@ -55,10 +55,29 @@ rotor_speed / pitch / yaw / state_of_charge 等可再生类别(`opcua_discover_t
 - 基线：`baseline_learn` `baseline_check` `baseline_record_change` `baseline_status`
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish`
   `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`
-- 元：`protocols_supported`
+- 程序变更基线：`plc_program_snapshot` `plc_program_drift` `plc_program_history` — 把「认可的那一版」
+  的结构记下来（文件 SHA-256 + 每个 block 的结构指纹：声明/调用/分支条件/定时器，**不含行号、注释、
+  block 顺序**，所以在文件顶上加一行注释不会把整份程序报成变更），之后问某一次导出**动没动**。
+  三个判词咬得很紧：`identical` **只**由 SHA-256 相同得出；`logic_changed` 逐 block 指出哪一类变了；
+  `changed_outside_extracted_structure` = 字节变了而结构指纹全同 —— 多半是注释/排版，但这些 parser
+  是结构抽取不是文法，**所以它不叫「仅文档」，也不构成放行**。删历史只在 CLI（`iaiops program forget`）：
+  删变更控制证据不该离 agent 只有一次调用。存的是 block 名 + 哈希 + 计数，**不落声明、源码行和注释**。
+- 自证：`verify_determinism` — 把「拿掉模型、断网、同一份数据重跑、输出逐字节相同」**跑出来**：
+  固定数据集过一遍分析层，规范化后取 SHA-256，在本进程跑两遍、再在两个不同 PYTHONHASHSEED 的
+  全新解释器里各跑一遍（这一臂才抓得到集合/字典迭代顺序渗进结果），全程 socket 抛异常。
+  给 CSV/验证团队的是一条能写进 IQ/OQ 的测试用例，不是一句形容词。
+- 元：`protocols_supported`(产品能做什么)· `site_readiness`(这个站点今天能跑什么、还差什么;零联网)
+- 调查层（§13，八步证据闭环）：`investigation_readiness` `investigation_open` `investigation_show`
+  `investigation_list` — 「真出事时这个站能走到第几步、每个缺口还差什么」，以及对一个**已过去的窗口**
+  逐步走完并留档（不碰设备）。缺口分两种:**你没供**(给命令) 与 **产品供不了**。
+- 产线关系与机制库：`line_relation_declare` `line_relations_list` `mechanism_library_check`
+  `mechanism_library_list` — 上下游由**人声明**（D25:线上下游共现是必然，推不出因果）；
+  机制库按 ISO 14224 分 mode/mechanism/cause，**可排除、绝不确认**，
+  库里没有这条原因 → `nothing_known`（不是「无异议」）。
+
 
 ## Workflows
 
@@ -74,5 +93,5 @@ rotor_speed / pitch / yaw / state_of_charge 等可再生类别(`opcua_discover_t
 |---|---|---|---|---|---|
 | Modbus-TCP | `pymodbus>=3.5,<4` | App 1.1b3;FC 1/2/3/4/5/6/15/16 | 逆变器/汇流箱/风机/表计 | TCP/502 | ✅ |
 | Modbus-RTU | `pymodbus>=3.5,<4` + `pyserial>=3.5` | Modbus serial (RTU) | 串口从站/表计 | RS-485/serial | ✅ socat PTY;物理 RS-485 待核实 |
-| OPC-UA | `asyncua>=1.0,<2` | OPC UA 1.0x（DA+HA+AC 子集） | 全站 SCADA / PLC 网关 | opc.tcp | ✅ mock+HDA |
+| OPC-UA | `asyncua>=2.0,<3` | OPC UA 1.0x（DA+HA+AC 子集） | 全站 SCADA / PLC 网关 | opc.tcp | ✅ mock+HDA |
 | MQTT-Sparkplug B | `paho-mqtt>=2.0,<3`（extra） | Sparkplug B 3.0 | 电站遥测 / IoT 网关 UNS | MQTT/1883/8883 | ✅ broker mock |

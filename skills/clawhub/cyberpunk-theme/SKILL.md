@@ -1,5 +1,5 @@
 ---
-name: 赛博朋克主题
+name: cyberpunk-theme
 description: Install, repair, or customize this OpenClaw cyberpunk chat and dream theme. Use when the user wants this exact theme, needs compatibility restored after an OpenClaw update, wants to import it into another workspace, or wants to swap the bundled avatars and background images.
 ---
 
@@ -10,21 +10,20 @@ description: Install, repair, or customize this OpenClaw cyberpunk chat and drea
 ## 当前包含
 
 - 赛博朋克 + P5 风格聊天页视觉层
-- 聊天背景、助手头像、工具头像、帮助/历史头像、用户头像替换
+- 聊天背景、助手头像、用户头像替换
 - 梦境页背景与梦境头像替换
-- 聊天消息头像自动纠偏
+- 聊天页助手 / 用户肖像固定在输入控制台左右两侧，并保持对称水平间距与底部对齐
 - 浮动 composer 上方的 context usage、compaction、run status 层级修正
 - 安全默认 runtime：只启用 HUD、头像、header、底部 composer 布局同步；默认关闭 quota badge、session fallback、消息时间线重排
 - OpenClaw 2026.6.9 chat composer 适配：恢复 HUD / 头像替换，兼容 `chat-workbench` 嵌套输入区，模型选择器靠左贴近输入工具，使用情况、设置与发送按钮靠右顺序排列
 - OpenClaw 2026.7.1 chat composer 适配：识别 `agent-chat__composer-shell` 新包裹层，将完整输入控制台稳定锚定在聊天区底部
+- OpenClaw 2026.8.1 chat conversation 适配：兼容 `chat-main__conversation` 内的 composer shell，释放旧版强制的 transcript 全高，避免底部输入区被裁切
 
 ## 能配置什么
 
-支持替换这七个槽位：
+支持替换这五个槽位：
 
 - 主助手头像
-- Tool 头像
-- Help / 历史消息头像
 - 用户头像
 - 聊天背景大图
 - 梦境头像
@@ -34,7 +33,7 @@ description: Install, repair, or customize this OpenClaw cyberpunk chat and drea
 
 ## 素材尺寸建议
 
-- 聊天页主助手 / Tool / Help 历史 / 用户立绘框当前为 `160x240`，比例 `2:3`。推荐原图也使用 `2:3` 竖图，至少 `1024x1536`，避免在框内裁切或放大后糊化。
+- 聊天页主助手 / 用户立绘框当前为 `160x240`，比例 `2:3`。推荐原图也使用 `2:3` 竖图，至少 `1024x1536`，避免在框内裁切或放大后糊化。
 - 聊天背景用于整张聊天页内容区铺底，当前素材为 `1536x1024`，比例 `3:2`，CSS 使用 `cover` + `center bottom`。推荐使用横向 `3:2` 或更宽的高分辨率图，底部主体不要贴边。
 - 梦境背景用于梦境页主舞台铺底，当前素材为 `2752x1536`，约 `16:9`，CSS 使用 `cover` + `center 52%`。推荐使用 `16:9` 或接近 `16:9` 的大图。
 - 梦境头像显示在 `226x226` 圆形框内，推荐方图或方形 GIF，当前素材为 `240x240`。
@@ -47,7 +46,7 @@ description: Install, repair, or customize this OpenClaw cyberpunk chat and drea
 
 带素材覆盖安装：
 
-`python3 scripts/install_cyberpunk_theme.py --workspace <target-workspace> --assistant-avatar /path/to/main.png --tool-avatar /path/to/tool.png --help-avatar /path/to/help.png --user-avatar /path/to/user.png --chat-background /path/to/chat.jpg --dream-avatar /path/to/dream.gif --dream-background /path/to/dream-bg.png`
+`python3 scripts/install_cyberpunk_theme.py --workspace <target-workspace> --assistant-avatar /path/to/main.png --user-avatar /path/to/user.png --chat-background /path/to/chat.jpg --dream-avatar /path/to/dream.gif --dream-background /path/to/dream-bg.png`
 
 如果不想在命令行里写长串参数，用 JSON 配置。先复制示例并把里面所有 `/path/to/...` 占位符改成真实路径，再运行：
 
@@ -65,8 +64,8 @@ description: Install, repair, or customize this OpenClaw cyberpunk chat and drea
 
 - 主题通过 `<style id="openclaw-workspace-theme">` 和 `<script id="openclaw-workspace-theme-script">` 注入 live Control UI。
 - 不使用 `openclaw-custom-theme` id，避免和 OpenClaw 内建自定义主题注入器冲突。
-- 当前主题源适配 OpenClaw 2026.5 系列 chat/control UI，并已补齐 OpenClaw 2026.6.1、2026.6.5、2026.6.9 与 2026.7.1 chat/control UI 结构变化。
-- ClawHub 轻量包不重复上传七份大型素材备份；全新安装且本地没有默认素材时，安装器会从官方 `cyberpunk-theme@1.0.21` 冻结版本包下载素材，并逐一校验 SHA-256。已有主题素材或已覆盖全部七个素材槽位时不会下载。
+- 当前主题源适配 OpenClaw 2026.5 系列 chat/control UI，并已补齐 OpenClaw 2026.6.1、2026.6.5、2026.6.9、2026.7.1 与 2026.8.1 chat/control UI 结构变化。
+- ClawHub 轻量包不重复上传五份大型素材备份；全新安装且本地没有默认素材时，安装器会从官方 `cyberpunk-theme@1.0.21` 冻结版本包下载仍在使用的素材，并逐一校验 SHA-256。已有主题素材或已覆盖全部五个素材槽位时不会下载。
 
 ## 安装后效果
 
@@ -84,11 +83,12 @@ description: Install, repair, or customize this OpenClaw cyberpunk chat and drea
 - `assets/theme/dreaming-bg.png`：梦境背景默认素材
 - `assets/cyberpunk-theme-small.svg` / `assets/cyberpunk-theme-large.svg`：skill 图标
 - `scripts/install_cyberpunk_theme.py`：安装、覆盖槽位、生成 apply 脚本、执行 apply
-- `references/theme-slots.md`：七个视觉槽位与落地文件名
+- `references/theme-slots.md`：五个视觉槽位与落地文件名
 - `references/theme-config.example.json`：`--from-config` 的示例配置
 
 ## Changelog
 
+- `1.0.25`：集中适配 OpenClaw 2026.8.1 的 `chat-main__conversation` 与 composer shell：释放旧 transcript 全高约束，修正聊天顶栏、progress/input 表面和模型/思考级别选择器堆叠；退役新版不再渲染的 Tool 与 Help / 历史肖像槽位及其 runtime、CSS 和默认素材，保留助手、用户、聊天背景、梦境头像与梦境背景五个有效槽位；将无铭牌助手与用户肖像固定在 composer 两侧，严格采用“肖像 + `24px` + composer + `24px` + 肖像”的网格与底边对齐，空间不足时同步收窄 transcript/composer，移动端继续隐藏肖像。
 - `1.0.22`：适配 OpenClaw 2026.7.1 新增的 `agent-chat__composer-shell` 包裹层，恢复聊天页底部完整输入控制台，并让 runtime 尺寸同步优先测量新 composer 容器；ClawHub 轻量包在新装缺少素材时，从固定的 1.0.21 官方包下载并校验七份默认素材，规避当前发布入口的实际包体限制。
 - `1.0.21`：修正 OpenClaw 2026.6.9 composer 右侧控制区排序，把 `使用情况 -> 聊天设置 -> 发送` 固定在同一行，避免 usage badge 被浏览器排进隐式列后掉到右下角。
 - `1.0.20`：适配 OpenClaw 2026.6.9 `chat-workbench` 嵌套 composer DOM，恢复底部输入框、附件 / Talk / 模型 / 设置 / 发送控件可见；修正 runtime footer 量测对新版嵌套定位的反馈漂移，避免 `--oc-chat-composer-bottom` 被越推越大。

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-workspace-management",
   "slug": "cargo-workspace-management",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1783571986817,
-  "contentHash": "fda96c93daeed4e78d6cf6f075809e11c91c9bbdf1f5d3f947d747a0e617228b",
-  "fetchedAt": "2026-07-26T18:17:41.472Z"
+  "version": "1.2.2",
+  "updatedAt": 1787874425323,
+  "contentHash": "e1b61c96132e0e4322081658b2466537afbca2f4addd7f2eb7e47e413e35d890",
+  "fetchedAt": "2026-09-01T12:58:05.932Z"
 }

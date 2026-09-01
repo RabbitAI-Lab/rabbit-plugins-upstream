@@ -1,49 +1,63 @@
-## Description: <br>
-Documents solved problems for team reuse by capturing resolved issues, lessons learned, post-mortems, knowledge-base entries, and searchable debugging knowledge for /ia-compound. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Document solved problems for team reuse by capturing resolved issues, lessons learned, post-mortems, and searchable knowledge-base entries after debugging.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this skill after non-trivial debugging to create validated solution notes, post-mortems, and reusable knowledge in docs/solutions with YAML frontmatter and cross-references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated solution notes can accidentally include secrets, private URLs, customer data, or sensitive incident details. <br>
-Mitigation: Preview the target path and summary before writing, then review and redact generated notes before committing or sharing them. <br>
-Risk: Broad trigger wording may invoke the workflow when a resolved issue does not need durable documentation. <br>
-Mitigation: Use the skill only for non-trivial fixes where future sessions would benefit, and skip simple typos, obvious syntax errors, or immediately corrected issues. <br>
-Risk: Incomplete context can produce misleading documentation or incorrect frontmatter classification. <br>
-Mitigation: Collect module, symptom, investigation attempts, root cause, solution, and prevention before writing; block on missing critical context and validate YAML frontmatter before creating the file. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to turn non-trivial resolved debugging sessions into structured troubleshooting documentation with validated YAML metadata, related issue links, and optional follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/compound-eng-compound-docs) <br>
-- [Documentation Capture Process](references/documentation-process.md) <br>
-- [YAML Frontmatter Schema](references/yaml-schema.md) <br>
-- [Quality Guidelines & Error Handling](references/quality-guidelines.md) <br>
-- [Example Scenario](references/example-scenario.md) <br>
-- [Resolution Template](assets/resolution-template.md) <br>
-- [Critical Pattern Template](assets/critical-pattern-template.md) <br>
-- [Frontmatter Validator](scripts/validate-frontmatter.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown files with YAML frontmatter, code examples, and optional shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local docs/solutions files after context gathering, schema validation, and user confirmation where required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.5 (source: server release metadata) <br>
+Risk: The skill can create or update repository troubleshooting documentation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated documentation before committing or publishing it.
+
+Risk: Captured debugging context could include secrets, customer data, private URLs, or personal information.
+
+Mitigation: Redact sensitive data before saving error context, symptoms, commands, or examples.
+
+Risk: Follow-up actions such as adding to an existing skill or creating a new skill can change future agent behavior.
+
+Mitigation: Treat those menu choices as explicit follow-up actions and review the resulting changes carefully.
+
+## Reference(s):
+
+- [Compound docs on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-compound-docs)
+- [documentation-process.md](artifact/references/documentation-process.md)
+- [yaml-schema.md](artifact/references/yaml-schema.md)
+- [quality-guidelines.md](artifact/references/quality-guidelines.md)
+- [example-scenario.md](artifact/references/example-scenario.md)
+- [resolution-template.md](artifact/assets/resolution-template.md)
+- [critical-pattern-template.md](artifact/assets/critical-pattern-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown troubleshooting documents with YAML frontmatter, inline code blocks, shell validation commands, and decision-menu guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces one documentation file per resolved problem under docs/solutions/[category]/ and may propose follow-up linking or skill-update actions after user selection.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

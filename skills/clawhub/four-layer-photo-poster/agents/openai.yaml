@@ -1,0 +1,3 @@
+display_name: "Four-Layer Photo Poster"
+short_description: "Create separate four-stage 3:4 design posters from photos"
+default_prompt: "Create a four-layer photo poster from each image I provide."

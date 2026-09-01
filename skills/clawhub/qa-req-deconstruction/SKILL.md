@@ -1,8 +1,11 @@
 ---
 name: qa-req-deconstruction
-version: 1.6.0
+slug: qa-req-deconstruction
+displayName: 需求解构
+version: 1.7.5
 description: >-
   将模糊的需求描述系统化拆分为输入、操作、状态、输出、规则五个可测试维度，同时挖掘显性需求之外的那些"没写出来但必须满足"的隐性需求和衍生需求。当用户的需求描述只有一两句话、或者看起来功能很简单但你可能遗漏了什么的时候，一定要用此技能做深度解构。适用于任何测试任务的第二步骤——无论需求文档有多详细，解构之后总能发现盲区。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"分析这个需求"、"需求解构"、"挖掘隐含需求"、"需求挖掘"、"需求分析"、"拆解需求"、"业务规则提取"、上传PRD/需求文档、需求模糊需要深挖时
 allowed-tools: Read Grep Glob WebFetch
@@ -33,6 +36,9 @@ input_format:
       description: 同类功能历史缺陷模式
 output_format:
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - requirement_id: "REQ-XXXX"
     - explicit_requirements: "显性需求列表"
     - implicit_requirements: "隐性需求列表"
@@ -41,7 +47,7 @@ output_format:
     - five_dimensions: "五维拆解"
     - risk_points: "风险点列表"
   traceability:
-    - 每个需求带唯一ID（REQ-XXXX）
+    - 每个需求带唯一ID（TC_{需求模块缩写}_{功能缩写}_{序号}）
     - 每个风险点带唯一ID（RISK-XXXX）
 depth_requirement_quantification:
   reference_value: "根据需求复杂度调整解构深度：简单×2/中等×3/复杂×4"
@@ -51,6 +57,8 @@ error_recovery_guidance:
   on_failure: "需求解构遗漏隐性需求时回退到需求评审补充上下文"
   retry_behavior: "补充上下文后重新解构"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

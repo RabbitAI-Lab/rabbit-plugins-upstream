@@ -1,11 +1,11 @@
 ---
 name: skylight-mcp
-description: Read and manage your Skylight Calendar family hub — calendar events, chores and reward stars, and shared lists (grocery/to-do). Triggers on phrases like "check Skylight", "what's on the family calendar", "add an event to Skylight", "what chores does [kid] have", "mark [chore] done", "add milk to the grocery list", "what's on our shopping list", "who's on the Skylight frame", or any request involving the Skylight frame, family calendar, chores, rewards, or shared lists. Works against your own signed-in Skylight account via email + password.
+description: Read and manage your Skylight Calendar family hub — calendar events, chores and reward stars, shared lists (grocery/to-do), and meal plans. Triggers on phrases like "check Skylight", "what's on the family calendar", "add an event to Skylight", "what chores does [kid] have", "mark [chore] done", "add milk to the grocery list", "what's on our shopping list", "what's for dinner", "what's on the meal plan", "who's on the Skylight frame", or any request involving the Skylight frame, family calendar, chores, rewards, shared lists, or meals. Works against your own signed-in Skylight account via email + password.
 ---
 
 # skylight-mcp
 
-MCP server for [Skylight Calendar](https://www.ourskylight.com) — 21 tools across calendar events, chores & rewards, shared lists, and frame/device info.
+MCP server for [Skylight Calendar](https://www.ourskylight.com) — 114 tools across calendar events, chores & rewards, shared lists, meals, messages & photo albums, photo/video upload, AI auto-creation, and frame/device/member settings.
 
 - **npm:** [npmjs.com/package/skylight-mcp](https://www.npmjs.com/package/skylight-mcp)
 - **Source:** [github.com/chrischall/skylight-mcp](https://github.com/chrischall/skylight-mcp)
@@ -48,9 +48,39 @@ Everything is scoped to a **frame** (your family hub); pass an optional `frameId
 | Calendar events | `skylight_list_events`, `skylight_get_event`, `skylight_create_event`, `skylight_update_event`, `skylight_delete_event`, `skylight_list_categories`, `skylight_list_source_calendars` |
 | Shared lists | `skylight_list_lists`, `skylight_get_list_items`, `skylight_create_list`, `skylight_add_list_item`, `skylight_update_list_item`, `skylight_delete_list_item` |
 | Chores & rewards | `skylight_list_chores`, `skylight_create_chore`, `skylight_complete_chore`, `skylight_list_rewards` |
+| Meals | `skylight_list_meals`, `skylight_list_recipes`, `skylight_get_recipe`, `skylight_create_recipe`, `skylight_plan_meal`, `skylight_update_meal`, `skylight_delete_meal`, `skylight_add_recipe_to_grocery_list` |
+
+## Confirm gates on recurrence-scoped writes
+
+Four tools return a **dry-run instead of acting** when their `apply_to` reaches
+past the occurrence you named:
+
+The four do NOT share one vocabulary, so they are listed separately — an
+earlier version of this table grouped the chore tools and named
+`this_and_future` for `skylight_delete_chore`, which that tool's schema rejects
+outright.
+
+| tool | `apply_to` accepts | gates at | acts immediately at |
+| --- | --- | --- | --- |
+| `skylight_update_meal` | `one` \| `future` \| `all` (required) | `future`, `all` | `one` |
+| `skylight_delete_meal` | `one` \| `future` \| `all` (required) | `future`, `all` | `one` |
+| `skylight_update_chore` | `this` \| `this_and_future` \| `all` (optional) | `this_and_future`, `all` | `this`, omitted |
+| `skylight_delete_chore` | `one` \| `all` (optional) | `all` | `one`, omitted |
+
+A scope that acts immediately affects exactly what you named, so it costs no
+extra round-trip.
+
+When gated, the response is `{"dryRun": true, ...}` and **no request was made**.
+Re-issue the same call with `confirm: true` to perform it. Do NOT report the
+dry-run as if the change happened: the sitting or chore is still there.
+
+The rule is blast radius, not irreversibility — `skylight_delete_recipe` is just
+as permanent and is ungated, because it destroys only what you named. An
+`apply_to` write can reach occurrences you did not name: `all` includes ones
+previously split off the series, and `future` truncates the series' `UNTIL` and
+takes the whole tail with it.
 
 ## Notes
 
-- **Meals are not supported** — Skylight does not expose a meals API.
 - `skylight_complete_chore` marks a chore complete; completing a single occurrence of a recurring chore isn't separately exposed.
 - `skylight_list_chores` requires `after` and `before` dates (chores are date-scoped).

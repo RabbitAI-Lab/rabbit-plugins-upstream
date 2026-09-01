@@ -1,40 +1,53 @@
-## Description: <br>
-Go安全漏洞扫描免费版 helps individual Go developers use govulncheck to scan known dependency vulnerabilities, assess impact, and identify safer update paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Go安全质量检查免费版 helps Go developers run govulncheck-based dependency vulnerability scans, assess impact, and get remediation guidance for a single project.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to run Go project vulnerability checks before release, before dependency updates, or as part of basic CI security scanning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dependency update commands can change go.mod and go.sum. <br>
-Mitigation: Run update steps only when intentionally repairing dependencies, keep the project under version control, and review the resulting module changes before committing. <br>
-Risk: The skill runs local Go tooling and is scoped to Go vulnerability checks. <br>
-Mitigation: Use it only inside Go projects where govulncheck and related Go commands are appropriate; do not invoke it for non-Go security, encryption, or unrelated assessment requests. <br>
+## Use Case:
 
+Developers and engineers use this skill in Go projects before release, dependency updates, or CI setup to run govulncheck, review known vulnerability impact, and draft remediation commands.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/go-security-vuln-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, JSON] <br>
-**Output Format:** [Markdown guidance with bash, YAML, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces govulncheck-oriented scan guidance, impact summaries, dependency update commands, and CI configuration examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Broad trigger wording may cause the skill to be selected for non-Go or general security tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for Go project vulnerability and quality checks, and confirm the repository contains a Go module before running commands.
+
+Risk: Dependency-update snippets can modify go.mod and go.sum.
+
+Mitigation: Review each command, commit or back up go.mod and go.sum first, and treat update snippets as manual remediation steps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/go-security-vuln-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, YAML, and command output snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose dependency update commands that should be reviewed before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,6 @@
 #!/bin/bash
 # Business Self-Improvement Error Detector Hook
+# Inspects CLAUDE_TOOL_OUTPUT in-process only. Never writes tool output, secrets, or transcripts to disk.
 # Reminder-only pattern detector for PostToolUse (Bash)
 
 set -e

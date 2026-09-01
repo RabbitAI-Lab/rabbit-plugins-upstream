@@ -1,44 +1,55 @@
-## Description: <br>
-Install, repair, or customize this OpenClaw cyberpunk chat and dream theme. Use when the user wants this exact theme, needs compatibility restored after an OpenClaw update, wants to import it into another workspace, or wants to swap the bundled avatars and background images. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, repair, or customize this OpenClaw cyberpunk chat and dream theme.
 
-## Publisher: <br>
-[kasanuowa](https://clawhub.ai/user/kasanuowa) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kasanuowa](https://clawhub.ai/user/kasanuowa)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to install, repair, or customize a cyberpunk chat and dream theme, including replacing seven visual asset slots and restoring compatibility after OpenClaw UI updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer persistently patches the live OpenClaw Control UI. <br>
-Mitigation: Review the target workspace and Control UI directory before applying, use --skip-apply when you only want files copied first, and keep generated backups for rollback. <br>
-Risk: The theme runs UI JavaScript inside OpenClaw. <br>
-Mitigation: Install only in a trusted workspace and inspect the bundled CSS and JavaScript before enabling the theme. <br>
-Risk: Custom or fallback visual assets may affect the user interface unexpectedly. <br>
-Mitigation: Use trusted asset files, keep the documented slot mapping, and rely on the bundled hash checks for downloaded default assets. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to install or repair a cyberpunk chat and dream theme in a target OpenClaw workspace, including replacing the assistant, user, chat background, dream avatar, and dream background visual slots.
 
-## Reference(s): <br>
-- [Theme Slots](references/theme-slots.md) <br>
-- [Theme Configuration Example](references/theme-config.example.json) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kasanuowa/skills/cyberpunk-theme) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may lead the agent to copy theme files, generate an apply script, and patch the live OpenClaw Control UI when the installer is run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.22 (source: release evidence and artifact changelog) <br>
+Risk: The installer modifies the target OpenClaw workspace and live Control UI theme.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or retain generated backups, test against the intended workspace, or run with --skip-apply to stage files before applying changes.
+
+Risk: A fresh install with missing default assets can trigger a fallback asset download from ClawHub.
+
+Mitigation: Provide all five asset overrides when avoiding downloads is required, or rely on the installer limits and SHA-256 checks described by the release evidence.
+
+## Reference(s):
+
+- [Theme Slots](references/theme-slots.md)
+- [Theme Config Example](references/theme-config.example.json)
+- [ClawHub Skill Page](https://clawhub.ai/kasanuowa/skills/cyberpunk-theme)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference user-provided workspace paths and optional visual asset paths.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release metadata and artifact changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zhihu-fetch-skill",
   "slug": "zhihu-fetch-skill",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1782801185650,
-  "contentHash": "b2327d38ac4cb46ec104d1f33a6844384181e99f84d0043e8d1603647866ee9c",
-  "fetchedAt": "2026-07-26T18:22:15.950Z"
+  "version": "2.2.0",
+  "updatedAt": 1788103459645,
+  "contentHash": "97d5e9df56adff02cab3c526e4a77ef1a27cdf53c9333d73f88a9c083b96b0f4",
+  "fetchedAt": "2026-09-01T12:49:02.526Z"
 }

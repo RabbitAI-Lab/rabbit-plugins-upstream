@@ -1,45 +1,64 @@
-## Description: <br>
-Generate high-quality images with Vidu Q2, including text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate high-quality images with Vidu Q2 using text-to-image or image-to-image prompts through the dLazy cloud service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke dLazy's hosted Vidu Q2 image generation service for prompt-based image creation and image-conditioned edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive prompts or files unless the deployment's data-handling requirements allow use of dLazy's hosted API. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Broad image-generation requests could trigger the skill unintentionally. <br>
-Mitigation: Invoke it explicitly with Vidu Q2 or dLazy terms, matching the security guidance's overbroad-trigger caution. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate Vidu Q2 images from text prompts or optional reference images. It is intended for normal dLazy cloud image-generation workflows that require a dLazy API key and available account credits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as hosted URLs; asynchronous requests may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts and local image inputs may be uploaded to dLazy cloud endpoints for inference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for intended dLazy requests and avoid passing sensitive prompts or local files.
+
+Risk: Generated outputs are hosted by dLazy and returned as remote file URLs.
+
+Mitigation: Review output URLs and downloaded files before sharing or reusing them in downstream workflows.
+
+Risk: A saved dLazy API key remains on the local machine until removed or revoked.
+
+Mitigation: Prefer least-privilege operational practices, rotate or revoke keys when needed, and remove local credentials on shared machines.
+
+Risk: Cloud generation may consume paid account credits.
+
+Mitigation: Use dry-run or cost-estimate behavior where available and confirm account balance before large generation runs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i)
+- [dLazy CLI repository](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API calls, Files, Guidance]
+
+**Output Format:** [JSON responses with image URLs, optional downloaded image files, and Markdown command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports asynchronous task IDs, account-balance errors, API-key authentication, and optional local file upload for image inputs.]
+
+## Skill Version(s):
+
+1.3.10 (source: server release metadata; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

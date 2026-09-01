@@ -1,52 +1,73 @@
-## Description: <br>
-Huawei Cloud SWR image automation and operations skill using hcloud CLI for cross-region image sync, sync status checks, and trigger-based deployment management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud SWR (Software Repository for Container) image automation and operations skill using hcloud CLI.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev)
 
-## Use Case: <br>
-Developers and cloud platform engineers use this skill to draft and verify hcloud CLI commands for Huawei Cloud SWR cross-region image replication, manual image sync, sync job checks, and CCE/CCI auto-deploy trigger lifecycle management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Commands can create, update, delete, or enable live SWR sync and auto-deploy behavior. <br>
-Mitigation: Use a test repository and namespace first, confirm all source and target resources before execution, and require explicit approval before write, delete, manual sync, or enabled auto-deploy commands. <br>
-Risk: Broad write permissions can modify image sync and trigger configuration across repositories. <br>
-Mitigation: Start with the read-only IAM policy, grant the full automation policy only when needed, and prefer temporary least-privilege credentials. <br>
-Risk: Incorrect regions, namespaces, repositories, cluster IDs, trigger conditions, or override settings can replicate or deploy unintended images. <br>
-Mitigation: Run read-only verification commands first, keep override disabled unless intentional, and review exact region, namespace, repository, cluster, application, and trigger values before execution. <br>
-Risk: Credential exposure could occur if access keys or security tokens are printed or embedded in commands. <br>
-Mitigation: Use environment variables or masked hcloud configuration, avoid echoing secrets, and rotate credentials after testing or production use. <br>
+## Use Case:
 
+Developers and cloud platform engineers use this skill to configure and inspect Huawei Cloud SWR cross-region image sync, sync jobs, and CCE/CCI auto-deploy triggers through hcloud CLI workflows.
 
-## Reference(s): <br>
-- [SWR Automation API Guide](references/swr-automation-api-guide.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Task: Image Sync](references/task-image-sync.md) <br>
-- [Task: Trigger Management](references/task-trigger-management.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Common Pitfalls](references/common-pitfalls.md) <br>
-- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html) <br>
-- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and command explanations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include hcloud SWR commands, IAM policy guidance, pre-run verification steps, and cleanup instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can create persistent image sync or auto-deploy trigger behavior that affects live Huawei Cloud workloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege temporary credentials, test in non-production namespaces first, and require explicit review before creating sync configs or enabling CCE/CCI triggers.
+
+Risk: Using override=true can overwrite existing images in a target region.
+
+Mitigation: Avoid override=true unless the target images are intentionally replaceable, and require explicit confirmation before running the command.
+
+Risk: All-push production triggers can deploy unintended image versions.
+
+Mitigation: Prefer tag or regex conditions aligned to release controls, and review trigger conditions before enabling production auto-deploy.
+
+Risk: Credential or installer handling can expose cloud access or execute unverified installer content.
+
+Mitigation: Use temporary least-privilege credentials, do not reveal AK/SK or security tokens, and verify the hcloud installer before execution.
+
+## Reference(s):
+
+- [Huawei Cloud SWR Image Automation Skill](artifact/SKILL.md)
+- [SWR Automation API Reference Guide](artifact/references/swr-automation-api-guide.md)
+- [Task: Image Sync](artifact/references/task-image-sync.md)
+- [Task: Trigger Management](artifact/references/task-trigger-management.md)
+- [IAM Permission Policies - SWR Image Automation Skill](artifact/references/iam-policies.md)
+- [Huawei Cloud KooCLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [Acceptance Criteria: Correct/Error Pattern Comparison](artifact/references/acceptance-criteria.md)
+- [Common Pitfalls & Solutions](artifact/references/common-pitfalls.md)
+- [Verification Method - SWR Image Automation Skill](artifact/references/verification-method.md)
+- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html)
+- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html)
+- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/)
+- [Huawei Cloud SWR Quick Start](https://support.huaweicloud.com/qs-swr/index.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include hcloud commands, IAM policy snippets, verification checklists, and user confirmation prompts.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

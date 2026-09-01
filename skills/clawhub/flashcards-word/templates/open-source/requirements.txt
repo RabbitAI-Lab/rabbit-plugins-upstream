@@ -1,0 +1,2 @@
+Pillow>=9
+python-docx>=0.8

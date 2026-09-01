@@ -1,44 +1,55 @@
-## Description: <br>
-Oh My Zsh management for adding plugins to .zshrc and authoring $ZSH_CUSTOM/*.zsh configuration files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Oh My Zsh management for adding or installing plugins in .zshrc and authoring $ZSH_CUSTOM/*.zsh custom configuration files.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers who use Oh My Zsh can use this skill to manage plugin entries in .zshrc and create custom zsh startup scripts for aliases, functions, environment variables, and key bindings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide persistent shell startup changes in .zshrc and auto-loaded $ZSH_CUSTOM/*.zsh files. <br>
-Mitigation: Review exact file diffs before applying changes and keep backups of existing shell configuration. <br>
-Risk: External plugin setup may clone third-party zsh plugin repositories. <br>
-Mitigation: Confirm each plugin repository and trust boundary before cloning or adding it to the plugins array. <br>
-Risk: The source includes an automatic skill-upgrade instruction unrelated to normal Oh My Zsh management. <br>
-Mitigation: Do not allow /skill-manager upgrade omz unless a separate skill update was explicitly requested. <br>
+## Use Case:
 
+Developers and shell users use this skill to update Oh My Zsh plugins, install external plugins, and write custom aliases, functions, environment variables, or keybindings in $ZSH_CUSTOM.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/omz) <br>
-- [Oh My Zsh Plugin Management](artifact/plugin.md) <br>
-- [Oh My Zsh Custom Script Authoring](artifact/custom.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose edits to shell startup configuration and Oh My Zsh custom files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release metadata and CHANGELOG, released 2026-06-03) <br>
+Risk: The skill includes a self-improvement instruction that can ask the agent to run /skill-manager upgrade omz after normal use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow the skill to run /skill-manager upgrade omz unless the user explicitly asked to update the skill.
+
+Risk: The skill can propose changes to .zshrc or $ZSH_CUSTOM and may install external Oh My Zsh plugins.
+
+Mitigation: Review the exact diff and any external plugin source before applying shell configuration changes or cloning plugin repositories.
+
+## Reference(s):
+
+- [Oh My Zsh Plugin Management](plugin.md)
+- [Oh My Zsh Custom Script Authoring](custom.md)
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/omz)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and zsh configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose edits to .zshrc or $ZSH_CUSTOM/*.zsh and commands for installing or verifying Oh My Zsh plugins.]
+
+## Skill Version(s):
+
+0.3.3 (source: server release metadata and CHANGELOG, released 2026-08-29)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

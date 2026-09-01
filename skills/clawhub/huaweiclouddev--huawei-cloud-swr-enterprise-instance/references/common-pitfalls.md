@@ -248,6 +248,233 @@ hcloud SWR ListAllInstanceRepositories --limit=20 --marker=<next_marker> --cli-r
 hcloud SWR ListAllInstanceRepositories --limit=20 --offset=0 --cli-region=cn-north-4
 ```
 
+## P8: SWR Enterprise Service Not Activated
+
+**Symptom**: API calls return errors indicating the service is not available or not activated.
+
+**Cause**: The SWR enterprise service has not been activated in the target region.
+
+**Solution**:
+1. Access the SWR enterprise instance console: `https://console.huaweicloud.com/swr-instance`
+2. Complete the service activation process if prompted
+3. Verify activation by running `hcloud SWR ListInstance --cli-region=<region>`
+4. If the service is not available in the region, try a different region
+
+## P9: Spec Not Available in Region
+
+**Symptom**: `CreateInstance` fails with an error about invalid or unsupported spec.
+
+**Cause**: The selected instance spec (`swr.ee.basic` or `swr.ee.professional`) is not available in the target region.
+
+**Solution**:
+1. Try the other spec (e.g., switch from `swr.ee.basic` to `swr.ee.professional` or vice versa)
+2. Try a different region where the spec is known to be available
+3. Use `hcloud SWR ListSyncRegions --cli-region=<region>` to check available regions
+4. Consult the SWR enterprise instance console at `https://console.huaweicloud.com/swr-instance` for current spec/region availability
+
+## Pitfall 15: Same-Name Parameter Conflict (path vs body)
+
+**Symptom**: Commands like `CreateInstance`, `CreateInstanceInternalEndpoint`, or `CreateInstanceRegistry` fail with "missing required parameter" or "duplicate parameter" errors when using `--project_id` or `--instance_id` CLI arguments.
+
+**Root Cause**: Some SWR API operations define the same parameter name in both the request path and request body. The hcloud CLI cannot distinguish between path and body parameters with the same name:
+- `CreateInstance`: `project_id` appears in both path (auto-filled) and body (VPC/subnet project)
+- `CreateInstanceInternalEndpoint`: `project_id` appears in both path (auto-filled) and body (VPC/subnet project)
+- `CreateInstanceRegistry`: `instance_id` appears in both path (source instance) and body (target instance for `swr-pro-internal`)
+
+**Solution**: Use `--cli-jsonInput` to pass all parameters via a JSON file with `path` and `body` sections (required by hcloud to distinguish same-name parameters):
+
+```bash
+# CreateInstance example
+cat > create_instance.json << 'EOF'
+{
+  "path": {
+    "project_id": "<project-id>"
+  },
+  "body": {
+    "name": "my-instance",
+    "spec": "swr.ee.professional",
+    "charge_mode": "postPaid",
+    "vpc_id": "<vpc-id>",
+    "subnet_id": "<subnet-id>",
+    "enterprise_project_id": "0",
+    "project_id": "<vpc-project-id>"
+  }
+}
+EOF
+
+hcloud SWR CreateInstance --cli-jsonInput=create_instance.json --cli-region=cn-north-4
+```
+
+```bash
+# CreateInstanceInternalEndpoint example
+cat > create_endpoint.json << 'EOF'
+{
+  "path": {
+    "instance_id": "<instance-id>",
+    "project_id": "<project-id>"
+  },
+  "body": {
+    "vpc_id": "<vpc-id>",
+    "subnet_id": "<subnet-id>",
+    "project_id": "<vpc-project-id>"
+  }
+}
+EOF
+
+hcloud SWR CreateInstanceInternalEndpoint --cli-jsonInput=create_endpoint.json --cli-region=cn-north-4
+```
+
+```bash
+# CreateInstanceRegistry example (swr-pro-internal type)
+cat > create_registry.json << 'EOF'
+{
+  "path": {
+    "instance_id": "<source-instance-id>",
+    "project_id": "<project-id>"
+  },
+  "body": {
+    "name": "target-registry",
+    "type": "swr-pro-internal",
+    "url": "https://<target-instance>.cn-east-3.myhuaweicloud.com",
+    "credential": {
+      "type": "basic",
+      "access_key": "<access-key>",
+      "access_secret": "<access-secret>"
+    },
+    "insecure": false,
+    "instance_id": "<target-instance-id>",
+    "project_id": "<target-project-id>",
+    "region_id": "cn-east-3"
+  }
+}
+EOF
+
+hcloud SWR CreateInstanceRegistry --cli-jsonInput=create_registry.json --cli-region=cn-north-4
+```
+
+**Note**: The `path`/`body` separation in the JSON file is mandatory — hcloud uses it to route same-name parameters to the correct API location. A flat JSON without `path`/`body` keys will be rejected.
+
+### Alternative: Python SDK Script (Recommended for CreateInstance)
+
+For `CreateInstance` specifically, a Python SDK helper script is available that bypasses the hcloud CLI duplicate parameter bug entirely by calling the Huawei Cloud SDK directly:
+
+```bash
+# ✅ Recommended - Use Python SDK script for CreateInstance
+python scripts/swr_instance_helper.py create --name=my-instance --spec=swr.ee.basic \
+    --vpc_id=<vpc-id> --subnet_id=<subnet-id> --enterprise_project_id=0 --description="My registry"
+
+# ❌ BROKEN - hcloud CLI CreateInstance cannot handle duplicate --project_id
+# hcloud SWR CreateInstance --name=my-instance --spec=swr.ee.basic ...
+```
+
+The SDK script requires `huaweicloudsdkcore` and `huaweicloudsdkswr` packages and uses the same AK/SK credentials as hcloud CLI (via environment variables). All other hcloud CLI SWR operations (ListInstance, ShowInstance, DeleteInstance, namespace/credential/endpoint/domain management) work correctly without the script.
+
+## Pitfall 16: Description Parameter with Spaces Causes Errors
+
+**Symptom**: `CreateInstance` or `CreateInstanceNamespace` fails when the `--description` parameter contains spaces, even when quoted.
+
+**Root Cause**: The hcloud CLI may not correctly parse `--description` values containing spaces when using the standard `--key=value` format. The shell may split the value at spaces, or the CLI may not handle the quoting correctly.
+
+**Solution**: Use one of the following approaches:
+
+```bash
+# ✅ Option 1: Use --cli-jsonInput for descriptions with spaces
+cat > create_instance.json << 'EOF'
+{
+  "path": {
+    "project_id": "<project-id>"
+  },
+  "body": {
+    "name": "my-instance",
+    "spec": "swr.ee.basic",
+    "charge_mode": "postPaid",
+    "vpc_id": "<vpc-id>",
+    "subnet_id": "<subnet-id>",
+    "enterprise_project_id": "0",
+    "description": "Production registry for team dev"
+  }
+}
+EOF
+hcloud SWR CreateInstance --cli-jsonInput=create_instance.json --cli-region=cn-north-4
+
+# ✅ Option 2: Use shell-quoted value (ensure proper quoting)
+hcloud SWR CreateInstanceNamespace --instance_id=<id> --namespace_name=group-dev --description='Production namespace' --cli-region=cn-north-4
+
+# ❌ WRONG - Unquoted description with spaces
+hcloud SWR CreateInstance --name=my-instance --spec=swr.ee.basic --charge_mode=postPaid --vpc_id=<vpc-id> --subnet_id=<subnet-id> --enterprise_project_id=0 --description=Production registry for team dev --cli-region=cn-north-4
+```
+
+**Note**: For `CreateInstance`, prefer `--cli-jsonInput` as it also resolves the same-name `project_id` parameter conflict (see Pitfall 15).
+
+## Pitfall 17: Default Internal Endpoint Conflict (SWR.400005)
+
+**Symptom**: `CreateInstanceInternalEndpoint` fails with error `SWR.400005` — "endpoint already exists" or similar conflict error.
+
+**Root Cause**: When an enterprise instance is created, a default internal endpoint is automatically created for the instance's VPC and subnet. Attempting to create another internal endpoint for the same VPC/subnet combination will conflict with the default endpoint.
+
+**Solution**: Before creating a new internal endpoint, check existing endpoints:
+
+```bash
+# 1. List existing internal endpoints
+hcloud SWR ListInstanceInternalEndpoints --instance_id=<instance-id> --cli-region=cn-north-4
+
+# 2. If the VPC/subnet already has an endpoint, use the existing one
+#    (Look for matching vpc_id and subnet_id in the response)
+
+# 3. Only create a new endpoint for a DIFFERENT VPC/subnet
+hcloud SWR CreateInstanceInternalEndpoint --instance_id=<instance-id> --vpc_id=<different-vpc-id> --subnet_id=<different-subnet-id> --project_id=<vpc-project-id> --cli-region=cn-north-4
+```
+
+**Note**: If you need to create an endpoint for the same VPC but a different subnet, verify that no existing endpoint covers that subnet first. Each VPC/subnet combination can only have one internal endpoint.
+
+## Pitfall 18: SWR Service Tenant Quota Exceeded (Misleading Error)
+
+**Symptom**: `CreateInstance` (via SDK or API) returns job status `Failed`
+with reason containing `"Quota exceeded for instances: Requested 1,
+but already used 200 of 200 instances"` (error code `Ecs.0204`, HTTP 403)
+
+**Root Cause**: SWR enterprise instances are hosted on a shared CCE cluster
+managed by the SWR service tenant. When the service tenant's ECS quota is full
+(e.g., 200/200 instances used by other users' enterprise instances),
+new instance creation fails. The error message is misleading — it refers to
+the **SWR service tenant's** quota, not the user's own ECS quota.
+The user's quota may show 0/200 used while still encountering this error.
+
+**Diagnosis Steps**:
+
+1. Check the job status to see the full error:
+
+```bash
+# Via SDK script
+python scripts/swr_instance_helper.py show --instance_id=<instance-id>
+
+# Via hcloud CLI (for job details, use ShowInstanceJob)
+hcloud SWR ShowInstanceJob --job_id=<job-id> --cli-region=cn-north-4
+```
+
+2. Verify the error message contains `"Quota exceeded for instances"` with `"Ecs.0204"` error code
+
+3. Confirm the user's own ECS quota is NOT the issue:
+
+```bash
+# User's quota is separate from the service tenant's quota
+hcloud ECS ShowServerLimits --cli-region=cn-north-4
+# maxTotalInstances: 200, totalInstancesUsed: 0 ← NOT the issue
+```
+
+**Solution**: This is a SWR service-side quota issue. Contact Huawei Cloud SWR team to expand the service tenant's ECS quota. No action is required on the user side.
+
+**Error Log Example** (from `ShowInstanceJob`):
+
+```
+reason: [[CreateServiceTenantCCENode.DoError] wait cycle error, failed to create cce node:
+  [[CreateNodeVM.DoError] wait create user node(name: swr-ee-<id>-registry-1, ...)
+    job <job-id> failed: create machine job failed:
+    {"sub_jobs":[{"entities":{"errorcode_message":"{\"forbidden\": {\"code\": 403,
+      \"message\": \"Quota exceeded for instances: Requested 1, but already used 200 of 200 instances\"}}"},
+    "error_code":"Ecs.0204","fail_reason":"CreateServerWithRootVolumeAndDataVolumeTask-fail: ..."}]}]
+```
+
 ## Common Error Response Reference
 
 | Error Code          | HTTP Status | Description                  | Recommended Action                    |
@@ -257,5 +484,6 @@ hcloud SWR ListAllInstanceRepositories --limit=20 --offset=0 --cli-region=cn-nor
 | `SVCSTG.SWR.404`    | 404         | Resource not found           | Verify resource exists first          |
 | `SVCSTG.SWR.409`    | 409         | Resource already exists      | Use Show operation to check           |
 | `SVCSTG.SWR.400`    | 400         | Invalid parameter            | Check parameter format and rules      |
+| `SVCSTG.SWR.400005` | 400         | Endpoint already exists / conflict | Check existing endpoints with ListInstanceInternalEndpoints before creating (see Pitfall 17) |
 | `SVCSTG.SWR.500`    | 500         | Internal server error        | Retry or contact support              |
 | `SVCSTG.SWR.429`    | 429         | Too many requests            | Add delay, reduce request rate        |

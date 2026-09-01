@@ -29,14 +29,14 @@ Reach for this skill when the question is about institutional ownership or 13F p
 - "Which activist funds took new positions this quarter?"
 - "How did 13F ownership of $COIN change quarter over quarter?"
 
-This skill pairs naturally with `politicians-stock-tracker`: line up 13F accumulation against a congressional purchase on the same ticker. Convergence across sources is the high-conviction read.
+This skill pairs naturally with `politicians-stock-tracker` and `insider-trading-tracker`: line up 13F accumulation against a congressional purchase or an insider cluster buy on the same ticker. Convergence across sources is the high-conviction read.
 
 Do not use it for order entry, portfolio management, or personalized advice. It has no write, trading, or wallet surface; every endpoint is a GET.
 
 ## What this data actually is (read before interpreting)
 
 - **13F is quarterly and lagged.** Institutions file 13F-HR within 45 days after each quarter end, so the freshest complete data is always the prior quarter. Never present it as real-time positioning.
-- **Always resolve the quarter first.** Every endpoint except `/quarters` needs a `reportDate`. The most recent quarter is `pending: true` during the 45-day filing window and holds only early filers; use the first quarter with `pending: false` for complete data.
+- **Always resolve the quarter first.** Every endpoint except `/quarters` needs a `reportDate`. During the 45-day filing window after a quarter ends, the newest entry is `pending: true` and holds only early filers; use the first quarter with `pending: false` for complete data. **Filter on the flag, never on position.** Once the filing window closes, the pending entry is gone and the newest quarter in the array is already complete, so code that skips index 0 on the assumption that the first row is always pending will quote a quarter that is three months staler than what you were served. Checked live on 2026-08-31: the array led with Q2 2026 at `pending: false` and contained no pending entry at all.
 - **Filer categories:** `INDEX_FUND`, `HEDGE_FUND`, `ACTIVIST`, `PENSION`, `BANK`, `INSURANCE`, `MUTUAL_FUND`, `SOVEREIGN_WEALTH`, `ENDOWMENT`, `CONGLOMERATE`, `OTHER`.
 - **Parent/subsidiary rollups.** Large managers file under many CIKs (e.g. Vanguard). A filer profile carries `multiCikRollup` / `childCikCount` / `childCiks` so sub-manager holdings roll up into one portfolio. Report the rollup, not double-counted child rows.
 - **Report values as given.** The API returns `valueUsd` (institution holdings) and `value` (per-holder) already denominated; quote them as the reported 13F value and do not re-scale or invent a unit.
@@ -59,6 +59,14 @@ Issue HTTP GET requests to `https://app.sentisense.ai`, authenticated with the `
 
 **Step 1, always: resolve the quarter.** `/quarters` is a bare array (no envelope). Every other institutional endpoint returns the wrapped envelope `{ isPreview, previewReason, data }`, so read `.data` before iterating. A `429` returns a `Retry-After` header; back off rather than serving a stale value.
 
+**Identify your client.** Send a `User-Agent` naming your agent runtime and this skill, for
+example `OpenClaw/1.4 (institutional-13f-tracker)` or `ClaudeCode/2.1 (institutional-13f-tracker)`. Substitute your own runtime and
+version if neither matches. You can also volunteer what your agent is called by adding an
+`agent/<your-agent-name>` token inside the same parentheses, as in
+`OpenClaw/1.4 (institutional-13f-tracker; agent/research-desk)`. All of it is optional, and it is what tells
+us this skill has real integrations behind it, so it gets prioritized and you get notice before it
+changes.
+
 ```bash
 # 1) get valid reporting quarters, pick the first with pending=false
 curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
@@ -69,9 +77,11 @@ curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
 ## Endpoints
 
 - **`GET /api/v1/institutional/quarters`** : available 13F reporting quarters. **Public**, bare array of `{ value, label, reportDate, pending }`, newest first. Call this first; use the first `pending: false` `reportDate` everywhere below.
-- **`GET /api/v1/institutional/holders/{ticker}?reportDate=`** : institutional holders for a stock. The holder list is nested at **`data.holders`** (not `data` directly). Each holder: filer name, category, shares, value, `changeType` (`NEW` / `INCREASED` / `DECREASED` / `SOLD_OUT` / `UNCHANGED`). `data` always carries `holderCount` (full-quarter count). **Paging (recommended):** pass `limit` (1-1000), `offset`, `sortBy`, `sortDir`. A mega-cap can have 5,000+ holders, and `notableChanges` (holders with a 10%+ change on 10k+ shares) plus `returnedCount` are returned **only when `limit` is passed**. Free: top 5.
+- **`GET /api/v1/institutional/holders/{ticker}?reportDate=`** : institutional holders for a stock. The holder list is nested at **`data.holders`** (not `data` directly). Each holder: filer name, category, shares, value, `changeType` (`NEW` / `INCREASED` / `DECREASED` / `SOLD_OUT` / `UNCHANGED`). `data` always carries `holderCount` (full-quarter count). **Paging (recommended):** pass `limit` (1-1000), `offset`, `sortBy`, `sortDir`. A mega-cap can have 5,000+ holders, and `notableChanges` (holders with a 10%+ change on 10k+ shares) plus `returnedCount` are returned **only when `limit` is passed**. Free: top 5, and free previews omit `returnedCount`, `offset`, and `notableChanges` even when `limit` is passed (`holderCount` stays the full-quarter count).
 - **`GET /api/v1/institutional/flows?reportDate=`** : aggregate institutional buying/selling per ticker. Free: top 5.
 - **`GET /api/v1/institutional/activist?reportDate=`** : activist-filer positions for the quarter (NEW or INCREASED stakes). Free: top 3; PRO: full.
+- **`GET /api/v1/institutional/bonds?reportDate=`** : convertible bond flows grouped by base ticker, the credit-side leg of the same 13F filings. Free: top 3; PRO: full.
+- **`GET /api/v1/institutional/options?reportDate=`** : institutional options positions with the call/put breakdown, as disclosed on 13F. Quarterly and end-of-quarter, not live flow. Free: top 3; PRO: full.
 - **`GET /api/v1/institutional/institutions`** : the filterable universe of tracked filers (use it to find a manager's slug/CIK for the endpoint below). Query `category`, `minAumUsd`, `sort`, `quarter`. Full list on every tier, and quota-exempt.
 - **`GET /api/v1/institutional/institution/{slugOrCik}`** : a single manager's profile, summary stats, and current-quarter equity holdings. Resolve by URL slug (`Berkshire-Hathaway`) or numeric CIK (`1067983`). Free: profile + top 10 holdings; PRO: full holdings. Holdings include `ticker, companyName, shares, valueUsd, changeType, sharesChange, sharesChangePct, portfolioWeight`, plus `multiCikRollup` / `childCiks` for parent/subsidiary rollups. Returns 404 for an unknown slug or CIK.
 
@@ -80,7 +90,7 @@ curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
 **1. Who owns this stock?**
 
 ```bash
-Q=2025-12-31  # first pending:false reportDate from /quarters
+Q=2026-06-30  # first pending:false reportDate from /quarters
 curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
   "https://app.sentisense.ai/api/v1/institutional/holders/NVDA?reportDate=$Q&limit=25"
 ```
@@ -97,6 +107,7 @@ Summarize new positions, adds, trims, and exits by `changeType`, and the biggest
 **3. Aggregate accumulation vs distribution**
 
 ```bash
+Q=2026-06-30  # first pending:false reportDate from /quarters
 curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
   "https://app.sentisense.ai/api/v1/institutional/flows?reportDate=$Q"
 ```
@@ -104,11 +115,12 @@ curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
 **4. Activist watch**
 
 ```bash
+Q=2026-06-30  # first pending:false reportDate from /quarters
 curl -s -H "X-SentiSense-API-Key: $SENTISENSE_API_KEY" \
   "https://app.sentisense.ai/api/v1/institutional/activist?reportDate=$Q"
 ```
 
-**5. Follow the convergence.** When institutional accumulation lines up with a congressional purchase (`politicians-stock-tracker`) on the same ticker, that agreement is the read worth surfacing. Cite each source.
+**5. Follow the convergence.** When institutional accumulation lines up with a congressional purchase (`politicians-stock-tracker`) or insider buying (`insider-trading-tracker`) on the same ticker, that agreement is the read worth surfacing. Cite each source.
 
 ## Answering well
 

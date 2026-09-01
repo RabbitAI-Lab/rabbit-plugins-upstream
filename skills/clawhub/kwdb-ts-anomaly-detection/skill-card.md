@@ -1,51 +1,65 @@
-## Description: <br>
-Automates end-to-end anomaly detection for time-series data stored in KaiwuDB / KWDB. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates end-to-end anomaly detection for time-series data stored in KaiwuDB / KWDB.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers, data engineers, and operators use this skill to inspect KaiwuDB / KWDB time-series tables for spikes, dips, drift, outliers, and other abnormal numeric telemetry patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests KWDB connection parameters and may handle sensitive database credentials or telemetry. <br>
-Mitigation: Use a read-only KWDB account, avoid privileged production credentials, and delete retained local reports when they contain sensitive telemetry or business data. <br>
-Risk: The bundled SQL runner is broad enough to modify data if unsafe SQL is approved or substituted. <br>
-Mitigation: Verify every displayed SQL statement before execution and use least-privilege credentials that cannot create, drop, write, or mutate production data. <br>
-Risk: Query results and reports may be written locally under /tmp. <br>
-Mitigation: Treat generated files as sensitive artifacts and remove retained result or report files after review. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect KWDB or KaiwuDB time-series tables for outliers, spikes, dips, drift, and data-quality issues in numeric telemetry columns.
 
-## Reference(s): <br>
-- [Workflow](references/workflow.md) <br>
-- [Constraints](references/constraints.md) <br>
-- [Error Handling](references/error-handling.md) <br>
-- [Metadata Query](references/metadata-query.md) <br>
-- [Column Comment](references/column-comment.md) <br>
-- [TS Select](references/ts-select.md) <br>
-- [Markdown Report Template](references/report-template.md) <br>
-- [HTML Report Template](references/report-template-html.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kwdb/skills/kwdb-ts-anomaly-detection) <br>
-- [KWDB Publisher Profile](https://clawhub.ai/user/kwdb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with SQL and shell command blocks; optional Markdown, PDF, or HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save query results and generated reports under /tmp during execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: evidence.release.version) <br>
+Risk: The skill handles database credentials and can execute SQL against KWDB or KaiwuDB.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privileged read-only KWDB account and avoid production or administrator credentials.
+
+Risk: The SQL runner can execute and commit database-changing statements.
+
+Mitigation: Inspect every SQL statement before execution and reject any statement that would create, modify, or delete database objects or data.
+
+Risk: Intermediate database results and reports may be written to /tmp.
+
+Mitigation: Avoid querying sensitive data unless temporary-file handling is acceptable, and remove intermediate files after use.
+
+## Reference(s):
+
+- [KWDB Time-Series Anomaly Detection on ClawHub](https://clawhub.ai/kwdb/skills/kwdb-ts-anomaly-detection)
+- [Workflow](references/workflow.md)
+- [Constraints](references/constraints.md)
+- [Metadata Query](references/metadata-query.md)
+- [SELECT](references/ts-select.md)
+- [Column Comment](references/column-comment.md)
+- [Error Handling](references/error-handling.md)
+- [Report Template](references/report-template.md)
+- [HTML Report Template](references/report-template-html.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with SQL, shell commands, anomaly summaries, and optional HTML or Markdown report files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create temporary SQL result, detection result, report JSON, HTML, or Markdown files under /tmp while preserving the final report.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

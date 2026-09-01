@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ai-sentinel",
   "slug": "ai-sentinel",
   "ownerHandle": null,
-  "version": "0.1.8",
-  "updatedAt": 1778487820503,
-  "contentHash": "c062e8a5603d2b98aa692548dcd9de125dab6e8bf5a2cda52342f00938742cb6",
-  "fetchedAt": "2026-07-26T20:25:21.529Z"
+  "version": "0.2.2",
+  "updatedAt": 1787886457416,
+  "contentHash": "16acb233e241acbe2bc18a05cec87b71cdabd953ea2acee47db57e05fb64fe62",
+  "fetchedAt": "2026-09-01T12:57:14.618Z"
 }

@@ -1,31 +1,23 @@
-# Risk and data disclaimer
+# MLB Live Trader Disclaimer
 
-Read this before connecting real funds. Running MLB Live Trader means you accept everything below.
+MLB Live Trader is experimental software for evaluating and, only after an explicit `--live` opt-in, trading prediction-market contracts. It is not financial, investment, legal, tax, or gambling advice. No return, win rate, calibration quality, or profitability claim is made.
 
-## Framework, not a production trading system
+Prediction-market contracts can lose their entire purchase price. Market prices, liquidity, fees, settlement rules, API responses, external sports data, and local laws can change. ESPN's public feeds are undocumented and may lag, omit, revise, or misidentify plays. Simmer and its connected venues may reject, partially fill, delay, or fail orders.
 
-This is a template: a deterministic reference implementation of a `scan → score → EV gate → size → safeguards → execute` pipeline. It is not a hardened, supervised, or supported trading product, and it offers no guarantee of uptime, correctness, market coverage, or fill quality. You are the operator, and the operator owns the outcome.
+Paper results do not establish live performance. Before risking funds:
 
-## Not financial advice
+- review the market's exact resolution rules and your local legal obligations;
+- run paper mode over a meaningful out-of-sample period;
+- measure data latency, probability calibration, spread, fees, fill quality, and drawdown;
+- keep per-order and daily limits at amounts you can afford to lose;
+- supervise the first live runs and verify positions independently.
 
-Nothing here — the code, the defaults, the documentation, or the example output — is financial, investment, legal, tax, or betting advice, nor an offer or solicitation to trade. No profit is promised or implied, and simulated results do not predict live results.
+The included safeguards reduce specific implementation risks but cannot prevent every loss, feed error, venue failure, software defect, account compromise, or operator mistake. Passing `--no-safeguards` removes the optional Simmer context check in paper mode only; live mode always requires that context.
 
-## Live orders are real and irreversible
+The live process lock coordinates only instances that use the same state path on a lock-capable filesystem. Multiple hosts or containers using one Simmer account must share `SIMMER_MLB_STATE_PATH` and one scheduler; independent local files cannot enforce an account-wide budget.
 
-Paper/dry mode is the default; `--live` submits real orders that spend real money on-chain. A broadcast, filled order cannot be undone, cancelled, refunded, or clawed back — not by this software, not by Simmer, not by you. A prediction-market position can lose 100% of its cost. Live sports markets add latency, suspended-game, feed-correction, order-book, partial-fill, fee, gas, wallet, API-outage, and resolution-rule risk. Kelly sizing is only as good as the probability estimate; a biased or stale estimate turns mathematically neat sizing into mathematically neat losses.
+Before first live use, the explicit initialization workflow checks the entire Polymarket account through a read-only SDK client. Any returned position or trade receipt from the prior 96 hours blocks empty initialization, including activity from another strategy. This conservative check cannot make an uncoordinated older scheduler atomic with the new process: stop all older writers before initialization. There is no force flag. Missing central state alongside an initialization marker or migrated snapshot requires deliberate restoration or reconciliation.
 
-## The ESPN feed is undocumented and can be wrong
+Keep API keys and wallet material in an environment-managed secret store. Never commit them, paste them into logs or issue reports, or place them in `config.json`.
 
-ESPN's public site JSON feed is undocumented and unsupported. It can change without notice, lag, omit fields, drop play-by-play, correct or retract plays, misreport delays and suspensions, or go offline entirely. Its win probability is a model output, not truth, and it is not calibrated for trading. The skill fails closed and skips what it cannot validate, which reduces this risk but does not remove it. Never replace a missing feed value with a guessed probability.
-
-## The defaults are not a validated edge
-
-Every shipped default — the `0.25` Kelly multiplier, the `0.05` minimum EV, the `0.90` probability haircut, the 2%-of-bankroll and $25 per-trade caps, $35 per game, $100 daily and portfolio exposure, 3 trades per run, and the spread, slippage, and quote-age gates — is a conservative starting point chosen for safety. None of it is backtested, and none of it has been validated as a trading edge on any market. Treat these as guardrails to test against, not as a recommendation.
-
-## Paper first, then out of sample
-
-Run in paper mode against live prices before you enable `--live`. Measure probability calibration, closing-line value, latency, fill quality, fees, and drawdown, then confirm the result out of sample — on data you did not use to tune. Tighten limits before you loosen them: any change to sizing, EV, or exposure caps re-opens the question of whether the strategy works at all.
-
-## Your responsibility, your jurisdiction
-
-You are solely responsible for how this software is used and for every order it places on your behalf, including orders placed while it runs unattended. Trade only with capital you can afford to lose in full. Comply with all laws, regulations, tax obligations, and sanctions that apply to you, and with the terms of service of Simmer, Polymarket, ESPN, and any other venue or data provider you touch. Prediction markets are restricted or prohibited for some persons and in some jurisdictions; confirming your own eligibility is your job, not this software's. Review each market's resolution criteria yourself — resolution is decided by the venue, not by this code. The software is provided "as is", without warranty of any kind, express or implied, and without any liability for loss or damage arising from its use.
+Use this software at your own risk. The GitHub source is distributed under its repository license. ClawHub applies its own registry license terms to published skill versions.

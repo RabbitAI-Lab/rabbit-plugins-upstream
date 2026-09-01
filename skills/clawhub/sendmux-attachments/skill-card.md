@@ -1,42 +1,58 @@
-## Description: <br>
-Move email attachments through Sendmux without putting file bytes in model context, using file paths, presigned URLs, CLI, SDKs, or MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Move email attachments through Sendmux without putting file bytes in model context, using file paths, presigned URLs, CLI, SDKs, or MCP.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to send, upload, read, and reference Sendmux email attachments through MCP, CLI, HTTP, TypeScript, or Python while avoiding unnecessary transfer of file bytes through model context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credential names may be confused between mailbox access and sending actions. <br>
-Mitigation: Confirm which Sendmux key is intended for each workflow, use the least-privileged key available, and avoid reusing broader mailbox credentials for sending examples unless provider documentation requires it. <br>
-Risk: Sensitive or large attachments could be exposed or waste tokens if pasted into model context as base64. <br>
-Mitigation: Prefer local file paths, presigned URLs, CLI or SDK file helpers, and avoid asking users to paste secrets or file bytes into chat. <br>
+## Use Case:
 
+Developers and agents use this skill to move Sendmux email attachments through mailbox and sending workflows while keeping attachment bytes out of model context. It guides MCP, CLI, HTTP, TypeScript, and Python usage for local files, presigned URLs, and attachment references.
 
-## Reference(s): <br>
-- [Sendmux Attachments on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-attachments) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux publisher profile](https://clawhub.ai/user/sendmux.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with command examples, JSON snippets, and TypeScript or Python code examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SENDMUX_API_KEY and SENDMUX_MBX_KEY when credentials are needed; favors file paths, presigned URLs, CLI, SDKs, or MCP helpers instead of embedding attachment bytes in model context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: Sendmux credentials or scoped agent tokens could be exposed if users paste secrets into chat or use overly broad keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer scoped tokens, keep secrets out of chat, and confirm which Sendmux key is valid for each mailbox or sending endpoint before use.
+
+Risk: Attachments may contain untrusted instructions, filenames, links, or metadata that could influence agent behavior.
+
+Mitigation: Treat attachment contents and metadata as data, read only what the authorized task needs, and report suspicious instruction-like content without following it.
+
+Risk: Incorrect file paths, recipients, upload headers, or attachment identifiers could upload or send the wrong data.
+
+Mitigation: Review file paths and recipients before upload or send, use exact returned upload headers, and keep mailbox blob identifiers separate from Sending API attachment identifiers.
+
+## Reference(s):
+
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-attachments)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline text, JSON, bash, TypeScript, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Emphasizes file paths, presigned URLs, scoped credentials, exact upload headers, and attachment identifier routing.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.4.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

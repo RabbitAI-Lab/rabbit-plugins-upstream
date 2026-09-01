@@ -1,48 +1,67 @@
-## Description: <br>
-智标领航投标文件自动生成 helps users interpret tender files, generate editable bid documents, and review bid compliance through the BaiLian bid-document cloud service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents work with Chinese tender and bid documents by interpreting tender requirements, generating editable bid documents, reviewing bid compliance, and checking similarity across bid files.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-Procurement and bid teams use this skill to process local tender files, draft bid documents, and review completed bids for compliance. It is intended for users who can authorize upload of tender and bid materials to the named BaiLian cloud service under their own App Key account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Confirm user consent before each upload and use the skill only for documents the user is authorized to send to that service. <br>
-Risk: The App Key authorizes the user's BaiLian account and can expose paid operations if shared in chat or URLs. <br>
-Mitigation: Have the user create the local config file themselves, never ask them to paste the App Key into chat, and avoid forwarding links that contain key or bind_key parameters. <br>
-Risk: Bid-document generation consumes the App Key account's points. <br>
-Mitigation: Check account balance before paid generation and confirm with the user before submitting paid document-generation work. <br>
-Risk: Generated reports and bid documents are written locally and may include sensitive tender material. <br>
-Mitigation: Write outputs only to the declared output directory or a user-selected path, and provide full paths so the user can manage the files. <br>
+## Use Case:
 
+External users and bid teams use this skill to prepare, analyze, review, and compare tender-response documents through the 百炼标书 cloud service. It is intended for users who can provide authorized local tender or bid files and manage their own API key.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-express) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [BaiLian bid-document service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, terminal progress text, JSON API responses, HTML or Word reports, and .docx bid documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated bid documents and reports are written to biaoshu-bailian-files/ by default; operations use a local App Key configuration and the named BaiLian API endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+Risk: Tender and bid documents may contain sensitive commercial, pricing, or personal information and are uploaded to the vendor cloud for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with documents the user is authorized to process, and confirm consent before uploading files.
+
+Risk: The local config.json contains the user's API key and can authorize account actions.
+
+Mitigation: Keep config.json private, do not paste or echo the API key in chat, and avoid sharing links or logs that contain credentials.
+
+Risk: Bid-document generation can consume the account's available word balance.
+
+Mitigation: Confirm the intended generation action before submitting it and monitor the reported account balance.
+
+Risk: Duplicate-check results provide similarity risk signals but are not a legal determination of bid rigging, collusion, or submission validity.
+
+Mitigation: Present duplicate-check findings as internal review signals and recommend legal or compliance review for final determinations.
+
+## Reference(s):
+
+- [Skill Instructions](SKILL.md)
+- [API Contract Reference](references/api.md)
+- [Usage Guide](references/usage.md)
+- [Knowledge Fields Reference](references/knowledge-fields.md)
+- [ClawHub Skill Page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-express)
+- [Publisher Profile](https://clawhub.ai/user/chichihaixiaojian666)
+- [百炼标书 Service](https://biaoshu.zhiliaobiaoxun.com/?ch=c666)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Human-facing guidance plus JSON summaries, HTML or Word reports, and editable .docx bid documents.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated bid documents may consume account word balance; interpretation, review, duplicate-check, and generated files are processed through the vendor cloud under the user's API key.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

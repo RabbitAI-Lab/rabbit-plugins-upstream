@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/financial-categorizer",
   "slug": "financial-categorizer",
   "ownerHandle": null,
-  "version": "1.10.0",
-  "updatedAt": 1784325918622,
-  "contentHash": "5bf4e7efcd8b7ccb35538c966c6b6b5ed9f60decf5411c3e6132b584637eb561",
-  "fetchedAt": "2026-07-26T18:11:38.746Z"
+  "version": "1.12.0",
+  "updatedAt": 1788178368329,
+  "contentHash": "c659c849bfed4a3b0e32c2eae4c39f42bb214d4701d29f6b367d14eb1d1e0365",
+  "fetchedAt": "2026-09-01T12:44:46.479Z"
 }

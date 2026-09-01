@@ -1,53 +1,70 @@
-## Description: <br>
-Guides agents through OKX CEX spot, swap, futures, options, and event-contract order management, including placing, canceling, amending, monitoring, leverage, take-profit, stop-loss, trailing-stop, credential, and trading-mode checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to help users place, cancel, amend, and monitor OKX spot, swap, futures, options, and event contract orders through the OKX CLI.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to prepare or run OKX CEX trading workflows for spot, swap, futures, options, and event contracts. It is intended for order management and trading-mode guidance, not market-data, portfolio, or bot workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can let an agent manage OKX trades with account credentials, including live orders and leverage changes. <br>
-Mitigation: Start in demo mode, require explicit user approval for live orders or leverage changes, and verify order details before execution. <br>
-Risk: Trading actions such as cancellation, position closure, leverage updates, and remediation after API errors may affect real funds. <br>
-Mitigation: Use read-only diagnostics first, present the findings, and wait for a separate confirmation before any cancellation, closure, transfer, bot stop, or other write remediation. <br>
-Risk: The security summary flags bot-related troubleshooting as outside the skill's stated scope. <br>
-Mitigation: Treat bot checks as out of scope unless the user explicitly authorizes the dedicated bot workflow. <br>
-Risk: The skill requires OKX credentials. <br>
-Mitigation: Do not accept credentials in chat; guide users to configure credentials through the OKX CLI setup flow. <br>
+## Use Case:
 
+Developers and external users use this skill to operate OKX centralized-exchange trading workflows from an agent, including order placement, amendment, cancellation, leverage changes, conditional orders, option workflows, and event contract workflows. It is intended for authenticated OKX CLI use and requires explicit care around live versus demo trading.
 
-## Reference(s): <br>
-- [OKX homepage](https://www.okx.com) <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-trade) <br>
-- [Event Contract Commands](artifact/references/event-commands.md) <br>
-- [Event Contract Workflows](artifact/references/event-workflows.md) <br>
-- [Futures / Delivery Command Reference](artifact/references/futures-commands.md) <br>
-- [Options Command Reference](artifact/references/options-commands.md) <br>
-- [Spot Command Reference](artifact/references/spot-commands.md) <br>
-- [Swap / Perpetual Command Reference](artifact/references/swap-commands.md) <br>
-- [MCP Tool Reference & Output Conventions](artifact/references/templates.md) <br>
-- [Trade Workflows & Examples](artifact/references/workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and CLI command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires configured OKX CLI credentials; authenticated command responses should identify live or demo mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: evidence release and artifact frontmatter metadata.version) <br>
+Risk: The skill can guide live OKX trading actions involving real funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use demo mode first and require explicit confirmation of live/demo mode, instrument, side, size, order type, price, leverage, cost, and maximum loss before any write action.
+
+Risk: Users may expose OKX credentials during setup or troubleshooting.
+
+Mitigation: Configure credentials only through the OKX CLI and never provide API keys, secrets, passphrases, or OAuth tokens in chat.
+
+Risk: Directional event-contract or market commentary may be mistaken for financial advice.
+
+Mitigation: Treat UP/DOWN and market commentary as unverified information, not financial advice, and require the user to choose and confirm any trade direction.
+
+Risk: Derivative contract sizing, leverage, and margin settings can produce orders different from the user's intent.
+
+Mitigation: Verify contract face value, leverage, margin mode, notional value, cost, and maximum loss before submission, and ask for clarification when amount units are ambiguous.
+
+## Reference(s):
+
+- [OKX homepage](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-trade)
+- [Trade workflows and examples](references/workflows.md)
+- [MCP tool reference and output conventions](references/templates.md)
+- [Spot command reference](references/spot-commands.md)
+- [Swap and perpetual command reference](references/swap-commands.md)
+- [Futures and delivery command reference](references/futures-commands.md)
+- [Options command reference](references/options-commands.md)
+- [Event contract commands](references/event-commands.md)
+- [Event contract workflows](references/event-workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration, Markdown, Text]
+
+**Output Format:** [Markdown text with OKX CLI commands and confirmation prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include mode labels, order identifiers, tabular command results, and safety confirmations for write actions.]
+
+## Skill Version(s):
+
+1.4.5 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Produces audience-specific QA test reports, including daily updates, weekly summaries, iteration reports, and quality decision summaries with metrics, risks, traceability IDs, and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+QA Test Reporting helps an agent turn test execution data, defect data, and quality metrics into audience-specific daily, weekly, iteration, or quality reports with quantified status and highlighted risks.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, project managers, and management stakeholders use this skill to turn test execution data, defect data, and optional quality metrics into reports tailored to the reader's decision needs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may trigger on generic requests such as daily report or progress report. <br>
-Mitigation: Specify that the requested report is for QA/testing, or choose a general project reporting workflow when the report is not test-related. <br>
-Risk: Report fields such as release recommendation or delay recommendation may be mistaken for an approved operational decision. <br>
-Mitigation: Treat release and delay recommendations as report content for stakeholder review, and require authorized human approval before acting on them. <br>
+## Use Case:
 
+QA engineers, test leads, project managers, and development teams use this skill to draft test status and quality reports for daily progress updates, weekly summaries, iteration reviews, and management decision support.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-reporting) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and structured report guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include a unique report ID and aggregate related use case, defect, and requirement IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Generated quality conclusions or release and delay recommendations may be mistaken for authorized decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the report as advisory text and require an authorized stakeholder to approve any release or delay decision.
+
+Risk: Reports depend on workspace test artifacts and defect data that may be incomplete or stale.
+
+Mitigation: Validate source metrics, defect counts, and coverage assumptions before sharing the report.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-reporting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown reports and structured report sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces advisory quality conclusions, risk assessments, release recommendations, and traceability fields such as report IDs and linked case, defect, and requirement IDs.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

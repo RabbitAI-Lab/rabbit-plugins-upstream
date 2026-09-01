@@ -2,13 +2,29 @@
 
 ## Step 0 — personalization, Q1 (template), Q2 (purpose/venue), Q3 (source material)
 
+🔴 **Five questions, a four-slot widget, and the axis that disappears.** A choice UI (Claude Code's
+`AskUserQuestion`) takes FOUR questions per call; this interview has FIVE lines. "Ask them in one
+batched call" therefore truncates the last one silently — and that is the line LANGUAGE lives on.
+Measured: a real deck was built in this repo's own session with language never asked, and the gates
+record carried `delivery`, `builds` and `content.slides` (the three axes something downstream
+demanded) and no answer for language, density, length or goal. Send **two calls**. Then RECORD the
+four: `interview.language / .density / .length / .goal`, required by both gates from one shared list
+(`deck_gates.INTERVIEW_AXES`) and scaffolded by `deck_gates.py --init`. An axis with no artifact
+demanding it is an axis that goes unasked — this file said exactly that about deck length, in prose,
+and the failure moved one axis over.
+
 **Personalize options only from THIS user's own footprint — never a hardcoded or guessed
 domain — and roll past work up into ONE option, drilling in only on pick (Q1's two-stage
 pattern), so personalization never crowds out the general choices.** Any *suggestions* you pre-fill into a question — candidate topics, example
 subjects, registered templates — must come from what this user has actually given you:
 materials they provided (now or in a past session) or their saved registry / profile /
-memory. In Codex, prefer the registry root `~/.codex/slide-templates/`; in Claude Code,
-prefer `~/.claude/slide-templates/`. If only one exists, use it. **Read `taste.md` at that
+memory. 🔴 **Resolve the registry root by RUNNING `python3 scripts/registry.py`, not from
+memory** — one call prints every existing root, the templates registered across them, and the
+write target. `~/.claude/slide-templates/` and `~/.codex/slide-templates/` keep priority;
+anything else (Kimi · Gemini · Cursor · Coze · an API caller) falls back to the host-neutral
+`~/.slide-maker/slide-templates/`, which exists because a hardcoded two-host list left every
+other runtime with no root at all — and therefore, silently, with no saved templates to offer
+at Q1(a) and no taste profile. **Read `taste.md` at that
 same registry root in the same pass** — the user's portable taste profile (schema +
 read/write protocol: `references/user-taste.md`): its DIALS/NO-GOs seed *delegated* picks
 under an auto directive, and its LOOK HISTORY supplies the substance of the two-stage
@@ -37,6 +53,34 @@ expanding to named past looks on pick — the named looks come from `taste.md`'s
 for any other history (past purposes, prior venues). Marking a *general* option "(Recommended)" is fine and unaffected — the rule bounds how
 PAST ITEMS enter, so they never crowd generic paths out of a bounded-option UI.
 
+**🔴 Emit a CAPABILITY LEDGER before the first question — four lines, from what you can observe
+about THIS host.** The skill is written for a host with a structured-choice UI, subagent dispatch,
+image input and web access; it runs on hosts with none of them. The danger is not that a weaker
+host produces a worse deck — it is that it produces a worse deck **while every report reads
+identically**, because the stages that degrade are the ones that self-certify. Measured: a run that
+read 3 of 10 reference files shipped zero icons and a raw format string on a slide, and every
+automated gate passed.
+
+    capability ledger
+      choice UI    : yes | no  → no = ask the four questions as plain text, never fake a form
+      subagents    : yes | no  → no = the planner/art-director/critic run inline; see below
+      image input  : yes | no  → no = the critic's DESIGN lens cannot see the render
+      web access   : yes | no  → no = no-web fallback (mark falsifiable claims open, ask the user)
+
+Carry it to the hand-off verbatim, beside `review:` and `cost:`. 🔴 **Where a capability is absent,
+say what was LOST, not that an equivalent ran** — `design lens: DEGRADED (no image input — judged
+from lint_deck --json structure, not from pixels)` is honest; silence is the failure this ledger
+exists to prevent. Two specific degradations must never be described as equivalent:
+- **No subagent dispatch.** "Run the same brief inline" preserves the WORDS and loses the property
+  that made the split worth having — a critic in the author's own context is the author grading
+  themselves, which is exactly what `.deck-gates.json` exists to make visible. Run it as a
+  deliberately fresh pass (state the brief, judge only the render and the lint JSON, do not consult
+  your build reasoning), and record `critic: inline (no dispatch on this host — not independent)`.
+- **No image input.** The design lens and the render self-check are both pixel work. Substitute the
+  structured surrogate (`lint_deck --json`: per-slide load, ink%, max pt, shape counts, contrast
+  findings) and **say it is a surrogate** — it cannot see crop, balance, a figure smothering text,
+  or anything in the paint-order blind list.
+
 **Scale the interview to the ask:** a full deck needs
 all four; a genuinely tiny ask (a single slide, a quick infographic) still needs purpose
 and content confirmed, but you may collapse template/style to a sensible default *stated
@@ -46,17 +90,20 @@ batch: *a conference talk* → ask which venue, then research it; *a new templat
 hand over the file; *"design a clean one" (no template)* → run the **direction gate**
 (DEFAULT on this branch — see Q1's design-one branch for the named skip carves; a Q4 Mode-A
 mimic example decides the look and skips it) — show **4** rendered style directions to pick
-from before the full build (3 best-fit REAL-DNA presets + 1 pure colour-scheme direction —
+from before the full build (>=1 BESPOKE register invented for the topic + best-fit REAL-DNA
+presets + 1 pure colour-scheme direction —
 see Q1(c)); *"generate a template with an image tool"* → run the mini-interview + generation
 + feedback loop in `references/generated-template.md` (its style gate shows **3** best-fit
 image-backed styles), then **skip the direction gate** (the look is already decided).
 **The count rule, by branch: no image tool → 4 offered; with image tool → 3 offered.** The
 four template choices:
 
-1. **Template / brand.** First **check this user's registered templates** — the
-   host-appropriate registry (`~/.codex/slide-templates/` in Codex, `~/.claude/slide-templates/`
-   in Claude Code; if only one exists, use it). Each subfolder is one template they've used before,
-   with a `profile.md`.
+1. **Template / brand.** First **check this user's registered templates** — run
+   `python3 scripts/registry.py`, which prints the count and the names across every root that
+   exists on THIS runtime (Claude/Codex roots first, host-neutral `~/.slide-maker/slide-templates/`
+   otherwise). Each subfolder is one template they've used before, with a `profile.md`. Reading
+   the number off the tool rather than guessing it is what makes option (a)'s "N registered"
+   true on a runtime this file never enumerated.
    **⚠️ WHENEVER the template question is asked, it MUST present ALL FOUR standard choices — do not
    silently drop one (especially the image-tool option, which is easy to forget). The question itself
    may be skipped only per the named carves: the current request already answers Q1, or the tiny-ask
@@ -93,7 +140,18 @@ four template choices:
      rather than always shipping the same default blue — a defense, an exec readout,
      and a lecture should not look alike.
      **Because the look is entirely yours to invent here, the direction gate RUNS BY
-     DEFAULT on this branch — a 🔴 checkpoint-grade step, not an optional offer.** This is
+     DEFAULT on this branch — a 🔴 checkpoint-grade step, not an optional offer.**
+     🔴 **Post it in the SAME turn that dispatches the Step-1 content planner, and collect the pick
+     at the CONTENT checkpoint** — do not stand still waiting for it. The directions page is
+     provably content-free (`archetypes_html.py` renders fixed sample copy; `build_directions_html`
+     takes only `deck_title`), so the planner consumes nothing the user is about to choose, and the
+     look is not consumed until Step 2 builds `style.py`. Two things the user does in parallel
+     therefore cost one wait instead of two. **What must NOT change: the gate is still a gate.** The
+     design checkpoint still cannot be posted without its `direction gate:` line, and that line now
+     carries the user's verbatim paste-back words (`references/checkpoint-convention.md`) precisely
+     because a step that no longer blocks is the kind that quietly collapses into the checkpoint
+     after it. If the pick has not arrived by the time Step 2 needs it, **stop there and wait** —
+     overlapping the wait is allowed, proceeding without the answer is not. This is
      the one branch where preference, not just quality, is unresolved; history shows an
      "offer" gets skipped under momentum (a whole deck shipped without the user ever seeing
      a choice of looks), so the gate is the default and skipping is the exception. Named
@@ -107,7 +165,7 @@ four template choices:
        are REAL STYLES — a named preset OR a bespoke register with its own motif — never three shades
        of one palette.** ("Synthesised" is not the enemy; a *motif-less colourway* is. A bespoke
        register you invent for this content is a real style and a first-class peer of a preset — often
-       the more daring answer, see the launchpad note below.) Pick the **3 best-fit design languages** for
+       the more daring answer, see the launchpad note below.) Fill the preset slots with the **best-fit design languages** for
        THIS topic/audience — presets from the 18-preset library (read each preset's `when` field in
        `scripts/presets.py` / `references/design-gallery.md`; e.g. a technical talk → blueprint /
        dark_tech / swiss, a culture deck → memphis / risograph / editorial_paper, a Chinese-heritage
@@ -122,7 +180,8 @@ four template choices:
        (the ambient register signature; `_dna_ambient`), so the user sees a style that carries the
        whole deck.
        - 🔴 **On this no-image-tool branch, offer FOUR rendered directions, not three:** the 3
-         best-fit DNA presets (A/B/C) **plus a 4th "colour-scheme" direction (D)** — one tasteful
+         directions A/B/C — **at least one of them a BESPOKE register invented for this topic, the
+         rest best-fit DNA presets** — **plus a 4th "colour-scheme" direction (D)** — one tasteful
          palette+type combination for THIS topic with **no motif**, the classic clean look (this is
          itself a legitimate style; a user asked for it to stay on the menu). Build all four in one
          call: `preset_directions(["p1","p2","p3", {colour_token}])` — a **dict** is passed through
@@ -130,14 +189,59 @@ four template choices:
          The HTML labels A–D as the four options and **E — describe your own** as the fifth slot (the
          own-letter is dynamic, so no collision). *(With an image tool it's the OTHER branch — Q1(d)'s
          style gate — which stays at 3.)*
-       - **Presets are the FLOOR you beat, not the menu you satisfy — PREFER a bespoke register when
-         the content has one.** Any of A–C may be a **bespoke synthesised direction** (a dict in the
-         `preset_directions` list, carrying its OWN motif so it renders real DNA) — and when THIS
-         content has a distinctive visual world of its own, *prefer* inventing that register over a
-         merely-adequate preset. A bespoke register with a named motif + palette + type + its own guard
-         + item-(q) all-pages carry is as legitimate as any preset and usually the bolder pick. Weigh it
-         on every design-clean deck — it is a default consideration, not a fallback for "a topic no
-         preset fits". The library raises the floor; your job is still to beat it.
+       - 🔴 **AT LEAST ONE of the offered directions MUST be a bespoke register invented for THIS
+         topic — not a preset.** Presets are the FLOOR you beat, not the menu you satisfy. A bespoke
+         direction is a dict in the `preset_directions` list carrying its OWN `cover_motif` +
+         `ambient_motif`, so it renders real DNA rather than a motif-less colourway; with a named
+         motif + palette + type + its own guard + item-(q) all-pages carry it is a first-class peer
+         of any preset, and usually the bolder pick. Weigh it on every design-clean deck — it is a
+         requirement, not a fallback for "a topic no preset fits". The library raises the floor;
+         your job is still to beat it.
+         **Why this became a MUST rather than a preference:** the previous wording ("PREFER a bespoke
+         register when the content has one") is exactly the shape of rule this skill keeps proving
+         gets skipped — it is advisory, nothing reports its absence, and the cheapest path is always
+         three preset names. **Derive the bespoke register from what the content already IS**, not
+         from a style vocabulary: ask what world this material lives in (its objects, its signage,
+         its instruments, its documents) and build the motif out of that. Where the subject has a
+         real-world visual system of its own, borrowing THAT system is almost always stronger than
+         any preset — it makes the colour, the marker and the line carry meaning instead of taste.
+         *(Measured: on a deck about routes into a country's labour market, a bespoke transit-signage
+         register — line colour = visa route, numbered roundel = step, buffer stop = dead end — beat
+         all three best-fit presets, and then supplied the deck's signature move for free, because
+         the motif was load-bearing rather than decorative.)*
+       - 🔴 **The verdict now LANDS IN `.deck-gates.json` and is RE-SCORED at hand-off**, the way
+         the arc competition is: record `design_plan.direction_gate = {"candidates": "directions.json",
+         "picked": "<the chosen one>"}`, or the named carve `"n/a — <locked template | mimic |
+         user supplied the look | tiny ask>"`. `render_deck.py --gate-check` runs
+         `directions_diversity.check()` over the candidates itself. Measured on a real build: the
+         script reports `TOO SIMILAR Brutalist vs Swiss (palette 37.9)` — which the author caught
+         by eye — AND `NO BESPOKE DIRECTION`, which the author did NOT catch: the "bespoke"
+         candidate carried colours, a cover and a skeleton but no `cover_motif`, so the user chose
+         from three presets and a colourway. Neither finding reached the design checkpoint, because
+         nothing required the script to be run.
+       - 🔴 **The mechanical check enforces it — on BOTH failure directions:** `directions_diversity.py`
+         fails a set in which **no** direction carries `cover_motif`/`ambient_motif` (no bespoke), AND
+         a set carrying **more than one motif-less colourway** (`colourway_excess` — the "just different
+         colours" set). The branch is **3 real styles (best-fit DNA presets and/or a bespoke register,
+         TOPIC-ADAPTED) + 1 colour-scheme option**, so a preset-only set is the catalogue *and* a set of
+         bare colourways is under-designed — both exit 2, both with the same named-`direction gate:`
+         escape. Build the styled slots with `preset_directions([names])` (each stamps a real `dna`) or a
+         bespoke dict; a hand-written colour dict with neither `dna` nor a motif counts as a plain
+         colourway, and only ONE is allowed. *(This closed a measured hole: a `3 plain colourways + 1
+         bespoke` set passed every pairwise divergence test and the bespoke gate, yet was exactly the
+         mediocre "the options were just different colours" set the whole preset-driven gate exists to
+         prevent. The Codex delivery gate loads the SAME checker, so both paths reject it identically.)*
+         **The requirement is to OFFER one, never that it must win** — the user may well pick a
+         preset, and that is a real choice made against a real alternative rather than a default.
+         **Escape, same shape as the divergence check's:** if you genuinely cannot invent one, keep
+         the set and record why on the `direction gate:` line (e.g. `no bespoke — brand mandates
+         palette, type AND grid; variance had nowhere left to live`). A recorded reason is a decision
+         someone made; a silently preset-only set is the default this exists to interrupt. Note that
+         a brand lock is rarely a real escape: a motif, a composition envelope and an interior
+         register signature are all still yours even when the palette and type are not.
+       - **This gate also fires on the lighter case-(b) offer** (unsure-on-style / brand-defining,
+         2–3 directions) because it is the same machinery — which is the right default, since those
+         are exactly the decks where an invented register pays most.
        - 🔴 **DIVERGENCE IS A PAIRWISE RULE, NOT AN EXHORTATION: any two directions must differ on
          ≥2 of four axes — {palette mood · type attitude · density/scale · COMPOSITION ENVELOPE}.**
          "Distinct light/dark, warm/cool, serif/sans" describes *knobs*; a dark version and a light
@@ -151,11 +255,15 @@ four template choices:
          corporate look", a Q4 mimic), that axis LEAVES the divergence set and the ≥2 rule re-applies
          to the ones that remain. A constraint relocates variance; it never licenses convergence.
        - 🔴 **Run the mechanical check before you post the link:**
-         `python scripts/directions_diversity.py directions.json`. It scores four axes — **palette
+         `python3 scripts/directions_diversity.py directions.json`. It scores four axes — **palette
          mood** (a light/dark flip counts as a palette divergence, so mode is folded in) · **type
-         pairing** · **density** · **composition** — and flags any pair matching on ≥3 of the 4. **Exit 2 is
-         not an auto-kill** — REDIVERGE the flagged pair, or keep it and record the reason on the
-         `direction gate:` line ("brand-locked accent — divergence moved to composition + type").
+         pairing** · **density** · **composition** — and flags any pair matching on ≥3 of the 4. It ALSO
+         fails a set with no bespoke direction (above). **Exit 2 is not an auto-kill, and it now
+         carries two distinct meanings — read the output, do not infer from the code**: a flagged
+         PAIR (rediverge it, or keep it and record the reason on the `direction gate:` line —
+         "brand-locked accent — divergence moved to composition + type") and/or NO BESPOKE
+         direction (invent one, or record why you could not). `--json` reports them separately as
+         `flagged` and `no_bespoke`.
          The check exists because the agent that writes the directions is the same agent that
          judges whether they differ; only an outside measurement catches several skins of one idea. **Hand the user the single `file://…
        directions.html` link** to open in a browser, review side-by-side, and pick from — no
@@ -188,7 +296,13 @@ four template choices:
      `references/generated-template.md`**: a mini-interview *now* (scenario/topic first — brand colours
      fold into tailoring; **pick the 3 best-fit, deliberately DIVERSE styles for the TOPIC + CONTENT
      from its Style library** (different visual languages — e.g. Swiss vs Manga vs Glassmorphism — never
-     colour-variations of one look), **GENERATE 1 real template image per candidate style (2 for the
+     colour-variations of one look). 🔴 **Each candidate is a whole STYLE, not a swapped picture: a
+     distinct visual language WITH its own matched chrome (the `style.py` you derive per pick — palette,
+     type, motif, component geometry), TOPIC-ADAPTED and novel — the same anti-mediocrity bar the
+     "design a clean one" branch enforces mechanically (`directions_diversity.py`). Three generated
+     images of the same subject in one look, or three that share a chrome, are the 生图 analogue of the
+     "just different colours" failure — reject them.** **GENERATE 1 real template image per candidate
+     style (2 for the
      front-runner) on this topic, and show them in ONE HTML gallery — the "style gate"** (one `file://`
      link; the winner's image is reused as the deck's hero, so the cost is ~3–4 images; native
      `archetypes_html.py` mockups are only the no-image-tool fallback), then the user picks. **Offer
@@ -243,11 +357,20 @@ four template choices:
        **Canvas format rides on this answer:** an ordinary talk/meeting/self-read deck is 16:9 —
        never ask a format question there (16:9 is the unchanged default and every rule assumes it).
        But when the deliverable is a **non-slide surface** — a rednote/小红书 image note, an Instagram
-       square post, a Story/Reels/Shorts vertical, an A4 print one-pager, or a venue demanding 4:3 —
+       square post, a Story/Reels/Shorts vertical, an A4 print one-pager, an **A0/A1 conference
+       poster**, or a venue demanding 4:3 —
        **confirm the canvas format** (one option-line, or fold into this question) and build on the
        matching `scripts/formats.py` preset: per-format safe zones, chrome policy, density, and
        layout DNA live in `references/canvas-formats.md`. Same identity + components, recomposed —
        never a 16:9 layout transplanted onto a portrait canvas.
+       🔴 **A poster ask needs TWO answers, not one.** "Make me a poster for the conference" leaves
+       the board size open (A0 and A1 are both standard, and the venue usually specifies), and it
+       leaves the reading register open. Ask the size, and ask whether it is a **billboard** poster
+       (one result, big, read in seconds) or a **traditional** one (the full argument, read
+       standing) — they produce different section counts and different amounts of text at the same
+       type floors, which do NOT move either way. Whichever they choose, methods and limitations
+       are required content: they are what a passer-by cannot reconstruct and cannot fairly judge
+       the claim without, and `scripts/check_surface.py` blocks a board that has neither.
      - **Deck length is ALWAYS the user's choice — surface it, never silently derive it.** Make it an
        explicit interview option: a **self-read** deck → ask **short ~5–8 / medium ~9–15 / long 16+**; a
        **spoken** deck → the **time budget** sets the working count (~1 slide/min), but still **confirm the
@@ -268,43 +391,25 @@ four template choices:
        This sets the **rhetorical arc**: *inform* builds to the evidence; *decide* leads with the
        recommendation and the ask; *inspire* opens on stakes and closes on a call to action. Purpose
        hints at it but doesn't fix it (a conference talk can inform *or* persuade) — so confirm it.
-     - **Review effort — `fast` · `standard` · `thorough`. ASK IT, on the same line as purpose.**
-       This is the deck's COST DIAL, and it is the one axis the user previously had no handle on:
-       a single low-stakes deck run at full weight measured **~32 subagents and ~2M tokens across
-       research + build + two review rounds**. The rule that scales the loop already existed
-       ("scale the critic to stakes"), but it was inferred, never offered — so nobody knew they
-       could turn it down.
-       **The default is DERIVED, not fixed** — offer the derived value as the pre-selected option
-       so the common case is one click:
-       | purpose | derived default |
+     - **Review effort — NOT asked here.** The `fast` · `standard` · `thorough` · `none` question
+       is asked at **Step 5, after the first clean render, with the deck in front of the user**
+       (SKILL.md → the post-build review question). At Step 0 it was a blind cost decision about a
+       deck nobody had seen — which is why the cheap tier could never safely be the default. Do
+       not add it back to the interview, and do not derive a review tier from the purpose.
+     - **Research breadth — DERIVED from purpose, never asked.** Research runs before the deck
+       exists, so it cannot wait for the post-build question; derive its breadth from the purpose
+       and say the derived word in the plan:
+       | purpose | derived research breadth |
        |---|---|
        | research/lab meeting · work status update · teaching · webinar / online presentation · **any tiny ask (1–2 slides, an internal note)** | `standard` |
        | academic conference talk · academic job talk / faculty interview · thesis defense · company/stakeholder readout · product description / pitch (customer, investor or internal) | `thorough` |
-       🔴 **`fast` is never derived — it is reachable only by the user asking for it.** The table has
-       two rows for a reason: those are the two classes the skill already had, so a derived tier can
-       only ever reproduce today's behaviour. A small ask does NOT lower the tier; **purpose decides,
-       size never does.** A one-slide exec readout derives `thorough`, and choosing `fast` there is a
-       recorded downgrade — which is exactly the case that most needs recording.
-       Deriving rather than defaulting to a constant is what makes this safe to add: **a user who
-       says nothing gets exactly the behaviour they got before this dial existed** (today's
-       low-stakes ≡ `standard`, today's high-stakes ≡ `thorough`), because those two tiers are pure
-       ALIASES rather than new behaviours. `fast` is the ONE genuinely new band, and it is opt-in
-       only — so the guarantee holds without an exception. The word exists so ONE word can move it.
-       **One word governs BOTH cost centres** — the research fan-out and the review panel. They are
-       comparable in size (measured on one deck: research ~1.02M tokens vs review ~0.95M), and a
-       user who asks for speed means the whole pipeline, not half of it. What `fast` narrows on the
-       research side is the **sample**, never the gate: the PRIMARY-SOURCE GATE still runs.
-       **Say the cost of `fast` in the option itself, never in a footnote:** it collapses the panel
-       to ONE generalist critic carrying both lenses, and a single agent wading all ~30 checks is
-       the exact failure mode the two-lens split was built to fix. Choosing it is accepting a known
-       recall drop, which is a legitimate trade — but only if it was stated.
-       🔴 **Choosing a tier BELOW the derived default is allowed and must be VISIBLE:** say in one
-       line what is being given up, and record it on the hand-off's `review:` line as
-       `fast (derived default was thorough — user chose)`. A downgrade nobody can see afterwards is
-       indistinguishable from a downgrade that was never offered.
-       *(What each tier actually dispatches — panel size, arbitration trigger, round cap and round-2
-       scope — is owned by `references/critic-panel.md` → "Review effort tiers". Do not restate the
-       mechanics here; this question only collects the word.)*
+       A small ask does NOT lower the breadth; **purpose decides, size never does.** Breadth
+       narrows the **sample** (how many sources, how deep the sweep), never the gate: the
+       PRIMARY-SOURCE GATE and the fidelity floor hold at every breadth. Cost context, for when
+       the user asks: a single low-stakes deck at full weight measured **~32 subagents and ~2M
+       tokens across research + build + two review rounds**, research and review comparable in
+       size (~1.02M vs ~0.95M tokens on one measured deck) — and the build, not the review, is
+       the biggest wall-clock slice at 40–71% of model-active minutes.
    - *(Structure emphasis — data/trends vs narrative-insights vs sector/section breakdown — and the
      fine-grained slide count are best steered at the **Step-1 content checkpoint**, where the user
      approves the arc, rather than front-loaded here — keep this interview cheap.)*
@@ -368,6 +473,33 @@ four template choices:
    - *No* → **build the content yourself** from your knowledge, and **web-search to
      ground it** (correct facts, current numbers, credible framing) rather than
      inventing. Confirm the intended scope/outline with the user before building.
+   - 🔴 **When material IS provided, ASK whether to supplement it from the web — and bring your
+     own read of what is missing.** "They gave me a source" is not the same as "the deck has what
+     it needs", and a provided source is the case where the gap is *least* visible: the material
+     looks complete because it is complete *for its own purpose*, which is rarely the deck's
+     purpose. Make it one option-line in the same batch, **pre-filled with the specific gaps you
+     can already name from a first scan** — not a bare "want me to search?", which puts the
+     diagnosis on the user and reliably gets "no".
+     The recurring gap classes, in the order they actually bite:
+     - **Time-bound claims in the source have gone stale.** A paper's "state-of-the-art", an
+       adoption number, a "first/largest/latest" superlative, a price, a policy, a headcount.
+       Re-verifying a source claim is not inventing — it is fidelity to what is true *now*
+       (this is the same rule as SKILL.md's "re-verify the source's own falsifiable claims at
+       TODAY's date"; the interview is where the user gets to authorise the searches it costs).
+     - **The source ends where the deck's audience begins** — a method paper with no
+       related-work-since-publication, a repo with no writeup, an internal memo with no market
+       context, figures with no prose.
+     - **The venue / audience / competitor context is nowhere in the material**, because the
+       material was never written for that room.
+     - **One named asset the deck will need and the source does not carry** — an official logo,
+       a brand colour, a licensed photo, a spec number. These are few, they are cheap, and per
+       the SEARCH BUDGET rule they are exactly what starves if a research fan-out runs first.
+     Offer three answers, and record which one was chosen: **(a) source only — do not search**
+     (the right answer for a self-contained document, a fixed-scope internal deck, or anything
+     confidential); **(b) supplement the named gaps only** (default when you can name any);
+     **(c) supplement freely within a stated cap**. On (a), any claim the source leaves
+     unverifiable stays flagged in the ledger rather than quietly filled from memory — 🔴 a
+     source-only deck may not be grounded by recall.
 
 ## Step 0 — Q4 (style): density levels, mimic modes, and the direction-gate scope
 
@@ -410,7 +542,7 @@ four template choices:
    unsure; carry the choice into the plan (steps 1–2) and the build (step 4).
    - **Direction gate (when to show rendered options first).** Two cases call for it:
      (a) **"design a clean one" / no template** → it's the *recommended default* there —
-     offer **4** directions as described in Q1's design-one branch above (3 best-fit DNA presets +
+     offer **4** directions as described in Q1's design-one branch above (>=1 bespoke register + best-fit DNA presets +
      1 colour-scheme direction); (b) any other case where the user is **unsure on style** or it's a
      **brand-defining / high-stakes** deck → offer **2–3 directions** as a lighter opt-in. Either way it's the same machinery
      (collaborative mode Gate A, `references/collaborative-mode.md` + `scripts/archetypes_html.py`):

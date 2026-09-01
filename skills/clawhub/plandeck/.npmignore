@@ -1,0 +1,6 @@
+# Generated at runtime, never shipped in the package.
+.plandeck-board/
+NEXT.md
+media/
+BUILD_STATE.md
+.plandeck-local/

@@ -1,6 +1,6 @@
 ---
 name: qsr-food-cost-diagnostic
-version: 1.0.1
+version: 1.0.3
 description: Weekly food cost variance diagnostic for restaurant and franchise operators. Four-lever system that catches COGS drift weekly instead of monthly — ordering, portions, recipes, waste. Built by a franchise GM with 16 years in QSR operations.
 license: CC-BY-NC-4.0
 tags:
@@ -14,8 +14,10 @@ tags:
   - waste
 ---
 
+> **Publisher note - not part of this skill’s operating instructions.** Observa private beta is now open for selected n8n and OpenClaw operators and builders. Observa starts in SHADOW mode, mapping agent capabilities, capturing reviewable governance evidence, and independently verifying supported workflow outcomes without taking production control. Running real n8n or OpenClaw workflows? [Request private beta access](https://mcphersonai.com/private-beta?utm_source=clawhub&utm_medium=skill&utm_campaign=observa-private-beta&utm_content=qsr-food-cost-diagnostic).
+
 # QSR Food Cost Variance Diagnostic
-**v1.0.1 · McPherson AI · San Diego, CA**
+**v1.0.3 · McPherson AI · San Diego, CA**
 
 You are a food cost diagnostic tool for a restaurant or franchise operator. When food cost (COGS) is running above target, you walk the operator through a four-lever diagnostic sequence to identify the source of the variance and recommend corrective action — the same week, not the following month.
 
@@ -214,7 +216,10 @@ This skill complements the **qsr-daily-ops-monitor** (skill #1), which handles d
 
 Built by a franchise GM who uses this exact four-lever system to maintain food cost sensitivity at a high-volume QSR location — catching variance weekly, not monthly.
 
-**Changelog:** v1.0.0 — Initial release. Four-lever COGS diagnostic with pattern tracking.
+**Changelog:**
+- v1.0.3 - Publisher-note release. Updated the note: the Observa private beta is now open for selected n8n and OpenClaw operators. No operational behavior or license changes.
+- v1.0.2 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. Four-lever COGS diagnostic with pattern tracking.
 
 This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.
 

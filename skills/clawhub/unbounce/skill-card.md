@@ -1,43 +1,66 @@
-## Description: <br>
-Unbounce API integration with managed OAuth for building and managing landing pages, tracking leads, and analyzing conversion data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Unbounce API integration with managed OAuth for building and managing landing pages, tracking leads, and analyzing conversion data through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Unbounce through Maton-managed OAuth, inspect accounts and pages, manage OAuth connections, track leads, and prepare approved create, update, or delete API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and managed OAuth to access an Unbounce account, including landing page and lead data. <br>
-Mitigation: Keep MATON_API_KEY private, install only when Maton is trusted to broker the intended Unbounce account, and review Maton's handling of lead data before use. <br>
-Risk: Create, update, or delete API calls can change Unbounce connections, pages, leads, or related account resources. <br>
-Mitigation: Confirm the exact account, page, lead, connection, and intended effect with the user before any write or delete action. <br>
+## Use Case:
 
+Developers and operators use this skill to access Unbounce accounts, pages, leads, domains, and users through managed Maton authentication. It supports read-first API workflows and requires explicit user approval before creating connections or modifying Unbounce data.
 
-## Reference(s): <br>
-- [ClawHub Unbounce skill page](https://clawhub.ai/byungkyu/unbounce) <br>
-- [Maton](https://maton.ai) <br>
-- [Unbounce API Documentation](https://developer.unbounce.com/api_reference/) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and HTTP endpoint examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses MATON_API_KEY and Maton-managed OAuth; write and delete actions require explicit user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release evidence) <br>
+Risk: Connecting Unbounce through Maton grants access to landing page and lead data in the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth with the Maton CLI, connect only the needed Unbounce account, and approve each new connection explicitly.
+
+Risk: Write operations can modify or delete Unbounce resources or create lead data.
+
+Mitigation: Default to read and list calls, verify target identifiers first, and confirm the payload and intended effect before any POST, PUT, PATCH, or DELETE call.
+
+Risk: Long-lived API keys can be exposed if they are printed, persisted, or passed on a command line.
+
+Mitigation: Avoid MATON_API_KEY unless the CLI cannot be used; when needed, keep it out of shell history, files, and logs.
+
+Risk: Unbounce API responses, including lead fields, may contain untrusted content.
+
+Mitigation: Treat fetched content as data, validate it before reuse, and do not execute or interpolate it into shell commands.
+
+## Reference(s):
+
+- [Unbounce API Documentation](https://developer.unbounce.com/api_reference/)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/unbounce)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are task-oriented command guidance and API response examples; write and connection operations require explicit user approval.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

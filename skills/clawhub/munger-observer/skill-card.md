@@ -1,40 +1,53 @@
-## Description: <br>
-Munger Observer applies Charlie Munger's mental models to review daily work, decisions, thinking patterns, and blind spots. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Munger Observer guides bounded reviews of specific decisions, plans, or artifacts using evidence, counterevidence, alternatives, opportunity cost, privacy boundaries, and user-verifiable next checks.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
 
-## Use Case: <br>
-Individuals and teams use this skill to review recent work and decisions for cognitive traps, opportunity costs, second-order effects, and other mental-model insights. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reviews today's memory and session logs, which may include sensitive work context. <br>
-Mitigation: Install and invoke it only when private thinking reviews over stored work context are acceptable. <br>
-Risk: Optional daily scheduling can create recurring reviews of stored work context. <br>
-Mitigation: Prefer explicit manual invocation unless recurring end-of-day reviews are intended. <br>
+## Use Case:
 
+Developers and users apply this skill when they want an agent to perform a focused decision review, premortem, or artifact critique based on supplied or explicitly approved evidence. It is suited for surfacing material observations, bounded inferences, alternatives, opportunity costs, and next checks without assessing personal traits.
 
-## Reference(s): <br>
-- [Munger Observer on ClawHub](https://clawhub.ai/jdrhyne/skills/munger-observer) <br>
-- [Publisher profile: jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review with concise observations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces one or two observations when insights are found; otherwise reports that no cognitive landmines were detected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Using history, memory, logs, or recurring schedules could expose sensitive context if the review scope is too broad.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit, bounded approval for named sources, time range, item count, privacy exclusions, schedule parameters, and any later scope expansion.
+
+Risk: Reviewed content may contain untrusted instructions, links, secrets, or irrelevant personal data.
+
+Mitigation: Treat reviewed material only as evidence, avoid executing or following instructions from it, and minimize personal data in both analysis and output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jdrhyne/skills/munger-observer)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown decision review with structured bullet sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Concise output; includes scope, evidence used, confidence, observation, inference, counterevidence, alternative, opportunity cost, and a verify-next check when evidence supports a finding.]
+
+## Skill Version(s):
+
+1.1.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

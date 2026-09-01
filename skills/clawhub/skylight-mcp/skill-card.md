@@ -1,42 +1,60 @@
-## Description: <br>
-Read and manage a signed-in Skylight Calendar family hub, including calendar events, chores, reward stars, shared lists, frames, and device information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read and manage a signed-in user's Skylight Calendar family hub, including calendar events, chores and reward stars, shared lists, meal plans, and frame-related account data.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and household administrators use this skill through an agent to inspect and update their own Skylight Calendar family hub data, including events, chores, reward stars, shared lists, frames, and devices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ClawScan security summary reports an unpinned install path and broader live-account tool access than the submitted description discloses. <br>
-Mitigation: Pin and review the npm package version before use, and only enable the server after reviewing the exposed Skylight tools. <br>
-Risk: The skill requires Skylight account credentials and can change live family hub data. <br>
-Mitigation: Use project-scoped configuration, set SKYLIGHT_FRAME_ID when possible, and require explicit user confirmation before deletes, bulk changes, uploads, member or account changes, and calendar changes. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent read and update a Skylight family hub through the user's own signed-in Skylight account. It is suited for managing family calendars, chores, rewards, shared lists, meals, and related frame information from conversational requests.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/skylight-mcp) <br>
-- [Skylight](https://www.ourskylight.com) <br>
-- [skylight-mcp npm package](https://www.npmjs.com/package/skylight-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration examples, shell commands, and MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Skylight email and password environment variables; tool actions are scoped to a Skylight frame.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.6 (source: server release metadata) <br>
+Risk: The skill requires primary Skylight account credentials and can access sensitive family hub data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that access is acceptable, keep configuration files out of source control and backups where possible, and restrict file permissions.
+
+Risk: Write-capable tools can change calendars, chores, shared lists, meals, and related family hub data.
+
+Mitigation: Review ambiguous or write-capable requests before allowing action, and treat dry-run responses as pending until the same call is re-issued with confirmation.
+
+Risk: The described capabilities include media, messages, frame, member, and device data beyond the main discovery summary.
+
+Mitigation: Review the installed MCP server's requested tools and account scope before deployment, especially in shared family environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/skylight-mcp)
+- [Skylight Calendar](https://www.ourskylight.com)
+- [npm package](https://www.npmjs.com/package/skylight-mcp)
+- [Source repository](https://github.com/chrischall/skylight-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, configuration, API calls, guidance]
+
+**Output Format:** [Markdown or text with JSON configuration examples and MCP tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run responses for recurrence-scoped writes that require explicit confirmation before action.]
+
+## Skill Version(s):
+
+0.9.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

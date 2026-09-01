@@ -58,6 +58,7 @@ The first tool call prints a pair code to approve in the Transporter extension p
 | `tock_get_availability` | A venue's bookable calendar: experiences, prices, open dates/times. |
 | `tock_list_reservations` | The signed-in user's purchases / reservations (needs a signed-in tab). |
 | `tock_get_profile` | The signed-in user's profile (needs a signed-in tab). |
+| `tock_verify_reservation` | After a booking attempt, re-query the account and return `confirmed` / `cancelled` / `not_found` (needs a signed-in tab). Use this instead of eyeballing a success screen. |
 | `tock_healthcheck` | Round-trip the bridge; reports status + the pair code on first run. |
 
 ## Typical flow
@@ -67,8 +68,34 @@ The first tool call prints a pair code to approve in the Transporter extension p
 3. `tock_get_availability { slug: "alinea", date: "2026-07-10", party_size: 2 }` → see experiences and open dates/times.
 4. To book, open `exploretock.com/<slug>` — reservations are prepaid tickets and are completed on Tock.
 
+## Booking verification protocol
+
+Booking happens outside these tools (on exploretock.com, by hand or by UI
+automation), but **verification is this server's job**. A booking counts as
+**confirmed** only when BOTH hold:
+
+1. a confirmation ID, receipt URL, or confirmation email was captured, **and**
+2. `tock_verify_reservation { venue, date, partySize, bookedMinutesAgo }` returns
+   verdict `confirmed`.
+
+Use `tock_verify_reservation` rather than reading `tock_list_reservations`
+yourself: it checks the canceled and past lists too (a created-then-voided
+booking appears only in `canceled`), and it applies the lag rule below for you,
+returning `recheckAdvised: true` when an absence is still inconclusive.
+
+Anything less — including a screenshot of a success screen — must be reported
+as **"attempted, unverified."** Two Tock-specific traps make the stricter rule
+non-negotiable:
+
+- The post-booking modal is not proof: a confirm submitted with a stale cart
+  is a silent no-op that still renders the success modal.
+- The reservations backend (`PatronReservationHistory`) lags the Reservations
+  tab by **minutes**. A single immediate re-read proving absence proves
+  nothing; re-query after a couple of minutes (and once more before giving a
+  verdict).
+
 ## Notes
 
 - **Read-only.** No booking, cancelling, or payment — Tock reservations are prepaid/Turnstile-gated checkouts left to the site.
-- **Discovery needs no login.** Only `tock_list_reservations` / `tock_get_profile` require a signed-in exploretock.com tab.
+- **Discovery needs no login.** Only `tock_list_reservations`, `tock_get_profile` and `tock_verify_reservation` require a signed-in exploretock.com tab.
 - Errors are actionable: a Cloudflare challenge asks you to clear it in the signed-in tab; a signed-out account tool asks you to sign in.

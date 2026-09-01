@@ -1,45 +1,60 @@
-## Description: <br>
-Captures dialogue learnings, tone mismatches, escalation failures, and conversation-quality issues so agents can review and promote proven conversation patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures redacted dialogue learnings, tone mismatches, escalation failures, and conversation quality issues in local .learnings/ files, with optional project-scoped reminder hooks and human-reviewed promotion guidance.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers and agent operators use this skill to capture conversation failures, tone mismatches, hallucinations, escalation gaps, and feature requests into learning files, then promote recurring patterns into project or workspace memory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent conversation logs can capture sensitive or private conversation data. <br>
-Mitigation: Use redacted summaries, do not store secrets or private user/customer data, and keep learning files project-scoped. <br>
-Risk: Hook reminders and promoted learnings can broadly influence future agent behavior. <br>
-Mitigation: Require human review before promoting logs into AGENTS.md, SOUL.md, TOOLS.md, CLAUDE.md, Copilot instructions, or generated skills. <br>
-Risk: Global hook activation can carry conversation-learning behavior into unrelated workspaces. <br>
-Mitigation: Prefer opt-in, project-scoped hook configuration with narrow matchers, dedupe, and rate limiting. <br>
+## Use Case:
 
+Developers and conversational-agent operators use this skill to record dialogue failures, tone mismatches, hallucinations, escalation gaps, context loss, and requested conversation capabilities as local markdown learnings. They can later review recurring patterns and promote proven guidance into agent prompt or workspace files only after a human-reviewed diff.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jose-compu/self-improving-conversation) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or appends local learning logs when the agent follows the workflow; optional hooks emit reminder text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and user changelog) <br>
+Risk: Learning files may contain sensitive conversation excerpts or personal data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep .learnings/ local or gitignored unless entries are reviewed, and redact names, account data, secrets, regulated content, and raw transcripts before anything is stored or promoted.
+
+Risk: Optional hooks can persist across sessions and may add reminders more broadly than intended if configured too widely.
+
+Mitigation: Keep hooks opt-in, project-scoped, and narrowly matched; avoid global or user-level hook installation unless it has been explicitly reviewed.
+
+Risk: Promoting captured patterns into prompt or workspace files can introduce incorrect or misleading conversation guidance.
+
+Mitigation: Promote only proven patterns after explicit human review of a diff.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jose-compu/skills/self-improving-conversation)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown entries with inline shell commands and JSON hook snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or updates local .learnings/ files and proposes reviewed diffs for promotion; optional hooks emit reminder text.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

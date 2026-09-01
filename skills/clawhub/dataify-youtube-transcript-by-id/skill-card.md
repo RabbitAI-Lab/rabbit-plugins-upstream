@@ -1,41 +1,56 @@
-## Description: <br>
-Dataify YouTube Transcript By ID submits Dataify Builder jobs to collect YouTube subtitles or transcripts by video ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect subtitles, captions, or transcript text for a known YouTube video ID.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to configure and submit YouTube transcript collection jobs through Dataify, then receive the task ID, status, and dashboard guidance for managing results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a saved DATAIFY_API_TOKEN to submit Dataify Builder jobs. <br>
-Mitigation: Review parameters before submission and save the token locally only when future reuse is intended. <br>
-Risk: Submitted jobs send YouTube video IDs and subtitle settings to Dataify for processing. <br>
-Mitigation: Confirm the video IDs, subtitle language, subtitle type, selected-only setting, and file name before creating the task. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify jobs for YouTube subtitle, caption, or transcript collection when they already know the target video ID. The skill can wait for the asynchronous task and return the collected result by default.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-transcript-by-id) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown parameter tables, command examples, and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, submitted parameters, dashboard URL, and guidance after successful task creation; it does not return transcript files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill contacts Dataify and may consume account credits when transcript collection is requested.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only with a user-owned DATAIFY_API_TOKEN, and review the target video ID and scope before submission.
+
+Risk: Implicit invocation is enabled, so ambiguous Dataify transcript requests could trigger a collection flow.
+
+Mitigation: Ask for clarification when the target or intent is unclear, especially before submitting multiple video IDs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-transcript-by-id)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify API token login](https://dashboard.dataify.com/login?utm_source=skill)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with command examples and JSON task/result output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-owned DATAIFY_API_TOKEN and a YouTube video ID; may wait for asynchronous task completion.]
+
+## Skill Version(s):
+
+1.3.0 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

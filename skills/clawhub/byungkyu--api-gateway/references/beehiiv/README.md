@@ -42,6 +42,8 @@ GET /beehiiv/v2/publications/{publication_id}/subscriptions/{subscription_id}
 GET /beehiiv/v2/publications/{publication_id}/subscriptions/by_email/{email}
 ```
 
+> **⚠ This endpoint puts a subscriber's email address in the URL path.** Unlike a request body, a URL is routinely recorded in access logs, proxy and CDN logs, monitoring and error-tracking tools, and command history — so calling this leaves a real person's email address in more places than the API call itself. URL-encode the address (`@` becomes `%40`), look up one subscriber the user actually named rather than probing addresses to see who is subscribed, and do not build lists of subscribers this way. Prefer the subscription ID (`.../subscriptions/{subscription_id}`) when you already have it. Subscriber records are personal data belonging to the publication's readers: retrieve only what the task needs and avoid echoing full addresses back in output where they are not required.
+
 #### Create Subscription
 ```bash
 POST /beehiiv/v2/publications/{publication_id}/subscriptions

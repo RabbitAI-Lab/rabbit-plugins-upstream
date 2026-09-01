@@ -31,7 +31,7 @@ Flat-rate generalist: four actions, all **1 credit fixed** — person enrichment
 ```bash
 # Only on rows where cargo.enrichBusinessFundingAndAcquisitions missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"getFunding","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"getFunding"}' \
   --records '[{"domain":"acme.com"},{"domain":"globex.com"}]' \
   --wait-until-finished
 ```
@@ -40,7 +40,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"findEmail"}' \
   --records '[{"firstName":"Alice","lastName":"Smith","company":"Acme","findEmailV2Country":"France"}]' \
   --wait-until-finished
 ```
@@ -65,6 +65,13 @@ Every hit still flows to VERIFY: free pre-cull, then `waterfall.verifyEmail` (0.
 - `enrichPerson` / `enrichCompany` — **ENRICH, fallback rungs** behind the stack (`cargo` → `waterfall` → `peopleDataLabs`).
 - `getFunding` — **SIGNAL (funding), fallback** behind `cargo.enrichBusinessFundingAndAcquisitions` (0.5).
 
+## Recurring use
+
+The one action here with a real monitor shape is `getFunding` — funding is an event stream, not a static field.
+
+- **Scheduled pull:** re-run `getFunding` (1) **weekly** on the watched-companies segment as the fallback rung behind `cargo.enrichBusinessFundingAndAcquisitions` (0.5), per [`../recipes/funding-watch.md`](../recipes/funding-watch.md); cadence defaults in [`../recipes/save-as-play.md`](../recipes/save-as-play.md). Diff each pull against the stored funding fields so only *changed* rows trigger paid downstream steps.
+- **In-play gate:** the other three actions are per-record enrichment — `findEmail` only where `email` is still empty, `enrichPerson` / `enrichCompany` only where their target profile/firmographic fields are unfilled. Re-running them on a timer re-bills stable data.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

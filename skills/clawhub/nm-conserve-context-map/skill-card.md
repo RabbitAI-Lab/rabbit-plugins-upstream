@@ -1,41 +1,58 @@
-## Description: <br>
-Generates a compressed project context map to avoid expensive Read/Grep calls at session start or before implementing features in an unfamiliar codebase. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a compressed project context map to avoid expensive Read/Grep calls at session start or before implementing features in an unfamiliar codebase.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect an unfamiliar codebase, identify structure, dependencies, entry points, routes, environment variables, and high-impact files, and then guide follow-up reads with a compact project overview. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repository scans can inspect broad project structure and surface environment variable references. <br>
-Mitigation: Run it only on intended project roots and review generated context before sharing it outside the project team. <br>
-Risk: Output and wiki modes can create local files. <br>
-Mitigation: Confirm the destination path or mode before requesting saved output. <br>
+## Use Case:
 
+Developers and engineering-focused agents use this skill to quickly understand a project before exploration or implementation work. It summarizes structure, dependencies, entry points, routes, environment variables, schemas, and high-blast-radius files so subsequent file reads can be targeted.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-context-map) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, files, guidance] <br>
-**Output Format:** [Markdown project context map with optional JSON output and local wiki files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an explicit output file or .codesight wiki articles when those modes are requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+Risk: The skill scans the current project to build structural context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in repositories where project-structure scanning is intended, and review the generated context before relying on it for implementation decisions.
+
+Risk: The scanner may create .codesight files that affect repository cleanliness.
+
+Mitigation: Run with --no-wiki when persistent wiki files are not wanted, or add .codesight/ to .gitignore before use.
+
+Risk: Broad trigger words may invoke the skill during general codebase exploration.
+
+Mitigation: Confirm that a context-map scan is appropriate before running scanner commands in sensitive or change-controlled workspaces.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-context-map)
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON scanner output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Default scanner output targets a compact project map; options can emit JSON, write to a file, select one section, or adjust the token cap.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

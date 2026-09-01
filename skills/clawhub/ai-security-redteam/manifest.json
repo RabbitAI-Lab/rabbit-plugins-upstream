@@ -1,0 +1,80 @@
+{
+  "schema": "ownership-attestation/1.0",
+  "package": "AI安全与红队测试",
+  "version": "1.0.0",
+  "author": "注册老炮",
+  "year": "2026",
+  "timestamp_utc": "2026-08-27T16:25:29.199325+00:00",
+  "timestamp_local": "2026-08-28T00:25:29.199334",
+  "package_fingerprint_sha256": "d6ac9c19d0b2e057d5b615143efd788c711c3c4634f98bfa9ebe654479fd271c",
+  "files": [
+    {
+      "path": "LICENSE.md",
+      "sha256": "e8a66e30b55e997de5fca2cb78bbf2bdabd1a50bc739145dcac48e08b748843d"
+    },
+    {
+      "path": "SECURITY_AUDIT.md",
+      "sha256": "9ea3d0418f111dfc5af227c7c9c1233606ab0308d4f83b920301a1872a10abcf"
+    },
+    {
+      "path": "SKILL.md",
+      "sha256": "2f8fa73c21a69b5aff11f38ed1686c69009e325ef6076e7fe141bbdef68dd7bd"
+    },
+    {
+      "path": "references/01-AI安全风险全景.md",
+      "sha256": "998f1f0e0ef9f33a089971c540f024ecd8d8e7f98b349ab72213cac5be86bc03"
+    },
+    {
+      "path": "references/02-红队测试流程.md",
+      "sha256": "4b66033760821b308e8ca5fe273237b400afad8ff2b9777e2d98bb02f491ef57"
+    },
+    {
+      "path": "references/03-提示注入测试.md",
+      "sha256": "b3a9d3073a84fb44cd71da70ecd5e5f608427dc33da866c279564f255aca8c0b"
+    },
+    {
+      "path": "references/04-越权与逃逸测试.md",
+      "sha256": "ef57dbd7af6a40cfb9bce0d4e741f1ee11113ecdfcba3fcddf97285c89f856b2"
+    },
+    {
+      "path": "references/05-数据与隐私测试.md",
+      "sha256": "4a515e841a3e2062a978c2a6ad993ba60d9ae1dbdb4b73966664a43ce7d50524"
+    },
+    {
+      "path": "references/06-幻觉与质量测试.md",
+      "sha256": "db7c2db60d0a39686d46b9b11fbdcb71cc280b6d5b0385949f268405c81c4b06"
+    },
+    {
+      "path": "references/07-供应链与拒绝服务.md",
+      "sha256": "6f097072cf5f695bb1c532605e406aef753beebdccbff32e547b549c8674c716"
+    },
+    {
+      "path": "references/08-报告与修复.md",
+      "sha256": "53b2c8e1978a03382d19e690bd9bd06c8b655dcb8ea4c0ff46e603bc2f236f9b"
+    },
+    {
+      "path": "references/09-FAQ.md",
+      "sha256": "f93b6e56e117f8cf84caedf4f5d0754a93a8b2ee988d9a07b7373cb2fa92b013"
+    },
+    {
+      "path": "tools/ai_redteam_toolkit.py",
+      "sha256": "b09c8bcf5f9fd939554749caeae912f245479f8bfb6ee84e8953fd979d354def"
+    },
+    {
+      "path": "verify/ai_redteam_quality_test.py",
+      "sha256": "ae4458458d80482364f6c1cf62ed3b433614c53bba5d36e82b14bdd943f63927"
+    },
+    {
+      "path": "verify/gen_security_radar.py",
+      "sha256": "148e883a1085d732f4504fcdf8601578a48378cc44fc837cc7a2cab2cf390d08"
+    },
+    {
+      "path": "verify/security-radar.svg",
+      "sha256": "7c29bf1e38fbaffc6fcf35bff112ceaa8515b89eb3261564984126335f116e5d"
+    },
+    {
+      "path": "verify/security_results.json",
+      "sha256": "025b16e33052696d766f0c80869a84e5d2024b15e17b98fc941630e28f68b055"
+    }
+  ]
+}

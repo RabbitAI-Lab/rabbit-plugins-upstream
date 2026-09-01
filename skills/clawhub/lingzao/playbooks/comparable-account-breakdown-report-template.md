@@ -34,13 +34,13 @@ Default deep-report deliverable:
 
 When a full comparable-account report is generated, create both HTML and Word whenever tooling is available. They must come from the same report source. Word is the official shareable deliverable; HTML is the browser preview. If only one format can be created, explain why and prefer Word.
 
-Do not generate a full Word/HTML report by default after one light lookup. First give the short decision summary. If the user wants a full report, explain that it becomes a deeper comparable-account breakdown and may require more Lingzao searches/credits because it needs to inspect more notes and possibly deeper content.
+Do not generate a full Word/HTML report by default after one light lookup. First give the short decision summary. If the user wants a full report, explain that it becomes a deeper comparable-account breakdown and may require more Lingzao searches because it needs to inspect more notes and possibly deeper content.
 
 User-facing upgrade explanation:
 
 如果你只想先判断这个账号值不值得学，我可以先按轻量拆解给你结论；如果你想生成正式报告，就会进入深度拆解。我会同时给你 HTML 预览和 Word 文档：HTML 方便你先看结构，Word 方便你转发给朋友、客户或团队。深度拆解会多看它的近期内容、代表爆款、封面标题、内容结构、可学和不可照抄部分，必要时还会继续看单篇正文、评论区或同阶段对标。
 
-积分上也先说清楚：轻量看一个主页近期内容通常属于基础查看；正式报告如果要用主页深度解析，20 条作品是 50 credits，40 条作品是 100 credits。如果继续打开单篇详情或评论区，会按对应查看范围另外计算。我会先确认范围，不会直接替你扩大搜索。
+范围上也先说清楚：轻量版只看一个主页的近期内容；正式报告可以用 20 条作品做标准深度解析，或用 40 条作品做更深的报告。如果还要打开单篇详情或评论区，我会先确认新增范围，不会直接替你扩大搜索。
 
 The deep report should clearly tell the user what they will get:
 

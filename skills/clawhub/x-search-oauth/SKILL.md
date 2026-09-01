@@ -1,48 +1,44 @@
 ---
 name: x-search-oauth
-description: "Search X/Twitter with OAuth-backed xAI x_search; includes optional xso CLI companion guidance."
-homepage: https://github.com/LeoStehlik/x-search-oauth
+description: "Search X/Twitter through OpenClaw's native OAuth-backed xAI x_search tool. Includes a JS CLI wrapper."
+homepage: https://docs.openclaw.ai/providers/xai
 metadata:
   openclaw:
     emoji: "X"
     requires:
       plugins: ["xai"]
       tools: ["x_search"]
-    install:
-      - id: "node"
-        kind: "node"
-        package: "x-search-oauth"
-        bins: ["xso", "x-search-oauth"]
-        label: "Install xso CLI companion (npm)"
-  version: "0.2.3"
 ---
 
 # X Search OAuth
 
 Use when the user asks to search X/Twitter, inspect posts, find X trends, monitor AI/tech chatter, look up a post/thread, gather X citations, or use the `x-search-oauth` / `xso` CLI.
 
-## OpenClaw Skill Path
+## Use Native OpenClaw Tooling
 
-Inside OpenClaw, use the native `x_search` tool exposed by the bundled `xai` plugin when available.
+Use the native `x_search` tool exposed by OpenClaw's bundled `xai` plugin.
 
 Do not ask for `XAI_API_KEY`.
+Do not call the xAI Responses API directly.
 Do not use unofficial API-key-only X search skills when native `x_search` is available.
-Do not use scraping paths.
 
-If `x_search` is unavailable inside OpenClaw, tell the user that the bundled xAI plugin must be enabled and signed in. Keep setup instructions minimal unless the user asks for exact commands.
-
-## CLI Companion
-
-The same GitHub repo also ships `xso`, a standalone Node.js CLI for human terminal use. ClawHub installs this skill; OpenClaw can also offer the `xso` CLI as an optional Node companion binary via the skill metadata.
-
-For terminal use:
+If `x_search` is unavailable, tell the user to enable/sign in with the bundled xAI plugin:
 
 ```bash
-xso auth
-xso "AI coding agents" --from-date YYYY-MM-DD
+openclaw plugins enable xai
+openclaw onboard --auth-choice xai-oauth
 ```
 
-The CLI performs xAI device-code OAuth directly and does not require OpenClaw Gateway. OAuth state is stored under the user's config directory, normally `~/.config/x-search-oauth/auth.json`.
+For command-line use, the repo ships a JavaScript CLI:
+
+```bash
+xso --query "AI coding agents" --from-date YYYY-MM-DD
+xso --query "OpenClaw 2026.5.19" --handle openclaw --json
+x-search-oauth auth
+x-search-oauth doctor
+```
+
+The CLI calls OpenClaw Gateway `tools.invoke` with `name: "x_search"`; auth and OAuth session handling remain inside OpenClaw.
 
 ## Query Patterns
 

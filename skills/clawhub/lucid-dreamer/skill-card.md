@@ -1,48 +1,64 @@
-## Description: <br>
-Lucid Dreamer schedules an agent to review recent memory notes, detect stale facts, unresolved tasks, recurring issues, and optional cleanup candidates, then produce review reports or memory updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lucid Dreamer helps an AI agent review workspace memory and recent daily notes on a schedule, producing reports and optional memory updates for stale facts, unresolved todos, recurring problems, decisions, contradictions, and cleanup opportunities.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Developers and agent users with markdown-based long-term memory use Lucid Dreamer to run scheduled memory hygiene, generate review reports, and optionally apply high-confidence memory updates. It is most appropriate when the workspace owner is comfortable with a scheduled agent reading personal or project memory notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A scheduled agent can read personal or workspace memory notes. <br>
-Mitigation: Run it only in workspaces intended for memory maintenance, and avoid markdown workspaces containing plaintext secrets or credentials. <br>
-Risk: Optional auto-apply, session debrief, and cleanup behavior can directly change long-term memory and create local commits. <br>
-Mitigation: Review the nightly and debrief prompts before enabling cron, keep auto-apply and aggressive cleanup disabled unless accepted, and remove direct-write or auto-commit steps if review-only operation is required. <br>
-Risk: Incorrect high-confidence updates could pollute long-term memory. <br>
-Mitigation: Review generated reports and source citations before accepting suggestions, and use local git history to revert unwanted changes. <br>
+## Use Case:
 
+Developers and agent users use this skill to keep long-term memory files current by generating scheduled review reports, tracking suggestions, and optionally applying high-confidence memory changes.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/robbyczgw-cla/lucid-dreamer) <br>
-- [README](README.md) <br>
-- [Architecture](ARCHITECTURE.md) <br>
-- [Lucid configuration](config/lucid.config.json) <br>
-- [Auto-apply configuration](config/auto-apply.md) <br>
-- [Nightly review prompt](prompts/nightly-review.md) <br>
-- [Session debrief prompt](prompts/session-debrief.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, JSON state, configuration snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local memory files and local git commits when optional auto-apply or debrief behavior is enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.8 (source: frontmatter and release evidence) <br>
+Risk: Scheduled runs read USER.md, MEMORY.md, and recent daily notes, which may contain sensitive personal or operational details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set CLAWD_DIR explicitly, avoid storing secrets in plaintext markdown, and use the skill only in workspaces whose memory files are appropriate for summarization.
+
+Risk: The security review reports that the nightly prompt can directly edit and commit long-term memory despite documentation saying auto-apply is off by default.
+
+Mitigation: Keep auto-apply and aggressive cleanup disabled unless unattended edits are intended, and review generated reports, diffs, and local commits regularly.
+
+Risk: On OpenClaw 2.0, Lucid's historical 03:00 schedule can collide with the built-in memory sweep and risk conflicting edits to MEMORY.md.
+
+Mitigation: Disable one memory sweep or schedule Lucid at a different time before enabling nightly automation.
+
+## Reference(s):
+
+- [Lucid Dreamer on ClawHub](https://clawhub.ai/robbyczgw-cla/skills/lucid-dreamer)
+- [README](README.md)
+- [Architecture](ARCHITECTURE.md)
+- [Auto-Apply Configuration](config/auto-apply.md)
+- [Honcho.dev](https://honcho.dev)
+- [Gigabrain](https://github.com/legendaryvibecoder/gigabrain)
+- [Nuggets](https://github.com/NeoVertex1/nuggets)
+- [ByteRover Context Engine PR](https://github.com/openclaw/openclaw/pull/50848)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown review reports, JSON state, and shell/configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces files under the configured workspace path and may propose or apply memory edits depending on configuration.]
+
+## Skill Version(s):
+
+0.8.0 (source: frontmatter, changelog released 2026-08-31, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

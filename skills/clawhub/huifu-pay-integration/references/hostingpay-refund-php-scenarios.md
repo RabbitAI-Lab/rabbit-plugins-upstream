@@ -2,6 +2,8 @@
 
 本文件覆盖托管支付退款与退款查询的 PHP 调用方式。
 
+> 真实请求只使用官方 PHP SDK 的 `BsPayClient::postRequest()`；不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。联调/生产仍须满足共享凭据边界和 DEBUG 硬检查点。
+
 ## 目录
 
 - 发起退款
@@ -27,7 +29,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentHtrefundRequest.php
 use BsPaySdk\request\V2TradeHostingPaymentHtrefundRequest;
 
 $request = new V2TradeHostingPaymentHtrefundRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -46,6 +48,8 @@ $result = $client->postRequest([
         'remark' => '用户取消订单退款',
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 适合场景：
@@ -69,7 +73,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentQueryrefundinfoRequ
 use BsPaySdk\request\V2TradeHostingPaymentQueryrefundinfoRequest;
 
 $request = new V2TradeHostingPaymentQueryrefundinfoRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -80,6 +84,7 @@ $result = $client->postRequest([
     ],
 ]);
 
+$result = $client->postRequest($requestShape);
 $response = $result->getRspDatas()['data'] ?? [];
 $transStat = $response['trans_stat'] ?? 'P';
 ```
@@ -92,7 +97,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentQueryrefundinfoRequ
 use BsPaySdk\request\V2TradeHostingPaymentQueryrefundinfoRequest;
 
 $request = new V2TradeHostingPaymentQueryrefundinfoRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -102,6 +107,8 @@ $result = $client->postRequest([
         'org_hf_seq_id' => $refund->getHuifuSeqId(),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 适合场景：

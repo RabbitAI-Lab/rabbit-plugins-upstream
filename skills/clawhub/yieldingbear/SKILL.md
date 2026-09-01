@@ -1,110 +1,107 @@
 ---
 name: yieldingbear
-description: Use Yielding Bear's unified LLM API for cost arbitrage and intelligent routing. Use when cutting AI costs, routing LLM requests, comparing model pricing, or setting up an OpenClaw agent to use multiple LLM providers. YB routes every request to the cheapest capable model automatically — saving 60-80% vs direct API calls.
-allowed-tools:
-  - Bash
-  - Read
-  - Write
+description: "One API. 100+ LLMs. Smart Routing. Wire OpenClaw/Hermes to Yielding Bear — Grizzly auto-routes, free tier, doctor CLI. Start at https://yieldingbear.com"
+homepage: https://yieldingbear.com
 metadata:
-  author: Yielding Bear
-  version: "1.0.0"
+  author: Yielding Bear LLC
+  version: "2.1.0"
+  openclaw:
+    requires:
+      bins: ["curl", "bash"]
+    primaryEnv: YIELDINGBEAR_API_KEY
+    emoji: "🐻"
 ---
 
-# Yielding Bear — Unified LLM Routing API
+# Yielding Bear
 
-Yielding Bear provides a single unified API that routes every LLM request to the cheapest capable model across 16+ providers — saving 60-80% vs calling OpenAI, Anthropic, or Google directly.
+**One API. 100+ LLMs. Smart Routing.**  
+Built for builders, agents, and SMBs — cheap when it’s easy, frontier when it’s not.
 
-## Setup (First Time Only)
+→ **https://yieldingbear.com**
 
-1. **Get an API key** at https://yieldingbear.com/api
+## Why Yielding Bear
 
-2. **Set environment variable:**
+| | |
+|--|--|
+| **One key** | Drop-in OpenAI-compatible base URL — GPT, Claude, Gemini, Llama, and more |
+| **Smart routing** | `yieldingbear/grizzly-1.0g` picks cost vs capability per request |
+| **Real savings** | Up to ~60–80% vs retail (illustrative) — right model every call |
+| **Honest free** | True $0 upstream free models only — no fake “free” paid rows |
+| **Agents-first** | Free key → usage; **Grizzly Pro $99** when you scale (25M tokens) |
+| **Dashboard** | Keys, spend, models — [developers](https://yieldingbear.com/dashboard?tab=developer) |
+
+## Why this skill
+
+| | |
+|--|--|
+| **1-command install** | Hermes, OpenClaw, or shell — keys mode 600, never in git |
+| **Doctor CLI** | `yb.sh doctor` / `models` / `smoke` — prove the wire before you ship |
+| **Live catalog** | Free tags from live API — not a stale hardcoded list |
+| **Updatable** | `clawhub update yieldingbear` — no fork rot |
+
+## Get started (90 seconds)
+
+1. **Sign up + key** → https://yieldingbear.com/dashboard?tab=developer  
+2. **Install skill**
    ```bash
-   export YIELDINGBEAR_API_KEY="yb_live_your_key_here"
+   clawhub install yieldingbear
+   bash ~/.openclaw/skills/yieldingbear/scripts/install.sh
+   # or: curl -fsSL https://yieldingbear.com/install.sh | bash
+   ```
+3. **Pick a model** (installer prompts) — Grizzly router, a free model, or any paid ID  
+4. **Ship**
+   ```bash
+   bash ~/.openclaw/skills/yieldingbear/scripts/yb.sh doctor
+   bash ~/.openclaw/skills/yieldingbear/scripts/yb.sh models --free
+   bash ~/.openclaw/skills/yieldingbear/scripts/yb.sh smoke
    ```
 
-3. **Save to your shell profile** (optional):
-   ```bash
-   echo 'export YIELDINGBEAR_API_KEY="yb_live_your_key_here"' >> ~/.zshrc
-   source ~/.zshrc
-   ```
-
-## Quick Start — OpenClaw Agents
-
-### Method 1: Direct API calls
+Non-interactive:
 
 ```bash
-curl -X POST https://api.yieldingbear.com/v1/chat/completions \
-  -H "Authorization: Bearer $YIELDINGBEAR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "auto",
-    "messages": [{"role": "user", "content": "Summarize this email: ..."}],
-    "max_tokens": 500
-  }'
+YIELDINGBEAR_API_KEY=yb_live_sk_… \
+YIELDINGBEAR_DEFAULT_MODEL=yieldingbear/grizzly-1.0g \
+  bash scripts/install.sh
 ```
 
-### Method 2: OpenAI-compatible drop-in replacement
+## Wire once
+
+| | |
+|--|--|
+| Base URL | `https://yieldingbear.com/api/v1` |
+| Key | `yb_live_sk_…` (customer key only — never platform secrets) |
+| Default router | `yieldingbear/grizzly-1.0g` |
 
 ```python
 from openai import OpenAI
-
 client = OpenAI(
-    api_key="yb_live_your_key",
-    base_url="https://api.yieldingbear.com/v1"
+    api_key="yb_live_sk_…",  # from dashboard
+    base_url="https://yieldingbear.com/api/v1",
 )
-# Same SDK. Same code. 60-80% less cost.
+client.chat.completions.create(
+    model="yieldingbear/grizzly-1.0g",
+    messages=[{"role": "user", "content": "hi"}],
+)
 ```
 
-## Model Routing
+## Links
 
-| Task Type | Routes To | Cost/1M |
-|-----------|-----------|---------|
-| Summaries, classification | Llama 3.1 8B | $0.04 |
-| Email drafting, formatting | DeepSeek V3 | $0.07 |
-| General chat, code | GPT-4o-mini | $0.15 |
-| Complex reasoning | YB Sentinel 70B | $0.06 |
-| Fast completions | Gemini 2.0 Flash | $0.10 |
+- Site: https://yieldingbear.com  
+- How it works: https://yieldingbear.com/how-it-works  
+- Docs: https://yieldingbear.com/docs  
+- Pricing / Pro: https://yieldingbear.com/pricing  
+- Keys: https://yieldingbear.com/dashboard?tab=developer  
+- ClawHub: https://clawhub.ai/yieldingbear/yieldingbear  
+- Source: https://github.com/yieldingbear/yieldingbear-clawhub-skill  
 
-Override routing:
-```json
-{ "model": "claude-3.5-haiku", "routing": { "capabilities": ["reasoning"] } }
-```
+## Security (hard rules)
 
-## OpenClaw Agent Integration
+- **Never** commit real `yb_live_sk_*`, OpenRouter, Supabase service role, LiteLLM, or ClawHub tokens.
+- Customer keys live only in `~/.hermes|openclaw|config/yieldingbear/secrets/` (mode 600).
+- Free path = true free upstream only. Paid models require balance.
 
-### For OpenClaw sub-agents
-
-Set in environment before spawning:
-```bash
-export YIELDINGBEAR_API_KEY="yb_live_..."
-```
-
-The agent uses YB automatically when calling OpenAI-compatible endpoints.
-
-### For custom tools and scripts
+## Update
 
 ```bash
-RESULT=$(curl -s -X POST "https://api.yieldingbear.com/v1/chat/completions" \
-  -H "Authorization: Bearer $YIELDINGBEAR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"model":"auto","messages":[{"role":"user","content":"Analyze: $1"}]}')
-echo "$RESULT"
+clawhub update yieldingbear
 ```
-
-## Cost Comparison
-
-| Task | Direct OpenAI | Via YB | Savings |
-|------|-------------|--------|---------|
-| 1M simple summaries | $150 | $40 | 73% |
-| 1M email drafts | $300 | $60 | 80% |
-| 1M chat completions | $500 | $150 | 70% |
-| 1M reasoning tasks | $3,000 | $300 | 90% |
-
-## Key Links
-
-- **API Docs**: https://yieldingbear.com/developers
-- **Yields page**: https://yieldingbear.com/yields
-- **How it works**: https://yieldingbear.com/how-it-works
-- **Dashboard**: https://yieldingbear.com/dashboard
-- **Get API key**: https://yieldingbear.com/api
