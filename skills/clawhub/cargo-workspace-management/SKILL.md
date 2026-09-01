@@ -1,8 +1,8 @@
 ---
 name: cargo-workspace-management
-description: Manage workspace users, API tokens, folders, roles, and submit reports to workspace management using the Cargo CLI. Use when the user wants to invite or manage workspace members, create or rotate API tokens, organize resources into folders, inspect workspace roles and permissions, or submit a report to workspace management when the CLI fails or is misused.
-version: "1.2.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Administer a Cargo workspace and talk back to the Cargo team — invite and manage members, mint and rotate API tokens, organize plays, tools, and agents into folders, inspect roles, upload batch input files, and file reports. Triggers: \"invite my teammate\", \"create an API token for CI\", \"who has access\", \"organize these into folders\", \"rotate that token\", \"upload this CSV for a batch\" — and for feedback: \"report this bug to Cargo\", \"send feedback to the Cargo team\", \"this CLI command is broken\", \"share this session with Cargo\", \"request a feature\". Most commands need a token with admin access. Skip when: the question is about credits, plans, or invoices — use cargo-billing."
+version: "1.2.2"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -30,11 +30,18 @@ Workspace administration: managing users, API tokens, folders, roles, workspace-
 > See `references/examples/reports.md` for examples of submitting workspace management reports.
 > See `references/examples/sessions.md` for session tracking — the Cargo installer scaffolds the Claude Code SessionStart + Stop + SessionEnd hooks automatically.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
 
-**Admin-only:** user, role, and token writes require a token with admin access on the workspace. Folder writes and `report create` work with non-admin tokens.
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. **Admin-only:** user, role, and token writes require a token with admin access on the workspace. Folder writes and `report create` work with non-admin tokens. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -196,7 +203,7 @@ cargo-ai workspaceManagement session upsert \
 - `--finished` stamps `finished_at = now`. Use `--finished-at <iso>` for an explicit timestamp instead.
 - Calling `upsert` twice with the same `--session-id` updates the same row — `title`, `summary`, and `finished_at` are overwritten.
 
-Returns the upserted session as JSON. The Cargo installer (`curl -fsSL https://api.getcargo.io/install.sh | sh`) wires SessionStart + Stop + SessionEnd hooks that call this command automatically: SessionStart writes a placeholder, the per-turn Stop hook checkpoints the row (no `--finished`), and SessionEnd writes the transcript-driven AI summary with `--finished` — see [`references/examples/sessions.md`](references/examples/sessions.md).
+Returns the upserted session as JSON. The [Cargo installer](https://github.com/getcargohq/cargo-skills#staying-current) wires SessionStart + Stop + SessionEnd hooks that call this command automatically: SessionStart writes a placeholder, the per-turn Stop hook checkpoints the row (no `--finished`), and SessionEnd writes the transcript-driven AI summary with `--finished` — see [`references/examples/sessions.md`](references/examples/sessions.md).
 
 ## Workspace files
 
@@ -204,7 +211,7 @@ Workspace files are CSVs or other data files uploaded for use in batch runs.
 
 ```bash
 # Upload a file
-cargo-ai workspaceManagement file upload --file-path <path-to-file>
+cargo-ai workspaceManagement file upload --file <path-to-file>
 # → Returns s3Filename
 
 # Inspect a file's columns before running a batch

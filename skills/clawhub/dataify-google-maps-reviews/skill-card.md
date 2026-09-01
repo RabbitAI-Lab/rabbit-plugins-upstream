@@ -1,45 +1,58 @@
-## Description: <br>
-Collect Google Maps review and comment information from Google Maps URLs through the Dataify Scraper API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect reviews and comments for a known Google Maps place URL. Do not use for place discovery or general place details without reviews.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to create Dataify collection tasks for Google Maps reviews, preview request parameters, and submit confirmed collection jobs by URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Google Maps URLs and collection parameters to the external Dataify service. <br>
-Mitigation: Install only if this data sharing is acceptable, and review the Markdown confirmation table before approving each API call. <br>
-Risk: A Dataify API token is required and may be provided interactively or through DATAIFY_API_TOKEN. <br>
-Mitigation: Use a scoped token where possible, never paste tokens into shared logs, and avoid permanent environment-variable storage on shared machines. <br>
-Risk: The skill can create external collection tasks through Dataify. <br>
-Mitigation: Confirm parameters before submission and review task status in the official Dataify dashboard after creation. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify collection tasks for reviews from a known Google Maps place URL and retrieve the collected JSON results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-maps-reviews) <br>
-- [Publisher profile](https://clawhub.ai/user/dataify-server) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown confirmation tables, shell commands, and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python and a Dataify API token; submits Google Maps URLs and collection parameters to Dataify after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: The skill sends the target Google Maps URL, review time range, and Dataify API token to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a Dataify token appropriate for this tool and prefer temporary environment setup unless persistent shell storage is intentional.
+
+Risk: Collection tasks may consume Dataify credits, especially for high-volume, multi-page, or multi-input requests.
+
+Mitigation: Confirm consequential scope choices before submission and preserve the returned task ID so timed-out monitoring can resume without resubmitting a paid task.
+
+Risk: The skill is scoped to reviews for a known place URL or identifier and is not intended for place discovery.
+
+Mitigation: Resolve and verify the Google Maps place separately before using this skill for review collection.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-maps-reviews)
+- [Dataify builder endpoint](https://scraperapi.dataify.com/builder?platform=1)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command when asynchronous monitoring times out or is interrupted.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

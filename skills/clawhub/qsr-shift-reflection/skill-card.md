@@ -1,44 +1,55 @@
-## Description: <br>
-Cross-shift continuity and unresolved issue tracking system for restaurant and franchise operators. Captures wins, bottlenecks, and handoffs at end of shift, then actively tracks unresolved urgent items across shifts until they are confirmed closed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cross-shift continuity and unresolved issue tracking system for restaurant and franchise operators. Captures wins, bottlenecks, and handoffs at end of shift, then actively tracks unresolved urgent items across shifts until they are confirmed closed.
 
-## Publisher: <br>
-[mcphersonai](https://clawhub.ai/user/mcphersonai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-CC BY-NC 4.0 with McPherson AI commercial-use clarification <br>
+## Publisher:
 
+[mcphersonai](https://clawhub.ai/user/mcphersonai)
 
-## Use Case: <br>
-Restaurant operators, franchise managers, and shift leads use this skill to capture end-of-shift reflections, create urgent handoff records, surface unresolved items during operator-initiated check-ins, and generate operational digests for a single store or multi-location rollout. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
 
-## Known Risks and Mitigations: <br>
-Risk: Background-tracking wording could be misread as autonomous monitoring. <br>
-Mitigation: Confirm the release states that issue checks run only during operator-initiated shift check-ins or on-demand commands, with no daemon, polling, scheduled alerts, or automatic cross-session monitoring. <br>
-Risk: Shift reflections and open issue records may contain confidential operational details or unnecessary personal information. <br>
-Mitigation: Use operational roles instead of names when possible, omit the listed PII categories, and keep records scoped to the relevant store namespace. <br>
-Risk: Persistent full-store archival depends on a companion memory skill and host-platform controls. <br>
-Mitigation: Verify that the QSR Store Memory Engine is available for persistence, or run in session-only mode; rely on the host platform for authentication, authorization, encryption, audit logging, retention, and deletion. <br>
+## Use Case:
 
+Restaurant and franchise operators use this skill to capture end-of-shift reflections, create structured urgent handoffs, and keep unresolved operational issues visible across shift changes until they are closed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mcphersonai/qsr-shift-reflection) <br>
-- [McPherson AI publisher profile](https://clawhub.ai/user/mcphersonai) <br>
-- [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and structured plain text records for shift reflections, open issue records, issue boards, exports, and weekly digests] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Records are intended to be scoped to a store namespace; persistence depends on the companion QSR Store Memory Engine or the host session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Shift reflections and unresolved operational issues may be persisted in the companion store memory system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the store memory retention, deletion, access control, and audit policies before deployment; use operational roles instead of names and omit unnecessary PII.
+
+Risk: One artifact line says unresolved issue tracking runs continuously in the background, which conflicts with the stated operator-triggered behavior.
+
+Mitigation: Treat follow-up and issue tracking as operator-triggered until the publisher corrects the wording.
+
+## Reference(s):
+
+- [QSR Shift Reflection on ClawHub](https://clawhub.ai/mcphersonai/skills/qsr-shift-reflection)
+- [README](artifact/README.md)
+- [Skill definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured text for shift reflections, open issues, issue boards, exports, and weekly digests.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are store-scoped when the companion memory skill is available and session-only otherwise.]
+
+## Skill Version(s):
+
+2.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

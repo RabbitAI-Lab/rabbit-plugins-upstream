@@ -1,7 +1,25 @@
+---
+name: mailgi
+description: Give an AI agent a real, deliverable email address. Register in one POST with no OAuth and no signup form, then send, receive, read and organise mail over a plain REST API — on a shared handle or your own verified domain.
+version: 1.1.0
+homepage: https://www.mailgi.xyz
+metadata:
+  openclaw:
+    emoji: "📬"
+    envVars:
+      - name: MAILGI_API_KEY
+        required: false
+        description: An existing Mailgi API key. Not needed to get started — an agent registers with no credentials at all and stores the key it gets back.
+---
+
 # mailgi — SKILL FILE
 
 This file teaches you how to use the mailgi email API.
 You are an AI agent. Read this file, then you can send and receive email.
+
+**Skill version 1.1.0 · updated 2026-08-30**
+Canonical copy: https://www.mailgi.xyz/SKILL.md — if yours is older, re-fetch it.
+This file tracks the live API; a stale copy will describe endpoints that changed.
 
 **Base URL:** `https://api.mailgi.xyz`
 **Auth:** `Authorization: Bearer <apiKey>` on all authenticated requests.
@@ -18,6 +36,11 @@ Content-Type: application/json
 
 { "label": "my-agent" }
 ```
+
+Optional fields:
+- `label` — a name for your own reference; shows up in the owner's dashboard.
+- `did` — a W3C DID in `did:key:` format. Only affects which deterministic
+  alias you get. It does **not** enable password-free login (see section 7).
 
 Response:
 ```json
@@ -54,14 +77,23 @@ Authorization: Bearer <apiKey>
 ```
 
 Optional query params:
-- `mailboxId` — filter to a specific folder
+- `mailboxId` — restrict to one folder
 - `limit` — max results (default 20, max 100)
 - `position` — pagination offset (default 0)
 - `sort` — `asc` or `desc` (default `desc`)
 
+**There is no search.** No full-text, subject, sender or date filtering exists —
+any other query param is ignored, not rejected. To find a message, page through
+the list and match it yourself.
+
 Response: `{ messages: [...], total: N, position: N }`
 
 Each message has: `id`, `subject`, `from`, `to`, `receivedAt`, `preview`, `seen`.
+
+**There is no push delivery.** No webhooks, no WebSocket, no long-poll. The only
+way to learn about new mail is to call `GET /v1/mail` again. Poll every few
+seconds when waiting for something specific (a verification code), and every
+minute or two for a background inbox.
 
 **Get full body of a message:**
 
@@ -94,7 +126,17 @@ Optional fields: `cc`, `bcc`, `htmlBody`, `replyTo`.
 
 Response: `{ "messageId": "..." }`
 
-Sending is free. Rate limit: 100 external emails per day per API key.
+Sending is free. Rate limit: 100 external emails per day per API key, plus
+50/hour and 300/day per agent across all its keys. On a custom domain your
+organisation is also capped by domain age: 100/day under three days, 1000/day
+up to thirty, 5000/day after that.
+
+**Attachments are not supported.** There is no `attachments` field — sending one
+does nothing. Send links instead.
+
+**Sending right after registering can fail.** The mailbox is provisioned
+asynchronously; wait a couple of seconds after `register` before your first
+send, and retry once on a 5xx.
 
 ---
 
@@ -135,6 +177,21 @@ Content-Type: application/json
 { "seen": true }
 ```
 
+Rename a folder:
+```
+PATCH /v1/mailboxes/<id>
+Authorization: Bearer <apiKey>
+Content-Type: application/json
+
+{ "name": "Archive" }
+```
+
+Delete a folder:
+```
+DELETE /v1/mailboxes/<id>
+Authorization: Bearer <apiKey>
+```
+
 Delete a message (moves to Trash):
 ```
 DELETE /v1/mail/<id>
@@ -162,27 +219,17 @@ Revoke a key: `DELETE /v1/apikeys/<keyId>`
 
 ---
 
-## 7. DID-based auth (optional)
+## 7. DID-based auth — NOT AVAILABLE YET
 
-If you registered with a `did:key:` DID, you can authenticate without an API key:
+**Do not use this. Use your API key.**
 
-1. Request a challenge:
-```
-POST /v1/auth/challenge
-Content-Type: application/json
+`POST /v1/auth/challenge` and `POST /v1/auth/verify` exist and will return a
+signed token, but **no endpoint accepts that token yet** — authentication is
+API-key-only today, so the token returns `401` everywhere. Registering with a
+`did:key:` DID is supported and does determine your alias address; the
+challenge/response login it implies does not work.
 
-{ "did": "did:key:z6Mk..." }
-```
-
-2. Sign the returned `nonce` with your Ed25519 private key (base64url), then verify:
-```
-POST /v1/auth/verify
-Content-Type: application/json
-
-{ "did": "did:key:z6Mk...", "nonce": "...", "signature": "<base64url Ed25519 sig>" }
-```
-
-Response: `{ "token": "...", "expiresIn": 3600 }` — use as `Authorization: Bearer <token>`.
+This section will describe the real flow once it does.
 
 ---
 
@@ -197,11 +244,31 @@ Common codes:
 - `401` — missing or invalid API key
 - `404` — message or mailbox not found
 - `409` — conflict (e.g. mailbox name already exists)
-- `429` — rate limit exceeded
+- `RATE_LIMITED` — rate limit exceeded
+
+**Match on `error.code`, not on the HTTP status.** Rate limiting currently
+returns `429` on some paths and `500` on others; the `code` is reliable where
+the status is not.
 
 ---
 
-## 9. Health
+## 9. Deleting your account
+
+```
+DELETE /v1/agents/me
+Authorization: Bearer <apiKey>
+```
+
+Revokes every API key and removes the mailbox. Returns `204`.
+
+**This is permanent, and it burns the address.** A deleted address can never be
+registered again — not by you, not by anyone. There is no undo and no support
+path to reverse it. Do not call this to "reset" or "start clean": register a
+second agent instead and simply stop using the first.
+
+---
+
+## 10. Health
 
 ```
 GET /health        — liveness (always 200 if server is up)
@@ -220,7 +287,10 @@ RESP=$(curl -s -X POST https://api.mailgi.xyz/v1/agents/register \
 EMAIL=$(echo $RESP | jq -r .emailAddress)
 KEY=$(echo $RESP | jq -r .apiKey)
 
-# 2. Send a message
+# 2. Send a message.
+# Give the mailbox a moment first — sending in the same breath as registering
+# can 500 while the mail server finishes provisioning. Retry once if it does.
+sleep 3
 curl -s -X POST https://api.mailgi.xyz/v1/mail/send \
   -H "Authorization: Bearer $KEY" \
   -H "Content-Type: application/json" \
@@ -233,7 +303,7 @@ curl -s https://api.mailgi.xyz/v1/mail \
 
 ---
 
-## 10. TypeScript / Node.js SDK
+## 11. TypeScript / Node.js SDK
 
 Install:
 ```bash
@@ -286,7 +356,7 @@ try {
 
 ---
 
-## 11. CLI
+## 12. CLI
 
 Install globally:
 ```bash
@@ -342,6 +412,67 @@ mailgi logout --agent buzzing-falcon --yes
 # Raw JSON output (any command)
 mailgi inbox --agent buzzing-falcon --json
 ```
+
+---
+
+## 13. Custom domains & registration tokens
+
+Everything above registers your agent on the shared `@mailgi.xyz` domain.
+If a human wants their agents to send as `you@theircompany.com` instead,
+that's a **custom domain** — a separate, dashboard-driven feature, not
+something an agent sets up for itself.
+
+**This part is done by a human, in a browser, not by an API call:**
+
+1. They sign in at **https://app.mailgi.xyz** (email + one-time code, or
+   GitHub/Google if configured) and create/join an organization.
+2. They attach their domain and add the DNS records the dashboard shows
+   them (TXT + MX for inbound; once that's verified, DKIM/MAIL-FROM/DMARC
+   records appear for outbound sending — all auto-generated, nothing to
+   configure by hand).
+3. Once the domain shows verified, they create a **registration token**
+   for it (`POST /v1/orgs/:orgId/domains/:domainId/registration-tokens`,
+   requires their dashboard session — not an API key). This returns a
+   token string **shown exactly once**, meant to be handed to an agent.
+
+**This part is you, the agent** — once you're given that token and a
+local part to claim (e.g. "register as `support` on this token"):
+
+```
+POST /v1/agents/register
+Content-Type: application/json
+
+{ "domainToken": "<token from the human>", "localPart": "support" }
+```
+
+Response is the same shape as a normal registration, except
+`emailAddress` is now `support@theircompany.com` instead of a random
+`@mailgi.xyz` handle:
+```json
+{
+  "agentId": "...",
+  "emailAddress": "support@theircompany.com",
+  "aliasAddress": "x7k3mwf2qr5b@theircompany.com",
+  "apiKey": "amb_...",
+  "apiKeyId": "..."
+}
+```
+
+Everything from section 2 onward (profile, inbox, send, mailboxes, API
+keys) works exactly the same afterward — the only difference custom
+domains make is which address you register with. `localPart` must be
+lowercase alphanumeric (`.`/`_`/`-` allowed as separators), 1–64 chars,
+and can't be a reserved name (`postmaster`, `abuse`, etc.) or already
+taken on that domain.
+
+A registration token can mint many agents on the same domain — a human
+might hand you one token and ask you to self-register several teammates
+(`support`, `sales`, `billing`, ...) in one go.
+
+If the token is invalid, revoked, or the domain isn't verified yet, you
+get back a generic `401 Invalid or unusable registration token` —
+deliberately the same error for all three cases, so tell the human to
+check the dashboard rather than guessing which one it is.
 
 ---
 

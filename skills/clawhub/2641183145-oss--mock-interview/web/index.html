@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>模拟面试 · 答题</title>
+<style>
+  :root {
+    --bg: #FFF6E8;
+    --paper: #FFFDF8;
+    --ink: #2D2A26;
+    --ink-soft: #6E675E;
+    --yellow: #FFC93C;
+    --coral: #FF6B5B;
+    --mint: #3EC98F;
+    --blue: #5B8DEF;
+    --purple: #A77DFF;
+    --pink: #FF9EC7;
+    --border: 2.5px solid var(--ink);
+    --shadow: 7px 7px 0 var(--ink);
+    --shadow-sm: 4px 4px 0 var(--ink);
+    --font: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+            "Noto Sans SC", "Source Han Sans SC", system-ui,
+            -apple-system, "Segoe UI", sans-serif;
+    --round: "Yuanti SC", "YouYuan", "幼圆", "PingFang SC",
+             "Microsoft YaHei", sans-serif;
+    --bounce: cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    background-color: var(--bg);
+    background-image: radial-gradient(rgba(45,42,38,.08) 1.6px, transparent 1.6px);
+    background-size: 24px 24px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .shell { max-width: 780px; margin: 0 auto; padding: 28px 20px 90px; }
+
+  /* ---------- 顶栏 ---------- */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 20px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--round);
+    font-weight: 800; font-size: 17px; letter-spacing: .04em;
+  }
+  .brand-mark {
+    width: 34px; height: 34px; border-radius: 11px;
+    background: var(--coral); color: #fff;
+    border: var(--border); box-shadow: 3px 3px 0 var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transform: rotate(-6deg);
+    transition: transform .25s var(--bounce);
+  }
+  .brand:hover .brand-mark { transform: rotate(6deg) scale(1.08); }
+  .topbar-meta {
+    font-size: 13px; font-weight: 700;
+    background: var(--paper); border: 2px solid var(--ink);
+    border-radius: 999px; padding: 5px 14px;
+    box-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(1deg);
+  }
+  .topbar-meta:empty { display: none; }
+
+  /* ---------- 进度(圆点步进) ---------- */
+  .progress { margin-bottom: 24px; }
+  .steps { display: flex; align-items: center; gap: 0; padding: 0 4px; }
+  .step-dot {
+    flex: none;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--paper);
+    border: var(--border);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; font-family: var(--round);
+    color: var(--ink-soft);
+    transition: background .2s, transform .2s;
+    position: relative; z-index: 1;
+  }
+  .step-line {
+    flex: 1; height: 3px; background: var(--ink);
+    opacity: .18; margin: 0 -2px; border-radius: 2px;
+    position: relative; overflow: hidden;
+  }
+  .step-line i {
+    position: absolute; inset: 0; background: var(--ink);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .5s var(--bounce);
+  }
+  .step-line.fill i { transform: scaleX(1); }
+  .step-dot.done {
+    background: var(--yellow); color: var(--ink);
+    animation: dot-pop .45s var(--bounce);
+  }
+  .step-dot.now {
+    background: var(--coral); color: #fff;
+    animation: now-bob 1.6s ease-in-out infinite;
+  }
+  @keyframes dot-pop {
+    0% { transform: scale(.4); } 60% { transform: scale(1.35); } 100% { transform: scale(1); }
+  }
+  @keyframes now-bob {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-4px) scale(1.1); }
+  }
+  .progress-label {
+    margin-top: 10px; font-size: 12.5px; color: var(--ink-soft);
+    display: flex; justify-content: space-between; font-weight: 600;
+  }
+
+  /* ---------- 屏幕切换 ---------- */
+  .screen { animation: pop-in .5s var(--bounce) both; }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(26px) scale(.96) rotate(.8deg); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ---------- 卡片 ---------- */
+  .card {
+    background: var(--paper);
+    border: var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 40px 42px;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 560px) { .card { padding: 26px 22px; } }
+
+  /* 卡片角落的小涂鸦 */
+  .doodle { position: absolute; pointer-events: none; opacity: .9; }
+  .doodle-star { top: 18px; right: 22px; animation: float 4s ease-in-out infinite; }
+  .doodle-squiggle { bottom: 20px; left: 24px; animation: float 5s ease-in-out infinite reverse; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-7px) rotate(10deg); }
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-family: var(--round);
+    font-size: 13px; font-weight: 800; letter-spacing: .1em;
+    background: var(--blue); color: #fff;
+    border: 2px solid var(--ink); border-radius: 999px;
+    padding: 4px 14px; box-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(-1.5deg);
+    margin-bottom: 16px;
+  }
+
+  h1.intro-title {
+    font-family: var(--round);
+    font-size: 32px; margin: 0 0 8px; letter-spacing: .01em;
+  }
+  .intro-sub { color: var(--ink-soft); font-size: 14.5px; margin: 0 0 24px; font-weight: 600; }
+
+  .note-banner {
+    background: #FFF0C9;
+    border: var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px; font-weight: 600;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    transform: rotate(-.5deg);
+  }
+
+  .facts { list-style: none; margin: 0 0 30px; padding: 0; }
+  .facts li {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 11px 0; font-size: 15px;
+    transition: transform .18s var(--bounce);
+  }
+  .facts li:hover { transform: translateX(6px); }
+  .facts li + li { border-top: 2px dashed rgba(45,42,38,.18); }
+  .facts .n {
+    flex: none; width: 30px; height: 30px; border-radius: 10px;
+    border: 2px solid var(--ink);
+    font-family: var(--round);
+    font-size: 14px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 2px 2px 0 var(--ink);
+    transform: rotate(-3deg);
+  }
+  .facts li:nth-child(1) .n { background: var(--yellow); }
+  .facts li:nth-child(2) .n { background: var(--mint); }
+  .facts li:nth-child(3) .n { background: var(--pink); }
+  .facts li:nth-child(4) .n { background: var(--purple); color: #fff; }
+
+  /* ---------- 按钮 ---------- */
+  .btn-primary {
+    appearance: none; cursor: pointer;
+    background: var(--yellow); color: var(--ink);
+    border: var(--border); border-radius: 999px;
+    box-shadow: 5px 5px 0 var(--ink);
+    font-family: var(--round);
+    font-weight: 800; font-size: 17px; letter-spacing: .03em;
+    padding: 15px 34px;
+    transition: transform .13s var(--bounce), box-shadow .13s var(--bounce), background .15s;
+  }
+  .btn-primary:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ink); }
+  .btn-primary:active { transform: translate(4px, 4px); box-shadow: 1px 1px 0 var(--ink); }
+  .btn-primary:disabled {
+    background: #E8E2D6; color: var(--ink-soft);
+    cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 var(--ink-soft);
+  }
+
+  :focus-visible {
+    outline: 3px dashed var(--coral);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  /* ---------- 题目 ---------- */
+  .q-eyebrow {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .q-count {
+    font-family: var(--round);
+    font-size: 16px; font-weight: 800;
+    background: var(--ink); color: var(--bg);
+    border-radius: 999px; padding: 5px 15px;
+    transform: rotate(-1deg);
+  }
+  .q-total { opacity: .55; }
+
+  .tag {
+    display: inline-flex; align-items: center;
+    font-family: var(--round);
+    font-size: 12.5px; font-weight: 800; line-height: 1;
+    padding: 6px 13px; border-radius: 999px;
+    border: 2px solid var(--ink);
+    box-shadow: 2px 2px 0 var(--ink);
+    transition: transform .18s var(--bounce);
+  }
+  .tag:hover { transform: rotate(-3deg) scale(1.06); }
+  .tag-accent { background: var(--purple); color: #fff; transform: rotate(1.5deg); }
+  .tag-muted  { background: #EFE9DC; color: var(--ink-soft); transform: rotate(-1.5deg); box-shadow: none; }
+
+  .q-quote {
+    margin: 0 0 14px;
+    font-size: 14px; font-weight: 600; color: var(--ink);
+    background: #E9F4FF;
+    border: 2px solid var(--ink);
+    border-radius: 16px 16px 16px 4px;
+    padding: 11px 16px;
+    box-shadow: var(--shadow-sm);
+    display: inline-block;
+  }
+  .q-text {
+    font-size: 23px; font-weight: 800; line-height: 1.55;
+    margin: 0 0 20px; letter-spacing: .005em;
+  }
+
+  .probes {
+    border: 2.5px dashed var(--blue);
+    background: #F0F6FF;
+    border-radius: 18px;
+    padding: 15px 18px;
+    margin-bottom: 28px;
+    transform: rotate(.4deg);
+  }
+  .probes-title {
+    font-family: var(--round);
+    font-size: 13px; font-weight: 800; color: var(--blue);
+    margin-bottom: 7px;
+  }
+  .probes ul { margin: 0; padding: 0; list-style: none; }
+  .probes li {
+    font-size: 14px; color: var(--ink);
+    padding: 3px 0 3px 20px; position: relative; font-weight: 600;
+  }
+  .probes li::before {
+    content: ""; position: absolute; left: 4px; top: 13px;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--blue);
+    border: 1.5px solid var(--ink);
+  }
+
+  /* ---------- 回答区 ---------- */
+  .a-label {
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--round);
+    font-size: 15px; font-weight: 800;
+    margin-bottom: 10px;
+  }
+  .a-label::before {
+    content: ""; width: 12px; height: 12px; border-radius: 4px;
+    background: var(--mint); border: 2px solid var(--ink);
+    transform: rotate(-8deg);
+  }
+  textarea {
+    display: block; width: 100%;
+    font: inherit; font-size: 16px; line-height: 1.8;
+    color: var(--ink);
+    background: #FFFDF5;
+    border: var(--border);
+    border-radius: 18px;
+    padding: 16px 18px;
+    min-height: 176px;
+    resize: vertical;
+    box-shadow: inset 3px 3px 0 rgba(45,42,38,.06);
+    transition: box-shadow .18s var(--bounce), transform .18s var(--bounce), background .18s;
+  }
+  textarea::placeholder { color: #B0A894; }
+  textarea:focus {
+    outline: none;
+    background: #fff;
+    box-shadow: 5px 5px 0 var(--mint);
+    transform: translate(-2px, -2px);
+  }
+  .a-foot {
+    display: flex; justify-content: flex-end; align-items: center; gap: 10px;
+    margin-top: 8px;
+  }
+  .counter {
+    font-size: 12.5px; font-weight: 700; color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    background: #F3EEE3; border-radius: 999px; padding: 3px 12px;
+    transition: background .2s, color .2s;
+  }
+  .counter.cheer { background: var(--mint); color: #fff; }
+
+  /* ---------- 语音 ---------- */
+  .voice-row {
+    display: flex; align-items: center; gap: 18px;
+    margin-top: 22px;
+    padding: 16px 18px;
+    background: #FFF0F0;
+    border: var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-sm);
+  }
+  .mic {
+    flex: none;
+    width: 60px; height: 60px; border-radius: 50%;
+    border: var(--border); cursor: pointer;
+    background: var(--yellow); color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform .13s var(--bounce), box-shadow .13s var(--bounce), background .15s;
+    position: relative;
+  }
+  .mic:hover { transform: translate(-2px, -2px) rotate(-4deg); box-shadow: 6px 6px 0 var(--ink); }
+  .mic:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+  .mic.recording { background: var(--coral); color: #fff; }
+  .mic.recording::before, .mic.recording::after {
+    content: ""; position: absolute; inset: -8px;
+    border-radius: 50%;
+    border: 3px solid var(--coral);
+    animation: ripple 1.4s ease-out infinite;
+  }
+  .mic.recording::after { animation-delay: .5s; }
+  @keyframes ripple {
+    0%   { transform: scale(.8); opacity: 1; }
+    100% { transform: scale(1.35); opacity: 0; }
+  }
+  .mic:disabled {
+    background: #E8E2D6; color: var(--ink-soft);
+    cursor: not-allowed; box-shadow: 3px 3px 0 var(--ink-soft); transform: none;
+  }
+
+  .voice-status { min-width: 0; flex: 1; }
+  .v-line1 { font-size: 14px; font-weight: 600; color: var(--ink); }
+  .v-line1 .rec-time { color: var(--coral); font-weight: 800; font-variant-numeric: tabular-nums; }
+  .v-line2 {
+    font-size: 13px; color: var(--ink-soft);
+    min-height: 20px; margin-top: 3px; font-weight: 600;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .eq {
+    display: inline-flex; gap: 3px; align-items: flex-end;
+    height: 16px; margin-right: 8px; vertical-align: -3px;
+  }
+  .eq i {
+    width: 4px; border-radius: 2px;
+    background: var(--coral); border: 1px solid var(--ink);
+    animation: eq .8s ease-in-out infinite;
+  }
+  .eq i:nth-child(1) { animation-delay: 0s; }
+  .eq i:nth-child(2) { animation-delay: .18s; }
+  .eq i:nth-child(3) { animation-delay: .36s; }
+  .eq i:nth-child(4) { animation-delay: .12s; }
+  @keyframes eq { 0%, 100% { height: 5px; } 50% { height: 15px; } }
+
+  /* ---------- 错误 ---------- */
+  .err {
+    margin-top: 18px;
+    background: #FFE3E0;
+    border: var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    font-size: 14px; font-weight: 700;
+    padding: 12px 16px;
+    animation: shake .4s var(--bounce);
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px) rotate(-.5deg); }
+    75% { transform: translateX(6px) rotate(.5deg); }
+  }
+
+  .actions {
+    margin-top: 26px;
+    display: flex; justify-content: flex-end; align-items: center; gap: 14px;
+  }
+
+  /* ---------- 结束屏 ---------- */
+  .done-wrap { text-align: center; padding: 8px 0 4px; }
+  .done-badge {
+    width: 88px; height: 88px; margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--mint); color: #fff;
+    border: var(--border);
+    box-shadow: 5px 5px 0 var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    animation: badge-pop .6s var(--bounce) both;
+  }
+  @keyframes badge-pop {
+    0% { transform: scale(0) rotate(-30deg); }
+    70% { transform: scale(1.2) rotate(8deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .done-title { font-family: var(--round); font-size: 28px; margin: 0 0 10px; }
+  .done-msg { color: var(--ink-soft); font-size: 15px; font-weight: 600; margin: 0 auto 8px; max-width: 46ch; }
+  .done-next {
+    margin: 20px auto 28px; max-width: 46ch;
+    background: #FFF0C9;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    border-radius: 18px;
+    padding: 16px 20px;
+    font-size: 15px; font-weight: 800;
+    font-family: var(--round);
+    transform: rotate(-.6deg);
+    animation: wobble-hint 2.4s ease-in-out 1s infinite;
+  }
+  @keyframes wobble-hint {
+    0%, 100% { transform: rotate(-.6deg); }
+    50% { transform: rotate(.6deg) scale(1.015); }
+  }
+  .recap { text-align: left; border-top: 2.5px dashed rgba(45,42,38,.25); padding-top: 20px; }
+  .recap-title {
+    font-family: var(--round);
+    font-size: 13px; font-weight: 800; letter-spacing: .1em;
+    color: var(--ink-soft); margin-bottom: 12px;
+  }
+  .recap-row {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; font-weight: 600; padding: 8px 0;
+    animation: pop-in .4s var(--bounce) both;
+  }
+  .recap-row:nth-child(2) { animation-delay: .05s; }
+  .recap-row:nth-child(3) { animation-delay: .1s; }
+  .recap-row:nth-child(4) { animation-delay: .15s; }
+  .recap-row:nth-child(5) { animation-delay: .2s; }
+  .recap-row:nth-child(6) { animation-delay: .25s; }
+  .recap-row .qid {
+    flex: none; width: 42px; font-family: var(--round);
+    font-weight: 800; color: var(--coral);
+  }
+  .recap-row .comp { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .recap-row .mode {
+    flex: none; font-size: 12px; font-weight: 800;
+    background: var(--blue); color: #fff;
+    border: 2px solid var(--ink); border-radius: 999px;
+    padding: 3px 11px;
+    transform: rotate(1deg);
+  }
+  .done-foot { margin-top: 24px; font-size: 13px; color: var(--ink-soft); font-weight: 600; }
+
+  /* ---------- 加载 / 错误屏 ---------- */
+  .center-note { text-align: center; color: var(--ink-soft); padding: 70px 0; font-size: 15px; font-weight: 600; }
+  .spinner {
+    width: 42px; height: 42px; margin: 0 auto 16px;
+    border-radius: 50%;
+    border: 4px solid rgba(45,42,38,.15);
+    border-top-color: var(--coral);
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ---------- 已保存提示 ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 30px;
+    transform: translateX(-50%) translateY(24px) rotate(-2deg) scale(.8);
+    background: var(--mint); color: #fff;
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--round);
+    font-size: 14px; font-weight: 800;
+    padding: 11px 22px; border-radius: 999px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .3s var(--bounce);
+    z-index: 60;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) rotate(-2deg) scale(1); }
+
+  /* ---------- 撒花 ---------- */
+  .confetti {
+    position: fixed; top: -20px; width: 11px; height: 15px;
+    border: 1.5px solid rgba(45,42,38,.5);
+    z-index: 50; pointer-events: none;
+    animation-name: confetti-fall;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  @keyframes confetti-fall {
+    to { transform: translateY(112vh) rotate(720deg); opacity: .85; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">✦</span>模拟面试</div>
+    <div class="topbar-meta" id="topbarMeta"></div>
+  </header>
+
+  <div class="progress" id="progress" hidden>
+    <div class="steps" id="steps"></div>
+    <div class="progress-label">
+      <span id="progressText"></span>
+      <span>答完即保存,可放心刷新</span>
+    </div>
+  </div>
+
+  <main id="stage"></main>
+</div>
+
+<div class="toast" id="toast">已保存 ✓</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var stage = document.getElementById("stage");
+  var topbarMeta = document.getElementById("topbarMeta");
+  var progress = document.getElementById("progress");
+  var stepsEl = document.getElementById("steps");
+  var progressText = document.getElementById("progressText");
+  var toastEl = document.getElementById("toast");
+
+  var session = null;          // GET /api/session 的响应
+  var currentIdx = 0;          // 当前题下标
+  var answeredCount = 0;       // 与 server 对齐的已答数
+  var submissions = {};        // qid -> { mode, dur } 本地回顾用
+  var toastTimer = null;
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function fmtDur(sec) {
+    if (!sec || sec <= 0) return "";
+    sec = Math.round(sec);
+    if (sec < 60) return sec + "s";
+    return Math.floor(sec / 60) + "分" + (sec % 60 ? (sec % 60) + "秒" : "");
+  }
+
+  function showToast() {
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("show"); }, 1300);
+  }
+
+  function confetti() {
+    var colors = ["#FFC93C", "#FF6B5B", "#3EC98F", "#5B8DEF", "#A77DFF", "#FF9EC7"];
+    for (var i = 0; i < 48; i++) {
+      var s = document.createElement("i");
+      s.className = "confetti";
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.background = colors[i % colors.length];
+      s.style.animationDelay = (Math.random() * 0.7) + "s";
+      s.style.animationDuration = (1.7 + Math.random() * 1.5) + "s";
+      if (Math.random() < 0.4) s.style.borderRadius = "50%";
+      document.body.appendChild(s);
+      (function (el) {
+        setTimeout(function () { el.remove(); }, 4200);
+      })(s);
+    }
+  }
+
+  /* 进度圆点:建一次,之后只切 class,这样 pop 动画只在新完成的点上重放 */
+  function buildSteps() {
+    var total = session ? session.total : 0;
+    var html = "";
+    for (var i = 0; i < total; i++) {
+      if (i > 0) html += '<span class="step-line" data-line="' + i + '"><i></i></span>';
+      html += '<span class="step-dot" data-i="' + i + '">' + (i + 1) + "</span>";
+    }
+    stepsEl.innerHTML = html;
+  }
+
+  function updateProgress() {
+    var total = session ? session.total : 0;
+    if (!total) { progress.hidden = true; return; }
+    progress.hidden = false;
+    if (!stepsEl.children.length) buildSteps();
+    var dots = stepsEl.querySelectorAll(".step-dot");
+    var lines = stepsEl.querySelectorAll(".step-line");
+    dots.forEach(function (d, i) {
+      d.classList.toggle("done", i < answeredCount);
+      d.classList.toggle("now", i === answeredCount && answeredCount < total);
+    });
+    lines.forEach(function (l, i) {
+      l.classList.toggle("fill", i < answeredCount);
+    });
+    progressText.textContent = "已答 " + answeredCount + " / " + total + " 题";
+  }
+
+  /* ================= 语音输入 =================
+     Web Speech API 的三个坑(契约里写明的):
+     1. continuous = true —— 面试回答一两分钟
+     2. 停顿约两秒它会自己 onend —— 用户没点停止就必须自动 start() 接上
+     3. 只有 Chrome / Edge 有 —— 不支持就留文本框                       */
+
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var voiceSupported = !!SR;
+
+  var rec = null;
+  var wantRec = false;       // 用户是否还想录(区别"用户停止"和"它自己断了")
+  var activeSince = 0;       // 当前这段识别开始的时刻
+  var voiceMs = 0;           // 本题累计识别时长
+  var voiceChars = 0;        // 本题语音贡献的字数(决定 input_mode)
+  var tickTimer = null;
+
+  function makeRecognizer() {
+    var r = new SR();
+    r.lang = "zh-CN";
+    r.continuous = true;
+    r.interimResults = true;
+
+    r.onstart = function () {
+      activeSince = Date.now();
+      renderVoiceUI();
+    };
+
+    r.onresult = function (e) {
+      var interim = "";
+      for (var i = e.resultIndex; i < e.results.length; i++) {
+        var res = e.results[i];
+        if (res.isFinal) {
+          appendToAnswer(res[0].transcript);
+        } else {
+          interim += res[0].transcript;
+        }
+      }
+      var live = document.getElementById("vInterim");
+      if (live) live.textContent = interim ? "识别中:" + interim : "";
+    };
+
+    r.onerror = function (e) {
+      if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+        wantRec = false;
+        setVoiceLine("麦克风权限被拒绝了 —— 可以在浏览器地址栏允许,或直接打字。");
+      } else if (e.error === "audio-capture") {
+        wantRec = false;
+        setVoiceLine("没检测到麦克风,请打字输入。");
+      } else if (e.error === "network") {
+        setVoiceLine("语音识别服务网络异常,识别可能会断断续续 —— 打字不受影响。");
+      }
+      // no-speech / aborted 之类不用管,onend 会自动接上
+    };
+
+    r.onend = function () {
+      if (activeSince) { voiceMs += Date.now() - activeSince; activeSince = 0; }
+      if (wantRec) {
+        // 停顿两秒它自己断了,但用户没点停止 —— 接回去
+        setTimeout(function () {
+          if (!wantRec) return;
+          try { rec.start(); } catch (err) { /* 偶发重复 start,忽略 */ }
+        }, 60);
+      } else {
+        renderVoiceUI();
+      }
+    };
+    return r;
+  }
+
+  function startVoice() {
+    if (!voiceSupported) return;
+    if (!rec) rec = makeRecognizer();
+    wantRec = true;
+    try { rec.start(); } catch (err) { /* 已在运行 */ }
+    if (!tickTimer) tickTimer = setInterval(renderVoiceUI, 500);
+  }
+
+  function stopVoice() {
+    wantRec = false;
+    if (rec) { try { rec.stop(); } catch (err) { /* 未在运行 */ } }
+    if (tickTimer) { clearInterval(tickTimer); tickTimer = null; }
+  }
+
+  function resetVoiceForQuestion() {
+    stopVoice();
+    voiceMs = 0;
+    voiceChars = 0;
+    activeSince = 0;
+  }
+
+  window.addEventListener("beforeunload", function () { stopVoice(); });
+
+  function appendToAnswer(text) {
+    var ta = document.getElementById("answer");
+    if (!ta) return;
+    var t = text.replace(/^\s+/, "");
+    if (!t) return;
+    ta.value += t;
+    voiceChars += t.length;
+    ta.dispatchEvent(new Event("input"));
+    ta.scrollTop = ta.scrollHeight;
+  }
+
+  function elapsedVoiceSec() {
+    var ms = voiceMs + (activeSince ? Date.now() - activeSince : 0);
+    return Math.round(ms / 1000);
+  }
+
+  function renderVoiceUI() {
+    var btn = document.getElementById("micBtn");
+    if (!btn) return;
+    var live = wantRec || !!activeSince;
+    btn.classList.toggle("recording", live);
+    btn.setAttribute("aria-pressed", live ? "true" : "false");
+    btn.setAttribute("aria-label", live ? "停止语音输入" : "开始语音输入");
+    if (live) {
+      setVoiceLine('<span class="eq"><i></i><i></i><i></i><i></i></span>' +
+        '正在识别 · <span class="rec-time">' + elapsedVoiceSec() + "s</span> —— 说完点麦克风停止");
+    } else {
+      setVoiceLine(voiceChars > 0
+        ? "已停止。识别结果在文本框里,可以直接改;再点麦克风接着说。"
+        : "点麦克风开始语音输入,识别结果会写进文本框,可随时修改。");
+    }
+  }
+
+  function setVoiceLine(html) {
+    var el = document.getElementById("vLine1");
+    if (el) el.innerHTML = html;
+  }
+
+  /* ================= 小涂鸦 ================= */
+
+  function doodles() {
+    return '<svg class="doodle doodle-star" width="34" height="34" viewBox="0 0 24 24">' +
+        '<path d="M12 2 L14 9 L21 11 L14 13 L12 20 L10 13 L3 11 L10 9 Z" ' +
+        'fill="#FFC93C" stroke="#2D2A26" stroke-width="1.5"/></svg>' +
+      '<svg class="doodle doodle-squiggle" width="72" height="20" viewBox="0 0 72 20">' +
+        '<path d="M2 12 Q 10 2, 18 12 T 34 12 T 50 12 T 66 12" fill="none" ' +
+        'stroke="#A77DFF" stroke-width="3" stroke-linecap="round"/></svg>';
+  }
+
+  function checkSvg(size) {
+    return '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="none" ' +
+      'stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M20 6L9 17l-5-5"/></svg>';
+  }
+
+  function micSvg() {
+    return '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" ' +
+      'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+      '<rect x="9" y="2.5" width="6" height="11.5" rx="3"/>' +
+      '<path d="M5.5 10.5a6.5 6.5 0 0 0 13 0"/><line x1="12" y1="17.5" x2="12" y2="21.5"/></svg>';
+  }
+
+  /* ================= 屏幕 ================= */
+
+  function showLoading() {
+    stage.innerHTML =
+      '<div class="center-note"><div class="spinner"></div>正在加载题目…</div>';
+  }
+
+  function showLoadError(msg) {
+    progress.hidden = true;
+    stage.innerHTML =
+      '<section class="screen card" style="text-align:center">' + doodles() +
+        '<h1 class="intro-title" style="font-size:24px">哎呀,连不上答题服务</h1>' +
+        '<p class="intro-sub">' + esc(msg) + "<br>请确认 server 还在运行,然后重试。</p>" +
+        '<button class="btn-primary" id="retryBtn">重新加载</button>' +
+      "</section>";
+    document.getElementById("retryBtn").addEventListener("click", function () {
+      location.reload();
+    });
+  }
+
+  function showClosed() {
+    progress.hidden = true;
+    topbarMeta.textContent = "";
+    stage.innerHTML =
+      '<section class="screen card done-wrap">' + doodles() +
+        '<div class="done-badge">' + checkSvg(40) + "</div>" +
+        '<h1 class="done-title">这一轮已经结束了</h1>' +
+        '<p class="done-msg">本轮回答已经收齐,server 不再接受新的提交。</p>' +
+        '<div class="done-next">回到 Claude Code 查看评分,或让它给你重开一轮</div>' +
+      "</section>";
+  }
+
+  function showIntro() {
+    var ctx = session.context || {};
+    topbarMeta.textContent = ctx.target_role || "";
+    updateProgress();
+
+    var resumeIdx = firstUnansweredIdx();
+    var resumed = answeredCount > 0 && resumeIdx < session.total;
+
+    var facts =
+      '<ul class="facts">' +
+        '<li><span class="n">1</span><span>' + session.total +
+          " 道题,全部从你的经历里长出来,不是题库题。</span></li>" +
+        '<li><span class="n">2</span><span>答完一题点提交,立刻保存 —— 中途关掉页面也能接着答。</span></li>' +
+        '<li><span class="n">3</span><span>可以打字,也可以语音(需要 Chrome / Edge)。语音结果会写进文本框,改完再提交。</span></li>' +
+        '<li><span class="n">4</span><span>每题下方的「可以覆盖这几点」是提示,照着说更容易拿分,不是必答项。</span></li>' +
+      "</ul>";
+
+    stage.innerHTML =
+      '<section class="screen card">' + doodles() +
+        '<div class="eyebrow">MOCK INTERVIEW</div>' +
+        '<h1 class="intro-title">' + esc(ctx.target_role || "模拟面试") + "</h1>" +
+        '<p class="intro-sub">' + esc(ctx.seniority || "") +
+          (resumed ? " · 已答 " + answeredCount + " 题,接着上次的继续" : " · 一共 " + session.total + " 题,大概十分钟") + "</p>" +
+        (ctx.density_note ? '<div class="note-banner">' + esc(ctx.density_note) + "</div>" : "") +
+        facts +
+        (voiceSupported ? "" :
+          '<div class="note-banner">当前浏览器不支持语音输入(需要 Chrome 或 Edge),请直接打字,不影响流程。</div>') +
+        '<div class="actions" style="justify-content:flex-start">' +
+          '<button class="btn-primary" id="startBtn">' +
+            (resumed ? "从第 " + (resumeIdx + 1) + " 题继续 →" : "开始答题 →") +
+          "</button>" +
+        "</div>" +
+      "</section>";
+
+    document.getElementById("startBtn").addEventListener("click", function () {
+      showQuestion(firstUnansweredIdx());
+    });
+  }
+
+  function firstUnansweredIdx() {
+    var done = {};
+    (session.answered || []).forEach(function (id) { done[id] = true; });
+    for (var i = 0; i < session.questions.length; i++) {
+      if (!done[session.questions[i].id]) return i;
+    }
+    return session.questions.length;
+  }
+
+  function counterHint(len) {
+    if (len === 0) return "0 字";
+    if (len < 50) return len + " 字 · 继续,越具体越好";
+    if (len < 150) return len + " 字 · 不错,再说说当时怎么想的";
+    return len + " 字 · 很具体了!";
+  }
+
+  function showQuestion(idx) {
+    resetVoiceForQuestion();
+    currentIdx = idx;
+    var q = session.questions[idx];
+    var total = session.total;
+    var isLast = idx === total - 1;
+
+    var probes = "";
+    if (q.probes && q.probes.length) {
+      probes =
+        '<div class="probes"><div class="probes-title">可以覆盖这几点(提示,不是必答)</div><ul>' +
+        q.probes.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") +
+        "</ul></div>";
+    }
+
+    stage.innerHTML =
+      '<section class="screen card">' + doodles() +
+        '<div class="q-eyebrow">' +
+          '<span class="q-count">第 ' + (idx + 1) + ' 题<span class="q-total"> / ' + total + "</span></span>" +
+          '<span class="tag tag-accent">' + esc(q.competency) + "</span>" +
+          (q.is_generic ? '<span class="tag tag-muted">通用题</span>' : "") +
+        "</div>" +
+        (q.source_quote
+          ? '<p class="q-quote">关于你提到的:「' + esc(q.source_quote) + "」</p>"
+          : "") +
+        '<h1 class="q-text">' + esc(q.text) + "</h1>" +
+        probes +
+        '<div class="answer-box">' +
+          '<label class="a-label" for="answer">你的回答</label>' +
+          '<textarea id="answer" rows="7" placeholder="打字输入,或点下面的麦克风直接说——可以说一两分钟,尽量讲具体。"></textarea>' +
+          '<div class="a-foot"><span class="counter" id="counter">0 字</span></div>' +
+        "</div>" +
+        '<div class="voice-row">' +
+          '<button class="mic" id="micBtn" aria-pressed="false" aria-label="开始语音输入"' +
+            (voiceSupported ? "" : " disabled") + ">" + micSvg() + "</button>" +
+          '<div class="voice-status">' +
+            '<div class="v-line1" id="vLine1">' +
+              (voiceSupported
+                ? "点麦克风开始语音输入,识别结果会写进文本框,可随时修改。"
+                : "当前浏览器不支持语音,请直接打字。") +
+            "</div>" +
+            '<div class="v-line2" id="vInterim" aria-live="polite"></div>' +
+          "</div>" +
+        "</div>" +
+        '<div class="err" id="err" role="alert" hidden></div>' +
+        '<div class="actions">' +
+          '<button class="btn-primary" id="submitBtn">' +
+            (isLast ? "提交,完成面试 ✓" : "提交,下一题 →") +
+          "</button>" +
+        "</div>" +
+      "</section>";
+
+    var ta = document.getElementById("answer");
+    var counter = document.getElementById("counter");
+    ta.addEventListener("input", function () {
+      var len = ta.value.length;
+      counter.textContent = counterHint(len);
+      counter.classList.toggle("cheer", len >= 150);
+    });
+
+    document.getElementById("micBtn").addEventListener("click", function () {
+      if (wantRec || activeSince) { stopVoice(); } else { startVoice(); }
+      renderVoiceUI();
+    });
+
+    document.getElementById("submitBtn").addEventListener("click", submitCurrent);
+
+    // 全程键盘可达:Ctrl/Cmd + Enter 也能提交
+    ta.addEventListener("keydown", function (e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        submitCurrent();
+      }
+    });
+
+    ta.focus();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function showError(msg) {
+    var err = document.getElementById("err");
+    if (!err) return;
+    err.hidden = false;
+    err.textContent = msg;
+  }
+
+  function submitCurrent() {
+    var q = session.questions[currentIdx];
+    var ta = document.getElementById("answer");
+    var btn = document.getElementById("submitBtn");
+    var text = ta.value.replace(/\s+/g, " ").trim();
+
+    if (!text) {
+      showError("先写点(或说点)什么再提交 —— 空回答保存不了。");
+      ta.focus();
+      return;
+    }
+
+    stopVoice();
+    btn.disabled = true;
+    btn.textContent = "保存中…";
+
+    var payload = { qid: q.id, text: text };
+    if (voiceChars > 0) {
+      payload.input_mode = "voice";
+      var dur = elapsedVoiceSec();
+      if (dur > 0) payload.duration_sec = dur;
+    }
+
+    fetch("/api/answer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) {
+        return res.json().then(function (body) { return { status: res.status, body: body }; });
+      })
+      .then(function (r) {
+        if (r.status !== 200 || !r.body.ok) {
+          var e = (r.body && r.body.error) || {};
+          if (e.code === "session_closed") { showClosed(); return; }
+          if (e.code === "empty_answer") {
+            showError("回答内容为空,补充一点再提交。");
+          } else {
+            showError(e.message || "提交失败,请重试。");
+          }
+          btn.disabled = false;
+          btn.textContent = currentIdx === session.total - 1 ? "提交,完成面试 ✓" : "提交,下一题 →";
+          return;
+        }
+
+        submissions[q.id] = {
+          mode: payload.input_mode || "text",
+          dur: payload.duration_sec || 0
+        };
+        answeredCount = r.body.answered;
+        updateProgress();
+
+        if (r.body.all_done) {
+          // 契约:收到 all_done 后不要再发任何请求,server 已经退了。
+          // 结束屏用手里已有的数据渲染。
+          showDone(r.body);
+        } else {
+          showToast();
+          showQuestion(currentIdx + 1);
+        }
+      })
+      .catch(function () {
+        // 网络层失败:server 可能已退出(理论上只在 all_done 之后),先按可重试处理
+        showError("提交没发出去 —— 检查 server 是否还在运行,再点一次提交。");
+        btn.disabled = false;
+        btn.textContent = currentIdx === session.total - 1 ? "提交,完成面试 ✓" : "提交,下一题 →";
+      });
+  }
+
+  function showDone(respBody) {
+    var total = session.total;
+    var rows = session.questions.map(function (q, i) {
+      var sub = submissions[q.id] || {};
+      var modeText = sub.mode === "voice"
+        ? "语音" + (sub.dur ? " · " + fmtDur(sub.dur) : "")
+        : "打字";
+      return '<div class="recap-row">' +
+        '<span class="qid">Q' + (i + 1) + "</span>" +
+        '<span class="comp">' + esc(q.competency) + " —— " + esc(q.text) + "</span>" +
+        '<span class="mode">' + esc(modeText) + "</span>" +
+      "</div>";
+    }).join("");
+
+    stage.innerHTML =
+      '<section class="screen card done-wrap">' + doodles() +
+        '<div class="done-badge">' + checkSvg(44) + "</div>" +
+        '<h1 class="done-title">面试结束,' + total + " / " + total + " 已提交!</h1>" +
+        '<p class="done-msg">' + esc(respBody.message || "回答已全部收集。") + "</p>" +
+        '<div class="done-next">下一步:回到 Claude Code,让它给你打分并生成评分报告</div>' +
+        '<div class="recap"><div class="recap-title">本轮作答回顾</div>' + rows + "</div>" +
+        '<p class="done-foot">答题服务已自动关闭,这个页面可以关掉了。</p>' +
+      "</section>";
+
+    updateProgress();
+    confetti();
+  }
+
+  /* ================= 启动 ================= */
+
+  showLoading();
+  fetch("/api/session")
+    .then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      session = data;
+      answeredCount = (data.answered || []).length;
+
+      if (data.status !== "awaiting_answers") { showClosed(); return; }
+      if (!data.questions || !data.questions.length) {
+        showLoadError("session 里没有题目。回 Claude Code 重新生成一轮,再起 server。");
+        return;
+      }
+      if (answeredCount >= data.total) { showClosed(); return; }
+      showIntro();
+    })
+    .catch(function (e) {
+      showLoadError("GET /api/session 失败:" + e.message);
+    });
+})();
+</script>
+</body>
+</html>

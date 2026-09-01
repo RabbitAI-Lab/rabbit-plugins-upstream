@@ -1,39 +1,58 @@
-## Description: <br>
-Automatically recovers working context after session compaction or when continuation is implied but context is missing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recover missing conversation context after explicit compaction or truncation, or when the user explicitly asks to recover prior work.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
 
-## Use Case: <br>
-Developers and agent users use this skill to recover recent working context from scoped channel or session history when compaction or ambiguous continuation would otherwise make the next action unclear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally reads recent channel and session history to restore context. <br>
-Mitigation: Install only where scoped history access is acceptable, keep channel permissions tight, and avoid highly sensitive channels unless access is explicitly approved. <br>
-Risk: Recovered context could be persisted beyond the current interaction if optional memory or disk saving is enabled. <br>
-Mitigation: Do not enable persistence unless the user has reviewed what will be saved and explicitly consents. <br>
+## Use Case:
 
+Developers and agent users use this skill to recover just enough lost conversation context after compaction, truncation, or an explicit recovery request to safely resume the active task.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jdrhyne/skills/context-recovery) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown summary with recovered context, recent timeline, pending actions, and a suggested continuation prompt] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses bounded channel and session history inspection; optional persistence requires user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Recovered messages, summaries, attachments, links, logs, or memory items could contain untrusted or conflicting claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat recovered material as evidence only, preserve source and confidence details, seek counterevidence for status claims, and surface unresolved conflicts instead of silently choosing one version.
+
+Risk: Recovering context from another thread, channel, workspace, memory store, transcript, or log could expose private or sensitive information.
+
+Mitigation: Use current supplied context first, require explicit approval before reading another source, bound the time range and item count, and redact credentials, tokens, personal data, and unrelated details.
+
+Risk: Persisting recovered content could retain sensitive conversation material beyond the user's immediate recovery need.
+
+Mitigation: Keep recovery read-only by default and request consent for the exact redacted content, destination, and expected retention before writing recovered context anywhere.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jdrhyne/skills/context-recovery)
+- [OpenClaw repository metadata](https://github.com/jdrhyne/agent-skills/tree/main/skills/context-recovery)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown recovery report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes scope, sources, evidence timeline, conflicts, unresolved items, and one proposed next step.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

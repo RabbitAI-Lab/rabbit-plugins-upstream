@@ -1,45 +1,64 @@
-## Description: <br>
-Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the dLazy CLI to submit PNG/JPG images to the dLazy hosted API for vectorization and return generated asset URLs or task status.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to convert user-selected raster image assets into scalable vector output through the dLazy CLI and hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-selected images may be uploaded to dLazy's hosted service and returned as hosted files. <br>
-Mitigation: Use the skill only with images appropriate for third-party processing and review service terms before sending sensitive assets. <br>
-Risk: The CLI uses an API key saved in local user configuration or supplied through DLAZY_API_KEY. <br>
-Mitigation: Use per-invocation environment variables when persistent local credentials are not desired, and rotate or revoke keys when access is no longer needed. <br>
-Risk: A global CLI install persists a third-party binary on the system. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install path is preferred. <br>
+## Use Case:
 
+Developers, designers, and agents use this skill to convert logo, icon, and flat illustration image inputs into scalable vector-style assets through the dLazy CLI and hosted service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-vectorize) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Configuration instructions] <br>
-**Output Format:** [JSON response with hosted output URL; optional downloaded file when --save is used] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; accepts an image URL or local image path and supports asynchronous task polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: frontmatter and server release metadata) <br>
+Risk: Local image paths passed to the CLI can result in uploads to dLazy-hosted endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get explicit user confirmation before running the skill on local files, and avoid using sensitive or restricted images unless the upload is approved.
+
+Risk: The evidence notes inconsistency about whether returned assets are guaranteed SVG.
+
+Mitigation: Verify the returned MIME type and asset contents before treating the result as a vector SVG deliverable.
+
+Risk: The skill depends on a third-party CLI package and hosted API.
+
+Mitigation: Prefer the pinned npx invocation or a reviewed pinned install, and review the package/source links before persistent installation.
+
+Risk: The skill requires a dLazy API key saved in local configuration or supplied through an environment variable.
+
+Mitigation: Use organization-scoped keys, keep local config access restricted, and rotate or revoke keys when access changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vectorize)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON, Files]
+
+**Output Format:** [Markdown guidance with bash commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May upload local image inputs to dLazy-hosted endpoints and may return asynchronous task status when --no-wait is used.]
+
+## Skill Version(s):
+
+1.2.10 (source: server release evidence; artifact frontmatter reports 1.2.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

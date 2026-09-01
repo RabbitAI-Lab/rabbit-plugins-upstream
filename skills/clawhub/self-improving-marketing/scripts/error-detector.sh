@@ -1,5 +1,6 @@
 #!/bin/bash
 # Marketing Self-Improvement Error Detector Hook
+# Inspects CLAUDE_TOOL_OUTPUT in-process only. Never writes tool output, secrets, or transcripts to disk.
 # Triggers on PostToolUse for Bash to detect campaign issues, deliverability problems, and tracking errors
 # Reads CLAUDE_TOOL_OUTPUT environment variable
 

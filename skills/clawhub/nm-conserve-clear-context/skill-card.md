@@ -1,42 +1,52 @@
-## Description: <br>
-Manages context overflow by handing off to a fresh subagent at 80% usage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages context overflow by handing off to a fresh subagent at 80% usage.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and coding agents use this skill to preserve task state and continue long-running work when context pressure reaches critical levels. It is intended for context handoffs that save a session checkpoint, delegate continuation to a fresh subagent, and resume work with documented state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Continuation agents may preserve unattended or dangerous execution modes and continue work without fresh user confirmation. <br>
-Mitigation: Install only when automated context handoffs are intentional, and rely on runtime approval checks for destructive or public side effects. <br>
-Risk: Session checkpoints may expose sensitive task context if used in repositories or sessions containing secrets, credentials, or sensitive business plans. <br>
-Mitigation: Avoid using the skill on sensitive sessions unless the runtime and repository policies prevent secret capture and restrict access to checkpoint files. <br>
+## Use Case:
 
+Developers and agent operators use this skill to preserve progress during long-running work when context pressure becomes critical. It creates a session-state checkpoint and delegates continuation to a fresh agent so work can continue from documented state.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/athola/skills/nm-conserve-clear-context) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/athola) <br>
-- [Source homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration, Shell commands] <br>
-**Output Format:** [Markdown with inline code blocks and checkpoint templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent handoff instructions, session-state templates, threshold guidance, and environment variable configuration notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Continuation agents may preserve unattended or dangerous execution mode with limited user checkpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for workflows that intentionally need automated context handoffs, and avoid using it during production changes, credential handling, destructive operations, account or financial actions, or work that should receive fresh approval at each step.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-clear-context)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+- [Session State Module](modules/session-state.md)
+- [Session State Schema](modules/session-state-schema.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with checkpoint file templates, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write a session-state checkpoint and prompt a continuation agent to resume work.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

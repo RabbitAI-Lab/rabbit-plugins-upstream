@@ -1,45 +1,60 @@
-## Description: <br>
-Identifies prone sleeping positions, head covering, and occlusion of the mouth/nose by bedding or clothing; provides real-time high-risk alerts to safeguard infant sleep safety. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies prone sleeping positions, head covering, and mouth or nose occlusion by bedding or clothing, then returns high-risk infant sleep safety alerts and structured reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and caregivers use this skill to analyze infant sleep monitoring videos or URLs for prone sleeping, head covering, and mouth or nose occlusion risks, then receive structured safety alerts and report links. It can also query cloud-stored historical warning reports associated with the internally resolved user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill sends infant sleep videos or video URLs to the LifeEmergence backend. <br>
-Mitigation: Use it only with consent and privacy review for infant video data, and avoid submitting sensitive media unless remote processing is acceptable. <br>
-Risk: The security evidence says the skill creates or reuses an internal identity, stores local account tokens, and queries cloud-stored historical reports. <br>
-Mitigation: Treat report history and identity association as privacy-sensitive state; review token storage, account separation, and report access controls before deployment. <br>
-Risk: The security evidence reports mismatched backend documentation, and the artifact describes the skill as an auxiliary monitoring tool. <br>
-Mitigation: Confirm the configured backend endpoints and API behavior before use, and present alerts as assistive safety information that does not replace adult supervision or professional care. <br>
+## Use Case:
 
+External users and caregivers use this skill to analyze infant sleep monitoring videos or video URLs for prone sleeping, head covering, and mouth or nose occlusion risks. The skill can also return identity-linked cloud history for prior warning reports.
 
-## Reference(s): <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-infant-suffocation-warning-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with risk findings, safety suggestions, historical report tables, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files, video URLs, sensitivity levels 1-5, basic/standard/json detail modes, and optional output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Sensitive infant sleep videos or video URLs may be sent to a backend for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher and backend are trusted, and confirm that users understand where footage is processed and retained.
+
+Risk: The skill can create or reuse an internal identity, store account tokens locally, and retrieve cloud report history tied to that identity.
+
+Mitigation: Run in an isolated workspace, review local token storage before use, and avoid shared workspaces for sensitive child footage or reports.
+
+Risk: Automated alerts and reports may be treated as a substitute for direct adult supervision or professional care.
+
+Mitigation: Present the output as auxiliary monitoring only and require caregivers to verify high-risk alerts directly and seek appropriate medical help when needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-infant-suffocation-warning-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API 接口文档](references/api_doc.md)
+- [API接口文档](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, files]
+
+**Output Format:** [Markdown reports and JSON strings, with optional saved text or JSON output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local mp4, avi, or mov video files up to 10 MB, or public video URLs; can list cloud report history associated with the resolved identity.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release metadata; artifact frontmatter says 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

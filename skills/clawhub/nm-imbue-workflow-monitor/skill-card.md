@@ -1,41 +1,53 @@
-## Description: <br>
-Detects workflow failures and inefficient patterns then files GitHub issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects workflow failures and inefficient patterns then files GitHub issues
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to monitor agent workflow executions for failures, timeouts, retry loops, context pressure, and inefficient tool usage, then prepare structured issue reports for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad workflow-related trigger wording may activate the skill during ordinary workflow discussions. <br>
-Mitigation: Review trigger wording before installation and narrow activation if the deployment needs stricter scope. <br>
-Risk: Automated issue drafting or creation can produce noisy, duplicate, or misleading workflow issues if findings are not reviewed. <br>
-Mitigation: Keep approval required, check for duplicate issues, rate-limit issue creation, and review evidence before filing. <br>
+## Use Case:
 
+Developers and engineers use this skill to monitor workflow executions, classify failures and inefficiencies, and prepare structured issue reports for repository follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-workflow-monitor) <br>
-- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, issue templates, YAML configuration examples, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose GitHub or GitLab issue creation after duplicate checks and user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Workflow diagnostics can capture command output, paths, session context, stack traces, environment notes, tokens, or proprietary snippets and may place them into GitHub or GitLab issues.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep automatic issue creation disabled unless the repository is trusted and private, and review or redact captured evidence before creating issues.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-workflow-monitor)
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+- [Detection patterns](artifact/modules/detection-patterns.md)
+- [Efficiency metrics](artifact/modules/efficiency-metrics.md)
+- [Issue templates](artifact/modules/issue-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown reports with issue templates, command examples, and YAML configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include workflow evidence excerpts, efficiency scores, labels, and suggested fixes.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence; artifact frontmatter lists 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

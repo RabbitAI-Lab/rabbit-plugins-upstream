@@ -1,6 +1,8 @@
 ---
 name: qa-test-strategy-design
-version: 1.6.0
+slug: qa-test-strategy-design
+displayName: Test Strategy Design
+version: 1.7.5
 description: >-
   当新项目启动需要制定测试方案、或者迭代开始前需要确定"这期怎么测"时使用此技能。根据项目特征（新项目/迭代/重构/紧急修复）、风险分布和资源约束设计分层测试策略，明确测试范围、测试手段、准入准出标准和工具选型。一个好的测试策略让团队知道"测什么、不测什么、为什么"。输出包含风险矩阵、分级测试方案的测试策略文档。
 
@@ -35,8 +37,11 @@ input_format:
 output_format:
   traceability:
     - 每份策略带唯一ID（STRAT-XXXX）
-    - 关联需求ID（REQ-XXXX）
+    - 关联需求ID（TC_{需求模块缩写}_{功能缩写}_{序号}）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - test_strategy: 分层测试策略
     - scope_definition: 测试范围定义
     - means_selection: 测试手段选择

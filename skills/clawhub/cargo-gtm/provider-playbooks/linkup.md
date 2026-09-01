@@ -29,7 +29,7 @@ Natural-language web research with synthesized answers. Two actions: `search` (0
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"instruct","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"instruct"}' \
   --data '{
     "q": "What pricing model does acme.com use for its main product?",
     "depth": "standard",
@@ -51,7 +51,7 @@ The schema root **must** be `type: "object"`. Keep it small — a few well-descr
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"search","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkup","actionSlug":"search"}' \
   --data '{"q": "Who is the current CTO of Acme Corp?", "depth": "standard"}' \
   --wait-until-finished
 ```
@@ -69,9 +69,17 @@ Escalate to `depth: "deep"` only when standard came back empty or shallow — de
 
 **RESEARCH / fallback SOURCE.** Web research chain: `firecrawl` (0.05) for raw pages → **linkup** (0.5–2) for synthesized/structured answers → `serper` (1) for Google-shaped results. As a people/company source it's a fallback (0.5) when no structured provider has the data — see [`../references/stage-action-map.md`](../references/stage-action-map.md).
 
+## Recurring use
+
+Research answers are point-in-time — **recur only when the question itself moves**.
+
+- **Scheduled fit:** narrow. A weekly `instruct` re-ask over an account segment works for genuinely time-sensitive questions (pricing changes, launches); for static facts a re-run re-bills the same answer. Cadence defaults: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
+- **In-play gate:** write the structured output to a dedicated column and run only where it's still empty — or where a refreshed-at timestamp is older than the cadence — since `instruct` bills a flat 1 per row on every re-evaluation.
+- **Keep `depth: "standard"` in recurring nodes** — the deep-by-default trap above compounds on a schedule.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"linkup","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"linkup","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 

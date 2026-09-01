@@ -1,45 +1,60 @@
-## Description: <br>
-Turns Doc, Word, Markdown, PPT, Excel, and PDF documents into explainer, report, courseware, or training videos by driving the dLazy file-to-video agent workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts documents such as PPT, Word, Excel, PDF, and Markdown into explainer, report, courseware, or training video workflows through the dLazy file-to-video agent.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and content teams use this skill to ask the hosted dLazy file-to-video agent to parse source documents, create outlines and storyboards, generate voiceover, build videos, and validate the result. It supports new project creation and continued project work through the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached documents are sent to dLazy, and attached local files can be uploaded to dLazy media storage. <br>
-Mitigation: Confirm before sharing confidential files and install only when sending the relevant content to dLazy is acceptable. <br>
-Risk: The dLazy API key can be stored in local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when persistence is not desired, and rotate or revoke the key when access is no longer needed. <br>
-Risk: The skill depends on a pinned external CLI and hosted SaaS endpoints. <br>
-Mitigation: Review the pinned CLI/source and the dLazy service terms before deployment. <br>
+## Use Case:
 
+External users, developers, and content teams use this skill to turn supplied documents into video projects with outlining, storyboarding, voiceover, generation, and validation support.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-doc-to-video) <br>
-- [dLazy CLI source link from metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Text] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke the dLazy CLI, stream agent responses, and upload attached local files to dLazy media storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached documents are sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with documents approved for dLazy SaaS processing, and avoid confidential material unless organizational policy permits it.
+
+Risk: Local files attached with the CLI are uploaded to dLazy media storage.
+
+Mitigation: Review attachments before invoking the skill and remove sensitive or unintended files from the command.
+
+Risk: The dLazy API key is stored locally or supplied through the environment.
+
+Mitigation: Protect the local config and environment, and rotate or revoke the key from the dLazy dashboard if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-doc-to-video)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference project ids, uploaded files, authentication setup, and dLazy CLI command output.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

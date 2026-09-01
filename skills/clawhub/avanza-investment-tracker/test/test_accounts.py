@@ -1157,7 +1157,7 @@ def test_delete_reverts_transactions_and_removes_virtual(tmp_path):
     ))
     assert _holdings(DatabaseHandler(db_file), "YOLO") == pytest.approx(100, abs=1e-6)
 
-    rc = cli.account_delete(_ns(db_file, name="YOLO"))
+    rc = cli.account_delete(_ns(db_file, name="YOLO", yes=True))
     assert rc == 0
 
     db = DatabaseHandler(db_file)
@@ -1183,7 +1183,7 @@ def test_delete_removes_cash_transfer_traces(tmp_path):
     cli.account_create(_ns(db_file, name="YOLO", parent="1111", starting_cash=5000, starting_cash_date="2020-02-01"))
     assert _count_virtual_transfers(db_file) == 2  # one pair from starting_cash
 
-    rc = cli.account_delete(_ns(db_file, name="YOLO"))
+    rc = cli.account_delete(_ns(db_file, name="YOLO", yes=True))
     assert rc == 0
     assert _count_virtual_transfers(db_file) == 0
 
@@ -1203,7 +1203,7 @@ def test_delete_cleans_up_asset_transfer_partners(tmp_path):
 
     transfers_before = _count_virtual_transfers(db_file)
 
-    rc = cli.account_delete(_ns(db_file, name="YOLO"))
+    rc = cli.account_delete(_ns(db_file, name="YOLO", yes=True))
     assert rc == 0
 
     db = DatabaseHandler(db_file)
@@ -1242,7 +1242,7 @@ def test_delete_other_virtuals_unaffected(tmp_path):
     assert _holdings(DatabaseHandler(db_file), "YOLO") == pytest.approx(50, abs=1e-6)
     assert _holdings(DatabaseHandler(db_file), "GROWTH") == pytest.approx(30, abs=1e-6)
 
-    rc = cli.account_delete(_ns(db_file, name="YOLO"))
+    rc = cli.account_delete(_ns(db_file, name="YOLO", yes=True))
     assert rc == 0
 
     # GROWTH still exists and has its shares
@@ -1261,3 +1261,52 @@ def test_delete_non_virtual_rejected(tmp_path):
     db_file = _base_parent_db(tmp_path)
     rc = cli.account_delete(_ns(db_file, name="1111"))
     assert rc == 1
+
+
+def test_dividend_routing_preserves_sek_total_for_foreign_currency_dividends(tmp_path):
+    """Regression test (issue #83): dividends on foreign-currency instruments
+    have a price column in the instrument currency (e.g. DKK) but Belopp/total
+    in SEK. Re-splitting across holders must divide the SEK total, not
+    recompute shares * dps (which mixes currencies and understates the
+    dividend)."""
+    db_file = _base_parent_db(tmp_path)
+    cli.account_create(_ns(db_file, name="YOLO", parent="1111", starting_cash=None, starting_cash_date=None))
+    cli.account_allocate(_ns(db_file, tx_date="2020-01-02", tx_asset="Asset A", to="YOLO", from_account=None, shares=None))
+    # All 100 shares on YOLO; dividend of 3.75 DKK/share -> 375 DKK = 550 SEK total
+    csv = _DIV + "2020-06-01;1111;Utdelning;Asset A;100;3,75;550;0;SEK;ASSETA;-"
+    routed = _import_more(db_file, csv, tmp_path)
+    assert routed == 1
+    db = DatabaseHandler(db_file)
+    db.connect()
+    cur = db.get_cursor()
+    cur.execute("SELECT amount, price, total FROM transactions WHERE transaction_type='Utdelning'")
+    rows = cur.fetchall()
+    db.disconnect()
+    assert len(rows) == 1
+    amount, dps, total = rows[0]
+    assert amount == pytest.approx(100, abs=1e-6)
+    assert dps == pytest.approx(3.75, abs=1e-6)   # instrument currency preserved
+    assert total == pytest.approx(550, abs=1e-6)   # SEK total preserved, NOT 375
+
+
+def test_dividend_credits_capital_from_sek_total_not_native_price(tmp_path):
+    """Regression test (issue #85): handle_dividend must credit capital using
+    the SEK total (total / amount), not the instrument-currency price column.
+    A dividend with Kurs 3.75 (instrument currency) and Belopp 22.05 SEK on
+    4 shares must credit 22.05 SEK of capital, not 15.00."""
+    db_file = _base_parent_db(tmp_path)
+    cli.account_create(_ns(db_file, name="YOLO", parent="1111", starting_cash=None, starting_cash_date=None))
+    cli.account_allocate(_ns(db_file, tx_date="2020-01-02", tx_asset="Asset A", to="YOLO", from_account=None, shares=None))
+    # All 100 shares on YOLO. Dividend: Kurs 3.75 (instrument currency),
+    # Belopp 550 SEK -> per-share SEK rate 5.50, NOT 3.75.
+    csv = _DIV + "2020-06-01;1111;Utdelning;Asset A;100;3,75;550;0;SEK;ASSETA;-"
+    routed = _import_more(db_file, csv, tmp_path)
+    assert routed == 1
+    db = DatabaseHandler(db_file)
+    db.connect()
+    cur = db.get_cursor()
+    cur.execute("SELECT COALESCE(SUM(capital), 0) FROM cohort_data WHERE account = 'YOLO'")
+    yolo_cash = cur.fetchone()[0]
+    db.disconnect()
+    # YOLO held all 100 shares at dividend time: 100 * 5.50 = 550 SEK credited
+    assert yolo_cash == pytest.approx(550, abs=0.5)

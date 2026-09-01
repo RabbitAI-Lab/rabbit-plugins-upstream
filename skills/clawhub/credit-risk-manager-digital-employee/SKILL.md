@@ -2,33 +2,25 @@
 name: "Credit Risk Manager Digital Employee"
 slug: credit-risk-manager-digital-employee
 description: "覆盖行业规则生成、大额风险暴露管理、信贷政策分析、风险协作、风险信息提取、贷后监控预警、贷后管理、VLM验证全流程。帮助银行信用风险管理人员实现风险闭环管理。"
-version: "2.0.1"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 2.1.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - analytical-framework
+  - no-executable-code
 ---
 
 # Credit Risk Manager Digital Employee / 信用风险管理师数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断## Skill Overview / 技能概览
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
+## Skill Overview / 技能概览
 
 信用风险管理师数字员工，集成以下8项核心能力模块：
 
@@ -191,7 +183,7 @@ capabilities:
 
 ## 审计追踪 (Audit Trail)
 
-每次执行后生成审计日志：
+如机构需要留痕，可参考以下要点由用户自行记录（本技能不写文件）：
 
 ```json
 {
@@ -461,7 +453,7 @@ capabilities:
 
 ## 审计追踪 (Audit Trail)
 
-每次规则生成执行后,生成审计日志记录以下信息:
+如机构需要留痕，可参考以下要点由用户自行记录（本技能不写文件）：录以下信息:
 
 ```json
 {
@@ -482,7 +474,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## 输出格式 (Output Format)
 
@@ -773,7 +765,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## 输出格式 (Output Format)
 
@@ -1107,7 +1099,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## 输出格式 (Output Format)
 
@@ -1543,7 +1535,7 @@ capabilities:
 }
 ```
 
-审计日志保留期限 ≥ 3 年。
+留痕与保留期限由用户所在机构合规制度决定（本技能不存储文件）
 
 ## 踩坑记录 (Gotchas)
 
@@ -1733,7 +1725,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**:至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## 输出格式 (Output Format)
 
@@ -2179,7 +2171,7 @@ capabilities:
 }
 ```
 
-审计日志保留期限 ≥ 3 年。
+留痕与保留期限由用户所在机构合规制度决定（本技能不存储文件）
 
 ## 踩坑记录 (Gotchas)
 
@@ -2407,7 +2399,7 @@ capabilities:
 }
 ```
 
-**审计日志保留期限**：至少3年。
+**留痕与保留期限**：由用户所在机构的合规制度决定；本技能不存储任何文件
 
 ## Gotchas
 

@@ -1,7 +1,7 @@
 ---
 name: galdr
 description: OpenClaw skill for using galdr's ARC workflow to turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by listener-state traces: pattern, attention, pulse, heard pressure, surface balance/evidence, harmony, melody, overtones, and silence/re-entry structure. Use when asked to analyze a song, explain what makes a track work structurally, generate a listening experience, or extract video frames from a music video.
-version: "0.6.0"
+version: "0.7.1"
 author: Sellemain
 license: MIT
 platforms: [linux, macos]
@@ -77,6 +77,8 @@ Default sequence:
 5. Write the listening experience yourself or pass the prompt to the requested model.
 
 The stream is evidence. Walk the track through time before summarizing. Do not invent emotional claims that the structure does not support.
+
+When a user wants to configure another agent or project to use Galdr, point them to `docs/AGENT-ONBOARDING.md` and `examples/agent/AGENTS.md`. Those files contain the public, copy-pasteable agent instruction path.
 
 Use the ARC prompt family when the user asks for a specific reading mode:
 

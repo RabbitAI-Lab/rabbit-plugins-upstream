@@ -1,47 +1,64 @@
-## Description: <br>
-Mailchimp Marketing API integration with managed OAuth for audiences, campaigns, templates, automations, reports, and subscribers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailchimp Marketing API integration with managed OAuth for accessing audiences, campaigns, templates, automations, reports, and subscriber management through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and agents use this skill to connect through Maton-managed OAuth and manage Mailchimp audiences, subscribers, campaigns, templates, automations, reports, and batch operations. The skill is intended for email-marketing workflows where write operations are reviewed before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton brokers access to the connected Mailchimp account, so the skill can expose or affect email-marketing data if used with an unintended or untrusted connection. <br>
-Mitigation: Install only if you trust Maton, protect the MATON_API_KEY value, and verify the exact Mailchimp connection before making requests. <br>
-Risk: Write operations can create, update, delete, send, schedule, or batch-modify Mailchimp audiences, subscribers, campaigns, templates, and automations. <br>
-Mitigation: Require explicit user approval before writes and confirm the target resource, recipient count, timing, and intended effect, especially before sends, scheduling, automation starts, permanent deletion, or batch operations. <br>
-Risk: Multiple linked Mailchimp accounts can cause requests to run against the wrong account if the connection is ambiguous. <br>
-Mitigation: Use the Maton-Connection header when more than one Mailchimp connection exists and confirm the selected connection before sensitive reads or any write operation. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Mailchimp email marketing resources, subscriber lists, campaigns, templates, automations, and reports from an agent session. It is suited for read-first Mailchimp workflows and user-approved changes through managed OAuth.
 
-## Reference(s): <br>
-- [Mailchimp skill on ClawHub](https://clawhub.ai/byungkyu/skills/mailchimp) <br>
-- [Mailchimp Marketing API Documentation](https://mailchimp.com/developer/marketing/) <br>
-- [Mailchimp Marketing API Reference](https://mailchimp.com/developer/marketing/api/) <br>
-- [Mailchimp Quick Start Guide](https://mailchimp.com/developer/marketing/guides/quick-start/) <br>
-- [Mailchimp Release Notes](https://mailchimp.com/developer/release-notes/) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoints, shell commands, Python and JavaScript examples, and JSON request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; supports selecting a specific Mailchimp OAuth connection with the Maton-Connection header; all write operations require explicit approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Mailchimp actions can send campaigns, change subscribers, delete data, or trigger automations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, then require explicit user confirmation of the target resource, payload, and intended effect before any write or high-impact operation.
+
+Risk: OAuth tokens, API keys, or provider-issued credentials could be exposed if printed, logged, persisted, or passed through shell arguments.
+
+Mitigation: Use Maton OAuth and the operating system credential store where available; never print, log, persist, or pass secrets on a command line, and use raw HTTP only when the CLI cannot be installed.
+
+Risk: Multiple Maton accounts or Mailchimp connections could route requests to the wrong account.
+
+Mitigation: Verify authentication state and specify the intended profile or connection when multiple accounts or connections exist.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/mailchimp)
+- [Maton Homepage](https://maton.ai)
+- [Mailchimp Marketing API Documentation](https://mailchimp.com/developer/marketing/)
+- [Mailchimp Marketing API Reference](https://mailchimp.com/developer/marketing/api/)
+- [Mailchimp Quick Start Guide](https://mailchimp.com/developer/marketing/guides/quick-start/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Default to read/list operations; confirm new connections and write operations with the user.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

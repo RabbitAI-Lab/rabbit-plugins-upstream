@@ -1,46 +1,58 @@
-## Description: <br>
-Skill Kit helps Claude Code agents create, lint, merge, upgrade, route, convert, discover, graph, and publish-check multi-topic skills, including trigger and hook registration guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+skill-kit helps Claude Code users create, validate, merge, upgrade, route, publish, and maintain multi-topic skills, including trigger hooks, dependency graphs, language checks, and portability review.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent builders use Skill Kit to create, validate, refactor, discover, and publish-check Claude Code skills. It is also used to generate dependency graphs and manage trigger and hook workflows for skill ecosystems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent Claude Code hook or settings changes may be applied. <br>
-Mitigation: Use dry-run and per-project modes first, and review settings.json plus generated hook scripts before applying changes. <br>
-Risk: Global or unattended skill installs can affect more projects than intended. <br>
-Mitigation: Avoid global -g -y installs for untrusted skills and prefer per-project installation when evaluating behavior. <br>
-Risk: Converted, merged, or deduplicated skills may not behave as expected after file moves. <br>
-Mitigation: Keep backups until the converted or merged skill has been reviewed, validated, and exercised in the target environment. <br>
+## Use Case:
 
+Developers and engineers use skill-kit to author and maintain Claude Code skills, validate frontmatter, organize multi-topic skill content, inspect dependencies, and prepare public releases.
 
-## Reference(s): <br>
-- [Skill Kit on ClawHub](https://clawhub.ai/drumrobot/skills/skill-kit) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
-- [Skills CLI ecosystem](https://skills.sh/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with code fences, command examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose skill files, hook scripts, settings changes, dependency graphs, and validation reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: ClawHub release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can register persistent Claude hook behavior and update local Claude settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run or list modes before compiling triggers, inspect generated hook scripts, and register hooks only after reviewing their matchers and actions.
+
+Risk: Maintenance workflows such as dedup, convert, merge, and upgrade can modify installed skills, backups, and git state.
+
+Mitigation: Review proposed commands and affected paths before execution, prefer single-skill scopes, and keep backup moves explicit and reversible.
+
+Risk: Generated hook behavior may include environment-specific patterns that are wider than expected for a general user.
+
+Mitigation: Inspect trigger resources and generated dispatchers after compilation, remove private or irrelevant matchers, and keep public skills free of environment-specific references.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/skill-kit)
+- [Skills CLI ecosystem](https://skills.sh/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, code snippets, configuration examples, and generated files where the selected workflow calls for them.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or generate edits to skill files, hook scripts, settings, dependency graphs, and validation reports depending on the invoked topic.]
+
+## Skill Version(s):
+
+0.8.0 (source: server release metadata; changelog released 2026-08-29)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

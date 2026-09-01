@@ -1,44 +1,59 @@
-## Description: <br>
-Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build or review frontend UI for clean, restrained, human-designed interfaces without generic AI visual patterns.
 
-## Publisher: <br>
-[leostehlik](https://clawhub.ai/user/leostehlik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[leostehlik](https://clawhub.ai/user/leostehlik)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill when creating or reviewing frontend UI to avoid generic AI visual patterns and produce restrained, usable interfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can shape frontend implementation choices and may conflict with product, accessibility, security, localization, or existing design-system requirements. <br>
-Mitigation: Treat the rules as advisory visual-quality constraints and preserve explicit product, accessibility, security, localization, and design-system requirements when they conflict. <br>
-Risk: Generated UI may still include misleading, decorative, or hard-to-use interface patterns if the checklist is skipped. <br>
-Mitigation: Use the bundled review checklist and reference files before accepting generated frontend work. <br>
+## Use Case:
 
+Developers and engineers use this skill as a visual-quality guardrail when building, revising, or reviewing frontend interfaces with AI coding agents. It helps keep generated UI practical, scannable, and aligned with existing product requirements and design systems.
 
-## Reference(s): <br>
-- [Banned UI Patterns](references/banned-patterns.md) <br>
-- [Colour Palettes](references/colour-palettes.md) <br>
-- [No Slop UI Review Checklist](examples/review-checklist.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/leostehlik/no-slop-ui) <br>
-- [Publisher Profile](https://clawhub.ai/user/leostehlik) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with frontend code and configuration recommendations when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory visual-quality rules subordinate to accessibility, security, localization, product requirements, and existing design systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can steer UI decisions strongly enough to conflict with product requirements, accessibility, localization, security, data correctness, or an existing design system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep those requirements authoritative, apply the skill as a visual-quality guardrail, and document any justified exception when a no-slop rule conflicts.
+
+Risk: The checklist may reject valid domain-specific branding, motion, or visual treatment if applied without context.
+
+Mitigation: Use the review checklist as an acceptance aid, not a substitute for domain judgment, and escalate rather than revise when a visual rule conflicts with the product need.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/leostehlik/skills/no-slop-ui)
+- [SKILL.md](SKILL.md)
+- [Banned UI Patterns](references/banned-patterns.md)
+- [Colour Palettes](references/colour-palettes.md)
+- [Agent Snippets](docs/agent-snippets.md)
+- [No Slop UI v0.3 Conversion Proof](docs/conversion-proof.md)
+- [No Slop UI Review Checklist](examples/review-checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with optional code, shell command snippets, and checklist verdicts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Framework-agnostic frontend guidance; no hidden data access, persistence, or unsafe execution behavior found in ClawHub security evidence.]
+
+## Skill Version(s):
+
+0.3.0 (source: SKILL.md frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

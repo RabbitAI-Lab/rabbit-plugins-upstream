@@ -1,43 +1,59 @@
-## Description: <br>
-Provides paid horoscope profile and fortune lookups for the twelve zodiac signs across daily, weekly, monthly, and yearly periods using 聚合数据. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries zodiac profiles and daily, weekly, monthly, or yearly horoscope readings through Juhe Data, with paid access handled through an A2M/HTTP 402 flow.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and consumer agents use this skill to request zodiac profiles and horoscope readings after confirming a paid Alipay-backed lookup. The skill is suited for entertainment-oriented constellation information, not decisions about health, finance, law, career, or relationships. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may incur a paid Alipay-backed horoscope lookup without noticing the price or order details. <br>
-Mitigation: Show the price, order details, privacy notice, and cancellation path before any payment flow begins. <br>
-Risk: Plain-HTTP local testing could expose real queries or payment details. <br>
-Mitigation: Use HTTPS for production and avoid real queries or payments in any plain-HTTP local test setup. <br>
-Risk: Horoscope output could be mistaken for reliable advice for health, finance, legal, career, or relationship decisions. <br>
-Mitigation: Present results as entertainment only and keep the no-scientific-basis disclaimer with the generated Markdown output. <br>
+## Use Case:
 
+External users use this skill to request a zodiac sign profile or horoscope reading for a selected sign and time period. The skill is intended for paid entertainment queries and routes payment through Alipay before presenting returned results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-constellation-a2a) <br>
-- [聚合数据 A2A query endpoint](https://apis.juhe.cn/a2a/query.php) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Shell commands, Guidance] <br>
-**Output Format:** [Markdown horoscope profile and fortune report after payment completion] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the requested zodiac sign and period only; output should be based on returned API fields and include an entertainment disclaimer.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Users may treat entertainment horoscope output as decision guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present the entertainment-only disclaimer and avoid using the output for medical, financial, legal, career, or relationship decisions.
+
+Risk: The skill initiates a paid flow through Alipay payment capabilities.
+
+Mitigation: Confirm the price, order details, and user intent before payment, and stop the flow if the user cancels.
+
+Risk: The query sends the selected zodiac sign and period to a third-party API.
+
+Mitigation: Send only the requested sign and period over the fixed HTTPS endpoint and do not add personal identifiers or unrelated user data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/juhemcp/skills/juhe-constellation-a2a)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/juhemcp)
+- [Juhe A2A Query Endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns structured horoscope and zodiac-profile content from the service response, with an entertainment-only disclaimer.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

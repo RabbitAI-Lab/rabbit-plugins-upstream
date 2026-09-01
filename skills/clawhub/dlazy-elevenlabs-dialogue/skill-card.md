@@ -1,43 +1,61 @@
-## Description: <br>
-Dlazy Elevenlabs Dialogue helps an agent invoke the pinned dLazy CLI to generate ElevenLabs eleven_v3 multi-voice dialogue audio from per-line voice assignments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates multi-voice ElevenLabs dialogue through the dLazy CLI, assigning voices per line and returning hosted audio-generation results.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to create character dialogue, podcast segments, and short skits by sending dialogue lines, voice IDs, and generation options through the dLazy CLI to a hosted audio-generation service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dialogue text and local files explicitly passed to supported media fields may be sent to dLazy or ElevenLabs infrastructure. <br>
-Mitigation: Review user inputs before invocation and avoid sending confidential or restricted content unless the deployment has approved the external service use. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use per-invocation credentials or npx when persistence is not desired, restrict local credential access, and rotate or revoke the key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers, creators, and agents use this skill to generate character dialogue, podcast dialogue, and short skit audio with separate voices for each line. It is useful when an agent needs to call a hosted dialogue-generation service and optionally save or poll for generated outputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown instructions with bash examples and JSON result envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated-output URLs or an async generateId; requires dLazy API credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill sends dialogue text, prompts, parameters, and any referenced media files to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only pass content suitable for external processing, and review dLazy service terms and data-handling expectations before use.
+
+Risk: The dLazy CLI stores an API key in local user configuration or reads it from the DLAZY_API_KEY environment variable.
+
+Mitigation: Use standard secret-handling practices, restrict local config access, and rotate or revoke the API key from the dLazy dashboard when needed.
+
+Risk: Installing a global npm CLI creates supply-chain exposure for the local environment.
+
+Mitigation: Review the dLazy CLI source or npm package before installation, and prefer the pinned npx invocation for one-off use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted output URLs or an asynchronous task identifier for polling.]
+
+## Skill Version(s):
+
+1.3.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

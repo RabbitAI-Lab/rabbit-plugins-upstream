@@ -1,47 +1,62 @@
-## Description: <br>
-Manages project documentation: CLAUDE.md, AGENTS.md, README.md, CONTRIBUTING.md, DOCS.md. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages project documentation files such as CLAUDE.md, AGENTS.md, README.md, CONTRIBUTING.md, and DOCS.md by verifying them against codebase state before writing.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this workflow skill to create or maintain project documentation and agent context files from the current repository state. It focuses on AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, and DOCS.md rather than general markdown editing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documentation or context-file edits could introduce stale, incorrect, or misleading instructions for future agents and developers. <br>
-Mitigation: Use the skill's verification workflow to check paths, commands, and repository structure against the current codebase before accepting changes. <br>
-Risk: Existing AGENTS.md or CLAUDE.md files may be changed, renamed, or linked during context initialization workflows. <br>
-Mitigation: Use --dry-run or review planned changes before writing, and confirm before migrating CLAUDE.md to AGENTS.md. <br>
-Risk: README or CONTRIBUTING updates could overwrite intentional project-specific prose or governance policy. <br>
-Mitigation: Use preserve behavior where appropriate, update CONTRIBUTING.md with targeted replacements, and keep maintainer policy sections intact. <br>
+## Use Case:
 
+Developers and maintainers use this skill to create, refresh, and verify project-facing Markdown documentation and agent context files against the current repository state. It is intended for documentation maintenance workflows, not general Markdown editing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-md-docs) <br>
-- [Initialize Context Workflow](references/init-agents.md) <br>
-- [Monorepo Handling](references/monorepo.md) <br>
-- [Update Context Files Workflow](references/update-agents.md) <br>
-- [Update CONTRIBUTING Workflow](references/update-contributing.md) <br>
-- [Update README Workflow](references/update-readme.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown documentation updates, concise reports, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update AGENTS.md, CLAUDE.md symlinks, README.md, CONTRIBUTING.md, and DOCS.md according to the selected workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill can change persistent agent context and project documentation files, which may affect future agent behavior or developer workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed diffs before allowing writes, use dry-run where possible, and keep the skill's backup behavior before overwriting files.
+
+Risk: The skill may replace or symlink CLAUDE.md and AGENTS.md during context initialization or migration.
+
+Mitigation: Confirm the migration with the user before renaming or symlinking context files, and do not perform this migration as a side effect of unrelated documentation work.
+
+Risk: Documentation verification can surface deploy, migration, credentialed, or otherwise state-changing commands.
+
+Mitigation: Do not run state-changing commands solely to verify documentation unless the user explicitly intends that action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-md-docs)
+- [Update Context Files Workflow](artifact/references/update-agents.md)
+- [Update README Workflow](artifact/references/update-readme.md)
+- [Update CONTRIBUTING Workflow](artifact/references/update-contributing.md)
+- [Initialize Context Workflow](artifact/references/init-agents.md)
+- [Monorepo Handling](artifact/references/monorepo.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown files and concise status reports with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or write documentation files and context-file symlinks; supports dry-run previews when requested.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -32,21 +32,13 @@
 
 期望：直接进入 checkout-js、callback 和异步通知/最终确认链路；不重新列 quickstart、base、preorder、query 作为本轮阅读顺序。
 
-### C04 商户进件图片上传边界
-
-```text
-我有一张本地营业执照图片。请用 $huifu-pay-integration 给我图片上传 multipart、签名和重试代码。
-```
-
-期望：路由到图片上传 reference，说明 `file_url` 与文件流互斥、图片格式和 2MB 限制；multipart、签名原文、响应字段与重试均标 `[需要官方确认]`，不生成可运行代码。
-
 ### C05 版本升级
 
 ```text
 后续你们 Skill 更新了，我怎么更新本地这个 $huifu-pay-integration？它能不能主动提醒我升级？
 ```
 
-期望：读取版本策略，说明当前本地版本 `1.3.2`、不能主动联网检查或推送升级，以及 Git 拉取、本地目录整体覆盖或内部发布包替换方式。
+期望：读取版本策略，说明当前支付 Skill 版本 `1.3.5`、不能主动联网检查或推送升级，以及 Git 拉取、本地目录整体覆盖或独立发布包替换方式。
 
 ### C06 托管新增接口
 
@@ -64,10 +56,10 @@
 
 期望：路由到聚合关单、关单查询和对账 reference；说明 `merge_flag=Y` 时用主单信息、非合单用子单信息；对账 `bill_type` 可用 `MERGE_BILL`，文件名需兼容 `file_name/file_Name`。
 
-### C08 商户进件状态分层
+### C08 交易分账明细查询
 
 ```text
-企业进件已经返回 huifu_id，业务开通也提交了。请用 $huifu-pay-integration 判断能否直接把商户设为可交易。
+我要用 Java、PHP、Python 官方 SDK 查询一笔180天内的实时或延时分账明细。请用 $huifu-pay-integration 核对请求字段、完整响应和 split_trans_responses 编码。
 ```
 
-期望：路由到企业进件、业务开通和申请状态 reference；说明 `huifu_id`、审核、业务开通、渠道实名与电子协议状态不等同，建议用申请状态查询补偿确认。
+期望：路由到 `trade-split-detail-query.md` 和完整字段目录；说明请求只有 `hf_seq_id/huifu_id/ord_type`，三语言都有专属 `V2TradeTransSplitQueryRequest` 且扩展映射为空；`split_trans_responses` 按 String(JSON Array) 只解码一次，16个子字段保留数组层级；示例独有的顶层 `response.data.huifu_id` 不进入合同。

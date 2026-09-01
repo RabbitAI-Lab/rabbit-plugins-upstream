@@ -613,7 +613,7 @@ def cmd_calendar(args):
     """低价日历（扫描多日价格）"""
     from_city = args.from_city
     to_city = args.to_city
-    start_date = args.start_date
+    start_date = args.startDate
     days = min(args.days, 30)  # 最多30天
 
     calendar = []
@@ -725,7 +725,7 @@ def main():
     search_p.add_argument("--from", dest="from_city", required=True, help="出发城市")
     search_p.add_argument("--to", dest="to_city", required=True, help="到达城市")
     search_p.add_argument("--date", dest="dep_date", required=True, help="出发日期 YYYY-MM-DD")
-    search_p.add_argument("--trip-type", dest="trip_type", default="one_way", help="行程类型 one_way/round_trip")
+    search_p.add_argument("--tripType", dest="tripType", default="one_way", help="行程类型 one_way/round_trip")
     search_p.add_argument("--cabin", default="economy", help="舱位 economy/business/first")
     search_p.add_argument("--adults", type=int, default=1, help="成人数")
 
@@ -733,7 +733,7 @@ def main():
     cal_p = subparsers.add_parser("calendar", help="低价日历（扫描多日价格）")
     cal_p.add_argument("--from", dest="from_city", required=True, help="出发城市")
     cal_p.add_argument("--to", dest="to_city", required=True, help="到达城市")
-    cal_p.add_argument("--start-date", dest="start_date", required=True, help="起始日期 YYYY-MM-DD")
+    cal_p.add_argument("--startDate", dest="startDate", required=True, help="起始日期 YYYY-MM-DD")
     cal_p.add_argument("--days", type=int, default=14, help="扫描天数（最多30）")
     cal_p.add_argument("--cabin", default="economy", help="舱位 economy/business/first")
 

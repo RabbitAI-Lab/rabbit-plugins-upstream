@@ -1,47 +1,69 @@
-## Description: <br>
-Cnsdoce Publish V4 helps agents query Chinese engineering cost quotas, calculate item pricing and fees, and generate quotation tables for installation, building, municipal, and landscaping projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cnsdoce Publish V5 helps agents query Chinese construction-cost quota items, calculate Shandong/Jinan engineering fees, check unit and price assumptions, and prepare quotation-table outputs.
 
-## Publisher: <br>
-[caoshun-sudo](https://clawhub.ai/user/caoshun-sudo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[caoshun-sudo](https://clawhub.ai/user/caoshun-sudo)
 
-## Use Case: <br>
-External users and cost engineers use the skill to search quota items, compare list and quota units, calculate composite prices and fees, and prepare traceable quotation outputs for China engineering cost workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Engineering scope descriptions may be sent to Tencent or ByteDance LLM APIs during semantic matching. <br>
-Mitigation: Use explicit invocation for sensitive projects, avoid sending confidential scope details, or use a local-only workflow when confidentiality matters. <br>
-Risk: The database migration workflow may alter a real database if run without preparation. <br>
-Mitigation: Back up databases and review migration inputs before running migration scripts. <br>
-Risk: Dependency versions may change over time and affect behavior. <br>
-Mitigation: Prefer pinned dependencies and scan the runtime environment before deployment. <br>
+## Use Case:
 
+External users and cost engineers use this skill to map Chinese engineering bill items to quota items, calculate construction fees, validate unit conversions and material prices, and prepare quotation table outputs for Shandong/Jinan-focused projects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/caoshun-sudo/cnsdoce) <br>
-- [Cost composition and pricing procedure](references/cost_composition.md) <br>
-- [Fee standard](references/fee_standard.md) <br>
-- [Measure item rules](references/measure_items.md) <br>
-- [Multi-quota mapping](references/multi_quota_mapping.md) <br>
-- [Unit conversion rules](references/unit_conversion.md) <br>
+### Deployment Geography for Use:
 
+China, with Shandong and Jinan costing sources emphasized
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON quota recommendations, shell command examples, and quotation-table content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Optional LLM semantic matching can use HUNYUAN_API_KEY, DOUBAO_API_KEY, and LLM_PROVIDER; ClawHub metadata lists Python and Windows support.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata and frontmatter) <br>
+Risk: Project descriptions, pricing details, or API credentials may be processed by third-party LLM providers when LLM features are configured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use API keys only intentionally, disclose data handling to users before LLM use, and prefer --no-llm or local-only workflows for confidential bids.
+
+Risk: A configurable LLM endpoint could route project data to an untrusted host.
+
+Mitigation: Do not set HUNYUAN_URL to an untrusted host; verify endpoint configuration before running LLM-assisted matching.
+
+Risk: Database migration can change quota.db content used for costing decisions.
+
+Mitigation: Back up quota.db before running migration scripts and review migrated data before relying on it for pricing.
+
+Risk: Built-in sample quota data may be insufficient for formal pricing decisions.
+
+Mitigation: Use authorized source data for formal projects and require human review of quota matches, unit conversions, and quotation outputs.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/caoshun-sudo/skills/cnsdoce)
+- [Cost composition reference](references/cost_composition.md)
+- [Fee standard reference](references/fee_standard.md)
+- [Unit conversion reference](references/unit_conversion.md)
+- [Multi-quota mapping reference](references/multi_quota_mapping.md)
+- [Measure item reference](references/measure_items.md)
+- [Other item reference](references/other_items.md)
+- [Tencent TokenHub chat completions endpoint](https://tokenhub.tencentmaas.com/v1/chat/completions)
+- [Volces Doubao chat completions endpoint](https://ark.cn-beijing.volces.com/api/v3/chat/completions)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON snippets, shell commands, and quotation-table or Excel output guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use optional third-party LLM APIs when configured; local no-LLM workflows are available for confidential work.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release metadata; artifact frontmatter: 2.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,68 @@
-## Description: <br>
-Exa API integration with managed API key authentication for neural web search, page content retrieval, similar-page discovery, AI-generated answers, and asynchronous research tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Exa API integration with managed API key authentication for neural web search, page content retrieval, similar-page discovery, AI-generated answers, and asynchronous research tasks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Exa through Maton for web search, content extraction, answer generation with citations, and longer-running research workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton and linked Exa credentials can grant access to paid search and research APIs. <br>
-Mitigation: Store MATON_API_KEY and linked Exa keys as secrets, avoid printing them in logs, and rotate keys if exposed. <br>
-Risk: Search, content, answer, and research prompts may disclose private URLs or confidential research topics to external services. <br>
-Mitigation: Send only data approved for Maton and Exa, and avoid confidential URLs or prompts unless the workflow permits that exposure. <br>
-Risk: Connection create or delete examples can change which Exa API key the gateway uses. <br>
-Mitigation: Review connection IDs and confirm create or delete actions before running connection management commands. <br>
-Risk: Exa API calls can incur usage costs, especially content extraction and asynchronous research tasks. <br>
-Mitigation: Limit result counts, choose research models deliberately, and monitor returned cost fields where available. <br>
+## Use Case:
 
+Developers and external agents use this skill to access Exa through Maton for web search, URL content extraction, similarity search, cited answers, and research workflows. It is suited to tasks that need current web context with user-approved authentication and cautious handling of API operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/exa-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Exa API documentation](https://exa.ai/docs) <br>
-- [Exa API reference](https://exa.ai/docs/reference/search) <br>
-- [Exa dashboard](https://dashboard.exa.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline JSON, Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Exa connection managed through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Exa API calls through Maton can incur provider costs for searches, content extraction, answers, or research tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review planned calls before execution, use limits where available, and confirm cost-bearing research or extraction requests with the user.
+
+Risk: Authentication or connection setup can expose long-lived credentials or authorize the wrong Exa account if handled carelessly.
+
+Mitigation: Use OAuth when possible, let the Maton CLI manage credentials, approve new Exa connections explicitly, and specify the intended connection when multiple accounts are available.
+
+Risk: POST, PUT, PATCH, or DELETE requests can create or modify resources through the proxied API.
+
+Mitigation: Default to read and list calls, then require user approval with the target, payload, and intended effect before any modifying request.
+
+Risk: Web content returned by Exa may contain untrusted or adversarial instructions.
+
+Mitigation: Treat returned content as data, validate it before reuse, and do not let fetched content choose follow-up endpoints, recipients, or commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/exa-api)
+- [Maton Homepage](https://maton.ai)
+- [Exa API Documentation](https://exa.ai/docs)
+- [Exa API Reference](https://exa.ai/docs/reference/search)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Exa search results, extracted page content, cited answers, research task status, and cost metadata through Maton API calls.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

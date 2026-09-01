@@ -1,39 +1,58 @@
-## Description: <br>
-Helps QA teams design layered, risk-based test strategies for new projects, iterations, refactors, and urgent fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams design layered QA test strategies for new projects, iterations, refactors, and urgent fixes based on project characteristics, risk distribution, and resource constraints.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to turn risk assessments and requirement analysis into an actionable test strategy covering scope, layered test approach, resource allocation, and entry and exit criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad Chinese testing-planning phrases, which may produce a test strategy when the request is not actually about QA strategy. <br>
-Mitigation: Confirm that the user is asking for test strategy design before relying on the generated plan. <br>
-Risk: Generated release, CI/CD, and testing recommendations could be mistaken for approved operational actions. <br>
-Mitigation: Treat outputs as planning guidance only and review them before any release decision, pipeline change, or production action. <br>
+## Use Case:
 
+QA engineers, test leads, and delivery teams use this skill to turn requirements, risk assessments, project plans, and resource constraints into a practical test strategy. It produces scope definitions, layered testing approaches, entry and exit criteria, resource allocation guidance, and risk-aware test coverage decisions.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy document with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs risk matrices, strategy IDs, requirement traceability, scope definitions, test approach guidance, resource plans, and entry and exit criteria.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: The skill may read workspace files while preparing a test strategy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in workspaces where project requirements, risk assessments, and planning documents are appropriate for the agent to inspect.
+
+Risk: The generated strategy may reference release evaluation or CI/CD pipeline practices.
+
+Mitigation: Treat those references as planning guidance and require authorized review before executing release or pipeline changes.
+
+Risk: Ambiguous Chinese-language requests about test planning may activate the skill.
+
+Mitigation: Confirm that the user is asking for QA strategy output before using workspace documents to prepare the plan.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-strategy-design)
+- [Publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown strategy document with tables, risk matrix, scope definition, layered test plan, and entry and exit criteria]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should include a unique strategy ID, requirement traceability, priority distribution guidance, and coverage caveats based on available inputs.]
+
+## Skill Version(s):
+
+1.7.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

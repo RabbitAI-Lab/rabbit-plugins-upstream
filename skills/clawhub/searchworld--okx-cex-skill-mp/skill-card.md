@@ -1,44 +1,54 @@
-## Description: <br>
-Helps agents browse, install, update, remove, and verify AI trading skills from the OKX Skills Marketplace using the OKX CLI or related MCP tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search, browse, install, update, remove, and verify AI trading skills from the OKX Skills Marketplace.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-Developers and trading-assistant users use this skill to discover, install, update, remove, and verify AI trading skills from the OKX Skills Marketplace. It is for skill marketplace management, not order placement, market data, portfolio review, or bot management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide installation or changes of third-party trading skills across multiple detected agent environments. <br>
-Mitigation: Review each target skill before installing and confirm that multi-agent installation is intended before running the default add flow. <br>
-Risk: Installed marketplace skills run locally with the agent's permissions. <br>
-Mitigation: Install only skills from trusted publishers, use signature verification, and avoid bypassing verification unless the source and risk are explicitly accepted. <br>
-Risk: Marketplace access and install flows require local OKX CLI setup and credentials. <br>
-Mitigation: Configure credentials only for intended marketplace access and use download-only or MCP alternatives when full CLI installation is unavailable or too broad. <br>
+## Use Case:
 
+External users and developers use this skill to manage marketplace skills for AI trading agents, including discovery, installation, updates, removal, and signature verification. It is not used to place trades, fetch market data, or manage trading bots.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-skill-mp) <br>
-- [Publisher profile](https://clawhub.ai/user/searchworld) <br>
-- [OKX homepage](https://www.okx.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown] <br>
-**Output Format:** [Markdown with inline shell commands and command-output examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include CLI commands, MCP tool alternatives, installation guidance, update checks, removal steps, and signature-verification guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and skill metadata) <br>
+Risk: Installed third-party skills can run with the local agent's permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each skill before installation and install only skills from sources the user trusts.
+
+Risk: Using the documented force option bypasses signature verification.
+
+Mitigation: Avoid force installation unless the user intentionally accepts the package source and verification risk.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-skill-mp)
+- [OKX homepage](https://www.okx.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May request JSON output from OKX CLI commands when the user needs machine-readable results.]
+
+## Skill Version(s):
+
+1.4.5 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

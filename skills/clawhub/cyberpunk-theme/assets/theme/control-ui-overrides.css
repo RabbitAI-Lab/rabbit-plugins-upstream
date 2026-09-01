@@ -25,10 +25,9 @@
    20. GLOBAL HEADER    — 通用页顶栏
    21. BUBBLE LAYOUT    — 气泡宽度 & 透视
    22. HOVER BORDER     — 悬停脉冲边框
-   23. TOOL AVATAR      — 工具头像
-   24. CHAT BACKGROUND  — 聊天背景
-   25. HUD CANVAS       — 赛博HUD层
-   26. DREAM PAGE       — 梦境页面
+   23. CHAT BACKGROUND  — 聊天背景
+   24. HUD CANVAS       — 赛博HUD层
+   25. DREAM PAGE       — 梦境页面
    ═══════════════════════════════════════════════════════════════ */
 
 :root,
@@ -1677,7 +1676,7 @@ input[type="radio"]{
 /* ═══════════════════════════════════════════
    AVATARS — 头像立绘卡片
    ═══════════════════════════════════════════ */
-.chat-group:not(.user) .chat-avatar,
+.chat-group.assistant .chat-avatar,
 .chat-avatar.assistant,
 img.chat-avatar.assistant {
   width: 144px !important;
@@ -1692,39 +1691,39 @@ img.chat-avatar.assistant {
     0 28px 44px rgba(0,0,0,.40) !important;
 }
 
-.chat-group:not(.user) .chat-avatar::before,
+.chat-group.assistant .chat-avatar::before,
 .chat-avatar.assistant::before {
   background:
     linear-gradient(180deg, rgba(53,232,255,.14) 0%, rgba(53,232,255,.04) 30%, transparent 55%, rgba(255,65,208,.10) 100%) !important;
 }
 
-.chat-group:not(.user) .chat-avatar::after,
+.chat-group.assistant .chat-avatar::after,
 .chat-avatar.assistant::after {
   height: 3px !important;
   background: linear-gradient(90deg, rgba(53,232,255,.98), rgba(255,65,208,.62), transparent 90%) !important;
 }
 
-.chat-group:not(.user) .chat-avatar {
+.chat-group.assistant .chat-avatar {
   position: relative;
 }
 
-.chat-group:not(.user) .chat-avatar::marker {
+.chat-group.assistant .chat-avatar::marker {
   display: none;
 }
 
-.chat-group:not(.user) .chat-avatar::before,
-.chat-group:not(.user) .chat-avatar::after,
+.chat-group.assistant .chat-avatar::before,
+.chat-group.assistant .chat-avatar::after,
 .chat-avatar.assistant::before,
 .chat-avatar.assistant::after {
   pointer-events: none;
 }
 
-.chat-group:not(.user) .chat-avatar::before,
+.chat-group.assistant .chat-avatar::before,
 .chat-avatar.assistant::before {
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
 }
 
-.chat-group:not(.user) .chat-avatar {
+.chat-group.assistant .chat-avatar {
   transform:
     perspective(1350px)
     rotateY(11deg)
@@ -1732,7 +1731,7 @@ img.chat-avatar.assistant {
     translateZ(14px) !important;
 }
 
-.chat-group:not(.user) .chat-avatar:hover {
+.chat-group.assistant .chat-avatar:hover {
   transform:
     perspective(1350px)
     rotateY(8deg)
@@ -1741,13 +1740,13 @@ img.chat-avatar.assistant {
     translateX(2px) !important;
 }
 
-.chat-group:not(.user) .chat-avatar + .chat-group-messages {
+.chat-group.assistant .chat-avatar + .chat-group-messages {
   margin-left: 10px !important;
   margin-top: 24px !important;
 }
 
 @media (max-width: 900px) {
-  .chat-group:not(.user) .chat-avatar,
+  .chat-group.assistant .chat-avatar,
   .chat-avatar.assistant,
   img.chat-avatar.assistant {
     width: 108px !important;
@@ -2059,7 +2058,7 @@ img.chat-avatar.assistant {
   padding: 6px 12px 5px 12px;
 }
 
-.chat-group:not(.user) .chat-avatar {
+.chat-group.assistant .chat-avatar {
   margin-bottom: 26px !important;
 }
 
@@ -2544,15 +2543,6 @@ img.chat-avatar.assistant {
   .chat-text .markdown-plain-text-fallback
 )):hover {
   transform: none !important;
-}
-
-
-/* ═══════════════════════════════════════════
-   TOOL AVATAR — 隐藏内置图标，立绘本体在后面的 portrait 规则统一定义
-   ═══════════════════════════════════════════ */
-.chat-avatar.tool > :not(.oc-theme-avatar-raster),
-.chat-group.tool .chat-avatar > :not(.oc-theme-avatar-raster) {
-  display: none !important;
 }
 
 
@@ -4871,9 +4861,7 @@ img.chat-avatar.assistant {
   overflow-anchor: none !important;
 }
 
-.chat-group.assistant::before,
-.chat-group.tool::before,
-.chat-group.other::before {
+.chat-group.assistant::before {
   left: 10px !important;
   bottom: -12px !important;
   z-index: 5 !important;
@@ -4916,100 +4904,13 @@ img.chat-avatar.assistant {
     0 0 18px rgba(255,118,222,.05) !important;
 }
 
-.chat-group.other::before {
-  content: var(--oc-helper-nameplate, "消息助手 helper") !important;
-  left: 6px !important;
-  bottom: -10px !important;
-  z-index: 6 !important;
-  padding: 6px 14px 5px 14px !important;
-  font-size: 10px !important;
-  letter-spacing: .15em !important;
-  color: color-mix(in srgb, var(--accent) 62%, white 38%) !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.17) 0%, rgba(255,255,255,0) 22%, rgba(255,255,255,0) 100%),
-    radial-gradient(circle at 14% 14%, rgba(104,239,255,.20) 0%, rgba(104,239,255,0) 32%),
-    radial-gradient(circle at 84% 24%, rgba(255,118,222,.16) 0%, rgba(255,118,222,0) 30%),
-    linear-gradient(180deg, rgba(34,39,64,.52) 0%, rgba(23,28,49,.40) 52%, rgba(13,18,34,.30) 100%) !important;
-  border: 1px solid rgba(170,236,255,.22) !important;
-  box-shadow:
-    0 0 0 1px rgba(166,230,255,.08),
-    0 10px 22px rgba(2,8,16,.15),
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 0 18px rgba(104,239,255,.10) !important;
-  backdrop-filter: blur(18px) saturate(1.08) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.08) !important;
-  text-shadow:
-    0 0 10px rgba(53,232,255,.12),
-    0 0 18px rgba(255,118,222,.05) !important;
-  text-transform: none !important;
-}
-
-.chat-group.tool::before {
-  content: "TOOL // SYSTEM" !important;
-  left: 6px !important;
-  bottom: -10px !important;
-  z-index: 6 !important;
-  padding: 6px 14px 5px 14px !important;
-  font-size: 10px !important;
-  letter-spacing: .15em !important;
-  color: color-mix(in srgb, var(--accent) 68%, white 32%) !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,.15) 0%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 100%),
-    radial-gradient(circle at 14% 14%, rgba(104,239,255,.22) 0%, rgba(104,239,255,0) 34%),
-    radial-gradient(circle at 84% 24%, rgba(120,188,255,.12) 0%, rgba(120,188,255,0) 30%),
-    linear-gradient(180deg, rgba(20,32,54,.54) 0%, rgba(13,22,39,.42) 52%, rgba(8,15,28,.30) 100%) !important;
-  border: 1px solid rgba(170,236,255,.22) !important;
-  box-shadow:
-    0 0 0 1px rgba(166,230,255,.08),
-    0 10px 22px rgba(2,8,16,.15),
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 0 18px rgba(104,239,255,.10) !important;
-  backdrop-filter: blur(18px) saturate(1.08) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.08) !important;
-  text-shadow:
-    0 0 10px rgba(53,232,255,.12),
-    0 0 16px rgba(120,188,255,.06) !important;
-}
-
 .chat-group.assistant,
-.chat-group.tool,
-.chat-group.other,
 .chat-group.user {
   gap: var(--oc-chat-portrait-gap-x) !important;
 }
 
 .chat-group.user {
   align-items: flex-end !important;
-}
-
-.chat-group.tool .chat-avatar,
-.chat-avatar.tool {
-  --oc-portrait-w: var(--oc-chat-portrait-w);
-  --oc-portrait-h: var(--oc-chat-portrait-h);
-  --oc-portrait-clip: polygon(
-    0 18px,
-    18px 0,
-    calc(100% - 14px) 0,
-    100% 14px,
-    100% calc(100% - 24px),
-    calc(100% - 24px) 100%,
-    0 100%
-  );
-  --oc-portrait-shadow:
-    0 0 0 1px rgba(53,232,255,.14),
-    0 0 26px rgba(53,232,255,.18),
-    0 0 56px rgba(255,65,208,.08),
-    -18px 26px 46px rgba(0,0,0,.44);
-  --oc-portrait-transform: rotate(-0.55deg) translateY(0);
-  --oc-portrait-hover-transform: rotate(-0.35deg) translateY(-1px);
-  --oc-portrait-overlay:
-    linear-gradient(180deg, rgba(53,232,255,.14) 0%, transparent 34%, rgba(255,65,208,.08) 100%);
-  --oc-portrait-overlay-shadow: inset 0 0 0 1px rgba(255,255,255,.035);
-  --oc-portrait-bar-h: 3px;
-  --oc-portrait-bar-bg:
-    linear-gradient(90deg, rgba(53,232,255,.92), rgba(255,65,208,.56), transparent 92%);
-  --oc-portrait-bar-shadow: 0 0 10px rgba(53,232,255,.18);
-  background-color: rgba(11, 16, 27, 0.98) !important;
 }
 
 .chat-group.user .chat-avatar,
@@ -5083,40 +4984,6 @@ img.chat-avatar.assistant {
     linear-gradient(180deg, rgba(14,22,37,.98) 0%, rgba(9,13,24,.98) 100%) !important;
 }
 
-.chat-group.other .chat-avatar {
-  --oc-portrait-w: var(--oc-chat-portrait-w);
-  --oc-portrait-h: var(--oc-chat-portrait-h);
-  --oc-portrait-clip: polygon(
-    0 18px,
-    18px 0,
-    calc(100% - 14px) 0,
-    100% 14px,
-    100% calc(100% - 24px),
-    calc(100% - 24px) 100%,
-    0 100%
-  );
-  --oc-portrait-shadow:
-    0 0 0 1px rgba(53,232,255,.14),
-    0 0 26px rgba(53,232,255,.18),
-    0 0 56px rgba(255,65,208,.08),
-    -18px 26px 46px rgba(0,0,0,.44);
-  --oc-portrait-transform: rotate(-0.45deg) translateY(0);
-  --oc-portrait-hover-transform: rotate(-0.25deg) translateY(-1px);
-  --oc-portrait-overlay:
-    linear-gradient(180deg, rgba(53,232,255,.16) 0%, transparent 36%, rgba(255,65,208,.10) 100%);
-  --oc-portrait-overlay-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
-  --oc-portrait-bar-h: 4px;
-  --oc-portrait-bar-bg:
-    linear-gradient(90deg, rgba(53,232,255,.95), rgba(255,65,208,.62), transparent 92%);
-  --oc-portrait-bar-shadow: 0 0 14px rgba(53,232,255,.20);
-  background:
-    linear-gradient(180deg, rgba(14,22,37,.98) 0%, rgba(9,13,24,.98) 100%) !important;
-}
-
-.chat-group.other .chat-avatar > :not(.oc-theme-avatar-raster) {
-  display: none !important;
-}
-
 .oc-theme-avatar-raster {
   position: absolute !important;
   inset: 0 !important;
@@ -5128,15 +4995,8 @@ img.chat-avatar.assistant {
   pointer-events: none !important;
 }
 
-.chat-group.other .chat-avatar > .oc-theme-avatar-raster {
-  object-position: center 12% !important;
-}
-
 .chat-group.assistant .chat-avatar,
 .chat-group.assistant img.chat-avatar.assistant,
-.chat-group.tool .chat-avatar,
-.chat-avatar.tool,
-.chat-group.other .chat-avatar,
 .chat-group.user .chat-avatar,
 .chat-avatar.user {
   width: var(--oc-portrait-w) !important;
@@ -5164,12 +5024,6 @@ img.chat-avatar.assistant {
 
 .chat-group.assistant .chat-avatar::before,
 .chat-group.assistant .chat-avatar::after,
-.chat-group.tool .chat-avatar::before,
-.chat-group.tool .chat-avatar::after,
-.chat-avatar.tool::before,
-.chat-avatar.tool::after,
-.chat-group.other .chat-avatar::before,
-.chat-group.other .chat-avatar::after,
 .chat-group.user .chat-avatar::before,
 .chat-group.user .chat-avatar::after,
 .chat-avatar.user::before,
@@ -5178,9 +5032,6 @@ img.chat-avatar.assistant {
 }
 
 .chat-group.assistant .chat-avatar::before,
-.chat-group.tool .chat-avatar::before,
-.chat-avatar.tool::before,
-.chat-group.other .chat-avatar::before,
 .chat-group.user .chat-avatar::before,
 .chat-avatar.user::before {
   content: "" !important;
@@ -5191,9 +5042,6 @@ img.chat-avatar.assistant {
 }
 
 .chat-group.assistant .chat-avatar::after,
-.chat-group.tool .chat-avatar::after,
-.chat-avatar.tool::after,
-.chat-group.other .chat-avatar::after,
 .chat-group.user .chat-avatar::after,
 .chat-avatar.user::after {
   content: "" !important;
@@ -5208,9 +5056,6 @@ img.chat-avatar.assistant {
 
 .chat-group.assistant .chat-avatar:hover,
 .chat-group.assistant img.chat-avatar.assistant:hover,
-.chat-group.tool .chat-avatar:hover,
-.chat-avatar.tool:hover,
-.chat-group.other .chat-avatar:hover,
 .chat-group.user .chat-avatar:hover,
 .chat-avatar.user:hover {
   transform: var(--oc-portrait-hover-transform) !important;
@@ -5219,19 +5064,6 @@ img.chat-avatar.assistant {
 .chat-group.user .chat-avatar svg,
 .chat-avatar.user svg {
   display: none !important;
-}
-
-.chat-group.tool {
-  margin-bottom: 24px !important;
-}
-
-.chat-group.other {
-  margin-bottom: 24px !important;
-}
-
-.chat-group.tool .chat-avatar + .chat-group-messages {
-  margin-left: 0 !important;
-  margin-top: var(--oc-chat-portrait-offset-y) !important;
 }
 
 .chat-group.tool .chat-bubble,
@@ -5321,11 +5153,6 @@ img.chat-avatar.assistant {
 }
 
 .chat-group.assistant .chat-avatar + .chat-group-messages {
-  margin-left: 0 !important;
-  margin-top: var(--oc-chat-portrait-offset-y) !important;
-}
-
-.chat-group.other .chat-avatar + .chat-group-messages {
   margin-left: 0 !important;
   margin-top: var(--oc-chat-portrait-offset-y) !important;
 }
@@ -5645,13 +5472,11 @@ img.chat-avatar.assistant {
     margin-top: 28px !important;
   }
 
-  .chat-group.tool .chat-avatar + .chat-group-messages,
   .chat-group.user .chat-avatar + .chat-group-messages {
     margin-top: 28px !important;
   }
 
-  .chat-group.assistant::before,
-  .chat-group.tool::before {
+  .chat-group.assistant::before {
     left: 0 !important;
     bottom: -8px !important;
     font-size: 9px !important;
@@ -6361,6 +6186,245 @@ img.chat-avatar.assistant {
   margin: 0 !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+}
+
+/* OpenClaw 2026.8.1 conversation adapter.
+   The transcript and composer now share a flex column inside
+   .chat-main__conversation. Release the legacy full-height transcript so the
+   composer remains inside the visible conversation viewport. */
+.shell--chat section.card.chat:has(.chat-main__conversation) {
+  padding-top: 0 !important;
+}
+
+.shell--chat .chat-main__conversation {
+  --chat-transcript-composer-underlap: 0px !important;
+  min-height: 0 !important;
+}
+
+.shell--chat .chat-main__conversation > .chat-thread {
+  min-height: 0 !important;
+  height: auto !important;
+  margin-bottom: 0 !important;
+  padding-bottom: calc(
+    6px + var(--chat-transcript-composer-underlap, 0px) + var(--chat-transcript-fade-height, 0px)
+  ) !important;
+}
+
+.shell--chat .chat-main__conversation > .agent-chat__composer-shell > .agent-chat__input {
+  margin: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.shell--chat .chat-main__conversation .chat-controls__model-settings {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr) !important;
+  gap: 4px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.shell--chat .chat-main__conversation .chat-controls__model-settings > .chat-controls__inline-select {
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.shell--chat .chat-main__conversation .chat-controls__model-settings .chat-controls__inline-select-trigger {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+.shell--chat .chat-main__conversation .chat-controls__model-settings .chat-controls__inline-select-label {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* OpenClaw 2026.8.1 direct-chat portrait and composer surface adapter.
+   Direct chat no longer renders avatar nodes, so keep one assistant portrait
+   and one user portrait locked to the two sides of the composer. */
+.shell--chat .chat-main__conversation {
+  --oc-stage-portrait-w: 132px;
+  --oc-stage-portrait-h: 198px;
+  --oc-stage-portrait-gap: 24px;
+  --oc-stage-edge-gap: 8px;
+  --oc-stage-composer-width: min(
+    var(--chat-thread-max-width, 48rem),
+    calc(
+      100%
+      - var(--oc-stage-portrait-w)
+      - var(--oc-stage-portrait-gap)
+      - var(--oc-stage-edge-gap)
+      - var(--oc-stage-portrait-w)
+      - var(--oc-stage-portrait-gap)
+      - var(--oc-stage-edge-gap)
+    )
+  );
+  position: relative !important;
+}
+
+.shell--chat .chat-main__conversation > .chat-thread.chat-thread--direct .chat-thread-inner {
+  box-sizing: border-box !important;
+  width: var(--oc-stage-composer-width) !important;
+  max-width: var(--oc-stage-composer-width) !important;
+}
+
+.shell--chat .chat-main__conversation:has(> .chat-thread.chat-thread--direct) > .agent-chat__composer-shell {
+  width: var(--oc-stage-composer-width) !important;
+  max-width: var(--oc-stage-composer-width) !important;
+  align-self: center !important;
+}
+
+.shell--chat .oc-theme-stage-portraits {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: var(--oc-chat-composer-bottom, 14px) !important;
+  z-index: 4 !important;
+  display: grid !important;
+  grid-template-columns:
+    var(--oc-stage-portrait-w)
+    var(--oc-stage-portrait-gap)
+    minmax(0, 1fr)
+    var(--oc-stage-portrait-gap)
+    var(--oc-stage-portrait-w) !important;
+  grid-template-rows: var(--oc-stage-portrait-h) !important;
+  width: calc(
+    var(--oc-stage-portrait-w)
+    + var(--oc-stage-portrait-gap)
+    + min(
+      var(--chat-thread-max-width, 48rem),
+      calc(
+        100%
+        - var(--oc-stage-portrait-w)
+        - var(--oc-stage-portrait-gap)
+        - var(--oc-stage-edge-gap)
+        - var(--oc-stage-portrait-w)
+        - var(--oc-stage-portrait-gap)
+        - var(--oc-stage-edge-gap)
+      )
+    )
+    + var(--oc-stage-portrait-gap)
+    + var(--oc-stage-portrait-w)
+  ) !important;
+  height: var(--oc-stage-portrait-h) !important;
+  overflow: visible !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+}
+
+.shell--chat .oc-theme-stage-portrait {
+  position: relative !important;
+  align-self: end !important;
+  display: block !important;
+  width: var(--oc-stage-portrait-w) !important;
+  height: var(--oc-stage-portrait-h) !important;
+  min-width: var(--oc-stage-portrait-w) !important;
+  min-height: var(--oc-stage-portrait-h) !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  border-radius: 0 !important;
+  transform-origin: center bottom !important;
+  filter: none !important;
+  isolation: isolate !important;
+}
+
+.shell--chat .oc-theme-stage-portrait--left {
+  grid-column: 1 !important;
+  clip-path: polygon(0 18px, 18px 0, calc(100% - 14px) 0, 100% 14px, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%) !important;
+  transform: none !important;
+  background: linear-gradient(180deg, rgba(14,22,37,.98), rgba(9,13,24,.98)) !important;
+  box-shadow: 0 0 0 1px rgba(53,232,255,.14), 0 0 26px rgba(53,232,255,.18), -18px 26px 46px rgba(0,0,0,.44) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait--right {
+  grid-column: 5 !important;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px) !important;
+  transform: none !important;
+  background: linear-gradient(180deg, rgba(34,18,39,.98), rgba(14,11,24,.98)) !important;
+  box-shadow: 0 0 0 1px rgba(255,65,208,.18), 0 0 26px rgba(255,65,208,.18), 18px 26px 46px rgba(0,0,0,.44) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait::before,
+.shell--chat .oc-theme-stage-portrait::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+
+.shell--chat .oc-theme-stage-portrait::before {
+  inset: 0 !important;
+  background: linear-gradient(180deg, rgba(53,232,255,.13), transparent 36%, rgba(255,65,208,.09)) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait::after {
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(90deg, rgba(53,232,255,.95), rgba(255,65,208,.68), transparent 94%) !important;
+  box-shadow: 0 0 14px rgba(53,232,255,.20) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait--right::before {
+  background: linear-gradient(180deg, rgba(255,65,208,.16), transparent 36%, rgba(53,232,255,.08)) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait--right::after {
+  background: linear-gradient(90deg, transparent 6%, rgba(255,65,208,.92), rgba(53,232,255,.62)) !important;
+  box-shadow: 0 0 14px rgba(255,65,208,.18) !important;
+}
+
+.shell--chat .oc-theme-stage-portrait > .oc-theme-avatar-raster {
+  z-index: 1 !important;
+}
+
+.shell--chat .chat-thread--direct .chat-group.assistant::before {
+  content: none !important;
+}
+
+@media (max-width: 1100px) {
+  .shell--chat .chat-main__conversation {
+    --oc-stage-portrait-w: 112px;
+    --oc-stage-portrait-h: 168px;
+    --oc-stage-portrait-gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .shell--chat .chat-main__conversation {
+    --oc-stage-portrait-w: 0px;
+    --oc-stage-portrait-gap: 0px;
+    --oc-stage-edge-gap: var(--chat-thread-gutter, 16px);
+  }
+
+  .shell--chat .oc-theme-stage-portraits {
+    display: none !important;
+  }
+}
+
+.shell--chat .chat-main__conversation > .agent-chat__composer-shell:has(> .agent-chat__progress-float) {
+  gap: 0 !important;
+}
+
+.shell--chat .chat-main__conversation > .agent-chat__composer-shell > .agent-chat__progress-float {
+  margin-bottom: 0 !important;
+}
+
+.shell--chat .chat-main__conversation .session-progress-card--composer {
+  padding-bottom: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 18px 18px 0 0 !important;
+  background: rgb(9, 17, 30) !important;
+}
+
+.shell--chat .chat-main__conversation .agent-chat__progress-float + .agent-chat__input {
+  border-top: 0 !important;
+  border-radius: 0 0 18px 18px !important;
 }
 
 .shell--chat .agent-chat__input {

@@ -21,7 +21,7 @@ writes unless `mbs pivot --help` proves the first-class command is unavailable.
 
 Default flow:
 
-1. `mbs workbook metadata` or `mbs workbook list-worksheets`
+1. `mbs workbook inspect` and `mbs worksheet list`
 2. Identify the source worksheet name and header row
 3. Author `pivot-config.json`
 4. Run `mbs pivot preview`
@@ -33,7 +33,7 @@ CLI:
 ```bash
 mbs pivot preview --doc-id <DOC_ID> --worksheet-name SourceData --spec pivot-config.json --output table
 mbs pivot upsert --doc-id <DOC_ID> --target-worksheet-name PivotResult --anchor-cell A1 --spec pivot-config.json
-mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
+mbs range read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
 ```
 
 Use `--dry-run` before mutation when you need to confirm the write request
@@ -167,9 +167,10 @@ mbs pivot preview --doc-id <DOC_ID> --worksheet-name SourceData --spec pivot-con
 After `upsert`, verify the written worksheet:
 
 ```bash
-mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
-mbs workbook list-worksheets --doc-id <DOC_ID> --output table
+mbs range read --doc-id <DOC_ID> --worksheet-name PivotResult --range A1:H30 --output table
+mbs workbook inspect --doc-id <DOC_ID> --output json
+mbs worksheet list --doc-id <DOC_ID> --output table
 ```
 
-If the target sheet was auto-created, `workbook list-worksheets` should show it
-after the write completes.
+If the target sheet was auto-created, `worksheet list` should show it after the
+write completes.

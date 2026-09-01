@@ -129,7 +129,7 @@ if [ "$DRY_RUN" = true ]; then
     echo "---"
     cat << TEMPLATE
 name: $SKILL_NAME
-description: "[TODO: Add a concise description of what this skill does and when to use it]"
+description: "[TODO: Add a concise description of what this skill does and when to use it. Require narrow, testable trigger conditions plus explicit exclusions (never empty or catch-all matchers).]"
 ---
 
 # $(echo "$SKILL_NAME" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')
@@ -184,7 +184,7 @@ mkdir -p "$SKILL_PATH"
 cat > "$SKILL_PATH/SKILL.md" << TEMPLATE
 ---
 name: $SKILL_NAME
-description: "[TODO: Add a concise description of what this skill does and when to use it]"
+description: "[TODO: Add a concise description of what this skill does and when to use it. Require narrow, testable trigger conditions plus explicit exclusions (never empty or catch-all matchers).]"
 ---
 
 # $(echo "$SKILL_NAME" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) tolower(substr($i,2))}1')

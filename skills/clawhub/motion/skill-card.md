@@ -1,44 +1,63 @@
-## Description: <br>
-Motion API integration with managed OAuth for managing tasks, projects, workspaces, comments, recurring tasks, schedules, and related Motion data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Motion API integration with managed OAuth for managing tasks, projects, workspaces, comments, recurring tasks, schedules, statuses, and custom fields through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to query and manage connected Motion workspaces through Maton-managed OAuth, including tasks, projects, comments, custom fields, schedules, and recurring tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a sensitive MATON_API_KEY and delegates Motion OAuth access through Maton. <br>
-Mitigation: Install only if Maton is trusted, keep MATON_API_KEY private, and use the intended Motion connection when multiple accounts are linked. <br>
-Risk: Create, update, and delete calls can change Motion tasks, projects, comments, custom fields, connections, and recurring tasks. <br>
-Mitigation: Approve write or delete actions only after checking the exact target resource and intended effect. <br>
+## Use Case:
 
+Developers and external users use this skill to connect a Motion account through Maton and read or manage scheduled work, including tasks, projects, workspaces, comments, recurring tasks, schedules, statuses, and custom fields.
 
-## Reference(s): <br>
-- [Motion on ClawHub](https://clawhub.ai/byungkyu/motion) <br>
-- [Maton](https://maton.ai) <br>
-- [Motion API Documentation](https://docs.usemotion.com/) <br>
-- [Motion API Reference](https://docs.usemotion.com/api-reference) <br>
-- [Motion Cookbooks](https://docs.usemotion.com/cookbooks/getting-started) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoints and Python or JavaScript examples; API responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Motion OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can create, update, or delete resources in the connected Motion account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, then require explicit user confirmation of the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Installing and using the skill grants Maton-mediated access to the user's Motion account.
+
+Mitigation: Prefer OAuth, connect only accounts needed for the task, choose least-privilege scopes when available, and revoke unused connections.
+
+Risk: API keys or provider credentials can be exposed if printed, stored in files, or passed through shell history.
+
+Mitigation: Use OAuth where possible; when API keys are unavoidable, keep them in the credential store or stdin-only HTTP configuration and never log, print, or persist tokens.
+
+## Reference(s):
+
+- [Maton Homepage](https://maton.ai)
+- [Motion API Documentation](https://docs.usemotion.com/)
+- [Motion API Reference](https://docs.usemotion.com/api-reference)
+- [Motion Cookbooks](https://docs.usemotion.com/cookbooks/getting-started)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Code, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Motion API responses are JSON; write operations require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata; artifact frontmatter reports 1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

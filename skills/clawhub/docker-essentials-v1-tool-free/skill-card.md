@@ -1,41 +1,57 @@
-## Description: <br>
-Helps developers maintain legacy Docker V1 environments with classic container lifecycle, image management, basic Compose V1 orchestration, and compatibility-checking guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供Docker V1经典命令集与基础容器管理,适合维护旧版Docker环境的开发者。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage containers, images, and docker-compose workflows in legacy Docker V1 environments and to assess readiness for migration to Docker V2. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose Docker commands that stop or delete containers, images, and volumes. <br>
-Mitigation: Require explicit user approval before destructive Docker operations such as rm, rmi, prune, docker-compose down -v, or forced container removal. <br>
-Risk: The skill can propose commands that push images to registries or run commands as root inside containers. <br>
-Mitigation: Review registry targets, credentials, and container privilege level before execution, and restrict root container shell access to intentional maintenance tasks. <br>
+## Use Case:
 
+Developers and engineers use this skill to generate and review Docker V1 and docker-compose V1 commands for maintaining legacy container environments, managing images and containers, debugging services, and preparing migration assessments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-essentials-v1-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, YAML, Dockerfile, and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose Docker and docker-compose commands that operate on local containers, images, volumes, registries, and container shells.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can suggest destructive Docker operations such as remove, prune, or down -v.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before destructive commands and back up important containers, images, and volumes first.
+
+Risk: The skill may guide registry login, push, or rebuild workflows that can expose credentials or publish unintended images.
+
+Mitigation: Do not paste passwords or tokens into commands or logs, and review registry targets and image tags before execution.
+
+Risk: The skill focuses on legacy Docker V1 and docker-compose V1 environments.
+
+Mitigation: Use it only when legacy Docker support is required and keep the agent scoped to that maintenance or migration task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-essentials-v1-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, YAML, and Dockerfile code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Docker commands that require user review before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

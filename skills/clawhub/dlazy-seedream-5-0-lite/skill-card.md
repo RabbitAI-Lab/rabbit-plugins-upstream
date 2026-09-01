@@ -1,45 +1,60 @@
-## Description: <br>
-Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images through the dLazy hosted Seedream 5.0 Lite API from text prompts or reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs are sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid submitting confidential or restricted content unless the user has approved dLazy as a provider for that data. <br>
-Risk: The dLazy CLI may store an API key in a local config file. <br>
-Mitigation: Use the per-invocation DLAZY_API_KEY environment variable or verify config-file permissions on shared machines. <br>
-Risk: Generated assets are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review generated output links before sharing them outside the intended workflow. <br>
+## Use Case:
 
+Developers and external users can use this skill to have an agent generate or transform images through the dLazy Seedream 5.0 Lite CLI using prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as dLazy-hosted URLs; async runs may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: A dLazy API key may be stored on disk in the local CLI configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer DLAZY_API_KEY for per-run use when persistence is not needed, and verify permissions on ~/.dlazy/config.json if a key is saved.
+
+Risk: Prompts and selected local images are sent to dLazy hosted services for generation.
+
+Mitigation: Review prompts and input files before invocation, especially when they may contain sensitive or proprietary content.
+
+Risk: Generation commands can incur paid API usage or overwrite intended output paths.
+
+Mitigation: Use dry-run or explicit command options where appropriate, and provide clear output paths when saving generated assets.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API calls, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated image outputs are returned as hosted file URLs and may be saved locally with the CLI --save option.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,60 @@
-## Description: <br>
-Generate and edit high-quality images with Nano Banana 2.0 using the dLazy CLI, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit high-quality images with Nano Banana 2.0 for text-to-image and image-to-image workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to call dLazy's hosted Nano Banana 2.0 image generation and editing service from an agent, passing prompts and optional image references through the pinned CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and any local media paths passed to the CLI can be uploaded to dLazy's hosted API and media storage. <br>
-Mitigation: Use the skill only when external cloud image processing is acceptable, and avoid sending sensitive prompts or media unless approved. <br>
-Risk: Authentication stores a dLazy API key locally or uses the DLAZY_API_KEY environment variable. <br>
-Mitigation: Protect local CLI configuration and environment variables, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers and external users use this skill to ask an agent to generate or edit images through the dLazy Nano Banana 2 CLI, using text prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-banana2) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands; CLI responses are JSON containing hosted image output URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; prompts and local media paths may be sent to dLazy-hosted API and file services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: Prompts, reference images, and local paths passed to the skill are sent to the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only data appropriate for dLazy processing and avoid sending sensitive prompts or files unless the user has approved that service.
+
+Risk: The dLazy API key may be stored in the local CLI configuration.
+
+Mitigation: Prefer per-invocation DLAZY_API_KEY where persistent storage is not acceptable, and rotate or revoke keys when needed.
+
+Risk: Image-generation calls may be billable.
+
+Mitigation: Use dry-run or explicit confirmation before calls where cost matters.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-banana2)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The invoked CLI returns image output URLs and may save generated assets locally when requested.]
+
+## Skill Version(s):
+
+1.3.10 (source: server release metadata; artifact frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

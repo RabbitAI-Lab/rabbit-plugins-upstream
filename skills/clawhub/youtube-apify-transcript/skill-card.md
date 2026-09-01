@@ -1,45 +1,61 @@
-## Description: <br>
-Fetches YouTube transcripts through the Apify API, including support for cloud IP environments, local caching, batch mode, language preference, and text or JSON output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch YouTube transcripts via the Apify API from cloud IPs, with local caching and batch mode.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve transcripts for YouTube videos so the agent can summarize, analyze, or transform video content from transcript text. It is useful in cloud-hosted environments where direct YouTube transcript access may be blocked. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requested YouTube video URLs are sent to Apify to retrieve transcripts. <br>
-Mitigation: Use this skill only when sharing those URLs with Apify is acceptable for the user's privacy and compliance requirements. <br>
-Risk: Transcript data may be cached locally on disk. <br>
-Mitigation: Choose an appropriate cache directory, disable cache when needed, and clear cached transcripts when they should not persist. <br>
-Risk: The skill requires an Apify API token and can consume Apify quota for uncached requests. <br>
-Mitigation: Use a dedicated token with suitable quota limits and monitor usage for broad or batch transcript requests. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve YouTube video transcripts through Apify when direct transcript access is blocked from cloud infrastructure. It supports single-video and batch transcript retrieval for downstream summarization, analysis, and documentation workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robbyczgw-cla/skills/youtube-apify-transcript) <br>
-- [Apify pricing](https://apify.com/pricing) <br>
-- [Apify API token setup](https://console.apify.com/account/integrations) <br>
-- [YouTube Transcript Scraper actor](https://apify.com/topaz_sharingan/Youtube-Transcript-Scraper-1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, files, shell commands, guidance] <br>
-**Output Format:** [Plain text transcripts, JSON transcript objects, or transcript files written by the command-line script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include timestamps, video metadata, cache status, and batch processing summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: frontmatter, package.json, CHANGELOG, server release evidence) <br>
+Risk: Requested YouTube URLs and request metadata are sent to Apify for transcript retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for videos where third-party processing by Apify is acceptable, and avoid sensitive private video requests.
+
+Risk: Apify actor runs can incur usage costs.
+
+Mitigation: Review Apify pricing and billing before use, rely on local caching for repeat requests, and disable fresh fetches unless needed.
+
+Risk: Transcript content is cached locally by default.
+
+Mitigation: Set an appropriate YT_TRANSCRIPT_CACHE_DIR, clear cached transcripts when no longer needed, or run with --no-cache for sensitive workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/robbyczgw-cla/skills/youtube-apify-transcript)
+- [Apify YouTube Transcripts Actor](https://apify.com/topaz_sharingan/youtube-transcript-scraper-1)
+- [Apify Pricing](https://apify.com/pricing)
+- [Apify API Token Setup](https://console.apify.com/account/integrations)
+- [Apify Billing](https://console.apify.com/billing)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text or JSON transcript data, with optional file output and Markdown usage guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires APIFY_API_TOKEN, uses Apify network calls, and caches transcript data locally unless caching is disabled.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

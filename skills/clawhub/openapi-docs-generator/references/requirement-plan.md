@@ -25,25 +25,25 @@ Evidence coverage: 12 signals across 3 source families.
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: csdn, github, segmentfault.
+- Distinct source families: 3; sources: github, hacker-news, segmentfault.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- hacker-news-ask-hn (2026-08-29T10:26:48+00:00): [Ask HN: Why do we need MCP?](https://news.ycombinator.com/item?id=49488654)
+- github-issues (2026-08-30T06:14:11+00:00): [Measure opportunity effectiveness across review and downstream outcomes](https://github.com/sgajbi/lotus-idea/issues/1156)
+- github-issues (2026-08-30T06:14:08+00:00): [Make review feedback a governed offline opportunity-quality signal](https://github.com/sgajbi/lotus-idea/issues/1155)
+- github-issues (2026-08-30T06:45:07+00:00): [program: reconstruct, simplify, and mechanically govern the repository](https://github.com/ListenCloser/listencloser/issues/634)
+- github-issues (2026-08-23T18:49:28+00:00): [🐝 Hive Advisory Report](https://github.com/weavster-dev/weavster/issues/1)
+- github-issues (2026-08-27T05:04:51+00:00): [Add HMAC signature verification for incoming webhooks](https://github.com/francovp/cabros-bot/issues/737)
+- github-issues (2026-08-31T00:38:39+00:00): [roadmap: make the HTTP gateway a unified, operable multi-node product](https://github.com/majiayu000/litellm-rs/issues/1292)
+- segmentfault-search (2026-08-31T04:06:39.296679+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-08-31T04:06:39.296679+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-08-31T04:06:39.296679+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-08-31T04:06:39.297190+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-08-31T04:06:39.297190+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
 
 ## How The Skill Meets The Requirement
 

@@ -1,43 +1,54 @@
-## Description: <br>
-Helps an agent prepare and run spoken narration or voiceover generation with Gemini 3.1 Flash TTS through Replicate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone needs spoken narration or voiceover - explainer tracks, documentary lines, or voice to pair with generated video.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creators use this skill to collect text, voice, style prompt, and language inputs, then guide a Replicate text-to-speech request for narration, documentary lines, explainer voiceover, or audio to pair with generated video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Replicate API token is required to generate audio. <br>
-Mitigation: Keep REPLICATE_API_TOKEN in the local environment and do not include it in prompts, generated files, or shared logs. <br>
-Risk: Optional related PrunaAI skills may broaden the installed skill set. <br>
-Mitigation: Install only the companion skills needed for the workflow and review them before adding the full suite. <br>
-Risk: Generated narration may not match the intended text, tone, voice, or language. <br>
-Mitigation: Confirm text, voice, prompt, and language_code before generation, then review the downloaded audio before using it. <br>
+## Use Case:
 
+External users, developers, and content teams use this skill to guide an agent through Replicate-based text-to-speech generation for narration, voiceover, and audio tracks paired with video.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts) <br>
-- [Replicate model readme](https://replicate.com/google/gemini-3.1-flash-tts/readme) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with bash and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN; ffmpeg and ffprobe are needed for trimming, concatenating scene voiceover, or mixing with a music bed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill sends user-provided text and style prompts to Replicate using the user's API token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user intends to submit the content to Replicate and avoid sending sensitive text or prompts unless the user has approved that use.
+
+Risk: The skill suggests installing related prerequisite skills with npx before generation.
+
+Mitigation: Review the referenced Pruna prerequisite skills and install commands before allowing those commands to run.
+
+## Reference(s):
+
+- [Replicate Gemini 3.1 Flash TTS readme](https://replicate.com/google/gemini-3.1-flash-tts/readme)
+- [Replicate Gemini 3.1 Flash TTS prediction endpoint](https://api.replicate.com/v1/models/google/gemini-3.1-flash-tts/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline bash and curl examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-provided text; optional voice, prompt, and language_code; uses REPLICATE_API_TOKEN and may require ffmpeg or ffprobe for media post-processing.]
+
+## Skill Version(s):
+
+1.0.10 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

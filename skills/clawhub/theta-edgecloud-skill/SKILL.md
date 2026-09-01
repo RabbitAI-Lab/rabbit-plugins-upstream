@@ -1,6 +1,7 @@
 ---
-name: theta-edgecloud-skill
-description: Theta EdgeCloud runtime for OpenClaw cost optimization: route eligible AI, media, inference, and GPU workloads through Theta EdgeCloud with secure command-scoped auth, dry-run safety, and on-demand Qwen3/chat support.
+name: "theta-edgecloud-skill"
+description: "Theta EdgeCloud runtime for AI, media, inference, video, GPU, on-demand chat, deployment, and cost-optimization workflows."
+license: "MIT-0"
 ---
 
 # Theta EdgeCloud Skill (Cloud API Runtime)
@@ -19,11 +20,13 @@ If you would like to help support more projects like these, please stake your TH
 - Endpoint creation is not instantly probe-ready; use authenticated readiness retries for ~1-2 minutes before declaring failure.
 - Prefer `vm_gt1` first when allocator capacity is available, then fall back to `vm_gt2` or V100-backed options.
 
-## On-demand service status (refreshed 2026-05-26 for v0.1.22)
-Live public service discovery currently exposes these aliases:
-- Chat/LLM: `qwen3`, `gpt_oss_120b`, `llama_3_1_70b`
-- Image/vision/audio: `flux`, `stable_diffusion_xl_turbo`, `grounding_dino`, `blip`, `llava`, `whisper`
-- Catalog-only/stale since latest live discovery: `minimax_m2_5`, `llama_3_8b`, `step_video`, `esrgan`, `voice_cloning`, `instant_id`, `talking_head`
+## On-demand service status (live discovery 2026-08-31)
+Live public service list (`/service/list`) currently exposes:
+- Chat/LLM: `glm_5_3`, `glm_5_3_flash`, `qwen3`
+- Image/vision/audio: `image_to_image` (stylize/upscale/background_removal), `stable_diffusion_xl_turbo`, `blip`, `llava`, `whisper`, `esrgan`
+- Newly discovered 2026-08-31: `glm_5_3_flash` (GLM-5.3-Flash, input=17/output=55 per 1M tokens, tool calling verified live) and `image_to_image`
+- Absent from live list at 2026-08-31 (catalog-only/stale): `glm_5_2`, `flux`, `grounding_dino`, `minimax_m2_5`, `gpt_oss_120b`, `step_video`, `llama_3_8b`, `llama_3_1_70b`, `voice_cloning`, `instant_id`, `talking_head`
+- Live catalog also exposes a `reasoning_effort` input (low/high/max, default low) on GLM-5.3/5.3-Flash completions.
 
 Qwen3 notes:
 - Canonical slug: `qwen3`
@@ -49,6 +52,25 @@ GPT OSS 120B notes:
   - non-streaming reasoning metadata: `choices[0].message.reasoning`
 - For real-estate production workflows, only use GPT OSS with supplied listing facts and a post-check that blocks unsupported claims. Live testing avoided invented prices but invented amenities/direct beach access when those facts were not supplied.
 
+GLM-5.3-Flash notes (validated 2026-08-31):
+- Canonical slug: `glm_5_3_flash`; same OpenAI-compatible `/infer_request/chat/completions` contract as `glm_5_3`, including structured `tool_calls` (live-verified plain + tool call + valid args).
+- Pricing: input=17/output=55 per 1M tokens (~9x cheaper input than GLM-5.3). Strong default for high-volume worker tasks.
+
+GLM-5.3 notes (validated 2026-08-31):
+- Canonical slug: `glm_5_3`; categorized as `text` and accepted by `theta.ondemand.chat`.
+- **For structured tool calls, use the OpenAI-compatible endpoint**: `POST https://ondemand.thetaedgecloud.com/infer_request/chat/completions` with `model: "glm_5_3"` and top-level `tools`/`tool_choice`. Verified: `tool_choice` none/auto/required/forced, schema-valid arguments, parallel tool calls, streaming, and tool-result continuation (per Theta Support + live tests 2026-08-31).
+- The job-style `/infer_request/glm_5_3` endpoint does NOT expose structured `tool_calls` — it returns the stored inference job result.
+- Endpoint streams SSE by default; pass `"stream": false` for a single JSON response.
+- Reasoning content arrives as `message.reasoning_content` / `delta.reasoning_content`.
+- OpenClaw model: `litellm/glm_5_3`, alias `theta-glm-53`; configured as default-agent fallback #2 (`claude-opus-4-7` -> `glm_5_3` -> `glm_5_2` -> `gpt-5.3-codex`). Board Telegram session pinned to it.
+
+GLM-5.2 notes:
+- Canonical slug: `glm_5_2`; categorized as `text` and accepted by `theta.ondemand.chat`.
+- Verified request contract: prediction `completions`, variant `default`, and fields `messages`, `max_tokens`, `temperature`, `top_p`, `stream`, and `enable_thinking`.
+- Bundled catalog metadata records the 5,000-token default output cap, 1M-token advertised model context, MIT license, and raw split-price units without asserting a currency.
+- Live OpenClaw tooling validation passed route, read/write, multi-file repair, web research, and controlled error recovery without fallback.
+- Keep GLM-5.2 opt-in for bounded, reversible, objectively verifiable worker tasks. It is not the Board/CEO default or an automatic fallback because strict-output discipline, verified cost accounting, and OpenClaw-to-Theta thinking mapping remain incomplete.
+
 ## AI Agent/RAG API coverage (v0.1.22)
 Runtime commands now cover the Theta chatbot API documented by Theta's Yosemite knowledge-base example:
 - `theta.ai.agent.create`
@@ -61,6 +83,21 @@ Runtime commands now cover the Theta chatbot API documented by Theta's Yosemite 
 - `theta.ai.agent.document.list`
 
 Document create/update accepts provided string content only; runtime does not read local files.
+
+## Theta agent MCP server (expanded 2026-08-27)
+Theta EdgeCloud expanded its project-scoped APIs and MCP server so **AI agents can discover, deploy, and manage GPU infrastructure themselves** (blog: https://blog.thetatoken.org/ai-agents-can-now-deploy-edgecloud-gpus-themselves/). Coverage now includes:
+- GPU resource discovery: hosted + community availability, hardware specs, regions, pricing
+- GPU Node deployment templates
+- GPU Node lifecycle management: list, inspect, create, start, stop, restart, delete
+- Deployment status, events, and logs
+- Read-only billing: account balance, project usage, usage breakdowns, current pricing, top-up history
+
+Key properties:
+- Every API key is scoped to a single TEC project — it reaches only that project's resources, not the whole account.
+- MCP sits above the API as the agent-facing tool layer; it does not replace the API.
+- Typical autonomous workflow: find available GPU -> check pricing -> deploy node -> monitor job -> report back.
+- Existing runtime commands already map to much of this surface: `theta.deployments.*` (list/create/start/stop/delete/routeProbe/validateDisposable), `theta.deployments.events`/logs via status, and `theta.billing.balance`/`balanceSnapshot` for read-only billing.
+- Use `THETA_DRY_RUN=1` first for any mutating lifecycle operation; real deployments spend credits and need explicit approval per the safety rules above.
 
 ## MCP-compatible aliases (v0.1.26 staged locally)
 The runtime exposes Theta MCP vocabulary aliases for migration and marketing parity:
@@ -173,7 +210,7 @@ THETA_DRY_RUN=0 THETA_MAX_BUDGET_USD=2.00 bash ./scripts/ondemand_live_smoke.sh
 This scaffold supports a Theta-primary route for OpenClaw:
 
 - Content generation: `flux`, `stable_diffusion_xl_turbo`, `step_video`
-- Website chatbot/assistant features: on-demand LLMs (`qwen3`, `minimax_m2_5`, `gpt_oss_120b`, `llama_3_8b`, `llama_3_1_70b`)
+- Website chatbot/assistant features: on-demand LLMs (`glm_5_3`, `glm_5_3_flash`, `qwen3` live; `glm_5_2`, `minimax_m2_5`, `gpt_oss_120b`, `llama_3_8b`, `llama_3_1_70b` catalog-only)
 - Vision/media intelligence: `blip`, `grounding_dino`, `llava`, `whisper`
 - Video pipelines: `theta.video.*`
 - Infra management: `theta.deployments.*`, `theta.ai.*`, `theta.auth.capabilities`, `theta.billing.balance`
@@ -183,6 +220,5 @@ Operational rule:
 - Dedicated endpoint chat/models are valid when the project has quota/plan support, but should use readiness retries instead of immediate fail-fast assumptions.
 
 ## Next
-- Bind this scaffold into OpenClaw command handlers
 - Add signed request telemetry + structured logging
 - Add live probe tests against target deployment

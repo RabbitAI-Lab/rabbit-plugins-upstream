@@ -1,42 +1,59 @@
-## Description: <br>
-DRG/DIP 医保分组计算 — ICD 编码搜索、DRG/DIP 分组、医保结算、CC/MCC 查询。需使用个人 MedGroup API Key 并连接 MedGroup MCP SSE。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+安装后通过 MedGroup OAuth 登录授权，查询 DRG/DIP 城市与规则、检索 ICD 编码、执行分组和结算测算、查询 CC/MCC。用户提出医保分组、编码或规则核对任务时使用；不需要 API Key，不替代临床诊断、医保审核或实际结算。
 
-## Publisher: <br>
-[u201013903](https://clawhub.ai/user/u201013903) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[u201013903](https://clawhub.ai/user/u201013903)
 
-## Use Case: <br>
-External users and healthcare operations developers use this skill to connect an agent to MedGroup MCP tools for ICD code lookup, DRG/DIP grouping, medical insurance settlement calculations, and CC/MCC status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The required MedGroup API key could be exposed if it is embedded directly in MCP URLs, shared configuration files, or screenshots. <br>
-Mitigation: Use a scoped, revocable key and prefer client secret storage over putting the key directly in the MCP URL. <br>
-Risk: Patient-related data may be sent to the external MedGroup service during grouping, settlement, or code-status checks. <br>
-Mitigation: Use synthetic or de-identified data unless MedGroup privacy, retention, logging, and compliance terms meet the user's requirements. <br>
+## Use Case:
 
+External users and agents use this skill to work with the MedGroup remote MCP service for DRG/DIP rule lookup, ICD code search, grouping, settlement scenario calculations, and CC/MCC checks. Outputs are decision-support estimates for medical insurance grouping and coding review, not final clinical diagnosis, coding approval, insurance audit, or reimbursement determinations.
 
-## Reference(s): <br>
-- [MedGroup homepage](https://medgroup.medchat.fun) <br>
-- [MedGroup MCP SSE endpoint](https://medgroup.medchat.fun/mcp/sse) <br>
-- [ClawHub skill listing](https://clawhub.ai/u201013903/medgroup-drgdip-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, API Calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON MCP tool arguments and structured MedGroup tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MEDGROUP_API_KEY and a MedGroup MCP SSE endpoint configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: The skill sends task data to the MedGroup remote MCP service after OAuth authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user is comfortable authorizing MedGroup through OAuth, and do not ask users for API keys, tokens, account passwords, or other credentials.
+
+Risk: DRG/DIP grouping and settlement calculations may be mistaken for official clinical, coding, audit, or reimbursement decisions.
+
+Mitigation: Label settlement results as scenario estimates and state that outputs do not replace clinical diagnosis, final medical coding review, insurance audit, or local official settlement documents.
+
+Risk: Medical grouping workflows can involve patient-identifying information.
+
+Mitigation: Prefer synthetic or de-identified data and avoid requesting or repeating patient names, ID numbers, contact details, admission numbers, or similar identifiers.
+
+## Reference(s):
+
+- [MedGroup homepage](https://medgroup.medchat.fun)
+- [ClawHub skill page](https://clawhub.ai/u201013903/skills/medgroup-drgdip-skill)
+- [Publisher profile](https://clawhub.ai/user/u201013903)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, API calls]
+
+**Output Format:** [Markdown responses with tool-derived DRG/DIP, ICD, rule, grouping, CC/MCC, and settlement values]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires OAuth authorization to the MedGroup remote MCP service; results should identify the tool and city or rule version used.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

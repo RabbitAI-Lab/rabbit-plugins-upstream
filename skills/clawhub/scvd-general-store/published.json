@@ -1,0 +1,7 @@
+{
+  "version": "3.6.0",
+  "bundle_sha256": "e441c4affb56e21ebc84d1cc767219f9749ee5886495a3adc658608cc5ee8c8f",
+  "published_at": "2026-08-21T16:58:22.581Z",
+  "commit": "02c69a407a99808515804c8e29adb8b57d3b8a69",
+  "changelog": "The evidence layer: passport refresh on the shelf, /trust and /passport/{host} with the embeddable chip, free receipt verification (POST /api/verify-receipt), the SIWX claims challenge, and /api/practice."
+}

@@ -4,7 +4,7 @@ display_name: "机票比价"
 description: 飞猪+途牛+同程+美团+RollingGo五平台直飞航班实时比价，按航班号自动匹配同一航班跨平台报价，一次出结果含预订链接。暑期机票比价、出行省钱。
 tags: [机票, 机票比价, 订机票, 航班, 旅行, 特价机票, 打折机票]
 tools:
-  - name: flight_compare
+  - name: flightCompare
     description: 多平台机票比价，飞猪/途牛/同程/美团/RG同时查询直飞航班
     primaryEnv: FLIGHT_COMPARE_PROXY_URL
     env:
@@ -15,11 +15,11 @@ tools:
         description: 代理认证Token（自动配置，无需手动设置）
         required: false
     parameters:
-      - name: from_city
+      - name: fromCity
         type: string
         description: 出发城市，如"上海"、"北京"
         required: true
-      - name: to_city
+      - name: toCity
         type: string
         description: 到达城市，如"三亚"、"广州"
         required: true
