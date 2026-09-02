@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/dicom-series-to-volume",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "c386e6d3d2bb44a7fc2f15a51f5da86563e8b428ae71c611d04726ba3b50cfba",
-  "fetchedAt": "2026-07-26T17:03:52.261Z"
+  "pushedAt": "2026-09-01T15:00:43Z",
+  "contentHash": "2f7b8c41ba003c31ceba89272f71a75391b3551f5f7536cefdd1c549f313c21b",
+  "fetchedAt": "2026-09-02T12:09:55.400Z"
 }

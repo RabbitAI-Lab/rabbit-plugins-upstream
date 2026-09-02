@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/health/neuroskill-bci",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "52701f2fff1969a683786cf73b507c1a56a0979d2361e8e21bf33ed5bb623981",
-  "fetchedAt": "2026-07-26T17:03:56.999Z"
+  "pushedAt": "2026-09-02T12:05:52Z",
+  "contentHash": "2383ccfde43bba14a3a0f176d29d90d942698f4374dcd784b4b4cbbd00aa8b6c",
+  "fetchedAt": "2026-09-02T12:10:00.938Z"
 }
