@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-filestore-autoscale",
+  "repo": "google/skills",
+  "skillId": "google-cloud-filestore-autoscale",
+  "branch": "main",
+  "pushedAt": "2026-09-02T04:50:40Z",
+  "contentHash": "8a07c2fdedd5cde69fe617704503db056918dab2d2e48c187696025594852c51",
+  "fetchedAt": "2026-09-02T12:11:13.112Z"
+}

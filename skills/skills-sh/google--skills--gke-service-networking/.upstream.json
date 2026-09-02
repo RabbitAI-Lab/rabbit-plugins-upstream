@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-service-networking",
+  "repo": "google/skills",
+  "skillId": "gke-service-networking",
+  "branch": "main",
+  "pushedAt": "2026-09-02T04:50:40Z",
+  "contentHash": "23671081da9991e6eddc87d457f68e444041d55f1f012da19349a08e83fe9c61",
+  "fetchedAt": "2026-09-02T12:11:13.012Z"
+}
