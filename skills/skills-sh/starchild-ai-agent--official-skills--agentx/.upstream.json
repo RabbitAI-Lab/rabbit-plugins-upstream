@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/agentx",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "agentx",
+  "branch": "main",
+  "pushedAt": "2026-08-27T02:18:18Z",
+  "contentHash": "aacd0360fbb1d8421e6d4a1b31c67480ad2873d965a8ff2f426f1fae06e370ce",
+  "fetchedAt": "2026-09-02T12:11:40.948Z"
+}

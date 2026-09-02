@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/provider-configuration",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "provider-configuration",
+  "branch": "main",
+  "pushedAt": "2026-09-01T19:34:02Z",
+  "contentHash": "df225a577fa4b77565f5f9a5cc172a2d88675ac32796a1558dd84fd9b5af5ef8",
+  "fetchedAt": "2026-09-02T12:11:42.422Z"
+}

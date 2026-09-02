@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/image-to-video",
+  "repo": "inference-sh/skills",
+  "skillId": "image-to-video",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "a36aa844a85e1171fd4720ee13535f296e5c36b84b4de5bf801e46f9ebe974d1",
+  "fetchedAt": "2026-09-02T12:09:39.524Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/azure-verified-modules",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "azure-verified-modules",
+  "branch": "main",
+  "pushedAt": "2026-09-01T19:34:02Z",
+  "contentHash": "ca54dbb80989ce3535e905a2117e6c60179933c2cdfa26827228905b8449271d",
+  "fetchedAt": "2026-09-02T12:11:42.407Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/get-pr-comments",
+  "repo": "cursor/plugins",
+  "skillId": "get-pr-comments",
+  "branch": "main",
+  "pushedAt": "2026-09-02T04:38:25Z",
+  "contentHash": "989394d4df16bbcc2dfaa4c486bb7574777f535262943ca6bee1c0edefc4f454",
+  "fetchedAt": "2026-09-02T12:09:57.248Z"
+}

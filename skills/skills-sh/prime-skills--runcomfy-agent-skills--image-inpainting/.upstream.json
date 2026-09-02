@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/image-inpainting",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "image-inpainting",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "4e2fffac9f008e0b36af78e9ff23ce1094ac4a04eb33c4d43a0c6a5c29fd3c74",
+  "fetchedAt": "2026-09-02T12:09:39.294Z"
+}

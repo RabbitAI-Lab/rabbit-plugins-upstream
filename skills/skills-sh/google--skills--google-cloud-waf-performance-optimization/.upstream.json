@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-waf-performance-optimization",
+  "repo": "google/skills",
+  "skillId": "google-cloud-waf-performance-optimization",
+  "branch": "main",
+  "pushedAt": "2026-09-02T04:50:40Z",
+  "contentHash": "2768c4c5add8a79a0a2a1bdb3dfa22aeaafd8816bb7183125c79167673a8a013",
+  "fetchedAt": "2026-09-02T12:11:12.700Z"
+}
