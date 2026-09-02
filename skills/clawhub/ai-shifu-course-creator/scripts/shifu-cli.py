@@ -3,24 +3,39 @@
 
 import argparse
 import base64
+import contextlib
 import hashlib
 import json
 import math
 import os
+import platform
 import shutil
+import socket
 import sys
+import tempfile
 import time
 import uuid
-from datetime import datetime
+import webbrowser
+from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
-from dotenv import load_dotenv, set_key
+from dotenv import dotenv_values, load_dotenv, set_key
 
 from skill_update import DEV_CACHE_FILE, check_for_update
 
+# Usage tracking is strictly optional: a broken tracker must never take the
+# CLI down with it.
+try:
+    from usage_tracker import track
+except Exception:  # noqa: BLE001 - fail-open: any tracker breakage must not take the CLI down
+    def track(event_name):
+        return None
+
 # ── Constants ──────────────────────────────────────────────────────────────────
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+ENV_EXAMPLE_FILE = ENV_FILE.with_name(".env.example")
 
 DEFAULT_BASE_URL = "https://app.ai-shifu.cn"
 
@@ -38,10 +53,14 @@ DRAFT_CONFLICT_CODE = 4007
 #   0 = success, 1 = hard error (api() default), 2 = conflict auto-pulled, redo
 EXIT_CONFLICT = 2
 
-# Token lifetime (matches backend TOKEN_EXPIRE_TIME = 604800 = 7 days) and the
+# `login --wait` returns this when the request is still valid but nobody has
+# approved it yet, so a caller can distinguish "keep waiting" from a failure.
+EXIT_AUTH_PENDING = 3
+
+# Token lifetime (matches backend TOKEN_EXPIRE_TIME = 2592000 = 30 days) and the
 # backend error codes that mean "token is not usable" — used by `verify` and the
 # resolve_auth() early-expiry hint.
-TOKEN_EXPIRE_SECONDS = 604800
+TOKEN_EXPIRE_SECONDS = 2592000
 _TOKEN_ERROR_CODES = frozenset({1001, 1004, 1005})
 # 1001 = userNotFound, 1004 = userNotLogin, 1005 = userTokenExpired
 
@@ -53,20 +72,136 @@ MAX_COURSE_PAGES = 10
 
 
 # ── Shared Infrastructure ──────────────────────────────────────────────────────
-def load_env():
-    """Load environment variables from the skill's .env file."""
+def ensure_env_file():
+    """Create the runtime .env from .env.example when it does not exist."""
     if ENV_FILE.exists():
-        load_dotenv(dotenv_path=ENV_FILE, override=False)
+        return
+    if not ENV_EXAMPLE_FILE.exists():
+        print(f"Error: missing environment template: {ENV_EXAMPLE_FILE}",
+              file=sys.stderr)
+        sys.exit(1)
+    shutil.copyfile(ENV_EXAMPLE_FILE, ENV_FILE)
+    os.chmod(ENV_FILE, 0o600)
 
 
-def save_env(token):
-    """Persist token to the skill's .env file."""
-    env_path = str(ENV_FILE)
-    if not ENV_FILE.exists():
-        ENV_FILE.parent.mkdir(parents=True, exist_ok=True)
-        ENV_FILE.touch(mode=0o600)
-    set_key(env_path, "SHIFU_TOKEN", token)
-    os.chmod(env_path, 0o600)
+def load_env():
+    """Ensure and load environment variables from the skill's .env file."""
+    ensure_env_file()
+    load_dotenv(dotenv_path=ENV_FILE, override=False)
+    migrate_legacy_token()
+
+
+# Loopback stays available over http so the CLI can be pointed at a local
+# development server; every other host must use TLS.
+LOOPBACK_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
+
+
+def resolve_base_url():
+    """Resolve the AI-Shifu service URL with the production URL as fallback."""
+    value = os.environ.get("SHIFU_BASE_URL", "").strip().rstrip(" /\t\r\n")
+    return value or DEFAULT_BASE_URL
+
+
+def require_secure_base_url(base_url):
+    """Refuse to carry the device code or token over plaintext HTTP."""
+    parsed = urlparse(base_url)
+    if parsed.scheme == "https":
+        return base_url
+    if parsed.scheme == "http" and (parsed.hostname or "") in LOOPBACK_HOSTS:
+        return base_url
+    print(
+        f"Error: SHIFU_BASE_URL must use https, got '{base_url}'. "
+        "Authorization carries credentials and will not be sent in the clear."
+    )
+    sys.exit(1)
+
+
+def config_dir():
+    """Return the directory holding credentials for this user.
+
+    Credentials live outside the skill package so upgrading or reinstalling the
+    skill does not silently sign the user out, which is what happened while the
+    token was kept in the package's own .env file. The location follows the XDG
+    convention other command-line tools use (~/.config/gh, ~/.config/anthropic).
+    """
+    override = os.environ.get("AI_SHIFU_CONFIG_DIR", "").strip()
+    if override:
+        return Path(override).expanduser()
+    xdg_home = os.environ.get("XDG_CONFIG_HOME", "").strip()
+    base = Path(xdg_home).expanduser() if xdg_home else Path.home() / ".config"
+    return base / "ai-shifu"
+
+
+def credentials_path():
+    return config_dir() / "credentials.json"
+
+
+def pending_auth_path():
+    return config_dir() / "pending-device-auth.json"
+
+
+def _write_private_json(path, payload):
+    """Write JSON readable only by the current user, atomically.
+
+    The content is written to a fresh 0600 temporary file and moved into place.
+    Writing directly would expose the credential twice: a permissive umask
+    leaves the new file readable until the chmod lands, and rewriting an
+    existing file keeps whatever mode it already had while it is truncated.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp_name = tempfile.mkstemp(dir=str(path.parent), prefix=".tmp-")
+    try:
+        os.chmod(temp_name, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            json.dump(payload, handle, indent=2)
+        os.replace(temp_name, path)
+    except BaseException:
+        with contextlib.suppress(OSError):
+            os.unlink(temp_name)
+        raise
+
+
+def _read_json_file(path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def load_saved_token():
+    """Return the stored token, or an empty string when there is none."""
+    data = _read_json_file(credentials_path())
+    if isinstance(data, dict):
+        token = data.get("token")
+        if isinstance(token, str):
+            return token.strip()
+    return ""
+
+
+def save_token(token):
+    """Persist the issued token to the user's config directory."""
+    _write_private_json(credentials_path(), {"token": token})
+
+
+def migrate_legacy_token():
+    """Move a token written by an older CLI into the config directory.
+
+    Only the .env file is inspected, never the environment: a SHIFU_TOKEN the
+    user exported themselves belongs to them and must not be rewritten.
+    """
+    if load_saved_token() or not ENV_FILE.exists():
+        return
+    try:
+        legacy_token = (dotenv_values(str(ENV_FILE)) or {}).get("SHIFU_TOKEN") or ""
+    except OSError:
+        return
+    legacy_token = legacy_token.strip()
+    if not legacy_token:
+        return
+    save_token(legacy_token)
+    # Leave a single source of truth behind.
+    with contextlib.suppress(OSError):
+        set_key(str(ENV_FILE), "SHIFU_TOKEN", "")
 
 
 def _jwt_payload(token):
@@ -88,28 +223,34 @@ def _jwt_payload(token):
 
 
 def resolve_auth(args):
-    """Resolve token from CLI args or .env. Base URL is fixed to DEFAULT_BASE_URL.
+    """Resolve the service URL and token from CLI args or .env.
 
-    When the JWT carries a ``time_stamp`` older than 7 days, a warning is printed
+    When the JWT carries a ``time_stamp`` older than the token lifetime, a
+    warning is printed
     to stderr (the authoritative expiry check is the backend's DB record, so this
     is only a nudge — the call still proceeds).
     """
-    token = getattr(args, "token", None) or os.environ.get("SHIFU_TOKEN")
+    token = (
+        getattr(args, "token", None)
+        or os.environ.get("SHIFU_TOKEN")
+        or load_saved_token()
+    )
     if not token:
         print("Error: no token available. Run 'shifu-cli.py login' first, "
-              "or use --token / set SHIFU_TOKEN in .env")
+              "or use --token / set SHIFU_TOKEN")
         sys.exit(1)
 
     payload = _jwt_payload(token)
     if isinstance(payload, dict):
         ts = payload.get("time_stamp")
         if isinstance(ts, (int, float)) and (time.time() - ts) > TOKEN_EXPIRE_SECONDS:
-            print("Warning: token may be expired (issued > 7 days ago). "
+            print("Warning: token may be expired "
+                  f"(issued > {TOKEN_EXPIRE_SECONDS // 86400} days ago). "
                   "Run `shifu-cli.py verify` to check, or `shifu-cli.py login` "
                   "to re-login.",
                   file=sys.stderr)
 
-    return DEFAULT_BASE_URL, token
+    return resolve_base_url(), token
 
 
 def api(base_url, token, method, path, **kwargs):
@@ -284,12 +425,19 @@ def safe_join_path(base_dir, filename):
 
 
 def fmt_time(ts):
-    """Format an ISO timestamp for display, return '' if missing."""
+    """Format a backend timestamp for display in the local timezone.
+
+    Backend timestamps are UTC; values without an explicit offset are
+    interpreted as UTC, then converted to the machine-local timezone.
+    Returns '' if missing.
+    """
     if not ts:
         return ""
     try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%Y-%m-%d %H:%M")
+        dt = datetime.fromisoformat(str(ts).strip().replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone().strftime("%Y-%m-%d %H:%M")
     except Exception:
         return ts[:16] if len(ts) >= 16 else ts
 
@@ -331,7 +479,7 @@ SYNC_MANIFEST_NAME = ".shifu-sync.json"
 
 def _now_iso():
     """UTC timestamp, second precision, Z-suffixed — matches image-manifest style."""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _mask_phone(phone):
@@ -435,44 +583,203 @@ def _login_post(base_url, path, payload, error_prefix):
     return data
 
 
-def cmd_login(args):
-    """SMS login and save token (non-interactive two-step flow)."""
-    base_url = DEFAULT_BASE_URL
+def _friendly_os_name():
+    """Name the operating system the way its owner would.
 
-    phone = args.phone
-    if not phone:
-        print("Error: --phone is required for login")
+    The approval page exists so a person can recognise their own machine, so it
+    must not show what `platform.release()` returns on macOS: that is the Darwin
+    kernel version ("25.5.0"), which no Mac owner recognises.
+    """
+    system = (platform.system() or "").strip()
+    if system == "Darwin":
+        release = ""
+        try:
+            release = (platform.mac_ver()[0] or "").strip()
+        except Exception:  # noqa: BLE001 - display only, never fail login
+            release = ""
+        return f"macOS {release}".strip() if release else "macOS"
+    if system == "Linux":
+        pretty = ""
+        try:
+            pretty = (
+                platform.freedesktop_os_release().get("PRETTY_NAME", "") or ""
+            ).strip()
+        except Exception:  # noqa: BLE001 - not every distro ships os-release
+            pretty = ""
+        if pretty:
+            return pretty
+    release = (platform.release() or "").strip()
+    return f"{system} {release}".strip() or "unknown"
+
+
+def _device_description():
+    """Describe this machine for the approval page. Display only."""
+    try:
+        device_name = socket.gethostname() or "unknown"
+    except OSError:
+        device_name = "unknown"
+    return device_name[:64], _friendly_os_name()[:64]
+
+
+def _client_version():
+    try:
+        from skill_update import SKILL_MD, read_skill_metadata
+
+        metadata = read_skill_metadata(SKILL_MD)
+    except Exception:  # noqa: BLE001 - version is cosmetic, never fail login
+        return ""
+    if isinstance(metadata, dict):
+        return str(metadata.get("version") or "")[:32]
+    return ""
+
+
+def _poll_device_authorization(base_url, device_code):
+    """Ask the backend once; transient failures read as "still pending"."""
+    try:
+        resp = requests.post(
+            f"{base_url}/api/user/device/token",
+            json={"device_code": device_code},
+            headers={"Content-Type": "application/json"},
+            timeout=30,
+        )
+    except requests.RequestException:
+        return "pending", ""
+    if not resp.ok:
+        return "pending", ""
+    try:
+        body = resp.json()
+    except ValueError:
+        return "pending", ""
+    if not isinstance(body, dict):
+        return "pending", ""
+    if body.get("code") != 0:
+        # The request is gone: expired, already collected, or never existed.
+        return "expired", ""
+    data = body.get("data")
+    if not isinstance(data, dict):
+        return "pending", ""
+    return str(data.get("status") or "pending"), str(data.get("token") or "")
+
+
+def _start_device_authorization(base_url):
+    device_name, device_os = _device_description()
+    response = _login_post(
+        base_url,
+        "/api/user/device/authorize",
+        {
+            "device_name": device_name,
+            "device_os": device_os,
+            "client_version": _client_version(),
+        },
+        "Failed to start authorization",
+    )
+    data = response.get("data")
+    if not isinstance(data, dict):
+        print(f"Unexpected authorization response: {response}")
         sys.exit(1)
 
-    sms_code = args.sms_code
-    masked = phone[:3] + "****" + phone[-4:] if len(phone) >= 7 else phone
+    device_code = str(data.get("device_code") or "")
+    user_code = str(data.get("user_code") or "")
+    url = str(
+        data.get("verification_uri_complete") or data.get("verification_uri") or ""
+    )
+    if not device_code or not user_code or not url:
+        print(f"Incomplete authorization response: {data}")
+        sys.exit(1)
 
-    if sms_code:
-        # Step 2: Verify code and save token
-        print("Verifying code...")
-        data = _login_post(base_url, "/api/user/login_sms",
-                           {"mobile": phone, "sms_code": sms_code, "login_context": "admin"}, "Verification failed")
+    # The device code can be exchanged for a token once the request is
+    # approved, so it is stored with owner-only permissions rather than
+    # printed: printing would copy it into the calling agent's transcript.
+    _write_private_json(
+        pending_auth_path(),
+        {
+            "device_code": device_code,
+            "user_code": user_code,
+            # Remember which host issued this code. Polling a different host
+            # after SHIFU_BASE_URL changed would hand the code to a service
+            # that never issued it.
+            "base_url": base_url,
+            "interval": int(data.get("interval") or 5),
+            "expires_at": time.time() + int(data.get("expires_in") or 600),
+        },
+    )
 
-        token = data.get("data")
-        if not token:
-            print(f"No token in response: {data}")
+    opened = False
+    with contextlib.suppress(Exception):
+        opened = bool(webbrowser.open(url))
+
+    print("Open this link in a browser to authorize this device:")
+    print(f"  {url}")
+    print(f"Pairing code: {user_code}")
+    if opened:
+        print("A browser window was opened on this machine.")
+    print(
+        "After approving it there, run 'shifu-cli.py login --wait' "
+        "to finish signing in."
+    )
+
+
+def _wait_for_device_authorization(base_url, timeout_seconds):
+    pending = _read_json_file(pending_auth_path())
+    if not isinstance(pending, dict) or not pending.get("device_code"):
+        print("No authorization is in progress. Run 'shifu-cli.py login' first.")
+        sys.exit(1)
+
+    issuing_base_url = str(pending.get("base_url") or "")
+    if issuing_base_url and issuing_base_url != base_url:
+        print(
+            "Error: SHIFU_BASE_URL changed since this authorization started "
+            f"('{issuing_base_url}' -> '{base_url}'). "
+            "Run 'shifu-cli.py login' again to start a new one."
+        )
+        sys.exit(1)
+
+    device_code = str(pending.get("device_code") or "")
+    interval = max(1, int(pending.get("interval") or 5))
+    expires_at = float(pending.get("expires_at") or 0)
+    deadline = time.time() + max(1, int(timeout_seconds))
+    if expires_at:
+        deadline = min(deadline, expires_at)
+
+    while True:
+        status, token = _poll_device_authorization(base_url, device_code)
+        if status == "approved" and token:
+            save_token(token)
+            with contextlib.suppress(OSError):
+                pending_auth_path().unlink()
+            print(f"Authorization complete. Credentials saved to {credentials_path()}")
+            return
+        if status == "denied":
+            with contextlib.suppress(OSError):
+                pending_auth_path().unlink()
+            print("The request was denied in the browser. Nothing was authorized.")
             sys.exit(1)
-        # API may return token as a dict (e.g. {"token": "..."}) or a plain string
-        if isinstance(token, dict):
-            token = token.get("token", "")
-        if not token:
-            print(f"No token string found in response data: {data}")
+        if status == "expired":
+            with contextlib.suppress(OSError):
+                pending_auth_path().unlink()
+            print(
+                "The authorization request expired. "
+                "Run 'shifu-cli.py login' to start a new one."
+            )
             sys.exit(1)
+        if time.time() + interval >= deadline:
+            break
+        time.sleep(interval)
 
-        save_env(token)
-        print(f"Login successful! Token saved to {ENV_FILE}")
-    else:
-        # Step 1: Send SMS code only, then exit
-        print(f"Sending SMS code to {masked}...")
-        _login_post(base_url, "/api/user/console_send_sms_code",
-                    {"mobile": phone}, "Failed to send SMS")
-        print(f"SMS code sent to {masked}. "
-              f"Run again with --sms-code <4-digit-code> to complete login.")
+    print(
+        "Still waiting for approval in the browser. Approve the request, "
+        "then run 'shifu-cli.py login --wait' again."
+    )
+    sys.exit(EXIT_AUTH_PENDING)
+
+
+def cmd_login(args):
+    """Authorize this device through the browser and store the issued token."""
+    base_url = require_secure_base_url(resolve_base_url())
+    if getattr(args, "wait", False):
+        _wait_for_device_authorization(base_url, getattr(args, "timeout", 120))
+        return
+    _start_device_authorization(base_url)
 
 
 # ── Verify Token ────────────────────────────────────────────────────────────────
@@ -1489,10 +1796,17 @@ def _tts_model_options(tts_config):
 
 
 def _filter_tts_voices_for_model(provider, voices, model):
-    if _tts_provider_name(provider) != "volcengine":
-        return voices
     model_key = _string_tts_value(model)
     if not model_key:
+        return voices
+    # Providers whose voices declare a resource_id (volcengine resources,
+    # tencent TextToVoice tiers) require the voice to match the selected
+    # model; providers without the annotation keep their full list. This
+    # mirrors the platform editor's filterTtsVoicesForModel behavior.
+    has_resource_annotations = any(
+        _string_tts_value(v.get("resource_id")) for v in voices
+    )
+    if not has_resource_annotations:
         return voices
     return [
         v for v in voices
@@ -1513,7 +1827,12 @@ def _select_platform_tts_defaults(speed, tts_config):
     """Mirror the platform editor's default provider/model/voice selection."""
     providers = _tts_providers_by_name(tts_config)
     model_options = _tts_model_options(tts_config)
-    default_model_option = model_options[0] if model_options else None
+    # Prefer the option the platform declares as default (is_default); older
+    # backends without the marker fall back to the first option.
+    default_model_option = next(
+        (o for o in model_options if o.get("is_default")),
+        model_options[0] if model_options else None,
+    )
     provider = ""
     model = ""
 
@@ -1622,6 +1941,72 @@ def cmd_set_tts(args):
                   f"{COURSE_CONFIG_NAME} was left unchanged. Run "
                   "`pull --course-dir <dir>` to resync.", file=sys.stderr)
 
+        _update_course_manifest_after_push(base_url, token, shifu_bid,
+                                           course_dir, manifest)
+
+
+def cmd_set_avatar(args):
+    """Upload and bind a JPG/PNG teacher avatar to a course."""
+    src_path = Path(args.file).expanduser().resolve()
+    if src_path.suffix.lower() not in {".jpg", ".jpeg", ".png"}:
+        print("Error: teacher avatar must be a JPG or PNG file.", file=sys.stderr)
+        sys.exit(1)
+
+    from image_utils import prepare_image  # local import keeps Pillow optional
+    try:
+        prepared = prepare_image(src_path)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if prepared.original_width != prepared.original_height:
+        print(
+            "Warning: teacher avatars are displayed in a square frame; "
+            f"this image is {prepared.original_width}x{prepared.original_height} "
+            "and may be cropped. A 1:1 image is recommended.",
+            file=sys.stderr,
+        )
+
+    base_url, token = resolve_auth(args)
+    shifu_bid = args.shifu_bid
+    course_dir = getattr(args, "course_dir", None)
+    manifest = _load_sync(course_dir) if course_dir else None
+
+    # Check the local revision before uploading so a known conflict does not
+    # leave an unused resource behind.
+    intended_meta = {"avatar": "<pending local upload>"}
+    _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
+                                intended_meta)
+
+    remote_url = api_upload(
+        base_url, token, prepared.filename, prepared.data, prepared.mime,
+    )
+    if not isinstance(remote_url, str) or not remote_url.startswith("https://"):
+        print("Error: image upload did not return a valid resource URL.",
+              file=sys.stderr)
+        sys.exit(1)
+
+    api(base_url, token, "post", f"/shifus/{shifu_bid}/detail",
+        json={"avatar": remote_url})
+    fresh_detail = api_safe(base_url, token, "get",
+                            f"/shifus/{shifu_bid}/detail")
+    if not isinstance(fresh_detail, dict) or fresh_detail.get("avatar") != remote_url:
+        print(
+            "Error: the image was uploaded, but the course avatar could not be "
+            "verified. The course may be unchanged; run `show` or check the "
+            "admin page before retrying.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    print(f"Set course {shifu_bid} teacher avatar")
+    print(f"  Resource URL: {remote_url}")
+    print(f"  Source: {prepared.original_width}x{prepared.original_height}, "
+          f"{prepared.original_bytes} bytes")
+    print(f"  Uploaded: {len(prepared.data)} bytes ({prepared.mime})")
+
+    if manifest and manifest.get("shifu_bid") == shifu_bid:
+        _write_course_config(course_dir, _course_config_from_detail(fresh_detail))
         _update_course_manifest_after_push(base_url, token, shifu_bid,
                                            course_dir, manifest)
 
@@ -2229,7 +2614,7 @@ def _build_import_json(course_dir, title=None, description=None,
 
     import_data = {
         "version": "1.0",
-        "exported_at": datetime.now().isoformat(),
+        "exported_at": _now_iso(),
         "shifu": {
             "shifu_bid": shifu_bid,
             "title": title,
@@ -2648,7 +3033,7 @@ def cmd_upload_image(args):
                 "local": local_rel,
                 "remote": remote_url,
                 "alt": alt,
-                "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "uploaded_at": _now_iso(),
                 "bytes": len(file_bytes),
                 "original_bytes": original_bytes,
                 "mime": mime,
@@ -2665,7 +3050,7 @@ def cmd_upload_image(args):
             "source_url": args.url,
             "remote": remote_url,
             "alt": alt,
-            "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "uploaded_at": _now_iso(),
         })
 
 
@@ -2720,10 +3105,11 @@ def build_parser():
 
     # ── login ──
     p = sub.add_parser("login", parents=[parent_parser],
-                       help="SMS login and save token")
-    p.add_argument("--phone", required=True, help="Phone number for SMS login")
-    p.add_argument("--sms-code", default=None,
-                   help="4-digit SMS verification code")
+                       help="Authorize this device through the browser")
+    p.add_argument("--wait", action="store_true",
+                   help="Wait for the pending authorization to be approved")
+    p.add_argument("--timeout", type=int, default=120,
+                   help="Seconds to keep polling when used with --wait")
 
     # ── verify ──
     sub.add_parser("verify", parents=[parent_parser],
@@ -2843,6 +3229,15 @@ def build_parser():
                    help="true=enable Listen Mode, false=disable it")
     p.add_argument("--speed", type=float, default=None,
                    help="Override the platform default TTS speed")
+    p.add_argument("--course-dir", default=None,
+                   help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
+
+    # ── set-avatar ──
+    p = sub.add_parser("set-avatar", parents=[parent_parser],
+                       help="Upload and set a course teacher avatar (JPG/PNG)")
+    p.add_argument("shifu_bid", help="Course BID")
+    p.add_argument("--file", required=True,
+                   help="Local JPG or PNG teacher-avatar path")
     p.add_argument("--course-dir", default=None,
                    help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
 
@@ -2981,6 +3376,7 @@ def main():
         "rename-lesson": cmd_rename_lesson,
         "set-access": cmd_set_access,
         "set-tts": cmd_set_tts,
+        "set-avatar": cmd_set_avatar,
         "delete-lesson": cmd_delete_lesson,
         "reorder": cmd_reorder,
         "import": cmd_import,
@@ -2996,6 +3392,13 @@ def main():
 
     handler = commands.get(args.command)
     if handler:
+        # check-update runs once per session (session-controls.md), so it
+        # doubles as the session-start marker; every other command reports
+        # its own name. Only the command name is sent, never its arguments.
+        if args.command == "check-update":
+            track("skill_start")
+        else:
+            track(f"cli_{args.command}")
         handler(args)
     else:
         parser.print_help()

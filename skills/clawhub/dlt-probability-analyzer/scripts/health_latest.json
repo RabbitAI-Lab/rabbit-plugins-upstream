@@ -1,0 +1,179 @@
+{
+  "timestamp": "2026-08-24 16:17:44",
+  "total": 24,
+  "passed": 23,
+  "blockers": 0,
+  "warns": 1,
+  "duration_sec": 56.2,
+  "status": "WARN",
+  "checks": [
+    {
+      "idx": 0,
+      "name": "语法编译 46 个文件",
+      "ok": true,
+      "blocking": true,
+      "detail": "46 个全部 OK"
+    },
+    {
+      "idx": 1,
+      "name": "dlt_common._self_test()",
+      "ok": true,
+      "blocking": true,
+      "detail": "PRIMES=11 FRONT_WEIGHTS=[0.4, 0.25, 0.2, 0.15]"
+    },
+    {
+      "idx": 2,
+      "name": "活动脚本常量与 dlt_common 一致",
+      "ok": true,
+      "blocking": true,
+      "detail": "无漂移"
+    },
+    {
+      "idx": 3,
+      "name": "期号滚动 5 边界用例",
+      "ok": true,
+      "blocking": true,
+      "detail": "含 26156->27001 全部正确"
+    },
+    {
+      "idx": 4,
+      "name": "三方交叉验证 52项",
+      "ok": true,
+      "blocking": true,
+      "detail": "全绿 | 通过率=100.0%"
+    },
+    {
+      "idx": 5,
+      "name": "ECI 回测运行",
+      "ok": true,
+      "blocking": true,
+      "detail": "rc=0"
+    },
+    {
+      "idx": 6,
+      "name": "关键产物齐全",
+      "ok": true,
+      "blocking": true,
+      "detail": "dlt_history/valid_combos/common/period 均存在"
+    },
+    {
+      "idx": 7,
+      "name": "数据容灾配置健康",
+      "ok": true,
+      "blocking": true,
+      "detail": "优先级 ['huiniao', 'cwl', '500']; dlt_history 2913期; 最后源=huiniao@2026-08-21 13:52"
+    },
+    {
+      "idx": 8,
+      "name": "强化引擎自测 + 能力齐全",
+      "ok": true,
+      "blocking": true,
+      "detail": "OK"
+    },
+    {
+      "idx": 9,
+      "name": "ML自评模块健康",
+      "ok": true,
+      "blocking": true,
+      "detail": "OK"
+    },
+    {
+      "idx": 10,
+      "name": "反诈骗诚实闸门(5套方法论检验)",
+      "ok": true,
+      "blocking": true,
+      "detail": "全绿 | 逆向工程/对称补缺/视觉图形/历史并集重合/中奖人数奖级分布 五假设均被样本外检验(含随机对照)否定, no_edge 不变"
+    },
+    {
+      "idx": 11,
+      "name": "方法发现引擎闸门(头条=一等奖/no_edge)",
+      "ok": true,
+      "blocking": true,
+      "detail": "全绿 | 一等奖命中 方法={'hot': 0, 'cold': 0, 'avoid_last': 0, 'balanced': 0, 'omission': 0, 'interval': 0, 'tail': 0, 'kill_formula': 0, 'back_refine': 0} 基线=0 | 小额奖假象存活=['hot', 'avoid_last', 'back_refine'] | "
+    },
+    {
+      "idx": 12,
+      "name": "版本标识一致性",
+      "ok": true,
+      "blocking": true,
+      "detail": "README/bat/WorkBuddy自动化 均为 8.9.7, 无版本标签漂移"
+    },
+    {
+      "idx": 13,
+      "name": "报告板块完整性反遗漏",
+      "ok": true,
+      "blocking": true,
+      "detail": "最新增强版报告板块齐全 (大乐透26096期预测报告_V8_全面修复_V85_增强版.html)"
+    },
+    {
+      "idx": 14,
+      "name": "数据时效性与完整性",
+      "ok": true,
+      "blocking": true,
+      "detail": "数据2913期 | 最新期26095@2026-08-22 | 滞后2天(<=7) | 无异常断裂"
+    },
+    {
+      "idx": 15,
+      "name": "核心函数属性/差分/变质测试",
+      "ok": true,
+      "blocking": true,
+      "detail": "5000随机样本: AC差分oracle/平移变质/输入校验 全部成立"
+    },
+    {
+      "idx": 16,
+      "name": "开奖序列随机性检验电池",
+      "ok": true,
+      "blocking": true,
+      "detail": "10项卡方 + NIST SP 800-22 密码学级灵敏度升级: 无灾难性异常, 4项已知极小偏差(非异常,已证伪有正收益可能性); NIST 0 项 ANOMALY"
+    },
+    {
+      "idx": 17,
+      "name": "三体协同一致性",
+      "ok": true,
+      "blocking": true,
+      "detail": "排程(SYSTEM/启用/bat)↔程序(单入口dlt_smart.py)↔自动化(v8暂停防双触发+看门狗激活)↔模型产物新鲜 四层咬合无漂移"
+    },
+    {
+      "idx": 18,
+      "name": "根↔SKILL产物同步",
+      "ok": true,
+      "blocking": true,
+      "detail": "最新期26096 预测JSON签名一致 + 基础/增强报告均在副本 (产物无漂移)"
+    },
+    {
+      "idx": 19,
+      "name": "根↔SKILL离线数据同步",
+      "ok": true,
+      "blocking": true,
+      "detail": "dlt_history.json 根最新期26095 副本最新期26095 一致(无数据漂移)"
+    },
+    {
+      "idx": 20,
+      "name": "静态未定义名闸门",
+      "ok": true,
+      "blocking": true,
+      "detail": "检查文件: 44  |  确定性未定义名: 0"
+    },
+    {
+      "idx": 21,
+      "name": "排程真实运行结果动态闸门",
+      "ok": true,
+      "blocking": false,
+      "detail": "上次结果=0、无杀任务反模式、日志无中断、无未处理告警"
+    },
+    {
+      "idx": 22,
+      "name": "预测追踪自证闸门",
+      "ok": true,
+      "blocking": true,
+      "detail": "状态=no_edge_confirmed | 自证通过: 系统累积 25 个推荐分组的前区命中均值 0.560 ≈ 理论随机期望 0.714 (蒙特卡洛随机基线 0.880), 最小显著性 p=0.294 >> 0.01 —— 系统自身推荐与纯随机无显著差异, 确认无预测优势 (no_"
+    },
+    {
+      "idx": 23,
+      "name": "自查自愈增强闸门",
+      "ok": false,
+      "blocking": false,
+      "detail": "运行一致性: 未核对历史预测 ['26094', '26095']; 孤儿记录 无"
+    }
+  ]
+}

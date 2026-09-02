@@ -1,45 +1,62 @@
-## Description: <br>
-Double-entry, full-cycle accounting suite built for AI agents that converts bank CSV, OFX, and QBO files into balanced local SQLite books and accounting reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Double-entry, full-cycle accounting suite built for AI agents that converts bank CSVs, OFX, and QBO files into balanced, auditable local SQLite books with balance sheet, income statement, general ledger, and trial balance outputs.
 
-## Publisher: <br>
-[737999](https://clawhub.ai/user/737999) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-AGPL-3.0 <br>
+## Publisher:
 
+[737999](https://clawhub.ai/user/737999)
 
-## Use Case: <br>
-External users, developers, agents, and accounting practitioners use this skill to create local client books, import bank or AJE files, categorize transactions, manage accounting rules, and produce auditable financial statements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+AGPL-3.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can import, delete, close, and modify financial records in local books.db files. <br>
-Mitigation: Install only for a dedicated GRIDTRX_WORKSPACE, keep current backups, and require explicit approval before imports, deletes, rule changes, lock or ceiling changes, report layout edits, exports, or year-end rollover. <br>
-Risk: Accounting data may contain sensitive financial information. <br>
-Mitigation: Keep books.db and exported reports in approved local storage and do not share them by email or other insecure channels unless the user explicitly approves. <br>
-Risk: Incorrect categorization or period changes can produce misleading books and reports. <br>
-Mitigation: Confirm ambiguous transaction categories with the user, review suspense items, respect lock dates and fiscal-year ceilings, and verify the trial balance after write operations. <br>
+## Use Case:
 
+External users and their agents use this skill to create and maintain local bookkeeping records, import bank activity, clear suspense items, and produce auditable financial statements and ledgers. The skill is intended for accounting workflows where the operator reviews categorization, destructive changes, extracted journal entries, and final reports.
 
-## Reference(s): <br>
-- [GridTRX on ClawHub](https://clawhub.ai/737999/gridtrx) <br>
-- [GridTRX homepage](https://github.com/gridtrx/gridtrx) <br>
-- [GridTRX demo](https://youtu.be/9mmHbgEB3PQ) <br>
-- [CLI reference](CLI_README.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, plain-text CLI output, structured MCP JSON responses, and CSV or PDF report exports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Operates on local books.db files inside GRIDTRX_WORKSPACE and may create or modify accounting records, import rules, lock dates, fiscal-year ceilings, and exported reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.21 (source: server release metadata) <br>
+Risk: The skill handles confidential accounting records and can make high-authority local changes to books.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set GRIDTRX_WORKSPACE narrowly, keep exports inside the client workspace, and require operator review before destructive changes or final reporting.
+
+Risk: The PDF/image/Excel AJE extraction path can send financial documents to Anthropic despite local-only claims elsewhere.
+
+Mitigation: Use that extraction path only with explicit user approval, and review AI-extracted journal entries before posting them.
+
+Risk: Browser workpaper file-open actions and some export paths may reach beyond the intended workspace boundary.
+
+Mitigation: Run the browser UI only on a trusted local machine and treat workpaper open actions as privileged local file operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/737999/skills/gridtrx)
+- [Publisher profile](https://clawhub.ai/user/737999)
+- [Project homepage](https://github.com/737999/GridTRX)
+- [README.md](README.md)
+- [SKILL.md](SKILL.md)
+- [Demo video](https://youtu.be/9mmHbgEB3PQ)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline command examples and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May operate on local SQLite books and produce CSV or PDF accounting reports through the bundled application interfaces.]
+
+## Skill Version(s):
+
+0.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

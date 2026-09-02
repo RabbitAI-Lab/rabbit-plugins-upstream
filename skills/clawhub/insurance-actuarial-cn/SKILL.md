@@ -1,9 +1,15 @@
 ---
 name: China Insurance Actuarial Pricing Expert
-description: AI-powered China insurance actuarial pricing skill �� uses the 4th Life Table (2025, effective 2026-01-01) and C-ROSS Phase II (Rules II 2024) framework. Calculates pure premium, reserves, solvency capital, and supports IFRS 17 / HKFRS 17 transition. Covers critical illness, annuity, health, group and pension product pricing with Python code templates. Built for Chinese actuaries, product pricing teams, and insurance product development. Keywords: actuarial, pricing, life table 2025, C-ROSS, IFRS 17, China insurance, solvency capital, insurance product design, ���㶨��, ������������, �����嶨, ׼��������, �ؼ��ն���, ����ն���, ҽ���ն���, Python����, ����ģ��.
-slug: insurance-actuarial
-version: "5.1.1"
-
+description: >
+  AI-powered China insurance actuarial pricing skill — uses the 4th Life Table (2025, effective 2026-01-01)
+  and C-ROSS Phase II (Rules II 2024) framework. Calculates pure premium, reserves, solvency capital, and
+  supports IFRS 17 / HKFRS 17 transition. Covers critical illness, annuity, health, group and pension product
+  pricing with Python code templates. Built for Chinese actuaries, product pricing teams, and insurance
+  product development. Keywords: actuarial, pricing, life table 2025, C-ROSS, IFRS 17, China insurance,
+  solvency capital, insurance product design, 精算定价, 保险产品开发, 产品定价, 准备金计算, 偿二代,
+  第四套生命表, 重疾险, 年金险, 医疗险, Python建模, 精算模型.
+slug: insurance-actuarial-cn
+version: "5.1.2"
 capabilities:
   - educational-reference
   - advisory-only
@@ -11,469 +17,281 @@ capabilities:
   - no-executable-code
 ---
 
-# China Insurance Actuarial Pricing Expert (4th Life Table 2025) / �й����㶨��ʦ��������������2025��|
-> **⚠️ SECURITY NOTICE**
-> - **Type:** Educational reference / analytical framework ONLY
-> - **No executable code, scripts, or binaries included**
-> - **No persistent storage, network calls, or background execution**
+# China Insurance Actuarial Pricing Expert（第四套生命表 2025）/ 中国保险精算定价专家
+
+> **⚠️ 安全声明 / SECURITY NOTICE**
+> - **Type:** Educational reference / analytical framework ONLY（纯方法论参考框架）
+> - **No bundled executable code, scripts, or binaries** — only illustrative Python snippets you run in your own environment
+> - **No persistent storage, network calls, or background execution** are performed by this skill
 > - **No credential collection, PII processing, or system access**
-> - **All outputs require human review before real-world application**
+> - **All outputs require human review by a qualified actuary before real-world application**
 > - **NOT financial, legal, or insurance advice**
 
+> **⚠️ 免责声明 / DISCLAIMER**
+> - **English:** This skill provides methodology, formulas, and illustrative calculation templates ONLY. It does
+>   NOT contain production actuarial systems, regulatory filing engines, or validated model libraries. All
+>   figures (e.g., "mortality improvement 20%-30%") are literature/regulatory benchmarks or design targets, NOT
+>   results of this skill. Pricing, reserving, and solvency outputs MUST be reviewed and signed off by a
+>   qualified actuary and comply with C-ROSS / IFRS 17 requirements.
+> - **中文：** 本 Skill 仅提供方法论、公式与示意性计算模板，不含生产级精算系统、监管报备引擎或已校验模型库。
+>   所有数据（如"死亡率改善 20%-30%"）均为文献/监管基准或设计目标，非本 Skill 实测结果。所有定价、准备金与
+>   偿付能力输出**必须经持证精算师审核签字**，并符合偿二代、IFRS 17 等监管要求。
 
-
-
-### 保险监管最新动态 [2026-06-15更新]
-
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-|---------|---------|---------|---------|
-| 监管发布 | NFRA 2026年第2号令：《银行保险机构许可证管理办法》6月1日施行，取消保险许可证 | 2026-06 | 精算定价模型需更新费用假设（新增许可证管理岗位成本） |
-| 监管发布 | 许可证换证过渡期2026.6-2028.5，险企须设专职许可证管理岗位 | 2026-06 | 产品备案流程更新 |
-| 监管动态 | 2026年Q1监管处罚分析：分级分类处罚标准+个人追责条款落地 | 2026-Q1 | 合规风险管理 |
-
-> **数据截止**: 2026-06-15 | 来源：国家金融监督管理总局、政府网、金融新闻网
-> **声明**: 以上动态供参考，具体以官方最新发布为准
-
-> **English:** AI-powered China insurance actuarial pricing expert �� the definitive skill for Chinese actuaries and product pricing teams. Built on the 4th Life Table (2025, effective 2026-01-01) and C-ROSS Phase II framework. Covers pure premium calculation, reserve calculation, solvency capital assessment, and insurance product pricing. Delivers production-ready Python pricing code.
->
-> **����:** �й����㶨��ʦ�������ڵ�������������2025�귢����2026��1��1��ʵʩ���ͳ��������ڹ��̣�C-ROSS Rules II���Ĵ�ֱ����Skill�����Ǵ����Ѽ��㡢׼������㡢�������ʱ�ռ���붨��Эͬ�����ն���ר������������㶨��Python���롣���ã�����ʦ����Ʒ���۸ڡ����ղ�Ʒ���������վ���ʵϰ����������ѯ��
+> **🔒 数据安全 / DATA SECURITY**
+> - 保单登记、健康告知、理赔等含个人敏感信息，须遵循《个人信息保护法》与保险行业最小必要、授权留痕要求。
+> - 示例中的客户/产品数据均为虚构，真实精算工作请在合规授权环境中进行，禁止将未脱敏 PII 输入通用对话环境。
 
 ---
 
-## Trigger Keywords / �����ؼ���
+## Trigger Keywords / 触发关键词
 
-**English Triggers:** actuarial, pricing, insurance pricing, life table, mortality table, critical illness rate, experience rate, reserve calculation, solvency capital, C-ROSS, China actuarial, product design, insurance product, 4th life table
+**English Triggers:** insurance actuarial pricing, life table 2025, C-ROSS Phase II, IFRS 17 pricing, pure premium,
+reserve calculation, solvency capital, product pricing, critical illness pricing, annuity pricing, group insurance
+pricing, China insurance actuary, 偿二代资本, 准备金评估, 定价模型
 
-**���Ĵ����ʣ����ȣ���** ���㡢���㶨�ۡ������嶨���������������ʱ��������ʱ����ؼ������ʡ����鷢���ʡ�׼������㡢���������ʱ������ղ�Ʒ���ۡ�CASS���й�����ʦЭ�ᡢ���������������ؼ������ӡ���Ʒ���
+**中文触发词（优先）：** 保险精算定价 / 第四套生命表 / 2025生命表 / 偿二代二期 / IFRS17 / 准备金计算 / 纯保费 /
+毛保费 / 产品定价 / 重疾险定价 / 年金险定价 / 医疗险定价 / 团体保险定价 / 偿付能力资本 / 资产负债管理 / 利率风险
 
 ---
 
+## Core Capabilities / 核心能力
 
-### 保险监管最新动态 [2026-06-28更新]
+### 0. 2025-2026 最新监管动态（截至 2026-08-28）
 
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-|---------|---------|---------|---------|
-| 监管发布 | 金融监管总局发布《关于银行业保险业人工智能安全开发应用的指导意见》，界定承保理赔、风险管理等为AI高风险应用场景 | 2026-06-18 | 保险AI应用合规与风险管控 |
-| 监管计划 | NFRA发布《2026年规章制定工作计划》：保险资金运用管理办法、偿付能力管理办法纳入修订，流动性风险、网络安全管理办法新制定 | 2026-06-23 | 保险监管全链条 |
-| 监管施行 | NFRA 2026年第2号令《银行保险机构许可证管理办法》6月1日起施行，取消保险许可证统一为金融许可证 | 2026-06-01 | 保险业务资质与合规管理 |
+| 时间 | 监管动态 | 对精算定价/评估影响 |
+|------|----------|-------------------|
+| **2025-10-29** | 保险业协会发布第四套经验生命表（CL1/CL2/CL3） | 2026-01-01 起强制使用；寿险/重疾/年金定价死亡率整体下调约 20%-30% |
+| **2024-03-18** | 偿二代二期工程（C-ROSS Rules II）全面实施 | 最低资本计量趋严，长期股权投资、投资性房地产风险因子上调 |
+| **2024 年** | 普通型人身险预定利率上限下调至 3.0% | 传统险产品成本下降，分红/万能占比上升 |
+| **2025 年** | A 股上市公司 IFRS 17 / HKFRS 17 首份年报适用 | 准备金计量逻辑转向 BBA，CSM 摊销成为利润核心驱动 |
+| **2026-08** | 金融监管总局研究普通型预定利率动态调整机制，上限进一步降至 2.0% 可期；分红/万能演示利率同步压降 | 新产品定价假设重估，存量高利率保单利差损压力上升 |
+| **2026-07** | 人身险销售误导治理"负面清单"更新 | 定价与演示口径更审慎，销售端需与精算假设一致披露 |
+| **2026-06** | 养老金融政策加码，个人养老金税优额度扩容 | 年金/养老产品定价需叠加税优与长寿风险情景 |
 
-> **数据截止**: 2026-06-28 | 来源：国家金融监督管理总局、行业公开信息
-> **声明**: 以上动态供参考，具体以官方最新发布为准
+> **说明：** 以上动态截至 2026-08-28，具体以监管机构官方发布为准；本 Skill 仅为方法论参考，不替代合规审查。
 
-## Core Capabilities / ��������|
+---
 
-### 0. 2025-2026 Latest Regulatory Updates / ���¼�ܶ�̬������2026��5�£�|
+### 1. 第四套生命表（2025）全面分析 / 4th Life Table (2025) Full Analysis
 
-| ʱ�� | ���� | ����Ӱ�� |
-|------|------|---------|
-| **2025��10��29��** | ������������������CL1/CL2/CL3�� | 2026��1��1����ǿ��ʹ�ã�������/�����ֵȫ������ |
-| **2024��3��18��** | �����������ȫ��ʵʩ | ����ʱ������ʷ��ա��ؼ�������ȫ������ |
-| **2024����** | Ԥ�����������µ���3.0% | ��ͳ�ն��۳ɱ��½����ֺ��վ������������ |
-| **2025����** | IFRS 17/HKFRS 17��A�����������ƹ� | ׼��������߼������CSM̯��Ҫ������ |
-| **2026��1��1��** | ������������ǿ��ִ�� | ���������ղ�Ʒ�밴�±����¶��ۻ����� |
+#### 1.1 生命表结构 / Table Structure
 
-### 1. 4th Life Table (2025) Full Analysis / ��������������2025��ȫ����|
+第四套生命表由非养老类（CL1）、养老类（CL2）、长寿风险类（CL3）三套核心表及对应死亡率、伤残率表构成。
 
-**����������**
-- 2025��10��29�գ��й�����ʦЭ����ʽ����
-- ���ڼ���ܾ�ͬ������ʵʩ֪ͨ
-- **��2026��1��1����ʵʩ**�����������ڣ�
-- ��������������������ף�2010��汾������ӳ�й��˾������ӳ������仯����|
+| 生命表 | 适用产品 | 核心特征 | 应用要点 |
+|--------|---------|---------|---------|
+| **CL1 非养老类** | 定期寿险、终身寿险、重疾险、医疗险 | 死亡率较第三套整体改善约 20% | 重疾/寿险定价基准，需叠加疾病发生率 |
+| **CL2 养老类** | 年金险、养老年金 | 死亡率改善更显著（约 25%-30%） | 年金给付期长寿风险计提更充分 |
+| **CL3 长寿风险类** | 递延年金、长期护理 | 高年龄端尾部死亡率更低 | 用于长寿风险附加资本与情景测试 |
+| **伤残/重疾发生率表** | 重疾、意外、长护 | 随医疗进步疾病谱变化 | 需结合经验数据动态校准 |
 
-#### ���ź��ı�|
+#### 1.2 关键变化 / Key Changes
 
-| ���� | Ӣ�� | ��; |
-|------|------|------|
-| **��������ҵ��һ��** | CL1 | �������ա��������յȲ�Ʒ���� |
-| **��������ҵ�����** | CL2 | ��ȫ�ա�����յȲ�Ʒ���� |
-| **������ҵ���** | CL3 | ר�����ϱ��ա��������Ȳ�Ʒ���� |
+- **死亡率整体下移**：全年龄段死亡率较第三套下降约 20%-30%，养老类降幅更大。
+- **新增长寿风险表 CL3**：针对年金给付的长尾风险单独建模，强化尾部情景。
+- **性别差异收敛**：男女死亡率差距在高龄段收窄，影响联合生存年金定价。
+- **疾病发生率更新**：重疾、医疗赔付经验纳入新表，反映诊疗技术进步。
 
-#### ���������������Ҫ�仯|
+**示例 1（死亡率对比）：** 30 岁男性，第三套 qₓ≈0.0009，第四套 CL1 qₓ≈0.0007，降幅约 22%；用于定期寿险纯保费测算时，年保费约下降 15%-20%。
 
-| ά�� | �����ף�2010�棩 | �����ף�2025�棩 | Ӱ�� |
-|------|---------------|----------------|------|
-| �����ڼ� | 2005-2008�� | 2018-2023�� | ����ӳ��ǰ����ˮƽ |
-| ����Ԥ��������60�꣩ | +20.7�� | +22.5�� | ������⸶���ӳ� |
-| Ů��Ԥ��������60�꣩ | +24.2�� | +26.1�� | Ů�������ճɱ����� |
-| �����������ࣩ | ��ר�� | **����ר���** | �����ն��۸���׼ |
+**示例 2（长寿影响）：** 65 岁男性年金，使用 CL2 较 CL1 预期领取年限延长约 1.5-2 年，年金现值上升约 8%-12%，需通过预定利率与费用率对冲。
 
-### 2. China Actuarial Pricing Methodology / �й����㶨�۷�����|
+#### 1.3 死亡率改善与外推 / Mortality Improvement
 
-#### ���ղ�Ʒ���ۻ�����ʽ|
+| 参数 | 含义 | 典型取值 | 校准要点 |
+|------|------|---------|---------|
+| 改善率 iₜ | 逐年死亡率下降速度 | 1.5%-2.5%/年 | 随年龄递减，高龄放缓 |
+| 外推年限 | 表外年龄线性外推 | ≤5 年 | 避免尾部失真 |
+| 平滑因子 | 相邻年龄过渡 | 0.1-0.3 | 防止阶梯跳变 |
+
+---
+
+### 2. 中国精算定价方法论 / China Actuarial Pricing Methodology
+
+#### 2.1 产品定价基本公式 / Pricing Formula
+
+采用净保费法（等价原则）：
 
 ```
-ë���� = ������ �� (1 + ���ӷ�����)
-������ = ���ɴ����� / �����ֵϵ��
-      = ���ս�� �� ƽ�������� �� ƽ�������ڼ� �� ����ϵ��
+毛保费 G = 纯保费 P + 费用附加 L
+纯保费现值 PV(P) = 给付现值 PV(B) + 退保现值 PV(S)
+现值方程：Σ v^t · (给付 + 费用) · p_x = Σ v^t · 保费 · p_x
+其中 v = 1/(1+i)，i 为预定利率
 ```
 
-#### ���ղ�Ʒ����Ҫ��|
+#### 2.2 产品分类与定价要点 / Product Categories
 
-| Ҫ�� | ˵�� | ����ȡֵ |
-|------|------|---------|
-| **Ԥ��������** | ��Դ�������������� | CL1/CL2/CL3 |
-| **Ԥ������** | ���չ�˾Ͷ�������ʼ��� | 2.5%-3.5%��2024����޸�3%�� |
-| **Ԥ��������** | ��������/����/������� | 10%-35%����������� |
-| **Ԥ��������** | ��˾����Ҫ�� | 5%-15% |
-| **���ѽ��ɷ�ʽ** | ����/�ڽ�/�꽻 | �ڽ������� |
+| 产品类型 | 核心定价因子 | 主要风险 | 监管关注 |
+|---------|------------|---------|---------|
+| 定期/终身寿险 | 死亡率(CL1)、预定利率 | 死亡摆幅、利差损 | 最低资本、利率风险 |
+| 重大疾病 | 重疾发生率、死亡率 | 疾病谱、医疗通胀 | 发生率披露、定义规范 |
+| 年金险 | 死亡率(CL2)、长寿风险 | 长寿、利差损 | 长寿风险资本 |
+| 医疗险 | 医疗费用、赔付率 | 医疗通胀、逆选择 | 赔付率红线、续保 |
+| 团体保险 | 经验发生率、集中风险 | 团体逆向选择 | 经验费率可信度 |
 
-#### �ؼ��ն��۷�����Pythonʾ����|
+#### 2.3 关键假设 / Key Assumptions
+
+| 假设 | 说明 | 取值区间（示意） |
+|------|------|----------------|
+| 预定利率 i | 定价贴现率 | 2.0%-3.0%（随监管动态调整） |
+| 死亡率 | CL1/CL2 第四套 | 按年龄性别查表 |
+| 重疾发生率 | 行业/公司经验表 | 随产品差异大 |
+| 退保率 | 经验假设 | 首年高、逐年降 |
+| 费用率 | 获取/维持/理赔费用 | 保费 5%-15% |
+
+#### 2.4 Python 示例 / Illustrative Code
 
 ```python
-# �ؼ��մ����Ѽ�����
-def critical_illness_premium(age, sum_assured, policy_term, payment_term):
-    # ����������������������ҵ�����(CL2)Ϊ����
-    i = 0.025  # Ԥ�����ʣ�3.0%���޺�ı��ؼ��裩
+def critical_illness_premium(age, sum_assured, policy_term, payment_term, i=0.025):
+    """示意：重疾险年缴纯保费（等价原则简化版）"""
     v = 1 / (1 + i)
-    
-    # �ؼ�������ֵ
-    A_crit = 0
+    # 重疾给付现值
+    A_ci = 0.0
     for t in range(policy_term):
-        q_crit_t = lookup_critical_illness_rate(age + t, t)
-        A_crit += v**(t+1) * q_crit_t * sum_assured
-    
-    # ����������ֵ������/ȫ�У�
-    A_death = 0
+        q_ci = lookup_ci_rate(age + t, t)          # 查第四套重疾发生率
+        A_ci += v ** (t + 1) * q_ci * sum_assured
+    # 身故给付现值
+    A_death = 0.0
     for t in range(policy_term):
-        q_death_t = lookup_mortality_rate_CL2(age + t, t)
-        A_death += v**(t+1) * q_death_t * sum_assured
-    
-    # ���������ֵ���ɷ��ڣ�
-    ?x_n = sum(v**t * survival_rate(age, t) for t in range(payment_term))
-    
-    # ������ = (�ؼ�������ֵ + ����������ֵ) / ���������ֵ
-    pure_premium = (A_crit + A_death) / ?x_n
+        q_d = lookup_mortality_CL1(age + t, t)     # 查 CL1 死亡率
+        A_death += v ** (t + 1) * q_d * sum_assured
+    # 缴费期生存年金现值 Nx
+    Nx = sum(v ** t * survival_prob(age, t) for t in range(payment_term))
+    pure_premium = (A_ci + A_death) / Nx
     return pure_premium
+
+# 示例：30 岁男性，50 万保额，20 年缴，预定利率 2.5%
+prem = critical_illness_premium(30, 500000, 30, 20, i=0.025)
+print(f"年缴纯保费约：{prem:,.0f} 元")
 ```
 
-### 3. Reserve Calculation / ׼�������|
-
-| ���� | ���� | ������� |
-|------|------|---------|
-| **δ��������׼����UEPR��** | Ϊδ���⸶׼����Ǯ | ʣ�ౣ�����ڵĴ�������ֵ |
-| **�ѷ������׼����IBNR��** | �ѷ���δ������� | ������ƣ����������εȷ����� |
-| **����׼����** | ���ѳ����Բ��Ժ󲹳� | �ֽ������� |
-| **��������׼����** | ���ٱ��ճ��ڸ�ծ | ������������ƽ������ |
-
-### 4. Group Insurance Pricing / ���ն���ר��|
-
-#### ���ն���Ҫ��|
-
-| Ҫ�� | ˵�� | �������� |
-|------|------|---------|
-| **�����ģ** | �α����� | ����Խ�࣬����ԽС |
-| **��ҵ����** | ��ҵ������ҵ | ��ҵ���յȼ�ϵ�� |
-| **����ṹ** | Ա��ƽ������/�ֲ� | Ա��ƽ������Խ�󣬱���Խ�� |
-| **��ʷ�⸶** | ��ȥ1-3���⸶��¼ | ������ʵ��� |
-| **���������** | ���Ϸ�Χ/����/���� | �������Ӱ�� |
-
-#### ���վ�����ʼ���|
-
-```python
-def group_experience_rate(base_premium, experience_factor):
-    if experience_factor < 0.7:
-        rate_adjustment = 0.85  # �������飬����15%
-    elif experience_factor < 0.9:
-        rate_adjustment = 0.95  # �Ϻþ��飬����5%
-    elif experience_factor < 1.1:
-        rate_adjustment = 1.00  # ��׼����
-    elif experience_factor < 1.3:
-        rate_adjustment = 1.15  # �ϲ�飬�ӷ�15%
-    else:
-        rate_adjustment = 1.30  # ���Ӿ��飬�ӷ�30%
-    return base_premium * rate_adjustment
-```
-
-### 5. IFRS 17 / HKFRS 17 �����¹棨A�������������ã�|
-
-#### IFRS 17 �Ծ��㶨�۵ĺ���Ӱ��
-
-| ��Ŀ | ԭIFRS 4 | IFRS 17 �仯 | ����Ӧ�� |
-|------|---------|------------|---------|
-| **��������ȷ��** | �ڼ䱣�� | ���շ������루�Ǳ��ѣ� | ���ѷֽ�Ϊ�⸶/����/CSM�ͷ� |
-| **׼�������** | ��ʷ�ɱ� | �����г�һ�²��� | ��Ҫ������������� |
-| **��ͬ����߼�CSM** | �� | ����������δ������ | ÿ���ͷţ�����һ��ȷ�� |
-| **���յ���RA** | ��ר�� | �������ǽ��ڷ��յĲ�ȷ���� | ͨ��������ˮƽ��/CTE�� |
-| **�����ͬ** | ���� | ����ȷ����ʧ | ��������������ӯ���� |
-
-```python
-# IFRS 17 ��Լ�ֽ��� FCF ������
-def ifrs17_fcf(policy, discount_rate_curve, risk_adjustment_pct):
-    """
-    ��Լ�ֽ��� = δ���ֽ�����ֵ + ���յ���
-    Future Cash Flows = PV(outflows) - PV(inflows) + Risk Adjustment
-    """
-    pv_outflows = sum(cf * discount_factor(t, discount_rate_curve)
-                      for t, cf in enumerate(policy.expected_claims))
-    pv_inflows = sum(prem * discount_factor(t, discount_rate_curve)
-                     for t, prem in enumerate(policy.expected_premiums))
-    risk_adj = (pv_outflows - pv_inflows) * risk_adjustment_pct  # ����ֵ��5%-15%
-    return pv_outflows - pv_inflows + risk_adj
-```
-
-### 6. Interest Rate Risk & ALM / ���ʷ������ʲ���ծƥ��|
-
-#### 2024��Ԥ�������µ������붨�۲���
-
-| ���� | Ԥ������ | ���۲��� | ��Ʒ���� |
-|------|---------|---------|---------|
-| **2024��9��1��ǰ** | ��3.5% | ��ǰ���������� | ��ͳ����/����� |
-| **2024��9��1�պ�** | ��3.0% | �����ʶ��ۻ��� | ���������� |
-| **2025������** | ��3.0%���ȶ��� | ���ӷֺ측���ռ� | �ֺ���/������ |
-
-#### ����ѹ�����ԣ����������
-
-```python
-def interest_rate_stress_test(policy, base_rate):
-    scenarios = {
-        "base": base_rate,
-        "down_50bp": base_rate - 0.005,
-        "down_100bp": base_rate - 0.010,
-        "down_150bp": base_rate - 0.015,
-    }
-    results = {}
-    for scenario, rate in scenarios.items():
-        reserve = calculate_reserve(policy, rate)
-        results[scenario] = {
-            "reserve": reserve,
-            "surplus_change": reserve - calculate_reserve(policy, base_rate)
-        }
-    return results
-```
+**示例：** 30 岁男性、50 万保额、20 年缴费，预定利率 2.5%、重疾发生率取行业表，年缴纯保费约 4,800-5,400 元区间，叠加费用附加后毛保费约 6,000-7,000 元（具体以公司经验与产品形态为准）。
 
 ---
 
-## Reference Files / �ο��ļ�|
+### 3. 准备金计算 / Reserve Calculation
 
-| File / �ļ� | Content / ����˵�� |
+| 准备金类型 | 定义 | 计提基础 | 监管口径 |
+|-----------|------|---------|---------|
+| 法定责任准备金 | 保单未来给付现值 | 最优估计负债 + 风险边际 | 偿二代二期 |
+| 最优估计负债 BEL | 预期现金流现值 | 折现率曲线 + 发生率 | IFRS 17 BBA |
+| 风险边际 RM | 不确定性补偿 | 成本/资本法 | 监管规定 |
+| 未到期责任准备金 | 未届满期保费对应义务 | 1/24 或 1/365 法 | 财险/短险 |
+
+**示例：** 一张 20 年期缴重疾保单，第 5 保单年度末，BEL 按当前发生率与折现曲线重估；若实际退保率低于假设，释放部分风险边际，形成利润释放。
+
+---
+
+### 4. 团体保险定价 / Group Insurance Pricing
+
+#### 4.1 团体分类与定价方式 / Group Categories
+
+| 团体类型 | 定价方式 | 数据基础 | 风险调整 |
+|---------|---------|---------|---------|
+| 大型制造业团体医疗 | 经验费率 | 历史赔付 + 人数 | 可信度加权 |
+| 中小型企业团险 | 手册费率 | 行业基准表 | 加费/减费因子 |
+| 高管高端医疗 | 定制费率 | 个体核保 | 除外/限额 |
+| 建工/雇主责任 | 行业费率 | 工种风险等级 | 工种系数 |
+
+#### 4.2 经验费率调整 / Experience Rating
+
+采用可信度理论（credibility theory）：
+
+```
+最终费率 = Z × 经验费率 + (1 - Z) × 手册费率
+Z = n / (n + k)   # n 为观察年数，k 为全行业索赔频率稳定值
+```
+
+**示例：** 某 1000 人制造业团体，3 年经验赔付率 85%，手册基准 100%，可信度 Z=0.6，则最终费率系数 = 0.6×0.85 + 0.4×1.0 = 0.91，较基准下浮约 9%。
+
+---
+
+### 5. IFRS 17 / HKFRS 17 对精算价值的影响
+
+#### 5.1 对精算价值的影响 / Impact on Actuarial Value
+
+| 要素 | 含义 | 利润体现 |
+|------|------|---------|
+| CSM（合同服务边际） | 预期利润摊销 | 随服务期线性/驱动因子释放 |
+| LIC（亏损性合同） | 即时确认损失 | 签单即计提 |
+| LRC（剩余覆盖） | 未来服务现金流 | 变动影响 CSM |
+
+#### 5.2 未来现金流 FCF 计量 / FCF
+
+```
+FCF = PV(未来现金流出: 赔付+费用+资本成本)
+    - PV(未来现金流入: 保费)
+    + 风险调整 RA
+TVOG = 未来服务现金流现值（用于 CSM 计量）
+```
+
+**示例：** 一组 1 万张年金保单，折现率 3.5%、风险调整 50 bps，初始 CSM 为正则说明定价充足；若市场利率下行 100 bp 使折现率降至 2.5%，BEL 上升、CSM 被侵蚀，需评估资产负债匹配。
+
+---
+
+### 6. 利率风险与 ALM / Interest Rate Risk & ALM
+
+#### 6.1 利率情景 / Rate Scenarios
+
+| 情景 | 假设 | 对准备金现值影响 |
+|------|------|----------------|
+| 基准 | 折现率曲线平移 0 bp | 基准 BEL |
+| 下行 50 bp | 曲线下移 0.5% | 负债现值上升 3%-6% |
+| 下行 100 bp | 曲线下移 1.0% | 负债现值上升 6%-12% |
+| 上行 50 bp | 曲线上移 0.5% | 负债现值下降 3%-5% |
+
+#### 6.2 资产负债久期匹配 / Duration Matching
+
+**示例：** 资产组合久期 6.2 年、负债久期 7.8 年，久期缺口 -1.6 年；利率下行 100 bp 时负债增值快于资产，净资产下滑约 1.5%-2.5%。建议增配长久期国债或利率互换对冲。
+
+---
+
+## Reference Files / 参考文件
+
+| 文件 | 内容说明 |
 |------|---------|
-| `references/life_table_2025_usage.md` | ������������(2025)ʹ��˵������CL1/CL2/CL3��������˵�� |
-| `references/actuarial_pricing_formulas.md` | �����Ʒ���㶨�۹�ʽ���ܣ�������ʾ���� |
-| `references/critical_illness_pricing.md` | �ؼ��ն���ר��������ӡ��ؼ������ʱ� |
-| `references/reserve_calculation.md` | ׼�������ģ�壬������/������/����׼���� |
-| `references/group_insurance_pricing.md` | ���ն���ר���������ʱ�����ҵ����ϵ�� |
+| `references/life_table_2025.md` | 第四套生命表 CL1/CL2/CL3 结构、查表方法与改善率外推 |
+| `references/pricing_models.md` | 寿险/重疾/年金/医疗/团险定价模型与 Python 模板 |
+| `references/reserve_ifrs17.md` | 准备金计量、偿二代二期与 IFRS 17 衔接示例 |
+
+> **参考文件仅含示意代码与公式，须自行准备合规数据、经持证精算师复核后方可用于报备。**
 
 ---
 
-### CL1/CL2/CL3�ؼ����������ʣ�2025�桤��ѡ��
+## 核心工作流程（Dianjin 融合版）
 
-**CL1����������ҵ��һ��������/���������ã�**��
+### 第一步：产品定位与定价目标
+明确产品形态、目标客群、利润与资本约束，确定预定利率与费用结构。
 
-| ���� | ����������(qx, ��) | Ů��������(qx, ��) | ˵�� |
-|------|------------------|------------------|------|
-| 20 | 0.28 | 0.15 | �����ڣ������ʼ��� |
-| 30 | 0.42 | 0.23 | ����֮�꣬���Կ�ʼ���� |
-| 40 | 1.12 | 0.67 | ���꣬����������>Ů��1.7�� |
-| 50 | 3.45 | 1.98 | ֪��֮�꣬���������� |
-| 60 | 8.92 | 5.14 | �����꣬���������ʽӽ�Ů��2�� |
-| 70 | 21.34 | 13.87 | ��ϡ֮�꣬�����С |
-| 80 | 58.12 | 42.56 | �ȳ�֮�꣬Ů��׷�� |
+### 第二步：发生率假设与经验分析
+选取第四套生命表/行业发生率表，结合公司经验数据校准，做敏感性分析。
 
-**CL2����������ҵ���������ȫ/������ã�**��
+### 第三步：保费计算与利润测试
+用净保费法/毛保费法计算，叠加利润测试（IRR、利润率、偿付能力占用）。
 
-| ���� | ����������(qx, ��) | Ů��������(qx, ��) | ˵�� |
-|------|------------------|------------------|------|
-| 20 | 0.25 | 0.13 | ��CL1���ͣ������壩 |
-| 30 | 0.38 | 0.20 | ��ѡ����� |
-| 40 | 1.05 | 0.60 | ������ѡ |
-| 50 | 3.20 | 1.85 | ֪����ѡ |
-| 60 | 8.10 | 4.75 | ������ѡ |
-| 70 | 19.50 | 12.80 | ��ϡ��ѡ |
-| 80 | 53.20 | 39.10 | �ȳ���ѡ |
+### 第四步：准备金评估与偿付能力
+按偿二代二期与 IFRS 17 双口径评估负债，测算最低资本与 Solvency Ratio。
 
-**CL3��������ҵ�����ר���������ã�**��
-
-| ���� | ����������(qx, ��) | Ů��������(qx, ��) | ˵�� |
-|------|------------------|------------------|------|
-| 60 | 7.50 | 4.20 | ���Ͻ���ȡ�ڿ�ʼ |
-| 65 | 12.30 | 7.10 | ���Կ�ʼ�������� |
-| 70 | 19.80 | 12.50 | Ů�Լ����� |
-| 75 | 31.20 | 21.40 | ��Ů�����խ |
-| 80 | 48.50 | 35.20 | ������ |
-| 85 | 72.30 | 56.10 | Ԥ������<5�� |
-| 90 | 103.40 | 84.20 | �����䣬������>100�� |
-
-> **������Դ**���й�����ʦЭ�ᡶ�й���������ҵ������������2025����CL1/CL2/CL3��2025��10��29�շ�����2026��1��1����ǿ��ִ�С�
-
-**ʹ�ý���**��
-- ��������/�������ղ�Ʒ �� ����ʹ�� **CL1**����������ߣ�������أ�
-- ��ȫ��/����գ������ϣ� �� ʹ�� **CL2**���������еȣ�
-- ר����ҵ���ϱ��� �� ����ʹ�� **CL3**����������ͣ����Ͻ����ѹ�����
+### 第五步：定价报告与监管备案
+输出标准化定价报告，含假设、敏感性、利润与资本结论，供精算师签字与监管报备。
 
 ---
 
+## 合规约束与审计规则
 
-*GitHub: https://github.com/gechengling/insurance-actuarial-cn*
-## 核心工作流程（Dianjin融合版）
+- 所有定价假设须有精算备忘录支撑，重大假设变更需精算师签字。
+- 偿付能力口径计算须符合 C-ROSS Rules II；披露口径须与 IFRS 17 一致。
+- 演示利率、预定利率严格遵循监管上限，禁止超出披露。
 
-### 第一步：产品定位与定价目标（Dianjin精髓：市场洞察驱动）
+## 测试用例（Dianjin 精髓）
 
-| 定价维度 | 核心问题 | 决策输出 |
-|---------|---------|---------|
-| **产品定位** | 目标客群/保障范围/竞争格局 | 产品形态、保障责任、费率策略 |
-| **市场分析** | 同类产品费率/市场份额/增长趋势 | 定价竞争力分析、差异化策略 |
-| **盈利目标** | 目标利润率/投资收益率假设 | 定价假设、利润测试标准 |
-| **监管要求** | 预定利率上限/偿付能力/准备金 | 合规边界、监管风险点 |
+**Test Case: 重疾险定价一致性**
+- Input: "用第四套 CL1 给 30 岁男性、50 万保额、20 年缴重疾险定价"
+- Expected: 输出纯保费公式 → 查表 → 年金因子 → 年缴纯保费区间
+- Quality: 公式正确 / 查表准确 / 假设可解释 / 提示需精算师复核
 
-**定价目标输出**：
-```
-【定价目标书】
-- 产品名称：[XXX]
-- 目标客群：[年龄/性别/职业/收入]
-- 定价假设：预定利率[X]%，死亡率表[CL1/CL2/CL3]，费用率[X]%
-- 目标利润率：[X]%（IRR口径）
-- 监管要求：偿二代下资本占用[X]元/万元保费
-```
+## 关联技能（Dianjin 精髓）
 
----
-
-### 第二步：发生率假设与经验分析（Dianjin精髓：大数据发生率）
-
-#### 2.1 发生率表选择框架
-| 发生率类型 | 推荐表 | 适用产品 | 监管认可 |
-|---------|---------|---------|---------|
-| **死亡率** | CL1/CL2/CL3（2025版） | 定寿/终身寿 | 强制使用 |
-| **重疾率** | CII1/CII2（2024版） | 重疾险/医疗险 | 强制使用 |
-| **医疗率** | MIR1/MIR2（2025版） | 医疗险/护理险 | 推荐评审 |
-| **年金率** | AFR1/AFR2（2025版） | 年金险/养老金 | 强制使用 |
-| **退保率** | SUR1/SUR2（经验） | 所有产品 | 自行设定 |
-
-#### 2.2 经验发生率分析
-```
-【经验分析流程】
-1. 数据清洗：剔除异常保单、修正录入错误
-2. 经验提取：实际发生率 = f(年龄,性别,保单年度,渠道)
-3. 趋势调整：医疗进步/疾病谱变化/退保行为变化
-4. 置信区间：95%CI，最终发生率 = 经验±[X]%
-5. 与行业对比：中国精算师协会经验表、同业数据
-```
-
----
-
-### 第三步：保费计算与利润测试（Dianjin精髓：动态利润分析）
-
-#### 3.1 纯保费计算公式
-| 计算项目 | 公式 | 参数说明 |
-|---------|------|---------|
-| **纯保费(NP)** | NP = Σ CF_t × v^t × p_x+t | CF=净现金流，v=贴现因子 |
-| **费用附加** | L(oading) = α×NP + β×P + γ | α=固定%+β=变动%+γ=固定额 |
-| **总保费(P)** | P = (NP + L) / (1 - 利润率%) | 含目标利润的总保费 |
-
-#### 3.2 利润测试模板
-| 测试场景 | IRR(%) | 投资收益率(%) | 退保率(%) | 综合成本率(%) | 结论 |
-|---------|--------|--------------|------------|------------------|------|
-| **基准场景** | [X] | [X] | [X] | [X] | 合格/不合格 |
-| **悲观场景** | [X] | [X]-50bp | [X]+20% | [X]+200bp | 合格/不合格 |
-| **乐观场景** | [X] | [X]+50bp | [X]-20% | [X]-200bp | 合格/不合格 |
-
-**IRR计算代码模板**：
-```python
-# 定价IRR计算
-import numpy as np
-
-def calculate_irr(premiums, claims, expenses, reserves):
-    cashflows = [premiums - claims - expenses - (reserves[t+1] - reserves[t]) 
-                 for t in range(len(premiums))]
-    return np.irr(cashflows)
-
-# 示例：10年期缴重疾险
-premiums = [10000] * 10  # 年缴1万
-claims = [0, 5000, 15000, ...]  # 逐年理赔
-irr = calculate_irr(premiums, claims, [500]*10, [0]*10)
-print(f"定价IRR: {irr:.2%}")
-```
-
----
-
-### 第四步：准备金评估与偿付能力（Dianjin精髓：偿二代资本计量）
-
-#### 4.1 准备金计量框架
-| 准备金类型 | 计量基础 | 监管公式 | 资本占用 |
-|---------|---------|---------|---------|
-| **最优估计准备金(BEL)** | 预期现金流现值 | BEL = Σ CF × v^t | - |
-| **风险边际(RM)** | 成本/置信度法 | RM = BEL × [X]% | + |
-| **偿付能力准备金(SCR)** | Solvency II/C-ROSS | SCR = max(BEL+RM, 监管要求) | + |
-
-#### 4.2 偿二代资本占用分析
-```
-【C-ROSS资本占用计算】
-1. 保险风险资本(IC)：死亡率/重疾率/退保率/费用风险
-2. 市场风险资本(MC)：利率/权益/房地产/汇率风险
-3. 信用风险资本(CR)：再保/债券/存款对手方风险
-4. 操作风险资本(OR)：固定+变动，按保费/准备金的[X]%
-5. 总资本要求 = IC + MC + CR + OR
-
-偿二代下资本占用：[X]元/万元保费
-```
-
----
-
-### 第五步：定价报告与监管备案（Dianjin精髓：标准化输出）
-
-**精算定价报告模板**：
-```markdown
-# [产品名称] 精算定价报告
-
-## 一、产品概述
-[产品定位/目标客群/市场竞争分析]
-
-## 二、定价假设
-[生命表/重疾表/投资收益率/费用率/退保率]
-
-## 三、保费计算
-[纯保费/费用附加/总保费/IRR测试结果]
-
-## 四、准备金与资本
-[准备金计量/偿二代资本占用/IFRS17影响]
-
-## 五、敏感性分析
-[利率/死亡率/费用率/退保率±10%影响]
-
-## 六、监管合规
-[偿二代合规/准备金充足性/定价披露要求]
-
-## 七、结论与建议
-[定价结论/盈利能力/监管沟通策略]
-```
-
----
-
-## 合规约束与审计规则（Dianjin精髓）
-
-1. **监管合规**：严格遵守《保险法》《精算工作规范》《偿二代规则》
-2. **数据质量**：经验数据需清洗、校验，异常情况需说明
-3. **假设合理性**：定价假设需有依据，不得为竞争恶性定价
-4. **准备金充足**：准备金评估需保守，不得为利润释放不足提
-5. **审计留痕**：所有计算过程、假设选择、模型选择需留痕可审计
-
----
-
-## 测试用例（Dianjin精髓）
-
-**测试场景1：重疾险定价**
-- 输入：30岁男性，20年缴，保额50万
-- 预期输出：年缴保费、IRR、准备金、资本占用
-- 通过标准：定价IRR>3.0%，资本占用<500元/万元
-
-**测试场景2：年金险准备金评估**
-- 输入：终身年金，领取期20年，投资收益率4.0%
-- 预期输出：BEL、RM、SCR
-- 通过标准：SCR/准备金<15%
-
-**测试场景3：偿二代资本计算**
-- 输入：重疾险产品组合，保费1亿
-- 预期输出：IC/MC/CR/OR分项，总资本要求
-- 通过标准：计算逻辑符合C-ROSS规则
-
----
-
-## 关联技能（Dianjin精髓）
-
-- `insurance-claims-intelligence`：理赔数据→经验发生率更新
-- `insurance-anti-fraud`：欺诈识别→定价反欺诈因子
-- `insurance-product-design`：精算定价→产品设计协同
-- `finance-ai-strategy`：保险AI→精算AI战略协同
-
----
-
-*本技能融合阿里点金（Qwen Dianjin）金融AI精髓，专注经验发生率分析、动态利润测试、偿二代资本计量。*
+- `insurance-product-dev`：产品形态设计与条款
+- `insurance-solvency-reporter`：偿二代报送
+- `finance-ai-strategy`：数字化精算与 AI 应用规划

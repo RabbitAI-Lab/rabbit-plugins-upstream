@@ -1,54 +1,78 @@
-## Description: <br>
-Huawei Cloud SWR image governance skill that helps agents use the hcloud CLI to manage permissions, retention rules, shared domains, image sharing, and agency delegation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud SWR image governance skill using hcloud CLI for namespace and repository permissions, retention rules, shared download domains, image sharing checks, agency delegation, and repository reference queries.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev)
 
-## Use Case: <br>
-Developers and cloud platform operators use this skill to audit and change Huawei Cloud SWR namespace and repository permissions, image retention rules, shared download domains, image sharing settings, and agency delegation through hcloud CLI workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose broad cloud-changing operations, including create, update, delete, permission, retention, shared domain, and agency delegation commands. <br>
-Mitigation: Prefer the read-only IAM policy by default, require explicit user confirmation before create/update/delete commands, and use least-privilege credentials for the requested operation. <br>
-Risk: Real Huawei Cloud credentials could authorize destructive or privilege-affecting SWR changes. <br>
-Mitigation: Use temporary credentials where possible, avoid exposing credential values in commands or conversation, and test workflows in non-production before applying them to production resources. <br>
-Risk: Agency delegation and shared download domains can expand access beyond a single repository workflow. <br>
-Mitigation: Review agency delegation and shared domain changes with a cloud administrator before execution. <br>
+## Use Case:
 
+Developers and cloud platform engineers use this skill to audit and manage Huawei Cloud SWR governance controls. It helps them prepare hcloud CLI commands, confirm sensitive changes, parse SWR responses, and apply least-privilege access, retention, sharing, and agency delegation workflows.
 
-## Reference(s): <br>
-- [SWR Governance API Reference Guide](references/swr-governance-api-guide.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Output Format](references/output-format.md) <br>
-- [Common Pitfalls](references/common-pitfalls.md) <br>
-- [Task: Namespace Permissions](references/task-namespace-permissions.md) <br>
-- [Task: Repository Permissions](references/task-repository-permissions.md) <br>
-- [Task: Retention Management](references/task-retention-management.md) <br>
-- [Task: Shared Domains](references/task-shared-domains.md) <br>
-- [Task: Image Sharing](references/task-image-sharing.md) <br>
-- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html) <br>
-- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with hcloud CLI command examples and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires hcloud CLI, Huawei Cloud region selection, and Huawei Cloud credentials supplied outside the skill content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Cloud permission grants, updates, or revocations can create overly broad access or immediately break CI/CD and service workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Huawei Cloud credentials, review every proposed Create, Update, or Delete command, and confirm target users, resources, scope, and auth level before execution.
+
+Risk: Retention rules can permanently delete image tags when cleanup runs.
+
+Mitigation: Verify retention conditions carefully, protect critical tags such as latest or stable where appropriate, and confirm the repository and rule parameters before creating or updating retention rules.
+
+Risk: Shared download domains can expose images to another Huawei Cloud account and may increase traffic costs, especially with deadline=forever.
+
+Mitigation: Prefer explicit expiration dates, confirm the target IAM domain, audit shared domains periodically, and delete domains that are expired or no longer needed.
+
+Risk: Creating SWR agency delegation allows SWR to perform cross-service operations on the user's behalf.
+
+Mitigation: Check agency status first, confirm the delegation scope, and use temporary or least-privilege credentials where possible.
+
+Risk: Huawei Cloud AK, SK, and security token values are sensitive credentials.
+
+Mitigation: Pass credentials through environment variables, avoid printing or hardcoding secret values, and install hcloud only after verifying the CLI source.
+
+## Reference(s):
+
+- [SWR Governance API Reference Guide](references/swr-governance-api-guide.md)
+- [Huawei Cloud KooCLI Installation Guide](references/cli-installation-guide.md)
+- [IAM Permission Policies - SWR Image Governance Skill](references/iam-policies.md)
+- [Verification Method - SWR Image Governance Skill](references/verification-method.md)
+- [SWR Image Governance - Output Format](references/output-format.md)
+- [Task: Namespace Permissions](references/task-namespace-permissions.md)
+- [Task: Repository Permissions](references/task-repository-permissions.md)
+- [Task: Retention Management](references/task-retention-management.md)
+- [Task: Shared Domains](references/task-shared-domains.md)
+- [Task: Image Sharing](references/task-image-sharing.md)
+- [Common Pitfalls & Solutions](references/common-pitfalls.md)
+- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html)
+- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html)
+- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON response summaries, tables, and confirmation prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write operations require explicit user confirmation; hcloud CLI output is parsed into concise human-readable summaries.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -107,18 +107,96 @@ _looks_like_json_value() {
   return 1
 }
 
+# ── _mktemp_body: temp file for the outgoing request body ─────────────────
+# The JSON body MUST reach curl via --data-binary "@file", never as a bare
+# command-line argument: on Git Bash / MSYS2, curl.exe is a native Windows
+# binary, and MSYS2 re-encodes argv into the process's ANSI code page (e.g.
+# GBK on zh-CN Windows) before exec'ing it. Any non-ASCII byte in a
+# command-line argument is corrupted (silently, to U+FFFD on the server
+# side) before curl ever sees it -- headers are unaffected because the token
+# here is ASCII, but a JSON body carrying UTF-8 business text is not.
+# Reading from a file sidesteps argv entirely, which fixes the corruption.
+# It is NOT a confidentiality upgrade, and an earlier draft of this comment
+# claimed otherwise -- corrected here, because a stale "this is private"
+# comment is more dangerous than no comment (it gets cited later as a
+# reason something is fine when it is not, per this repo's own incident
+# history): on a POSIX host, `mktemp` does create a 0600 file. But on
+# Windows/MSYS2 (this repo's primary target host, per the curl.exe
+# corruption this function exists to fix), the file is created under the
+# OS temp dir and inherits that directory's ACL rather than getting a
+# private mode bit -- measured with `icacls` on this class of host, that
+# ACL includes BUILTIN\Users:(RX) and Everyone:(RX), i.e. any local
+# principal can read it for as long as it exists. Net exposure vs. the
+# old argv-based transport is a wash, not an improvement: the token was
+# never in this body (it is a header) either way, so this change does
+# not affect token exposure; what it changes is that a local user who
+# could already read this process's argv (which on Windows generally
+# needs no elevation, unlike inspecting another user's process) can,
+# for the short life of this file, instead read it from disk. Do NOT
+# read "private (0600)" as a confidentiality guarantee this script
+# provides on Windows. If `mktemp` is unavailable (LA#3: this script
+# must run on any third-party agent host, no guaranteed non-POSIX
+# deps), fall back to a manually-created file under a tightened umask
+# -- this narrows exposure on the POSIX hosts where umask is actually
+# authoritative, with no claim made about the Windows/MSYS2 case.
+_mktemp_body() {
+  if command -v mktemp >/dev/null 2>&1; then
+    mktemp "${TMPDIR:-/tmp}/lg_agent_exec.XXXXXX" 2>/dev/null && return 0
+    mktemp 2>/dev/null && return 0
+  fi
+  local dir="${TMPDIR:-/tmp}" candidate old_umask
+  old_umask="$(umask)"
+  umask 077
+  candidate="${dir}/lg_agent_exec.$$.${RANDOM}${RANDOM}"
+  : > "$candidate" 2>/dev/null
+  umask "$old_umask"
+  if [[ -f "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+  return 1
+}
+
 _dispatch() {
   local json_body="$1"
   if [[ -n "${LG_AGENT_DRY_RUN:-}" ]]; then
     printf '%s\n' "$json_body"
     return 0
   fi
+
+  local tmpfile
+  tmpfile="$(_mktemp_body)" || {
+    echo "Error: unable to create a temporary file for the request body" >&2
+    return 1
+  }
+  # EXIT (not RETURN) so the body file is removed on every exit path this
+  # trap can actually observe: normal completion, a curl failure, or the
+  # script aborting under `set -e`, and also SIGTERM (bash runs pending
+  # EXIT traps on a fatal signal it does not ignore). It CANNOT observe
+  # SIGKILL -- no POSIX shell can trap SIGKILL -- so a `kill -9` of this
+  # process (or an ancestor that takes it down without signal delivery)
+  # leaves this file on disk until something else cleans the temp
+  # directory. Worth naming plainly since it is a direction change: before
+  # this fix, a SIGKILLed call left zero trace on disk (the body existed
+  # only in argv, gone with the process); after this fix, the same
+  # SIGKILL leaves a JSON file with business-data content sitting in the
+  # temp dir. Low severity, but new, and the opposite direction from
+  # every other exit path this trap does handle.
+  # Expand $tmpfile NOW (double-quoted trap arg), not when the trap fires:
+  # under `set -u`, a `local` variable referenced by NAME inside a
+  # single-quoted trap body is unbound by the time the EXIT trap actually
+  # runs (the function's local scope has already unwound), which aborts
+  # the trap itself with "unbound variable" (verified empirically).
+  trap "rm -f \"$tmpfile\"" EXIT
+
+  printf '%s' "$json_body" > "$tmpfile"
+
   curl -sS "${BASE_URL}/agent/skills/execute" \
     -X POST \
     -H "Authorization: Bearer ${LG_AGENT_TOKEN}" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    --data "${json_body}"
+    --data-binary "@${tmpfile}"
 }
 
 if [[ $# -lt 1 ]]; then

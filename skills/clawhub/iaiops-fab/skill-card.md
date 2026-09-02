@@ -1,42 +1,49 @@
-## Description: <br>
-Iaiops Fab helps agents inspect semiconductor and display fab equipment over SECS/GEM and OPC-UA, combining equipment status, alarms, recipes, OEE, asset inventory, data quality, and downtime root-cause workflows with a read-first, MOC-gated write posture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops-fab helps agents work with semiconductor and display fab equipment across SECS/GEM and OPC-UA for read-first diagnostics, status discovery, alarms, OEE, asset inventory, data quality, and root-cause analysis.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Fab engineers, automation engineers, and operations teams use this skill to investigate SECS/GEM and OPC-UA equipment state, alarms, recipes, downtime, quality signals, and cross-protocol asset context in semiconductor or display fabs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Industrial write, export, and publish capabilities can affect production equipment or move fab data outside intended destinations. <br>
-Mitigation: Disable write, export, and publish tools unless they are required; require explicit approvals, destination allowlists, and dry-run review before enabling higher-impact actions. <br>
-Risk: The documented MOC controls may not be enforced by the installed pip package implementation. <br>
-Mitigation: Verify the installed implementation enforces the documented MOC controls before use in or near production fab systems. <br>
-Risk: Diagnostic and root-cause guidance can be misleading when equipment, MES, alarm, or historian signals are incomplete. <br>
-Mitigation: Review results against current fab context and corroborate recommendations with real equipment signals before operational action. <br>
+## Use Case:
 
+Fab automation, manufacturing, and equipment-interface engineers use this skill to inspect SECS/GEM and OPC-UA equipment signals, analyze alarms and downtime, and prepare evidence-backed operational guidance while keeping production writes gated by change approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-fab) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured diagnostic results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bounded samples, cited signal values, configuration checks, and MOC-gated action guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: The skill is intended for fab and industrial-control environments and references write-capable factory tools, so unauthorized or poorly controlled production access could affect equipment operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for authorized users and confirm MOC approval, dry-run behavior, and deployment safeguards before enabling production access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-fab)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tool-call recommendations, command examples, and structured analysis summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first fab and industrial-control guidance; production writes require external MOC approval controls.]
+
+## Skill Version(s):
+
+0.26.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

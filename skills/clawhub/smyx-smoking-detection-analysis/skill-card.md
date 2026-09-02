@@ -1,45 +1,60 @@
-## Description: <br>
-Automatically detects smoking behavior in images, video files, and video streams, then returns structured detection results, alerts, recommendations, and report links for smoking-control management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically detects smoking behavior in target areas from video streams, images, and video files, then reports detected violations and alerts for smoking-control safety management.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Facility, community, park, and workplace operators can use this skill to analyze submitted public-space images, videos, or video URLs for suspected smoking behavior and review generated management reports. Agents can also query cloud-hosted historical smoking-detection reports for the current managed identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted images, videos, or media URLs are processed by the publisher's remote service. <br>
-Mitigation: Use only media you are authorized to send to that service, and review publisher service terms before using workplace, public-space, or personally identifiable footage. <br>
-Risk: Report history is associated with an automatically managed identity. <br>
-Mitigation: Treat report history as account-linked data and avoid using the skill where silent identity creation or association conflicts with your privacy or compliance requirements. <br>
-Risk: The skill stores generated user records and session tokens locally. <br>
-Mitigation: Run it in a controlled workspace, protect local data directories, and remove stored records or tokens when they are no longer needed. <br>
+## Use Case:
 
+External operators, facility managers, and developers use this skill to analyze public-area image or video inputs for smoking behavior, produce structured detection reports, trigger violation alerts, and query cloud-hosted historical reports.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-smoking-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis reports with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, historical report tables, alerts, confidence details, and management recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter declares 1.0.8) <br>
+Risk: Smoking-detection media may be sent to a cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media that operators are authorized to process, document consent and retention expectations, and review service endpoints before deployment.
+
+Risk: The skill can silently create or reuse identity context and query historical reports.
+
+Mitigation: Limit deployment to trusted workspaces, verify report access controls, and make identity association behavior clear to operators.
+
+Risk: Tokens or profile data may be stored locally in the workspace.
+
+Mitigation: Review local credential storage before use, restrict filesystem access, and rotate credentials if the workspace is shared or exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-smoking-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Smyx Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown reports, JSON analysis payloads, report links, and optional saved text or JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports basic, standard, and json detail levels; local media inputs are documented with a 10 MB limit.]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release metadata; artifact SKILL.md frontmatter says 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

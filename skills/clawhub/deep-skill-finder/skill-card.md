@@ -1,47 +1,61 @@
-## Description: <br>
-Deep Skill Finder helps an agent search Meyo community skill data for task-matched skill recommendations and install a selected skill after user confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deep Skill Finder helps an agent search, recommend, install, and collect feedback on community skills that match a user's task.
 
-## Publisher: <br>
-[lintong123](https://clawhub.ai/user/lintong123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lintong123](https://clawhub.ai/user/lintong123)
 
-## Use Case: <br>
-Developers, operators, and agent users use Deep Skill Finder to find skill recommendations for a described task, compare the top matches, and install the selected community skill into an agent skills directory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to Meyo off-device. <br>
-Mitigation: Avoid sensitive prompts as search queries and use the skill only when off-device search is acceptable. <br>
-Risk: The skill may use local Meyo credentials and a configured or environment-supplied Meyo API host. <br>
-Mitigation: Review local Meyo configuration, MEYO_API_KEY, and MEYO_API_URL before use, especially if the API host is nonstandard. <br>
-Risk: The installer can download third-party skills into an agent skills directory. <br>
-Mitigation: Review recommended skills before installing them, install only selected skills, and scan downloaded skill files before enabling them. <br>
-Risk: Remote ZIP extraction is identified as unsafe by the security evidence. <br>
-Mitigation: Install into a controlled skills directory and inspect extracted files before running the installed skill. <br>
+## Use Case:
 
+Developers and agent users use this skill to find an existing community skill for a task, compare recommendations, install a selected skill, or submit feedback after use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lintong123/skills/deep-skill-finder) <br>
-- [Meyo skill search](https://www.meyo.life/skill) <br>
-- [Meyo community](https://www.meyo.life/community/home) <br>
-- [Meyo community skills](https://www.meyo.life/community/square/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown recommendations with JSON helper-script output and shell commands for search or install actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results are presented as up to five ranked skill recommendations; installation can write the selected skill into a target agent skills directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can install remote community skills into an agent environment with weak safety checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the recommended skill source and publisher before installing, and run installation only in a constrained skills directory.
+
+Risk: Configured MEYO_API_URL or MEYO_FEEDBACK_API_URL endpoints may receive local API tokens.
+
+Mitigation: Use trusted endpoint configuration and avoid setting broad or untrusted API override URLs.
+
+Risk: The skill performs broad local inspection when preparing usage feedback.
+
+Mitigation: Review generated feedback fields for sensitive information and use the redaction step before submission.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lintong123/skills/deep-skill-finder)
+- [Publisher profile](https://clawhub.ai/user/lintong123)
+- [Skill evaluation workflow](references/skill-evaluation.md)
+- [Meyo Skill directory](https://www.meyo.life/skill)
+- [Meyo community](https://www.meyo.life/community/home)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown recommendation lists with inline links and shell commands; JSON for feedback drafts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include recommendation ranks, safety-review summaries, installation prompts, and feedback fields.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release metadata; artifact metadata references 1.3.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

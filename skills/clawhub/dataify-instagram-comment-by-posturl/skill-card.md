@@ -1,44 +1,59 @@
-## Description: <br>
-Submits Dataify Builder jobs that collect Instagram post comments from one or more post URLs and returns the resulting task ID and status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect comments from a known Instagram post URL. Do not use for profile data or Reel details.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers with a Dataify account use this skill to submit Instagram post comment collection jobs by post URL, including multi-post submissions, and receive the task ID and status for follow-up in Dataify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill submits task parameters to Dataify under the user's account. <br>
-Mitigation: Review post URLs and task settings before submission, and submit only when the user intends to create a Dataify collection job. <br>
-Risk: A saved Dataify API TOKEN can be reused for future submissions. <br>
-Mitigation: Use DATAIFY_API_TOKEN deliberately, do not persist tokens silently, and ask for confirmation before providing save commands. <br>
-Risk: Incorrect or out-of-scope post URLs could submit unintended collection targets. <br>
-Mitigation: Validate that each posturl is non-empty and starts with https://www.instagram.com/ before calling the Builder endpoint. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify Instagram post-comment collection jobs for specific Instagram post URLs, monitor the returned task, and receive the final collected result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-comment-by-posturl) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with parameter tables, shell commands, and JSON task summaries from the helper script.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify API TOKEN and one or more Instagram post URLs; the helper script prints spider_id, task_id, status, parameters, file_name, dashboard_url, and message.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill uses a Dataify API TOKEN to submit Dataify collection jobs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable allowing the skill to use DATAIFY_API_TOKEN, and do not expose the token in chat or output.
+
+Risk: Submitted Dataify jobs may consume Dataify credits.
+
+Mitigation: Review high-volume or multi-post collection scope before execution and avoid resubmitting paid tasks when a task_id is already available.
+
+Risk: The skill is scoped to user-provided Instagram post URLs.
+
+Mitigation: Provide actual Instagram post URLs and reject URLs outside https://www.instagram.com/.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-comment-by-posturl)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task/result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and an Instagram post URL; waits for the final result by default unless no-wait behavior is requested.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

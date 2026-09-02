@@ -1,0 +1,25 @@
+{
+  "test_cases": [
+    {
+      "name": "查询所有CCE集群（默认区域）",
+      "command": "python3 scripts/huawei-cloud-cce-list.py",
+      "method": "GET",
+      "category": "readonly",
+      "expected": ".*(名称|状态|集群版本|未找到)"
+    },
+    {
+      "name": "指定区域查询",
+      "command": "python3 scripts/huawei-cloud-cce-list.py --region cn-north-4",
+      "method": "GET",
+      "category": "readonly",
+      "expected": ".*(名称|状态|集群版本|未找到)"
+    },
+    {
+      "name": "显示帮助",
+      "command": "python3 scripts/huawei-cloud-cce-list.py --help",
+      "method": "GET",
+      "category": "readonly",
+      "expected": "usage:"
+    }
+  ]
+}

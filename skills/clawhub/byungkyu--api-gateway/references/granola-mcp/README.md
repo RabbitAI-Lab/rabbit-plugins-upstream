@@ -14,26 +14,18 @@
 
 ## Connection Management
 
-Manage MCP connections at `https://api.maton.ai`.
+An MCP connection is created like any other, with `--method MCP`.
 
 ### List Connections
 
 ```bash
-GET https://api.maton.ai/connections?app=granola&method=MCP&status=ACTIVE
-Authorization: Bearer $MATON_API_KEY
+maton connection list granola --method MCP --status ACTIVE
 ```
 
 ### Create Connection
 
 ```bash
-POST https://api.maton.ai/connections
-Content-Type: application/json
-Authorization: Bearer $MATON_API_KEY
-
-{
-  "app": "granola",
-  "method": "MCP"
-}
+maton connection create granola --method MCP
 ```
 
 ## API Path Pattern

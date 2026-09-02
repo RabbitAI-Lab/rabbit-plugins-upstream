@@ -13,6 +13,30 @@ Ref-based actions run in two modes, Playwright-style:
 
 `--headed` is a global flag and also applies to every `batch` entry.
 
+### Reading the result of an action
+
+A successful action reports what happened, not just that it ran:
+
+| Field | Meaning |
+|-------|---------|
+| `data.steps` | Each mechanism attempted, in order, with `outcome` (`succeeded`/`skipped`) and `verified` |
+| `data.disposition.delivery` | `delivered_verified` when the effect was observed, `delivered_unverified` when the application claimed success without an observable change |
+| `data.post_state` | The target element's state after the action, when the action has one |
+| `data.surfaces` | Overlays the application had open once the action settled |
+
+Check `data.surfaces` before assuming an action finished the job. An action that
+opens a sheet, menu, or alert leaves the application waiting on that overlay, and
+the next command must target it:
+
+```json
+{ "ok": true, "command": "set-value",
+  "data": { "action": "set-value", "surfaces": [{ "id": "focused-window", "type": "sheet" }] } }
+```
+
+Reach into that overlay with `find --surface sheet` rather than searching the
+window. A `delivered_unverified` result with a surface still open usually means
+the application is waiting for a confirmation the action did not deliver.
+
 ### `--wait-for` / `--wait-for-gone` (global)
 
 Three global flags poll the accessibility tree until a compact selector matches (or, with `--wait-for-gone`, until it no longer matches), then return a snapshot envelope:
@@ -63,7 +87,7 @@ When the actionability preflight blocks an action, the error envelope carries th
 
 **`receives_events` failures.** When a hit test at the target's center point lands on a different element, `receives_events` fails with `reason: "occluded by <role>"` and a structured `occluder` object on that check: `{ "role", "name", "bounds" }` (the element that actually received the hit, when it can be identified). The target's own bounds have not changed — something else is now on top of them. Recovery is to bring the target's window or element to the front (or dismiss whatever is covering it), then retry; blind-retrying without changing z-order will fail the same way again.
 
-Every ref-resolving action accepts `--timeout-ms` (default `5000`), but it budgets different things. For the dispatch actions (`click`, `double-click`, `triple-click`, `right-click`, `clear`, `focus`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll-to`, `type`, `set-value`, `select`, `scroll`) it is the actionability-wait budget: they poll roughly every 100ms until the target becomes actionable, then fail with `TIMEOUT` once the budget is exhausted — unless the block is a terminal check (`supported_action`/`policy`/`editable`), which fails fast on the first attempt with `ACTION_NOT_SUPPORTED`/`POLICY_DENIED` rather than waiting out the budget. For `hover` and `drag`, the same budget covers ref resolution, live visibility/bounds, stability, and `receives_events`. Transient misses, app-unresponsive reads, and occlusion are polled until recovery or `TIMEOUT`; terminal errors are returned immediately with their original code.
+Every ref-resolving action accepts `--timeout-ms` (default `5000`), but it budgets different things. For the dispatch actions (`click`, `double-click`, `triple-click`, `right-click`, `clear`, `focus`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll-to`, `type`, `set-value`, `select`, `scroll`) it is the actionability-wait budget: they poll roughly every 100ms until the target becomes actionable, then fail with `TIMEOUT` once the budget is exhausted — unless the block is a terminal check (`supported_action`/`policy`/`editable`), which fails fast on the first attempt with `ACTION_NOT_SUPPORTED`/`POLICY_DENIED` rather than waiting out the budget. For `hover` and `drag`, the same budget covers ref resolution, live visibility/bounds, stability, and `receives_events`. Transient misses, app-unresponsive reads, and occlusion are polled until recovery or `TIMEOUT`; terminal errors are returned immediately with their original code. If every poll completed traversal but one or more required native live reads failed, the command instead returns `ACTION_FAILED` with `details.kind: "live_read_incomplete"` and `retryable: false`; re-snapshot and use a fresh ref rather than treating incomplete evidence as an ordinary timeout.
 
 **Implicit scroll-into-view.** Standard ref actions whose `Action` declares a scroll precondition attempt `AXScrollToVisible` before dispatch. The pointer resolver for `hover` and `drag` independently makes one scroll attempt when a ref endpoint is not visibly bounded, then re-resolves and fails closed if it is still not visible. Use the standalone `scroll-to` command when you need an explicit, verifiable scroll result.
 
@@ -76,7 +100,7 @@ Click commands use semantic AX activation in strict headless mode. Pass `--heade
 agent-desktop click @s8f3k2p9:e5
 agent-desktop click @e5 --snapshot <snapshot_id>
 ```
-Primary activation. Headless uses `AXPress`; `--headed` performs a physical click first and reports `physical_synthetic` in `data.steps`.
+Primary activation. Headless tries the activation the element actually publishes — `AXPress`, `AXOpen`, or `AXConfirm` — and, for a row whose activation is selection, writes the container's selection instead. `--headed` performs a physical click first and reports `physical_synthetic` in `data.steps`. Delivery is judged by observing the application, not by the accessibility return code, so `data.steps` reports each attempt and `disposition.delivery` distinguishes `delivered_verified` from `delivered_unverified`.
 
 ### double-click
 ```bash
@@ -292,6 +316,17 @@ Synthesizes a scroll-wheel event at absolute coordinates and requires `--headed`
 | `--modifiers` | | Held modifiers: `shift`, `meta`, `ctrl`, `alt` (repeatable; `cmd`/`command` aliases are accepted) |
 
 ## Choosing the Right Command
+
+### Agent cursor presentation
+
+Enable it once per session with `session start --cursor` or `cursor-overlay enable`. Interaction commands take no cursor flags.
+
+- The cursor stays alive between eligible headless ref actions and travels from its previous destination.
+- The action waits for it to land before it dispatches, capped at 900 ms.
+- A click plays a ripple and flashes an accent outline around the element.
+- Headed actions hide the overlay and use the real OS cursor. Raw pointer commands keep their headed-only behavior.
+
+See `commands-system.md` for the style flags.
 
 | Goal | Preferred | Alternative |
 |------|-----------|-------------|

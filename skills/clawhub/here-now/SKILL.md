@@ -16,7 +16,7 @@ description: >
 
 # here.now
 
-**Skill version: 1.18.0**
+**Skill version: 1.26.0**
 
 here.now lets agents publish websites and files to live URLs in seconds.
 
@@ -54,10 +54,13 @@ Topics that require current docs (do not rely on local skill text alone):
 - SPA routing
 - owner Site search
 - Site analytics
+- Site version history, previews, and rollback
 - error handling and remediation
 - feature availability
 
 **If docs and live API behavior disagree, trust the live API behavior.**
+
+Command-line fetches of https://here.now/docs (curl, WebFetch, etc.) receive a markdown summary, not the full HTML docs: it lists every stable public endpoint with a one-line description, but section anchors in this skill (like `/docs#access-control`) resolve only in the HTML version, and worked examples live there too. For complete request/response schemas and parameters, fetch **https://here.now/openapi.json**. Do not conclude an operation is unsupported from the markdown summary alone — check the OpenAPI spec first.
 
 If the docs fetch fails or times out, continue with the local skill and live API/script output. Prefer live API behavior for active operations.
 
@@ -70,6 +73,16 @@ If the docs fetch fails or times out, continue with the local skill and live API
 - Bundled helpers:
   - `./scripts/publish.sh` for publishing sites
   - `./scripts/drive.sh` for private Drive storage
+
+## If the helper scripts aren't installed
+
+Some environments receive this document without the bundled `scripts/` directory (for example, hosted platform integrations that provide only `$HERENOW_API_KEY`). In that case, either install the full bundle first:
+
+```bash
+npx skills add heredotnow/skill --skill here-now -g
+```
+
+or call the API directly — every script workflow in this document is a wrapper over the public API. Publishing is a three-step flow: `POST /api/v1/publish` with a `files` array (`[{path, size}]`) returns presigned upload targets, `PUT` each file's bytes to its returned URL, then `POST` the returned `finalizeUrl`. The site is not live until finalize succeeds. Full walkthrough with request/response examples: https://here.now/docs#create (then #upload and #finalize), machine-readable schemas: https://here.now/openapi.json.
 
 ## Create a site
 
@@ -98,6 +111,10 @@ The script auto-loads the `claimToken` from `.herenow/state.json` when updating 
 
 Authenticated updates require a saved API key.
 
+**Stale-base protection.** The live Site may have changed since your local files were published — the owner can edit it from other tools (another agent, the here.now Studio, a teammate). The script records the live `versionId` in `.herenow/state.json` after each publish and sends it as `baseVersionId` on the next update of the same slug from the same directory; if the live Site moved past it, the update is rejected with `code: "version_conflict"` naming the live version and what created it. When that happens, relay the message to the user and offer to (a) fetch the current Site and reconcile local files before republishing, or (b) re-run with `--overwrite` to replace the live version anyway. Before editing local files for an authenticated Site you haven't touched recently, it's cheap to check for drift first: `GET /api/v1/publish/{slug}` returns `currentVersionId` — if it differs from your state file's `versionId`, fetch the live files before editing. Anonymous Sites can't call that endpoint; they rely on the saved state and server enforcement. Omitting `baseVersionId` (or using `--overwrite`) is an unchecked full replacement — today's default for raw API callers.
+
+Every publish records an immutable version. If the user asks to see earlier versions of a Site, undo a publish, or roll back: list history with `GET /api/v1/publish/{slug}/versions` and restore instantly with `POST /api/v1/publish/{slug}/versions/{versionId}/restore` (restoring keeps the current access mode, password, and domains). Version access requires a paid plan and is included for workspace Sites; free accounts' history is recorded and unlocks on upgrade. A byte-identical republish returns `unchanged: true` from finalize instead of creating a new version. See https://here.now/docs#versions.
+
 Signed-in users also have public profiles. Agents can help users show or hide Sites on their profile and manage profile settings through the API documented at https://here.now/docs#profile.
 
 ## Publish to a workspace
@@ -122,7 +139,7 @@ A Site uses one access mode at a time:
 - **password**: visitors must enter a shared password.
 - **restricted**: invite-only; only verified email addresses or email domains the owner allows can view.
 
-Workspace-owned Sites use a different set of modes: **account_members** (the default — visitors sign in and must be workspace members) or public, optionally with a password. `restricted` allowlists are personal-Site-only and return `409 workspace_access_mode_unsupported` on workspace Sites. See https://here.now/docs#workspace-access.
+Workspace-owned Sites default to **account_members** (visitors sign in and must be workspace members) and also support public, public with a password, and **restricted**. On a workspace Site, `restricted` means workspace members plus a per-Site guest allowlist: members always have access, and allowlisted emails/domains are outside guests who can view only that Site — they never become workspace members, though the Site appears in the guest's own dashboard as a shared Site. Workspace restricted requires at least one guest email or domain — an empty allowlist is rejected with a 400 (use `account_members` for members-only). See https://here.now/docs#workspace-access.
 
 Manage access with `GET`/`PATCH /api/v1/publish/{slug}/access` (passwords via the metadata endpoint). Restricted access requires a claimed Site. The PATCH replaces the full allowlists — read, merge, then write. Before working with access control, read the current docs:
 
@@ -146,14 +163,21 @@ Use scoped Drive tokens for agent-to-agent handoff. If you receive a `herenow_dr
 
 ## Client attribution
 
-Pass `--client` so here.now can track reliability by agent:
+Pass `--client` with the name of the **agent product or harness you are running in** — `cursor`, `claude-code`, `codex`, `grok-bot`, `openclaw`, `gemini`, etc:
 
 ```bash
-./scripts/publish.sh {file-or-dir} --client cursor
+./scripts/publish.sh {file-or-dir} --client claude-code
 ```
 
-This sends `X-HereNow-Client: cursor/publish-sh` on publish API calls.
-If omitted, the script sends a fallback value.
+This sends `X-HereNow-Client: claude-code/publish-sh` on publish API calls. If omitted, the script sends a fallback value.
+
+Use the platform's name, **not** the name you were given inside it. If you are a bot named "research-bot" running inside Grok Bot, the correct value is `grok-bot` — not `research-bot`. Bot names, personas, sub-agents, projects, and thread names don't identify the platform. To record your instance name too, append it after a slash:
+
+```bash
+./scripts/publish.sh {file-or-dir} --client grok-bot/research-bot
+```
+
+Only a standalone agent running in no harness should use its own product name.
 
 ## API key storage
 
@@ -210,8 +234,8 @@ After every site create/update, the script writes to `.herenow/state.json` in th
   "publishes": {
     "bright-canvas-a7k2": {
       "siteUrl": "https://bright-canvas-a7k2.here.now/",
-      "claimToken": "abc123",
-      "claimUrl": "https://here.now/claim?slug=bright-canvas-a7k2&token=abc123",
+      "claimToken": "4fQ9tK2mXb7cW1pZ",
+      "claimUrl": "https://here.now/c/4fQ9tK2mXb7cW1pZ",
       "expiresAt": "2026-02-18T01:00:00.000Z"
     }
   }
@@ -227,10 +251,11 @@ Never present this local file path as a URL, and never use it as source of truth
 For published sites:
 
 - Always share the `siteUrl` from the current script run.
+- Put the site URL on its own line with nothing else on that line — no punctuation, dashes, or status text after it (chat clients autolink everything up to whitespace, gluing your words into the URL). Status details like "permanent, saved to your account" go on the following line.
 - Read and follow `publish_result.*` lines from script stderr to determine auth mode.
 - When `publish_result.account_url` is non-empty (workspace publishes), share it as the primary team URL alongside `siteUrl`.
 - When `publish_result.auth_mode=authenticated`: tell the user the site is **permanent** and saved to their account. No claim URL is needed.
-- When `publish_result.auth_mode=anonymous`: tell the user the site **expires in 24 hours**. Share the claim URL (if `publish_result.claim_url` is non-empty and starts with `https://`) so they can keep it permanently. Warn that claim tokens are only returned once and cannot be recovered.
+- When `publish_result.auth_mode=anonymous`: tell the user the site **expires in 24 hours**. Share the claim URL (if `publish_result.claim_url` is non-empty and starts with `https://`) so they can keep it permanently. Copy it byte-for-byte as a clickable link — never shorten, redact, summarize, or replace any part of it with `...`; a modified claim link will not work. Warn that claim tokens are only returned once and cannot be recovered.
 - Never tell the user to inspect `.herenow/state.json` for claim URLs or auth status.
 
 For Drives:
@@ -246,10 +271,11 @@ For Drives:
 | `--slug {slug}`        | Update an existing site instead of creating |
 | `--workspace {subdomain}` | Publish into a workspace (team account) you belong to |
 | `--claim-token {token}`| Override claim token for anonymous updates    |
+| `--overwrite`          | Skip the stale-base check and replace the live version |
 | `--title {text}`       | Viewer title (non-HTML sites)             |
 | `--description {text}` | Viewer description                            |
 | `--ttl {seconds}`      | Set expiry (authenticated only)               |
-| `--client {name}`      | Agent name for attribution (e.g. `cursor`)    |
+| `--client {name}`      | Agent harness for attribution — the platform you run in (e.g. `cursor`, `grok-bot`), not your bot/persona name; optionally append it: `grok-bot/research-bot` |
 | `--base-url {url}`     | API base URL (default: `https://here.now`)    |
 | `--allow-nonherenow-base-url` | Allow sending auth to non-default `--base-url` |
 | `--api-key {key}`      | API key override (prefer credentials file)    |

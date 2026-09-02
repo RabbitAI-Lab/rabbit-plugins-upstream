@@ -1,48 +1,64 @@
-## Description: <br>
-Control Tokei (tokei.io) pre-launch and waitlist campaigns from the command line: list and update pages, clone new ones, pull stats and leaderboards, add entries, and manage webhooks via the Tokei v1 REST API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tokei-agent lets agents and command-line users manage Tokei pre-launch, waitlist, giveaway, referral, and launch campaigns through the Tokei v1 REST API.
 
-## Publisher: <br>
-[gilesdawe](https://clawhub.ai/user/gilesdawe) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[gilesdawe](https://clawhub.ai/user/gilesdawe)
 
-## Use Case: <br>
-Developers, marketers, and launch operators use this skill to let agents inspect and manage Tokei waitlist and pre-launch campaigns through a CLI or MCP server. It supports monitoring, campaign updates, signup import, leaderboard review, and webhook management when the user supplies an appropriate Tokei API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: An agent can read or modify Tokei campaign data when given a Tokei API key with sufficient scope. <br>
-Mitigation: Use a read-only API key for monitoring and reserve read-write keys for tasks that are intended to change campaigns, entries, or webhooks. <br>
-Risk: Changing TOKEI_API_URL could send requests and credentials to an untrusted endpoint. <br>
-Mitigation: Leave TOKEI_API_URL unset for normal use, or set it only to an endpoint the user explicitly trusts. <br>
-Risk: Webhook creation returns the signing secret only once. <br>
-Mitigation: Store the returned webhook secret immediately and use HTTPS endpoints for webhook delivery. <br>
-Risk: On Node 24 for Windows, the documented process exit code may be unreliable even when JSON output is correct. <br>
-Mitigation: Judge command results by the JSON output envelope rather than the process exit status in that environment. <br>
+## Use Case:
 
+Developers, operators, and AI-agent users use this skill to inspect, create, update, publish, monitor, and automate Tokei campaign pages while preserving JSON command output for scripts and MCP clients.
 
-## Reference(s): <br>
-- [Tokei](https://tokei.io) <br>
-- [Tokei API Reference](https://tokei.io/docs/api) <br>
-- [Tokei OpenAPI Specification](https://tokei.io/openapi.json) <br>
-- [ClawHub skill page](https://clawhub.ai/gilesdawe/skills/tokei-agent) <br>
-- [Agent skill reference](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON API responses and Markdown guidance with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires TOKEI_API_KEY; TOKEI_API_URL is optional and should only point to a trusted Tokei-compatible endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.2 (source: package.json, server.json, evidence.release.version, target metadata) <br>
+Risk: A read-write Tokei API key can change pages, entries, media, and webhooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only key for monitoring and provide a read-write key only when changes are intended.
+
+Risk: Command output can include sensitive campaign data such as emails, survey answers, and analytics.
+
+Mitigation: Treat command output and agent transcripts as sensitive when they contain campaign or entrant data.
+
+Risk: Public-facing writes, webhook changes, and entry imports can affect entrants or third parties.
+
+Mitigation: Confirm these actions with a human before running them.
+
+Risk: Broad request bodies passed with --data can send more fields than the command name alone implies.
+
+Mitigation: Review --data payloads carefully before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gilesdawe/skills/tokei-agent)
+- [Tokei Agent Docs](https://tokei.io/agent)
+- [Tokei API Reference](https://tokei.io/docs/api)
+- [npm Package](https://www.npmjs.com/package/tokei-agent)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, MCP configuration examples, and JSON response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON envelopes for non-interactive agent, script, CI, and MCP use.]
+
+## Skill Version(s):
+
+0.3.5 (source: package.json, CHANGELOG, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

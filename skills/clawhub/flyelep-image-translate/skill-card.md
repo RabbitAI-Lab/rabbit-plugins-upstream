@@ -1,42 +1,60 @@
-## Description: <br>
-This skill uses the Flyelep AI Tool API to identify and translate text in an image and return a URL for the translated image. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes and translates text in images through the Flyelep AI Tool API and returns URLs for the translated images.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and developers use this skill to translate text embedded in posters, product images, and other single-image assets by providing an image URL, target language, and Flyelep API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the submitted image URL and runtime API key to Flyelep. <br>
-Mitigation: Use it only when Flyelep is trusted for the image content and key handling, avoid confidential images unless Flyelep's privacy and retention terms are acceptable, and provide the secretKey only at runtime. <br>
-Risk: Storing the Flyelep secretKey in shared files or prompts could expose the API credential. <br>
-Mitigation: Do not hard-code or persist the secretKey; pass it through the request header only for the active call. <br>
+## Use Case:
 
+External users and agents use this skill to translate visible text in posters, product images, and other image assets into a supported target language. It is intended for workflows where the user can provide a public image URL or allow local images to be uploaded before translation.
 
-## Reference(s): <br>
-- [Flyelep Image Translation API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/translate) <br>
-- [Flyelep controlboard](https://www.flyelep.cn/controlboard) <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/flyelep-image-translate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a translated image URL from the Flyelep API response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Local image uploads can create permanent public URLs for source images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Warn users before uploading local files and proceed only with images they are comfortable making externally reachable.
+
+Risk: Images sent for translation are processed by a third-party service.
+
+Mitigation: Avoid confidential, personal, regulated, or unreleased business images unless the provider's retention and deletion controls are acceptable.
+
+Risk: The skill requires a Flyelep API key at runtime.
+
+Mitigation: Request the key only when needed and do not store it in skill files, repositories, or persistent configuration.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/flyelepai/skills/flyelep-image-translate)
+- [Flyelep API Key Dashboard](https://www.flyelep.cn/controlboard)
+- [Flyelep Image Translation API](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/translate)
+- [Flyelep File Upload API](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request bodies and curl commands; runtime output is translated image URL text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return one or more translated image URLs as a comma-separated list in the same order as the input images.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

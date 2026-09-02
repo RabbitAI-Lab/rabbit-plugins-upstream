@@ -1,44 +1,65 @@
-## Description: <br>
-Reference skill for Lance v9, the open columnar lakehouse format for multimodal AI, covering Lance crates, dataset and file formats, indexes, MemWAL, schema evolution, versioning, object-store configuration, and related engineering guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a deep reference for Lance v12, covering the Lance file and table formats, indexes, schema evolution, object-store behavior, and Rust/Python implementation surfaces.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to answer implementation questions about Lance datasets, file and table formats, indexes, versioning, concurrency, performance, and object-store behavior when building directly on Lance crates or bindings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may surface cleanup commands, external blob URI settings, non-TLS object-store options, or trace logging settings that affect data retention or exposure. <br>
-Mitigation: Review generated commands and configuration against the data sensitivity, object-store policy, and working directory before applying them. <br>
-Risk: Some Lance guidance is version-specific and may describe beta or unstable format behavior. <br>
-Mitigation: Pin the intended Lance version and verify reader and writer compatibility before changing persistent datasets or indexes. <br>
+## Use Case:
 
+Developers and engineers use this skill when building directly on Lance crates, pylance, or .lance datasets and need format-level guidance for storage layout, indexing, transactions, versioning, and object-store behavior.
 
-## Reference(s): <br>
-- [Lance Format ClawHub Skill](https://clawhub.ai/tenequm/skills/lance-format) <br>
-- [Lance Format Source Homepage](https://github.com/tenequm/skills/tree/main/skills/lance-format) <br>
-- [Lance Reference](references/lance-reference.md) <br>
-- [Lance Performance Reference](references/performance.md) <br>
-- [Lance Format Documentation Mirror](references/docs/format/index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; answers should load the relevant bundled reference files before giving version-specific guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.11.1 (source: frontmatter, changelog, server release metadata) <br>
+Risk: Copied tutorial commands may delete, overwrite, or otherwise affect local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution and run destructive examples only in disposable directories without important data.
+
+Risk: Object-store examples can interact with external blob storage and credentials.
+
+Mitigation: Scope credentials narrowly to trusted buckets or paths and avoid testing with production storage unless the commands have been reviewed.
+
+Risk: The reference tracks Lance v12.0.0-beta.6 while also documenting v11.0.0 as the stable pin.
+
+Mitigation: Verify guidance against the exact Lance version in use, especially for beta format features, manifest flags, and index behavior.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/lance-format)
+- [ClawHub Metadata Homepage](https://github.com/tenequm/skills/tree/main/skills/lance-format)
+- [Lance Reference Index](references/lance-reference.md)
+- [Lance File Format Reference](references/format-file.md)
+- [Lance Table Format Reference](references/format-table.md)
+- [Lance Indexes and Distributed Builds](references/indexes.md)
+- [Lance Operations Reference](references/ops.md)
+- [Lance Performance Reference](references/performance.md)
+- [Lance v7 to v12 Changelog](references/changelog-v7-v12.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with technical explanations, code snippets, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference answers are version-sensitive and should be checked against the user's exact Lance pin.]
+
+## Skill Version(s):
+
+0.18.0 (source: frontmatter, release evidence, changelog released 2026-09-01)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

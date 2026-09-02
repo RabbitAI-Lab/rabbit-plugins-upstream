@@ -1,54 +1,76 @@
-## Description: <br>
-Huawei Cloud SWR enterprise instance management skill using hcloud CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud SWR enterprise instance management skill using hcloud CLI.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev)
 
-## Use Case: <br>
-Developers, DevOps engineers, and cloud administrators use this skill to manage Huawei Cloud SWR enterprise instances, namespaces, registries, repositories, artifacts, credentials, endpoints, domains, statistics, and job status through hcloud CLI workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose powerful Huawei Cloud registry administration actions, including irreversible deletion of instances, namespaces, repositories, artifacts, credentials, endpoints, domains, or job records. <br>
-Mitigation: Use least-privilege IAM permissions and require explicit confirmation before running destructive commands. <br>
-Risk: Credential-related workflows can expose AK/SK values, security tokens, registry access secrets, or returned authentication tokens if output is shared or logged carelessly. <br>
-Mitigation: Prefer temporary credentials, redact returned tokens and secrets, check credential presence without printing values, and store long-term credentials only in secure secret stores. <br>
-Risk: Public access, anonymous access, insecure TLS, and broad IP allowlists can unintentionally expose registry resources. <br>
-Mitigation: Keep anonymous access and insecure TLS disabled unless explicitly required, use narrow IP allowlists, and review endpoint and domain settings before applying changes. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to manage Huawei Cloud SWR enterprise instances and related namespaces, registries, repositories, artifacts, credentials, endpoints, domains, statistics, and jobs. It helps agents provide hcloud CLI workflows, configuration guidance, prerequisite checks, IAM policy guidance, and verification steps for SWR enterprise instance administration.
 
-## Reference(s): <br>
-- [Credential Configuration](references/credential-configuration.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [SWR Instance API Reference Guide](references/swr-instance-api-guide.md) <br>
-- [Task: Instance Lifecycle](references/task-instance-lifecycle.md) <br>
-- [Task: Instance Namespaces](references/task-instance-namespaces.md) <br>
-- [Task: Instance Registries and Repositories](references/task-instance-registries.md) <br>
-- [Task: Instance Artifacts](references/task-instance-artifacts.md) <br>
-- [Task: Instance Credentials](references/task-instance-credentials.md) <br>
-- [Task: Instance Endpoints](references/task-instance-endpoints.md) <br>
-- [Task: Instance Domains](references/task-instance-domains.md) <br>
-- [Output Format](references/output-format.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Common Pitfalls and Solutions](references/common-pitfalls.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with hcloud CLI commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON response examples and cautions for credentials, public access, and destructive cloud operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The skill can guide broad administration of Huawei Cloud SWR enterprise resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege IAM policies and grant write permissions only for the specific operations the user intends to perform.
+
+Risk: Instance creation, deletion, public access, anonymous access, and credential issuance can create cost, exposure, or irreversible changes.
+
+Mitigation: Require explicit user confirmation before these operations and verify target instance, namespace, endpoint, and credential identifiers before execution.
+
+Risk: Huawei Cloud AK/SK values, security tokens, and registry secrets may be exposed if handled carelessly.
+
+Mitigation: Prefer temporary credentials where possible, never echo or paste real secrets into chat or command output, and verify credential presence with masked CLI/profile checks.
+
+Risk: The Python helper performs SDK-backed instance creation and depends on the user's local IAM and hcloud configuration.
+
+Mitigation: Review the helper behavior before use and run it only in an environment configured for the intended Huawei Cloud account, region, VPC, and subnet.
+
+## Reference(s):
+
+- [Command Reference](references/command-reference.md)
+- [Parameter Reference](references/parameter-reference.md)
+- [SWR Instance API Guide](references/swr-instance-api-guide.md)
+- [Credential Configuration](references/credential-configuration.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [Verification Method](references/verification-method.md)
+- [Common Pitfalls](references/common-pitfalls.md)
+- [Instance Lifecycle](references/task-instance-lifecycle.md)
+- [Instance Namespaces](references/task-instance-namespaces.md)
+- [Instance Registries](references/task-instance-registries.md)
+- [Instance Artifacts](references/task-instance-artifacts.md)
+- [Instance Credentials](references/task-instance-credentials.md)
+- [Instance Endpoints](references/task-instance-endpoints.md)
+- [Instance Domains](references/task-instance-domains.md)
+- [Huawei Cloud SWR Enterprise Instance Console](https://console.huaweicloud.com/swr-instance)
+- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-swr-enterprise-instance)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include hcloud CLI commands, Python helper invocation guidance, IAM policy JSON, credential handling guidance, and verification checklists.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

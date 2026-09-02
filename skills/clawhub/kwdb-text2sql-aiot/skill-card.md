@@ -1,51 +1,65 @@
-## Description: <br>
-Convert natural language queries to KWDB SQL for time series data, relational data, and cross-model analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert natural language queries to KWDB SQL for time series data, relational data, and cross-model analysis.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers and database users use this skill to convert natural-language requests into KWDB SQL for IoT time-series data, relational data, and cross-model analysis. When kwdb-mcp-server is available, it can discover schema and optionally execute approved SQL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated SQL may query or modify a KWDB database when the user approves execution through kwdb-mcp-server. <br>
-Mitigation: Review generated SQL before approval, especially CREATE, DROP, ALTER, INSERT, UPDATE, and DELETE statements. <br>
-Risk: Schema assumptions can produce incorrect SQL when MCP schema discovery is unavailable. <br>
-Mitigation: Confirm table names, column names, and time ranges, and treat assumed-schema output as needing verification. <br>
+## Use Case:
 
+Developers and database engineers use this skill to translate natural-language requests into KWDB-specific SQL for IoT time-series, relational, and cross-model database work. It supports schema-aware query generation, SQL formatting, and optional execution through kwdb-mcp-server when available.
 
-## Reference(s): <br>
-- [KWDB Text2SQL AIoT ClawHub listing](https://clawhub.ai/kwdb/skills/kwdb-text2sql-aiot) <br>
-- [Query Scenarios](references/scenarios.md) <br>
-- [KWDB MCP Server Integration](references/mcp-integration.md) <br>
-- [Time Series DDL Reference](references/ts-ddl.md) <br>
-- [Time Series Downsampling](references/ts-downsampling.md) <br>
-- [Time Series Interpolation](references/ts-interpolation.md) <br>
-- [Time Series Latest Value](references/ts-latest-value.md) <br>
-- [Window Functions and Event Detection](references/ts-window-events.md) <br>
-- [Cross-Model Query Reference](references/cross-model.md) <br>
-- [Relational Query Reference](references/relational.md) <br>
-- [KWDB Functions Quick Reference](references/ts-functions.md) <br>
-- [KWDB Relational Functions Reference](references/relational-functions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with SQL code blocks, assumptions, field mappings, validation checklists, and optional execution results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include schema verification status, generated KWDB SQL, and tabular query results when execution is approved.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Generated SQL can include broad write or administrative statements against a live KWDB database.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only database credentials by default, enable write-query only in trusted sessions, and review every DELETE, DROP, ALTER, UPDATE, INSERT, or CREATE statement before execution.
+
+Risk: When kwdb-mcp-server is unavailable, generated SQL may rely on assumed table or column names.
+
+Mitigation: Require the response to mark assumed schema clearly and have the user verify table names, columns, time ranges, and LIMIT clauses before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kwdb/skills/kwdb-text2sql-aiot)
+- [Output Template](assets/output-template.md)
+- [Query Scenarios](references/scenarios.md)
+- [KWDB MCP Server Integration](references/mcp-integration.md)
+- [Time Series DDL Reference](references/ts-ddl.md)
+- [Time Series Downsampling](references/ts-downsampling.md)
+- [Time Series Interpolation](references/ts-interpolation.md)
+- [Time Series Latest Value](references/ts-latest-value.md)
+- [Window Functions and Event Detection](references/ts-window-events.md)
+- [Relational Query Reference](references/relational.md)
+- [Cross-Model Query Reference](references/cross-model.md)
+- [KWDB Functions Quick Reference](references/ts-functions.md)
+- [KWDB Relational Functions Reference](references/relational-functions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with SQL code blocks, assumptions, field mappings, validation checklists, and optional execution results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include schema verification status, generated KWDB SQL, read or write execution results, and user-facing warnings when schema is assumed.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

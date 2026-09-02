@@ -1,43 +1,56 @@
-## Description: <br>
-DOGE节点免费版 helps agents operate against a local Dogecoin Core node by wrapping common dogecoin-cli status, wallet, transaction, address, RPC reference, and configuration tasks into readable guidance and structured outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query Dogecoin Core node status and perform basic wallet RPC lookups, including balances and transaction history.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, Dogecoin node operators, and automation teams use this skill to inspect Dogecoin Core sync and network status, wallet balances, unspent outputs, generated receiving addresses, and recent transaction history through agent-proposed CLI/RPC commands.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The trigger text is broad and mismatched, including database, SQL, analytics, and reporting language outside the Dogecoin node-management use case.
+
+Mitigation: Constrain activation to explicit Dogecoin Core node or wallet RPC requests and avoid using the skill for generic database, SQL, analytics, or reporting work.
+
+Risk: The skill can propose command execution against a local Dogecoin Core node, which may expose wallet balances, addresses, transaction history, or local RPC configuration details.
+
+Mitigation: Review commands before execution, keep Dogecoin RPC bound to localhost, avoid exposing RPC credentials, and redact sensitive wallet or transaction details from shared outputs.
+
+Risk: Generating a new wallet address is under-disclosed relative to the mainly read-oriented positioning of the skill.
+
+Mitigation: Require explicit confirmation before generating new receiving addresses or displaying wallet balances and transaction history.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Dogecoin node operators and agent-assisted infrastructure users use this skill to inspect node sync status, peer/network state, local wallet balances, recent transactions, unspent outputs, and basic Dogecoin Core RPC usage. It is intended for local Dogecoin Core environments where the agent may propose or run dogecoin-cli commands and summarize their results. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide or run local commands against a Dogecoin Core node and wallet, including commands that reveal wallet balances, transactions, unspent outputs, or generate new receiving addresses. <br>
-Mitigation: Restrict invocation to explicit Dogecoin Core and dogecoin-cli tasks, review proposed shell commands before execution, and require confirmation before generating addresses or handling wallet backup/export data. <br>
-Risk: Wallet results and callback-style outputs may expose sensitive local wallet information if sent to an untrusted destination. <br>
-Mitigation: Keep wallet outputs local unless the destination is trusted, and avoid callback URLs for wallet-related results unless their ownership and transport security are clear. <br>
-Risk: The release security summary notes ambiguity between read-only claims and capabilities that can access wallet data and run local commands. <br>
-Mitigation: Treat the skill as requiring review before deployment, constrain allowed operations to expected read-oriented queries, and confirm any non-query or wallet-affecting action with the user. <br>
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill release page](https://clawhub.ai/thcjp/skills/doge-node-tool-free) <br>
-- [Skill definition artifact](artifact/SKILL.md) <br>
+**Other Properties Related to Output:** [Outputs should be reviewed before execution because the skill may propose local Dogecoin Core RPC commands that expose wallet balances, addresses, or transaction history.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with tables, JSON examples, bash command snippets, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured status summaries, execution logs, Dogecoin Core RPC command examples, and dogecoin.conf guidance.] <br>
+1.0.3 (source: server release metadata; artifact metadata: 1.0.0)
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and target metadata; artifact frontmatter says 1.0.0) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

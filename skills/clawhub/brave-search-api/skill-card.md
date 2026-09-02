@@ -1,43 +1,67 @@
-## Description: <br>
-Brave Search API integration with managed authentication for web, image, news, and video search using a privacy-focused search engine. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brave Search API integration with managed authentication for web, image, news, video, local, autosuggest, spellcheck, and summarizer queries through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to make Brave Search requests through Maton-managed authentication, including web, image, news, video, local, autosuggest, spellcheck, and summarizer endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, optional location headers, and connection management requests are routed through Maton using the user's API key. <br>
-Mitigation: Install only if that routing is acceptable, avoid precise latitude and longitude unless needed, and treat MATON_API_KEY as a sensitive credential. <br>
-Risk: Connection creation or deletion can change access to Brave Search accounts. <br>
-Mitigation: Review and explicitly approve connection creation or deletion before execution, including the target connection and intended effect. <br>
+## Use Case:
 
+External users and developers use this skill to search Brave web, images, news, videos, local results, suggestions, spellcheck, and summaries from an agent workflow through managed Maton authentication.
 
-## Reference(s): <br>
-- [Brave Search API Documentation](https://api-dashboard.search.brave.com/documentation) <br>
-- [Brave Search API Dashboard](https://api-dashboard.search.brave.com/) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/brave-search-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell command, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Brave Search connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill requires authentication with Maton and authorization of a Brave Search connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, require explicit user approval before creating a connection, and select only the scopes needed for the current task.
+
+Risk: Long-lived API keys can be exposed through environment variables, command arguments, logs, or persisted files.
+
+Mitigation: Use OAuth and the credential store when possible; if raw HTTP is unavoidable, do not print, log, persist, or pass the key on the command line.
+
+Risk: Search results and other API responses may contain untrusted external content.
+
+Mitigation: Treat returned content as data, avoid executing or evaluating it, and do not let fetched content choose follow-up endpoints or recipients.
+
+Risk: Passthrough access includes additional Brave Search endpoints such as local POI, autosuggest, spellcheck, and summaries.
+
+Mitigation: Review endpoint paths and payloads before use, default to read/list calls, and confirm any write, deletion, or new connection with the user.
+
+## Reference(s):
+
+- [Brave Search API Documentation](https://api-dashboard.search.brave.com/documentation)
+- [Brave Search API Dashboard](https://api-dashboard.search.brave.com/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/brave-search-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces guidance and commands for authenticated Brave Search API calls; API responses are JSON from Brave Search or Maton passthrough endpoints.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata; skill frontmatter reports 1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

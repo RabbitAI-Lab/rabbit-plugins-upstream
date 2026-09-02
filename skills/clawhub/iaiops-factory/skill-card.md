@@ -1,42 +1,57 @@
-## Description: <br>
-Iaiops Factory helps agents inspect and troubleshoot discrete-manufacturing systems across PLC, CNC, fieldbus, MES/SCADA, MQTT/Sparkplug B, and Unified Namespace workflows with read-first diagnostics and approval-gated writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Factory edition of iaiops for discrete-manufacturing troubleshooting across PLC, CNC, servo and drive bus, tag browsing, Unified Namespace, OEE, downtime root-cause, asset inventory, and read-first industrial protocol workflows with MOC-gated writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, controls engineers, and industrial operations teams use this skill to browse tags, diagnose connectivity and dataflow, analyze downtime and OEE, inventory assets, and prepare controlled write actions for factory production lines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact write tools could affect production control equipment if used without authorization. <br>
-Mitigation: Keep write tools disabled unless a formal MOC or approval workflow is active, require dry-run review first, and preserve rollback or undo information before any approved change. <br>
-Risk: EtherCAT and PROFINET operations may require raw-socket or privileged network access. <br>
-Mitigation: Run the skill only in environments where the agent is authorized to inspect industrial systems, and limit privileged access to the required dedicated industrial network interface. <br>
-Risk: SCADA API tokens, MQTT publish access, and PLC write functions can create operational impact if over-scoped or misused. <br>
-Mitigation: Use scoped credentials from a secret store, prefer read-only tokens where possible, and audit write-capable actions across MCP and CLI use. <br>
+## Use Case:
 
+Developers, engineers, and authorized industrial-operations teams use this skill to inspect and troubleshoot discrete-manufacturing systems across factory protocols, production data, asset models, alarms, OEE, and program-change baselines. Write-capable actions are intended to remain gated by management-of-change review, dry-run checks, approval, and rollback planning.
 
-## Reference(s): <br>
-- [Iaiops Factory on ClawHub](https://clawhub.ai/zw008/skills/iaiops-factory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured tool-use guidance with inline commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-first diagnostics, evidence-linked analysis, dry-run write plans, and rollback notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: High-impact write tools can affect industrial control systems when enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep write tools disabled unless the operator has authorization, a real MOC process, named approval, dry-run review, and a rollback plan.
+
+Risk: Factory-network access, raw-socket use, root privileges, or API tokens may broaden operational exposure.
+
+Mitigation: Restrict privileges and tokens to the specific factory network, gateway, and assessment scope.
+
+Risk: Troubleshooting advice may influence production-line decisions.
+
+Mitigation: Use the skill only in environments where the operator is authorized to inspect or control industrial systems and review recommendations before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-factory)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration notes, and structured troubleshooting guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should preserve read-first posture, cite concrete operational evidence where available, and distinguish advisory analysis from approved control actions.]
+
+## Skill Version(s):
+
+0.26.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

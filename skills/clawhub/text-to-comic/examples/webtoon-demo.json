@@ -1,0 +1,168 @@
+{
+  "story_id": "webtoon_city_night_demo",
+  "visual_form": "comic",
+  "format": "webtoon",
+  "genre": "drama",
+  "language": "zh-CN",
+  "style_id": "slice-of-life-color",
+  "aspect_ratio": "9:16",
+  "source_summary": "一个加班到深夜的城市年轻人，走出写字楼，路过便利店买热饮，在空荡的街道上忽然被这座城市的一点暖意治愈。",
+  "target_audience": "young urban adults on mobile",
+  "character_bible": [
+    {
+      "character_id": "char_lin",
+      "name": "林晚",
+      "appearance": {
+        "age_presentation": "mid-20s",
+        "hair": "medium black hair slightly messy",
+        "face": "oval face",
+        "eyewear": "none",
+        "outfit": "dark gray overcoat, white shirt",
+        "accent_color": "warm amber",
+        "build": "slim",
+        "vibe": "tired but quietly hopeful"
+      },
+      "must_keep": [
+        "medium black hair",
+        "dark gray overcoat",
+        "white shirt",
+        "warm amber accent"
+      ]
+    }
+  ],
+  "panels": [
+    {
+      "panel_id": 1,
+      "narrative_role": "setup",
+      "shot": "overhead",
+      "scene": "empty office floor, one desk light still on, city lights visible through tall windows",
+      "scene_tag": "INDOOR_OFFICE",
+      "action": "林晚独自坐在工位，屏幕泛着冷光，收拾东西准备下班。",
+      "emotion": "exhausted",
+      "dialogue": [],
+      "caption": "凌晨的城市，写字楼只剩一盏灯。",
+      "must_include": [
+        "single lit desk",
+        "tall window city skyline",
+        "dark gray overcoat"
+      ],
+      "avoid": [
+        "other coworkers",
+        "bright cheerful lighting"
+      ],
+      "visual_priority": "lonely scale",
+      "text_budget": 8
+    },
+    {
+      "panel_id": 2,
+      "narrative_role": "build",
+      "shot": "medium",
+      "scene": "building lobby, glass doors sliding open to dark street",
+      "scene_tag": "OUTDOOR_STREET",
+      "action": "林晚走出写字楼，呼出一口白气，抬头看夜空的冷清。",
+      "emotion": "flat",
+      "dialogue": [],
+      "caption": "今晚的风有点凉。",
+      "must_include": [
+        "glass door",
+        "night street",
+        "breath visible"
+      ],
+      "avoid": [
+        "daylight",
+        "crowd"
+      ],
+      "visual_priority": "transition",
+      "text_budget": 6,
+      "continuity_from_panel": 1
+    },
+    {
+      "panel_id": 3,
+      "narrative_role": "build",
+      "shot": "wide",
+      "scene": "convenience store glowing warm inside on a quiet corner, small neon sign",
+      "scene_tag": "OUTDOOR_STREET",
+      "action": "林晚被便利店的暖光吸引，停下脚步推门而入。",
+      "emotion": "curious",
+      "dialogue": [
+        {
+          "speaker": "店员",
+          "text": "这么晚还不睡？",
+          "language": "zh-CN"
+        }
+      ],
+      "caption": "那一点暖光，像在等人。",
+      "must_include": [
+        "convenience store glow",
+        "neon sign",
+        "warm vs cold contrast"
+      ],
+      "avoid": [
+        "busy street",
+        "overdetailed signage"
+      ],
+      "visual_priority": "warm beacon",
+      "text_budget": 12,
+      "continuity_from_panel": 2
+    },
+    {
+      "panel_id": 4,
+      "narrative_role": "payoff",
+      "shot": "close-up",
+      "scene": "inside the store, 林晚's hands wrapped around a steaming hot drink, amber light",
+      "scene_tag": "INDOOR_STORE",
+      "action": "林晚捧着热饮，紧绷的肩膀慢慢放松下来，嘴角微微扬起。",
+      "emotion": "relieved",
+      "dialogue": [
+        {
+          "speaker": "林晚",
+          "text": "嗯，好像还行。",
+          "language": "zh-CN"
+        }
+      ],
+      "caption": "原来治愈，就是这么简单。",
+      "must_include": [
+        "steaming cup",
+        "warm amber light",
+        "soft smile",
+        "white shirt"
+      ],
+      "avoid": [
+        "dark cold tones dominating",
+        "exaggerated happy face"
+      ],
+      "visual_priority": "quiet warmth",
+      "text_budget": 12,
+      "continuity_from_panel": 3
+    },
+    {
+      "panel_id": 5,
+      "narrative_role": "cta",
+      "shot": "wide",
+      "scene": "林晚 walking home on the empty street, holding the hot drink, city lights in background, slight upturn in posture",
+      "scene_tag": "OUTDOOR_STREET",
+      "action": "林晚的背影走在街道上，脚步比来时轻快了些。",
+      "emotion": "hopeful",
+      "dialogue": [],
+      "caption": "晚安，这座城市。",
+      "must_include": [
+        "walking away figure",
+        "city lights",
+        "lighter posture"
+      ],
+      "avoid": [
+        "text overlay clutter",
+        "dramatic sunrise"
+      ],
+      "visual_priority": "afterglow",
+      "text_budget": 6,
+      "continuity_from_panel": 4
+    }
+  ],
+  "assembly": {
+    "layout": "vertical-stack",
+    "gutter_px": 16,
+    "caption_mode": "overlay",
+    "background": "#0E1116"
+  }
+}

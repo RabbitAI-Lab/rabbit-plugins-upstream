@@ -692,13 +692,13 @@ def compare_flights(from_city, to_city, date, time_pref=None, sort_mode=None):
 
 def main():
     parser = argparse.ArgumentParser(description="机票比价 - 多平台直飞航班实时对比 v3.2")
-    parser.add_argument("--from_city", required=True, help="出发城市，如上海、北京")
-    parser.add_argument("--to_city", required=True, help="到达城市，如三亚、广州")
+    parser.add_argument("--fromCity", required=True, help="出发城市，如上海、北京")
+    parser.add_argument("--toCity", required=True, help="到达城市，如三亚、广州")
     parser.add_argument("--date", required=True, help="出发日期，格式YYYY-MM-DD")
-    parser.add_argument("--time_pref", default=None, help="时段偏好（可选），如'上午'、'下午'、'早班机'、'红眼'")
-    parser.add_argument("--sort_mode", default=None, help="排序模式（可选），'cheapest'按最低价、'earliest'按起飞时间")
+    parser.add_argument("--timePref", default=None, help="时段偏好（可选），如'上午'、'下午'、'早班机'、'红眼'")
+    parser.add_argument("--sortMode", default=None, help="排序模式（可选），'cheapest'按最低价、'earliest'按起飞时间")
     args = parser.parse_args()
-    result = compare_flights(args.from_city, args.to_city, args.date, args.time_pref, args.sort_mode)
+    result = compare_flights(args.fromCity, args.toCity, args.date, args.timePref, args.sortMode)
     print(result)
 
 

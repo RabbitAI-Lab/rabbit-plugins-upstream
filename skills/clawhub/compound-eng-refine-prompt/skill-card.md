@@ -1,41 +1,53 @@
-## Description: <br>
-Transforms vague prompts into precise, structured AI instructions for prompt refinement, prompt engineering, system prompts, and more effective AI instructions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms vague prompts into precise, structured AI instructions for prompt refinement, prompt engineering, system prompts, and agent instructions.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers, prompt engineers, and agent builders use this skill to turn vague requests into precise markdown prompts, including system prompts and task instructions, while asking for clarification when intent is unclear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompt content may include secrets, private data, or other sensitive information. <br>
-Mitigation: Avoid putting secrets or private data into prompts submitted for refinement, and review the refined prompt before reuse. <br>
-Risk: The optional save step can store refined prompt content in the workspace. <br>
-Mitigation: Approve saving only when workspace persistence is intended; otherwise use the refined prompt without writing it to .ai/PROMPT.md. <br>
-Risk: Refining harmful or illegal requests could make unsafe instructions more actionable. <br>
-Mitigation: Do not refine prompts for harmful or illegal tasks, and ask for clarification when the original intent is unclear. <br>
+## Use Case:
 
+Developers, prompt engineers, and agent builders use this skill to turn vague prompt drafts into precise, structured instructions and to validate that the refined prompt preserves the original intent.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs only the refined prompt unless the user explicitly asks for explanation; may offer to append the result to .ai/PROMPT.md after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.5 (source: server release evidence) <br>
+Risk: A refined prompt could unintentionally change the user's original intent or introduce unsupported constraints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the refined prompt before use and verify it only uses information from the original prompt or conversation context.
+
+Risk: Optional persistence could write prompt content to a local file.
+
+Mitigation: Save refined prompts only after explicit user approval.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-refine-prompt)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown refined prompt text, with optional saved Markdown after explicit user approval]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill asks for clarification when intent is unclear and declines harmful or illegal prompt-refinement requests.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

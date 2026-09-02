@@ -1,43 +1,58 @@
-## Description: <br>
-This skill lets an agent query Juhe Data for vehicle transfer-history records by VIN through a paid Alipay A2M/HTTP 402 flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill performs paid VIN-based vehicle transfer history lookups through Juhe Data and returns prior transfer records, transfer months, cities before and after transfer, and total transfer counts.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and agents use this skill to check vehicle transfer-history records for a provided VIN, including transfer month, prior and current cities, and total transfer count. It is aimed at second-hand vehicle transaction, finance, and insurance review workflows that need a paid third-party data lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill initiates a paid VIN lookup through an Alipay payment flow. <br>
-Mitigation: Before payment, verify the VIN, price, Alipay order details, and that the request is for a Juhe vehicle transfer-history query. <br>
-Risk: The VIN is sent to a third-party vehicle-data API for lookup. <br>
-Mitigation: Collect only the VIN after user confirmation and send it only to the fixed Juhe endpoint documented for this skill. <br>
-Risk: Vehicle transfer-history data may be delayed or incomplete. <br>
-Mitigation: Present results as reference information and advise users not to rely on the lookup as the sole basis for transaction, insurance, finance, or legal decisions. <br>
+## Use Case:
 
+External users and agents use this skill to query a specific vehicle's ownership-transfer history by VIN for used-car, finance, or insurance risk checks after confirming the paid lookup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-vehicle-owner-a2a) <br>
-- [Juhe vehicle lookup endpoint](https://apis.juhe.cn/a2a/query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown tables with short payment, validation, and status messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a valid VIN and paid Alipay confirmation; final records are rendered only from Juhe API response fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The queried VIN is sent to Juhe for a paid vehicle-transfer-history lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Show the payment and privacy notice before the lookup, send only the VIN needed for the query, and avoid storing or logging the full VIN.
+
+Risk: Users may over-rely on third-party vehicle transfer records for transaction, finance, or insurance decisions.
+
+Mitigation: Present the results as reference information, keep the source disclaimer visible, and avoid making definitive legal or valuation conclusions.
+
+Risk: Payment details or the HTTP 402 payment response could be mishandled during the Alipay payment flow.
+
+Mitigation: Confirm price and order details with the user before approval and pass the payment response to the payment skill without changing order, price, or resource fields.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/juhemcp/skills/juhe-vehicle-owner-a2a)
+- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown tables with structured vehicle-transfer lookup results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a valid 17-character VIN and user payment confirmation; output should use only returned API fields and include the stated data-source disclaimer.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

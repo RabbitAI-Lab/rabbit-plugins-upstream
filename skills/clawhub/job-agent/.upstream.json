@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/job-agent",
   "slug": "job-agent",
   "ownerHandle": null,
-  "version": "0.4.7",
-  "updatedAt": 1784892353036,
-  "contentHash": "6e84a19f3954afe2b010031e8650506e6e7f6430b45355dd63bc235c806a8445",
-  "fetchedAt": "2026-07-26T18:05:10.795Z"
+  "version": "0.5.40",
+  "updatedAt": 1787926836861,
+  "contentHash": "3f8ce88369daa6d5b808a9eb8ab3f4532f7807d0848ce98caaf56c21c96a0156",
+  "fetchedAt": "2026-09-02T12:28:14.793Z"
 }

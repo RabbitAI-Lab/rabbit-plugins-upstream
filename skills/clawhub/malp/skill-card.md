@@ -1,46 +1,66 @@
-## Description: <br>
-Project context tracker using `.malp/` directories for discovering, opening, creating, refreshing, and maintaining local project context notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Project context tracker that helps agents discover, open, create, refresh, classify, retire, and promote `.malp/` directories for project-local working context.
 
-## Publisher: <br>
-[inertia186](https://clawhub.ai/user/inertia186) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[inertia186](https://clawhub.ai/user/inertia186)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to manage local project reconnaissance notes in `.malp/` directories, including active, attic, and unindexed context states. It helps preserve working knowledge without silently loading unrelated or archived context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create `.malp/` folders in user-named paths and maintain an index under `~/.malp-home/`. <br>
-Mitigation: Use it only for paths the user explicitly asks to track, and review generated `.malp/` files before sharing or committing them. <br>
-Risk: Project context notes may accidentally include secrets or sensitive working knowledge. <br>
-Mitigation: Do not put secrets in `.malp/` notes, and choose whether `.malp/` files should be ignored by git or intentionally tracked. <br>
-Risk: Archived or unindexed context could be mistaken for active project state. <br>
-Mitigation: Keep active, attic, and unindexed states explicit, and avoid loading archived or cross-referenced malps unless the user asks. <br>
+## Use Case:
 
+Developers and coding agents use MALP to maintain project-local context notes, scout which context to load, and manage active, attic, and unindexed `.malp/` workspaces.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/inertia186/malp) <br>
-- [Operational behavior and file conventions](artifact/references/tasks.md) <br>
-- [Active, attic, and unindexed states](artifact/references/indexing.md) <br>
-- [Attic and archive semantics](artifact/references/attic.md) <br>
-- [Version control strategies for `.malp/`](artifact/references/repo-strategies.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Concise Markdown or plain text with optional shell commands and local file guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or refresh `.malp/` directories and maintain an index under `~/.malp-home/` only when the user asks it to track a path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server-resolved release metadata) <br>
+Risk: The skill can create or edit local `.malp/` directories and `~/.malp-home/` maps.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only create, refresh, classify, retire, or delete MALP context for an explicitly requested target, and use scoped approval when the environment requires it.
+
+Risk: Project context notes may capture sensitive or personal working information if used carelessly.
+
+Mitigation: Avoid storing secrets in `.malp/` notes and consider ignoring `.malp/` in git when the notes are personal.
+
+Risk: Kino scouting and git-history recommendations are heuristic and may be incomplete or stale.
+
+Mitigation: Treat Kino output as provisional and verify recommendations against direct project evidence before acting.
+
+## Reference(s):
+
+- [MALP Operational Tasks](references/tasks.md)
+- [MALP Indexing States](references/indexing.md)
+- [MALP Attic](references/attic.md)
+- [Clawpatch-aware MALP Work](references/clawpatch.md)
+- [Repo Strategies for `.malp/`](references/repo-strategies.md)
+- [MALP Style Notes](references/style.md)
+- [Stargate M.A.L.P. Reference](references/stargate-malp-kino.md)
+- [Kino Scout Script](scripts/kino.py)
+- [Mobile Analytic Laboratory Probe](https://stargate.fandom.com/wiki/Mobile_Analytic_Laboratory_Probe)
+- [Kino](https://stargate.fandom.com/wiki/Kino)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text and Markdown-style notes with inline shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update `.malp/` project context files and `~/.malp-home/` maps when requested.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

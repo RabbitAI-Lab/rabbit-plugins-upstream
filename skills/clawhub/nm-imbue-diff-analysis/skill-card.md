@@ -1,42 +1,55 @@
-## Description: <br>
-Analyzes changesets with risk scoring, categorization by type and impact, and release note preparation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes changesets with risk scoring, categorization by type and impact, and release note preparation.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to analyze git diffs, configuration changes, API migrations, schema updates, or document revisions, then categorize changes, assess risk, and prepare review or release-note summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad change or impact-analysis requests. <br>
-Mitigation: Narrow trigger phrases before deployment if broad activation would disrupt normal agent workflows. <br>
-Risk: Risk scoring and release-note summaries may be incomplete or misleading if the compared baseline or diff scope is wrong. <br>
-Mitigation: Confirm the baseline, changed-file scope, and relevant test coverage before relying on the generated analysis. <br>
+## Use Case:
 
+Developers and engineers use this skill to analyze diffs, migrations, configuration changes, schema updates, and document revisions before review, release-note preparation, or planning.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-imbue-diff-analysis) <br>
-- [Configured Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
-- [sem Entity Diff Tool](https://github.com/Ataraxy-Labs/sem) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or structured text with optional shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes semantic change categories, risk levels, mitigation suggestions, review focus areas, and release-note or changelog-ready summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+Risk: The skill may activate for broad requests involving changes, impact, summaries, or release notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when diff, migration, release-note, or impact analysis is intended; use the alternate workflows named in the skill for quick context catchup or full pull-request review.
+
+Risk: Generated risk assessments and release summaries can be incomplete if the comparison baseline or change scope is unclear.
+
+Mitigation: Confirm the baseline, changed files, and comparison boundary before relying on the analysis for review or release decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-diff-analysis)
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+- [sem entity-level diff tool](https://github.com/Ataraxy-Labs/sem)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with optional shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces categorized change summaries, risk assessments, review focus areas, dependencies, and release-note or changelog-ready summaries.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

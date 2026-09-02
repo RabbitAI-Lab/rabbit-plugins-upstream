@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-orchestration",
   "slug": "cargo-orchestration",
   "ownerHandle": null,
-  "version": "1.5.1",
-  "updatedAt": 1783644898368,
-  "contentHash": "54f08e632092a424f385089adfd2b6a9403f4e054a37c3ffd905384d76acc485",
-  "fetchedAt": "2026-07-26T18:17:19.897Z"
+  "version": "1.11.0",
+  "updatedAt": 1788305557869,
+  "contentHash": "b55fc921df39c05cf2af97b97d079ddb682a661f014f0b517dd6833007e602c4",
+  "fetchedAt": "2026-09-02T12:13:46.318Z"
 }

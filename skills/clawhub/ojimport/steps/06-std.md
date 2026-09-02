@@ -8,24 +8,40 @@
 
 ```cpp
 #include <iostream>
+#include <vector>
+#include <map>
+#include <cmath>
+#include <set>
+#include <queue>
+#include <stack>
+#include <list>
+#include <tuple>
+#include <unordered_map>
 #include <algorithm>
-#include <cstring>
+#include <climits>
+#include <tuple>
+#define endl '\n'
+#define int long long
+#define pii pair<int, int>
 using namespace std;
+const int inf = 0x3f3f3f3f3f3f3f3f;
+const int mod = 998244353;
+const int mxn = 3e6 + 5;
 
-// 全局数组——大小按题面数据范围来定
-// const int MAXN = 105;
-// int dp[MAXN], w[MAXN], v[MAXN], val[MAXN];
-
-int main()
+int n,a[114514];
+int c=0;
+signed main()
 {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-
-    // 读数据 + 算答案
-
-    cout << ans << '\n';
+    cin>>n;
+    for(int i=0;i<n;++i) cin>>a[i];
+    for(int i=0;i<n-2;++i)
+    {
+        c+=(a[i]<a[i+1] and a[i+1]>a[i+2]);
+    }
+    cout<<c<<endl;
     return 0;
 }
+
 ```
 
 ## 要点
@@ -35,8 +51,16 @@ int main()
 3. `#include <bits/stdc++.h>` 尽量少用，优先逐一声明所需头文件
 4. **STL 容器（vector / map / set 等）尽量少用**——优先用全局数组（`int dp[105][105]` 而非 `vector<vector<int>>`），确有必要时可用
 5. ⚠️ **禁 `memcpy` / `memset`**——数组拷贝用 `vector` 赋值（`auto prev = dp`），初始化用 `fill`
-5. ⚠️ **禁动态内存分配**——`new`/`malloc`/`vector.resize()` 均不可
-6. 时复杂度满足时限
+6. ⚠️ **禁动态内存分配**——`new`/`malloc`/`vector.resize()` 均不可
+7. ⚠️ **字符串用 `std::string`，禁用 `char[]`**——读入用 `cin >> s` 或 `getline`，输出用 `s.c_str()`（如需）
+   - ❌ `char s[105]; scanf("%s", s);`
+   - ✅ `string s; cin >> s;`
+8. ⚠️ **不引入 `<cstring>` / `<string.h>`**——禁 `char[]`、`memcpy`、`memset`。初始化用 `fill`，拷贝用赋值
+9. ⚠️ **禁止使用 C 语言的输入输出**——`scanf`/`printf` 均不可，必须用 `cin`/`cout`（或 `getline`）。头文件用 `<iostream>` 而非 `<stdio.h>`。
+   - ❌ `scanf("%d", &n); printf("%d\n", ans);`
+   - ✅ `cin >> n; cout << ans << endl;`
+10. **除数组外，尽量用 C++ 写法**——结构体、算法、字符串处理等优先用 C++ 标准库（`std::sort`、`std::string`、`std::vector` 等），避免 C 风格（`qsort`、`char[]`、`strcpy` 等）。
+11. 时复杂度满足时限
 
 ## ⚠️ 铁律：写后即验（生数据前）
 

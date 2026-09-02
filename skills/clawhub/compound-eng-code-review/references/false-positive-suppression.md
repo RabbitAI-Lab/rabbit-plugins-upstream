@@ -16,7 +16,7 @@ Style issues that the project's linter or formatter already enforces (or should 
 
 ### 3. Intentional design
 
-Code that looks unusual but is deliberately written that way. Signals: comment explaining why, consistent pattern elsewhere in codebase, matches a documented architectural decision, performance-critical section. When uncertain, use question-based feedback ("Was this intentional?") rather than flagging it as a defect.
+Code that looks unusual but is deliberately written that way. Signals: comment explaining why, consistent pattern elsewhere in codebase, matches a documented architectural decision, performance-critical section. When uncertain, use question-based feedback ("Was this intentional?") rather than flagging it as a defect. Exception: an explanatory comment does not suppress a gate-loosening finding (skipped test, new suppression comment, lowered threshold -- the floor-guards class) -- a comment is how silent loosening is normally dressed, so those report with the comment quoted as context.
 
 ### 4. Already handled elsewhere
 
@@ -40,4 +40,8 @@ Test code follows different rules than production code. Don't flag: hardcoded te
 
 ## When to Override Suppression
 
-Suppress rules don't apply when the finding is **Critical severity** (security vulnerability, data loss, crash). Critical findings are always reported regardless of category, though they should still include evidence.
+Suppress rules don't apply when the finding is **Critical severity** (security vulnerability, data loss, crash, race condition). Critical findings are always reported regardless of category, though they should still include evidence.
+
+This override covers the eight categories above, and only those. The separate confidence-band suppression in [severity-and-confidence.md](./severity-and-confidence.md) is the other gate, and its Protected Subjects list names the classes exempt from that one.
+
+The two gates are independent and either one alone suppresses: a finding is reported only if it clears both. So a protected-subject finding still has to survive the categories here, and a Critical finding still has to clear the confidence floor unless an exemption applies.

@@ -1,43 +1,64 @@
-## Description: <br>
-Text-to-vector model that outputs SVG results for logos, icons, and scalable design assets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the dLazy CLI to call the hosted Recraft V4 Vector API for text-prompt image generation aimed at logos, icons, and scalable design workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and external agents use this skill to invoke the dLazy Recraft V4 Vector model for generating vector-style design assets from text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party dLazy CLI and sends prompts, parameters, and explicitly referenced files to dLazy hosted services. <br>
-Mitigation: Review the dLazy CLI and service terms before use, and avoid sending sensitive prompts or files unless approved for that service. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-invocation environment variable is used. <br>
-Mitigation: Use organization-scoped keys, rotate or revoke keys when needed, and prefer npx @dlazy/cli@1.2.3 when avoiding a persistent global install. <br>
+## Use Case:
 
+Developers and designers use this skill to have an agent invoke dLazy's hosted Recraft V4 Vector generation workflow from text prompts and retrieve generated image assets or asynchronous task status.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [Shell command output as JSON containing generated media result URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task IDs when --no-wait is used; generated URLs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The skill advertises SVG/vector output while the documented successful output example returns image/png.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Test representative prompts and inspect returned mimeType and saved files before relying on editable or scalable vector output.
+
+Risk: Prompts, parameters, and optional local media inputs are sent to dLazy API and storage endpoints.
+
+Mitigation: Avoid submitting sensitive or restricted content unless the service terms and organizational policy permit that use.
+
+Risk: The workflow requires a dLazy API key that may be stored locally or supplied through an environment variable.
+
+Mitigation: Use least-privilege access, protect the local config file, and rotate or revoke keys when access changes.
+
+Risk: The skill relies on a pinned third-party npm CLI to perform networked generation requests.
+
+Mitigation: Install the pinned CLI version from the disclosed package source and review the package or source repository before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-vector)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [CLI command guidance and JSON results containing generated image URLs, with optional saved image files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful documented outputs use image/png URLs; asynchronous runs may return a generateId for later polling.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

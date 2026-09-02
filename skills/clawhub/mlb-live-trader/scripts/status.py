@@ -1,81 +1,130 @@
 #!/usr/bin/env python3
-"""Read-only portfolio/status viewer for MLB Live Trader.
-
-This command is deliberately inert: it never places, cancels, or redeems an
-order, and it never runs a preflight. It reads Simmer positions/portfolio plus
-the skill's local idempotency state and prints them as JSON.
-
-Identity constants and the state-file location are imported from the
-``mlb_live_trader`` monofile rather than re-declared here. A divergent
-``TRADE_SOURCE`` would silently filter out real positions and under-report
-exposure, so there is exactly one definition of it.
-
-Credentials are read by the Simmer SDK from the environment; this script never
-reads, stores, or prints them.
-"""
+"""Show the Simmer portfolio and open MLB positions without trading."""
 
 from __future__ import annotations
 
 import argparse
-import json
+import os
 import sys
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import asdict, is_dataclass
-from pathlib import Path
-from typing import Any, Mapping
-
-from simmer_sdk import SimmerClient
-
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from mlb_live_trader import (  # noqa: E402  (path set up immediately above)
-    SKILL_SLUG,
-    TRADE_SOURCE,
-    VENUE,
-    _STATE_PATH,
-)
-
-STATE_PATH = _STATE_PATH
+from typing import Any, Protocol
 
 
-def _json_default(value: Any) -> Any:
-    return asdict(value) if is_dataclass(value) else str(value)
+class ClientFactory(Protocol):
+    """Construct the narrow Simmer client needed by the status view."""
+
+    def __call__(self, *, api_key: str, venue: str, live: bool) -> Any:
+        """Return a configured Simmer client."""
 
 
-def _local_state() -> Mapping[str, Any]:
-    try:
-        value = json.loads(STATE_PATH.read_text(encoding="utf-8"))
-    except (FileNotFoundError, OSError, json.JSONDecodeError):
-        return {}
-    return value if isinstance(value, dict) else {}
+class StatusViewer:
+    """Render a read-only portfolio summary through injected adapters."""
+
+    def __init__(
+        self,
+        *,
+        client_factory: ClientFactory,
+        environment: Mapping[str, str],
+        output: Callable[[str], None],
+        error: Callable[[str], None],
+    ) -> None:
+        """Initialize the status service.
+
+        Args:
+            client_factory: Simmer client constructor or deterministic fake.
+            environment: Read-only environment mapping.
+            output: Standard-output line writer.
+            error: Standard-error line writer.
+        """
+        self._client_factory = client_factory
+        self._environment = environment
+        self._output = output
+        self._error = error
+
+    def run(self) -> int:
+        """Fetch and render current portfolio state.
+
+        Returns:
+            Process-style status code. The method never places or changes an
+            order.
+        """
+        api_key = self._environment.get("SIMMER_API_KEY")
+        if not api_key:
+            self._error("SIMMER_API_KEY is not set")
+            return 1
+
+        client = self._client_factory(
+            api_key=api_key,
+            venue=self._environment.get("TRADING_VENUE", "polymarket"),
+            live=False,
+        )
+        try:
+            portfolio = client.get_portfolio()
+            positions = client.get_positions(venue=client.venue)
+        except Exception as exc:
+            self._error(f"Could not fetch portfolio: {exc}")
+            return 1
+
+        balance = (
+            portfolio.get("balance_usdc", 0) if isinstance(portfolio, Mapping) else 0
+        )
+        self._output(f"Available balance: ${float(balance):.2f}")
+        if not positions:
+            self._output("No open positions.")
+            return 0
+
+        for position in positions:
+            if not is_dataclass(position) or isinstance(position, type):
+                self._error("Simmer returned a non-dataclass position")
+                return 1
+            values = asdict(position)
+            title = (
+                values.get("question") or values.get("market_id") or "unknown market"
+            )
+            legs = [
+                self._render_leg(label, values.get(field, 0))
+                for label, field in (("YES", "shares_yes"), ("NO", "shares_no"))
+                if values.get(field, 0) != 0
+            ]
+            rendered_legs = ", ".join(legs) if legs else "no shares"
+            self._output(f"{title}: {rendered_legs}")
+        return 0
+
+    @staticmethod
+    def _render_leg(label: str, shares: object) -> str:
+        """Render one nonzero SDK position leg without losing precision."""
+        rendered_shares = (
+            f"{shares:g}" if isinstance(shares, (int, float)) else str(shares)
+        )
+        return f"{label} {rendered_shares} shares"
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Show MLB Live Trader status")
-    parser.add_argument("--live", action="store_true", help="inspect real Polymarket mode")
-    parser.add_argument("--starting-balance", type=float, default=1000.0)
-    args = parser.parse_args()
-    client = SimmerClient.from_env(
-        venue=VENUE,
-        live=args.live,
-        starting_balance=args.starting_balance,
+def main(argv: Sequence[str] | None = None) -> int:
+    """Run the read-only status command.
+
+    Args:
+        argv: Optional CLI arguments for deterministic callers.
+
+    Returns:
+        Process exit status.
+    """
+    parser = argparse.ArgumentParser(
+        description="Show Simmer positions for the MLB live trader."
     )
-    positions = []
-    for position in client.get_positions(venue=VENUE, source=TRADE_SOURCE):
-        if is_dataclass(position):
-            positions.append(asdict(position))
-        elif isinstance(position, Mapping):
-            positions.append(dict(position))
-    payload = {
-        "skill": SKILL_SLUG,
-        "source": TRADE_SOURCE,
-        "mode": "live" if args.live else "dry/paper",
-        "positions": positions,
-        "local_state": _local_state(),
-        "portfolio": client.get_portfolio(venue=VENUE) if args.live else None,
-        "paper_summary": client.get_paper_summary() if not args.live else None,
-    }
-    print(json.dumps(payload, indent=2, default=_json_default))
-    return 0
+    parser.parse_args(argv)
+    try:
+        from simmer_sdk import SimmerClient
+    except ImportError:
+        print("simmer-sdk is not installed", file=sys.stderr)
+        return 1
+
+    return StatusViewer(
+        client_factory=SimmerClient.readonly,
+        environment=os.environ,
+        output=print,
+        error=lambda message: print(message, file=sys.stderr),
+    ).run()
 
 
 if __name__ == "__main__":

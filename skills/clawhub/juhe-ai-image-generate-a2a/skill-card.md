@@ -1,43 +1,50 @@
-## Description: <br>
-AI图像创作(AI付版) - 聚合数据 generates images from text prompts through Juhe's paid AI image service and an Alipay payment flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This paid ClawHub skill helps an agent generate images from a user prompt through Juhe's AI image service and Alipay payment confirmation.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and agents use this skill to create paid AI-generated images from prompts, with user confirmation before sending prompt text to Juhe and completing payment through Alipay. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image prompts are sent in plaintext to Juhe for generation. <br>
-Mitigation: Avoid personal, sensitive, confidential, or regulated information in prompts before continuing. <br>
-Risk: The workflow uses a paid Alipay payment flow before results are returned. <br>
-Mitigation: Confirm the payment amount, order details, and user consent before invoking payment. <br>
-Risk: Generated images may be unlawful, infringing, or inappropriate for a user's jurisdiction or use case. <br>
-Mitigation: Review requested content and generated outputs against applicable law, platform rules, and organizational policy. <br>
+## Use Case:
 
+External users and agents use this skill to request paid AI-generated images from prompt text, with size selection and Alipay-based payment confirmation before fulfillment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/juhe-ai-image-generate-a2a) <br>
-- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API Calls, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request bodies and downloaded image files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user consent for paid generation; prompt text is sent to Juhe and payment handling is delegated to alipay-payment-skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The user's image prompt is sent to Juhe, and the workflow uses a paid Alipay payment step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm price and payment intent before requesting the service, and avoid placing personal or sensitive information in prompts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-ai-image-generate-a2a)
+- [Juhe A2A image generation endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request payloads and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts are sent to Juhe for image generation; payment is handled through Alipay skills after user confirmation.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

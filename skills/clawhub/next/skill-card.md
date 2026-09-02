@@ -1,47 +1,61 @@
-## Description: <br>
-Suggests next actions after task completion and can auto-invoke through a Stop hook when completion keywords are detected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Suggests next actions after task completion, including explicit next-action requests, completion-triggered follow-up prompts, stall detection, and ask gates for task, PR, issue, and cleanup decisions.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent users use Next to choose follow-up work after completed tasks, such as verifying changes, committing or pushing work, monitoring CI, creating draft pull requests, or wrapping up a session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The always-on Stop hook can prompt follow-up actions after ordinary task completion. <br>
-Mitigation: Install only where automatic completion follow-ups are desired, and review or constrain the Stop hook before enabling it. <br>
-Risk: Stall detection can route the agent into automatic remediation through the dependent fix workflow. <br>
-Mitigation: Review the stall-detect behavior and require the expected level of user approval before any fix workflow executes. <br>
-Risk: Next-action options can include repository operations such as tests, commits, pushes, pull requests, or CI monitoring. <br>
-Mitigation: Inspect generated options and allow repository-changing actions only after explicit user selection. <br>
+## Use Case:
 
+Developers and agent operators use this skill to surface appropriate follow-up choices after an agent completes work, stalls, waits on external systems, or needs a user decision. It helps route follow-up actions through prompts, task checks, and supporting skills instead of leaving completion states unresolved.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/next) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Ask Gates](artifact/ask-gates.md) <br>
-- [Stall Detection](artifact/stall-detect.md) <br>
-- [Suggestion Patterns](artifact/suggestion-patterns.md) <br>
-- [Stop Hook Trigger](artifact/resources/next-trigger.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Text or Markdown guidance with selectable next-action options and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May register and execute selected follow-up actions when the user chooses one or more options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: evidence.release.version and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can auto-trigger after task completion and inspect local session state, task lists, workspace planning files, and GitHub or organization data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review hook registration before deployment and install only in environments where those local and remote data checks are acceptable.
+
+Risk: Hook debug logs may retain sensitive transcript snippets or workflow state.
+
+Mitigation: Disable or restrict debug logging where sensitive transcripts are possible and periodically review retained log files.
+
+Risk: The skill is an assertive workflow-orchestration helper and may surface follow-up choices beyond a simple suggestion feature.
+
+Mitigation: Review the documented ask gates and skip conditions before use so operators understand when prompts, task checks, and follow-up routing may occur.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/next)
+- [Next skill instructions](artifact/SKILL.md)
+- [Stall detection topic](artifact/stall-detect.md)
+- [Ask gates topic](artifact/ask-gates.md)
+- [Suggestion patterns topic](artifact/suggestion-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown and structured next-action options]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or route follow-up actions through available agent skills and host hooks.]
+
+## Skill Version(s):
+
+0.9.2 (source: server release metadata and CHANGELOG, released 2026-09-01)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

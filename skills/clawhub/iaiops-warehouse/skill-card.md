@@ -1,40 +1,52 @@
-## Description: <br>
-Iaiops Warehouse helps agents inspect and analyze warehouse and intralogistics operations across EtherNet/IP, Profinet, Modbus, OPC-UA, and MQTT-Sparkplug telemetry, including predictive maintenance, downtime triage, OEE/throughput, alarms, bottlenecks, and sortation health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Warehouse and intralogistics skill for agent-assisted diagnostics, predictive maintenance, downtime triage, throughput/OEE analysis, alarm analysis, and bottleneck investigation across material-handling systems using EtherNet/IP, Profinet, Modbus, OPC-UA, and MQTT-Sparkplug.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, industrial engineers, and warehouse operations teams use this skill to inspect and analyze distribution center and material-handling systems, including conveyors, sorters, palletizers, AS/RS equipment, and AGV/AMR fleets. The skill supports read-first workflows for diagnostics, predictive maintenance, throughput and OEE analysis, alarm review, bottleneck analysis, and controlled change-baseline review.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill presents a read-first or read-only posture while documenting write-capable actions against production OT systems.
+
+Mitigation: Review before installation in real warehouse or industrial environments, keep read-only and write-capable operations clearly separated, require explicit approval gates, and enforce dry-run defaults before enabling any write path.
+
+Risk: Incorrect use of industrial diagnostics or control guidance could affect warehouse operations or production equipment.
+
+Mitigation: Use the skill for diagnostics and analytics under operator review, and validate recommendations against site procedures, change-management controls, and qualified engineering judgment.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, engineers, and operations teams use this skill to guide warehouse and material-handling diagnostics, telemetry analysis, predictive maintenance, throughput/OEE review, alarm analysis, and controlled OT change workflows. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, analysis]
 
-## Known Risks and Mitigations: <br>
-Risk: The release is flagged suspicious because it presents a read-only posture while exposing write-capable control-system tools. <br>
-Mitigation: Review before installing in any warehouse or industrial network; enable it only where write-capable tools are technically gated, approved, logged, and separated from production unless explicitly authorized. <br>
-Risk: Write-capable OT operations such as EtherNet/IP tag writes and Profinet DCP changes can affect warehouse or industrial equipment if executed without authorization. <br>
-Mitigation: Keep dry-run, approval, audit, and change-management gates enabled; restrict credentials and network access to approved maintenance contexts. <br>
+**Output Format:** [Markdown or plain text with inline shell commands, configuration snippets, and structured analysis summaries.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-warehouse) <br>
+**Other Properties Related to Output:** [Outputs may refer to industrial control and warehouse operations evidence; write-capable workflows require separate operational approval controls.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, analysis] <br>
-**Output Format:** [Markdown guidance with inline commands, configuration notes, and tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include OT diagnostics, read/write gating guidance, and risk notes.] <br>
+0.26.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
