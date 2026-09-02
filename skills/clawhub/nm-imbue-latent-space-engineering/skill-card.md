@@ -1,41 +1,54 @@
-## Description: <br>
-Shapes agent behavior via instruction framing and style transfer <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shapes agent behavior via instruction framing and style transfer.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, skill authors, and agent operators use this skill to frame prompts, transfer style from examples, and structure multi-agent reviews with clearer behavioral guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Style-transfer examples may place sensitive or unsuitable exemplar text into an agent context. <br>
-Mitigation: Use non-sensitive exemplars and review generated output before adopting it. <br>
-Risk: The artifact references a separate external plugin for a fuller experience that is outside this markdown-only release. <br>
-Mitigation: Review and scan any separate external plugin before installing or enabling it. <br>
+## Use Case:
 
+Developers and skill authors use this skill to frame agent prompts, skill instructions, multi-agent review dispatches, and style-matching generation tasks.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-imbue-latent-space-engineering) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with prompt snippets and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only guidance; no executable behavior or credential handling is identified in the server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Prompt-framing guidance can reduce review quality if used outside the documented conditions, such as competitive framing for fewer than three reviewers or implementation agents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply the module-specific when-not-to-use guidance and require evidence-backed findings when using competitive review framing.
+
+Risk: Style transfer can reproduce outdated or inappropriate conventions if the exemplar is poorly chosen.
+
+Mitigation: Use recent, high-quality exemplars from the same codebase and language, and keep exemplar snippets within the documented size guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-latent-space-engineering)
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance for prompt and skill-authoring workflows]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Markdown-only skill; it does not run commands or access private data.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,52 @@
-## Description: <br>
-PLCnext and virtualized-PLC edition of iaiops that guides agents through read-first OPC-UA and Modbus diagnostics, cross-protocol analysis, and industrial data workflows for Phoenix Contact PLCnext environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops-plcnext helps agents read PLCnext Control and virtual PLC operational data through built-in OPC-UA and Modbus-TCP services, then diagnose dataflow, downtime, predictive maintenance, OEE, alarms, and baselines with iaiops cross-protocol analysis tools.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and industrial automation engineers use this skill when an agent needs to inspect PLCnext or virtualized PLC data over OPC-UA or Modbus-TCP, triage operational issues, and summarize industrial data quality, alarms, downtime, and baseline changes.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill is framed as read-only for PLC writes, but listed export, publish, historian push, UNS publish, and compliance evidence bundle workflows could move sensitive operational data.
+
+Mitigation: Require explicit destination approval, local site policy review, and authorized operator confirmation before using any workflow that exports or publishes plant data.
+
+Risk: Agents may use the skill around PLCnext operational data where incorrect summaries or recommendations could affect incident response decisions.
+
+Mitigation: Use outputs as decision support only; review findings against site telemetry, maintenance records, and approved operating procedures before acting.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and industrial automation engineers use this skill to route agents toward read-first PLCnext Control and vPLC diagnostics over built-in OPC-UA and Modbus-TCP services. It is suited for connection diagnosis, dataflow triage, downtime root cause analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows using existing iaiops tools. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Unintended access to PLCnext endpoints or operational data destinations. <br>
-Mitigation: Before installation or use, confirm the iaiops MCP tools are configured only for intended PLCnext endpoints and that export, historian, streaming, baseline, and alias-map destinations are approved for the operational data involved. <br>
-Risk: Write-capable profiles could enable controlled changes outside this read-first edition. <br>
-Mitigation: Keep write-capable profiles disabled unless controlled changes are explicitly required; when enabled, apply the documented approval, dry-run, undo, and change-management controls. <br>
+**Output Format:** [Markdown or text with inline commands and structured analysis summaries]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
+**Other Properties Related to Output:** [Read-first skill posture; security evidence notes that export and publish tools may move sensitive plant data outside the environment.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with tool names and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first PLCnext OPC-UA and Modbus workflow guidance; no new connector or PLCnext vendor SDK is introduced by the skill text.] <br>
+0.26.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

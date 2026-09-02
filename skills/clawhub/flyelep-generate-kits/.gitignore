@@ -1,0 +1,5 @@
+.idea
+.agents/
+*.json
+*.py
+.DS_Store

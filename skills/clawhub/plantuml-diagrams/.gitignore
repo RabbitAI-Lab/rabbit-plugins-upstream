@@ -1,0 +1,9 @@
+# Git ignore
+*.log
+__pycache__/
+.DS_Store
+Thumbs.db
+# 预览图入麻（assets/preview 例外，其余渲染产物不追踪）
+assets/preview/*
+!assets/preview/
+!assets/preview/*.svg

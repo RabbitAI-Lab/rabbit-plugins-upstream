@@ -1,45 +1,65 @@
-## Description: <br>
-全国招标采购信息一站式查询与分析助手，帮助用户搜索招标、中标和采购公告，分析企业招投标活动、竞争对手、市场趋势、价格记录和潜在商机。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and analyzes Chinese bidding, procurement, award, supplier, competitor, and market data from the China National Bidding/Zhongguo Zhaobiao data service.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, procurement teams, sales teams, market analysts, and developers use this skill to query Chinese bidding and procurement data, inspect company bidding history, identify buyers and suppliers, compare competitors, and summarize market or price signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register a device-linked account by sending local device identifiers to zhiliaobiaoxun.com and storing an API key in ~/.zlbx/config.json. <br>
-Mitigation: Prefer manually configuring a dedicated ZLBX_API_KEY; use auto-registration only after reviewing the account, device, and credential-storage implications. <br>
-Risk: The skill may generate an auto-login recharge link when an automatically registered key has no remaining quota. <br>
-Mitigation: Review payment and account-binding implications before following recharge links; use manually managed keys where account control is required. <br>
+## Use Case:
 
+External users and procurement, sales, and market-analysis teams use this skill to search Chinese bid and award notices, inspect company bidding history, find upcoming opportunities, identify competitors or suppliers, and summarize market trends.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/zhiliaobiaoxun/skills/china-national-bidding-zhongguozhaobiao) <br>
-- [API overview](SKILL.md) <br>
-- [Bidding search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with JSON request examples and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call zhiliaobiaoxun.com APIs and may persist an API key in ~/.zlbx/config.json when auto-registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The vendor service can receive procurement queries and account activity associated with the configured API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that vendor data handling is acceptable, and avoid submitting sensitive procurement questions that should not leave the user's environment.
+
+Risk: If no API key is provided, the skill can ask to create a trial account using platform, CPU architecture, and a SHA256 hash of a MAC address, then store the returned key locally under ~/.zlbx/config.json.
+
+Mitigation: Prefer setting ZLBX_API_KEY manually to avoid auto-registration; only proceed with auto-registration after explicit user consent.
+
+Risk: Procurement and company contact data may be returned according to the account's entitlement, including masked contact fields for free or trial accounts.
+
+Mitigation: Respect returned masking and account limits; do not attempt to reconstruct hidden contact details through other sources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/china-national-bidding-zhongguozhaobiao)
+- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [标讯搜索类工具 API 详情](references/api-search.md)
+- [企业分析类工具 API 详情](references/api-company.md)
+- [市场分析类工具 API 详情](references/api-market.md)
+- [账户查询类工具 API 详情](references/api-account.md)
+- [SKILL 自动注册详细流程](references/auto-register.md)
+- [ZLBX API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名})
+- [Manual registration and recharge](https://ai.zhiliaobiaoxun.com/?ch=s52)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with API request guidance, tabular summaries, JSON examples, and occasional shell or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require ZLBX_API_KEY or an approved auto-registration flow before calling the vendor service.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

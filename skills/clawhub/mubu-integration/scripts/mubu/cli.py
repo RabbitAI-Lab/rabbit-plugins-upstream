@@ -1,26 +1,25 @@
 """mubu 包 — 命令行入口（argparse 子命令 + 日志配置）。"""
 
-import sys
+import argparse
+import getpass
 import json
 import logging
-import getpass
-import argparse
-from typing import Dict, List, Any
+import sys
 
+from mubu.client import MubuClient
 from mubu.config import (
-    logger,
     MAX_SEARCH_DEPTH,
     MAX_SEARCH_LIMIT,
     _safe_local_path,
+    logger,
 )
-from mubu.client import MubuClient
 from mubu.convert import (
-    markdown_to_doc,
-    doc_to_opml,
     doc_to_freeplane,
+    doc_to_opml,
     export_markdown,
     format_list,
     format_search,
+    markdown_to_doc,
 )
 
 
@@ -50,7 +49,7 @@ def main() -> None:
 
     # 登录（凭据取自环境变量 / ~/.workbuddy/.env.mubu；缺失时交互式输入，
     # 不再提供 --phone/--password 明文参数，避免出现在 ps / shell 历史中）
-    login_parser = subparsers.add_parser(
+    subparsers.add_parser(
         "login", help="登录幕布（凭据取自环境变量 / .env.mubu，缺失时交互式输入）"
     )
 
@@ -105,18 +104,23 @@ def main() -> None:
         "purge", help="彻底删除（不可逆，调用服务端 + 移除本地标记）"
     )
     purge_parser.add_argument("id", help="文档或文件夹ID")
+    purge_parser.add_argument("--type", choices=["doc", "folder"], default=None,
+                              help="对象类型（仅当回收站记录缺失时必填）："
+                                   "doc=文档 / folder=文件夹")
     purge_parser.add_argument("--yes", action="store_true",
                               help="确认执行不可逆彻底删除（必须显式传参）")
 
     # 列出本地回收站（v1.3.5）
-    trash_parser = subparsers.add_parser(
+    subparsers.add_parser(
         "trash", help="列出本地回收站中已软删除的项"
     )
 
     # 移动
-    move_parser = subparsers.add_parser("move", help="移动文档到其他文件夹")
-    move_parser.add_argument("item_id", help="文档ID")
+    move_parser = subparsers.add_parser("move", help="移动文档/文件夹到其他文件夹")
+    move_parser.add_argument("item_id", help="文档/文件夹 ID")
     move_parser.add_argument("--target", required=True, help="目标文件夹ID")
+    move_parser.add_argument("--type", default="doc", choices=["doc", "folder"],
+                             help="移动项类型（默认 doc）")
 
     # 搜索（T6，M4 T2 增加 --max-depth / --limit）
     search_parser = subparsers.add_parser("search", help="本地搜索文档/文件夹（按名称）")
@@ -143,7 +147,8 @@ def main() -> None:
     rename_parser.add_argument("id", help="文档或文件夹ID")
     rename_parser.add_argument("--name", required=True, help="新名称")
     rename_parser.add_argument("--type", choices=["doc", "folder"], default="doc",
-                               help="对象类型：doc=走 save_doc name；folder=走推测端点 /list/update_folder")
+                               help="对象类型：doc=走已验证端点 /list/rename_doc（内容保真）；"
+                                    "folder=走已验证端点 /list/rename_folder（folderId 填自身 id）")
 
     # OPML / FreeMind 导出（Roadmap: 兼容其它大纲工具）
     opml_parser = subparsers.add_parser("opml", help="将文档导出为 OPML / FreeMind XML")
@@ -214,19 +219,21 @@ def main() -> None:
             file_path = args.file
             if md_path:
                 safe = _safe_local_path(md_path)
-                # save_doc 的 content 必须是 definition JSON 字符串 {"nodes":[...]}，
-                # 与 get_doc 返回的 nodes 同构；markdown_to_doc 返回 {"node":{...}}，
-                # 此处取其根节点包成单顶层节点的 definition。
+                # markdown_to_doc 返回 {"node":{...}}，取其根节点包成单顶层节点的
+                # definition（{"nodes":[...]}），与 get_doc 返回的 nodes 同构。
                 md_doc = markdown_to_doc(safe.read_text(encoding="utf-8"))
-                content = json.dumps({"nodes": [md_doc.get("node")]}, ensure_ascii=False)
+                new_def = {"nodes": [md_doc.get("node")]}
             elif file_path:
                 safe = _safe_local_path(file_path)
-                content = safe.read_text(encoding="utf-8")
+                # 文件内容须为 definition JSON（{"nodes":[...]}）
+                new_def = json.loads(safe.read_text(encoding="utf-8"))
             elif args.content:
-                content = args.content
+                new_def = json.loads(args.content)
             else:
-                content = sys.stdin.read()
-            client.save_doc(args.doc_id, content)
+                new_def = json.loads(sys.stdin.read())
+            # 以新 definition 全量覆盖写回（事件契约见 client.build_update_event）
+            event = client.build_update_event(new_def, args.doc_id)
+            client.save_doc(args.doc_id, events=[event])
             print("保存成功")
 
         elif args.command == "delete":
@@ -260,7 +267,7 @@ def main() -> None:
                     "确认请加 --yes 重新执行。", args.id,
                 )
                 sys.exit(1)
-            client.purge_item(args.id)
+            client.purge_item(args.id, item_type=args.type)
             print(f"已彻底删除: {args.id}（不可恢复）")
 
         elif args.command == "trash":
@@ -273,7 +280,7 @@ def main() -> None:
                           f"{it.get('name')} / {it.get('deleted_at')}")
 
         elif args.command == "move":
-            client.move(args.item_id, args.target)
+            client.move(args.item_id, args.target, args.type)
             print(f"移动成功: {args.item_id} -> {args.target}")
 
         elif args.command == "search":
@@ -308,7 +315,7 @@ def main() -> None:
             if args.type == "doc":
                 client.rename_doc(args.id, args.name)
             else:
-                # 文件夹重命名走逆向推测端点，真实环境需验证
+                # 文件夹重命名走已验证端点 /list/rename_folder（M12 真机验证）
                 client.rename_folder(args.id, args.name)
             print(f"重命名成功: {args.id} -> {args.name}")
 

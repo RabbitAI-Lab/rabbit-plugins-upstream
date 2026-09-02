@@ -1,26 +1,26 @@
 # 真实排队动作参考
 
-本文仅用于在线取号、查本人排队订单和取消本人排队。门店当前总排队、历史事实、到店建议和取号渠道咨询仍调用 MCP，不启动授权。
+本文仅用于在线取号、查本人排队订单和取消本人排队。门店当前总排队、历史事实、到店建议和取号渠道咨询仍走公开查询 CLI（金谷园 REST API），不启动授权。
 
 ## 命令
 
-需要 Node.js 18 或更高版本，无需安装依赖。每次以实际帮助输出为准：
+需要 Node.js 18 或更高版本，无需安装依赖。美团授权由随包明文 Passport 实现完成，不携带闭源混淆包、cliguard、动态更新器或守护进程。每次以实际帮助输出为准：
 
 ```bash
-node <skill_dir>/scripts/queue.js --help
-node <skill_dir>/scripts/queue.js index <shopId>
-node <skill_dir>/scripts/queue.js take-number <shopId> --people-count <N> --table-type-id <ID> --confirm
-node <skill_dir>/scripts/queue.js order-detail <shopId>
-node <skill_dir>/scripts/queue.js order-cancel <shopId> --confirm
-node <skill_dir>/scripts/queue.js auth-start
-node <skill_dir>/scripts/queue.js auth-status
-node <skill_dir>/scripts/queue.js auth-poll --background [--qr-image-path <path>]
-node <skill_dir>/scripts/queue.js logout
+node <skill_dir>/scripts/jgy.cjs queue --help
+node <skill_dir>/scripts/jgy.cjs queue index <shopId>
+node <skill_dir>/scripts/jgy.cjs queue take-number <shopId> --people-count <N> --table-type-id <ID> --confirm
+node <skill_dir>/scripts/jgy.cjs queue order-detail <shopId>
+node <skill_dir>/scripts/jgy.cjs queue order-cancel <shopId> --confirm
+node <skill_dir>/scripts/jgy.cjs queue auth-start
+node <skill_dir>/scripts/jgy.cjs queue auth-status
+node <skill_dir>/scripts/jgy.cjs queue auth-poll --background [--qr-image-path <path>]
+node <skill_dir>/scripts/jgy.cjs queue logout
 ```
 
-**发起授权用 `auth-start`**：一条命令拿到授权链接 + 二维码 + 后台轮询，与业务命令触发的授权流程完全一致。**不要**单独跑 `auth-poll --background` 来发起授权——它只启动后台监听，不生成链接和二维码。
+**发起授权用 `auth-start`**：一条命令拿到授权链接 + 二维码 + 授权状态记录，与业务命令触发的授权流程完全一致。**不要**单独跑 `auth-poll --background` 来发起授权——它只记录状态，不生成链接和二维码。
 
-Agent 对话中**不要**使用阻塞式 `auth-poll` / `auth-poll --wait`（会长时间占住 Terminal，用户看不到授权链接与二维码）。`AUTH_REQUIRED` 时后台通常已在轮询，展示后用 **`auth-status`** 短查即可。
+Agent 对话中**不要**使用阻塞式 `auth-poll` / `auth-poll --wait`（会长时间占住 Terminal，用户看不到授权链接与二维码）。`AUTH_REQUIRED` 时授权状态已记录，展示后等待用户扫码；用户回复“已授权”后用 **`auth-status`** 短查即可。
 
 CLI 在 stdout 输出单个 JSON 对象：`{ ok, code, message, data? }`。不要把内部命令名或返回码原样告诉用户，除非排查 MCP/CLI 合同确实需要。
 
@@ -29,7 +29,7 @@ CLI 在 stdout 输出单个 JSON 对象：`{ ok, code, message, data? }`。不�
 | 门店 | `shopId` | 真实动作约束 |
 |---|---:|---|
 | 北邮总店 | `4211342` | 可查桌型、取号、查本人订单、取消 |
-| 五道口店 | `1756895741` | 通常以到店取号为主；只有本轮 MCP 新鲜快照或 `index 1756895741` 明确显示 `supportQueue: true` 时，才可说明当天开放并继续取号确认流程 |
+| 五道口店 | `1756895741` | 通常以到店取号为主；只有本轮公开查询新鲜快照或 `index 1756895741` 明确显示 `supportQueue: true` 时，才可说明当天开放并继续取号确认流程 |
 
 用户未说门店时先追问，不猜 `shopId`。
 
@@ -49,7 +49,9 @@ CLI 在 stdout 输出单个 JSON 对象：`{ ok, code, message, data? }`。不�
 
 `AUTH_REQUIRED` 可能是新授权流程，也可能是业务缓存 Token 过期后仍未拿到新授权链接；不能假定其 `data` 一定包含 `authLink`。
 
-收到 `AUTH_REQUIRED` 后：**阶段 A 内联图 + 链接** → **阶段 B `auth-status`**。后台用 `~/.jinguyuan/auth-poll-current.json` 指向本次 run 的独立状态文件；Agent 只需调用 `auth-status`，不要自行读取或改写状态。
+美团 Passport 轮询以 `data.token` 为最终成功凭据：实测 `authStatus=4` 且同时返回 `data.token` 表示用户已确认授权；`authStatus=1` 表示等待，`authStatus=2` 表示用户取消，`authStatus=3` 表示风控拒绝，`authStatus=5` 表示超时。不要把 `authStatus=4` 当成取消，也不要仅凭状态码判定成功。
+
+收到 `AUTH_REQUIRED` 后：**阶段 A 内联图 + 链接** → **阶段 B `auth-status`**。本机用 `~/.jinguyuan/auth-poll-current.json` 指向本次 run 的独立状态文件；Agent 只需调用 `auth-status`，不要自行读取或改写状态。
 
 1. **有 `authLink`**
    - **图**：`data.authRunId` 标识本次授权；`data.qrImagePath` = **绝对路径**（文件直接在工作区根目录，形如 `jinguyuan-auth-qr-<authRunId>.png`，非隐藏、无子目录）；可选 `qrImagePathRelative`。**不要**用 `~/.jinguyuan`，也不要猜固定文件名。
@@ -57,10 +59,10 @@ CLI 在 stdout 输出单个 JSON 对象：`{ ok, code, message, data? }`。不�
      1. 有图时：`Read` 绝对路径 PNG，并在主气泡正文写 `![美团授权二维码](<绝对路径>)`（推荐直接贴 `userReplyMarkdown`）。
      2. ⚠️ 仅 Read / 仅附件侧栏 / 步骤卡「已展示」**不算**——用户扫不到码。
      3. **链接必含**（可点 + 明文 URL）；云端主通道是 https。
-   - **阶段 B**：告知用户授权后稍候；宿主若未自动继续，用户可回复“已授权”。收到回复后执行 `auth-status`，再继续原任务。部分宿主能自动续跑，部分不能，禁止说“无需回复”或保证一定自动通知；禁止 `auth-poll --wait`。
+   - **阶段 B**：告知用户授权后稍候；宿主若未自动继续，用户可回复“已授权”。收到回复后执行 `auth-status`，再继续原任务。禁止说“无需回复”或保证一定自动通知；禁止 `auth-poll --wait`。
 2. **无 `authLink`**：`logout` 后仅成功才重跑。
 
-Token：`~/.jinguyuan/passport-auth.json`（与二维码目录分离）。不展示 Token。
+Token：`~/.jinguyuan/passport-auth.json`（与二维码目录分离，兼容旧版本缓存）。不展示 Token。
 
 ## 返回码与处理
 
@@ -73,9 +75,9 @@ Token：`~/.jinguyuan/passport-auth.json`（与二维码目录分离）。不展
 | `QUEUE_ORDER_DETAIL` | 只将本人订单数据作为个人进度，不用门店总排队替代 |
 | `QUEUE_CANCELLED` | 明确告知已取消的订单 |
 | `AUTH_REQUIRED` | 主气泡展示链接/图；说明若未自动继续可回复“已授权”，收到回复后用 `auth-status` |
-| `AUTH_POLL_STARTED` | 后台轮询已启动；继续展示（若未展示）并用 `auth-status` |
+| `AUTH_POLL_STARTED` | 授权状态已记录；继续展示（若未展示）并在用户确认后用 `auth-status` |
 | `AUTH_PENDING` / `AUTH_SUCCESS` | pending 则稍后重查；仅本轮明确业务命令触发授权时才续跑，单独授权成功后直接结束 |
-| `AUTH_STATUS_NONE` | 无后台记录；用 `auth-start` 重新触发授权 |
+| `AUTH_STATUS_NONE` | 无授权状态记录；用 `auth-start` 重新触发授权 |
 | `AUTH_CANCELLED` / `AUTH_RISK_DENIED` / `AUTH_TIMEOUT` | 终止授权，说明原因；不执行原业务命令 |
 | `QUEUE_ORDER_EXISTS` | 说明已有订单，可先查本人进度；不重复取号 |
 | `QUEUE_ORDER_NOT_FOUND` | 说明当前没有本人排队订单 |

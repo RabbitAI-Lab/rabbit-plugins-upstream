@@ -33,7 +33,7 @@ The **cheap tier** of the contact stack, three ways: `verifyEmail` at **0.01** i
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"verifyEmail"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob@globex.com"}]' \
   --wait-until-finished
 ```
@@ -45,7 +45,7 @@ Run the free `validate-emails.ts` cull first ([`../references/contact-accuracy.m
 ```bash
 # Only on rows that FullEnrich, hunter, AND peopleDataLabs all missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"findEmail"}' \
   --records '[{"firstName":"Alice","lastName":"Smith","domainOrCompany":"acme.com"}]' \
   --wait-until-finished
 ```
@@ -56,7 +56,7 @@ All three fields are **required**; `domainOrCompany` accepts either a domain or 
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"findPeople","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"icypeas","actionSlug":"findPeople"}' \
   --data '{"currentJobTitle":"CTO","location":"FR","limit":200}' \
   --wait-until-finished
 ```
@@ -81,6 +81,13 @@ Filters are coarse (title, company, location, keyword) — nothing like salesNav
 - `verifyEmail` — VERIFY-stage alternative to `waterfall.verifyEmail` for very large lists.
 - `findPeople` / `findCompanies` — SOURCE-stage alternative when LinkedIn-anchored search isn't viable.
 
+## Recurring use
+
+- **Scheduled sourcing fits:** a weekly `findPeople`/`findCompanies` pull (persona/company-search cadence, see [`../recipes/save-as-play.md`](../recipes/save-as-play.md)) is the cheapest recurring source at 0.02/record — dedupe new rows against the model before any paid enrichment runs downstream.
+- **Re-verify before send waves:** `verifyEmail` (0.01) is the natural pre-send gate — run it on rows entering the send segment or whose last verify is stale, never on a blanket timer over the whole list; even at 0.01, the free cull comes first (see Pattern A).
+- **In-play `findEmail` gate:** the last rung stays conditional — run only where the FullEnrich, hunter, AND peopleDataLabs email columns are all still empty. Found emails are stable data; never re-find on a schedule.
+- **Cadence × rate limit:** at 30 requests/minute (see Common pitfalls), large recurring batches run long — size scheduled pulls so one run finishes before the next fires.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"icypeas","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"icypeas","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

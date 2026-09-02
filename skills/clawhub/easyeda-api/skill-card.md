@@ -1,45 +1,60 @@
-## Description: <br>
-EasyEDA API Skill helps AI agents work with EasyEDA Pro projects by providing API references, extension-development guidance, document format documentation, and a local bridge for executing code in a connected EasyEDA client. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EasyEDA API Skill helps agents look up EasyEDA Pro APIs, generate extension or automation code, and control a running EasyEDA client through a local WebSocket bridge.
 
-## Publisher: <br>
-[yanranxiaoxi](https://clawhub.ai/user/yanranxiaoxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yanranxiaoxi](https://clawhub.ai/user/yanranxiaoxi)
 
-## Use Case: <br>
-Developers and electronics engineers use this skill to inspect EasyEDA APIs, write or debug EasyEDA extensions, and automate PCB, schematic, library, and project workflows through an EasyEDA Pro client. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose a local bridge that runs arbitrary code inside the user's active EasyEDA session. <br>
-Mitigation: Install only when intentional, keep projects backed up, stop the bridge when finished, and require review and approval before executing code that modifies designs or files. <br>
-Risk: Automation may target the wrong connected EasyEDA window. <br>
-Mitigation: Verify the selected EasyEDA window before running code and explicitly select the intended window when multiple clients are connected. <br>
+## Use Case:
 
+Developers and engineers use this skill to automate EasyEDA Pro sessions, inspect PCB and schematic APIs, build EasyEDA extensions, and work with EasyEDA project, schematic, and PCB source formats.
 
-## Reference(s): <br>
-- [ClawHub EasyEDA API Skill](https://clawhub.ai/yanranxiaoxi/easyeda-api) <br>
-- [EasyEDA Run API Gateway Extension](https://ext.lceda.cn/item/oshwhub/run-api-gateway) <br>
-- [API Reference Index](references/_index.md) <br>
-- [API Quick Reference](references/_quick-reference.md) <br>
-- [Document Source Format Reference](format/index.md) <br>
-- [Extension Development Guide](guide/how-to-start.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include code intended for execution through a local EasyEDA bridge after user review and approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata, skill metadata, package.json) <br>
+Risk: The local bridge can run agent-supplied code against live EasyEDA design projects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when intentional, keep the bridge limited to localhost, review code before execution, and stop the bridge when finished.
+
+Risk: Agent-driven actions can affect active design work, including delete, rename, order, screenshot/export, and project-switching operations.
+
+Mitigation: Use backed-up or test projects first and require explicit confirmation before these higher-impact actions.
+
+## Reference(s):
+
+- [ClawHub Release Page](https://clawhub.ai/yanranxiaoxi/skills/easyeda-api)
+- [EasyEDA API Reference Index](references/_index.md)
+- [EasyEDA API Quick Reference](references/_quick-reference.md)
+- [EasyEDA Document Source Format Overview](format/index.md)
+- [EasyEDA Extension API Guide](guide/index.md)
+- [EasyEDA Extension Development Startup Guide](guide/how-to-start.md)
+- [EasyEDA API Invocation Guide](guide/invoke-apis.md)
+- [EasyEDA Run API Gateway Extension](https://jlc-ext.com/item/oshwhub/run-api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON API examples, and JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute JavaScript against a connected local EasyEDA session through the bridge.]
+
+## Skill Version(s):
+
+1.1.23 (source: ClawHub release metadata; artifact metadata reports 1.1.28)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

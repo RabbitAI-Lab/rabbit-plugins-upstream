@@ -1,39 +1,50 @@
-## Description: <br>
-Converts a specification into a phased, dependency-ordered implementation plan for use after specification is complete and before execution begins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a completed specification into a phased, dependency-ordered implementation plan before execution begins.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill after a specification is complete to turn requirements into architecture, task breakdowns, dependency ordering, acceptance criteria, effort estimates, and implementation planning guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can move from planning into execution without a separate confirmation prompt after the implementation plan is saved. <br>
-Mitigation: Review the generated plan before allowing continuation, use --standalone or explicitly ask the agent to stop after planning, and run it in a workspace where unintended edits can be reverted. <br>
+## Use Case:
 
+Developers and engineering teams use this skill after specification work to plan architecture, task breakdowns, dependencies, acceptance criteria, estimates, risks, and sprint sequencing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-planning) <br>
-- [Attune plugin source](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown planning guidance, including task breakdowns, acceptance criteria, dependency notes, risks, and implementation-plan content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save an implementation plan to docs/implementation-plan.md and can continue to the execution phase unless stopped by user request, a --standalone flag, or a failed plan save.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The planning workflow may immediately proceed into implementation after saving docs/implementation-plan.md.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use `--standalone` or explicitly tell the agent to stop after planning, then review the implementation plan before allowing execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-planning)
+- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration, Shell commands]
+
+**Output Format:** [Markdown with structured task plans and inline command or skill-invocation examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update docs/implementation-plan.md and may continue into an execution phase unless bypassed.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

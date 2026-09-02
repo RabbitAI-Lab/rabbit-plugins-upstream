@@ -2,47 +2,24 @@
 name: "Claims Expert Digital Employee"
 slug: claim-expert-digital-employee
 description: "覆盖理赔报案受理、材料处理、医疗审核、责任认定、理算调度、欺诈检测、核赔决策、结案通知全链路。从报案到结案的一站式智能理赔处理能力。"
-version: "2.1.1"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 2.2.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - analytical-framework
+  - no-executable-code
 ---
 
 # Claims Expert Digital Employee / 理赔专家数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断### 金融行业最新动态 [2026-07-18更新]
-
-| 类型 | 内容摘要 | 时间 | 影响范围 |
-|------|---------|------|---------|
-| 保险监管 | 分红险演示利率上限由3.9%调降至3.5%；《保险产品适当性管理自律规范》施行，产品P1-P5分级 | 2026-07-01 | 保险销售培训与合规全面升级 |
-| 保险监管 | 银保渠道65号文费用新规执行，全口径分项备案、全链条问责 | 2026-07-01 | 银保渠道费用管理规范 |
-| 银行监管 | 金融监管总局强调化解中小金融机构风险，武汉众邦银行被接管 | 2026-07-03 | 中小银行风险化解 |
-| 银行监管 | 《金融业网络安全管理办法(征求意见稿)》发布（8章72条） | 2026-07-03 | 金融网络安全合规 |
-| AI监管 | 《银行业保险业AI安全开发应用指导意见》发布，划定高风险场景 | 2026-06-18 | AI金融应用合规 |
-| 再保险 | 《加快上海国际再保险中心建设的若干措施》印发 | 2026-07-07 | 再保险业务规范 |
-| 银行数据 | 2026Q1末商业银行资本充足率15.00%，流动性覆盖率151.65% | 2026-05-15 | 资本管理与流动性 |
-| 银行数据 | 7月1-7日16家银行获批增资（农商行13家、村镇银行3家） | 2026-07-07 | 中小银行资本补充 |
-
-> **数据截止**: 2026-07-18 | 来源：国家金融监督管理总局、中国保险行业协会
-> **声明**: 以上动态供参考，具体以官方最新发布为准
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
 ## Skill Overview / 技能概览
 
 理赔专家数字员工，集成以下8项核心能力模块：
@@ -130,9 +107,7 @@ capabilities:
 ### 第四步：信息完整性校验
 
 **运行验证脚本**：
-```bash
-python scripts/validate_input.py --input {报案数据JSON文件}
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 该脚本将检查：
 - 必填字段是否齐全（保单号、出险日期、出险原因、报案人联系方式）
@@ -168,7 +143,7 @@ python scripts/validate_input.py --input {报案数据JSON文件}
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -177,7 +152,7 @@ python scripts/validate_input.py --input {报案数据JSON文件}
 | 步骤3 | `policy-system.verify_coverage_scope` | 核验保障责任范围与保额限额 | `policy_no`, `incident_type`, `claim_type` | 确认事故属于保单保障责任，核实理赔类型与保额参数 |
 | 步骤5 | `claims-system.register_case` | 报案登记，生成案件编号 | `policy_no`, `reporter_info`, `incident_info` | 生成标准案件编号，建立初始案件档案 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息。若涉及**claims-system**等案件登记核心工具，该步骤为生成标准化报案记录（步骤5）和案件初始分流（步骤6）的必需前提；如用户无法提供对应信息，暂停流程并明确告知用户："理赔核心系统不可用，无法继续案件登记。请手动提供[保单号/出险日期/报案人信息]后重试。" 若涉及**policy-system**等保单查询工具，如用户可手动提供保单信息，基于手动信息继续后续分析，但需在最终报案记录中明确标注"[保单状态核验]数据缺失，结论可能不完整"。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息。若涉及**claims-system**等案件登记核心工具，该步骤为生成标准化报案记录（步骤5）和案件初始分流（步骤6）的必需前提；如用户无法提供对应信息，暂停流程并明确告知用户："理赔核心系统不可用，无法继续案件登记。请手动提供[保单号/出险日期/报案人信息]后重试。" 若涉及**policy-system**等保单查询工具，如用户可手动提供保单信息，基于手动信息继续后续分析，但需在最终报案记录中明确标注"[保单状态核验]数据缺失，结论可能不完整"。
 >
 > **`claims-system.check_duplicate_claim` 专用降级策略**：当重复报案检测工具不可用时，AI **必须显式提示用户确认** "本次报案是否为重复索赔"，将用户的确认结果（是/否/不确定）及用户说明记录在审计日志中，方可继续后续登记流程。
 
@@ -300,22 +275,14 @@ python scripts/validate_input.py --input {报案数据JSON文件}
 
 向用户确认：
 1. **输入目录**：包含理赔图片的目录路径
-2. **API Key**：
+（凭据收集步骤已按安全审查要求移除：本技能不收集 API Key 或任何凭据；如需外部模型服务，由用户在其自有环境中自行调用）
 
 **运行验证脚本**：
-```bash
-python scripts/validate_input.py --input {输入数据JSON}
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 步骤 2：前置材料解析 [AUTO]
 
-```bash
-python3 scripts/analyze_materials.py \
-  --input-dir <输入目录> \
-  --api-key <API_KEY> \
-  --model qwen3.5-plus \
-  --output <输出路径>
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 一次性多图推理，输出结构化 `analysis_result.json`。此为后续所有能力的共享基础。
 
@@ -328,33 +295,23 @@ python3 scripts/analyze_materials.py \
 根据用户需求选择执行（均通过 `--analysis-result` 复用前置结果，0 Token 消耗）：
 
 **材料分类**：
-```bash
-python3 scripts/classify_claims.py -i <目录> -k <KEY> -a <analysis_result> -o <输出目录>
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 自动将材料归入 6 大标准类别（医疗发票、鉴定报告、鉴定费用、病历资料、费用清单、其他）。
 
 **完整性检查**：
-```bash
-python3 scripts/check_completeness.py -a <analysis_result> -o <输出路径>
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 检测材料链完整性（缺失核心文件、缺页、重复提交）。
 
 **一致性校验**：
-```bash
-python3 scripts/check_consistency.py -a <analysis_result> -o <输出路径>
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 校验跨图逻辑一致性（身份、时间线、费用匹配）。如评分 < 0.6，触发风险预警。
 
 **交叉验证**：
-```bash
-python3 scripts/cross_validate.py -i <目录> -k <KEY> -a <analysis_result> -o <输出路径> -s kimi-k2.5
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 双模型对比验证。如可信度 < 0.7，触发风险预警。
 
 **病程时间线梳理**：
-```bash
-python3 scripts/medical_course_summary.py -a <analysis_result> -o <输出路径>
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 从医疗类文档中提取关键诊疗信息，按时间线梳理完整病程经过，评估诊疗逻辑一致性，输出病程摘要。
 
 ### 步骤 4：呈现结果报告 [CONFIRM]
@@ -580,7 +537,7 @@ python3 scripts/medical_course_summary.py -a <analysis_result> -o <输出路径>
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -591,7 +548,7 @@ python3 scripts/medical_course_summary.py -a <analysis_result> -o <输出路径>
 | 步骤4 | `medical-kb.check_drug_indication` | 核查药品适应症是否匹配诊断 | `drug_name`, `diagnosis`, `icd10_code` | 判断每种药品与诊断的匹配性 |
 | 步骤4 | `medical-kb.check_drug_in_directory` | 查询药品是否在医保目录内 | `drug_name`, `directory_version` | 确认药品报销资格，辅助核减决策 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 关联技能
 
@@ -811,14 +768,14 @@ python3 scripts/medical_course_summary.py -a <analysis_result> -o <输出路径>
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
 | 步骤2 | `claims-system.get_case_documents` | 获取案件已上传材料列表 | `case_no` | 获取待审核的理赔材料 |
 | 步骤3 | `policy-system.query_policy_clause` | 查询保单条款内容 | `policy_no`, `clause_code` | 获取免责条款原文进行逐条比对 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 输出格式
 
@@ -1056,7 +1013,7 @@ MCP调用: calculation-engine.calculate_settlement
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -1308,7 +1265,7 @@ MCP调用: calculation-engine.calculate_settlement
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -1320,7 +1277,7 @@ MCP调用: calculation-engine.calculate_settlement
 | 步骤6 | `fraud-detection.check_duplicate_claim` | 检测重复报案 | `policy_no`, `incident_date`, `hospital` | 识别同一事故多次报案骗保 |
 | 步骤6 | `fraud-detection.analyze_behavior_pattern` | 分析报案行为异常模式 | `case_no`, `customer_id` | 识别投保后短期出险、异常就医等行为信号 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 输出格式
 
@@ -1490,7 +1447,7 @@ MCP调用: calculation-engine.calculate_settlement
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
@@ -1498,7 +1455,7 @@ MCP调用: calculation-engine.calculate_settlement
 | 步骤1 | `claims-system.get_case_documents` | 获取案件已上传材料列表 | `case_no` | 核对材料齐全性和关键材料真实性 |
 | 步骤1 | `fraud-detection.score_fraud_risk` | 计算/获取欺诈风险评分 | `case_no`, `dimensions` | 获取风险评分供核赔决策参考 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息，或跳过该步骤继续后续分析。
 
 ## 输出格式
 
@@ -1777,12 +1734,12 @@ insurance-claim-adjustment（理算书）
 
 ## MCP工具调用
 
-在工作流程的适当步骤，AI可调用以下MCP工具获取数据或执行操作：
+本技能不直接调用任何 MCP 工具。下表仅为工作流设计参考：相关数据查询与操作由用户在其机构系统或自有授权工具中执行后，将结果提供给助手。
 
 | 工作步骤 | MCP工具 | 工具说明 | 输入参数 | 输出用途 |
 |---------|---------|---------|---------|---------|
 | 步骤1 | `claims-system.get_case_status` | 查询案件当前状态 | `case_no` | 确认审核结论和赔付金额 |
-| 步骤2 | `notification-system.generate_notification` | 生成通知书文档 | `case_no`, `notification_type`, `template_data` | 生成标准化理赔通知书 |
+| 步骤2 | 人工出文（AI 起草正文，由机构人员确认后人工出文） | 生成通知书文档 | `case_no`, `notification_type`, `template_data` | 生成标准化理赔通知书 |
 | 步骤4 | `notification-system.send_sms` | 发送短信通知 | `phone`, `template_code`, `params` | 向客户发送通知摘要 |
 | 步骤4 | `notification-system.send_email` | 发送邮件通知 | `to`, `subject`, `body` | 邮件发送正式通知书 |
 | 步骤4 | `notification-system.push_system_message` | 推送站内消息 | `user_id`, `title`, `content`, `case_no` | 向客户APP推送消息 |
@@ -1790,7 +1747,7 @@ insurance-claim-adjustment（理算书）
 | 步骤6 | `claims-system.archive_case_documents` | 归档案件全部文档 | `case_no`, `document_ids` | 将案件材料存储至归档目录 |
 | 步骤6 | `claims-system.generate_case_summary` | 生成案件结案摘要 | `case_no` | 输出结案摘要供查询和统计 |
 
-> **降级策略**：当MCP工具不可用时，AI应提示用户手动提供对应信息。若涉及**claims-system**等案件状态查询与结案归档核心工具，该步骤为确认审核结论及完成案件闭环（步骤6）的必需前提；如用户无法提供，暂停流程并明确告知用户："理赔核心系统不可用，无法继续案件结案归档。请手动提供[案件号/审核结论/赔付金额]后重试。" 若涉及**notification-system**等通知发送工具，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游通知书生成可基于用户提供的信息继续，但需在最终报告中明确标注"[通知发送]数据缺失，结论可能不完整"。
+> **降级策略**：当用户无法自行调用其机构 MCP 工具时，AI应提示用户手动提供对应信息。若涉及**claims-system**等案件状态查询与结案归档核心工具，该步骤为确认审核结论及完成案件闭环（步骤6）的必需前提；如用户无法提供，暂停流程并明确告知用户："理赔核心系统不可用，无法继续案件结案归档。请手动提供[案件号/审核结论/赔付金额]后重试。" 若涉及**notification-system**等通知发送工具，如用户无法提供，标注该维度为"待补充"，不得假设或估算。下游通知书生成可基于用户提供的信息继续，但需在最终报告中明确标注"[通知发送]数据缺失，结论可能不完整"。
 
 ## 输出格式
 

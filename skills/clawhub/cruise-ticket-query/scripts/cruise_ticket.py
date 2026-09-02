@@ -193,7 +193,7 @@ def _clean_res_name(res_name, scenic_name):
 
 def search_cruise(params):
     """查询游轮船票信息，包括游轮名、价格、航线方向和退改政策。"""
-    scenic_name = params.get("scenic_name", "")
+    scenic_name = params.get("scenicName", "")
     if not scenic_name:
         hint_list = "、".join(CRUISE_HINTS[:8])
         return f"请提供游轮线路名称，如：{hint_list}\n\n💡 提示：搜索需要精确关键词，如\"长江三峡游轮\"比\"三峡\"更准确"

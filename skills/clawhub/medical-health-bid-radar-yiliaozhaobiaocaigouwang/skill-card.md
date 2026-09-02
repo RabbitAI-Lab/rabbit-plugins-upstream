@@ -1,49 +1,58 @@
-## Description: <br>
-医疗大健康采招雷达-医疗招标采购网，当搜索词包含医院、医疗、卫生、体检时触发，重点提取采购方（医院）和中标方（医药公司/代理商），分析特定医院的Top供应商体系。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+医疗大健康采招雷达-医疗招标采购网，当搜索词包含医院、医疗、卫生、体检时触发，重点提取采购方（医院）和中标方（医药公司/代理商），分析特定医院的Top供应商体系。
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search medical and healthcare bidding data, inspect purchaser and supplier patterns, and compare companies, brands, prices, expiring projects, and market activity through the Zhiliaobiaoxun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends procurement searches and API credentials to an external Zhiliaobiaoxun service. <br>
-Mitigation: Install only if that provider is trusted for the intended searches, and use a limited API key through ZLBX_API_KEY. <br>
-Risk: Broad company or subsidiary matching can produce ambiguous business analysis. <br>
-Mitigation: Confirm ambiguous company matches before relying on subsidiary-wide analysis or downstream conclusions. <br>
-Risk: Returned project contact details may contain sensitive business or personal information. <br>
-Mitigation: Handle contact data according to the user's privacy, compliance, and retention requirements. <br>
-Risk: Confidential procurement strategy could be exposed through submitted queries. <br>
-Mitigation: Avoid submitting confidential strategy or sensitive internal plans unless that use is acceptable under the provider's terms. <br>
+## Use Case:
 
+External users and procurement analysts use this skill to query medical and healthcare bidding/procurement data, identify purchasing hospitals and winning suppliers, analyze supplier networks, and find project opportunities.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/medical-health-bid-radar-yiliaozhaobiaocaigouwang) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun API key portal](https://ai.zhiliaobiaoxun.com/?ch=s36) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured API request or response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for authenticated Zhiliaobiaoxun API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can create an account using device-derived identifiers and persist an API key under ~/.zlbx/config.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer setting ZLBX_API_KEY manually; allow auto-registration only after explicit consent and review the stored credential.
+
+Risk: The skill can surface project contact phone numbers and steer users to recharge or related agent links.
+
+Mitigation: Use narrow procurement-specific queries, avoid bulk contact export, and verify account or recharge links before following them.
+
+## Reference(s):
+
+- [Skill listing](https://clawhub.ai/thuanlynham-stack/skills/medical-health-bid-radar-yiliaozhaobiaocaigouwang)
+- [Bid Search API Details](references/api-search.md)
+- [Company Analysis API Details](references/api-company.md)
+- [Market Analysis API Details](references/api-market.md)
+- [Account API Details](references/api-account.md)
+- [Auto-Registration Flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, configuration, guidance]
+
+**Output Format:** [Markdown responses with tables, links, concise analysis, and JSON request examples when useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or a consent-gated auto-registration flow; account status may affect contact visibility and quota behavior.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

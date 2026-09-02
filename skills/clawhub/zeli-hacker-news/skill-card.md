@@ -1,43 +1,57 @@
-## Description: <br>
-Read Hacker News with AI summaries in the user's language via zeli.app, including daily front-page digests as markdown or JSON, permanent story summary pages, and RSS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Hacker News with AI summaries in your human's language (7 supported) via zeli.app.
 
-## Publisher: <br>
-[mazzzystar](https://clawhub.ai/user/mazzzystar) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mazzzystar](https://clawhub.ai/user/mazzzystar)
 
-## Use Case: <br>
-Agents use this skill to retrieve and summarize Hacker News front-page coverage for daily technology briefings, topic checks, and non-English readers. It is intended for users who want concise HN highlights with links back to original articles, HN discussions, and Zeli summary pages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AI-generated story summaries can omit nuance or be incorrect. <br>
-Mitigation: Use the provided original article and Hacker News discussion links to verify important details before relying on a summary. <br>
-Risk: Briefings depend on availability and freshness of external Zeli endpoints. <br>
-Mitigation: Cache dated digests when possible and handle fetch failures or stale responses gracefully. <br>
+## Use Case:
 
+External users and agents use this skill to fetch Hacker News daily digests, story summaries, RSS feeds, and JSON front-page data from Zeli in supported languages.
 
-## Reference(s): <br>
-- [Zeli](https://zeli.app) <br>
-- [Zeli LLM context](https://zeli.app/llms.txt) <br>
-- [Canonical Zeli skill](https://zeli.app/skill.md) <br>
-- [ClawHub listing](https://clawhub.ai/mazzzystar/skills/zeli-hacker-news) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON fetched from Zeli endpoints, with links to original articles, HN discussions, and summary pages.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports 30 language codes, hourly daily digest updates, immutable dated digests, and unauthenticated access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The agent contacts zeli.app to retrieve public Hacker News summaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and approve external network access to zeli.app before installing or running the skill.
+
+Risk: Fetched summaries may be used as briefing material and could omit context from original Hacker News stories or linked articles.
+
+Mitigation: Link users to the original article, Hacker News discussion, or Zeli story page when decisions depend on the details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mazzzystar/skills/zeli-hacker-news)
+- [Zeli](https://zeli.app)
+- [Zeli latest markdown digest](https://zeli.app/digest/latest.md)
+- [Zeli agent context](https://zeli.app/llms.txt)
+- [Canonical skill source](https://zeli.app/skill.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, JSON, shell commands]
+
+**Output Format:** [Markdown guidance with URLs and shell command examples; retrieved Zeli content may be Markdown, JSON, or RSS.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No credentials are required; the artifact describes public, unauthenticated Zeli endpoints.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

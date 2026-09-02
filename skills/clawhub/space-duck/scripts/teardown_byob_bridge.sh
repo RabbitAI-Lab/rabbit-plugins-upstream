@@ -22,9 +22,20 @@ source "$STATE_FILE"
 
 ok() { echo "✓ $*"; }
 
+# 0.8.6 — F1: kill -0 returns EPERM for a live process under another uid;
+# only "no such process" means dead. Check /proc + the error text.
+proc_alive() {
+  local pid="$1"
+  [[ -n "$pid" ]] || return 1
+  if kill -0 "$pid" 2>/dev/null; then return 0; fi
+  [[ -d "/proc/$pid" ]] && return 0
+  kill -0 "$pid" 2>&1 | grep -qi 'not permitted' && return 0
+  return 1
+}
+
 # Kill processes (best-effort; PIDs may already be dead)
 for p in "${BRIDGE_PID:-}" "${TUNNEL_PID:-}"; do
-  if [[ -n "$p" ]] && kill -0 "$p" 2>/dev/null; then
+  if [[ -n "$p" ]] && proc_alive "$p"; then  # 0.8.6 — F1
     kill "$p" 2>/dev/null && ok "killed pid $p" || true
   fi
 done

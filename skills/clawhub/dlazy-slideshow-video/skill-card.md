@@ -1,43 +1,60 @@
-## Description: <br>
-Dlazy Slideshow Video uses the pinned dLazy CLI to turn slides or documents into narrated slideshow-style videos with voiceover and transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns slides or documents into narrated slideshow videos with voiceover and transitions when a user wants a slideshow-style video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to create explainer, report, courseware, or training videos from slides, PDFs, and other documents through dLazy's hosted file-to-video workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached files are sent to dLazy as a third-party service. <br>
-Mitigation: Use the skill only when organizational policy allows uploading that content to dLazy, and avoid attaching sensitive files unless approved. <br>
-Risk: The dLazy API key grants access to the user's dLazy organization. <br>
-Mitigation: Store the key through the dLazy CLI, and rotate or revoke it when access is no longer needed. <br>
+## Use Case:
 
+Employees, external users, developers, and content teams use this skill to ask a dLazy-hosted agent to turn PPT, PDF, Word, Excel, image, or document inputs into slideshow-style explainer, report, courseware, or training videos.
 
-## Reference(s): <br>
-- [Dlazy Slideshow Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and streamed CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the pinned @dlazy/cli 1.2.3 package and may upload user-selected local files to dLazy for project-scoped video generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: Prompts and attached files are sent to dLazy cloud services for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when cloud processing is acceptable for the intended data, and avoid sending sensitive files unless the user's organization permits use of dLazy for that content.
+
+Risk: The dLazy API key may be stored locally in the CLI configuration.
+
+Mitigation: Use the documented configuration location and prefer the DLAZY_API_KEY environment variable or key rotation when local persistence is not desired.
+
+Risk: A global npm install keeps the dLazy CLI on the system after use.
+
+Mitigation: Use the documented npx @dlazy/cli@1.2.3 alternative for one-off runs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and CLI guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference project ids, prompts, local file attachments, dLazy API endpoints, and authentication setup.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

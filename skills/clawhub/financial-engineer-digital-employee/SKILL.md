@@ -2,33 +2,25 @@
 name: "Financial Engineer Digital Employee"
 slug: financial-engineer-digital-employee
 description: "覆盖数据探查、单变量分析、特征工程、LR评分卡、XGBoost/DNN建模、超参数调优、模型解释、多模型对比、分群建模、DeepModel集成全流程。从数据到模型上线的一站式机器学习建模能力。"
-version: "2.0.1"
-allowed-tools:
-  - data-analysis
-  - reference-framework
+version: 2.1.0
 capabilities:
-  - knowledge-reference
-  - analytical-framework
+  - educational-reference
+  - advisory-only
   - requires-human-review
-  - analytical-framework
+  - no-executable-code
 ---
 
 # Financial Engineer Digital Employee / 金融工程专家数字员工
 
-> **⚠️ 能力声明 / Capability Notice**
-> - **Type:** Knowledge reference framework for financial professionals
-> - **Purpose:** Provides analytical templates, reference data, and workflow guidance
-> - **No persistent storage, network calls, background execution, or credential collection**
-> - **All outputs are for reference only and require human review before real-world application**
-> - **This skill does NOT provide financial, legal, or insurance advice**
-> - **Users must exercise their own judgment and consult qualified professionals**
+> **⚠️ 安全与能力声明（Security & Capability Notice）**
 >
-> **⚠️ 使用声明**
-> - 本技能提供金融行业专业知识参考框架，辅助专业人员进行分析和决策
-> - 所有输出仅供专业参考，不构成投资建议、法律意见或合规保证
-> - 实际业务操作中需结合具体监管要求和机构内部制度执行
-> - 最终报告和数据须经相关责任人审核确认后方可提交或使用
-> - 不替代专业培训师、合规官或审核人员的专业判断## Skill Overview / 技能概览
+> **方法论参考框架（Educational / analytical framework）**
+> - **本技能为工作流与方法论指引，不捆绑任何可执行代码、脚本或自动后台任务**；文中出现的命令/代码示例均已移除，相关操作由用户在符合其机构合规要求的自有授权环境中执行
+> - **本技能本身不代为发起网络请求、不自动调用任何 MCP/API 工具、不创建定时任务、不收集任何凭据或 API Key**；正文所述的取数、系统查询、文件读写、审计留痕、消息外呼等操作，均为对该岗位既有工作流的**描述性参考**，实际执行主体与责任均在用户及其所在机构
+> - **敏感数据与留痕合规**：本技能涉及读取用户提供的业务材料、生成文档/报告/影像，以及在正文中描述的审计日志、客户笔记、案例归档等留存动作，这些内容可能包含客户身份、健康、财务、信贷、理赔等敏感信息。所有留存动作须遵循用户所在机构的**数据留存期限、访问权限、加密与脱敏**等管控要求；本技能不预设强制留存周期，亦不向任何第三方传输数据
+> - 所有输出（含分析、建议、话术、报告草稿）均为**供具备相应资质的专业人员审核决策的参考**，不构成正式的投资/保险/信贷/法律意见；最终决策与责任由持牌专业人员承担
+> - 触发后应先与用户确认具体业务上下文，再进入对应模块，避免在非专业语境下误激活；本技能面向持牌金融机构的专业岗位人员（研究/投顾/信贷/核保/理赔/财富管理等），仅在明确的专业业务上下文中使用
+## Skill Overview / 技能概览
 
 金融工程专家数字员工，集成以下14项核心能力模块：
 
@@ -74,11 +66,7 @@ capabilities:
 
 ## 执行方式
 
-```bash
-python scripts/profiler.py \
-  --data_path ./examples/toy.parquet \
-  --output_dir ./outputs/profile_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 执行结束后：
 - 产物目录 `<output_dir>/` 下生成：
@@ -185,27 +173,15 @@ python scripts/profiler.py \
 
 ### 数据探索模式（无目标变量）
 
-```bash
-python scripts/analyzer.py \
-  --data_path ./data.parquet --features "age,income,score" \
-  --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 特征筛选模式（有目标变量）
 
-```bash
-python scripts/analyzer.py \
-  --data_path ./data.parquet --features "age,income,score" --target y_label \
-  --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 交叉分布分析
 
-```bash
-python scripts/analyzer.py \
-  --data_path ./data.parquet --features "age,income" --cross "age,income" \
-  --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -215,31 +191,23 @@ python scripts/analyzer.py \
 
 查看单特征分布：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --features "age,income,score" --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 指定等距分箱：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --features "age" --binning_method distance --n_bins 5 --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：交叉分布分析
 
 查看两个特征的联合分布：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --features "age,income" --cross "age,income" --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景三：特征筛选（有目标变量）
 
 计算 IV 值，评估特征预测力：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --features "age,income,score" --target y_label --output_dir ./outputs/uni_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -348,7 +316,7 @@ age × income 交叉分布
 2. **分箱数量**：默认 10 箱，可根据数据量调整（数据量少时建议 5 箱）
 3. **交叉分布**：仅支持两个特征的交叉，建议选择离散或已分箱的特征
 4. **IV 计算**：需要目标变量为 0/1 二分类
-5. **产物位置**：报告保存到 `<output_dir>/`
+5. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -380,14 +348,7 @@ age × income 交叉分布
 
 ## 执行方式
 
-```bash
-python scripts/analyzer.py \
-  --data_path ./data.parquet --target y_label \
-  --exclude_cols "cust_code,busi_dt" \
-  --baseline_filter "busi_dt <= '20250501'" \
-  --comparison_filter "busi_dt > '20250701'" \
-  --output_dir ./outputs/fa_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -397,29 +358,19 @@ python scripts/analyzer.py \
 
 适用于无时间维度的数据集：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --target y_label --output_dir ./outputs/fa_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：完整分析（含 PSI）
 
 适用于有时间切分条件的数据集：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --target y_label \
-  --baseline_filter "busi_dt <= '20250501'" \
-  --comparison_filter "busi_dt > '20250701'" \
-  --output_dir ./outputs/fa_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景三：单变量深度分析
 
 输出 IV Top N 或指定特征的完整分箱明细表：
 
-```bash
-python scripts/analyzer.py --data_path ./data.parquet --target y_label --top_n 10 --output_dir ./outputs/fa_run
-python scripts/analyzer.py --data_path ./data.parquet --target y_label --specified_features "umeng_ALL,bscore" --output_dir ./outputs/fa_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -471,7 +422,7 @@ python scripts/analyzer.py --data_path ./data.parquet --target y_label --specifi
 2. **PSI 分析**：需同时提供 `baseline_filter` 和 `comparison_filter`，否则跳过
 3. **相关性**：仅对数值型特征有效，非数值列自动跳过
 4. **大数据集**：报告默认展示 IV Top 20，完整数据在文件中
-5. **产物位置**：报告保存到 `<output_dir>/`
+5. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -523,23 +474,11 @@ python scripts/analyzer.py --data_path ./data.parquet --target y_label --specifi
 
 ## 执行方式
 
-```bash
-python scripts/modeling.py \
-  --data_path ./data.parquet --target y_label \
-  --time_col busi_dt \
-  --exclude_cols "cust_code,busi_dt" \
-  --output_dir ./outputs/lr_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 指定特征建模：
 
-```bash
-python scripts/modeling.py \
-  --data_path ./data.parquet --target y_label \
-  --features "feat1,feat2,feat3,feat4" \
-  --regularization l1 --C 0.5 \
-  --output_dir ./outputs/lr_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -547,23 +486,15 @@ python scripts/modeling.py \
 
 ### 场景一：默认参数快速建模
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label --output_dir ./outputs/lr_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：指定特征建模
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label \
-  --features "feat1,feat2,feat3" --output_dir ./outputs/lr_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景三：自定义评分卡参数
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label \
-  --base_score 650 --pdo 40 --output_dir ./outputs/lr_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -605,7 +536,7 @@ python scripts/modeling.py --data_path ./data.parquet --target y_label \
 4. **WoE 分箱**：使用 `optbinning` 做最优分箱，每特征最多 `--max_n_bins` 箱
 5. **评分卡公式**：`Score = base_score - factor × ln(odds)`，其中 `factor = pdo / ln(2)`
 6. **不提供调参**：需要调参请切 `lr-tuning`（搜索 WoE 分箱 + LR 正则化参数）
-7. **模型保存**：模型和评分卡保存到 `<output_dir>/models/`
+7. **模型产物**：关键结果以对话内容呈现；模型文件的导出与保存由用户在其自有环境完成（本技能不写文件）
 
 
 ---
@@ -691,19 +622,11 @@ LR 评分卡调参的**唯一入口**，基于 `_vendor/tuning/lr_engine.LRTunin
 
 ### 交互式模式（单轮）
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label \
-  --round 1 --output_dir ./outputs/lr_tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### AUTO 模式
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label \
-  --auto --max_rounds 5 --output_dir ./outputs/lr_tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -788,7 +711,7 @@ python scripts/tuner.py \
 2. **联合搜索**：WoE 分箱与 LR 参数联合优化，确保最优组合
 3. **收敛判定**：连续2轮提升不足 0.001 自动停止
 4. **最大轮数**：默认最多 5 轮
-5. **产物位置**：模型和报告保存到 `<output_dir>/models/` 和 `<output_dir>/`
+5. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -835,23 +758,11 @@ python scripts/tuner.py \
 
 ## 执行方式
 
-```bash
-python scripts/modeling.py \
-  --data_path ./examples/toy.parquet \
-  --target y_label \
-  --time_col busi_dt \
-  --output_dir ./outputs/run1
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 复杂 `feature_sets` 通过 `--config` 传入：
 
-```bash
-python scripts/modeling.py \
-  --data_path ./examples/toy.parquet \
-  --target y_label \
-  --config ./config.json \
-  --output_dir ./outputs/run1
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 执行结束后 `<output_dir>/` 下生成：
 
@@ -888,12 +799,7 @@ stdout 末行打印 `result.json` 绝对路径，Agent 读这个文件即可获�
 
 下游（如 `model-explanation`）通过 `--model_path` 传入上游 result.json 中 `role=model` 的文件路径：
 
-```bash
-# 从上游 result.json 提取模型路径
-MODEL_PATH=$(jq -r '.files[] | select(.role=="model") | .path' ./outputs/run1/result.json)
-
-python ../model-explanation/scripts/explain.py --model_path "$MODEL_PATH" --data_path ./examples/toy.parquet
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -903,25 +809,19 @@ python ../model-explanation/scripts/explain.py --model_path "$MODEL_PATH" --data
 
 不指定特征，自动执行四大算子生成四套方案对比：
 
-```bash
-python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：指定特征建模
 
 使用指定的特征列表：
 
-```bash
-python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label --features "feat1,feat2,feat3"
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二-b：指定单套自动筛选方案
 
 只跑一种筛选方案（如"去共线性"）：
 
-```bash
-python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label --feature_scheme decorr
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 可选值：`full`(全量入模) / `decorr`(去共线性) / `high_iv`(高预测力) / `stable`(稳定性优先)
 
@@ -938,17 +838,13 @@ python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label -
 }
 ```
 
-```bash
-python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label --config ./config.json
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景四：保存模型
 
 训练完成后保存最优模型，供后续 model-explanation 使用：
 
-```bash
-python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label --model_name my_best_model
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 模型自动保存，输出：
 - 模型文件：`<output_dir>/models/my_best_model.json`
@@ -1004,7 +900,7 @@ python scripts/modeling.py --data_path ./examples/toy.parquet --target y_label -
 3. **自动特征筛选**：需要数据同时满足 IV、PSI、缺失率条件
 4. **样本策略**：强不均衡场景（正样本率 < 2%）建议 `--sample_strategy undersample`，一般场景用默认 `auto_weight`
 5. **不提供调参**：需要调参请切 xgb-tuning（基于 Optuna TPE + 诊断驱动的约束搜索）
-6. **模型保存**：每次训练自动保存最优模型至 `<output_dir>/models/`，无需传 `--save_model`；可用 `--model_name` 自定义文件名
+6. **模型产物**：关键结果以对话内容呈现；模型文件的导出与保存由用户在其自有环境完成（本技能不写文件）
 7. **稳定性分析**：基准月份取自训练集时间段；Bootstrap CI 需样本量 >= 100 才计算
 8. **BCR/校准曲线**：BCR（Bad Capture Rate）反映拒绝 Top K% 人群能捕获多少坏客户；校准曲线反映模型概率输出可信度
 
@@ -1210,13 +1106,7 @@ Agent 应根据用户提供的**场景信息**调整调参策略。
 
 复杂参数（`params`/`baseline`）建议通过 `--config` JSON 文件传入：
 
-```bash
-# 自动调优（推荐：通过 config.json 传复杂参数）
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label --features "f1,f2,f3" \
-  --auto --max_rounds 5 --output_dir ./outputs/tuning \
-  --config ./config.json
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 `config.json` 示例：
 
@@ -1229,20 +1119,11 @@ python scripts/tuner.py \
 
 ### 交互式模式（单轮调优）
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label --features "f1,f2,f3" \
-  --round 1 --output_dir ./outputs/tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### AUTO 模式（自动调优循环）
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label --features "f1,f2,f3" \
-  --auto --max_rounds 5 --metric auc \
-  --output_dir ./outputs/tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 脚本通过单出口协议 `[RESULT:{json}]` 输出模型、报告、state 更新；**LLM 不要复述脚本已产出的图表**。
 
@@ -1477,7 +1358,7 @@ tuner.py 在 AUTO 模式下每轮调用 `TuningEngine.run_round(diagnosis, tried
 4. **收敛判定**：连续2轮提升不足 0.001 自动停止
 5. **最大轮数**：默认最多 5 轮，避免过度调优
 6. **复杂 JSON**：`--params` / `--baseline` 等复杂 JSON 优先通过 `--config config.json` 传入
-7. **产物位置**：模型和报告保存到 `<output_dir>/models/` 和 `<output_dir>/`
+7. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -1531,25 +1412,11 @@ tuner.py 在 AUTO 模式下每轮调用 `TuningEngine.run_round(diagnosis, tried
 
 默认参数运行：
 
-```bash
-python scripts/modeling.py \
-  --data_path ./data.parquet --target y_label \
-  --time_col busi_dt \
-  --exclude_cols "cust_code,busi_dt" \
-  --output_dir ./outputs/dnn_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 自定义网络结构：
 
-```bash
-python scripts/modeling.py \
-  --data_path ./data.parquet --target y_label \
-  --hidden_dims "256,128,64" \
-  --dropout 0.4 \
-  --learning_rate 0.0005 \
-  --epochs 200 \
-  --output_dir ./outputs/dnn_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -1557,24 +1424,15 @@ python scripts/modeling.py \
 
 ### 场景一：默认参数快速建模
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label --output_dir ./outputs/dnn_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：自定义网络结构
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label \
-  --hidden_dims "256,128,64" --dropout 0.4 --learning_rate 0.0005 \
-  --output_dir ./outputs/dnn_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景三：指定特征建模
 
-```bash
-python scripts/modeling.py --data_path ./data.parquet --target y_label \
-  --features "feat1,feat2,feat3" --output_dir ./outputs/dnn_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -1618,7 +1476,7 @@ python scripts/modeling.py --data_path ./data.parquet --target y_label \
 5. **早停**：当 val loss 连续 `patience` 轮不下降时自动停止
 6. **不提供调参**：需要调参请切 `dnn-tuning`（搜索网络架构 + 训练参数）
 7. **GPU**：自动检测 CUDA，无 GPU 时回退到 CPU
-8. **模型保存**：模型文件保存到 `<output_dir>/models/`
+8. **模型产物**：关键结果以对话内容呈现；模型文件的导出与保存由用户在其自有环境完成（本技能不写文件）
 
 
 ---
@@ -1712,19 +1570,11 @@ DNN 调参的**唯一入口**，基于 `_vendor/tuning/dnn_engine.DNNTuningEngin
 
 ### 交互式模式（单轮调优）
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label \
-  --round 1 --output_dir ./outputs/dnn_tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### AUTO 模式（自动调优循环）
 
-```bash
-python scripts/tuner.py \
-  --data_path ./data.parquet --target y_label \
-  --auto --max_rounds 5 --output_dir ./outputs/dnn_tuning
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -1813,7 +1663,7 @@ python scripts/tuner.py \
 2. **搜索加速**：搜索期间使用 `search_epochs=30`，最终模型使用 `epochs=100`
 3. **收敛判定**：连续2轮提升不足 0.001 自动停止
 4. **最大轮数**：默认最多 5 轮
-5. **产物位置**：模型和报告保存到 `<output_dir>/models/` 和 `<output_dir>/`
+5. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -1888,30 +1738,15 @@ python scripts/tuner.py \
 
 默认三算法 + 通用场景：
 
-```bash
-python scripts/comparison.py \
-  --data_path ./data.parquet --target y_label \
-  --exclude_cols "cust_code,busi_dt" \
-  --output_dir ./outputs/compare
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 评分卡场景（只跑 XGB + LR）：
 
-```bash
-python scripts/comparison.py \
-  --data_path ./data.parquet --target y_label \
-  --algorithms "xgb,lr" --scenario scorecard \
-  --output_dir ./outputs/compare
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 使用历史调参最优参数：
 
-```bash
-python scripts/comparison.py \
-  --data_path ./data.parquet --target y_label \
-  --use_tuned --scenario fraud \
-  --output_dir ./outputs/compare
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -1973,7 +1808,7 @@ python scripts/comparison.py \
 3. **DeLong 检验**：p < 0.05 才认为差距统计显著
 4. **Pareto 前沿**：只识别未被任何算法严格优于的候选集，不做主观排序
 5. **场景标签**：`--scenario` 仅作文本标签，不参与加权评分
-6. **产物位置**：模型和报告保存到 `<output_dir>/`
+6. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -2006,35 +1841,15 @@ python scripts/comparison.py \
 
 ## 执行方式
 
-```bash
-python scripts/explainer.py \
-  --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet \
-  --target y_label \
-  --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 单样本解释：
 
-```bash
-python scripts/explainer.py \
-  --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet \
-  --target y_label \
-  --sample_id 1001 \
-  --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 特征交互分析：
 
-```bash
-python scripts/explainer.py \
-  --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet \
-  --target y_label \
-  --interaction_features "age,income" \
-  --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -2044,11 +1859,7 @@ python scripts/explainer.py \
 
 解释模型整体决策逻辑：
 
-```bash
-python scripts/explainer.py --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet --target y_label \
-  --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 输出：
 - SHAP Summary Plot（特征重要性排序）
@@ -2059,11 +1870,7 @@ python scripts/explainer.py --model_path ./models/my_model.json \
 
 解释特定样本的预测原因：
 
-```bash
-python scripts/explainer.py --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet --target y_label \
-  --sample_id 1001 --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 输出：
 - SHAP Force Plot（推动预测的正负特征）
@@ -2074,11 +1881,7 @@ python scripts/explainer.py --model_path ./models/my_model.json \
 
 分析两个特征的交互效应：
 
-```bash
-python scripts/explainer.py --model_path ./models/my_model.json \
-  --data_path ./examples/toy.parquet --target y_label \
-  --interaction_features "age,income" --output_dir ./outputs/explain_run
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 输出：
 - SHAP Dependence Plot（特征值 vs SHAP 值）
@@ -2090,21 +1893,7 @@ python scripts/explainer.py --model_path ./models/my_model.json \
 
 `xgb-modeling` 产物的 `result.json` 中 `role=model` 的 path 可直接喂给 `model-explanation`：
 
-```bash
-# 1) 训练
-python ../xgb-modeling/scripts/modeling.py \
-  --data_path ./examples/toy.parquet --target y_label \
-  --exclude_cols "cust_code" --output_dir ./outputs/mdl
-
-# 2) 从 result.json 提模型路径
-MODEL=$(jq -r '.files[] | select(.role=="model") | .path' ./outputs/mdl/result.json)
-
-# 3) 解释（特征自动从 <model>_meta.json 读取）
-python scripts/explainer.py \
-  --model_path "$MODEL" \
-  --data_path ./examples/toy.parquet --target y_label \
-  --output_dir ./outputs/xpl
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -2240,13 +2029,7 @@ python scripts/explainer.py \
 
 ## 执行方式
 
-```bash
-python scripts/run_experiment.py \
-  --data_path ./data.parquet --target y_label \
-  --exploration "不同特征组(firefly/子模型/友盟)对mob3逾期的贡献" \
-  --max_rounds 10 \
-  --output_dir ./outputs/exp
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -2254,31 +2037,15 @@ python scripts/run_experiment.py \
 
 ### 场景一：探索各特征组贡献
 
-```bash
-python scripts/run_experiment.py \
-  --data_path ./data.parquet --target y_label \
-  --exploration "不同特征组(firefly模型/子模型/友盟数据)对mob3逾期预测的贡献" \
-  --max_rounds 10 --output_dir ./outputs/exp
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景二：探索特定时间窗口特征
 
-```bash
-python scripts/run_experiment.py \
-  --data_path ./data.parquet --target y_label \
-  --exploration "mob3相关的逾期、还款特征" \
-  --max_rounds 8 --output_dir ./outputs/exp
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 场景三：在已有基线上探索新组
 
-```bash
-python scripts/run_experiment.py \
-  --data_path ./data.parquet --target y_label \
-  --baseline_features '["feat1","feat2","feat3"]' \
-  --exploration "添加mob6时间窗口特征组" \
-  --max_rounds 5 --output_dir ./outputs/exp
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -2358,7 +2125,7 @@ python scripts/run_experiment.py \
 3. **基线策略**：默认使用全量特征作为基线，也可指定特定特征集
 4. **显著性阈值**：默认2.0×，数据量小时可适当降低
 5. **可打断**：用户可随时停止，已有结果会保留
-6. **产物位置**：报告和模型保存到 `<output_dir>/`
+6. **产物位置**：以对话内容呈现，由用户自行保存
 
 
 ---
@@ -2422,41 +2189,19 @@ Try → Measure → Keep/Discard → Repeat
 
 ### 自主探索最优分群
 
-```bash
-python scripts/run_segment.py \
-  --data_path ./data.parquet --target y_label \
-  --mode auto --max_rounds 5 \
-  --output_dir ./outputs/seg
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 用户规则分群
 
-```bash
-python scripts/run_segment.py \
-  --data_path ./data.parquet --target y_label \
-  --mode manual \
-  --segment_rules '{"年轻": "age < 30", "中年": "age >= 30 and age < 50", "高龄": "age >= 50"}' \
-  --output_dir ./outputs/seg
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 聚类自动分群
 
-```bash
-python scripts/run_segment.py \
-  --data_path ./data.parquet --target y_label \
-  --mode manual --n_clusters 4 \
-  --output_dir ./outputs/seg
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 决策树分群
 
-```bash
-python scripts/run_segment.py \
-  --data_path ./data.parquet --target y_label \
-  --mode manual \
-  --tree_depth 3 --tree_features "age,income,credit_score" \
-  --output_dir ./outputs/seg
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 
@@ -2558,12 +2303,7 @@ python scripts/run_segment.py \
 
 ### 执行方式
 
-```bash
-python scripts/sub_trainer.py \
-  --data_path ./data.parquet --target y_label \
-  --time_col busi_dt --exclude_cols "cust_code,busi_dt" \
-  --auto --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 配合 `--config` 传入结构化 JSON：
 
@@ -2574,11 +2314,7 @@ python scripts/sub_trainer.py \
 }
 ```
 
-```bash
-python scripts/sub_trainer.py \
-  --data_path ./data.parquet --target y_label \
-  --auto --config ./config.json --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 输出
 
@@ -2610,11 +2346,7 @@ python scripts/sub_trainer.py \
 
 ### 执行方式
 
-```bash
-python scripts/stacker.py \
-  --data_path ./data.parquet --target y_label \
-  --cv_folds 5 --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 配合 `--config`：
 
@@ -2625,11 +2357,7 @@ python scripts/stacker.py \
 }
 ```
 
-```bash
-python scripts/stacker.py \
-  --data_path ./data.parquet --target y_label \
-  --config ./config.json --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 输出
 
@@ -2663,12 +2391,7 @@ python scripts/stacker.py \
 
 ### 执行方式
 
-```bash
-python scripts/comparator.py \
-  --data_path ./data.parquet --target y_label \
-  --stack_model_path ./outputs/deepmodel/stack_meta.json \
-  --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 配合 `--config`：
 
@@ -2679,12 +2402,7 @@ python scripts/comparator.py \
 }
 ```
 
-```bash
-python scripts/comparator.py \
-  --data_path ./data.parquet --target y_label \
-  --stack_model_path ./outputs/deepmodel/stack_meta.json \
-  --config ./config.json --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ### 输出
 
@@ -2698,23 +2416,7 @@ python scripts/comparator.py \
 
 ## 完整工作流示例
 
-```bash
-# 阶段1：训练分群子模型
-python scripts/sub_trainer.py \
-  --data_path ./data.parquet --target y_label \
-  --config ./config.json --auto --output_dir ./outputs/deepmodel
-
-# 阶段2：Stacking 融合
-python scripts/stacker.py \
-  --data_path ./data.parquet --target y_label \
-  --config ./config.json --output_dir ./outputs/deepmodel
-
-# 阶段3：集成对比报告
-python scripts/comparator.py \
-  --data_path ./data.parquet --target y_label \
-  --stack_model_path ./outputs/deepmodel/stack_meta.json \
-  --config ./config.json --output_dir ./outputs/deepmodel
-```
+> ⚠️ 原命令/代码示例已按平台安全审查要求移除：本技能不提供可执行代码，相关操作由用户在其自有授权环境中执行。
 
 ---
 

@@ -1,41 +1,54 @@
-## Description: <br>
-Presents adaptive codebase challenge questions with multiple-choice and trace exercises. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Presents adaptive codebase challenge questions with multiple-choice and trace exercises.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to test contributor knowledge of a codebase through adaptive challenge questions, answer evaluation, scoring, and progress tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Challenge workflows can read and update local .gauntlet state, including knowledge, pending challenge, progress, and pass-token files. <br>
-Mitigation: Review the generated challenge and any proposed state changes before relying on scoring or gate results. <br>
-Risk: Operational use may involve service credentials or retained incident notes, according to the ClawHub security guidance. <br>
-Mitigation: Use scoped tokens, review commands before destructive actions or outbound email, and avoid storing sensitive incident details unnecessarily. <br>
+## Use Case:
 
+Developers and contributors use this skill to answer adaptive questions about a codebase and receive scored feedback that can update Gauntlet progress state.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-challenge) <br>
-- [claude-night-market gauntlet](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown with challenge prompts, scoring feedback, and concise setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local .gauntlet knowledge, pending challenge, progress, and pass-token state files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The skill reads and updates local .gauntlet challenge state and developer progress.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in repositories where Gauntlet state tracking is intended, and review .gauntlet changes when state updates matter.
+
+Risk: If a pending challenge exists, the skill may treat the latest user message as the challenge answer.
+
+Mitigation: Confirm or clear pending challenge state before invoking the skill when the latest message should not be scored.
+
+## Reference(s):
+
+- [Gauntlet homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet)
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-challenge)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, guidance]
+
+**Output Format:** [Markdown and local Gauntlet state updates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read and update local .gauntlet challenge state and developer progress.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,33 @@
+{
+  "composition": {"width": 1280, "height": 720, "fps": 30},
+  "semantic_contract": {
+    "topic": "Order coffee in natural English",
+    "setting": "café",
+    "scene_visual_brief": "A café counter, coffee equipment, and the customer-barista interaction.",
+    "required_scene_tags": ["café", "coffee", "counter"],
+    "prohibited_terms": []
+  },
+  "phrase_cards": {
+    "n1": ["COFFEE"],
+    "n2": ["I'D LIKE"],
+    "n6": ["THAT'S ALL"],
+    "n7": ["I'D LIKE", "TO GO", "THAT'S ALL"]
+  },
+  "narration": [
+    {"id":"n1","scene":"intro","speaker":"narrator","text":"At a café, don’t just say: coffee.","caption":"Don’t just say: coffee.","output":"audio/01-narrator-intro.wav","from":0,"durationInFrames":65},
+    {"id":"n2","scene":"intro","speaker":"narrator","text":"A more natural start is: I’d like…","caption":"A natural start: I’d like…","output":"audio/02-narrator-upgrade.wav","from":110,"durationInFrames":74},
+    {"id":"n3","scene":"order","speaker":"customer","text":"Hi! I’d like a latte, please.","caption":"I’d like a latte, please.","output":"audio/03-customer-order.wav","from":15,"durationInFrames":84},
+    {"id":"n4","scene":"choice","speaker":"barista","text":"Sure. For here or to go?","caption":"For here or to go?","output":"audio/04-barista-question.wav","from":0,"durationInFrames":105},
+    {"id":"n5","scene":"choice","speaker":"customer","text":"To go, please.","caption":"To go, please.","output":"audio/05-customer-answer.wav","from":115,"durationInFrames":48},
+    {"id":"n6","scene":"recap","speaker":"narrator","text":"One more useful phrase: That’s all, thanks.","caption":"That’s all, thanks.","output":"audio/06-narrator-close.wav","from":0,"durationInFrames":103},
+    {"id":"n7","scene":"recap","speaker":"narrator","text":"Try the whole order: I’d like a latte. To go, please. That’s all, thanks.","caption":"Try the whole order.","output":"audio/07-narrator-repeat.wav","from":125,"durationInFrames":170},
+    {"id":"n8","scene":"recap","speaker":"narrator","text":"Small phrase. Big upgrade.","caption":"Small phrase. Big upgrade.","output":"audio/08-narrator-tag.wav","from":330,"durationInFrames":67}
+  ],
+  "scenes": [
+    {"id":"cover","semantic_tags":["café", "coffee"],"durationInFrames":90,"background":"assets/plates/cafe-empty.png","caption":{"title":"ORDER COFFEE\nIN NATURAL ENGLISH","subtitle":"Café English · Speak Naturally"},"layers":[{"src":"assets/layers/customer-1.png","speaker":"customer","role":"primary","x":770,"y":110,"width":390,"delay":10,"z":5,"from":"right"}]},
+    {"id":"intro","semantic_tags":["café", "coffee", "counter"],"durationInFrames":210,"background":"assets/plates/cafe-empty.png","caption":{"title":"Coffee, but natural.","subtitle":""},"layers":[{"src":"assets/layers/customer-1.png","speaker":"customer","role":"primary","x":90,"y":110,"width":420,"delay":12,"z":5,"from":"left"}]},
+    {"id":"order","semantic_tags":["café", "coffee", "counter"],"durationInFrames":210,"background":"assets/plates/cafe-empty.png","caption":{"title":"","subtitle":""},"layers":[{"src":"assets/layers/customer-1.png","speaker":"customer","role":"primary","x":80,"y":125,"width":400,"delay":8,"z":5,"from":"left"},{"src":"assets/layers/barista-1.png","speaker":"barista","role":"secondary","x":775,"y":100,"width":380,"delay":35,"z":4,"from":"right"}]},
+    {"id":"choice","semantic_tags":["café", "coffee", "counter"],"durationInFrames":180,"background":"assets/plates/cafe-empty.png","caption":{"title":"","subtitle":""},"layers":[{"src":"assets/layers/barista-2.png","speaker":"barista","role":"primary","x":755,"y":95,"width":400,"delay":8,"z":5,"from":"right"},{"src":"assets/layers/customer-2.png","speaker":"customer","role":"secondary","x":105,"y":125,"width":400,"delay":34,"z":4,"from":"left"}]},
+    {"id":"recap","semantic_tags":["café", "coffee"],"durationInFrames":420,"background":"assets/plates/cafe-empty.png","caption":{"title":"","subtitle":""},"layers":[{"src":"assets/layers/customer-2.png","speaker":"customer","role":"primary","x":140,"y":110,"width":430,"delay":10,"z":5,"from":"left"},{"src":"assets/layers/barista-2.png","speaker":"barista","role":"secondary","x":755,"y":110,"width":380,"delay":34,"z":4,"from":"right"}]}
+  ]
+}

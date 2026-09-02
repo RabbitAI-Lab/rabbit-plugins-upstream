@@ -1,44 +1,55 @@
-## Description: <br>
-Prepare Dataify builder requests for the x.com scraper family rooted at twitter_profile_by-profileurl, including tool selection, saved parameter lookup, and generation of a scraperapi.dataify.com/builder curl request that uses DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collects an X/Twitter profile from a known profile URL and is not intended for posts, keyword search, or arbitrary X URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to prepare authenticated Dataify builder curl requests for x.com scraping tools after choosing one supported tool and supplying any required spider parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DATAIFY_API_TOKEN can grant authenticated access to Dataify's scraper builder if exposed. <br>
-Mitigation: Treat the token as a secret, use a credential manager or session-scoped environment variable on shared machines, and avoid pasting token values into shared logs or prompts. <br>
-Risk: The generated curl command authenticates to scraperapi.dataify.com and submits the selected spider parameters. <br>
-Mitigation: Review the generated command, endpoint, selected tool, and spider_parameters before running it. <br>
+## Use Case:
 
+External users and developers use this skill to collect X/Twitter profile data through Dataify from a known profile URL, wait for the asynchronous task, and return the collected result. Reviewers should note that the artifact also exposes broader username and post collection options.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-twitter-profile-by-profileurl) <br>
-- [Dataify publisher profile](https://clawhub.ai/user/dataify-server) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
-- [Tool parameter catalog](references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash or PowerShell commands and generated curl requests] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated requests include spider_name, spider_id, spider_parameters, spider_errors, file_name, and an Authorization header that references DATAIFY_API_TOKEN.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence release.version) <br>
+Risk: The release advertises a narrow profile-URL workflow while also enabling username and post collection through Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Constrain normal use to the profile-URL tool unless the user explicitly requests a broader collection mode and accepts the scope and cost implications.
+
+Risk: The skill requires a Dataify API token and submits scraping jobs to an external paid API.
+
+Mitigation: Use session-scoped token setup where practical, never display the token, and confirm high-volume or materially costly collection scopes before execution.
+
+## Reference(s):
+
+- [Saved Dataify tool parameters](references/tool-params.json)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-twitter-profile-by-profileurl)
+- [Dataify Builder API endpoint](https://scraperapi.dataify.com/builder)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands and JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command when asynchronous monitoring times out or is interrupted.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -102,7 +102,32 @@ PENDING_TTL = 600  # 10 minutes; matches the MC dispatch window
 # 0.3.7 — local pulse marker; doctor.py reads this for offline-detection.
 PULSE_FILE = Path.home() / '.space-duck' / 'listener-pulse.json'
 PULSE_INTERVAL = 90      # platform self-pulse every 90s
-SKILL_VERSION = '0.4.18'
+# 0.8.10 [VER-0810] — was a hardcoded literal that stopped being bumped at
+# 0.4.18, so every pulse/handshake reported a version ~20 releases stale and
+# the platform's fleet view was fiction. Now derived from the skill's own
+# _meta.json, resolved relative to __file__.
+#
+# Read LAZILY at each report, never cached at startup: update.sh explicitly
+# does NOT restart a running listener ("Never auto-restarts a service the user
+# didn't already have running", update.sh:24), so a startup cache would keep
+# reporting the OLD version until someone manually restarted — reintroducing
+# the exact staleness this fixes.
+# 0.8.11 [VER-0811] — was '0.8.10', i.e. the fallback impersonated a real
+# release and had to be hand-bumped every ship (the exact failure mode this
+# whole change set exists to kill). '0.0.0' can never outrank a real version
+# in _cmp_semver, and the '-unknown' suffix still marks it as a bogus read.
+# 0.8.12 [NUDGE-0812] — moved to _version_nudge.py alongside the nudge that
+# consumes it; re-exported here so existing callers keep working unchanged.
+from _version_nudge import (          # noqa: E402
+    SKILL_VERSION_FALLBACK, skill_version,
+    VERSION_CHECK_INTERVAL, VERSION_STATE_FILE,
+    _load_version_state, _save_version_state, _cmp_semver,
+    _version_check_once, record_running_version,
+)
+
+RUNNING_SKILL_VERSION = skill_version()
+
+
 # 0.3.9 — Auto-approved-action memory. When the owner taps "Approve &
 # remember" on action_kind X, X is added here with expires_at = now+24h.
 # Future X dispatches auto-execute (with audit) until the entry expires.
@@ -910,7 +935,8 @@ def _send_shutdown_pulse(beak_key, sd_id, api_base):
     try:
         url = f'{api_base.rstrip("/")}/beak/me/duck/{sd_id}/listener-status'
         payload = {
-            'skill_version': SKILL_VERSION,
+            'skill_version': skill_version(),
+            'running_skill_version': RUNNING_SKILL_VERSION,   # 0.8.11
             'owner_approval': True,
             'pid': os.getpid(),
             'started_at': int(time.time()),
@@ -927,20 +953,35 @@ def _send_shutdown_pulse(beak_key, sd_id, api_base):
         pass
 
 
+# 0.8.12 [NUDGE-0812] — the daily update check now lives in _version_nudge.py
+# so peck-only boxes (no pulse thread) can call the identical implementation.
+# One copy, two callers: a second copy of the rate-limiter is exactly the
+# double-nudge bug 0.8.11 deleted.
+
 def _pulse_loop(beak_key, sd_id, api_base, verbose=False):
     """0.3.7 — self-pulse so the platform knows the listener is alive.
     Mirrors workspace_bridge.py's `status --report-to-platform` pattern.
     Lambda's /beak/me/duck/<sd>/listener-status stamps spaceducks row
     with listener_state + listener_state_at; MC reads it to render
     'listener online' vs 'listener offline' banner."""
-    payload = {
-        'skill_version': SKILL_VERSION,
-        'owner_approval': True,
-        'pid': os.getpid(),
-        'started_at': int(time.time()),
-    }
+    # 0.8.10 — payload rebuilt INSIDE the loop. It used to be constructed once
+    # before `while True`, which would have re-cached skill_version for the
+    # life of the thread and defeated the lazy read above.
+    _started = int(time.time())
     url = f'{api_base.rstrip("/")}/beak/me/duck/{sd_id}/listener-status'
     while True:
+      # 0.8.11 [VER-0811] — the ENTIRE body is guarded. In 0.8.10 the version
+      # check and the payload build sat outside the try, so any unexpected
+      # exception there killed the pulse thread for the life of the process
+      # and the duck silently went dark in Mission Control.
+      try:
+        payload = {
+            'skill_version': skill_version(),          # disk truth
+            'running_skill_version': RUNNING_SKILL_VERSION,   # 0.8.11 — in-memory truth
+            'owner_approval': True,
+            'pid': os.getpid(),
+            'started_at': _started,
+        }
         try:
             req = urllib.request.Request(
                 url,
@@ -964,7 +1005,14 @@ def _pulse_loop(beak_key, sd_id, api_base, verbose=False):
         except Exception as e:
             if verbose:
                 print(f'[PULSE-FAIL] {e}', file=sys.stderr)
-        time.sleep(PULSE_INTERVAL)
+        # 0.8.11 — version check moved AFTER the first pulse: it used to run
+        # first, delaying the initial listener-status POST by up to 16s and
+        # making doctor report "no pulse" on a healthy fresh start.
+        _version_check_once(beak_key, sd_id, api_base, verbose)
+      except Exception as e:
+        if verbose:
+            print(f'[PULSE-LOOP-GUARD] {e}', file=sys.stderr)
+      time.sleep(PULSE_INTERVAL)
 
 
 class _Handler(BaseHTTPRequestHandler):
@@ -1202,6 +1250,9 @@ class _Handler(BaseHTTPRequestHandler):
 
 
 def main(argv=None):
+    # 0.8.13 [RUN-0813] — stamp the executing version at startup so update.sh
+    # can verify running == installed after a bounce.
+    record_running_version('telegram_listener', RUNNING_SKILL_VERSION)
     p = argparse.ArgumentParser(
         description='Listen for HMAC-signed Telegram forwards from the Space Duck platform.')
     p.add_argument('--host', default='0.0.0.0')
@@ -1249,6 +1300,9 @@ def main(argv=None):
               f'(or pass --unsafe-skip-hmac for local debug).', file=sys.stderr)
         return 1
 
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base({'api_base': DEFAULT_API_BASE})
+
     _Handler.config = {
         'beak_key': beak_key,
         'on_message': args.on_message,
@@ -1275,6 +1329,26 @@ def main(argv=None):
         elif state != 'VERIFIED':
             print(f'[PREFLIGHT-WARN] bind_state={state} — {remediation}',
                   file=sys.stderr)
+
+    # 0.8.11 [VER-0811] — --no-pulse is documented as "disable the 90s
+    # self-pulse", but in 0.8.10 it also silently disabled update checks,
+    # because the check lived inside the pulse thread. Debug flags must not
+    # quietly turn off an unrelated safety feature: run a check-only thread
+    # on that path instead.
+    def _version_check_loop(bk, sd, base, vb):
+        while True:
+            try:
+                _version_check_once(bk, sd, base, vb)
+            except Exception:
+                pass
+            time.sleep(3600)
+
+    if beak_key and sd_id and args.no_pulse:
+        threading.Thread(
+            target=_version_check_loop,
+            args=(beak_key, sd_id, DEFAULT_API_BASE, args.verbose),
+            daemon=True).start()
+        print('[VERCHECK] thread started (--no-pulse: update checks still on)')
 
     # 0.3.7 — start the self-pulse thread when we have credentials.
     if beak_key and sd_id and not args.no_pulse:

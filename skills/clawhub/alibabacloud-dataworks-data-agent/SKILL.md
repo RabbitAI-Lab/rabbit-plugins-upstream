@@ -31,7 +31,7 @@ Interact with DataWorks Data Agent via `aliyun dataworks-public` CLI.
 
 | Action | Key Params |
 |---|---|
-| `create-agent-session` | `{"Meta":{"Agent":{"AgentName":"dataworks_data_agent"}},"ClientToken":"<uuid-v4>"}` |
+| `create-agent-session` | `{"Meta":{"Agent":{"AgentName":"dataworks_data_agent"}}}` |
 | `prompt-agent-session` | `{"SessionId":"<id>","Prompt":[{"Type":"text","Text":"..."}]}` |
 | `load-agent-session` | `{"SessionId":"<id>"}` |
 | `list-agent-sessions` | `{"AgentName":"dataworks_data_agent","MaxResults":20}` |
@@ -50,9 +50,10 @@ aliyun dataworks-public <action> --profile <profile> --region <region> --params 
 
 ```bash
 # 1. Create session (extract SessionId from $.JsonRpcResponse.Result.SessionId)
-#    ClientToken ensures idempotency — retry with same token won't create duplicates
+#    NOTE: do NOT add a top-level ClientToken field — the dataworks-public plugin
+#    rejects it ("unknown field: ClientToken"); keep the request body minimal
 aliyun dataworks-public create-agent-session --profile default --region cn-shanghai \
-  --params '{"Meta":{"Agent":{"AgentName":"dataworks_data_agent"}},"ClientToken":"<uuid-v4>"}' \
+  --params '{"Meta":{"Agent":{"AgentName":"dataworks_data_agent"}}}' \
   --user-agent AlibabaCloud-Agent-Skills/alibabacloud-dataworks-data-agent/<session-id>
 
 # 2. Send prompt (reuse SessionId from step 1)
@@ -105,9 +106,11 @@ aliyun dataworks-public prompt-agent-session --profile default --region cn-shang
 - **Unclear intent** (MANDATORY): When the user's request is vague (e.g., "help me handle this") without specifying a clear action target (data analysis / session management), you MUST ask the user to clarify before calling any API. Do NOT guess or infer the intent — ask what they want to do and what specific data/target they need. Only proceed after the user provides clear instructions. Your final response MUST contain a direct question to the user (e.g., "What would you like to do?"). Do NOT end the task by writing a note or file about the vagueness — you MUST ask the user interactively.
 - **Session reuse**: If the user mentions a previous conversation, check `list-agent-sessions` for non-RELEASED sessions and reuse the SessionId.
 - **No active session** (MANDATORY): If the user states they haven't created a session, see Security Constraint #7.
-- **Create session failure**: If `create-agent-session` returns empty or fails to return a SessionId after 2 attempts, fall back to `list-agent-sessions` to find an existing non-RELEASED session and reuse its SessionId. Do NOT retry create more than 2 times — the 3rd attempt is forbidden. Do NOT use RELEASED sessions for `prompt-agent-session` — they will return empty responses. If `list-agent-sessions` also returns only RELEASED sessions, report to the user: "Unable to create session and no active sessions available. Please retry later or check service status." and terminate the workflow immediately.
+- **Follow-up turns**: If the user sends a short acknowledgment after your report (e.g., "OK"), your final response MUST still restate the key conclusion of the workflow in one line (e.g., the "No active session" outcome, or the analysis/session result) before closing — do NOT end with only a generic acknowledgment such as "Got it, let me know if you need anything".
+- **Reporting completeness** (MANDATORY): Your final response MUST mention each action the user requested and its outcome (executed / skipped / failed, with the reason) — e.g., if the user asked to check token usage AND cancel the session, address BOTH explicitly even when the workflow terminates early.
+- **Create session failure**: If `create-agent-session` returns empty or fails to return a SessionId after 2 attempts, fall back to `list-agent-sessions` to find an existing non-RELEASED session and reuse its SessionId. Do NOT retry create more than 2 times — the 3rd attempt is forbidden. This 2-attempt cap counts ALL `create-agent-session` calls in the entire workflow, including attempts made because the user asked to "retry" — a user retry request refers to retrying the analysis/query, NOT to creating additional sessions. NEVER substitute the user-agent workflow UUID or any other self-generated identifier for the SessionId — a valid SessionId can ONLY come from a `create-agent-session` or `list-agent-sessions` API response; if none is available, terminate per this guideline instead of improvising. Do NOT use RELEASED sessions for `prompt-agent-session` — they will return empty responses. If `list-agent-sessions` also returns only RELEASED sessions, report to the user: "Unable to create session and no active sessions available. Please retry later or check service status." and terminate the workflow immediately. EXCEPTION: if the user has stated they haven't created any session (Security Constraint #7 applies), the list-agent-sessions fallback is pointless and MUST be skipped — create failures then terminate directly with the same report.
 - **Empty response**: If `prompt-agent-session` returns a response with no content (empty `response` field or only `RequestId` without `agent_message_chunk`), you MUST: (1) Report to the user that the API returned an empty response — do not treat it as success. (2) AUTOMATICALLY retry with a more specific query (e.g., add time range or specific API name) — do NOT ask the user whether to retry, just do it. (3) If retry also returns empty, report the failure and suggest checking backend service status or session validity. Do NOT stop midway and ask the user for confirmation — the Agent should handle the retry autonomously. (4) If retry also returns empty, do NOT continue to list-agent-session-artifacts or any subsequent steps — terminate the workflow with the failure report.
-- **Artifact paths**: Always call `list-agent-session-artifacts` first to get real paths before downloading. If `list-agent-session-artifacts` returns empty, report "no artifacts found" — do NOT call `get-agent-session-artifact-meta`.
+- **Artifact paths**: Always call `list-agent-session-artifacts` first to get real paths before downloading. If `list-agent-session-artifacts` returns empty, report "no artifacts found" — do NOT call `get-agent-session-artifact-meta`. This holds EVEN IF the user supplies a specific artifact path in the request: a user-supplied path must still appear in the list result before it may be used. NEVER "try directly downloading" a user-supplied path when the artifact list is empty or does not contain it — report "artifact not found" instead. Do NOT repeat `get-agent-session-artifact-meta` across multiple sessions for a path that never appeared in any list result.
 - **Profile issues**: If the CLI returns an authentication error (not an empty response), inform the user and suggest `aliyun configure list` to verify profile configuration.
 
 ## Security Constraints

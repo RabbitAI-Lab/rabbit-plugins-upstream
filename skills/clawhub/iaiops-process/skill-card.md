@@ -1,40 +1,52 @@
-## Description: <br>
-Iaiops Process helps agents inspect process-industry plant telemetry across HART-IP, OPC-UA, Modbus, and optional Sparkplug/MQTT contexts for instrumentation health, downtime root cause, data quality, OEE, alarm, asset, and loop-health analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops-process helps agents perform read-first process-industry diagnostics across HART-IP instrumentation, OPC-UA, Modbus, and optional MQTT/Sparkplug B workflows for chemical, pharma, food and beverage, and oil and gas plants.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, reliability engineers, and process-operations teams use this skill to inspect industrial process data, triage dataflow and downtime issues, assess instrument and control-loop health, and prepare MOC-gated actions for write-capable publishing workflows.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Optional Sparkplug or MQTT publishing workflows can affect operational data handling if used in production environments.
+
+Mitigation: Verify the underlying MCP server and integration configuration before production use, keep publishing in dry-run or approval-gated mode, and require site MOC approval before any write-capable workflow.
+
+Risk: Industrial diagnostics can be misleading when source telemetry is stale, flatlined, low quality, or unavailable.
+
+Mitigation: Use read-only diagnostics first, cite measured values and baseline samples, and confirm data quality before using results for operational decisions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, reliability engineers, and process-plant operators use this skill to guide read-first diagnostics and analysis for plant telemetry, instrumentation health, downtime root cause, OEE, alarms, and data quality across HART-IP, OPC-UA, and Modbus environments. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Industrial-control use may involve unclear write, export, or stream-publish authority despite read-first guidance. <br>
-Mitigation: Require documented read-only enforcement, operator approval, dry runs, and management-of-change controls before use in production or safety-relevant systems. <br>
-Risk: Historian, export, and stream-publish workflows may move sensitive plant telemetry outside expected boundaries. <br>
-Mitigation: Review destinations, credentials, and data scope before enabling export or publish workflows, and restrict access to approved operators and systems. <br>
+**Output Format:** [Markdown with diagnostic summaries, cited readings, and inline shell commands or configuration values when relevant]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/iaiops-process) <br>
+**Other Properties Related to Output:** [May include baseline comparisons, process-health findings, readiness gaps, and dry-run or approval steps for write-capable publishing workflows.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with tool names, environment variables, and inline shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first guidance for industrial telemetry; may include approval-gated write precautions when Sparkplug/MQTT publishing is in scope.] <br>
+0.26.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

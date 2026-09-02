@@ -1,46 +1,58 @@
-## Description: <br>
-Triggered when the user wants to install or deploy KaiwuDB (kwdb, kaiwudb). Helps users complete script-based deployment of KaiwuDB clusters, including configuration file modification, installation command execution, cluster initialization, and status checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through script-based KaiwuDB deployment, including configuration updates, installation command execution, cluster initialization, and status checks.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers and operations engineers use this skill to install or deploy KaiwuDB on Linux systems, including single-node and cluster deployments. It guides configuration confirmation, installation command execution, initialization, status checks, and failure handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: KaiwuDB deployment may require privileged access such as root, sudo, docker-group membership, or passwordless SSH. <br>
-Mitigation: Install only on intended deployment systems and use a controlled deployment account with the narrowest practical privileges. <br>
-Risk: A user-provided KaiwuDB installation package could be untrusted or malformed. <br>
-Mitigation: Use a trusted KaiwuDB package and verify its checksum or source when available before running deployment commands. <br>
-Risk: Incorrect ports, IP addresses, data directories, or security-mode settings can break deployment or expose services unexpectedly. <br>
-Mitigation: Confirm every deployment parameter with the user before execution, including displayed defaults. <br>
-Risk: Repeated automatic retries after a failed installation can compound configuration or environment problems. <br>
-Mitigation: Read the installation logs, report the error and likely causes, exit the installation flow, and wait for explicit user instructions before retrying. <br>
+## Use Case:
 
+Developers and engineers use this skill to install or deploy KaiwuDB on Linux hosts or clusters while confirming package paths, deployment mode, configuration values, installation commands, and post-installation status checks.
 
-## Reference(s): <br>
-- [KaiwuDB Script Deployment Guide](references/installation_guide.md) <br>
-- [KaiwuDB Common Issues and Solutions](references/troubleshooting.md) <br>
-- [KWDB Install Deploy on ClawHub](https://clawhub.ai/kwdb/skills/kwdb-install-deploy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the user to confirm deployment parameters before execution and reports installation failures from logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: KaiwuDB deployment can run installation scripts with elevated privileges on the target host or cluster.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on intended systems, review each requested setting before confirming, and trust the KaiwuDB package before running deploy.sh.
+
+Risk: Incorrect deployment settings can produce an invalid service or cluster configuration.
+
+Mitigation: Confirm package paths, ports, IP addresses, data directories, security mode, and generated configuration values before installation.
+
+Risk: Automatic retries after installation failure could repeat a failed privileged operation without new information.
+
+Mitigation: Read the installation logs, report the failure details, explain likely causes, and wait for explicit user instructions before retrying.
+
+## Reference(s):
+
+- [KaiwuDB Script Deployment Guide](references/installation_guide.md)
+- [KaiwuDB Common Issues and Solutions](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user confirmation before applying installation commands or configuration changes.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

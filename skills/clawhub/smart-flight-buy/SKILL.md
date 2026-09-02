@@ -31,7 +31,7 @@ tools:
         type: string
         description: 到达城市
         required: true
-      - name: start_date
+      - name: startDate
         type: string
         description: 起始日期 YYYY-MM-DD
         required: true

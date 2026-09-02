@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dlazy-imageseg",
   "slug": "dlazy-imageseg",
   "ownerHandle": null,
-  "version": "1.3.5",
-  "updatedAt": 1784601388508,
-  "contentHash": "cbbb678a291179d106af8365c7bddeb32ebdb963268f40026ef4c8116ecabf80",
-  "fetchedAt": "2026-07-26T18:09:36.613Z"
+  "version": "1.3.11",
+  "updatedAt": 1788311641047,
+  "contentHash": "ff3fc762fb909e2ef656541ce92a84ecfbd866a5542446392fe9b52860f0c605",
+  "fetchedAt": "2026-09-02T12:13:18.950Z"
 }

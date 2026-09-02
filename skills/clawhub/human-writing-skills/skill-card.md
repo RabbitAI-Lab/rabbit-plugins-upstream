@@ -1,43 +1,68 @@
-## Description: <br>
-Write, rewrite, or audit natural, genre-aware prose with long-form continuity, explicit reference-style matching, physical and relationship consistency, deterministic AI-pattern linting, and protected fact verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advanced multilingual AI humanizer for natural rewriting, fiction editing, long-form audit and continuity, verified chunked agent review, translationese review, and character consistency.
 
-## Publisher: <br>
-[whh110112](https://clawhub.ai/user/whh110112) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whh110112](https://clawhub.ai/user/whh110112)
 
-## Use Case: <br>
-External users and developers use this skill to draft, continue, revise, lint, audit, and verify prose across fiction, webnovels, essays, news, self-media, and academic writing while preserving supplied facts and continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Referenced supporting files and commands are not included in the submitted artifact, so parts of the workflow may not work unless those resources are supplied elsewhere. <br>
-Mitigation: Confirm required README, docs, module files, and command implementations are available before relying on the full workflow. <br>
-Risk: Drafts, sources, and continuity ledgers may contain sensitive or unpublished writing material processed by the agent. <br>
-Mitigation: Provide only material appropriate for the agent environment and review outputs before sharing or publication. <br>
-Risk: Writing, audit, or verification guidance can still introduce incorrect edits or misleading conclusions. <br>
-Mitigation: Use deterministic linting and source verification where applicable, then perform human review for factual and editorial decisions. <br>
+## Use Case:
 
+External users, writers, editors, and developers use this skill to humanize AI-shaped drafts, rewrite while preserving meaning, edit fiction and serious prose, and audit long-form continuity, voice, sources, numbers, and translation fidelity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills) <br>
-- [Server-resolved GitHub provenance](https://github.com/whh110112/human-writing-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce drafts, revisions, audits, lint findings, verification notes, and workflow guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: The local writing and editing tools can read drafts and reference files and write generated audit packages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended writing projects, keep MCP roots scoped to those projects, and review generated files before relying on them.
+
+Risk: Generated prompts and audit packages may contain sensitive draft text, source excerpts, or protected content supplied by the user.
+
+Mitigation: Review prompts before sending them to model or API sessions and use the protected-content verification workflow when preserving source meaning matters.
+
+Risk: The optional HTTP MCP endpoint can expose project coordination capabilities if made public.
+
+Mitigation: Do not expose the endpoint publicly without HTTPS and a strong bearer token.
+
+Risk: The editorial modules provide writing guidance and audits, not proof of authorship or guaranteed detector outcomes.
+
+Mitigation: Frame results as editing evidence and quality guidance rather than authorship attribution or detector evasion.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/whh110112/skills/human-writing-skills)
+- [README](README.md)
+- [Agent Orchestration And MCP](docs/agent-orchestration.md)
+- [Multi-Stage Audit Pipeline](docs/audit-pipeline.md)
+- [Chunked Long-Form Audit, Style Unification, and Character Consistency](docs/long-form-consistency.md)
+- [Fidelity, Statistics, and Conservative Fixes](docs/editing-tools.md)
+- [Protected Content Verification](docs/protected-content.md)
+- [Reference Style Alignment](docs/reference-style.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prompts, audit reports, CLI output, and generated project files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write staged audit packages, coverage receipts, conservative fix previews, and local MCP coordination artifacts.]
+
+## Skill Version(s):
+
+0.14.1 (source: release metadata and pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

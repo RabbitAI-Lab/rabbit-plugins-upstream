@@ -49,3 +49,15 @@ CC BY-NC 4.0 with McPherson AI commercial-use clarification as described in the 
 McPherson AI  
 San Diego, CA  
 Built from real QSR operating experience.
+
+---
+
+## Observa private beta
+
+The Observa private beta is now open for selected n8n and OpenClaw operators and builders. Observa starts in SHADOW mode, mapping agent capabilities, capturing reviewable governance evidence, and independently verifying supported workflow outcomes without taking production control.
+
+Running real n8n or OpenClaw workflows?
+
+[Request private beta access](https://mcphersonai.com/private-beta?utm_source=github&utm_medium=skill-readme&utm_campaign=observa-private-beta&utm_content=qsr-shift-reflection)
+
+*This publisher notice does not change this skill’s behavior, data handling, or license.*

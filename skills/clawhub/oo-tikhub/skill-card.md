@@ -1,42 +1,54 @@
-## Description: <br>
-TikHub connector skill that lets agents inspect schemas and run TikHub actions through the OOMOL oo CLI for TikTok, Douyin, Xiaohongshu, and TikHub account queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TikHub (tikhub.io). Use this skill for ANY TikHub request: searching, reading data, and invoking supported TikHub endpoints through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve public TikTok, Douyin, and Xiaohongshu data and to check TikHub account, usage, endpoint, and pricing information through a connected OOMOL TikHub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some actions may expose TikHub account or API-key-related information. <br>
-Mitigation: Run account and usage actions only when needed, and review returned data before sharing or storing it. <br>
-Risk: Actions marked write may change TikHub state, and the exact side effect may depend on the live connector contract. <br>
-Mitigation: Fetch the live action schema, confirm the exact payload and expected effect with the user, and avoid write actions without explicit approval. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect TikHub connector schemas and retrieve TikHub endpoint, usage, pricing, account, or functional API data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [TikHub homepage](https://tikhub.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub TikHub skill page](https://clawhub.ai/oomol/skills/oo-tikhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL oo CLI; action schemas should be fetched before constructing JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Broad TikHub endpoint invocation can affect account data, API-key-related information, or paid usage when treated as routine read-only activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before allowing invoke_endpoint, require the agent to show the endpoint, live schema, expected returned data, and likely credit or billing impact.
+
+Risk: The skill can only operate through the user connected OOMOL/TikHub account.
+
+Mitigation: Install or enable it only when agents are intended to use that connected account, and reconnect or adjust scopes only after an auth or scope error.
+
+## Reference(s):
+
+- [TikHub homepage](https://tikhub.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline bash commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, a connected TikHub account, and applicable TikHub path scopes for account and usage actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

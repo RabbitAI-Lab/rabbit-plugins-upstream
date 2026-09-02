@@ -1,42 +1,55 @@
-## Description: <br>
-Turns a user's Google Jobs search request into a confirmed Dataify Scraper API form POST and returns the raw response body. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Jobs for job and recruitment listings.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to search Google Jobs through the Dataify Scraper API after reviewing a pre-call parameter table and confirming the request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed job search parameters and the Dataify API token are sent to Dataify. <br>
-Mitigation: Use the required preview table to confirm only intended parameters, and avoid entering unrelated sensitive data in job search fields. <br>
-Risk: A mistaken parameter value could cause an unintended Google Jobs query or bypass cached results. <br>
-Mitigation: Review every field in the pre-call confirmation table and regenerate it after any requested change before approving the API call. <br>
+## Use Case:
 
+External users and developers use this skill to convert Google Jobs search requests into Dataify Scraper API calls and return job listing results. It supports structured parameters, natural-language search requests, preview tables, and raw JSON or HTML output when requested.
 
-## Reference(s): <br>
-- [Dataify Google Jobs API reference](references/google_jobs_api.md) <br>
-- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request) <br>
-- [ClawHub dataify-google-jobs release page](https://clawhub.ai/dataify-server/skills/dataify-google-jobs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API Calls, Text] <br>
-**Output Format:** [Markdown confirmation table followed by the raw Dataify API response body, typically JSON or HTML depending on the json parameter.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before the API call and uses a Dataify API token for authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: ClawHub release metadata) <br>
+Risk: Live searches send job-search parameters and a Dataify API token to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure DATAIFY_API_TOKEN in the environment and avoid sharing tokens in chat or command arguments.
+
+Risk: Searches may consume Dataify credits, especially when requesting multiple pages or bypassing cache.
+
+Mitigation: Review consequential search scope, pagination, and cache-bypass settings before execution.
+
+## Reference(s):
+
+- [Dataify Google Jobs API](artifact/references/google_jobs_api.md)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-jobs)
+- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Configuration guidance]
+
+**Output Format:** [Markdown, parameter tables, raw JSON, raw HTML, or shell command examples depending on the request.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API token for live API calls; previews and dry runs can show normalized parameters without calling the API.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

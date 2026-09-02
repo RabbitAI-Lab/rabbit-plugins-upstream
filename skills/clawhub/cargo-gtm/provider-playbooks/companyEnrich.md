@@ -28,7 +28,7 @@ Budget company enrichment. `enrichByDomain` (0.25) is the **cheapest company-by-
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"enrichByDomain","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"enrichByDomain"}' \
   --records '[{"domain":"acme.com"},{"domain":"globex.com"}]' \
   --wait-until-finished
 ```
@@ -39,8 +39,8 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"findSimilarCompanies","config":{}}' \
-  --record '{"domain":"acme.com","filters":{"country":"United States","employeeCountMin":50,"employeeCountMax":500,"industries":["Software"]},"limit":25}' \
+  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"findSimilarCompanies"}' \
+  --data '{"domain":"acme.com","filters":{"country":"United States","employeeCountMin":50,"employeeCountMax":500,"industries":["Software"]},"limit":25}' \
   --wait-until-finished
 ```
 
@@ -63,6 +63,12 @@ cargo-ai orchestration action execute \
 - `enrichByDomain` — **ENRICH (company), budget rung**: cheapest of the chain (`companyEnrich` 0.25 → `linkedin` 0.25–0.5 → `cargo` 0.5 ✅ → `waterfall` 1 ✅ → `peopleDataLabs` 3).
 - `findSimilarCompanies` — **SOURCE-adjacent**: lookalike expansion feeding TAM builds, upstream of ENRICH.
 
+## Recurring use
+
+- **Scheduled lookalikes:** `findSimilarCompanies` can re-run weekly to keep a TAM growing (persona/company searches → weekly; [`../recipes/save-as-play.md`](../recipes/save-as-play.md)) — but results overlap heavily run to run and bill 1 credit **per company returned**, so keep `limit` tight and dedup against the Companies model (`cargo.matchBusiness`) before any downstream enrichment.
+- **In-play gate:** `enrichByDomain` runs only where the row's firmographic target columns are still empty — and never beside the cargo default (see anti-patterns).
+- **Stable data:** firmographics don't decay; a scheduled re-enrich of an existing TAM just re-bills unchanged data at 0.25/row.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

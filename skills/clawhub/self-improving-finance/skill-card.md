@@ -1,46 +1,59 @@
-## Description: <br>
-Captures finance learnings, operational issues, feature requests, and reminder hooks for reconciliation breaks, forecast variances, control weaknesses, regulatory gaps, valuation errors, and cash flow anomalies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures reconciliation errors, forecast variances, control weaknesses, regulatory gaps, valuation errors, and cash flow anomalies to support continuous finance operations improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Finance operators, accountants, auditors, and agent developers use this skill to record anonymized finance issues and recurring process learnings, then promote proven patterns into checklists, controls, procedures, calendars, forecast models, or reusable skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional hooks can run persistently across prompts and sessions, increasing the chance of unwanted reminders or broad finance-log capture. <br>
-Mitigation: Use project-level hook configuration, add finance-specific matchers, avoid global user-level hooks, and enable PostToolUse only when detection is needed. <br>
-Risk: Finance logs may contain regulated or sensitive business data if entries are copied directly from real workflows. <br>
-Mitigation: Anonymize all entries, avoid real account numbers, bank details, client names, taxpayer identifiers, and specific figures, and review logs before sharing or promotion. <br>
-Risk: Promoting generated learnings into control matrices, payment workflows, or generated skills could preserve incorrect finance guidance. <br>
-Mitigation: Review proposed changes with qualified finance owners before relying on them in close, audit, control, tax, payment, or reporting workflows. <br>
+## Use Case:
 
+Finance teams and agent users use this skill to record anonymized finance issues, learnings, and feature requests as local markdown entries. It supports later review and promotion of recurring patterns into close checklists, reconciliation procedures, control matrices, tax calendars, forecast models, or audit response templates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jose-compu/self-improving-finance) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
-- [Self-Improving Finance Hook](hooks/openclaw/HOOK.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON hook configuration examples, and markdown log-entry templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated and appended learning entries should be anonymized and reviewed before being promoted into finance procedures or reusable skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: ClawHub release metadata) <br>
+Risk: Local finance logs may expose regulated, client-identifying, or otherwise sensitive financial data if populated with real account numbers, client names, exact figures, credentials, or raw transcripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep entries anonymized with placeholders and never record real account numbers, bank details, client names, credentials, exact figures, or raw transcripts.
+
+Risk: Optional reminder hooks may be too broad for the intended finance workflow, and PostToolUse scanning may inspect sensitive command output.
+
+Mitigation: Keep hooks project-scoped, start with the activator-only hook, use narrow finance matchers, and enable PostToolUse only when command-output scanning is acceptable.
+
+Risk: Promoted procedures or generated skills could encode incorrect finance guidance if accepted without review.
+
+Mitigation: Review generated skills and proposed promotions before accepting them, and apply changes only after explicit approval.
+
+## Reference(s):
+
+- [OpenClaw Integration](artifact/references/openclaw-integration.md)
+- [Hook Setup Guide](artifact/references/hooks-setup.md)
+- [Entry Examples](artifact/references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown entries and reminder text with inline shell and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or appends local .learnings markdown files when the workflow is followed; optional hooks emit reminder text and do not need to log raw command output.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

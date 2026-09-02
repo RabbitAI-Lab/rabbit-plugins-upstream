@@ -1,42 +1,66 @@
-## Description: <br>
-Helps API developers, backend teams, developer-experience teams, and maintainers generate, improve, and validate OpenAPI or Swagger documentation for REST APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps API developers and platform teams generate, improve, and validate OpenAPI or Swagger documentation for REST APIs.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-API developers, backend teams, developer-experience teams, and maintainers use this skill to create practical OpenAPI or Swagger documentation workflows, artifacts, checklists, code changes, and validation notes for REST APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad routing text may activate the skill on general API or developer-experience requests where OpenAPI documentation help is not intended. <br>
-Mitigation: Use explicit invocation or narrow trigger phrasing when routing matters, and confirm the user's API documentation goal before producing artifacts. <br>
+## Use Case:
 
+Developers, backend teams, developer-experience teams, and API maintainers use this skill to turn API documentation requests into practical OpenAPI or Swagger workflows, artifacts, checklists, analysis, code changes, and verification notes.
 
-## Reference(s): <br>
-- [Openapi Docs Generator on ClawHub](https://clawhub.ai/kyro-ma/skills/openapi-docs-generator) <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [OpenAPI RESTful API Design Signal](https://blog.csdn.net/2501_94476825/article/details/159013081) <br>
-- [Dynamic OpenAPI 3.1 Documentation Request](https://github.com/PRODHOSH/ossfolio/issues/577) <br>
-- [OpenAPI Interface Specification Signal](https://segmentfault.com/a/1190000043968971) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with optional code blocks, shell commands, checklists, and validation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are tailored to the user's API documentation task and should include assumptions, limits, and verification steps when relevant.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.70315 (source: server evidence release.version) <br>
+Risk: The skill may activate on broader API or developer-experience prompts than intended because implicit invocation is enabled and trigger wording is loose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether invocation was intended before relying on the output, and narrow the trigger wording for deployments that need stricter activation boundaries.
+
+Risk: OpenAPI or Swagger guidance can introduce incomplete schemas, inaccurate examples, or misleading validation advice if the source API behavior is underspecified.
+
+Mitigation: Validate generated documentation against the actual API implementation, available tests, and documented success criteria before publishing.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [Openapi Docs Generator on ClawHub](https://clawhub.ai/kyro-ma/skills/openapi-docs-generator)
+- [Ask HN: Why do we need MCP?](https://news.ycombinator.com/item?id=49488654)
+- [Measure opportunity effectiveness across review and downstream outcomes](https://github.com/sgajbi/lotus-idea/issues/1156)
+- [Make review feedback a governed offline opportunity-quality signal](https://github.com/sgajbi/lotus-idea/issues/1155)
+- [program: reconstruct, simplify, and mechanically govern the repository](https://github.com/ListenCloser/listencloser/issues/634)
+- [Hive Advisory Report](https://github.com/weavster-dev/weavster/issues/1)
+- [Add HMAC signature verification for incoming webhooks](https://github.com/francovp/cabros-bot/issues/737)
+- [roadmap: make the HTTP gateway a unified, operable multi-node product](https://github.com/majiayu000/litellm-rs/issues/1292)
+- [HarmonyOS Developer Community](https://segmentfault.com/brand/harmonyos-next)
+- [SegmentFault JavaScript](https://segmentfault.com/t/javascript)
+- [SegmentFault TypeScript](https://segmentfault.com/t/typescript)
+- [ONES R&D Management](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- [Swagger Bearer Token Answer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with optional code, command, checklist, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should include assumptions, validation steps, and remaining risks when relevant.]
+
+## Skill Version(s):
+
+0.20260831.40551 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

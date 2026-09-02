@@ -36,7 +36,7 @@ Do not start with:
 - "你先学账号定位"
 - "你先找 10 个对标账号"
 - "你适合做女性成长/AI/本地生活" without evidence
-- paid public-content search before the user has a direction
+- online public-content search before the user has a direction
 
 Do not send a beginner directly into benchmark search unless the user already
 gave a specific direction or examples. First mine their life signals.
@@ -199,9 +199,9 @@ Use this shape:
 
 Adjust the actual topics to the user's direction.
 
-## When To Use Paid Lingzao Search
+## When To Use Lingzao Online Search
 
-Do not use paid search in the first message for a no-direction beginner.
+Do not use online search in the first message for a no-direction beginner.
 
 Use free judgment first.
 

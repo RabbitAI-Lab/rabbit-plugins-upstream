@@ -1,41 +1,58 @@
-## Description: <br>
-Imports programming contest problems from online judges such as AtCoder and Codeforces, generates standardized problem packages, and can create test data from user-provided problem statements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Imports competitive-programming problems from OJ platforms such as AtCoder and Codeforces into standardized problem packages, and can also generate test data from user-provided problem statements.
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-Competitive programming educators, contest maintainers, and developers use this skill to import OJ problems, translate or normalize problem statements, generate standard solutions, design test data, audit package completeness, and produce distributable problem archives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, rename, delete, compile, and execute files in a Desktop work directory. <br>
-Mitigation: Use it in a disposable or sandboxed workspace and review planned file operations before execution. <br>
-Risk: Generated C++ solution and test-data files may be incorrect or unsafe to compile and run without review. <br>
-Mitigation: Review generated std.cpp and mkin.h before compiling or executing them, and avoid invoking the skill on untrusted local problem packages. <br>
+## Use Case:
 
+Developers, contest maintainers, and competitive-programming educators use this skill to convert online judge problems or supplied statements into normalized packages with statements, C++ solutions, test data, configuration, and archives.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/skills/ojimport) <br>
-- [Test Data Design Reference](artifact/references/testdata-design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with generated files, C++ code, YAML configuration, shell commands, and ZIP package paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces problem statements, std.cpp, mkin.h, testdata/config.yaml, .in/.out test files, and packaged ZIP archives when executed by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.5.4 (source: frontmatter and server release evidence) <br>
+Risk: Cleanup steps may delete or alter unintended desktop work folders.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a disposable workspace and confirm the resolved base and work paths before cleanup, rename, compile, run, or zip operations.
+
+Risk: Generated C++ source may be compiled and executed during test data creation.
+
+Mitigation: Inspect generated C++ before execution and run compilation and test generation inside a sandbox or container.
+
+Risk: Imported problem content may be incorrect or unsafe when taken from untrusted sources.
+
+Mitigation: Use trusted problem sources and review the final statement, configuration, tests, and archive before delivery.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/ojimport)
+- [Testdata design reference](artifact/references/testdata-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with generated files and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create C++ source files, YAML configuration, test data, and zip archives in a workspace.]
+
+## Skill Version(s):
+
+3.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

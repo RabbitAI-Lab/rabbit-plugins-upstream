@@ -90,6 +90,8 @@ Windows 注意：部分 Agent 客户端通过 PowerShell / cmd 代执行命令�
 
 两类流程同属 CSO 业务。**海外 B2B 社媒贴文/Caption** 为独立 skill `overseas-b2b-social-post`，不在本包内。
 
+内容生成仍先进入 `three-lib-content-workflow/content-writer.workflow.md`。该工作流负责读取 `references/platforms/platform-rules.md` 并加载当前平台唯一对应的规则；平台规则与三库是两个独立输入，三库策略只能在平台规则边界内使用。
+
 ## 命令索引
 
 | 命令                                                                               | 作用                                                                                                                                                                                                   | 详细文档                      |
@@ -133,6 +135,7 @@ Windows 注意：部分 Agent 客户端通过 PowerShell / cmd 代执行命令�
 | 拉取人设 / styleGuide（写稿前）/ 保存人设                                                                    | `references/persona.md`                                                            |
 | 写稿时检索素材库 RAG 片段（三库拆素材等）                                                                    | `references/rag.md`                                                                |
 | 选题 / 三库拆解 / 口播或视频脚本 / 公众号文章 / **单轨或多轨成稿** / 改稿润色 / 人设卡 / 反推人设 / 审稿打分 | `three-lib-content-workflow/content-writer.workflow.md`（多轨 → `multi-track.md`） |
+| 写稿时识别并加载当前平台规则                                                                                 | `references/platforms/platform-rules.md`                                           |
 
 ---
 

@@ -1,49 +1,62 @@
-## Description: <br>
-Meitu Skills is an agent skill library that routes image, video, audio, poster, product, and editing requests through Meitu CLI and Meitu OpenAPI workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meitu Skills is an agent skill library for Meitu OpenAPI that enables AI agents to generate and edit posters, stickers, videos, product images, audio, and related creative assets through scene-specific workflows.
 
-## Publisher: <br>
-[meituskills](https://clawhub.ai/user/meituskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[meituskills](https://clawhub.ai/user/meituskills)
 
-## Use Case: <br>
-External users and developers use this skill pack to generate and edit media assets, including posters, stickers, product views, videos, GIFs, portraits, and enhanced images, from agent workflows backed by Meitu OpenAPI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires Meitu OpenAPI credentials and can read them from environment variables or a local credentials file. <br>
-Mitigation: Prefer environment-variable credentials in shared or CI environments, restrict local credential file permissions, and verify credentials are not committed before packaging or publishing. <br>
-Risk: User media, prompts, and selected local context may be sent to Meitu OpenAPI for third-party processing. <br>
-Mitigation: Use the skill only with media and context that are acceptable for third-party processing, and avoid sensitive personal or proprietary inputs unless that processing is approved. <br>
-Risk: Some scene workflows read project context and shared visual memory and may persist outputs, preferences, or project memory locally. <br>
-Mitigation: Review workspace and visual-memory paths before use, disable or clear shared profile and memory files in shared workspaces, and inspect generated files before reuse. <br>
-Risk: The security verdict requires review because the package combines credentialed execution, remote media processing, broad local reads, and persistent writes. <br>
-Mitigation: Perform a deployment review against SECURITY.md, confirm declared permissions match the enabled workflows, and keep runtime repair or CLI upgrades as explicit operator actions. <br>
+## Use Case:
 
+External users and developers use Meitu Skills to route creative media requests to specialized Meitu workflows for image editing, poster and product image generation, sticker creation, video generation and editing, audio generation, and related asset preparation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/meituskills/skills/meitu-skills) <br>
-- [README](README.md) <br>
-- [Security Model](SECURITY.md) <br>
-- [Package Manifest](PACKAGE_MANIFEST.json) <br>
-- [Routing Guide](references/routing-guide.md) <br>
-- [Meitu Tools Command Catalog](meitu-tools/references/tools.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON CLI results, and generated media files or URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated outputs may be written to project-local output directories or the OpenClaw visual workspace depending on the selected workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.13 (source: server release metadata and PACKAGE_MANIFEST.json) <br>
+Risk: Meitu API credentials may be available to the CLI through environment variables or a local credentials file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer environment variables in shared environments, restrict any local credentials file, and avoid committing credentials.
+
+Risk: User media, prompts, and selected context summaries may be sent to Meitu OpenAPI for processing.
+
+Mitigation: Avoid sensitive portraits, documents, or private context unless the user explicitly accepts remote processing for the task.
+
+Risk: Visual memory and profile files may be created, updated, or reused for personalization.
+
+Mitigation: Review or disable local visual memory and profile files when long-lived personalization is not desired.
+
+## Reference(s):
+
+- [ClawHub Release Page](https://clawhub.ai/meituskills/skills/meitu-skills)
+- [README](README.md)
+- [Security Model](SECURITY.md)
+- [Meitu Tools Command Catalog](meitu-tools/references/tools.yaml)
+- [Routing Guide](references/routing-guide.md)
+- [Task ID Baseline](references/task-id-baseline.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style responses with shell commands, local file paths, generated media URLs, and user-facing guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require Meitu API credentials and can create or update local output, project, visual memory, and profile files depending on the selected workflow.]
+
+## Skill Version(s):
+
+2.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

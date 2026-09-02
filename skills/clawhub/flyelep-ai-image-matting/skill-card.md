@@ -1,42 +1,56 @@
-## Description: <br>
-Uses the Flyelep AI Tool API to remove image backgrounds from one or more public image URLs and return processed image URLs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-Image-Matting removes backgrounds from one or more user-provided images through the Flyelep AI Tool API and returns new image URLs.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-Agents use this skill when a user asks to cut out a subject, remove an image background, extract a product subject, or create transparent-background assets. It is suitable for single-image or batch workflows where the input images are available as direct public URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user-provided image URLs to Flyelep's API with a user-supplied secretKey. <br>
-Mitigation: Install only if you trust Flyelep with the submitted image URLs, provide the secretKey at runtime, and avoid storing the key in files or persistent configuration. <br>
-Risk: Private, expired, or non-direct image links may fail or expose content through an unintended public URL workflow. <br>
-Mitigation: Use only intended public direct image URLs and test with non-sensitive images before submitting sensitive or production assets. <br>
+## Use Case:
 
+External users and developers use this skill to remove image backgrounds, extract product subjects, and create transparent-background assets from public image URLs or uploaded local image files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/flyelep-ai-image-matting) <br>
-- [Flyelep open platform](https://www.flyelep.cn/controlboard) <br>
-- [Flyelep AI image matting API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/aiImageMatting) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON and shell command examples; runtime results are image URLs returned by the API.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns one or more processed image URLs, comma-separated by the API for batch requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill sends selected images and a Flyelep API key to the Flyelep API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask the user to provide the API key only at runtime and avoid storing it in files, examples, or persistent configuration.
+
+Risk: Local image uploads may become externally hosted permanent URLs.
+
+Mitigation: Avoid uploading sensitive images unless the user accepts that the uploaded file may remain available through an external hosted URL.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/flyelep-ai-image-matting)
+- [Flyelep open platform](https://www.flyelep.cn/controlboard)
+- [Flyelep AI image matting API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/aiTool/aiImageMatting)
+- [Flyelep file upload API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with JSON payloads and shell command examples; successful runs return image URLs as text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided Flyelep secretKey at runtime and one or more image URLs or local image paths.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,70 @@
-## Description: <br>
-Guided SOP for setting up and using OpenMAIC from OpenClaw, including cloning, startup-mode selection, provider-key configuration, service startup, and classroom generation from requirements or PDFs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenMAIC assistant for setting up, generating, and extending OpenMAIC.
 
-## Publisher: <br>
-[wyuc](https://clawhub.ai/user/wyuc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wyuc](https://clawhub.ai/user/wyuc)
 
-## Use Case: <br>
-Developers and educators use this skill to guide OpenMAIC setup, hosted or local startup, provider-key configuration, health checks, and classroom generation from requirements or PDFs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hosted mode and classroom generation may send requirements, parsed PDF content, and an access code to the OpenMAIC hosted service. <br>
-Mitigation: Use hosted mode only when comfortable sending that content to open.maic.chat, keep access codes in local config rather than chat, and use local mode for sensitive materials. <br>
-Risk: Local setup can run clone, install, startup, and API request commands that affect the user's machine or contact external services. <br>
-Mitigation: Review the OpenMAIC repository before approving commands, confirm each state-changing step, and inspect server-side provider configuration before generation. <br>
-Risk: Provider keys and model configuration errors can cause generation failures or accidental use of an unintended provider. <br>
-Mitigation: Store provider keys in local OpenMAIC configuration files, include provider prefixes in model IDs, and correct server-side config rather than using request-time overrides. <br>
+## Use Case:
 
+Developers, educators, and external users use this skill to set up OpenMAIC, configure provider keys, generate multi-agent interactive classrooms, or extend the OpenMAIC product and @openmaic/* SDK.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wyuc/openmaic) <br>
-- [Clone Or Reuse Existing Repo](references/clone.md) <br>
-- [Generate Flow](references/generate-flow.md) <br>
-- [Hosted Mode](references/hosted-mode.md) <br>
-- [Provider Keys](references/provider-keys.md) <br>
-- [Startup Modes](references/startup-modes.md) <br>
-- [OpenMAIC hosted service](https://open.maic.chat) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration examples, API request details, and generated classroom links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before state-changing local actions and before reading local PDFs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.1 (source: server release evidence) <br>
+Risk: Local setup may run clone, install, build, or startup commands on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: The skill requires explicit confirmation before state-changing local actions and reports existing local state before reuse.
+
+Risk: Access codes and provider keys are sensitive credentials used by OpenMAIC services.
+
+Mitigation: The skill directs users to edit local configuration files themselves and avoids asking users to paste API keys into chat.
+
+Risk: PDF-based generation and classroom content may be sent to the selected OpenMAIC service.
+
+Mitigation: The skill requires confirmation before reading local PDFs and tells users which service mode is active before generation.
+
+Risk: SDK font loading may depend on a remote font endpoint, which can affect offline or restricted-network deployments.
+
+Mitigation: Users who need offline operation or strict network controls should review the renderer font dependency and configure suitable local assets.
+
+## Reference(s):
+
+- [OpenMAIC ClawHub Listing](https://clawhub.ai/wyuc/skills/openmaic)
+- [OpenMAIC Live Demo](https://open.maic.chat)
+- [Clone Or Reuse Existing Repo](references/clone.md)
+- [Startup Modes](references/startup-modes.md)
+- [Provider Keys](references/provider-keys.md)
+- [Live Demo Mode](references/live-demo.md)
+- [Generate Flow](references/generate-flow.md)
+- [Extend Or Build On OpenMAIC](references/extend.md)
+- [Extend The OpenMAIC Product Cookbook](references/extend-cookbook.md)
+- [Consume The @openmaic/* SDK](references/extend-sdk.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, and URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide local command execution after user confirmation and may return an OpenMAIC classroom URL.]
+
+## Skill Version(s):
+
+0.3.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

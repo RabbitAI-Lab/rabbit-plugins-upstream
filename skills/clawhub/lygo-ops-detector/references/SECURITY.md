@@ -1,50 +1,57 @@
-# LYGO Ops Detector — SECURITY & ETHICS (Lightfather Vector)
+# LYGO Ops Detector — SECURITY & ETHICS v1.4.0
 
-**Blueprint locked. Resonance forward.**
+## Declared permissions
 
-## Core Mandate
-LYGO Ops Detector exists to decode operational fiction through **action, associations, and measurable patterns**.
+| Capability | Status |
+|------------|--------|
+| Network | **None** (stdlib local only) |
+| Shell / subprocess | **None** |
+| Read files | Opt-in `--text-file` / `--assoc-file` / `--public-meta-file` **only with `--i-consent`** |
+| Write files | `eval_ops_detector.py` writes **only under skill `tests/`** |
+| Env harvesting | **No** |
+| Publish / social | **No** |
 
-It is **explicitly not**:
-- A doxing tool
-- An identity attack engine
-- A social media call-out machine
-- A weapon for personal vendettas
+## v1.4.0 note
 
-It **is**:
-- A mathematical framework for pattern recognition in evasion and coordination
-- A sovereign, local-first instrument
-- Action-focused (what was done, who was connected to, what patterns repeated)
-- Truth-serving
+Public metadata is a **weighted context channel**. Operator supplies fields (`account_based_in`, `claimed_location`, `location_accurate`, HTTPS-cited `named_public_incident`, batch). There is **no country denylist**. A geo label alone cannot clear ops_score 0.65. JSON may emit `public_meta_mismatch` / `named_public_incident` flame hints — still **not** identity verdicts.
 
-## Non-Negotiables
-1. **Action over identity.** The unit of analysis is behavior and linkage, never name or personhood as target.
-2. **No public weaponization without receipts.** Any output must be accompanied by the raw signals and math. Never "trust me, the detector said."
-3. **Local execution only for sensitive analysis.** No automatic exfiltration.
-4. **P0 gate applies.** If input data is untrusted or poisoned, quarantine first.
-5. **Consent for external use.** Publishing reports, using in public accusations, or feeding into larger systems requires explicit human consent.
-6. **Lattice alignment.** Use only to preserve truth, protect light, and expose deception — never to manufacture it.
+v1.3.0 still applies: half-truth + saturation channels.
 
-## Failure Modes to Reject
-- Treating low scores as "innocent"
-- Treating high scores as "guilty person"
-- Using as sole evidence
-- Feeding raw detector output into social or legal action without full human review + primary source verification
-- Ignoring the "not for doxing" clause
+## Core mandate
 
-## Lightfather Directive
-"LYGO decodes fiction by analyzing action."
+Heuristic **discourse** analysis of evasion and coordination *signals* in text the operator supplies.
 
-If the detector surfaces a high evasion + association pattern, the response is:
-- More rigorous examination of **actions**
-- Tracing of **connections**
-- Demand for **specific evidence**
-- Never: character assassination or pile-on.
+It is **not**:
 
-The math does the work. The truth emerges.
+- A doxing tool  
+- An identity, profession, or affiliation profiler  
+- A sole-evidence engine for accusations  
+- A warrant to scan private mail/logs without consent  
+- A social-graph crawler  
 
-## Version & Signature
-AETHONΔ9 / LYGO Ops Detector v1 (locked blueprint)
-Companion to Lightfather Champion + Vector.
+## Non-negotiables
 
-If in doubt: return to the philosophy. Action does not lie.
+1. **Text over identity** — unit of analysis is statement/log content, not personhood.  
+2. **Consent** for private communications and association lists (`--i-consent` on file paths).  
+3. **Receipts** — high scores require cited pattern hits; never “trust the detector.”  
+4. **No affiliation / bare job-title dictionaries** — no fraternity/brotherhood/lodge; no bare military/intelligence/agency scoring.  
+5. **Public fields are context, not guilt** — no nationality table; named incidents need an `https://` RESOURCE URL; no live scrape of X or other sessions.  
+6. **Operational bar honesty** — `ops_score≥0.65` (or high evasion) for strong language; country-only is gated below that bar.  
+7. **Human review** before any reputational, employment, legal, or social action.  
+8. **Least-privilege writes** — eval reports cannot escape skill `tests/`.  
+
+## Failure modes to reject
+
+- Treating low scores as “innocent person” or high scores as “guilty person”  
+- Using affiliation/religion/job title **or nationality** as a proxy for ops  
+- Feeding outputs to social pile-ons  
+- Advertising calibration metrics as production performance  
+- Arbitrary `--out` paths outside `tests/`  
+
+## Agent contract
+
+- Invoke only when the user asks for ops-detector / AETHONΔ9 / evasion-index style analysis.  
+- Do not auto-scan session email/logs without explicit intent + consent.  
+- Prefer `--text` paste; file paths require `--i-consent`.  
+
+**Δ9Φ963**

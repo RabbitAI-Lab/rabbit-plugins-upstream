@@ -1,7 +1,7 @@
 ---
 name: dlazy-detect
 version: 1.0.5
-description: Detect whether an image, video, or audio file is AI-generated — including visual deepfakes and the likely generator model (Midjourney, Stable Diffusion, Sora, etc.). Returns confidence scores you can threshold. 检测图片、视频或音频是否由 AI 生成：包含人脸 deepfake 识别与疑似生成模型归因，返回可用于判定的置信度分数。
+description: "Detect whether an image, video, or audio file is AI-generated — including visual deepfakes and the likely generator model (Midjourney, Stable Diffusion, Sora, etc.). Returns confidence scores you can threshold. 检测图片、视频或音频是否由 AI 生成：包含人脸 deepfake 识别与疑似生成模型归因，返回可用于判定的置信度分数。"
 metadata:
   {
     'clawdbot':
@@ -10,8 +10,8 @@ metadata:
         'requires': { 'bins': ['npm', 'npx'] },
         'install': 'npm install -g @dlazy/cli@1.2.3',
         'installAlternative': 'npx @dlazy/cli@1.2.3',
-        'homepage': 'https://github.com/dlazyai/cli',
-        'source': 'https://github.com/dlazyai/cli',
+        'homepage': 'https://github.com/dlazy-ai/cli',
+        'source': 'https://github.com/dlazy-ai/cli',
         'author': 'dlazyai',
         'license': 'see-repo',
         'npm': 'https://www.npmjs.com/package/@dlazy/cli',
@@ -22,7 +22,7 @@ metadata:
   }
 ---
 
-# dlazy-detect
+# AI 内容检测 AI Detect
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
