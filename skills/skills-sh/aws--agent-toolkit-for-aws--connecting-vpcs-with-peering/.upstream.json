@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/connecting-vpcs-with-peering",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "connecting-vpcs-with-peering",
+  "branch": "main",
+  "pushedAt": "2026-09-03T11:45:46Z",
+  "contentHash": "4f428e1a0aecf1efc34f60ad74d8fa438b6d30bbd612449ea124b45ce80ab160",
+  "fetchedAt": "2026-09-03T12:11:57.244Z"
+}

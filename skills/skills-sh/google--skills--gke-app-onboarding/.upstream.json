@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-app-onboarding",
+  "repo": "google/skills",
+  "skillId": "gke-app-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-09-02T18:08:19Z",
+  "contentHash": "594bb14393793873cae2df642d315a85f87edf8fdb0c0a46711c1ffba7baee49",
+  "fetchedAt": "2026-09-03T12:11:03.457Z"
+}

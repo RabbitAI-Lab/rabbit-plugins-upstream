@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/provider-framework-migration",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "provider-framework-migration",
+  "branch": "main",
+  "pushedAt": "2026-09-02T18:42:49Z",
+  "contentHash": "378901d571fa8d0bfdd954360ea24c6d9c899314ba7b43e00a42e90c1b647381",
+  "fetchedAt": "2026-09-03T12:11:28.676Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/analyzing-release-readiness",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "analyzing-release-readiness",
+  "branch": "main",
+  "pushedAt": "2026-09-03T11:45:46Z",
+  "contentHash": "b95ade5a230e8e33533a7e845b006ef0e5f69906c5fad23eb47c449278ce517a",
+  "fetchedAt": "2026-09-03T12:11:58.121Z"
+}

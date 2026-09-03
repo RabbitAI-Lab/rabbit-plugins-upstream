@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/fix-merge-conflicts",
+  "repo": "cursor/plugins",
+  "skillId": "fix-merge-conflicts",
+  "branch": "main",
+  "pushedAt": "2026-09-03T04:37:13Z",
+  "contentHash": "a6657bf563b3873959e54c8d4c03a8aae75dbad54c414244edda62437ef2b118",
+  "fetchedAt": "2026-09-03T12:11:00.481Z"
+}

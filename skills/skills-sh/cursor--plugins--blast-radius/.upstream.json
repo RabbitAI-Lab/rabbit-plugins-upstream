@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/blast-radius",
+  "repo": "cursor/plugins",
+  "skillId": "blast-radius",
+  "branch": "main",
+  "pushedAt": "2026-09-03T04:37:13Z",
+  "contentHash": "3b107f1561bdc7e845689cef29b8893fe0ffd861da1d81ef87921b3abfcf9437",
+  "fetchedAt": "2026-09-03T12:11:00.473Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/provider-ephemeral-resources",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "provider-ephemeral-resources",
+  "branch": "main",
+  "pushedAt": "2026-09-02T18:42:49Z",
+  "contentHash": "5a5fe41dd9aadcea216d6f5daa182df8466bb52494d084b3ab6bee008a0b0c98",
+  "fetchedAt": "2026-09-03T12:11:28.677Z"
+}

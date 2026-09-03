@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-sound-effects",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-sound-effects",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "d6bc1dac0750c6356ddb0a1147f8fc32e488bb2afad3fd5d129931ed226a44c5",
+  "fetchedAt": "2026-09-03T12:09:17.866Z"
+}

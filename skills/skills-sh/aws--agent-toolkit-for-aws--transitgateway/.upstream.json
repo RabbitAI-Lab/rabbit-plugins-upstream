@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/transitgateway",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "transitgateway",
+  "branch": "main",
+  "pushedAt": "2026-09-03T11:45:46Z",
+  "contentHash": "e199fde5bea7ce16fb089f0f9e0faf6d65440d033c4c22790f0e38a333df4f14",
+  "fetchedAt": "2026-09-03T12:11:57.734Z"
+}
