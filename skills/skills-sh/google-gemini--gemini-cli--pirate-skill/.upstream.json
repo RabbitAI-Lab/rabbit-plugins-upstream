@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/pirate-skill",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "pirate-skill",
+  "branch": "main",
+  "pushedAt": "2026-09-03T07:38:06Z",
+  "contentHash": "af0dcfd8d93975160ee89102a4c2e3ba03bf81cfe92e97f856ae707fbebc39ac",
+  "fetchedAt": "2026-09-03T12:11:38.301Z"
+}

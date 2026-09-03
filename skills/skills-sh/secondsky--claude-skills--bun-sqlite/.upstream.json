@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/bun-sqlite",
+  "repo": "secondsky/claude-skills",
+  "skillId": "bun-sqlite",
+  "branch": "main",
+  "pushedAt": "2026-09-03T02:57:17Z",
+  "contentHash": "38e6904ed525c718068c3e465bb11040961ae6c50bd0683bddbd68bb7d30099e",
+  "fetchedAt": "2026-09-03T12:11:59.534Z"
+}

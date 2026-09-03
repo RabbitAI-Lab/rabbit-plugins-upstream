@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/image-upscaling",
+  "repo": "inference-sh/skills",
+  "skillId": "image-upscaling",
+  "branch": "main",
+  "pushedAt": "2026-08-03T15:41:46Z",
+  "contentHash": "a38152139c0bf7290c05d2731798e9557d30a37b47ba7b3583c1797cd6a0be7e",
+  "fetchedAt": "2026-09-03T12:09:17.804Z"
+}

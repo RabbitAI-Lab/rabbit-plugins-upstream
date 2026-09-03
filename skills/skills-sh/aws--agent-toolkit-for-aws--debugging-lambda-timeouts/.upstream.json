@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/debugging-lambda-timeouts",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "debugging-lambda-timeouts",
+  "branch": "main",
+  "pushedAt": "2026-09-03T11:45:46Z",
+  "contentHash": "b0d8d8b7a46fb86165782c98c6e6ff7a5d440b7f5f53ff547f14fde3ef28da7b",
+  "fetchedAt": "2026-09-03T12:11:57.141Z"
+}

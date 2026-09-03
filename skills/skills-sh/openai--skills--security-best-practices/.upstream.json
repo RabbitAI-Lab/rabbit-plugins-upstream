@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/security-best-practices",
+  "repo": "openai/skills",
+  "skillId": "security-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "c76f1246dcb6f81bf3e7d908d56fb3e448be4b2ed5bec6b5fe5ae66a9df3b69d",
+  "fetchedAt": "2026-09-03T12:11:11.351Z"
+}

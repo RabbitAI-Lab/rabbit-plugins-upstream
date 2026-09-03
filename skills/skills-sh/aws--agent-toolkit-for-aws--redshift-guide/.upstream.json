@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/redshift-guide",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "redshift-guide",
+  "branch": "main",
+  "pushedAt": "2026-09-03T11:45:46Z",
+  "contentHash": "9eb1d96f3b4468f6b2ff3f07539db334d69588ba21f347a7aacf1a83ca2bdf15",
+  "fetchedAt": "2026-09-03T12:11:57.971Z"
+}

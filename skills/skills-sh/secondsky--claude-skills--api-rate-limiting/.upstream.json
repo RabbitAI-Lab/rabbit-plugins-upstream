@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/api-rate-limiting",
+  "repo": "secondsky/claude-skills",
+  "skillId": "api-rate-limiting",
+  "branch": "main",
+  "pushedAt": "2026-09-03T02:57:17Z",
+  "contentHash": "73b30a5ca1b378339f5196f1c6b3b71f541210786ca64649ed0cba5f19b3be0c",
+  "fetchedAt": "2026-09-03T12:11:59.092Z"
+}
