@@ -159,7 +159,7 @@ Is the finding a one-off matter or broadly applicable?
 
 OpenClaw provides tools for cross-session sharing of legal findings.
 
-Use these only when cross-session sharing is explicitly needed and the environment is trusted. **Never forward privileged communications, case strategy, or confidential terms.**
+Do not send cross-session messages unless the user explicitly consents to that specific send. A trusted environment is not enough. **Never forward privileged communications, case strategy, confidential terms, or matter-identifying detail.** Prefer an entry ID plus a process-level summary.
 
 ### sessions_send (Legal Alerts)
 

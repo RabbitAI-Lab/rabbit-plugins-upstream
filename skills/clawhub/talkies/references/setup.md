@@ -6,14 +6,14 @@
 - `linux/amd64` host (no arm64 images — `nemo_toolkit[asr]` + chain doesn't resolve cleanly on aarch64)
 - Optional: NVIDIA GPU + NVIDIA Container Toolkit for the CUDA image (required for `qwen3-tts-0.6b` voice cloning)
 - ~3 GB disk for the CPU image, ~11 GB for the CUDA image
-- ~13 GB additional disk for model weights (CPU image set, includes Kokoro ~330 MB) or ~32 GB (full CUDA set including Qwen3-TTS ~2.2 GB)
+- Additional disk for selected model weights; set `TALKIES_ENABLED_MODELS` to avoid downloading the full registry
 - ~4 GB RAM minimum (whisper-large-v3 needs the working set + overhead); 12 GB+ VRAM for the GPU-only models
 
 ## Quick Install
 
 ### CPU
 
-Serves 2× Whisper + `canary-180m-flash` + `nemotron-3.5-asr-0.6b` (CPU-optimized, via parakeet.cpp) for ASR, plus `kokoro-82m` and `kokoro-82m-nvidia` for TTS. The CUDA-only ASR models aren't worth running on CPU, and the Qwen3-TTS family is CUDA-only.
+Serves 2× Whisper + `canary-180m-flash` + `nemotron-3.5-asr-0.6b` (CPU-optimized, via parakeet.cpp), four selectable Sherpa Zipformer variants, and `vosk-small-en-us-0.15` for ASR, plus `kokoro-82m` and `kokoro-82m-nvidia` for TTS. The CUDA-only ASR models aren't worth running on CPU, and the Qwen3-TTS family is CUDA-only.
 
 ```bash
 docker run -d --name talkies \
@@ -24,7 +24,12 @@ docker run -d --name talkies \
 
 ### CUDA
 
-Serves all seven ASR models plus both TTS engines / 3 backends (`kokoro-82m`, `kokoro-82m-nvidia`, and the 5 Qwen3-TTS slugs). Requires the NVIDIA Container Toolkit on the host.
+Serves all fourteen ASR models plus all three TTS engines / 4 backends (`kokoro-82m`, `kokoro-82m-nvidia`, the 5 Qwen3-TTS slugs, and `chatterbox-turbo`). Requires the NVIDIA Container Toolkit on the host.
+
+Nemotron runs through the SHA-256-pinned upstream parakeet.cpp v0.5.0 CUDA 12
+bundle in this image, so both file transcription and native WebSocket sessions
+use GPU offload. The matching CUDA 12.9 runtime libraries stay isolated under
+`/opt/parakeet` from the image's Python ML stack.
 
 ```bash
 docker run -d --name talkies \
@@ -34,24 +39,30 @@ docker run -d --name talkies \
   psyb0t/talkies:latest-cuda
 ```
 
-The CUDA image also runs without `--gpus all` — it binds to CPU, ignores CUDA env vars, and refuses the GPU-only slugs at first call. Useful for debugging without a GPU host. `qwen3-tts-0.6b` will fail loudly on first request in that mode (the upstream `FasterQwen3TTS.from_pretrained` raises `ValueError` on non-CUDA).
+The CUDA image expects `--gpus all`. Without a GPU assignment it retains its
+`TALKIES_DEVICE=cuda` image default, so model loading fails rather than silently
+falling back. To use its CPU-compatible subset for debugging, explicitly set
+`-e TALKIES_DEVICE=cpu` and restrict `TALKIES_ENABLED_MODELS` to CPU-compatible
+slugs; GPU-only Qwen3-TTS slugs remain unavailable.
 
 **Verify:** `curl http://localhost:8000/healthz` returns `{"ok": true, "device": "...", "models": [...]}` once boot's done.
 
-**First boot:** the entrypoint downloads every model in `models.json` into `/data/models/<slug>/` and creates `/data/files/` + `/data/custom-voices/`. CPU set is ~13 GB (includes Kokoro), CUDA full set is ~32 GB (includes Qwen3-TTS ~2.2 GB). Bind-mount `/data` so subsequent restarts are no-ops. Restrict the download set with `TALKIES_ENABLED_MODELS` to avoid pulling everything.
+**First boot:** the entrypoint downloads every enabled model into `/data/models/<slug>/` and creates `/data/files/` + `/data/custom-voices/`. Bind-mount `/data` so subsequent restarts are no-ops. Restrict the download set with `TALKIES_ENABLED_MODELS` to avoid pulling everything.
 
 ## CPU vs CUDA Images
 
 | Image | Tag | Platforms | Models served | Image size |
 |---|---|---|---|---|
-| CPU | `psyb0t/talkies:latest` | `linux/amd64` | 2× Whisper, Canary-180m-Flash, Nemotron-3.5-ASR (parakeet.cpp), Kokoro-82M ×2 runtimes | ~3 GB |
-| CUDA | `psyb0t/talkies:latest-cuda` | `linux/amd64` | all seven ASR + Kokoro-82M ×2 runtimes + Qwen3-TTS ×5 | ~11 GB |
+| CPU | `psyb0t/talkies:latest` | `linux/amd64` | 2× Whisper, Canary-180m-Flash, Nemotron-3.5-ASR, Sherpa Zipformer ×4, Vosk, wav2vec2 + ZIPA phoneme, Kokoro-82M ×2 runtimes | ~3 GB |
+| CUDA | `psyb0t/talkies:latest-cuda` | `linux/amd64` | all fourteen ASR + Kokoro-82M ×2 runtimes + Qwen3-TTS ×5 + Chatterbox Turbo | ~11 GB |
 
-The CPU image only ships ASR models that actually finish in a sane time without a GPU. Parakeet-TDT is autoregressive (slow on CPU). Canary-1B and Canary-Qwen-2.5B are flat-out too big. Use the CUDA image for those even if you mostly run on CPU — it gracefully falls back (except for `qwen3-tts-0.6b`, which hard-fails on non-CUDA). Kokoro-82M ships in both images — at 82M params it synthesizes faster than real-time on a 4-core CPU, no GPU needed.
+The CPU image only ships ASR models that actually finish in a sane time without a GPU. Parakeet-TDT is autoregressive (slow on CPU). Canary-1B and Canary-Qwen-2.5B need the CUDA image with `--gpus all`; use the CPU image for CPU workloads. Kokoro-82M ships in both images — at 82M params it synthesizes faster than real-time on a 4-core CPU, no GPU needed. Chatterbox Turbo is CUDA-only for the same reason as the heavier ASR models: it runs on CPU but measures roughly 5-10x slower than real-time, so it is not registered as a CPU slug.
 
 Both images bake `espeak-ng` into the runtime layer because Kokoro's G2P for es/fr/hi/it/pt routes through it via `misaki.espeak.EspeakG2P`. The Python `kokoro==0.9.4` package and its lightweight dependency chain (`misaki`, no `[ja]` / `[zh]` extras) are pinned alongside the rest of the ML stack in `Dockerfile` / `Dockerfile.cuda`.
 
 The CUDA image additionally bakes the `faster-qwen3-tts==0.2.6` MIT wrapper and three builtin Qwen3 reference voices (`alloy`, `echo`, `fable`) under `/opt/talkies/qwen3-voices/`. The model weights (`Qwen/Qwen3-TTS-12Hz-0.6B-Base`, Apache-2.0) are downloaded into `/data/models/qwen3-tts-0.6b/` at first boot like every other model.
+
+The CUDA image also bakes `chatterbox-tts==0.1.7` (MIT) and `s3tokenizer==0.3.0` (Apache-2.0) from a separate hash-pinned `requirements-chatterbox.txt`, installed `--no-deps` because their declared dependency metadata conflicts with the image's pinned torch/transformers and pulls tooling that has no place in a runtime image. The `ResembleAI/chatterbox-turbo` weights (MIT, ungated) land in `/data/models/chatterbox-turbo/` at first boot. Its voices come from `/data/custom-voices/` plus a `builtin` speaker shipped inside the checkpoint — the Qwen3 reference voices are deliberately not shared with it, since several are shorter than its 5-second reference-clip minimum.
 
 ## Environment Variables
 
@@ -70,10 +81,17 @@ Container binds `0.0.0.0:8000` unconditionally. Control network exposure at `doc
 
 | Var | Default | What it does |
 |---|---|---|
-| `TALKIES_DEVICE` | `auto` | `auto` picks `cuda` if available else `cpu`. Pin to a specific GPU with `cuda:N`. |
-| `TALKIES_MODELS_FILE` | `/app/models.json` | Path to the model registry JSON. Override to ship a custom subset. CPU image defaults to `/app/models-cpu.json` automatically. |
+| `TALKIES_DEVICE` | image default (`cpu` CPU / `cuda` CUDA) | `auto` picks `cuda` if available else `cpu`; it is an accepted override. Pin to a specific GPU with `cuda:N`. |
+| `TALKIES_MODELS_FILE` | `/app/models.json` | Path to the model registry JSON. Override to ship a custom subset. The CPU image copies `models-cpu.json` to this path; the CUDA image copies `models.json` here. |
 | `TALKIES_ENABLED_MODELS` | (empty = all from `models.json`) | Comma-separated slug whitelist. Restricts both the boot-time snapshot download and the queryable surface of `/v1/models`. Unknown slugs fail fast on startup. |
 | `TALKIES_PRELOAD` | (empty) | Comma-separated slugs to load into RAM/VRAM at boot, before uvicorn accepts requests. Skips cold-load on first transcription. Must be a subset of `TALKIES_ENABLED_MODELS`. |
+| `TALKIES_MODEL_MAX_CONCURRENCY` | `1` | Fallback number of simultaneous inference requests admitted per model across HTTP, MCP, WebSocket ASR, buffered TTS, and streaming TTS. Registry `max_concurrency` values take precedence. |
+| `TALKIES_MODEL_CONCURRENCY` | (empty) | Comma-separated `model-slug=limit` overrides, for example `nemotron-3.5-asr-0.6b=2,kokoro-82m=4`. Unknown, disabled, duplicate, malformed, or out-of-range entries fail at startup. |
+
+Each registry model may define `max_concurrency` from 1 through 1024. The
+bundled Nemotron entry defaults to two in both images. Only one model may own
+active inference slots at a time, which prevents sibling model eviction while
+a request is still using its backend.
 
 ### Data dir
 
@@ -89,7 +107,7 @@ Container binds `0.0.0.0:8000` unconditionally. Control network exposure at `doc
 |---|---|---|
 | `TALKIES_MODEL_TTL` | `600` (10 min) | Idle time before a loaded backend is unloaded by the sweeper. Bare number = seconds; also accepts Go-style `3h30m5s`, `45m`, `90s`. `0` disables auto-unload. |
 | `TALKIES_SWEEPER_INTERVAL` | `60` | How often the sweeper checks for idle models. |
-| `TALKIES_LOAD_TIMEOUT` | `300` | Per-model load timeout. Initial weights download + warmup runs inside this budget. |
+| `TALKIES_LOAD_TIMEOUT` | `300` | Parsed configuration reserved for a future model-load timeout; the current server does not apply it. |
 
 ### Upload + download caps
 
@@ -110,6 +128,21 @@ Audio longer than `TALKIES_VAD_CHUNK_THRESHOLD` seconds gets sliced through Sile
 | `TALKIES_VAD_MIN_SILENCE_MS` | `500` | Silero VAD param — minimum gap (ms) to consider a region break. |
 | `TALKIES_VAD_SPEECH_PAD_MS` | `200` | Silero VAD param — silence padding (ms) around each detected speech region. |
 | `TALKIES_VAD_THRESHOLD` | `0.5` | Silero VAD speech-probability threshold. Lower = more aggressive. |
+
+### Live ASR streaming
+
+`WS /v1/audio/transcriptions/stream` accepts headerless 16 kHz mono PCM16LE.
+It is separate from the OpenAI-compatible upload route. See the repository's
+[`docs/streaming.md`](https://github.com/psyb0t/docker-talkies/blob/main/docs/streaming.md)
+for the protocol and client examples.
+
+| Var | Default | What it does |
+|---|---|---|
+| `TALKIES_STREAM_MAX_CONNECTIONS` | `4` | Maximum active ASR WebSockets per container. Streams may share one pinned model; attempts to switch models while one is active return a conflict. |
+| `TALKIES_STREAM_MAX_FRAME_BYTES` | `65536` | Maximum binary PCM frame size. Frames must be non-empty, contain whole 16-bit samples, and be 2–16777216 bytes. |
+| `TALKIES_STREAM_MAX_BUFFER_SECONDS` | `5` | Faster-whisper rolling-window budget. Must hold one configured maximum-size frame; native decoders process each frame directly. |
+| `TALKIES_STREAM_IDLE_TIMEOUT` | `30s` | Maximum wait between client messages before close code 4408. |
+| `TALKIES_STREAM_MAX_DURATION` | `4h` | Maximum accepted audio duration per WebSocket. |
 
 ### Qwen3-TTS streaming
 
@@ -226,8 +259,10 @@ File structure:
 | Field | Required | Notes |
 |---|---|---|
 | `repo` | yes | HuggingFace repo id. Pulled via `snapshot_download(local_dir=$TALKIES_DATA_DIR/models/<slug>)` — flat directory keyed by slug, no HF cache indirection. |
-| `executor` | yes | One of `whisper`, `parakeet`, `parakeet_cpp`, `canary_multitask`, `canary_salm`, `kokoro`, `kokoro_nvidia`, `qwen3_tts`. Other values fail startup. |
-| `modality` | no | `asr` (default) or `tts`. Drives endpoint guards (`/v1/audio/transcriptions` requires ASR; `/v1/audio/speech` requires TTS) and the `modality` field on `/v1/models` entries. The `kokoro` and `qwen3_tts` executors imply `tts`; the four ASR executors imply `asr`. |
+| `revision` | no | Immutable Hugging Face commit SHA to download. Pin this for reproducible custom registries. |
+| `executor` | yes | One of `whisper`, `parakeet`, `parakeet_cpp`, `canary_multitask`, `canary_salm`, `sherpa`, `sherpa_offline_ctc`, `vosk`, `kokoro`, `kokoro_nvidia`, `qwen3_tts`, `chatterbox`, `wav2vec2_phoneme`. Other values fail startup — the allowlist is `VALID_EXECUTORS` in `src/talkies/config.py`, and `load_registry()` runs at server import, so an unknown executor stops the whole process rather than disabling one model. |
+| `modality` | no | `asr` (default) or `tts`. Drives endpoint guards (`/v1/audio/transcriptions` requires ASR; `/v1/audio/speech` requires TTS) and the `modality` field on `/v1/models` entries. The `kokoro`, `qwen3_tts` and `chatterbox` executors imply `tts`; the seven ASR executors imply `asr`. |
+| `download_patterns` | no | Non-empty list of static repository-relative paths passed to Hugging Face `snapshot_download(..., allow_patterns=...)`. Use it to limit a multi-variant repository to the files selected by this registry entry. |
 | `default_source_lang` | no | ASR only. Used when the request omits `language`. |
 | `default_target_lang` | no | ASR only. Used by Canary multitask for translation tasks. |
 | `default_task` | no | ASR only. `asr` (transcribe) or `s2t_translation` (Canary multitask only). Default `asr`. |

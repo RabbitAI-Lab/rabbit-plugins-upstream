@@ -1,0 +1,134 @@
+{
+  "infographic_id": "product_roadmap_ai_assistant_demo",
+  "intent": "plan",
+  "chart_family": "roadmap",
+  "language": "zh-CN",
+  "audience": "product, design, engineering, go-to-market",
+  "source_summary": "用一张路线图概览 AI 协作助手未来四个季度的产品重点与依赖。",
+  "message": {
+    "title": "AI 协作助手年度路线图",
+    "subtitle": "先打基础，再扩自动化与企业能力",
+    "core_takeaway": "路线图按 Foundation -> Automation -> Ecosystem -> Enterprise 递进，上一阶段的能力会成为下一阶段前提。",
+    "cta": "对外只讲季度主题，对内文档再展开里程碑细节。"
+  },
+  "layout": {
+    "layout_mode": "timeline",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "16:9",
+    "reading_order": "left-to-right",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "roadmap-quarterly",
+    "palette_mode": "brand",
+    "emphasis_style": "clean",
+    "brand_colors": ["#2563EB", "#7C3AED", "#14B8A6", "#F97316"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "年度路线图",
+      "content": "让团队先看全局，再看每季度重点。",
+      "visual_role": "primary",
+      "icon_hint": "map",
+      "must_include": ["时间轴"],
+      "avoid": ["密集任务列表"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_strategy",
+      "block_type": "summary",
+      "title": "路线图策略",
+      "content": "Q1 打基础，Q2 做自动化，Q3 做生态集成，Q4 做企业能力。",
+      "visual_role": "primary",
+      "icon_hint": "compass",
+      "must_include": ["总览摘要"],
+      "avoid": ["过多术语"],
+      "text_budget": 28
+    },
+    {
+      "block_id": "q1_foundation",
+      "block_type": "stage",
+      "title": "Q1 Foundation",
+      "content": "账号权限、数据接入、基础模板市场。",
+      "visual_role": "secondary",
+      "group_id": "quarters",
+      "icon_hint": "building-2",
+      "payload": {"quarter": "Q1", "theme": "foundation"},
+      "must_include": ["里程碑卡片"],
+      "avoid": ["任务过多"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "q2_automation",
+      "block_type": "stage",
+      "title": "Q2 Automation",
+      "content": "会议自动总结、任务回写、流程建议。",
+      "visual_role": "secondary",
+      "group_id": "quarters",
+      "icon_hint": "bot",
+      "payload": {"quarter": "Q2", "theme": "automation"},
+      "must_include": ["自动化主题"],
+      "avoid": ["字太多"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "q3_ecosystem",
+      "block_type": "stage",
+      "title": "Q3 Ecosystem",
+      "content": "连接文档、表格、白板与外部 API。",
+      "visual_role": "secondary",
+      "group_id": "quarters",
+      "icon_hint": "plug",
+      "payload": {"quarter": "Q3", "theme": "ecosystem"},
+      "must_include": ["生态集成"],
+      "avoid": ["抽象空话"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "q4_enterprise",
+      "block_type": "stage",
+      "title": "Q4 Enterprise",
+      "content": "审计、合规、权限治理与规模部署。",
+      "visual_role": "primary",
+      "group_id": "quarters",
+      "icon_hint": "shield",
+      "payload": {"quarter": "Q4", "theme": "enterprise"},
+      "must_include": ["企业能力高亮"],
+      "avoid": ["过多细节"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "note_dependency",
+      "block_type": "note",
+      "title": "关键依赖",
+      "content": "数据接入质量会影响自动化与生态连接进度。",
+      "visual_role": "supporting",
+      "icon_hint": "link-2",
+      "must_include": ["依赖提示"],
+      "avoid": ["密集注释"],
+      "text_budget": 22
+    }
+  ],
+  "relations": [
+    {
+      "from": "q1_foundation",
+      "to": "q2_automation",
+      "relation_type": "flow",
+      "label": "基础能力支撑自动化"
+    },
+    {
+      "from": "q2_automation",
+      "to": "q3_ecosystem",
+      "relation_type": "depends-on",
+      "label": "自动化能力成为外部连接卖点"
+    },
+    {
+      "from": "q3_ecosystem",
+      "to": "q4_enterprise",
+      "relation_type": "depends-on",
+      "label": "企业版依赖生态与治理能力"
+    }
+  ]
+}

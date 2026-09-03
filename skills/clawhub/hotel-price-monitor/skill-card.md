@@ -1,43 +1,58 @@
-## Description: <br>
-酒店降价监控与多平台比价助手，同时搜索多个旅游平台实时价格帮你比价省钱，支持按酒店名称精确比价、按城市搜索酒店列表、创建降价监控任务，多旅游平台数据直连。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+酒店降价监控与多平台比价助手，同时搜索多个旅游平台实时价格帮你比价省钱，支持按酒店名称精确比价、按城市搜索酒店列表、创建降价监控任务，多旅游平台数据直连。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-shopping agents use this skill to search hotels by city and date, compare live prices across travel platforms for a named hotel, and prepare host-agent price watch requests for selected stays. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel names, cities, stay dates, and related search details are sent to the skill's proxy service for live pricing. <br>
-Mitigation: Use the skill only when the user is comfortable sharing those travel search details with the proxy service. <br>
-Risk: Some booking links may use commission channels, so link ordering or neutrality may require user attention. <br>
-Mitigation: Present platform, price, cancellation policy, and link information transparently so the user can choose where to book. <br>
-Risk: Persistent price monitoring depends on host-agent support and is not guaranteed by the skill alone. <br>
-Mitigation: Confirm that the host agent has accepted and scheduled the monitoring request before promising ongoing alerts. <br>
+## Use Case:
 
+External travelers and booking assistants use this skill to search hotel options by city and date, compare a named hotel across travel platforms, and prepare structured price-watch requests for follow-up by the host agent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/hotel-price-monitor) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON command output from hotel search and comparison scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hotel names, prices, cancellation-policy notes, booking links, and structured monitoring-request details for the host agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release evidence) <br>
+Risk: Hotel names, cities, stay dates, and occupancy details are sent to the publisher's proxy service for live price lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proxy operator, network requirements, and retention policy before installation, and avoid sending unnecessary personal or booking details.
+
+Risk: The bundled script contains an embedded shared proxy token.
+
+Mitigation: Remove and rotate the embedded token and provide deployment-specific credentials through a managed secret or environment variable.
+
+Risk: Result ordering is commission-aware when prices tie, which can affect platform recommendations.
+
+Mitigation: Disclose commission-based tie-breaking and verify that user-facing recommendations still present all comparable platform prices clearly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/hotel-price-monitor)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Conversational Markdown with JSON outputs from the bundled Python comparison script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The script emits hotel search and comparison JSON; price-watch requests are structured for the host agent to schedule and notify.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence; artifact frontmatter says 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

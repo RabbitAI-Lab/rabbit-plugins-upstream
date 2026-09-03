@@ -1,41 +1,50 @@
-## Description: <br>
-Manages Claude Code sessions with naming, checkpointing, and resume strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages Claude Code sessions with naming, checkpointing, and resume strategies.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to organize long-running Claude Code work, name useful checkpoints, resume prior sessions, and troubleshoot session continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Resumed or named sessions can carry forward sensitive context longer than intended. <br>
-Mitigation: Avoid placing secrets or regulated data in sessions intended for resume, and use fresh-session controls when prior context should not carry forward. <br>
-Risk: Old named sessions can accumulate stale or unnecessary work context. <br>
-Mitigation: Periodically clean up named sessions that are no longer needed. <br>
+## Use Case:
 
+Developers and engineers use this skill to name, resume, and organize long-running Claude Code work across debugging, feature development, PR review, and investigation sessions.
 
-## Reference(s): <br>
-- [Nm Sanctum Session Management on ClawHub](https://clawhub.ai/athola/skills/nm-sanctum-session-management) <br>
-- [Sanctum homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown narrative with command examples and troubleshooting guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no persistent output file is specified.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
+Risk: Session names, summaries, work logs, and resumed agent settings may carry context forward between sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid storing secrets, credentials, or sensitive regulated data in sessions unless the retention behavior is understood and accepted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-sanctum-session-management)
+- [Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No files, scripts, hooks, or automatic execution are included in the artifact.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

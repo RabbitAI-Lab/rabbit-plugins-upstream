@@ -1,8 +1,11 @@
 ---
 name: qa-test-automation-arch
-version: 1.6.0
+slug: qa-test-automation-arch
+displayName: 测试自动化架构
+version: 1.7.5
 description: >-
   当需要设计自动化测试框架、或者现有框架维护成本太高需要重构时使用此技能。运用 PageObject、分层测试、关键字驱动、数据驱动等模式设计可维护可扩展的自动化架构。不要直接写测试代码——先设计架构：选型（UI/API/单元）、分层（测试层/业务层/基础设施层）、数据管理（测试数据与脚本分离）和 CI 集成方案。好的自动化架构应该让写用例的人不需要懂底层实现。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"自动化架构"、"框架设计"、"自动化策略"、"自动化框架"、"测试框架架构"、需要设计测试自动化架构、自动化维护困难需要重构时
 allowed-tools: Read Grep Glob Bash
@@ -31,6 +34,9 @@ output_format:
   traceability:
     - 每份架构设计带唯一ID（ARCH-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - automation_architecture: 自动化测试架构设计
     - framework_selection: 框架选择建议
     - layer_design: 分层设计
@@ -43,6 +49,8 @@ error_recovery_guidance:
   on_failure: "自动化架构遗漏维护策略时回退到技术选型补充"
   retry_behavior: "补充选型后重新设计架构"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

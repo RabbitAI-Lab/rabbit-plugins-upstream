@@ -26,9 +26,25 @@ Scan conversation for mistake signals and record to feedback memory + failed-att
 **Per mistake**:
 1. Analyze root cause (Why 1-3 minimum)
 2. Draft feedback memory entry (rule + Why + How to apply)
-3. Collect for Phase 2 AskUserQuestion
+3. **If the finding implies future work, register it as a `- [ ]` item in the workspace tracker (`fix_plan.md` / `checklist.md`) — HARD STOP.** See below.
+4. Collect for Phase 2 AskUserQuestion
 
-**FA Prune**: After recording, if failed-attempts.md has 5+ sections, run [fa-prune.md](../cleanup/fa-prune.md) automatically.
+**Findings that imply future work must reach the tracker (HARD STOP)**
+
+The retrospect log records **what went wrong**; the tracker records **what will be done**. They are different media and one does not stand in for the other. A finding whose remediation is not fully executed in this session — a hook the escalation matrix now mandates, a trigger to register, a rule to strengthen, a defect to verify elsewhere — leaves no actionable trace when it lives only in the retrospect entry: nothing surfaces it during the next session's backlog read, so the escalation the entry itself declares never gets executed.
+
+This mirrors the obligation C (Pattern Detect) already carries for its candidates. The asymmetry — candidates registered, retrospect remediations not — is the gap this rule closes.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Write the retrospect entry, then treat the retrospect as done | Register every finding's outstanding remediation as a `- [ ]` tracker item, cross-referenced by the entry's class name |
+| 2 | Route the "should we do this remediation?" decision to a user ask instead of the tracker | Registering it is not asking to do it — it makes the work visible. Whether to run it now is a separate decision |
+| 3 | Skip registration because the retrospect entry already spells out the fix in its Why 5 | A retrospect entry is not read during backlog triage. If it is not in the tracker, it is not scheduled |
+| 4 | Register only findings from Pattern Detect because that is where the HARD STOP is written | Retrospect findings carry the same obligation — this section is that missing half |
+
+**Skip condition for registration only**: the finding's remediation was fully executed in this session (state that in the report), or the finding is purely descriptive with no follow-up action.
+
+**FA Prune**: After recording, run [fa-prune.md](../cleanup/fa-prune.md) automatically when any axis in its "Execution trigger (class-based)" table fires. That table is the single source for the trigger — do not restate a section-count threshold here; the flat counts it replaced are deprecated.
 
 **Skip condition**: No mistakes/corrections in conversation.
 
@@ -53,6 +69,8 @@ Scan conversation for mistake signals and record to feedback memory + failed-att
 
 **Skip condition**: None — always run if any hooks registered.
 
+**Self-check (before closing this sub-step)**: did this pass **physically emit** the `**Hook summary**: N registered / M OK / ...` line (with the actual enumerated numbers from settings.json + session behavior classification), or did it collapse to a prose conclusion like "0 ignored" without the enumeration? A conclusion without the format line is not a substitute — go back and produce the line before moving to Skill Check. A "nothing changed since the last pass" judgment does not exempt this sub-step: re-run the enumeration and confirm the counts, even if the conclusion repeats the prior pass's numbers.
+
 #### Skill Check
 
 1. Collect skills invoked via `Skill()` during session
@@ -65,6 +83,8 @@ Scan conversation for mistake signals and record to feedback memory + failed-att
 
 **Skip condition**: No skills invoked, or all skills worked correctly.
 
+**Self-check (before closing this sub-step)**: did this pass **list the actual skills invoked this session** (by name) and run the 4-item self-heal checklist against each, or did it collapse to a single unenumerated sentence? Naming zero skills when 1+ were invoked this session is a skipped sub-step, not a clean result.
+
 ### C. Pattern Detect (Automation Candidate Discovery)
 
 **Always run — no skip.**
@@ -73,6 +93,7 @@ Scan conversation for mistake signals and record to feedback memory + failed-att
 2. On candidate discovery:
    - Maps to existing rule/skill → suggest upgrade in Phase 2
    - **New pattern that fits nowhere → invoke `/skill-kit route`** → auto-chain to upgrade/writer
+   - **Candidate is a bug/behavior fix (a hook, script, or guard producing wrong output — not a new topic/doc/skill) → run the `/fix` skill's Step 1 recurrence pre-check (`failed-attempts.md` grep, and a RAG semantic search if a receiver is available) before implementing it in Phase 2.** Reaching a bug fix via this pattern-detect path does not exempt it from the same recurrence discipline a direct `/fix` invocation would require — a bug surfaced here can still be an Nth recurrence of an already-recorded pattern, and implementing it as if newly discovered risks missing that it needs a status update (or a stronger fix) instead of a fresh entry
 3. Collect candidates for Phase 2 AskUserQuestion
 
 ## Ralph Mode

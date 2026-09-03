@@ -1,44 +1,59 @@
-## Description: <br>
-Youclaw connects an agent to YouCloud's marketing analysis API to analyze ad creative, brand campaign strategy, audience profiles, and creative improvement prompts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+YouClaw helps marketers analyze ad creatives, uncover brand advertising strategies, and refine campaign ideas through YouCloud's YouShu AI service.
 
-## Publisher: <br>
-[youcloud](https://clawhub.ai/user/youcloud) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youcloud](https://clawhub.ai/user/youcloud)
 
-## Use Case: <br>
-Marketing teams and growth practitioners use this skill to request brand, advertising creative, audience, and campaign strategy analysis through YouCloud's service. The skill requires a YouCloud API key and sends the user's marketing context to the external YouCloud API when invoked. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User prompts, brand details, campaign context, and follow-up questions may be sent to YouCloud's external API when the skill is triggered. <br>
-Mitigation: Install only if that data sharing is acceptable, avoid sending sensitive content unless approved, and prefer explicit slash commands for sensitive workflows. <br>
-Risk: The skill requires a YouCloud API key with access to the service. <br>
-Mitigation: Use a scoped YOUCLOUD_API_KEY stored in the environment, rotate it when needed, and remove access when the skill is no longer in use. <br>
+## Use Case:
 
+Marketing teams and growth strategists use this skill to request brand, competitor, ad creative, audience, and campaign strategy analysis. It supports both full analysis reports and iterative creative critique workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/youcloud/youclaw) <br>
-- [Publisher profile](https://clawhub.ai/user/youcloud) <br>
-- [YouCloud homepage](https://www.youcloud.com) <br>
-- [YouCloud API endpoint](https://aichat.youshu.youcloud.com/aichat/claw) <br>
-- [Usage example](references/example.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown analysis reports and follow-up guidance returned from the YouCloud API] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires YOUCLOUD_API_KEY and may wait up to 600 seconds for the external API response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence and OpenClaw metadata) <br>
+Risk: Prompt content is sent to an external YouCloud/YouShu service for marketing analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content approved for that service, and avoid sending sensitive campaign, brand, customer, or confidential business information unless your organization permits it.
+
+Risk: Follow-up questions may reuse a previous API session.
+
+Mitigation: Start a new request when switching brands, campaigns, clients, or sensitivity levels, and use explicit slash commands for sensitive workflows.
+
+Risk: The skill requires a YOUCLOUD_API_KEY with access to the YouCloud/YouShu service.
+
+Mitigation: Store the key in the environment, restrict access to authorized users, and rotate or revoke the key according to your credential-management policy.
+
+## Reference(s):
+
+- [Usage example](references/example.md)
+- [YouCloud homepage](https://www.youcloud.com)
+- [ClawHub skill page](https://clawhub.ai/youcloud/skills/youclaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, shell commands]
+
+**Output Format:** [Markdown analysis reports and configuration guidance, with shell commands for setup when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reuse a prior API session for follow-up questions; API requests require YOUCLOUD_API_KEY.]
+
+## Skill Version(s):
+
+1.2.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

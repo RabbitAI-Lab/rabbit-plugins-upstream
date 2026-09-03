@@ -4,8 +4,8 @@ interagent_queue — live transaction observer and file logger for the MIAB call
 
 PREREQUISITE: Requires the `miab-broker` skill to be installed and active.
 It tails the append-only callback ledger (state/callbacks/ledger.jsonl) managed by miab-broker,
-converts raw create / forward / return / resolve / cancel / fail events into human-readable log
-entries using the agent identity map, advances a once-only cursor, and — when the live
+converts raw create / forward / return / resolve / cancel / fail / corrupt events into
+human-readable log entries using the agent identity map, advances a once-only cursor, and — when the live
 toggle is on — writes the formatted batch to the log file ($CLAW_HOME/logs/interagent-queue.log).
 
 This is a READ-ONLY observer over the ledger: it never mutates the ledger or envelopes.
@@ -69,20 +69,111 @@ AGENT_MAP = {
     "sweep": "🧹 Callback Reaper"
 }
 
+def registry_file() -> Path:
+    env = os.environ.get("CLAW_REGISTRY")
+    if env:
+        return Path(env).expanduser()
+    return claw_home() / "state" / "callbacks" / "agent-registry.json"
+
+
+_REGISTRY_NAMES = None
+
+
+def registry_display_names() -> dict:
+    """canonical-name -> displayName, read from miab-broker's agent-registry.json. (Q9)
+
+    AGENT_MAP below duplicated exactly the persona<->function mapping the broker's
+    registry now owns (miab-broker T14). Two sources of truth for one fact is why
+    `SPECTRE` and `ECHO` rendered inconsistently: this file's copy silently fell back
+    to the raw name on a miss. The registry is authoritative; AGENT_MAP is the
+    fallback for agents that have never been registered.
+
+    Read-only, and cached for the process — this observer never mutates broker state.
+    """
+    global _REGISTRY_NAMES
+    if _REGISTRY_NAMES is not None:
+        return _REGISTRY_NAMES
+    names = {}
+    try:
+        reg = json.loads(registry_file().read_text(encoding="utf-8"))
+        for key, entry in (reg.get("agents") or {}).items():
+            if not isinstance(entry, dict):
+                continue
+            label = entry.get("displayName")
+            canonical = str(key).strip().casefold()
+            if label:
+                names[canonical] = label
+            for alias in entry.get("aliases") or []:
+                if label:
+                    names[str(alias).strip().casefold()] = label
+                else:
+                    # No displayName, but the alias should still land on whatever
+                    # AGENT_MAP knows the canonical name as.
+                    names.setdefault(str(alias).strip().casefold(),
+                                     AGENT_MAP.get(canonical, canonical))
+    except (OSError, ValueError, AttributeError):
+        names = {}
+    _REGISTRY_NAMES = names
+    return names
+
+
 def who(name):
-    """Friendly display for a logical agent name, falling back to the raw name."""
-    return AGENT_MAP.get(name, name or "Unknown")
+    """Friendly display for a logical agent name.
+
+    Registry displayName wins, then this module's AGENT_MAP fallback, then the raw
+    name. Lookups are case-insensitive to match the broker's canonical form, so a
+    ledger record written as `ECHO` and one written as `echo` render identically. (Q9)
+    """
+    if not name:
+        return "Unknown"
+    canonical = str(name).strip().casefold()
+    hit = registry_display_names().get(canonical)
+    if hit:
+        return hit
+    return AGENT_MAP.get(canonical, name)
 
 # --------------------------------------------------------------------------- state
+def _refuse_unusable_state(p: Path, reason: str) -> None:
+    """Exit 1 rather than silently resetting the cursor. See load_state()."""
+    print(json.dumps({
+        "ok": False,
+        "error": f"state file unusable: {reason}",
+        "state_file": str(p),
+        "refusing": "resetting the cursor here would replay the entire ledger into the log",
+        "remedy": "inspect the file, then repair it or delete it to start a fresh sweep",
+    }, indent=2), file=sys.stderr)
+    sys.exit(1)
+
+
 def load_state() -> dict:
+    """Load the sweep cursor and the live toggle.
+
+    A MISSING state file is a genuine fresh start, and `last_processed_line: 0`
+    is the right answer for it.
+
+    An UNUSABLE one is not, and must never be treated as one. Until 1.3.0 this
+    function swallowed every exception and fell through to that same fresh-start
+    default, so a corrupt or truncated queue_state.json silently rewound the
+    cursor to 0 and the next `process` replayed the ENTIRE ledger into the log —
+    the failure mode duplicated the output this observer exists to produce, which
+    is worse than not running at all. Fail closed instead and let the operator
+    repair or remove the file deliberately.
+    """
     p = state_file()
     p.parent.mkdir(parents=True, exist_ok=True)
-    if p.exists():
-        try:
-            return json.loads(p.read_text(encoding="utf-8"))
-        except Exception:
-            pass
-    return {"enabled": False, "last_processed_line": 0}
+    if not p.exists():
+        return {"enabled": False, "last_processed_line": 0}
+    try:
+        state = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as e:
+        _refuse_unusable_state(p, str(e))
+    if not isinstance(state, dict):
+        _refuse_unusable_state(p, f"expected a JSON object, found {type(state).__name__}")
+    cursor = state.get("last_processed_line", 0)
+    if isinstance(cursor, bool) or not isinstance(cursor, int) or cursor < 0:
+        _refuse_unusable_state(
+            p, f"last_processed_line must be a non-negative integer, found {cursor!r}")
+    return state
 
 def save_state(state: dict) -> None:
     p = state_file()
@@ -170,6 +261,30 @@ def format_event(rec):
             f"   By: {by}\n"
             f"   Reason: {reason}\n"
             f"   Last Holder: {holder}"
+        )
+    if event == "authority-override":
+        # miab-broker T15. A call that would have been refused was forced through.
+        # Rendering this is not optional: the ledger is the only place it is recorded,
+        # and an unrendered event type is invisible rather than broken.
+        action = rec.get("action", "unknown action")
+        expected = who(rec.get("expected"))
+        remaining = rec.get("stack_remaining")
+        lines = [
+            f"🔓 [Authority Override] {cid}",
+            f"   By: {by}",
+            f"   Forced: {action} (entitled agent was {expected})",
+        ]
+        if remaining:
+            lines.append(f"   Warning: {remaining} frame(s) still waiting on the stack.")
+        return "\n".join(lines)
+    if event == "corrupt":
+        reason = rec.get("reason", "unparseable or inconsistent envelope")
+        dest = rec.get("quarantined_to", "unknown")
+        return (
+            f"🗑️ [Quarantined Envelope] {cid}\n"
+            f"   By: {by}\n"
+            f"   Reason: {reason}\n"
+            f"   Quarantined To: {dest}"
         )
     return None
 

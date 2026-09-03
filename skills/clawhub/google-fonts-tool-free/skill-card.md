@@ -1,41 +1,52 @@
-## Description: <br>
-Google Fonts Tool Free helps personal developers choose Google Fonts pairings and produce loading guidance for display=swap, preconnect, variable fonts, and purpose-specific font selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Fonts Tool helps developers choose Google Fonts, optimize loading, plan subsets and weights, and create practical font pairings.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and frontend practitioners use this skill to generate Google Fonts loading snippets, fallback stacks, font-pairing recommendations, and performance checks for web projects.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill's declared trigger and tool metadata are broader than its Google Fonts purpose.
+
+Mitigation: Use it only for explicit font loading, typography pairing, CSS fallback stack, and frontend font-performance tasks.
+
+Risk: The release security verdict is suspicious because the skill declares broader tool access than font guidance requires.
+
+Mitigation: Review generated shell commands and avoid allowing automatic activation for general writing, marketing, or unrelated coding tasks.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Personal developers use this skill to generate concise typography guidance, Google Fonts loading snippets, fallback stacks, and font pairing recommendations for a single web project. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad read, write, and command authority for a mostly static Google Fonts helper. <br>
-Mitigation: Install and run it only in workspaces where those permissions are acceptable, and review proposed file or command actions before execution. <br>
-Risk: The activation rules and capability claims are broader than the stated typography use case. <br>
-Mitigation: Use it only for Google Fonts loading, pairing, and typography guidance unless the trigger and capability claims are narrowed. <br>
+**Output Format:** [Markdown with HTML, CSS, text, and shell command examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/google-fonts-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+**Other Properties Related to Output:** [May include font-loading snippets, pairing tables, fallback stacks, and checklist-style guidance.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, text, and occasional shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include font-pairing tables, performance checklists, and loading examples.] <br>
+1.0.3 (source: server release metadata)
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

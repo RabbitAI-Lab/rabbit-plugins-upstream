@@ -1,44 +1,50 @@
-## Description: <br>
-Audits changes for additive bias and Iron Law compliance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits changes for additive bias and Iron Law compliance.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and code reviewers use this skill after implementation work and before commits or pull requests to audit local changes for additive bias, test expectation drift, unnecessary abstractions, and unreviewed invariant changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on general code-review language even when a full justification audit is not intended. <br>
-Mitigation: Use it deliberately for post-implementation or pre-merge review, and treat incidental activations as advisory unless the local diff is being audited. <br>
-Risk: Review reports can introduce incorrect or misleading guidance if the agent misreads the local diff or project requirements. <br>
-Mitigation: Review the report against the actual git diff, test changes, and stated requirements before changing implementation or merge decisions. <br>
-Risk: The artifact covers the skill content only; related Claude Code plugin agents, hooks, or commands are not included in this release artifact. <br>
-Mitigation: Review and scan any separately installed plugin components before relying on them in the same workflow. <br>
+## Use Case:
 
+Developers and code reviewers use this skill after implementation or before merging to audit local git diffs for additive bias, test expectation changes, and minimal-intervention justification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-justify) <br>
-- [Publisher profile](https://clawhub.ai/user/athola) <br>
-- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with tables and inline shell command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an additive-bias score, Iron Law compliance check, change-by-change justification, risk assessment, and recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill can appear in general code-review situations and push for strict justification of added code and test changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it where a quality-gate reviewer is desired, or narrow triggers to explicit invocation for lighter workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-justify)
+- [Declared homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown report with tables and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review guidance over a single code-change delta.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

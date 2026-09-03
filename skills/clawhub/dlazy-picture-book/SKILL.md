@@ -10,8 +10,8 @@ metadata:
         'requires': { 'bins': ['npm', 'npx', 'python3', 'curl'] },
         'install': 'npm install -g @dlazy/cli@1.2.3',
         'installAlternative': 'npx @dlazy/cli@1.2.3',
-        'homepage': 'https://github.com/dlazyai/cli',
-        'source': 'https://github.com/dlazyai/cli',
+        'homepage': 'https://github.com/dlazy-ai/cli',
+        'source': 'https://github.com/dlazy-ai/cli',
         'author': 'dlazyai',
         'license': 'see-repo',
         'npm': 'https://www.npmjs.com/package/@dlazy/cli',
@@ -25,7 +25,7 @@ metadata:
   }
 ---
 
-# dlazy-picture-book
+# 绘本生成 Picture Book
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -67,7 +67,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli`
 - **Homepage**: [dlazy.com](https://dlazy.com)

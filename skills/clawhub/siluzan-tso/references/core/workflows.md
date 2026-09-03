@@ -1,22 +1,23 @@
-﻿# 工作流目录 · 操作 / 管理类（W1–W12）
+﻿# 工作流目录 · 操作 / 管理类（W1–W13）
 
 > **范围**：调接口 / 写操作类业务（账户读取、开户、广告 CRUD、智投、拓词、优化、报告推送、财务、权限、预警、线索、巡检）。分析/报告类（拉数 → 撰稿 → 交付）见 `references/core/playbooks.md`（P1–P9）。
-> **通用纪律见 `references/core/agent-conventions.md`**（写操作确认 + `--commit`、ID 口径）；各卡片只写线性步骤。卡片字段：`触发 / 必读 / 步骤 / 产物`。完整参数表见「必读」指向的命令文档。
+> **通用纪律见 `references/core/agent-conventions.md`**（写操作确认 + `--commit`、写后成败报告、ID 口径）；各卡片只写线性步骤。卡片字段：`触发 / 必读 / 步骤 / 产物`。完整参数表见「必读」指向的命令文档。
 
-| 编号 | 业务                            | 必读                                                                                        |
-| ---- | ------------------------------- | ------------------------------------------------------------------------------------------- |
-| W1   | 账户查询（列表/余额/消耗/账单） | `references/accounts/accounts-list.md` + `accounts-balance-stats.md` |
-| W2   | 开户申请（六大媒体）            | `references/accounts/open-account-by-media.md`                                              |
-| W3   | Google 广告创建与精细管理       | `google-ads-campaign-plan.md` + `google-ads-write.md` / `google-ads-read.md` |
-| W4   | AI 智投草稿 → 发布              | `references/google-ads/google-ads-batch.md`                                                  |
-| W5   | 拓词 / RAG                      | `references/analytics/keyword-planner-workflows.md` + `references/analytics/rag.md`         |
-| W6   | AI 广告优化记录查看与执行       | `references/operations/optimize.md`                                                         |
-| W7   | TSO 优化报告生成 → 推送         | `references/analytics/reporting.md`                                                         |
-| W8   | 财务：充值 / 转账 / 开票        | `references/accounts/finance.md`                                                            |
-| W9   | 账户权限管理                    | `references/accounts/accounts-permissions.md`                                               |
-| W10  | 智能预警规则管理                | `references/operations/forewarning.md`                                                      |
-| W11  | 广告线索提取                    | `references/operations/clue.md`                                                             |
-| W12  | 日 / 周巡检                     | `references/accounts/accounts-balance-stats.md` + 各域                                      |
+| 编号 | 业务                            | 必读                                                                                |
+| ---- | ------------------------------- | ----------------------------------------------------------------------------------- |
+| W1   | 账户查询（列表/余额/消耗/账单） | `references/accounts/accounts-list.md` + `accounts-balance-stats.md`                |
+| W2   | 开户申请（五大媒体）            | `references/accounts/open-account-by-media.md`                                      |
+| W3   | Google 广告创建与精细管理       | `google-ads-campaign-plan.md` + `google-ads-write.md` / `google-ads-read.md`        |
+| W4   | AI 智投草稿 → 发布              | `references/google-ads/google-ads-batch.md`                                         |
+| W5   | 拓词 / RAG                      | `references/analytics/keyword-planner-workflows.md` + `references/analytics/rag.md` |
+| W6   | AI 广告优化记录查看与执行       | `references/operations/optimize.md`                                                 |
+| W7   | TSO 优化报告生成 → 推送         | `references/analytics/reporting.md`                                                 |
+| W8   | 财务：充值 / 转账 / 开票        | `references/accounts/finance.md`                                                    |
+| W9   | 账户权限管理                    | `references/accounts/accounts-permissions.md`                                       |
+| W10  | 智能预警规则管理                | `references/operations/forewarning.md`                                              |
+| W11  | 广告线索提取                    | `references/operations/clue.md`                                                     |
+| W12  | 日 / 周巡检                     | `references/accounts/accounts-balance-stats.md` + 各域                              |
+| W13  | Meta Instant Form 线索广告      | `meta-ads.md` + **`meta-lead-launch-plan-template.md`** + `meta-ads-write.md` / `read` |
 
 ---
 
@@ -33,12 +34,12 @@
 
 ---
 
-## W2 · 开户申请（Google / TikTok / Yandex / BingV2 / Kwai / MetaAd）
+## W2 · 开户申请（Google / TikTok / Yandex / BingV2 / MetaAd）
 
 - **触发**：申请开户、新开广告账户、查开户进度。
-- **必读**：`references/accounts/open-account-by-media.md`（各媒体必填项与参数，**含 §「首次响应硬规范」：首次进入开户话题必须先列全必填清单**）；Google 字段加 `references/accounts/open-account-google-ui.md`。所有媒体均**无需**手动查 magKey，CLI 按公司名自动创建/关联广告主组。
+- **必读**：`references/accounts/open-account-by-media.md`（各媒体必填业务项，**含 §「首次响应硬规范」：首次进入开户话题必须先列全必填清单；对用户禁止展示 CLI 参数名**）；Google 字段加 `references/accounts/open-account-google-ui.md`。所有媒体均**无需**手动查 magKey，CLI 按公司名自动创建/关联广告主组。
 - **步骤**：
-  1. 列出必填项 → 收集资料（TikTok/Bing/Kwai 需营业执照图片本地路径；CLI 无 OCR）。
+  1. 用业务语言列出必填项（勿贴 `--flag`）→ 收集资料（TikTok/Bing 需营业执照图片本地路径；CLI 无 OCR）。
   2. 前置查询（按需）：TikTok `open-account tiktok-areas/-industries/-timezones`；Bing `open-account bing-industries`；Google `open-account google-timezones`。
   3. 提交非交互命令 `open-account <media> …`（**禁用** `google-wizard`，需真实 TTY）。MetaAd 无表单，用 `open-account meta` 拉官方 OE 链接引导网页。
   4. 轮询审核：`account-history -m <媒体>`。
@@ -55,40 +56,44 @@
 ## W3 · Google 广告创建与精细管理
 
 - **触发**：新建搜索系列、出投放方案、**按 Excel/表格投放方案创建**、**根据官网/网站/URL 生成 Google 搜索广告（含「表格格式」）**、搜索广告文案/关键词/计划表、系列/组/广告/关键词 CRUD、PMax、拒审处理、日常调价/启停。
+- **类型边界**：本工作流 **仅支持** Google **搜索广告（Search）** 与 **PMax**；**不支持展示广告（Display）**（含 RDA / 独立 Display 系列）。用户要做展示广告 → 明确告知不支持，可改推 Search / PMax；**禁止**用本卡片流程伪装创建 Display。
 - **勿误判**：仅给官网 URL 且目标是「写/生成搜索广告」→ **本卡片（W3）**，不是 P8 网站诊断、不是 P9 市场分析；若用户只要拓词无系列结构 → **W5**。
-- **仅出方案（默认优先）**：用户说「出方案 / 规划 / 表格 / 先别创建·开户·投钱」，或**未给账户且未要求创建** → 按 `google-ads-campaign-plan.md` §「仅出方案 vs 创建」：交付 JSON + Markdown，`account`=`[PENDING_ACCOUNT]`；**禁止**先要广告账户再开工；跳过 `list-accounts` / `geo resolve` / validate / create，直到用户确认创建。
-- **必读**：方案与门禁 `references/google-ads/google-ads-campaign-plan.md` + **`assets/campaign-create-template.json`**（先 Read）+ `assets/campaign-create-template.md`；**有 Excel/表格方案时另读** `references/google-ads/rules/google-ads-plan-source-fidelity.md`；写命令参数 `references/google-ads/google-ads-write.md`；查询/拒审 `google-ads-read.md`；batch 补建 `google-ads-batch.md`；PMax 加 **`assets/pmax-create-template.json`** + `assets/pmax-create-template.md` + `references/google-ads/pmax-api.md`。
+- **仅出方案（默认优先）**：用户说「出方案 / 规划 / 表格 / 先别创建·开户·投钱」，或**未给账户且未要求创建** → 按 `google-ads-campaign-plan.md` §「仅出方案 vs 创建」：落盘 JSON + **写代码投影完整审查稿**（默认 MD；用户指定则 Excel 等），`account`=`[PENDING_ACCOUNT]`；**禁止**先要广告账户再开工；跳过 `list-accounts` / `geo resolve` / validate / create，直到用户确认创建。
+- **必读**：方案与门禁 `references/google-ads/google-ads-campaign-plan.md` + **`assets/campaign-create-template.json`**（先 Read）+ `assets/campaign-create-template.md` + `rules/google-ads-launch-plan-template.md`；**有 Excel/表格方案时另读** `references/google-ads/rules/google-ads-plan-source-fidelity.md`；写命令参数 `references/google-ads/google-ads-write.md`；查询/拒审 `google-ads-read.md`；batch 补建 `google-ads-batch.md`；PMax 加 **`assets/pmax-create-template.json`** + `assets/pmax-create-template.md` + `rules/google-ads-pmax-launch-plan-template.md` + `references/google-ads/pmax-api.md`。
 - **创建路径选择**：
   - 已有 AI 智投草稿 → 走 **W4**。
-  - **PMax 出方案/创建** → **`assets/pmax-create-template.json`**（先 Read）+ `pmax-create-template.md` + `pmax-api.md`：仅出方案先 JSON+Markdown；要创建再 `pmax-validate` → 用户确认 → `pmax-create`（**勿**用 Search `campaign-create`）。
-  - **用户给了 Excel/表格方案** → **方案源轨**：见 `google-ads-plan-source-fidelity.md`——Agent **写脚本**转 JSON；仅出方案停在 JSON+Markdown；要创建再 **`ad geo resolve`** → validate → 确认 → create（**禁止**对话手填完整 JSON）。
-  - 搜索系列从零出方案 → `google-ads-campaign-plan.md`：JSON + Markdown；要创建再 `campaign-validate` → 用户确认 → `campaign-create`。
-  - 已有完整结构化 JSON 且要创建 → validate → create。
+  - **PMax 出方案/创建** → **`assets/pmax-create-template.json`**（先 Read）+ `pmax-create-template.md` + `google-ads-pmax-launch-plan-template.md` + `pmax-api.md`：JSON →（创建阶段 `pmax-validate`）→ **写代码投影完整审查稿** → 用户确认 → `pmax-create`（**勿**用 Search `campaign-create`）。
+  - **用户给了 Excel/表格方案** → **方案源轨**：见 `google-ads-plan-source-fidelity.md`——Agent **写脚本**转 JSON；投影完整审查稿后停住或再创建；要创建再 **`ad geo resolve`** → validate → 确认 → create（**禁止**对话手填完整 JSON）。
+  - 搜索系列从零出方案 → `google-ads-campaign-plan.md` + `google-ads-launch-plan-template.md`：JSON → 写代码投影审查稿；要创建再 `campaign-validate` → 用户确认 → `campaign-create`。
+  - 已有完整结构化 JSON 且要创建 → validate → **写代码投影审查稿** → 用户确认 → create。
 - **步骤（Search · 仅出方案，无账户）**：
   1. Read `campaign-create-template.json`；官网/RAG 归纳产品与落地页。
-  2. 填系列/组/词/RSA/预算假设；`account`=`[PENDING_ACCOUNT]`；地域用国家名占位（勿编造 geo 数字 id）。
-  3. 按 `google-ads-launch-plan-template.md` 投影 Markdown → 交付；说明「选定账户后可继续 validate/create」。
-  4. **停**；勿追问账户为前置条件。
+  2. 填系列/组/词/RSA/预算假设；`account`=`[PENDING_ACCOUNT]`；地域用国家名占位（勿编造 geo 数字 id）；JSON 落盘。
+  3. **写代码**按 `google-ads-launch-plan-template.md` 从 JSON 投影完整审查稿（默认 MD；用户要表格则出 Excel）→ 交给用户；说明「选定账户后可继续 validate/create」。
+  4. **停**；勿追问账户为前置条件；**禁止**只交概览表。
 - **步骤（PMax 方案 → 创建）**：
   1. **创建阶段**账户：`list-accounts -m Google -k <id>`；落地页与品牌从官网/RAG 归纳。仅出方案跳过本步。
   2. 地域/语言：多国用 `ad geo resolve`，单国用 `ad geo search`；语言 id 写入 JSON。
-  3. 复制 `pmax-create-template.json` 填文案/预算/图片；**必须**含 `campaignExtensions`（至少 callouts + structuredSnippets）；**Lead Gen/B2B 默认** `campaignExtensions.leadForm`（方案 Markdown 须单列表单节）。
-  4. 门禁：`ad pmax-validate --config-file ./pmax.json --json-out ./snap-pmax`。
-  5. 输出 JSON + Markdown 方案 → 用户确认 → `ad pmax-create --commit "…"`。
+  3. 复制 `pmax-create-template.json` 填文案/预算/图片并落盘；**必须**含 `campaignExtensions`（至少 callouts + structuredSnippets）；**Lead Gen/B2B 默认** `campaignExtensions.leadForm`。
+  4. 创建阶段门禁：`ad pmax-validate --config-file ./pmax.json --json-out ./snap-pmax`。
+  5. **写代码**按 `google-ads-pmax-launch-plan-template.md` 从 JSON 投影完整审查稿 → 用户审查确认 → `ad pmax-create --commit "…"`。
   6. 复核：`ad campaigns` / `ad pmax-get`；缺表单时 `ad extension lead-form` 补挂。
+  7. **向用户交付创建详情**（系列名/`campaignId`、资产组/扩展是否齐全、失败原因）；禁止只说「已创建」。
 - **步骤（Search · 方案文件 → 创建）**：
   1. Read `campaign-create-template.json`；Agent 写转换脚本读 Excel → 写出 `campaign.json`（匹配类型按方案分块）。
   2. `ad geo resolve -a <id> --from-file ./locations.json --json-out ./snap-geo`，把 id 写回 JSON。
-  3. `ad campaign-validate`；**有不合规 → 询问「您自己改还是我帮您改？」**（见 `google-ads-plan-source-fidelity.md`）→ 确认摘要 → `campaign-create` → `batch get` / `batch diff` / 自动补扩展；若 Agent 代改过 → **创建完成报告**（创建清单 + 从 xxx→xxx + 原因）。
-- **步骤（Search 一体化创建，无现成方案文件）**：
-  1. 地域：多国 `ad geo resolve`；单国 `ad geo search -a <id> -q "United States"`（仍禁止编造）。
-  2. 门禁：`ad campaign-validate --config-file ./campaign.json`（必跑）。
-  3. 用户确认后创建：`ad campaign-create --config-file ./campaign.json`，记录返回 taskId。
-  4. 轮询：`ad batch get --id <taskId> --config-file … --json-out …` 直至非 Creating；**读落盘 `agentWorkflow.nextCommand`**（`--json-out` 时人读提示不会出现）。
-  5. **必做** `ad batch diff`（含投放国家）；`ok===false` / exit 2 时按 `missing[].remediateCommand` **自动** `ad geo add` / `ad extension *` 补建，勿反问用户（见 `google-ads-campaign-plan.md` § batch diff 后自动补建）。
-  6. 复核：`ad campaigns` / `ad extension list` 确认系列与扩展齐全。
-- **精细管理与日常运营**：`ad adgroup-create` / `ad keyword-create` / `ad keyword-negative-create` / `ad ad-create`（拓词辅助见 **W5**）；调整用 `ad adgroup-status` / `ad campaign-status` / `ad ad-delete` / `ad keyword-negative-delete`。完整参数见 `references/google-ads/google-ads-write.md`；列表复核见 `google-ads-read.md`。
-- **产物**：系列（`ad campaigns` 可见）+ batch（`ad batch get` / `batch diff` 补齐扩展与地域）；关键词匹配格式 `running shoes`=广泛 / `"..."`=词组 / `[...]`=精确；结构性写操作须用户确认；写后用成对读命令复核。
+  3. `ad campaign-validate`；**有不合规 → 询问「您自己改还是我帮您改？」**（见 `google-ads-plan-source-fidelity.md`）→ **写代码投影完整审查稿** → 用户确认 → `campaign-create` → `batch get` / `batch diff` / 自动补扩展 → **必出系列创建详情报告**；若 Agent 代改过 → 详情中**另附**修改表（创建清单 + 从 xxx→xxx + 原因）。
+- **步骤（Search 一体化创建，无现成方案文件）**：0. **最小清单**（详见 `google-ads-campaign-plan.md` §创建前最小命令清单）：`list-accounts -m Google -k …` → `account check-access` → geo → validate → 审查稿 → create → `batch get`（看 `agentWorkflow`）→ **仅有 campaignId 时** `batch diff`。命令是 `ad campaigns`（禁 `ad-campaigns`/`campaign list`）；geo/ad 失败禁臆测授权过期；仅当列表输出含激活字段且未激活时才先处理激活。
+  1. 地域：多国 `ad geo resolve --json-out`；单国 `ad geo search -a <id> -q "United States" --json-out`（读 `picked`/`targetedLocations`；仍禁止编造）。
+  2. 门禁：`ad campaign-validate --config-file ./campaign.json --json-out …`（必跑；STRUCTURED_SNIPPET Key 须合法英文标头；ACCELERATED 预算看 warnings）。
+  3. **写代码**按 `google-ads-launch-plan-template.md` 从 JSON 投影完整审查稿 → 用户确认。
+  4. 创建：`ad campaign-create --config-file ./campaign.json`，记录返回 taskId。
+  5. 轮询：`ad batch get --id <taskId> --config-file … --json-out …` 直至非 Creating；**读落盘 `agentWorkflow`**：`shouldRunBatchDiff===false` 或无 `campaignId` → **不要**跑 diff，按 `agentHint` 改 JSON 重提。
+  6. **有 campaignId 时必做** `ad batch diff`（含投放国家）；`ok===false` / exit 2 时按 `missing[].remediateCommand` **自动** `ad geo add` / `ad extension *` 补建，勿反问用户（见 `google-ads-campaign-plan.md` § batch diff 后自动补建）。
+  7. 复核：`ad campaigns` / `ad extension list` 确认系列与扩展齐全。
+  8. **向用户发送 Markdown 创建详情**（硬性）：`batch diff` 后把 **`reportMarkdown` 全文**发给用户（`--md-out` / `reportMarkdownFile`）；多系列各一份；**禁止**只说「创建完成」。代改过方案时另附修改表（`google-ads-plan-source-fidelity.md`）。见 `agent-conventions.md` §四。
+- **精细管理与日常运营**：`ad adgroup-create` / `ad keyword-create` / `ad keyword-negative-create` / `ad ad-create`（拓词辅助见 **W5**）；调整用 `ad adgroup-status` / `ad campaign-status` / `ad ad-delete` / `ad keyword-negative-delete`。完整参数见 `references/google-ads/google-ads-write.md`；列表复核见 `google-ads-read.md`。写后按 `agent-conventions.md` §四向用户汇报成败（改了什么、是否生效）。
+- **产物**：系列（`ad campaigns` 可见）+ batch（`ad batch get` / `batch diff` 补齐扩展与地域）+ **面向用户的系列创建详情报告**；关键词匹配格式 `running shoes`=广泛 / `"..."`=词组 / `[...]`=精确；结构性写操作须用户确认；写后用成对读命令复核并汇报成败。
 
 ---
 
@@ -101,8 +106,8 @@
   2. 详情：`ad batch get --id <recordId>`。
   3. （可选）改字段（仅 `draftStatus=Draft` 可改）：`ad batch update --id <recordId> --budget … --campaign-name … --url …`。
   4. 发布：`ad batch publish --id <recordId>`。
-  5. 跟踪：`ad batch list` 看 `Creating → Successfully / Failed`；成功后 `ad campaigns -a <id>` 验证。
-- **产物**：草稿的**从零创建**须在网页向导完成，CLI 不支持；要纯 CLI 创建走 **W3**。发布前与用户确认。
+  5. 跟踪：`ad batch list` 看 `Creating → Successfully / Failed`；成功后 `ad campaigns -a <id>` 验证；终态后按 **W3** / `agent-conventions.md` §四向用户交付系列创建详情（成功/失败项）。
+- **产物**：草稿的**从零创建**须在网页向导完成，CLI 不支持；要纯 CLI 创建走 **W3**。发布前与用户确认；发布后须汇报成败明细。
 
 ---
 
@@ -149,7 +154,7 @@
 - **触发**：充值、钱包、账户间转账、转账记录、开票、发票抬头。
 - **必读**：`references/accounts/finance.md`。
 - **步骤**：
-  1. 充值/钱包：CLI 不支持，`config show` 取 `webUrl` 后按 `finance.md` 给对应媒体充值页链接（Yandex/Kwai 无充值页，引导联系客服）。
+  1. 充值/钱包：CLI 不支持；**当轮** `config show` 取 `webUrl`，仅按 `finance.md` 路径表拼接后贴完整链接（**禁止**凭记忆编 URL；Yandex 无充值页，引导联系客服）。
   2. 转账：记录 `transfer list -m <媒体>`；同媒体账户间 `transfer create -m <媒体> --out <id> --in <id> --amount <n>`（写操作先确认）。
   3. 开票：`invoice billable -m <媒体> -c <币种> --json-out ./snap` 取订单 `entityId` → 选发票抬头（`invoice-info list`，查重后再 `create`）→ `invoice apply --bill-ids … --invoice-type <PI|VATI|VATSI> …`。CNY 订单仅增值税票、外币仅 PI。
 - **产物**：开票分步引导（先选订单、再选抬头、最后申请）；**禁止**不展示 `invoice billable` 就让用户手写 id；保留 CLI 币种校验。
@@ -191,7 +196,7 @@
 
 ## W11 · 广告线索提取
 
-- **触发**：拉取 TikTok / Meta 广告表单留资线索。
+- **触发**：拉取 TikTok / Meta 广告表单**已有**留资线索（不是新建表单投放；新建走 **W13**）。
 - **必读**：`references/operations/clue.md`。
 - **步骤**：
   1. 确认账户：TikTok `list-accounts -m TikTok`；Meta 取 Facebook 页面 ID。
@@ -204,10 +209,36 @@
 ## W12 · 日 / 周巡检
 
 - **触发**：日常/每周快速了解各媒体余额、消耗、预警与报告/智投状态。
-- **必读**：`references/accounts/accounts-balance-stats.md`；首页看板口径见 `references/misc/tso-home.md`。
+- **必读**：`references/accounts/accounts-balance-stats.md`；首页看板口径见 `references/misc/tso-home.md`。Google 超预算/空耗熔断另读 `references/operations/guard.md`。Bing / Yandex / TikTok / Facebook 只读巡检读 `hosted-automation-bing.md` / `hosted-automation-yandex.md` / `hosted-automation-tiktok.md` / `hosted-automation-facebook.md`。
 - **步骤**：
   1. 余额：`list-accounts -m <媒体> --json-out ./snap` → `balance -m <媒体> -a <mediaCustomerId,...>`（多户续航预警走 **P2**）。
-  2. 消耗：`stats -m <媒体> -a <id> --start <昨天/上周一> --end <昨天/上周日>`（多户汇总走 **P3**）。
-  3. 预警触发：`forewarning records -m <媒体> --start <S>`（见 **W10**）。
-  4. 智投/线索（按需）：`ad batch list --state Failed/HasFailed`（**W4**）、`clue …`（**W11**）、`optimize list/records`（**W6**）。
-- **产物**：要与网页首页看板数字完全一致（聚合口径）时引导打开首页（`tso-home.md`）；CLI 给的是单账户粒度的近似巡检。
+  2. 消耗：`stats -m <媒体> -a <id> --start <昨天/上周一> --end <昨天/上周日>`（多户汇总走 **P3**；Bing/Yandex **今天**不要用 `stats`）。
+  3. Google 当日超预算/空耗熔断（若用户要求）：`guard budget-circuit` / `guard zero-conv -m Google --json-out`（**禁止**逐户 for-loop）。
+  4. Bing 巡检（若用户要求）：按 `hosted-automation-bing.md` 跑封禁/拒审/当日超预算或空耗预警（只告警，不暂停）。
+  5. Yandex 巡检（若用户要求）：按 `hosted-automation-yandex.md` 跑归档/拒审/当日超预算或空耗预警（只告警，不暂停）。
+  6. TikTok 巡检（若用户要求）：按 `hosted-automation-tiktok.md` 跑封禁/拒审/当日超预算或空耗预警（只告警，不暂停）。
+  7. Facebook / MetaAd 巡检（若用户要求）：按 `hosted-automation-facebook.md` 跑封禁/拒审/当日超预算或空耗预警（只告警，不暂停）。
+  8. 预警触发：`forewarning records -m <媒体> --start <S>`（见 **W10**）。
+  9. 智投/线索（按需）：`ad batch list --state Failed/HasFailed`（**W4**）、`clue …`（**W11**）、`optimize list/records`（**W6**）。
+- **产物**：要与网页首页看板数字完全一致（聚合口径）时引导打开首页（`tso-home.md`）；CLI 给的是单账户粒度的近似巡检；Google 熔断须交付命中表或显式「无命中」；Bing/Yandex/TikTok/Facebook 巡检交付告警列表（不能写成已自动暂停）。
+
+---
+
+## W13 · Meta Instant Form 线索广告创建与精细管理
+
+- **触发**：新建 Facebook / Meta 线索广告、Instant Form、潜在客户表单投放；改预算/定向/启停已有线索对象。
+- **勿误判**：拉**已有**表单留资 → **W11** `clue -m Meta`；Meta 周期/诊断报告 → **P4-FB**；Google 搜索/PMax → **W3**。
+- **必读**：`references/meta-ads/meta-ads.md` + **`assets/meta-lead-create-template.json`**（先 Read）+ `meta-lead-create-template.md` + **`references/meta-ads/meta-lead-launch-plan-template.md`** + `meta-ads-write.md` / `meta-ads-read.md`。
+- **仅出方案**（「出方案 / 只要表格」、未给账户且未说创建）：跳过 list-accounts / pages；JSON 用 `[PENDING_ACCOUNT]` / `[PENDING_PAGE]` → `meta-ad plan-render` 出运营 4 Sheet xlsx + md → **停住等确认**。**禁止** Agent 手写 Facebook 方案 xlsx。
+- **步骤（创建）**：
+  1. `list-accounts -m MetaAd --page-size 999 --json-out ./snap` 取 `mediaCustomerId`。
+  2. `meta-ad account` / `meta-ad pages`：记下币种与 `pageId`（`--json-out` 主页在 `items[]`，须含 `ADVERTISE`）。**HTTP 403** 或主页为空则停。`spend_capDisplay` ≈ `amount_spentDisplay` → 仍可 PAUSED 创建，ACTIVE 投不出去。
+  3. 落盘同构 JSON（可执行字段 + `plan` 套系/矩阵/背书）。
+  4. 门禁：`meta-ad validate --config-file ./meta-lead.json --json-out ./snap`。
+  5. `meta-ad plan-render --config-file ./meta-lead.json --out ./meta-lead-plan.xlsx` → 用户确认（`--commit` 代替不了这步）。
+  6. `meta-ad create --config-file ./meta-lead.json --json-out ./snap --commit "…"`（默认 PAUSED；失败读已建成 ID 用原语续跑）。报「支付方式」则停，不要重头 create。
+  7. 按返回 ID `meta-ad campaign/adset/ad --id` 复核。
+  8. 需要投放：三个对象 `*-status --status ACTIVE --commit`。清理：`DELETED`，顺序广告→组→系列。
+- **定向**：`create` / `adset-create` 会提交 `targeting_automation.advantage_audience`（默认 `1`；有非空 `flexibleSpec` 时默认 `0`，也可 JSON/`--advantage-audience` 显式指定）。审查稿兴趣可只写 `plan.targeting`；要打进网关则写 `adset.flexibleSpec`。
+- **失败续跑**：读 `--json-out` 已建成 ID 用原语续跑；**禁止**再 `campaign-create` / 重头 `create`。
+- **产物**：审查稿路径（MD 或 xlsx）+ create 的 `formId` / `imageHash` / `campaignId` / `adSetId` / `creativeId` / `adId`；写后交代成败与是否仍为 PAUSED。

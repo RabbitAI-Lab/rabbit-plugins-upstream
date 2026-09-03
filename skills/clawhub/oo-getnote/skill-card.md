@@ -1,42 +1,55 @@
-## Description: <br>
-Operates Get 笔记 (biji.com) through the OOMOL getnote connector for reading, creating, updating, sharing, and deleting notes and related knowledge-base data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get Biji operates a user's Get Biji account through OOMOL to read, create, update, share, search, and delete notes and knowledge base content.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Get 笔记 notes, tags, sharing, and knowledge bases from an agent through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive actions can change or delete Get 笔记 data. <br>
-Mitigation: Confirm the target note, knowledge base, tags, payload, and expected effect before approving write or destructive actions. <br>
-Risk: Installing or authenticating the OOMOL oo CLI affects access to the user's connected account. <br>
-Mitigation: Install or authenticate the OOMOL oo CLI only from the documented source and only when an auth or connection error requires it. <br>
+## Use Case:
 
+External users and agents use this skill to manage Get Biji notes and knowledge bases through an OOMOL-connected account, including read, search, write, share, and deletion workflows.
 
-## Reference(s): <br>
-- [Get 笔记 homepage](https://www.biji.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-getnote) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call the OOMOL oo CLI and return connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Read actions can inspect notes and knowledge bases in the connected Get Biji account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use this skill only when the agent is allowed to access the connected Get Biji account.
+
+Risk: Write, sharing, update, and deletion actions can change or expose Get Biji content.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before allowing those actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-getnote)
+- [Get Biji Homepage](https://www.biji.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Get Biji connector JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

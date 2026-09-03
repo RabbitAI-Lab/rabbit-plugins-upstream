@@ -1,44 +1,55 @@
-## Description: <br>
-aggclaw helps agents analyze global ad creatives with AppGrowing Global, select game, non-game, or Inspire modes, and optionally download creative materials from completed sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+aggclaw helps agents query AppGrowing Global to find, analyze, and summarize global ad creatives, including game, non-game, and Inspire ideation modes.
 
-## Publisher: <br>
-[youcloud](https://clawhub.ai/user/youcloud) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youcloud](https://clawhub.ai/user/youcloud)
 
-## Use Case: <br>
-External marketers, creative strategists, app teams, and game teams use this skill to request global ad creative analysis, compare creative strategies, generate ideation prompts, and retrieve creative materials after an analysis session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creative-analysis prompts and related session context are sent to AppGrowing/YouCloud using the user's API key. <br>
-Mitigation: Avoid confidential campaign plans, client secrets, personal data, and other sensitive material in prompts or follow-up context. <br>
-Risk: The skill can download creative assets returned by the AppGrowing/YouCloud service. <br>
-Mitigation: Review downloaded files and their usage rights before reuse or redistribution. <br>
-Risk: Direct creative download links may contain embedded authorization data and can expire. <br>
-Mitigation: Do not share raw download URLs; re-fetch materials through the authenticated materials endpoint when a link expires. <br>
+## Use Case:
 
+Developers, marketers, and growth teams use this skill to ask an agent for AppGrowing Global ad creative analysis and ideation. The skill can continue analysis sessions and download user-selected creative materials from the active session.
 
-## Reference(s): <br>
-- [Usage Examples](references/example.md) <br>
-- [AppGrowing Global](https://appgrowing.net/) <br>
-- [ClawHub skill page](https://clawhub.ai/youcloud/skills/aggclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown analysis responses with optional local creative asset files and PowerShell examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires YOUCLOUD_API_KEY; analysis requests may wait up to 600 seconds, and materials requests may wait 120 seconds or more.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill sends ad-analysis prompts to AppGrowing/YouCloud using the configured YOUCLOUD_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that external API use is acceptable, configure the key explicitly, and avoid submitting prompts that should not be shared with the service.
+
+Risk: User-requested creative downloads can save media files locally, including all creatives in a session if that scope is chosen.
+
+Mitigation: Review the download scope before choosing all creatives and prefer mentioned-creatives-only downloads when that is sufficient.
+
+## Reference(s):
+
+- [aggclaw ClawHub Skill Page](https://clawhub.ai/youcloud/skills/aggclaw)
+- [AppGrowing](https://appgrowing.net/)
+- [Usage Examples](references/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files]
+
+**Output Format:** [Markdown analysis text with optional local downloaded media files and setup commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires YOUCLOUD_API_KEY; can preserve session_id for follow-up analysis and save requested creative downloads locally.]
+
+## Skill Version(s):
+
+1.2.1 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

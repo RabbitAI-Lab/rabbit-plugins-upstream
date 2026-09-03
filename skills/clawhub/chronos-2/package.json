@@ -1,0 +1,37 @@
+{
+  "name": "chronos-skill",
+  "version": "1.0.0",
+  "description": "Time awareness for AI coding agents. Hook-backed ledger, 7 decision rules, 8 platforms. Stops your agent from guessing when and how long ago.",
+  "keywords": [
+    "pi-package",
+    "pi-skill",
+    "time-awareness",
+    "agent-skill",
+    "claude-code",
+    "hooks",
+    "skill"
+  ],
+  "pi": {
+    "skills": [
+      "SKILL.md"
+    ]
+  },
+  "files": [
+    "README.md",
+    "SKILL.md",
+    "scripts/",
+    "installers/",
+    "!**/__pycache__",
+    "!**/*.pyc"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OthmanAdi/chronos.git"
+  },
+  "author": "Ahmad Othman Ammar Adi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/OthmanAdi/chronos/issues"
+  },
+  "homepage": "https://github.com/OthmanAdi/chronos#readme"
+}

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agentcad",
   "slug": "agentcad",
   "ownerHandle": null,
-  "version": "0.4.0",
-  "updatedAt": 1783792453621,
-  "contentHash": "608fc87490a27581ddec99f6ba1266adb4d1760d396327e901656b6f383c34ab",
-  "fetchedAt": "2026-07-26T18:16:39.070Z"
+  "version": "0.5.0",
+  "updatedAt": 1788431129530,
+  "contentHash": "10fda0d47538bd2df6de1ad872b350418388d98b213f1bd90f4b0176ad134ae2",
+  "fetchedAt": "2026-09-03T12:10:54.147Z"
 }

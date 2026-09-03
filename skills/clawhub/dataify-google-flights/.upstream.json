@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dataify-google-flights",
   "slug": "dataify-google-flights",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1784191276274,
-  "contentHash": "8082ee41699318927dec8482d7ae04fc455ee8172f375f3604cd962e207ee177",
-  "fetchedAt": "2026-07-26T18:13:20.610Z"
+  "version": "1.3.0",
+  "updatedAt": 1788254385673,
+  "contentHash": "611a809b694bda8052f012f25e39f5759c45773260e79d46463ee45f77aa8fdb",
+  "fetchedAt": "2026-09-03T12:19:28.299Z"
 }

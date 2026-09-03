@@ -118,7 +118,7 @@ For competitive queries, if others are mentioned/cited and the client isn't (che
 - Do they have stronger schema/structured data?
 - Are they more established in the index?
 
-Run `cnry evidence <project> --format json` and check `competitorOverlap` in snapshots.
+Run `cnry evidence <project> --format json`. Use `citedDomains` and grounding-source hosts for citation evidence; use answer text with Canonry's shared matcher for mention evidence. `competitorOverlap` is a legacy mixed field and must not be treated as either metric by itself.
 
 ### Step 4: Check across providers
 Gemini, OpenAI, Claude, and Perplexity may behave differently. One citing a domain while another doesn't is normal — each has its own knowledge base and update schedule.
@@ -133,8 +133,9 @@ Look for patterns: are gaps growing or shrinking? Are new competitors appearing?
 A lost mention (or lost citation) isn't always a lost user. Before declaring a regression real, confirm whether AI-referral traffic actually fell on the same window:
 ```bash
 cnry ga status <project>                          # confirm lastSyncedAt is recent; re-sync if stale
-cnry ga ai-referral-history <project> --format json
-                                                      # daily {date, source, medium, attribution, sessions, users}
+cnry ga ai-referral-daily <project> --format json
+                                                      # AI sessions per day and per source, deduplicated across
+                                                      # attribution dimensions; totals match `cnry ga traffic`
 cnry ga attribution <project> --trend             # 7d/30d direction per channel + biggest mover
 ```
 Read the result against the citation loss window:

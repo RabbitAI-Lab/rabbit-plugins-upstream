@@ -1,46 +1,62 @@
-## Description: <br>
-Implements GitHub or GitLab issues via parallel subagents with review gates between task batches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Implements GitHub or GitLab issues via parallel subagents with review gates between task batches.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to fetch GitHub or GitLab issues, break them into tasks, execute independent work in parallel, review batches, and consolidate completed issue work into one pull request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use authenticated GitHub or GitLab CLI access to read issues, change code, commit work, comment on issues, close issues, or create a pull request. <br>
-Mitigation: Run it only in repositories where that level of agent access is acceptable, and review proposed issue comments, closures, commits, and pull requests before they are published. <br>
-Risk: The workflow includes an external public feedback step for tooling observations that could expose project details without clear confirmation. <br>
-Mitigation: Disable that step or require explicit manual approval before posting any tooling feedback outside the current repository. <br>
-Risk: Parallel subagent execution can create merge conflicts, incomplete work, or hard-to-recover hangs in remote-control or headless sessions. <br>
-Mitigation: Use the documented review gates, keep high-risk or dependent tasks sequential, limit parallelism, and prefer local sessions when subagents are required. <br>
+## Use Case:
 
+Developers use do-issue to turn one or more GitHub or GitLab issues into an implementation plan, dispatch parallel or sequential agents, run review gates, and prepare a consolidated pull request.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-do-issue) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Claude Code issue #28482](https://github.com/anthropics/claude-code/issues/28482) <br>
-- [Claude Code issue #33232](https://github.com/anthropics/claude-code/issues/33232) <br>
-- [Claude Code issue #13240](https://github.com/anthropics/claude-code/issues/13240) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands, issue workflow steps, task prompts, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to read and comment on issues, modify code, run tests, commit changes, and prepare one consolidated pull request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+Risk: The skill can write remote issue comments or close issues while resolving work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit issue numbers, review generated comments before posting, and keep issue closure disabled unless closure is intentionally approved.
+
+Risk: The skill includes an external tooling-feedback step that can send observations to the Night Market GitHub Discussions repository.
+
+Mitigation: Disable or ignore that feedback step unless the user explicitly wants tooling observations sent outside the current project.
+
+Risk: Parallel subagents can make code changes and commits that conflict or miss requirements.
+
+Mitigation: Run dependency and conflict analysis before dispatch, limit broad parallel batches, and require review gates plus tests before preparing a pull request.
+
+Risk: Subagent-heavy runs may hang in remote-control or headless sessions.
+
+Mitigation: Prefer local execution for subagent-heavy workflows, limit concurrency, and use background-capable execution when remote monitoring is necessary.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-sanctum-do-issue)
+- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, task plans, code changes, and issue or pull request text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use platform CLIs and subagents to fetch issues, edit code, commit changes, update issue comments, and prepare one consolidated pull request.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

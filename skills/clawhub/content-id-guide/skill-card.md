@@ -1,43 +1,77 @@
-## Description: <br>
-A calm way for creators to understand and organize automated content claims across platforms, so nothing important gets missed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides creators, managers, and labels through automated copyright claim workflows and organizes their existing claim documentation into evidence summaries and deadline timelines.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Creators and rights-operations teams use this skill to understand the procedural flow of automated content claims and organize documentation they already have. It supports neutral process explanation for systems such as YouTube Content ID, Meta Rights Manager, and similar automated copyright enforcement tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake procedural organization for legal advice or a recommendation about what action to take. <br>
-Mitigation: Keep responses framed as process help, require the documented acknowledgment before claim-specific assistance, and direct users to qualified professionals for legal decisions. <br>
-Risk: Claim notices may contain unnecessary personal details. <br>
-Mitigation: Avoid collecting unnecessary personal information and redact personal emails, phone numbers, and addresses before summarizing or displaying pasted notice text. <br>
-Risk: Requests to bypass or evade automated claim systems could create unsafe guidance. <br>
-Mitigation: Terminate or redirect requests about bypassing, tricking, masking, or evading detection systems. <br>
+## Use Case:
 
+External creators, artists, managers, and label teams use this skill to understand automated content claims, distinguish claim types, collect their existing documentation, and map platform-specific deadlines without receiving legal advice or outcome predictions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/otherpowers/skills/content-id-guide) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/otherpowers) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown procedural guidance with structured checklists and JSON-like claim-event fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable guidance; requires an acknowledgment before claim-specific help and includes PII redaction constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill handles sensitive claim notices and creator documentation that may contain personal, account, financial, or rights-holder information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use recap or memory features only for information the user is comfortable storing, redact incidental third-party personal data from pasted notices, and keep the evidence organizer under the user's control.
+
+Risk: Incorrect platform deadlines, windows, or money handling could mislead a creator during a time-sensitive claim process.
+
+Mitigation: Use current official platform sources, include units for all windows, ask users to double-check live dashboards before acting, and avoid invented dates, amounts, or outcome predictions.
+
+Risk: Formal legal steps such as counter notifications can require professional judgment.
+
+Mitigation: Frame the skill as procedural information and document organization, not legal advice, and recommend a qualified professional at legal-weight moments.
+
+Risk: Maintenance eval scripts may transmit transcripts or test material to external model APIs if run with real data.
+
+Mitigation: Do not run live evals with real transcripts unless consent and privacy controls are in place.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/content-id-guide)
+- [Creative Traditions](references/creative-traditions.md)
+- [Eval Plan](references/eval-plan.md)
+- [Eval Seeds](references/eval-seeds.md)
+- [Freshness Log](references/freshness-log.md)
+- [Geography](references/geography.md)
+- [Glossary](references/glossary.md)
+- [Label Operators](references/label-operators.md)
+- [Legal Help](references/legal-help.md)
+- [Official Source Pairings](references/links.md)
+- [Monetization Programs](references/monetization-programs.md)
+- [Meta Rights Manager Reference](references/platform-meta.md)
+- [TikTok Copyright Reference](references/platform-tiktok.md)
+- [YouTube Content ID Reference](references/platform-youtube.md)
+- [Extraction Red-Team Set](references/red-team-extraction.md)
+- [Severity System](references/severity-badges.md)
+- [Trigger Evals](references/trigger-evals.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Files, Shell commands]
+
+**Output Format:** [Plain-language text and Markdown evidence organizers, with optional CSV/HTML templates and maintenance shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should cite current official platform sources, avoid legal advice, avoid outcome predictions, and preserve user-controlled records.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and SKILL.md status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

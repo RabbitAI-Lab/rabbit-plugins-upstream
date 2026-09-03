@@ -1,0 +1,112 @@
+# Infoseek 外部能力注册表（声明式）
+# ───────────────────────────────────────────────────────────────
+# 设计原则（M0.2.5）：所有外部能力在此声明，代码零改动接入。
+#   - 新增能力：仅在此追加条目（无需改 pipeline / key_manager / lifecycle）
+#   - 生命周期：health_probe=engine_lifecycle 时，错误自动经
+#     engine_lifecycle.classify 分类（429→quota / 401-403→forbidden / …）
+#   - 代偿：degrade_to 声明能力间语义替代链，由 capability_compensator 消费
+#   - 合规：requires_consent=true 的能力必须显式授权才运行；enabled=false 默认 OFF
+#
+# 字段说明：
+#   name          能力名（唯一，作为生命周期 state key）
+#   kind          能力族（structured_data_api / identity_attribution / search_api / llm）
+#   enabled       默认是否启用（false=默认 OFF，需 env 或 consent 开启）
+#   requires_consent  是否需合法用途授权（针对个人的能力必为 true）
+#   auth_env      认证环境变量（无需则留空）
+#   weight        召回/排序权重（0-1）
+#   cost_model    none / credits / quota（影响保留池/预算策略）
+#   cli           命令行可执行名（subprocess 调用，隔离重依赖于主进程）
+#   health_probe  engine_lifecycle（复用既有健康/配额/自愈）
+#   degrade_to    失效时的能力间替代链（末端可放 manual_review 优雅降级）
+#   venv_hint     隔离 venv 依赖提示（可选）
+
+version: 1
+
+capabilities:
+  - name: QVeris
+    kind: structured_data_api
+    enabled: true
+    requires_consent: false
+    auth_env: QVERIS_API_KEY
+    weight: 0.9
+    cost_model: credits
+    health_probe: engine_lifecycle
+    degrade_to: [Exa, Tavily]
+
+  - name: Maigret
+    kind: identity_attribution
+    enabled: false            # 默认 OFF：合规 opt-in
+    requires_consent: true    # 针对个人的 OSINT，必须授权
+    auth_env: ""
+    weight: 0.9
+    cost_model: none
+    cli: maigret
+    health_probe: engine_lifecycle
+    degrade_to: [Sherlock, manual_review]
+    venv_hint: "pip install maigret（隔离 venv 推荐）"
+
+  - name: Sherlock
+    kind: identity_attribution
+    enabled: false            # 默认 OFF：合规 opt-in
+    requires_consent: true
+    auth_env: ""
+    weight: 0.85
+    cost_model: none
+    cli: sherlock
+    health_probe: engine_lifecycle
+    degrade_to: [manual_review]
+    venv_hint: "pip install sherlock-project（隔离 venv 推荐）"
+
+  # P0b 新增：账号人因验证器（L2 真人验证层）
+  # 纯规则启发式（零依赖/零网络/零成本）：区分 真人/机器人/水军/可疑
+  # 输入账号画像字段（年龄/发帖/粉丝/僵尸粉/互动率/行为规律/话题多样性），
+  # 输出 trust_score + verdict；与 Maigret/Sherlock 构成 发现→验证 闭环
+  - name: AccountTrustScorer
+    kind: identity_attribution
+    enabled: false            # 默认 OFF：涉个人数据，合规 opt-in
+    requires_consent: true
+    auth_env: ""
+    weight: 0.8
+    cost_model: none
+    health_probe: none
+    degrade_to: [manual_review]
+    venv_hint: ""
+
+  # P1a 新增：public-apis 免费 API 目录（L0 免费优先层）
+  # 目录索引本地化（scripts/public_apis_catalog.py），1712 条/51 分类/799 条无 key
+  # 供三级路由做 0 成本长尾数据源；失效时退回 manual_review（不静默丢数据）
+  - name: PublicApisCatalog
+    kind: free_api
+    enabled: false            # 默认 OFF：目录索引按需加载（INFOSEEK_ENABLE_PUBLICAPISCATALOG=1）
+    requires_consent: false
+    auth_env: ""
+    weight: 0.5
+    cost_model: none
+    health_probe: none
+    degrade_to: [manual_review]
+    venv_hint: ""
+
+  # P1b 新增：AgentKey 统一 MCP 网关（L1 网关付费层）
+  # 一个主密钥 → ~1800 工具（搜索/社交/金融含 Tushare/加密/电商）
+  # 默认 OFF：付费 credits + 涉社交个人数据，必须显式授权后按子集接入
+  - name: AgentKey
+    kind: gateway_api
+    enabled: false            # 默认 OFF：付费 + 合规，opt-in
+    requires_consent: true
+    auth_env: AGENTKEY_API_KEY
+    weight: 0.9
+    cost_model: credits
+    health_probe: engine_lifecycle
+    degrade_to: [QVeris, PublicApisCatalog, manual_review]
+    venv_hint: "pip install mcp（AgentKey 为 MCP 网关；需 find_tools/execute_tool 封装）"
+
+  # 末端优雅降级：无替代能力时，返回"需人工核实"标记而非静默丢数据
+  - name: manual_review
+    kind: graceful_fallback
+    enabled: true
+    requires_consent: false
+    auth_env: ""
+    weight: 0.0
+    cost_model: none
+    health_probe: none
+    degrade_to: []

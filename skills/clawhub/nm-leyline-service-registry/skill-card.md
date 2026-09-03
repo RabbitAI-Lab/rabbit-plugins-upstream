@@ -1,42 +1,56 @@
-## Description: <br>
-Registers external services with health checks, central config, and unified execution. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Registers external services with health checks, central config, and unified execution.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill to design or use a registry for coordinating multiple external AI or service CLIs with shared configuration, health checks, quotas, failover, and unified execution results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad local command execution through configured external service CLIs can run unintended binaries or commands. <br>
-Mitigation: Restrict service commands to trusted binaries and review generated command templates before execution. <br>
-Risk: Prompt or file routing through failover and parallel execution can send sensitive content to unexpected third-party providers. <br>
-Mitigation: Approve the destination service before sending prompts or files, avoid sensitive files unless explicitly approved, and review failover or parallel execution flows. <br>
+## Use Case:
 
+Developers and engineers use this skill to design and document a registry pattern for coordinating multiple external service integrations with shared configuration, health checks, service selection, failover, and execution result handling.
 
-## Reference(s): <br>
-- [Service Configuration](modules/service-config.md) <br>
-- [Execution Patterns](modules/execution-patterns.md) <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Python, YAML, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes registry, health check, service selection, retry, failover, and parallel execution patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: Configured external service CLIs may receive prompts or named files that contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted services, review API key setup and service config, and avoid sending sensitive files unless the provider and account policy allow it.
+
+Risk: Broad service and execution triggers may apply external-service registry guidance when the task does not need multi-service coordination.
+
+Mitigation: Confirm the task needs a service registry, shared health checks, or failover behavior before applying the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-service-registry)
+- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+- [Service configuration module](modules/service-config.md)
+- [Execution patterns module](modules/execution-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration]
+
+**Output Format:** [Markdown guidance with Python and YAML snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

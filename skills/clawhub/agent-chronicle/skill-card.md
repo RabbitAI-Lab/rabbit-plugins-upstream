@@ -1,45 +1,58 @@
-## Description: <br>
-AI-powered diary generation for agents that creates reflective journal entries with quote tracking, curiosity backlog, decision archaeology, relationship notes, mood analytics, weekly digests, On This Day resurfacing, and cron auto-generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered diary generation for agents - creates rich, reflective journal entries (400-600 words) with Quote Hall of Fame, Curiosity Backlog, Decision Archaeology, Relationship Evolution, mood analytics, weekly digests, "On This Day" resurfacing, and scheduled auto-generation.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Agents and developers use Agent Chronicle to create and manage persistent diary entries, weekly summaries, quotes, curiosities, decisions, relationship notes, and mood or topic analyses from agent work sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can summarize local session history into persistent diary, memory, quote, decision, and relationship files. <br>
-Mitigation: Install only when persistent journaling is intended; avoid use around secrets, regulated data, or private third-party conversations, and review generated entries before saving or exporting. <br>
-Risk: Broad diary and reflection triggers may capture more personal or collaborative context than expected. <br>
-Mitigation: Disable auto-generation, memory integration, quote capture, and relationship tracking unless those records are explicitly wanted. <br>
-Risk: Exported HTML may expose sensitive diary content or inherit unwanted remote styling behavior. <br>
-Mitigation: Prefer non-HTML export for sensitive material unless the remote stylesheet is removed and the output is reviewed before sharing. <br>
+## Use Case:
 
+Agents and developers use Agent Chronicle to create persistent diary entries, weekly digests, quote lists, curiosity backlogs, decision records, relationship notes, and mood or topic analyses from agent session activity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robbyczgw-cla/skills/agent-chronicle) <br>
-- [README.md](README.md) <br>
-- [CHANGELOG.md](CHANGELOG.md) <br>
-- [config.example.json](config.example.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, JSON, Shell commands, Configuration] <br>
-**Output Format:** [Markdown diary entries and digests, JSON task payloads and analytics, plus shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local diary, quote, curiosity, decision, relationship, memory, and export files according to configuration; PDF and HTML export require additional local tooling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.2 (source: SKILL.md frontmatter, package.json, CHANGELOG, server release evidence) <br>
+Risk: The skill can read local session memory and preserve sensitive quotes, moods, decisions, relationship notes, and diary summaries over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit diary commands, review generated entries before saving, and periodically delete or redact diary entries, quotes, relationship notes, exports, and duplicated daily-memory entries.
+
+Risk: Scheduled auto-generation can capture diary content without direct per-entry prompting when automation is enabled.
+
+Mitigation: Keep automation disabled unless unattended capture is intended, and grant only the exact commands and working directory needed for the scheduled job.
+
+Risk: PDF and HTML exports can make private diary records easier to share or retain outside the normal memory directory.
+
+Mitigation: Review export files before sharing and remove generated exports that contain private or sensitive content.
+
+## Reference(s):
+
+- [Agent Chronicle on ClawHub](https://clawhub.ai/robbyczgw-cla/skills/agent-chronicle)
+- [OpenClaw Automations Documentation](https://docs.openclaw.ai/automation/cron-jobs)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown diary entries, weekly digests, analysis reports, export files, and JSON task payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Diary records are saved under the configured memory/diary path; exports may be produced as PDF or HTML when optional dependencies are available.]
+
+## Skill Version(s):
+
+0.8.0 (source: server release, frontmatter, skill.json, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

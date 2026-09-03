@@ -109,7 +109,7 @@ problem. Say:
 这轮搜索返回了不少账号，但严格落在「1000-5000 粉」且有一波爆款证据的账号不足。我不会把 100 多粉或十几万粉的账号硬塞进主对标表里。可以继续用「近期爆款笔记反查作者」或放宽到 800-8000 粉再搜一轮。
 
 If follower count is missing from `search-users`, do not claim the range was
-met. Either verify selected candidates with profile lookup after credit framing,
+met. Either verify selected candidates with profile lookup after scope confirmation,
 or label them as `粉丝待核验` and keep them out of the strict main benchmark
 table until verified.
 
@@ -171,7 +171,7 @@ Default ranking:
 
 If `search-users` already returns follower and liked counts, reuse those
 numbers. If the final starter candidates are strong but profile stats are missing,
-either call `get-user-info` for the selected candidates after credit framing, or
+either call `get-user-info` for the selected candidates after scope confirmation, or
 mark the field as unknown; do not silently omit the field from the output.
 
 ## Default Result Count
@@ -182,24 +182,23 @@ when they ask for it or provide a clearer scope.
 
 Use this user-facing wording before or after the first recommendation table:
 
-我这边先在约 100 credits 的首轮预算里给你 3 个账号，看看方向是否适合；如果方向对，再扩到 5 个或按粉丝数量、账号阶段、内容形式、城市范围继续搜。这样不会一上来就把积分花在太宽泛的搜索上。
+我这边先给你 3 个值得看的账号，看看方向是否适合；如果方向对，再扩到 5 个或按粉丝数量、账号阶段、内容形式、城市范围继续搜。这样首轮结果更聚焦，也更容易判断是否值得继续。
 
 Rules:
 
 - Verify enough candidates to return up to 3 strong accounts in the first
   starter round.
-- Keep the first round inside the budget stop rule from
-  `search-credit-notice.md` whenever possible: no more than 5 paid lookups or
-  about 100 credits without another user confirmation.
+- Keep the first round inside the stop rule from
+  `research-scope-guard.md`: no more than 5 lookups without another scope
+  confirmation.
 - Do not default to 5, 10, or 20 benchmark accounts when the user has not
-  confirmed direction. More accounts mean broader search and may spend more
-  credits.
+  confirmed direction. More accounts mean a broader search.
 - If fewer than 3 candidates pass the active/recent-hit/stage-fit gate, return
   the actual number and explain why the rest were filtered out.
 - Only expand beyond 3 when the user asks for more or confirms a clearer
   follower range, stage, city, audience, or format.
 - If the user wants follower count control, first narrow the follower range
-  before continuing the search instead of spending credits on broad discovery.
+  before continuing the search instead of making online requests on broad discovery.
 - If the user gave a follower range and no candidates pass it, return "0 个严格
   符合" rather than filling the table with accounts that are too small or too
   large.
@@ -244,7 +243,7 @@ Definition:
 
 ## Recommended Search Flow
 
-Before searching, follow `search-credit-notice.md`.
+Before searching, follow `research-scope-guard.md`.
 
 ### If User Only Gives A Track Or Keyword
 
@@ -254,7 +253,7 @@ Example: "帮我找女性成长对标账号"
 
    我默认不只按关键词搜账号，会优先筛「还在持续更新、近 90/180 天有高互动作品、和你阶段匹配」的账号。断更很久的账号我最多放到历史参考，不会当主对标推荐。
 
-   我这边先在约 100 credits 的首轮预算里给你 3 个账号，看看方向是否适合；如果方向对，再扩到 5 个或按粉丝数量、账号阶段、内容形式、城市范围继续搜。
+   我这边先给你 3 个值得看的账号，看看方向是否适合；如果方向对，再扩到 5 个或按粉丝数量、账号阶段、内容形式、城市范围继续搜。
 
 2. Confirm or infer:
    - track / keyword
@@ -450,7 +449,7 @@ Use the same logic for other formats:
 When the user asks for more after the first 3, narrow the next search before
 expanding:
 
-如果这 3 个里面方向对了，我可以继续帮你按粉丝量筛，比如 1000-5000 粉、5000-3 万粉、3-10 万粉；也可以按图文/口播/Vlog/本地城市继续找。这样会比一次性给你 10-20 个更省积分，也更容易找到真正能模仿的账号。
+如果这 3 个里面方向对了，我可以继续帮你按粉丝量筛，比如 1000-5000 粉、5000-3 万粉、3-10 万粉；也可以按图文/口播/Vlog/本地城市继续找。这样会比一次性给你 10-20 个更聚焦，也更容易找到真正能模仿的账号。
 
 ## Do Not
 
@@ -458,8 +457,7 @@ expanding:
 - Do not return 10-20 benchmark accounts by default; first deliver up to 3
   strong accounts.
 - Do not keep verifying more candidates after the first round would exceed 5
-  paid lookups or about 100 credits unless the user has confirmed a larger
-  budget.
+  lookups unless the user has confirmed a larger scope.
 - Do not treat account search results as final recommendations before checking
   recent posts.
 - Do not call 100+ follower / few-hundred-like accounts "benchmark accounts" for
@@ -478,8 +476,8 @@ expanding:
   when the data is available.
 - Do not mix口播、图文、Vlog accounts without telling the user what formats were
   found and whether a format-specific follow-up search is needed.
-- Do not hide that additional account verification can add searches/credits.
-- Do not spend credits on a broad follower-range search before the user has
+- Do not hide that additional account verification can add searches.
+- Do not make online requests on a broad follower-range search before the user has
   confirmed the desired range or stage.
 - Do not over-filter until no references remain; if there are few active
   accounts, say so and offer another search strategy.

@@ -1,42 +1,53 @@
-## Description: <br>
-长江三峡游轮和城市游船船票查询，含价格、航线方向和退改政策，附带去码头交通（地铁优先）、景点门票和住宿推荐，多旅游平台数据直连，零配置即装即用。暑假邮轮票查询比价，多平台对比省钱 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询长江三峡游轮和城市游船船票信息，并返回价格、航线方向、退改政策、去码头交通、景点门票和住宿推荐。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel planners use this skill to compare domestic river and city cruise tickets, plan transport to piers, and find nearby attractions or hotels before booking on linked travel platforms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may send travel locations, route queries, and hotel-search text to external proxy and map services. <br>
-Mitigation: Use it only when that data sharing is acceptable, avoid entering sensitive personal details, and review the publisher's data-flow disclosures before installation. <br>
-Risk: The artifact includes an embedded proxy token. <br>
-Mitigation: The publisher should remove embedded secrets, rotate exposed tokens, and use runtime configuration for service credentials. <br>
-Risk: The security summary says external data sharing is under-disclosed. <br>
-Mitigation: The publisher should document the network data flows and external services clearly in release materials. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to compare domestic China river and city cruise tickets, plan transportation to piers, and find nearby attractions or hotels. The skill provides discovery and booking links, but does not purchase tickets or manage existing bookings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/cruise-ticket-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown text with prices, route details, policies, recommendations, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on external travel and map services; prices, availability, routes, and policies can change.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Cruise searches, origin and destination locations, city names, attraction keywords, and hotel preferences are sent through publisher cloud proxies and external travel/map providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, and avoid entering sensitive personal details in hotel or route queries.
+
+Risk: Ticket prices, availability, refund terms, routes, and travel-time estimates can change after the skill returns results.
+
+Mitigation: Confirm final price, availability, refund policy, and route details on the linked provider page before purchase or travel.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/cruise-ticket-query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style Chinese text with lists, prices, route details, caveats, and booking links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include real-time travel data from cloud proxy services and external travel/map providers; prices, availability, and route estimates can change.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

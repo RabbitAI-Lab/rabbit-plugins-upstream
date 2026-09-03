@@ -1,42 +1,57 @@
-## Description: <br>
-Collects Indeed company information by creating Dataify Scraper API tasks from a company list URL, keyword, industry and state, or company URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Indeed company records by company-list URL, keyword, industry and state, or company URL. Do not use for Indeed job listings or Glassdoor company URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to configure and submit Indeed company-information collection jobs through Dataify. It helps confirm parameters, handle Dataify API token setup, and report the created task ID or status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Dataify API token and can optionally save it as DATAIFY_API_TOKEN. <br>
-Mitigation: Treat the token as a secret, do not echo it in user-facing output, and save it permanently only after explicit user consent. <br>
-Risk: Confirmed parameters are submitted to Dataify to create external collection tasks. <br>
-Mitigation: Show the exact Markdown confirmation table before each real API call and submit only after explicit user confirmation. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify collection tasks for Indeed company information and receive the collected results. It supports collection by company list URL, keyword, industry and state, or company URL.
 
-## Reference(s): <br>
-- [Dataify Indeed Companies Info API Reference](references/indeed_companies_info_api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-indeed-companies-info) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown confirmation tables, shell commands, and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify API token; successful API calls create collection tasks and return task identifiers or status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill submits external Dataify scraping tasks that may consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review task scope before large, multi-page, or multi-input runs and avoid resubmitting a paid task when a task ID can be resumed.
+
+Risk: The skill needs a Dataify API token to submit tasks.
+
+Mitigation: Set the token through a secure environment or secret manager, verify only that it is present, and do not paste or print the token in chat.
+
+Risk: Security evidence marks the release suspicious because API-token guidance is inconsistent while the skill submits external paid scraping tasks.
+
+Mitigation: Review credential handling and task-submission behavior before deployment, following the security guidance in the release evidence.
+
+## Reference(s):
+
+- [Dataify Indeed Companies Info API Reference](references/indeed_companies_info_api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID, resume command, summarized result, or final JSON result depending on task completion and user-requested wait behavior.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

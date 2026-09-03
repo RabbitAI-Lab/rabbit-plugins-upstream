@@ -1,47 +1,63 @@
-## Description: <br>
-Answer Arknights questions about operator roles, skill mechanics, investment planning, story context, terminology, and stage strategy; read and maintain a local structured Doctor profile so advice can adapt to the user's roster and progress; clearly separate fresh version checks from non-current judgment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Answers Arknights operator, investment, lore, terminology, resource-planning, and stage-strategy questions while using a local Doctor profile for personalization.
 
-## Publisher: <br>
-[morandot](https://clawhub.ai/user/morandot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[morandot](https://clawhub.ai/user/morandot)
 
-## Use Case: <br>
-External players and agent users use this skill to get structured Arknights operator, investment, lore, terminology, comparison, and stage-strategy guidance. The skill can personalize advice from explicitly provided account facts stored in a local Doctor profile. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may save explicitly stated game account facts, including server, level, UID, goals, resources, and operators, in a local Doctor profile. <br>
-Mitigation: Tell users where the profile is stored and avoid asking them to provide sensitive information beyond what is needed for Arknights guidance. <br>
-Risk: The optional manual install path uses a remote shell script. <br>
-Mitigation: Prefer installation through a skill manager, or inspect and pin the install script before running it. <br>
-Risk: Version-sensitive Arknights guidance can become stale. <br>
-Mitigation: For current events, banners, and strength assessments, perform a fresh lookup when available or clearly state that conclusions are not current. <br>
+## Use Case:
 
+External Arknights players use this skill to get account-aware advice on operator investment, stage clears, mechanics, lore, and resource planning. The skill is also useful for agents that need a structured answer style with freshness caveats for version-sensitive game questions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/morandot/arknights-skill) <br>
-- [Project Homepage](https://github.com/morandot/arknights-skill) <br>
-- [Quick Start](references/quickstart.md) <br>
-- [Answer Templates](references/answer-templates.md) <br>
-- [Style Examples](references/examples.md) <br>
-- [Doctor Profile Schema](references/doctor-profile-schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with occasional inline shell commands or JSON snippets for local profile operations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and update a local Doctor profile when the client permits local file access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: The skill maintains a local Doctor profile containing account and roster facts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default local profile path or an intentional ARKNIGHTS_MEMORY_DIR override, and avoid adding facts the user did not explicitly provide.
+
+Risk: Manual shell installation can run a remote installer from GitHub.
+
+Mitigation: Review the installer before execution and pin a known release ref instead of installing from main when repeatability matters.
+
+Risk: Version-sensitive Arknights advice can become stale.
+
+Mitigation: Use live lookup for current events, banners, and meta assessments, or clearly state when an answer is not based on current version data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/morandot/skills/arknights-skill)
+- [Server-Resolved GitHub Source](https://github.com/morandot/arknights-skill/tree/main/arknights-skill)
+- [Project Homepage](https://github.com/morandot/arknights-skill)
+- [Quick Start](references/quickstart.md)
+- [Doctor Profile Schema](references/doctor-profile-schema.md)
+- [Answer Templates](references/answer-templates.md)
+- [Style Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose with optional shell command blocks and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read or update a local Doctor profile JSON file when explicit account facts are provided.]
+
+## Skill Version(s):
+
+1.6.1 (source: ClawHub release metadata; artifact frontmatter reports 1.7.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

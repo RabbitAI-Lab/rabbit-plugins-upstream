@@ -1,0 +1,59 @@
+{
+  "name": "navigation-delete",
+  "description": "Delete Tradebee navigation after explicit cascade-delete confirmation.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get. Every target ID must belong to this language."
+      },
+      "id_list": {
+        "type": "array",
+        "description": "Required array of 1-100 positive navigation IDs selected from navigation-read. Send an array even for one item.",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Positive navigation ID."
+        }
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required approval stating that first-level deletion cascades to children.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language and navigation ID list; it must acknowledge cascading child deletion."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "id_list",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result with success and failure arrays."
+  },
+  "dependencies": {
+    "id_list": {
+      "skill": "navigation-read",
+      "field": "data.list[].navigation_id",
+      "mode": "select-many"
+    }
+  }
+}

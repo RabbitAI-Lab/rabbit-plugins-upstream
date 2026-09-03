@@ -1,40 +1,53 @@
-## Description: <br>
-Provides CI/CD testing guidance for layered pipeline quality gates, tool integration strategy, and fast feedback across commit checks, unit tests, API tests, UI tests, and regression tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA, development, and DevOps teams design layered CI/CD testing stages, quality gates, feedback loops, and tool integrations for continuous testing.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and DevOps teams use this skill to design CI/CD test stages, define quality gates, and tune feedback loops for reliable automated delivery pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pipeline or deployment suggestions may affect production delivery if applied without review. <br>
-Mitigation: Review generated CI/CD, deployment, rollback, and quality-gate recommendations before use, especially in production environments. <br>
-Risk: The skill can propose CI/CD testing strategy but does not execute pipelines or validate environment-specific behavior. <br>
-Mitigation: Keep execution under explicit user control and validate changes in an authorized workspace or staging environment first. <br>
+## Use Case:
 
+Developers, QA engineers, and DevOps teams use this skill to turn testing strategy and automation architecture into CI/CD pipeline checks. It supports staged test planning, quality gate definition, feedback loops, and CI/CD test efficiency improvements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ci-cd-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown with structured pipeline design, test-stage, quality-gate, and feedback-loop sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Pipeline recommendations include traceability IDs and should be reviewed before applying to production CI/CD systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Generated CI/CD pipeline changes or release steps could affect production systems if applied without review or authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated pipeline recommendations before applying them, require explicit authorization for release or deployment steps, and validate rollback or canary strategy before production use.
+
+Risk: Credentials or deployment secrets could be exposed if included in prompts or generated CI/CD configuration.
+
+Mitigation: Keep credentials out of prompts and generated files, use approved secret management, and scan CI/CD changes before committing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ci-cd-testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tables and CI/CD pipeline configuration recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include pipeline IDs, staged test configuration, quality gates, feedback loops, and test case tables.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter reports 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

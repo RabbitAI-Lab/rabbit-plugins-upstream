@@ -1,41 +1,58 @@
-## Description: <br>
-When the user requests "call Google News" or "news search/information", or explicitly mentions the news search field, the dataify-google-news skill is triggered. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google News for current news results. Do not use for general Google web search.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to convert Google News search requests into confirmed Dataify Scraper API calls and return the API response body. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google News queries and selected parameters are sent to Dataify during live API calls. <br>
-Mitigation: Install only if this data sharing is acceptable for the intended use case, and review the confirmation table before approving each call. <br>
-Risk: The Dataify API token could be exposed if handled carelessly. <br>
-Mitigation: Store DATAIFY_API_TOKEN securely and avoid passing tokens on the command line when possible. <br>
+## Use Case:
 
+External users and developers use this skill to run targeted Google News searches through Dataify and receive compact news results with source links and relevant fields.
 
-## Reference(s): <br>
-- [Dataify Google News API Reference](references/google_news_api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-news) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API Calls, JSON, Text] <br>
-**Output Format:** [Markdown confirmation table, shell command invocation, and raw API response body in the requested output mode.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN for live calls, confirms parameters before outbound requests, and returns the API response body without summarizing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Google News queries and selected filters are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive private research terms and use the skill only when sharing selected search parameters with Dataify is acceptable.
+
+Risk: Dataify API usage may consume account credits.
+
+Mitigation: Review query scope and filters before high-volume use and confirm the account has enough credits for the intended request.
+
+Risk: Persistent credential configuration can leave API tokens in shell profiles.
+
+Mitigation: Prefer a session-scoped DATAIFY_API_TOKEN unless persistent storage is intentional, and never expose token values in chat or logs.
+
+## Reference(s):
+
+- [Dataify Google News API Reference](references/google_news_api.md)
+- [Dataify Google News Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-news)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, HTML, shell commands, configuration guidance]
+
+**Output Format:** [Markdown summaries by default, with raw JSON or HTML only when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Google News titles, source links, counts, truncation notes, and account setup guidance when credentials are missing.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

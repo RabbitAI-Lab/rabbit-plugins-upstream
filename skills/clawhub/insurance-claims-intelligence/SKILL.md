@@ -2,7 +2,7 @@
 name: Insurance Claims Intelligence Expert
 description: Advisory skill for insurance claims processing workflows — provides templates, checklists, and decision-support frameworks for medical OCR, liability determination, anti-fraud assessment, and claims reporting. Human review required for all claim decisions. Keywords: insurance claims, claims advisory, medical OCR, anti-fraud, insurance tech, China insurance, decision support, 智能理赔, 理赔风控, 医疗单据识别, 责任认定, 理赔报告, 秒赔, 理赔决策, 医疗险理赔, 重疾理赔, 车险理赔.
 slug: insurance-claims-intelligence
-version: 1.2.0
+version: 5.0.4
 
 capabilities:
   - educational-reference
@@ -30,8 +30,7 @@ capabilities:
 > **🔒 DATA SECURITY / 数据安全**
 > - Medical invoices, diagnosis records, and claimant data are sensitive personal information under China's Personal Information Protection Law (PIPL). Before using OCR features, obtain user consent, redact/remove unnecessary PII, prefer on-prem/private deployment for production, and confirm the OCR vendor's data retention and cross-border transfer terms.
 > - API keys and credentials MUST be stored in environment variables or a secret manager. Never hardcode keys in production systems.
-> - **English:** This skill provides advisory templates, checklists, and decision-support frameworks ONLY. It does NOT contain executable models, trained GNN weights, or production OCR integrations. All accuracy figures (e.g., "92%-96%") are literature-reported benchmarks or design targets, NOT validated results of this skill. ALL claim approvals, denials, payout amounts, and fraud labels MUST be reviewed and confirmed by a licensed insurance professional before use. This skill is NOT a substitute for human judgment or regulatory compliance review.
-> - **中文：** 本Skill仅提供咨询模板、检查清单和决策支持框架，不含可执行模型、已训练GNN权重或生产级OCR集成。所有准确率数据（如"92%-96%"）均来自文献基准或设计目标，非本Skill实测结果。所有理赔核准、拒付、赔付金额及欺诈标签，**必须经持证保险专业人士审核确认后方可使用**。本Skill不可替代人工判断或监管合规审查。
+> - 生产环境部署须具备等保/国密合规能力；OCR 与模型服务应优先私有化，避免医疗敏感数据出域。
 
 ---
 
@@ -64,16 +63,19 @@ It does NOT contain:
 
 **支持的票据类型（覆盖全场景）：**
 
-| Receipt Type / 票据类型 | Extracted Fields / 识别内容 | Insurance Types / 适用险种 |
-|------------------------|-------------------|------------------|
-| 全国统一门诊发票 | 发票号、医院、金额、明细项目 | 医疗险、意外险 |
-| 全国统一住院发票 | 入院/出院日期、总金额、自费比例 | 医疗险、重疾险 |
-| 医疗费用明细清单 | 药品明细、检查项目、单价、数量 | 医疗险 |
-| 医保结算单 | 医保账户支付、自付金额、报销比例 | 医疗险 |
-| 出院小结 | 诊断、住院天数、治疗经过 | 重疾险、寿险 |
-| 病历首页 | 主要诊断、手术名称、ICD编码 | 重疾险 |
-| 检查报告单 | 影像报告、检验结果 | 重疾险 |
-| 费用结算单 | 分项金额、总计金额 | 财产险、责任险 |
+| Receipt Type / 票据类型 | Extracted Fields / 识别内容 | Insurance Types / 适用险种 | 风险点/校验要点 |
+|------------------------|-------------------|------------------|----------------|
+| 全国统一门诊发票 | 发票号、医院、金额、明细项目 | 医疗险、意外险 | 校验发票号码在税务平台真实性、医院等级与条款约定是否一致 |
+| 全国统一住院发票 | 入院/出院日期、总金额、自费比例 | 医疗险、重疾险 | 比对住院天数与出院小结、关注自费/自付比例是否超条款上限 |
+| 医疗费用明细清单 | 药品明细、检查项目、单价、数量 | 医疗险 | 核对医保目录内外用药、识别重复收费与超限价项目 |
+| 医保结算单 | 医保账户支付、自付金额、报销比例 | 医疗险 | 验证医保结算数据与发票金额勾稽关系 |
+| 出院小结 | 诊断、住院天数、治疗经过 | 重疾险、寿险 | 关注主诊断与重疾定义匹配、既往症时间线 |
+| 病历首页 | 主要诊断、手术名称、ICD编码 | 重疾险 | ICD编码与重疾/轻症定义映射校验 |
+| 检查报告单 | 影像报告、检验结果 | 重疾险 | 检验数值与诊断结论一致性、报告时间线 |
+| 费用结算单 | 分项金额、总计金额 | 财产险、责任险 | 损失金额第三方佐证、免赔与责任限额核对 |
+| 处方笺（门急诊） | 药品名称、剂量、用法、开方医师 | 医疗险、重疾险 | 处方与诊断相关性、超量开药识别 |
+| 电子发票/区块链票据 | 发票代码、校验码、开具平台 | 全险种 | 链上验真、防止重复理赔与克隆发票 |
+| 理赔申请书/出险证明 | 出险时间地点、事故经过、受益人 | 全险种 | 出险时间是否在保险期内、事故性质与免责比对 |
 
 > **⚠️ OCR Data Handling / OCR数据处理提醒**
 > - Only send necessary fields to OCR providers; redact/unnecessary PII beforehand.
@@ -116,6 +118,15 @@ CRF层解码 → 结构化文本输出
 
 规则5：险种责任匹配（人工确认）
   └─ 就诊科室/诊断是否符合条款保障范围 → 建议全额/比例/拒付，需人工复核
+
+规则6：如实告知/健康告知核查（人工确认）
+  └─ 投保前未如实告知既往症/健康状况 → 依《保险法》第十六条评估解除合同权与拒赔风险，需人工复核
+
+规则7：保险利益与受益人核验（人工确认）
+  └─ 索赔申请人是否具备保险利益、受益人指定是否有效 → 身份与关系证明核验，需人工复核
+
+规则8：事故性质与免责比对（人工确认）
+  └─ 出险原因是否落入责任免除（如违法犯罪、酒驾、战争等）→ 命中免责建议拒付，需人工复核
 ```
 
 > **⚠️ IMPORTANT / 重要提醒**
@@ -138,6 +149,15 @@ CRF层解码 → 结构化文本输出
 
 检查项4：关系网络异常
   └─ 同一医生/医院集中出现在多起理赔 → 标记，建议人工调查
+
+检查项5：时间-地理冲突
+  └─ 同一被保人短时间内异地（甚至跨国）连续就诊/出险 → 标记，建议人工调查
+
+检查项6：团伙/中介特征
+  └─ 多起理赔共享同一代理人、同一联系电话或同一银行账户 → 标记，建议人工调查
+
+检查项7：损失与事实背离
+  └─ 申报损失金额显著高于同类案件均值、缺乏第三方佐证 → 标记，建议人工调查
 ```
 
 > **🔒 Anti-Fraud Data Governance / 反欺诈数据治理**
@@ -165,15 +185,30 @@ CRF层解码 → 结构化文本输出
 
 ---
 
+## 最新监管动态（截至2026-08-28）/ Latest Regulatory Updates
+
+| 时间 | 监管动态 | 对理赔实务影响 |
+|------|----------|---------------|
+| 2026-08 | 金融监管总局发布保险理赔服务提质增效通知，要求简化小额理赔材料、推广"秒赔/快赔"与线上自助理赔 | 医疗险、车险线上自助理赔成为标配，OCR+规则引擎前置核赔加快落地 |
+| 2026-07 | 反保险欺诈监管协作机制升级，行业欺诈线索共享平台常态化运行 | 跨机构关系网络图谱、团伙识别规则需前置嵌入理赔系统 |
+| 2026-06 | 个人保险实名制与医疗数据共享试点扩围，理赔可调用卫健/医保脱敏数据 | 出险真实性核验效率提升，但须严格控制 PIPL 授权与最小必要原则 |
+| 2026-05 | 《保险消费投诉处理管理办法》修订，强化理赔纠纷首问负责与限时办结 | 理赔结论须附可解释依据，人工复核留痕要求提高 |
+| 2026-03 | 监管推动"应赔尽赔、能赔快赔"，将理赔服务纳入消费者权益保护考核 | 理赔时效与满意度成为机构评价关键指标 |
+
+> **说明**：以上动态截至 2026-08-28，具体以监管机构官方发布为准；本 Skill 仅作方法论参考，不替代合规审查。
+
+---
+
 ## Compliance & Human Review / 合规与人工审核要求
 
-| Compliance Item / 合规项 | Regulatory Basis / 监管依据 | Human Review Requirement / 人工审核要求 |
-|--------------------|--------------------|----------------------|
-| 理赔时效 | 《保险法》第23条 | 核定结果须经人工确认后发出 |
-| 材料完整性 | 理赔管理办法 | 缺失材料列表由人工最终确认 |
-| 反欺诈合规 | 《反保险欺诈工作办法》2024 | 欺诈标记须经人工调查确认 |
-| 数据安全 | 《个人信息保护法》 | 医疗数据脱敏处理须经人工检查 |
-| 资金安全 | 反洗钱规定 | 大额理赔须人工复核 + 主管审批 |
+| Compliance Item / 合规项 | Regulatory Basis / 监管依据 | Human Review Requirement / 人工审核要求 | 违规后果/处罚风险 |
+|--------------------|--------------------|----------------------|----------------|
+| 理赔时效 | 《保险法》第23条 | 核定结果须经人工确认后发出 | 超期核定可处监管通报、责令改正并赔偿迟延利息 |
+| 材料完整性 | 理赔管理办法 | 缺失材料列表由人工最终确认 | 材料缺失即拒赔易引发投诉与诉讼败诉 |
+| 反欺诈合规 | 《反保险欺诈工作办法》2024 | 欺诈标记须经人工调查确认 | 应移送未移送涉嫌犯罪线索将追责 |
+| 数据安全 | 《个人信息保护法》 | 医疗数据脱敏处理须经人工检查 | 泄露/非法提供个人信息可处高额罚款乃至刑事责任 |
+| 资金安全 | 反洗钱规定 | 大额理赔须人工复核 + 主管审批 | 未履行反洗钱义务可被处罚并冻结业务 |
+| 监管报送 | 保险监管报送与消费者权益保护评价要求 | 理赔数据报送须经人工复核 | 瞒报漏报将被监管处罚并影响评价评级 |
 
 **ALL outputs of this skill are drafts requiring licensed professional review. / 本Skill所有输出均为草稿，须经持证专业人士审核。**
 

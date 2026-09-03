@@ -1,41 +1,58 @@
-## Description: <br>
-Guides developers converting a client-side Next.js App Router static export into an Electron desktop app, including offline Windows packaging, custom app protocol setup, locale and window persistence, system tray behavior, and GitHub Actions builds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers package a client-side Next.js static export as a Windows Electron app for offline or intranet environments without WebView2.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-Developers and engineers use this skill to wrap static-export Next.js applications in Electron for Windows desktop distribution, especially for offline or intranet machines without WebView2. It provides implementation guidance, shell commands, configuration, and copy-paste templates for Electron, electron-builder, and CI release workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Electron and GitHub Actions templates may not match the target repository's project names, checkout branch, release permissions, or contents:write policy. <br>
-Mitigation: Review and adjust generated templates before use, especially app identifiers, workflow refs, release upload behavior, and repository permissions. <br>
-Risk: Desktop packaging guidance affects local application state and must be verified on the intended Windows runtime environment. <br>
-Mitigation: Confirm local persistence is limited to expected app state such as locale and window size, then test the built app on target Windows machines before distribution. <br>
+## Use Case:
 
+Developers and engineers use this skill to convert a static-export Next.js App Router project into a self-contained Windows Electron desktop application, including packaging, test, and CI guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/nextjs-to-electron) <br>
-- [electron-files.md](electron-files.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and code/configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project-specific instructions and copy-paste Electron, electron-builder, and GitHub Actions templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated project packaging files, Electron dependencies, and CI or release workflow configuration can affect published desktop artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review package changes, electron-builder settings, GitHub Actions permissions, and release upload steps before publishing artifacts.
+
+Risk: The playbook targets current 64-bit Windows 10 or newer and is out of scope for 32-bit or pre-Windows 10 targets.
+
+Mitigation: Verify target machine bitness and Windows build number before committing to an Electron desktop build.
+
+Risk: Headless execution cannot fully verify desktop GUI behavior, offline operation, tray behavior, or localized navigation.
+
+Mitigation: Run the packaged app on a real Windows machine, ideally in the same offline or WebView2-less environment expected in deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/rockbenben/skills/nextjs-to-electron)
+- [electron-files.md](electron-files.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code blocks, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The guidance targets Windows Electron packaging for static Next.js exports and includes human GUI verification steps.]
+
+## Skill Version(s):
+
+1.1.5 (source: evidence.json release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

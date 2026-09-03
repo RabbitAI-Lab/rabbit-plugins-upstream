@@ -81,12 +81,25 @@ claw/users/<uid>/channels/weixinClawBot = {
 ## 🔴 关键机制：context_token（2026-07-09 定稿）
 
 ### 文本默认空 token；只有媒体才带 cursor buf
-- **文本推送**：`msg.context_token` 默认传【空串】即可发送，**无需读 cursor、无需激活**。
-  这就是为什么会话闲置十几小时（例如昨晚到今早）文本仍能正常推送——空 token 对文本长期有效。
+- **⚠️ 2026-08-28 实测修正**：服务端行为已收紧——**会话过期后，连空 token 的文本也会 `ret:-2 "prepare failed"`**。
+  "文本无需激活" 的旧结论已失效；激活后文本/媒体在当天会话窗口内都正常。
+- **文本推送**：`msg.context_token` 默认传【空串】（会话存活时即可发送）。
 - **媒体推送（图片 / 文件 / 视频）**：**必须**带非空 `context_token`，
   唯一来源是 cursor 游标里的 `get_updates_buf`（见下）。空 token 发媒体会 `ret:-2`。
-- **任何被拒（`ret:-2`）都要激活**：文本平时用空 token 就能发，一旦**文本也被拒**，
-  大概率是底层 bot id / 凭证已轮换，**同样需要**先给 ClawBot 发消息激活后重跑（详见排错表）。
+- **任何被拒（`ret:-2`）都要激活**：需要老板/用户在微信给 ClawBot 发消息激活后重跑（详见排错表）。
+
+### 协议层自激活：已验证无解（2026-08-28 全端点实测）
+- 真正的 `context_token` 是**每条收到的消息自带**的（官方 inbound.js：*"contextToken is issued per-message
+  by the Weixin getupdates API and must be echoed verbatim in every outbound send"*），
+  服务端用它校验**用户侧下行会话**（约 1 天无用户消息即过期），这是微信 bot 反骚扰设计，客户端无法绕过。
+- 以下手段**全部无效**（都能调通但救不活会话）：
+  - `ilink/bot/msg/notifystart`（生命周期通知，ret:0，无效果）
+  - `ilink/bot/getconfig` + `ilink/bot/sendtyping`（typing_ticket 可正常拿到、sendtyping ret:0，无效果）
+  - 先发文本再发媒体（文本自身也被拒，无效果）
+  - 重复调 `getupdates` / 重读 cursor buf（buf 凭证本身有效，死的是会话，不是凭证）
+- **不受会话校验的端点**：`getupdates`、`getuploadurl`、CDN 上传、`getconfig`、`sendtyping`、`notifystart` 都能通；
+  唯一卡 `sendmessage` 的 "prepare"（下行会话准备）这一步。
+- 唯一激活方式 = **用户在微信给 ClawBot 发一条消息**（可用 PC 微信 UI 自动化代发，属协议外手段）。
 
 ### 媒体的 context_token 来源：cursor 游标里的 `get_updates_buf`
 
@@ -198,7 +211,7 @@ claw/users/<uid>/channels/weixinClawBot = {
 | 现象 | 原因 | 解决 |
 |------|------|------|
 | `errcode:-14 session timeout` | 用了短 token | 改用完整 `botToken` 串 |
-| `FAILED: API ret=-2` | 会话已失效 / 底层 bot id 已轮换。文本平时用空 token 可长期发送，一旦文本也 `-2` 大概率是 id 变了；媒体则是 cursor buf 失效 | **【必须】先到微信给 ClawBot 发一条任意消息**（激活 host 的发送游标），**激活后再重跑本命令**，`send.js` 自动读最新 buf 重发。⚠️ 未激活时反复直接重跑必定再次 `ret:-2`，请务必先完成激活动作；不要拿 mtime 或"buf 值变没变"当判断条件；`send.js` 收到 `-2` 会清晰报错并退出（不内置轮询）；仍失败再显式 `--context <token>` 兜底 |
+| `FAILED: API ret=-2` (errmsg `prepare failed`) | **用户侧下行会话过期**（约 1 天无用户消息即失效，2026-08-28 实测文本/媒体都受此校验，协议内无自激活手段，见上方专节） | **【必须】先到微信给 ClawBot 发一条任意消息**（激活下行会话），**激活后再重跑本命令**，`send.js` 自动读最新 buf 重发。⚠️ 未激活时反复直接重跑必定再次 `ret:-2`；不要拿 mtime 或"buf 值变没变"当判断条件；`send.js` 收到 `-2` 会清晰报错并退出（不内置轮询）；仍失败再显式 `--context <token>` 兜底 |
 | 网络超时 / fetch 失败 | 默认沙箱拦截出网 | 加 `dangerouslyDisableSandbox: true` 或点允许 |
 | 通道找不到 | settings.json 路径/字段变了 | 按上文"凭据从哪来"手动核对路径 |
 | 走错通道 | 误用 MCP 的 weixin/wecom | 确认用 `weixinClawBot`（ClawBot），不是 MCP connector |

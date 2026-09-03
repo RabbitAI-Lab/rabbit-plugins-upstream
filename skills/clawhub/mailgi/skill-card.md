@@ -1,42 +1,65 @@
-## Description: <br>
-Mailgi lets agents register email addresses and use Mailgi's API, SDK, or CLI to send, receive, read, organize, and manage mail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give an AI agent a real, deliverable email address. Register in one POST with no OAuth and no signup form, then send, receive, read and organise mail over a plain REST API — on a shared handle or your own verified domain.
 
-## Publisher: <br>
-[oyagev](https://clawhub.ai/user/oyagev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oyagev](https://clawhub.ai/user/oyagev)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a Mailgi mailbox for task-related email workflows, including registration, inbox reads, message sending, mailbox organization, and API key management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent access to read, send, delete mail, organize mailbox state, and manage API keys. <br>
-Mitigation: Limit inbox reads to the task at hand, review recipients and message content before sending, and require explicit confirmation before deleting mail, changing mailbox state, or revoking API keys. <br>
-Risk: Mailgi API keys and DID-based tokens are sensitive credentials that can grant mailbox access. <br>
-Mitigation: Keep keys private, store the one-time registration API key immediately in a secure location, and create scoped or task-specific keys where practical. <br>
+## Use Case:
 
+Developers and agent builders use this skill to give agents a deliverable email inbox, then send, receive, read, and organize mail through REST API, SDK, or CLI workflows.
 
-## Reference(s): <br>
-- [Mailgi ClawHub listing](https://clawhub.ai/oyagev/mailgi) <br>
-- [Mailgi skill instructions](artifact/SKILL.md) <br>
-- [Mailgi API base URL](https://api.mailgi.xyz) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with REST examples, JSON payloads, bash commands, TypeScript snippets, and CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Mailgi API key or optional DID-based token; sending is limited to 100 external emails per day per API key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: Agents can send and read email and manage mailbox state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review send, delete, mailbox, API-key, and account-removal actions before execution.
+
+Risk: Mailgi API keys and custom-domain registration tokens grant mailbox or address-creation capabilities.
+
+Mitigation: Treat API keys and domain registration tokens as credentials; provide domain tokens only when the agent should create addresses on that domain.
+
+Risk: Deleting an agent account is permanent and burns the email address.
+
+Mitigation: Avoid account deletion for resets; register another agent and stop using the old mailbox instead.
+
+Risk: Sending immediately after registration can fail while the mailbox is provisioned.
+
+Mitigation: Wait briefly after registration and retry once on transient server errors.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oyagev/skills/mailgi)
+- [Mailgi homepage](https://www.mailgi.xyz)
+- [Canonical Skill File](https://www.mailgi.xyz/SKILL.md)
+- [Mailgi API Docs](https://api.mailgi.xyz/docs)
+- [Mailgi OpenAPI Specification](https://api.mailgi.xyz/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with REST examples, shell commands, TypeScript snippets, and CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes API-key handling guidance, mailbox lifecycle notes, rate limits, and unsupported-feature constraints.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -524,20 +524,20 @@ def cmd_search(args):
     # 飞猪有价格和链接，途牛信息最全——两个都搜，合并去重
     fliggy_result = search_fliggy(
         city=args.city,
-        check_in=args.check_in,
-        check_out=args.check_out,
+        check_in=args.checkIn,
+        check_out=args.checkOut,
         keyword=args.keyword,
         adults=args.adults,
     )
     tuniu_result = search_tuniu(
         city=args.city,
-        check_in=args.check_in,
-        check_out=args.check_out,
+        check_in=args.checkIn,
+        check_out=args.checkOut,
         keyword=args.keyword,
         adults=args.adults,
         rooms=args.rooms,
-        price_max=args.price_max,
-        star_ratings=args.star_ratings,
+        price_max=args.priceMax,
+        star_ratings=args.starRatings,
     )
 
     hotels = []
@@ -569,8 +569,8 @@ def cmd_search(args):
         "success": True,
         "action": "search",
         "city": args.city,
-        "check_in": args.check_in,
-        "check_out": args.check_out,
+        "check_in": args.checkIn,
+        "check_out": args.checkOut,
         "count": len(unique),
         "hotels": unique,
         "tip": "以上为浏览价格，选定酒店后告诉我酒店名，立刻启动多旅游平台比价！",
@@ -582,8 +582,8 @@ def cmd_compare(args):
     """多平台精确比价"""
     hotel_name = args.hotel
     city = args.city
-    check_in = args.check_in
-    check_out = args.check_out
+    check_in = args.checkIn
+    check_out = args.checkOut
     adults = args.adults or 2
     rooms = args.rooms or 1
 
@@ -636,19 +636,19 @@ def main():
 
     search_parser = subparsers.add_parser("search", help="搜索酒店列表")
     search_parser.add_argument("--city", required=True, help="城市名")
-    search_parser.add_argument("--check-in", required=True, help="入住日期 YYYY-MM-DD")
-    search_parser.add_argument("--check-out", required=True, help="离店日期 YYYY-MM-DD")
+    search_parser.add_argument("--checkIn", required=True, help="入住日期 YYYY-MM-DD")
+    search_parser.add_argument("--checkOut", required=True, help="离店日期 YYYY-MM-DD")
     search_parser.add_argument("--keyword", default=None, help="关键词/地标")
     search_parser.add_argument("--adults", type=int, default=2, help="入住人数")
     search_parser.add_argument("--rooms", type=int, default=1, help="房间数")
-    search_parser.add_argument("--price-max", type=int, default=None, help="最高价格")
-    search_parser.add_argument("--star-ratings", default=None, help="星级筛选，如 '4,5'")
+    search_parser.add_argument("--priceMax", type=int, default=None, help="最高价格")
+    search_parser.add_argument("--starRatings", default=None, help="星级筛选，如 '4,5'")
 
     compare_parser = subparsers.add_parser("compare", help="多平台精确比价")
     compare_parser.add_argument("--hotel", required=True, help="酒店名称")
     compare_parser.add_argument("--city", required=True, help="城市名")
-    compare_parser.add_argument("--check-in", required=True, help="入住日期 YYYY-MM-DD")
-    compare_parser.add_argument("--check-out", required=True, help="离店日期 YYYY-MM-DD")
+    compare_parser.add_argument("--checkIn", required=True, help="入住日期 YYYY-MM-DD")
+    compare_parser.add_argument("--checkOut", required=True, help="离店日期 YYYY-MM-DD")
     compare_parser.add_argument("--adults", type=int, default=2, help="入住人数")
     compare_parser.add_argument("--rooms", type=int, default=1, help="房间数")
 

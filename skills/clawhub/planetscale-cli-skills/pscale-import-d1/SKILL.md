@@ -31,11 +31,17 @@ pscale isolates its internal `sqlite3` calls from `~/.sqliterc` and forces batch
 
 If a D1 import or verification fails with unexpected SQLite output, upgrade pscale to the current release and rerun the same migration step. Treat an `unexpected output` error on a current release as a real parsing/data problem, and preserve the reported output and stderr when troubleshooting.
 
+The CLI hardens generated identifiers and output paths in D1 migration state. Keep migration IDs and output paths literal, avoid deriving filenames from untrusted input in wrapper scripts, and preserve the CLI's final wait/status output before deciding whether to resume, verify, or mark complete.
+
 ### Schema conversion behavior
 
 The current converter preserves and translates more SQLite schema semantics, including column- and table-level `CHECK` constraints, named constraints, generated columns, `NUMERIC`/`DECIMAL` precision, and common computed defaults such as `date('now')`, `time('now')`, `randomblob()`, UUID generators, and `CAST(unixepoch() AS TEXT)`. For columns inferred as PostgreSQL booleans, integer `0`/`1` literals in applicable `CHECK` comparisons, `IN`, and `BETWEEN` expressions are rewritten to `false`/`true`; non-boolean columns and decimal-like literals are left unchanged. SQLite `VIRTUAL` generated columns are materialized as PostgreSQL `STORED` generated columns because PostgreSQL 16 supports only stored generated columns.
 
 Supported `strftime()` current-time defaults are mapped according to the inferred destination type: common ISO/date formats on timestamp-like columns, `%s` epoch seconds on numeric columns, and safe day/hour/minute/second or `start of day|month|year` modifiers. `utc` and `localtime` modifiers are treated as no-ops in this UTC-oriented mapping. Unsupported formats, time values, or modifiers such as `weekday N` and calendar-month arithmetic are not guessed; on an inferred non-text destination the converter can omit that default, so inspect the generated DDL and restore an equivalent PostgreSQL expression deliberately when needed.
+
+Defaults and foreign-key action clauses are emitted only when they match validated literal or clause forms. Malformed or untrusted expressions are omitted instead of being copied verbatim into executable PostgreSQL DDL, and parsing stops at the balanced end of each `CREATE TABLE` body so trailing statements are not treated as schema content. Treat an omitted default, reference action, or invalid foreign key as a migration warning: inspect the generated DDL and restore only a reviewed PostgreSQL equivalent.
+
+Foreign keys are applied after tables, data, and indexes rather than relying on `CREATE TABLE` order. This supports cyclic relationships, case-insensitive target matching, schema-qualified and quoted/bracketed references, and column-less references that resolve to the parent primary key; composite foreign-key columns map positionally to the corresponding parent columns. Replay-safe constraint replacement uses `DROP CONSTRAINT IF EXISTS` before `ADD CONSTRAINT`, and generated names are bounded for PostgreSQL. Still inspect lint and converted DDL for unresolved targets, type coercions, actions, and the exact parent-column mapping before a real import.
 
 Still review `convert-schema` output before loading. Expression or partial indexes, views, triggers, and other constructs reported by `lint` can require manual migration decisions; do not assume a successful conversion is semantically identical without inspecting constraints, defaults, generated expressions, foreign-key types, and indexes.
 
@@ -92,7 +98,8 @@ If `<branch>` is omitted, pscale uses the default branch. Prefer passing the bra
 3. Do not run non-dry-run `start` or `complete` without explicit user confirmation of the target and source export.
 4. Prefer `--format json` and preserve the JSON output path/summary for auditability.
 5. Use an explicit branch argument and `--dbname` when the destination PostgreSQL database name is not `postgres`.
-6. Verify after loading; do not call the migration complete until `verify` succeeds.
+6. PostgreSQL connections created during import use verified TLS by default; do not weaken that behavior in surrounding tooling.
+7. Verify after loading; do not call the migration complete until `verify` succeeds.
 
 ## Troubleshooting
 

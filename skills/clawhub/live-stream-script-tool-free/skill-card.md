@@ -1,39 +1,49 @@
-## Description: <br>
-为个人主播与内容创作者生成直播脚本，包括开场白、产品介绍、互动话题和结尾话术。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为个人主播和内容创作者生成直播脚本，涵盖开场白、产品介绍、互动话题、促销节奏与结尾话术。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators, individual livestream hosts, and content operators use this skill to draft structured livestream scripts for ecommerce, knowledge sharing, entertainment, and gaming sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill metadata declares read, write, and exec tool access even though the artifact is mostly Markdown guidance. <br>
-Mitigation: Run it in normal agent sessions with command and file-change review enabled, and approve file or shell actions only when they match the livestream script task. <br>
-Risk: Generated livestream scripts may contain promotional claims or conversion language that is inaccurate or unsuitable for the product or audience. <br>
-Mitigation: Have a human reviewer verify factual product claims, pricing, compliance language, and platform policy fit before using the script live. <br>
+## Use Case:
 
+External creators and livestream hosts use this skill to draft structured Chinese livestream scripts for ecommerce, knowledge-sharing, entertainment, and gaming sessions. It helps plan opening remarks, product talking points, interaction prompts, pacing, closing language, and basic personalization for single-host workflows.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text, with optional JSON-style response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces draft livestream scripts, speaking prompts, pacing guidance, and template-style configuration examples for human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The security summary reports that broad activation language and shell/write permissions do not match the skill's narrow livestream script-writing purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation, narrow activation to livestream script creation, and reduce tool permissions unless command execution or file writes are required for a deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/live-stream-script-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown or structured Chinese text containing livestream scripts, templates, talking points, pacing guidance, and configuration examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an LLM-capable agent. The free version is scoped to single-host workflows, basic templates, and script generation rather than team collaboration, analytics, or A/B testing.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

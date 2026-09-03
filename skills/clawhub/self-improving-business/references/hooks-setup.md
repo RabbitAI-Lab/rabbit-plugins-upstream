@@ -5,7 +5,7 @@ Configure automatic business self-improvement reminders for coding agents.
 ## Overview
 
 Hooks can remind the agent to capture high-signal business administration findings:
-- `UserPromptSubmit`: broad reminder after each prompt
+- `UserPromptSubmit`: broad reminder after matching prompts
 - `PostToolUse` (Bash): pattern reminder from command output
 
 ## Claude Code Setup
@@ -17,7 +17,7 @@ Create `.claude/settings.json`:
   "hooks": {
     "UserPromptSubmit": [
       {
-        "matcher": "",
+        "matcher": "kpi|revenue|margin|strategy|roadmap|pricing|forecast|RACI",
         "hooks": [
           {
             "type": "command",
