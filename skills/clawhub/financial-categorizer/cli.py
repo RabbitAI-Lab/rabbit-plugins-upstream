@@ -49,6 +49,17 @@ def confirm_action(prompt_message: str, yes_flag: bool = False) -> bool:
         sys.exit(1)
 
 
+def _refresh_projection(db):
+    """Refresh period_projection + v_burn_down after data mutations.
+
+    Best-effort: projection staleness must never fail the mutation command.
+    """
+    try:
+        Stats(db).refresh_period_projection()
+    except Exception as exc:
+        logging.getLogger(__name__).warning("period projection refresh failed: %s", exc)
+
+
 def cmd_import(args):
     old_level = logging.getLogger().getEffectiveLevel()
     if args.quiet:
@@ -147,6 +158,7 @@ def cmd_import(args):
             # 4. Print total summary counts (compact, default, and verbose modes)
             print(f"Total: {total['imported']} imported, {total['skipped']} skipped, "
                   f"{total['errors']} errors")
+        _refresh_projection(db)
     finally:
         db.disconnect()
         logging.getLogger().setLevel(old_level)
@@ -473,6 +485,7 @@ def cmd_categorize(args):
                     print(f"[WARNING] Active recurring payment '{w['name']}' (expected around {w['expected']}) was not found in transaction history.")
             for c in rr.get("closed", []):
                 print(f"[INFO] Automatically closed missing/dead recurring payment '{c['name']}' (end date set to {c['end_date']}).")
+        _refresh_projection(db)
     finally:
         db.disconnect()
 
@@ -501,7 +514,7 @@ def cmd_transactions(args):
         txns = db.get_transactions(
             category_id=category_id,
             uncategorized_only=args.uncategorized,
-            non_zero=args.non_zero,
+            non_zero=not args.include_zero,
             account_id=account_id,
             limit=args.limit,
         )
@@ -539,7 +552,7 @@ def cmd_uncategorized(args):
 
         if args.group:
             groups = cat.get_uncategorized_grouped(
-                non_zero=args.non_zero,
+                non_zero=not args.include_zero,
                 net=args.net,
                 unsplit=args.unsplit
             )
@@ -559,7 +572,7 @@ def cmd_uncategorized(args):
         else:
             uncategorized = db.get_transactions(
                 uncategorized_only=True,
-                non_zero=args.non_zero,
+                non_zero=not args.include_zero,
                 limit=999999,
             )
             if not uncategorized:
@@ -704,6 +717,7 @@ def cmd_manual_match(args):
         cur.execute("SELECT name FROM categories WHERE id = ?", (cat_id,))
         cat_name = cur.fetchone()[0]
         print(f"Manually matched transaction [{txn_id}] '{txn_desc}' -> category [{cat_id}] '{cat_name}'")
+        _refresh_projection(db)
     finally:
         db.disconnect()
 
@@ -723,6 +737,7 @@ def cmd_manual_unmatch(args):
         else:
             print(f"Error: Transaction [{txn_id}] does not have a manual categorization override.", file=sys.stderr)
             sys.exit(1)
+        _refresh_projection(db)
     finally:
         db.disconnect()
 
@@ -838,7 +853,8 @@ def cmd_stats_summary(args):
         pt = resolve_period_type(db, args.period_type)
         stats = Stats(db)
         rows = stats.monthly_summary(month=args.month, period_type=pt,
-                                     unsplit=args.unsplit, gross=args.gross)
+                                     unsplit=args.unsplit, gross=args.gross,
+                                     raw_split=args.raw_split)
         if not rows:
             print("No data found.")
             return
@@ -848,6 +864,8 @@ def cmd_stats_summary(args):
             mode_label = " (gross)"
         elif args.unsplit:
             mode_label = " (unsplit)"
+        elif args.raw_split:
+            mode_label = " (raw-split)"
 
         for r in rows:
             print(f"{r['month']}{mode_label}  income={r['total_income']:>10.2f}  "
@@ -872,13 +890,15 @@ def cmd_stats_category(args):
             lookup["id"], month=args.month,
             date_from=args.from_date, date_to=args.to_date,
             period_type=pt,
-            unsplit=args.unsplit, gross=args.gross,
+            unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split,
         )
         mode_label = "total"
         if args.gross:
             mode_label = "gross_total"
         elif args.unsplit:
             mode_label = "unsplit_total"
+        elif args.raw_split:
+            mode_label = "raw_split_total"
 
         print(f"{args.name}: {mode_label}={result['total']:>10.2f}  count={result['count']}")
     finally:
@@ -901,7 +921,7 @@ def cmd_stats_trend(args):
             lookup["id"],
             date_from=args.from_date, date_to=args.to_date,
             period_type=pt,
-            unsplit=args.unsplit, gross=args.gross,
+            unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split,
         )
         if not rows:
             print("No data found.")
@@ -912,6 +932,8 @@ def cmd_stats_trend(args):
             mode_label = "gross_total"
         elif args.unsplit:
             mode_label = "unsplit_total"
+        elif args.raw_split:
+            mode_label = "raw_split_total"
 
         print(f"Trend for {args.name}:")
         for r in rows:
@@ -926,7 +948,7 @@ def cmd_stats_top(args):
         pt = resolve_period_type(db, args.period_type)
         stats = Stats(db)
         rows = stats.top_spending(month=args.month, limit=args.limit, period_type=pt,
-                                  unsplit=args.unsplit, gross=args.gross)
+                                  unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split)
         if not rows:
             print("No spending data found.")
             return
@@ -936,6 +958,8 @@ def cmd_stats_top(args):
             mode_label = " (gross)"
         elif args.unsplit:
             mode_label = " (unsplit)"
+        elif args.raw_split:
+            mode_label = " (raw-split)"
 
         print(f"Top spending{mode_label}{(' for ' + args.month) if args.month else ''}:")
         for r in rows:
@@ -952,7 +976,7 @@ def cmd_stats_transfers(args):
         pt = resolve_period_type(db, args.period_type)
         stats = Stats(db)
         rows = stats.external_transfers_summary(month=args.month, period_type=pt,
-                                                unsplit=args.unsplit, gross=args.gross)
+                                                unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split)
         if not rows:
             print("No transfers found.")
             return
@@ -962,6 +986,8 @@ def cmd_stats_transfers(args):
             mode_label = " (gross)"
         elif args.unsplit:
             mode_label = " (unsplit)"
+        elif args.raw_split:
+            mode_label = " (raw-split)"
 
         current_period = None
         for r in rows:
@@ -1112,6 +1138,7 @@ def cmd_link(args):
                 to_account_id=to_account_id,
             )
             print(f"Created link {link_id} ({args.type})")
+            _refresh_projection(db)
     except ValueError as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
@@ -1164,6 +1191,7 @@ def cmd_unlink(args):
             print(f"Removed link {args.id}")
         else:
             print(f"Link {args.id} not found")
+        _refresh_projection(db)
     finally:
         db.disconnect()
 
@@ -1297,7 +1325,7 @@ def cmd_stats_compare(args):
         resolved_pt = resolve_period_type(db, args.period_type)
         stats = Stats(db)
         result = stats.compare(period=args.month, period_type=resolved_pt,
-                               unsplit=args.unsplit, gross=args.gross)
+                               unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split)
         if not result:
             print("Not enough data for comparison.")
             return
@@ -1307,6 +1335,8 @@ def cmd_stats_compare(args):
             mode_label = " (gross)"
         elif args.unsplit:
             mode_label = " (unsplit)"
+        elif args.raw_split:
+            mode_label = " (raw-split)"
 
         if isinstance(result, list):
             # Not enough periods for comparison
@@ -1396,7 +1426,7 @@ def cmd_stats_cashflow(args):
         pt = resolve_period_type(db, args.period_type)
         stats = Stats(db)
         rows = stats.cash_flow_summary(month=args.month, period_type=pt,
-                                       unsplit=args.unsplit, gross=args.gross)
+                                       unsplit=args.unsplit, gross=args.gross, raw_split=args.raw_split)
         if not rows:
             print("No data found.")
             return
@@ -1406,6 +1436,8 @@ def cmd_stats_cashflow(args):
             mode_label = " (Gross)"
         elif args.unsplit:
             mode_label = " (Unsplit)"
+        elif args.raw_split:
+            mode_label = " (Raw-Split)"
 
         header_period = "Period" if pt == "salary" else "Month"
         header_period_label = f"{header_period}{mode_label}"
@@ -1627,6 +1659,12 @@ def cmd_remove_recurring(args):
     try:
         from financial_categorizer.recurring import RecurringManager
         rm = RecurringManager(db)
+        if args.hard:
+            action = "PERMANENTLY DELETE"
+        else:
+            action = "cancel (soft-close)"
+        if not confirm_action(f"This will {action} recurring payment ID {args.id}. Proceed?", yes_flag=args.yes):
+            return
         success = rm.remove_recurring(args.id, hard=args.hard, cancel_date=args.date)
         if not success:
             print(f"[ERROR] Recurring payment ID {args.id} not found.", file=sys.stderr)
@@ -1644,6 +1682,12 @@ def cmd_discover_recurring(args):
     try:
         from financial_categorizer.recurring import RecurringManager
         rm = RecurringManager(db)
+        if not args.dry_run and not confirm_action(
+            "Auto-discovery will save the discovered configurations, re-run transaction "
+            "linking, and auto-close dead recurring configurations. Proceed? (Use --dry-run to preview first)",
+            yes_flag=args.yes,
+        ):
+            return
         candidates = rm.discover_recurring_candidates(dry_run=args.dry_run)
         if not candidates:
             print("No recurring payment candidates found.")
@@ -1983,7 +2027,7 @@ def main():
     p_txns = subparsers.add_parser("transactions", help="Search and list transactions")
     p_txns.add_argument("--category", help="Filter by category name")
     p_txns.add_argument("--uncategorized", action="store_true", help="Show only uncategorized transactions")
-    p_txns.add_argument("--non-zero", action="store_true", help="Exclude transactions with adjusted_amount = 0")
+    p_txns.add_argument("--include-zero", action="store_true", help="Include transactions with adjusted_amount = 0 in the output")
     p_txns.add_argument("--account", help="Filter by account name")
     p_txns.add_argument("--limit", type=int, default=50, help="Maximum number of transactions to return (default: 50)")
     g_txns = p_txns.add_mutually_exclusive_group()
@@ -1994,7 +2038,7 @@ def main():
     # uncategorized
     p_uncat = subparsers.add_parser("uncategorized", help="Show uncategorized transactions")
     p_uncat.add_argument("--group", action="store_true", help="Group by description with counts and totals")
-    p_uncat.add_argument("--non-zero", action="store_true", help="Exclude transactions with adjusted_amount = 0")
+    p_uncat.add_argument("--include-zero", action="store_true", help="Include transactions with adjusted_amount = 0")
     g_uncat = p_uncat.add_mutually_exclusive_group()
     g_uncat.add_argument("--net", action="store_true", help="Display personal net (adjusted_amount) as primary value")
     g_uncat.add_argument("--unsplit", action="store_true", help="Display household net (unsplit_amount) as primary value")
@@ -2019,6 +2063,7 @@ def main():
     g_stats_summary = p_stats_summary.add_mutually_exclusive_group()
     g_stats_summary.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_stats_summary.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_stats_summary.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_stats_summary.set_defaults(func=cmd_stats_summary)
 
     # stats category
@@ -2032,6 +2077,7 @@ def main():
     g_stats_cat = p_stats_cat.add_mutually_exclusive_group()
     g_stats_cat.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_stats_cat.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_stats_cat.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_stats_cat.set_defaults(func=cmd_stats_category)
 
     # stats trend
@@ -2044,6 +2090,7 @@ def main():
     g_stats_trend = p_stats_trend.add_mutually_exclusive_group()
     g_stats_trend.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_stats_trend.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_stats_trend.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_stats_trend.set_defaults(func=cmd_stats_trend)
 
     # stats top
@@ -2055,6 +2102,7 @@ def main():
     g_stats_top = p_stats_top.add_mutually_exclusive_group()
     g_stats_top.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_stats_top.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_stats_top.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_stats_top.set_defaults(func=cmd_stats_top)
 
     # stats-transfers
@@ -2065,6 +2113,7 @@ def main():
     g_stats_transfers = p_stats_transfers.add_mutually_exclusive_group()
     g_stats_transfers.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_stats_transfers.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_stats_transfers.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_stats_transfers.set_defaults(func=cmd_stats_transfers)
 
     # recalculate
@@ -2142,6 +2191,7 @@ def main():
     g_compare = p_compare.add_mutually_exclusive_group()
     g_compare.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_compare.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_compare.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_compare.set_defaults(func=cmd_stats_compare)
 
     # salary-config
@@ -2172,6 +2222,7 @@ def main():
     g_cf = p_cf.add_mutually_exclusive_group()
     g_cf.add_argument("--unsplit", action="store_true", help="Undo joint account split (household net)")
     g_cf.add_argument("--gross", action="store_true", help="Undo split and ignore reimbursements (household raw)")
+    g_cf.add_argument("--raw-split", action="store_true", help="Ownership split without reimbursement adjustments (bank-view)")
     p_cf.set_defaults(func=cmd_stats_cashflow)
 
     # recurring
@@ -2229,12 +2280,14 @@ def main():
     p_rem_rec.add_argument("--hard", action="store_true",
                            help="Delete configuration completely from the DB (otherwise soft-closes/cancels)")
     p_rem_rec.add_argument("--date", help="Cancellation date (YYYY-MM-DD, defaults to date of last matched transaction)")
+    p_rem_rec.add_argument("--yes", "-y", action="store_true", help="Bypass confirmation prompt")
     p_rem_rec.set_defaults(func=cmd_remove_recurring)
 
     # discover-recurring
     p_disc_rec = subparsers.add_parser("discover-recurring",
                                        help="Auto-discover candidates and auto-close dead configurations")
     p_disc_rec.add_argument("--dry-run", action="store_true", help="Preview candidates without writing them to DB")
+    p_disc_rec.add_argument("--yes", "-y", action="store_true", help="Bypass confirmation prompt (required to save and auto-link in non-interactive mode)")
     p_disc_rec.set_defaults(func=cmd_discover_recurring)
 
     # stats-recurring

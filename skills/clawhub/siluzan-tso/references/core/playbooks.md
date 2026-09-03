@@ -10,9 +10,9 @@
 | P2    | 多账户余额扫描         | 续航不足/充值预警巡检                  |
 | P3    | 多账户投放画像汇总     | accounts-digest 多户对比表             |
 | P4    | Google 账户周期报告    | 默认 8 维周期汇总                      |
-| P4-FB | Meta/Facebook 周期报告 | facebook-analysis 5–7 维，默认 HTML    |
+| P4-FB | Meta/Facebook 周期报告 | facebook-analysis 默认 5 维，默认 HTML |
 | P5    | 多账户多维度批处理     | google-analysis-batch，禁外层 for-loop |
-| P6    | OKKI 周报              | 固定模板多 Sheet xlsx                  |
+| P6    | OKKI 周报              | 写 JSON → okki-render 出 5 Sheet xlsx  |
 | P7    | Google 询盘分析        | 严格 3 个月 8 Sheet xlsx               |
 | P8    | 网站诊断               | website-diagnosis，默认 HTML           |
 | P9    | 战略市场分析           | market-analysis，默认 HTML             |
@@ -43,7 +43,7 @@
 - **步骤**：
   1. 全量巡检：`balance-scan -m <媒体> --threshold-days 7 --json-out ./snap-p2`（可选 `--min-balance 100` / `--target-days 60`）。
   2. 已知子集：`balance-scan -m <媒体> -a id1,id2,id3 --json-out ./snap-p2-subset`（跳过翻页）。
-- **产物**：按 `remainingDays` 升序；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户不纳入预警。**禁止**逐账户 `balance`。
+- **产物**：`data.items` 为全部已检查账户（按 `remainingDays` 升序）；预警筛 `hitReason !== "none"`；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户 `remainingDays` 为 null、不纳入预警。向用户贴 Markdown 表时单元格必须把 `|` 换成 `｜`（公司名常含 `|`）。**禁止**逐账户 `balance`。
 
 ---
 
@@ -60,7 +60,7 @@
   2. **高 CPA 巡检**：加 `--max-cpa <n>`（保留 CPA > n，或有消耗且转化为 0 的账户）。
   3. **零转化 / 零询盘巡检**：加 `--zero-conversions`（有消耗且转化 = 0 或未返回）。
   4. 基于落盘 `data.items` 与 `meta.totals` 生成报告，**不要**再逐账户 `stats`。
-- **产物**：向用户交付排序表（或明确「无命中」）；表格覆盖用户请求的**每一个** ID（未返回的占一行标注「未返回」）。**禁止**只落盘不说话。
+- **产物**：向用户交付排序表（或明确「无命中」）；表格覆盖用户请求的**每一个** ID（未返回的占一行标注「未返回」）。Markdown 单元格须把 `|` 换成 `｜`。**禁止**只落盘不说话。
 
 ---
 
@@ -93,16 +93,16 @@
 ## P4-FB · Meta/Facebook 账户周期报告
 
 - **触发**：Meta/Facebook 账户周期/月报/周报或诊断报告。
-- **必读**：`report-templates/meta-period-report.md` + `assets/meta-period-report-rules.md`（内容丰富度必读）+ `references/analytics/facebook-analysis-guide.md`；要 Excel 加 `report-templates/meta-period-report-excel.md`。
-- **默认产物**：**HTML**（`facebook-analysis render`）；用户明确要 Excel 时 Agent 脚本写 xlsx（步骤 1–3 不变，不调 `render`）。
+- **必读**：`report-templates/meta-period-report.md` + `assets/meta-period-report-rules.md` + `references/analytics/facebook-analysis-guide.md`；要 Excel 加 `report-templates/meta-period-report-excel.md`。
+- **默认产物**：**HTML**（`facebook-analysis render`）；用户要表格 / Excel 时 `render --format xlsx`。
 - **步骤**：
   1. `list-accounts -m MetaAd -k <mediaCustomerId> --json-out ./snap-fb` 确认账户与 `currencyCode`。
   2. 确认 `--start` / `--end`（>3 个月可分段）。
-  3. **拉数**（默认 5 维，要创意加 `creative`）：`facebook-analysis -a <id> --start <S> --end <D> --json-out ./snap-fb --sections overview,ad-sets,platform,country,audience`。
+  3. **拉数**（默认 5 维）：`facebook-analysis -a <id> --start <S> --end <D> --json-out ./snap-fb --sections overview,daily,country,campaigns,audience`。
   4. **分析**：脚本读落盘 JSON 聚合（见 `facebook-analysis-guide.md`）。
-  5. **写 JSON**：按 `meta-period-report-rules.md` 落盘 `meta-period-report.json`（`narrative` 4 条建议各 ≥150 字 + `supplementaryRecommendations` 7 维 + HTML 必填扩展）；无按日/关键词等写「接口未提供」，**禁止编造**。
-  6. **交付**：`facebook-analysis render --data ./meta-period-report.json --snapshot-dir ./snap-fb --out ./meta-period-report.html`。
-- **产物**：按 conventions §七 自检。诊断场景改用 `report-templates/meta-account-diagnosis-report.md`，拉数省略 `--sections` 拉全 7 维。
+  5. **写 JSON**：按 `meta-period-report-rules.md` 落盘 `meta-period-report.json`（四问 + 3 张建议卡 + 各章 analysis/advice）；**禁止编造**数字。
+  6. **交付**：`facebook-analysis render --data ./meta-period-report.json --snapshot-dir ./snap-fb --out ./meta-period-report.html`；要表格加 `--format xlsx`。
+- **产物**：按 conventions §七 自检。诊断场景改用 `report-templates/meta-account-diagnosis-report.md`，拉数省略 `--sections` 拉全量。
 
 ---
 
@@ -135,8 +135,10 @@
   1. （可选）Read `subagent-orchestration.md` § P6 决定是否分阶段委派。
   2. 确认 `mediaCustomerId` 与 `--start` / `--end`。
   3. 同一 `--json-out` 目录执行模板命令组合：`stats`、`balance`、`google-analysis --sections overview,campaigns,keywords,search-terms,campaign-device,campaign-geo-matched`。
-  4. 脚本读盘 → 按 `okki-weekly-google-client.md` **默认客户话术**填数交付（用户另有话术/增删条目时从其自定义）；并产出多 Sheet `.xlsx`（无 CLI 写表命令）。
-- **产物**：**不**按 P4 默认 8 维追加；金额读 `*Yuan` 字段；对外话术数值须与 xlsx 一致。
+  4. 脚本读盘 → 只写 `okki-weekly-report.json` 的 `meta` + `narrative`（5 Sheet 表末分析 + 账户 Sheet 固定 5 维数据复盘；表为空也须写）。
+  5. `google-analysis okki-render --data ./okki-weekly-report.json --snapshot-dir ./snap-okki --out <xlsx>`。缺分析 / 缺 5 维复盘 / 缺 `campaign-device` 或 `campaign-geo-matched` 会拒绝出文件；按 stderr 补 JSON 后重跑。**禁止** Agent 手写 xlsx。
+  6. 按 `okki-weekly-google-client.md` **默认客户话术**填数交付（用户另有话术/增删条目时从其自定义）；数值与 xlsx 一致。
+- **产物**：`okki-render` 写出的 `.xlsx` 路径（缺文件 = 未完成）+ 对话内客户话术；**不**按 P4 默认 8 维追加。仅用户明确「只要话术 / 不要文件」时才省略 xlsx。
 
 ---
 
@@ -156,7 +158,8 @@
 
 ## P8 · 网站诊断
 
-- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」（**非** Google 账户诊断、**非** 行业报告）。同义词见 `intent-routing.md` §二 P8。
+- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」「**是否符合（Google）广告投放要求**」「**能不能投 / 适不适合投广告**」（**非** Google 账户诊断、**非** 行业报告、**非** 生成搜索广告方案）。同义词见 `intent-routing.md` §零 / §二 P8。
+- **典型误路由**：用户说「诊断网站 https://… 是否符合 Google 广告投放要求」→ **仍是 P8**；须 `website-diagnosis collect --url …`，**禁止**因带「Google 广告」改走 W3，**禁止**只用 WebFetch/浏览器肉眼看页写结论。
 - **必读**：`references/analytics/website-diagnosis-guide.md` + `assets/website-diagnosis-rules.md` + `report-templates/website-diagnosis-report.md`。
 - **默认产物**：**HTML**（`website-diagnosis render`）；**禁止**仅 Markdown 摘要或纯 JSON 充当终稿。
 - **步骤**：

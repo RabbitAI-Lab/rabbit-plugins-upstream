@@ -1,44 +1,56 @@
-## Description: <br>
-AppGrowing advertising-material analysis assistant for strategy exploration and creative inspiration workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AppGrowing intelligent ad creative analysis assistant with Strategy Exploration (chat_mode=6) and Inspiration (chat_mode=10) modes.
 
-## Publisher: <br>
-[youcloud](https://clawhub.ai/user/youcloud) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youcloud](https://clawhub.ai/user/youcloud)
 
-## Use Case: <br>
-Developers, marketers, and advertising teams use this skill to send campaign-analysis prompts to AppGrowing/YouCloud, select the appropriate analysis mode, and receive advertising-material insights or creative direction as Markdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and advertising-analysis requests are sent to the AppGrowing/YouCloud service. <br>
-Mitigation: Install only when that service use matches the organization's data-sharing policy, and avoid submitting confidential campaign or business data unless approved. <br>
-Risk: The skill requires an AppGrowing/YouCloud API key and can accept a pasted key for a single request. <br>
-Mitigation: Prefer configuring YOUCLOUD_API_KEY as an environment variable and avoid pasting credentials into chat unless the environment is trusted. <br>
-Risk: The skill is available only to AppGrowing plans with API access. <br>
-Mitigation: Confirm account entitlement and quota before relying on the workflow for production advertising analysis. <br>
+## Use Case:
 
+External users and marketing teams use this skill to analyze AppGrowing ad creative data, explore advertising strategy, and generate creative inspiration through the disclosed AppGrowing API.
 
-## Reference(s): <br>
-- [agclaw on ClawHub](https://clawhub.ai/youcloud/skills/agclaw) <br>
-- [AppGrowing](https://appgrowing.cn/) <br>
-- [Usage Examples](references/example.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown responses with API-call guidance and returned analysis content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an AppGrowing/YouCloud API key and may wait up to 600 seconds for the external analysis response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server-resolved release metadata and openclaw metadata) <br>
+Risk: The skill can send prompts and an AppGrowing API key to a disclosed external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, configure YOUCLOUD_API_KEY as an environment variable, and avoid pasting API keys into chat.
+
+Risk: Broad trigger phrases can activate external API calls unintentionally.
+
+Mitigation: Use explicit commands such as /ag, /agclaw, or /ag-inspire and review activation behavior before deployment.
+
+## Reference(s):
+
+- [AppGrowing homepage](https://appgrowing.cn/)
+- [agclaw ClawHub skill page](https://clawhub.ai/youcloud/skills/agclaw)
+- [Publisher profile](https://clawhub.ai/user/youcloud)
+- [Usage examples](references/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown analysis text with optional shell command and API configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call an external AppGrowing API using YOUCLOUD_API_KEY and return the API-provided markdown output.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

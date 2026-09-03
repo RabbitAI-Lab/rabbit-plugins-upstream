@@ -1,0 +1,56 @@
+{
+  "skill_name": "huawei-cloud-vpc-list",
+  "region": "cn-north-4",
+  "test_cases": [
+    {
+      "id": "TC-01",
+      "name": "list_vpcs.py syntax check",
+      "command": "python3 -c \"import py_compile; py_compile.compile('scripts/list_vpcs.py', doraise=True)\"",
+      "expected": "No syntax errors",
+      "type": "syntax",
+      "executor": "sdk"
+    },
+    {
+      "id": "TC-02",
+      "name": "list_vpcs.py --help",
+      "command": "python3 scripts/list_vpcs.py --help",
+      "expected": "Help output shows all parameters",
+      "type": "syntax",
+      "executor": "sdk"
+    },
+    {
+      "id": "TC-03",
+      "name": "SDK VPC client availability",
+      "command": "python3 -c \"from huaweicloudsdkvpc.v3 import VpcClient; print('SDK OK')\"",
+      "expected": "SDK OK",
+      "type": "syntax",
+      "executor": "sdk"
+    },
+    {
+      "id": "TC-04",
+      "name": "List VPCs live (full aggregation, limit=5)",
+      "command": "python3 scripts/list_vpcs.py --project_id={project_id} --region=cn-north-4 --limit=5",
+      "expected": "JSON output with vpcs array and total_count",
+      "type": "readonly",
+      "executor": "sdk"
+    },
+    {
+      "id": "TC-05",
+      "name": "List VPCs with enterprise project filter",
+      "command": "python3 scripts/list_vpcs.py --project_id={project_id} --region=cn-north-4 --enterprise_project_id=0",
+      "expected": "JSON output filtered by enterprise project",
+      "type": "readonly",
+      "executor": "sdk"
+    },
+    {
+      "id": "TC-06",
+      "name": "Pagination test: marker parameter works",
+      "command": "python3 scripts/list_vpcs.py --project_id={project_id} --region=cn-north-4 --limit=1 --output=json",
+      "expected": "JSON output with total_count showing actual total",
+      "type": "readonly",
+      "executor": "sdk"
+    }
+  ],
+  "env_vars_required": ["HUAWEI_ACCESS_KEY/HUAWEI_SECRET_KEY or HW_AK/HW_SK"],
+  "notes": "Read-only queries only. Pagination is fully auto-aggregated by the script."
+}

@@ -7,8 +7,6 @@
 
 ---
 
-
-
 - 一、行业敏感度分级（先判断再执行）
 - 二、绝对禁止内容（关键词/文案中不可出现）
 - 三、编辑合规规则（Top 12% 被拒原因）
@@ -29,8 +27,8 @@
 
 ## Contents / 何时 Read
 
-| 文件 | 何时 Read |
-| ---- | --------- |
-| [`google-ads-compliance-forbid.md`](google-ads-compliance-forbid.md) | 行业分级、绝对禁止、编辑/虚假承诺/商标/落地页一致性 |
-| [`google-ads-compliance-copy.md`](google-ads-compliance-copy.md) | 关键词生成、多语言、修饰语、Headlines/Descriptions 清单、新广告主验证 |
-| [`google-ads-compliance-ops.md`](google-ads-compliance-ops.md) | 生成前检查、命令联动、被拒排查、申诉恢复 |
+| 文件                                                                 | 何时 Read                                                             |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [`google-ads-compliance-forbid.md`](google-ads-compliance-forbid.md) | 行业分级、绝对禁止、编辑/虚假承诺/商标/落地页一致性                   |
+| [`google-ads-compliance-copy.md`](google-ads-compliance-copy.md)     | 关键词生成、多语言、修饰语、Headlines/Descriptions 清单、新广告主验证 |
+| [`google-ads-compliance-ops.md`](google-ads-compliance-ops.md)       | 生成前检查、命令联动、被拒排查、申诉恢复                              |

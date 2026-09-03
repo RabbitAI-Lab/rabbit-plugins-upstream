@@ -1,41 +1,58 @@
-## Description: <br>
-Cmclaw connects an agent to YouCloud Creative Manager to generate advertising strategy analysis, creative inspiration, and material strategy reports from selected asset scopes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+cmclaw connects an agent to YouCloud Creative Manager to analyze advertising creatives and return strategy reports or brainstorming output.
 
-## Publisher: <br>
-[youcloud](https://clawhub.ai/user/youcloud) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youcloud](https://clawhub.ai/user/youcloud)
 
-## Use Case: <br>
-Marketing and growth teams with a paid YouCloud Creative Manager account use this skill to request ad strategy reports or iterative creative brainstorming against selected asset scopes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts, selected material scope, and account-derived identifiers to the YouCloud API using a YouCloud API key. <br>
-Mitigation: Use it only with an authorized YouCloud Creative Manager account and avoid including material that should not be sent to YouCloud. <br>
-Risk: The optional DAM_API_BASE setting can redirect requests to a different endpoint. <br>
-Mitigation: Leave DAM_API_BASE unset for the production YouCloud endpoint unless the alternate endpoint is trusted. <br>
+## Use Case:
 
+External users with paid YouCloud Creative Manager access use this skill to send ad strategy or creative analysis prompts to YouCloud and receive a complete markdown report or brainstorming response.
 
-## Reference(s): <br>
-- [Cmclaw on ClawHub](https://clawhub.ai/youcloud/skills/cmclaw) <br>
-- [DamClaw Skill API](references/cm-claw-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report or conversational markdown response with a YouCloud conversation detail link.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires YOUCLOUD_API_KEY. DAM_API_BASE is optional and should only point to a trusted endpoint. Responses may take up to 650 seconds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Ad strategy prompts, material-scope references, and account-linked user or team identifiers are sent to YouCloud and may appear in the web app conversation list.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended YouCloud Creative Manager workflows and avoid submitting data that should not be processed by that service.
+
+Risk: A broad YOUCLOUD_API_KEY or untrusted DAM_API_BASE could expose requests to the wrong account or host.
+
+Mitigation: Scope YOUCLOUD_API_KEY to the intended account and keep DAM_API_BASE unset or pointed only at a trusted YouCloud endpoint.
+
+Risk: The skill relies on long-running streamed responses and can produce incomplete output if interrupted early.
+
+Mitigation: Wait for the stream to complete or return an error before treating the markdown response as final.
+
+## Reference(s):
+
+- [DamClaw Skill API](references/cm-claw-api.md)
+- [YouCloud Creative Manager API base](https://console.dam.youcloud.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown report or conversational analysis text with a conversation detail link.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single complete response after the YouCloud stream ends; session_id may be retained for follow-up.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

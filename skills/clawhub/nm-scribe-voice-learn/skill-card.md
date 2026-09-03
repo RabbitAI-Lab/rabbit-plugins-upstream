@@ -1,41 +1,54 @@
-## Description: <br>
-Improves a voice profile by learning from manual edits, refining registers and reducing voice drift over time. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Improves a voice profile by learning from manual edits to refine registers and close voice drift over time.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, writers, and agent users use this skill after manually editing generated text to compare review and edit snapshots, identify recurring voice patterns, and propose updates to voice-profile rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores generated and edited writing samples in the local voice-profile directory. <br>
-Mitigation: Avoid running it on sensitive drafts unless local snapshot retention is acceptable, and review or clean stored snapshots periodically. <br>
-Risk: Broad trigger terms could invoke the learning flow when it is not intended. <br>
-Mitigation: Invoke the skill deliberately after completing manual edits and confirm proposed profile changes before applying them. <br>
+## Use Case:
 
+Writers and developers use this skill after manually editing generated text to compare post-review and final drafts, identify recurring voice patterns, and propose updates to voice profiles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-voice-learn) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces pattern analysis, hold/apply recommendations, proposed profile-rule edits, and local accumulator updates for user review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill stores generated drafts, reviewed drafts, and final manual edits as local voice-profile snapshots.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the local profile storage and any sync behavior are acceptable for the writing being processed; avoid confidential writing unless that storage has been reviewed.
+
+Risk: Learning proposals can introduce incorrect or unwanted voice rules into the profile.
+
+Mitigation: Review the evidence and proposed profile changes before approving any update.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-voice-learn)
+- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown proposals and summaries, JSON accumulator entries, and local profile file updates when approved.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses three-stage snapshot comparison and requires user approval before applying proposed profile changes.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

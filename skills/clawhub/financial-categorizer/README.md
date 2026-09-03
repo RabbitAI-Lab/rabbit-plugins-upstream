@@ -57,11 +57,16 @@ All data lives in a single SQLite database (`data/finance.db` by default).
 - **match_rules** — patterns for auto-categorization
 - **transaction_links** — connects transfers and reimbursements
 
+### Projection tables
+- **period_projection** — persisted projection of the current period (income-anchored burn-down), refreshed automatically after data mutations (import, categorize, manual match/unmatch, link/unlink); the latest refresh wins
+- **period_projection_items** — itemized expected occurrences (date, name, amount) covering the full period, with an `upcoming` flag (date > as-of); zero-amount rows filtered
+
 ### Views
 - `v_effective_transactions` — all transactions with adjusted, unsplit, and raw amounts
 - `v_monthly_summary` — income, expenses, net per month (includes unsplit and gross aggregations)
 - `v_category_monthly` — category totals per month (includes unsplit and gross aggregations)
 - `v_daily_spending` — daily spending breakdown
+- `v_burn_down` — income-anchored burn-down derived from `period_projection`
 
 ### Adjusted, Unsplit, and Gross amounts
 
@@ -140,8 +145,8 @@ The following commands require confirmation:
 | `recurring [--status <active|cancelled|all>]` | List recurring payments configurations |
 | `add-recurring <name> <pattern> [options] [--dry-run]` | Manually create a recurring payment config and link transactions |
 | `update-recurring <id> [options] [--dry-run]` | Update recurring config fields and re-run transaction linking |
-| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration |
-| `discover-recurring [--dry-run]` | Auto-discover recurring transaction patterns and auto-close dead configurations |
+| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>] [--yes]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration (requires confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode) |
+| `discover-recurring [--dry-run] [--yes]` | Auto-discover recurring transaction patterns and auto-close dead configurations (saving, re-linking, and auto-closing require confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode — run `--dry-run` first to preview) |
 | `stats-recurring [query] [--month <YYYY-MM>] [--period-type <type>]` | Display subscription stats dashboard or detail reports for matching subscriptions |
 | `estimate-period [--days <int>] [--level <0|1|2>]` | Project spending and estimate total outflow remaining in current period (rollup levels: 0=none, 1=top, 2=detailed) |
 | `set-estimate-level <0|1|2>` | Set default category rollup level configuration for spending estimation |

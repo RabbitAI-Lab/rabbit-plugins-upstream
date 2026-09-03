@@ -16,7 +16,7 @@ Use this recipe when the user wants to find or prioritize companies based on **w
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies"}' \
   --data '{
     "techFields": {"technologies": ["snowflake", "dbt"]},
     "fields": {"industries": ["software"], "headcountMin": 100},
@@ -31,7 +31,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs"}' \
   --data '{
     "fields": {
       "job_titles": ["Head of RevOps", "VP RevOps"],
@@ -51,7 +51,7 @@ Result includes both job postings and the companies that posted them. Dedup on c
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies"}' \
   --data '{
     "techFields": {"technologies": ["snowflake"]},
     "jobFields": {"job_titles": ["Data Engineer"], "posted_at_max_age_days": 60},
@@ -65,23 +65,26 @@ This is theirStack's unique strength — combined tech-stack + hiring-intent in 
 
 ## Per-company tech validation
 
-After sourcing with theirStack, validate the technographics on each company with cargo native:
+After sourcing with theirStack, validate the technographics on each company with
+builtwith — **free first, paid on the residue**:
 
 ```bash
-# 1. Match the sourced companies to cargo
+# 1. Free stack summary for every sourced domain — costs nothing
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"builtwith","actionSlug":"getDomainSummary"}' \
   --records "$(jq -c '[.results[] | {domain}]' /tmp/sourced.json)" \
-  --wait-until-finished
+  --wait-until-finished > /tmp/stack-summary.json
 
-# 2. Pull cargo's technographics view
+# 2. Full detail only where the free summary didn't settle the question
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessTechnographics","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.business_id) | {business_id}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"builtwith","actionSlug":"enrichDomain"}' \
+  --records '<rows from /tmp/stack-summary.json the summary left ambiguous>' \
   --wait-until-finished
 ```
 
-cargo's technographics action provides a richer view (technology categories, adoption confidence, recency) than theirStack alone. Use both when high-confidence is required.
+`enrichDomain` gives the richer view (technology categories, versions, spend
+signals) than theirStack alone. Use both when high-confidence is required — but
+never before the free summary has cut the list down.
 
 ## Discovering canonical technology / role slugs
 
@@ -90,7 +93,7 @@ theirStack's filters expect canonical slugs (e.g. `"snowflake"`, not `"Snowflake
 ```bash
 # Discover canonical slugs before search
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchTechnologies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchTechnologies"}' \
   --data '{"fields": {"keywords": "snowflake"}, "limit": 10}' \
   --wait-until-finished
 ```
@@ -114,22 +117,22 @@ To make this recurring, follow [`save-as-play.md`](save-as-play.md) — it walks
 | `theirStack.searchTechnologies` | 0.5 |
 | `theirStack.searchJobs` | 0.5 |
 | `theirStack.searchCompanies` | 0.5 |
-| `cargo.matchBusiness` | 0.5 per record |
-| `cargo.enrichBusinessTechnographics` | 1 per record |
+| `builtwith.getDomainSummary` | **0** per record |
+| `builtwith.enrichDomain` | 1 per record |
 
-Note: theirStack actions are **per-call**, not per-record-returned. One call returning 500 companies = 0.5 credits. Cargo enrichments are per-record.
+Note: theirStack actions are **per-call**, not per-record-returned. One call returning 500 companies = 0.5 credits. builtwith is per-record.
 
-For a 500-company tech-intent scan with cargo validation: 0.5 (theirStack) + 250 (matchBusiness × 500) + 500 (enrichTechnographics × 500) = ~750 credits.
+For a 500-company tech-intent scan with validation: 0.5 (theirStack) + 0 (`getDomainSummary` × 500) + 1 per row that actually needs `enrichDomain`. If a fifth of the list escalates, that is ~100 credits, not 500 — which is the whole point of running the free summary first.
 
 ## When the intent doesn't show up in theirStack
 
-- **Stack X isn't in theirStack's catalog**: use `cargo.enrichBusinessTechnographics` directly on a known account list — cargo's tech catalog is broader for some niches.
+- **Stack X isn't in theirStack's catalog**: run `builtwith.getDomainSummary` (free) directly on a known account list, and escalate the ambiguous rows to `builtwith.enrichDomain` (1) — builtwith detects from the site itself rather than from a curated catalog, so its coverage is broader for niche tools.
 - **Job posting on a niche board**: theirStack covers major boards (LinkedIn, Indeed, etc.); for niche/industry boards, fall back to `firecrawl.crawl` on the board URL.
 - **Self-reported intent (e.g. case studies)**: scrape with `firecrawl.scrape` + LLM extract via `anthropic.instruct`.
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"theirStack","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"theirStack","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Output retrieval
 

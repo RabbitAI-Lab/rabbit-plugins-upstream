@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-nsx-security",
   "slug": "vmware-nsx-security",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668749264,
-  "contentHash": "c8777c3d18c4a57c12986a1a1032299ca05f365a63b75c3adf9bbb44fd0277a3",
-  "fetchedAt": "2026-07-26T18:08:52.675Z"
+  "version": "1.10.0",
+  "updatedAt": 1788360283658,
+  "contentHash": "0b28b250c929769b4b19a253149d8e38ea0483b9179241710789454e60b412c7",
+  "fetchedAt": "2026-09-03T12:14:20.809Z"
 }

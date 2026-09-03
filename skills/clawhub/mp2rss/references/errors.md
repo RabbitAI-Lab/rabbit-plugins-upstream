@@ -18,13 +18,15 @@
 - `code` 字段是 HTTP 状态码（来自上游 API）或 CLI 自身 exit code
 - `message` 是人类可读描述（中文），可直接转发给用户
 
+> ⚠️ 例外（实测 CLI 1.1.0）：**cobra 参数解析层**的错误（必填位置参数缺失、flag 值类型非法如 `--page-size abc`）以 exit 1 退出，且**即使带 `-o json` 也输出裸文本到 stderr**，不是 JSON envelope。Agent 解析 JSON 失败时应回退读 stderr 文本。
+
 ## Exit codes
 
 | Code | 含义 | 典型场景 | Agent 处理 |
 |------|------|---------|-----------|
 | `0` | 成功 | 命令正常执行 | 解析 stdout |
-| `1` | 通用错误（网络） | DNS 失败 / TCP 连不上 / 超时 | 报告 + 建议稍后重试；检查网络 |
-| `2` | 参数错误 | flag 拼错 / 必填参数缺失 / `mp subscribe` URL 不是 `mp.weixin.qq.com/s/...` | 解析 stderr 给用户具体提示；URL 错就反问用户索要正确文章链接 |
+| `1` | 通用错误（网络）/ 解析层错误 | DNS 失败 / TCP 连不上 / 超时；**必填参数缺失、flag 值非法**（cobra 解析层，裸文本 stderr） | 网络类：报告 + 建议稍后重试；解析类：修正命令参数后重试一次 |
+| `2` | 参数错误（业务校验层） | `mp subscribe` URL 不是 `mp.weixin.qq.com/s/...` / 位置参数格式非法（如 mpId 非数字） | 解析 envelope 给用户具体提示；URL 错就反问用户索要正确文章链接 |
 | `3` | 鉴权失败 | Feed Key 错 / 过期 / 未配置 / HTTP 401 | 引导用户跑 `mp2rss auth login`（见 [auth.md](auth.md)）；**不要反复重试** |
 | `4` | 资源不存在 | mpId 错 / 文章 URL 失效 / **xUserId 未订阅**（X 读类端点要求已订阅）/ HTTP 404 | MP：用 `mp list` 重新核对 mpId 或更换文章链接；X：先 `x list` 确认是否已订阅，未订阅的话引导用户去 Web 控制台「订阅管理 → X」 |
 | `5` | 上游不可用 | API 服务挂 / HTTP 5xx | 报告 + 建议稍后重试 |
@@ -38,10 +40,10 @@ CLI 把上游 HTTP 状态码映射到上面的 exit codes：
 | 200 | 0 | OK |
 | 400 | 2 | 请求参数错 |
 | 401 | 3 | Feed Key 无效 |
-| 403 | 3 | 权限不足（实际同 401 处理） |
+| 403 | 1 | 权限不足（CLI 未特判 403，落到通用错误；message 会带上游原文） |
 | 404 | 4 | 资源不存在 |
-| 429 | 5 | 限流（视为上游不可用） |
-| 5xx | 5 | 上游错误 |
+| 429 | 1 | 限流；CLI 会自动退避重试 2 次，仍失败后按通用错误退出（未特判） |
+| 5xx | 5 | 上游错误（CLI 同样先自动退避重试 2 次） |
 
 ## Agent 处理策略
 
@@ -50,6 +52,7 @@ CLI 把上游 HTTP 状态码映射到上面的 exit codes：
 | 错误类型 | 重试策略 |
 |---------|---------|
 | Exit 1（网络） | 等待 5 秒后**最多重试一次**；二次失败明确报告网络问题 |
+| Exit 1（解析层：缺参 / flag 值非法） | **不要原样重试**；按 stderr 提示修正命令参数后再执行 |
 | Exit 3（鉴权） | **不要重试**；直接引导 `mp2rss auth login` |
 | Exit 4（不存在） | **不要重试**；引导用户核对 mpId / URL |
 | Exit 5（上游 5xx） | 等待 5 秒后**最多重试一次**；二次失败建议稍后再试 |
@@ -95,7 +98,7 @@ Agent → 告诉用户必须用微信公众号文章 URL，并反问索要正确
 
 ```bash
 $ mp2rss mp articles 999999999 -o json
-{"error":{"message":"该公众号不在你的订阅中","code":404}}
+{"error":{"message":"未找到（HTTP 404）：MP account is not subscribed","code":404}}
 $ echo $?
 4
 ```

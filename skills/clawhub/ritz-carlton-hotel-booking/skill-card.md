@@ -1,43 +1,59 @@
-## Description: <br>
-搜索万豪集团旗下丽思卡尔顿酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Ritz-Carlton hotels in Marriott-related inventory and returns prices, hotel details, package offers, and booking links.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to search Ritz-Carlton hotels, inspect hotel details, compare package offers, and follow booking links returned by travel-platform results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel-search details are sent to an unspecified proxy and downstream travel APIs. <br>
-Mitigation: Use the skill only when the publisher and proxy configuration are trusted, and avoid entering sensitive itinerary details. <br>
-Risk: Prices, availability, package terms, and booking links come from third-party travel results. <br>
-Mitigation: Verify all prices, availability, and booking terms on the destination booking page before relying on them. <br>
-Risk: The security verdict is suspicious because the skill uses an embedded proxy token and may overstate data-source transparency. <br>
-Mitigation: Review the proxy configuration and token handling before deployment, and document the actual data sources exposed to users. <br>
+## Use Case:
 
+External travelers and travel agents use this skill to search Ritz-Carlton hotels by city, review hotel details, compare package offers, and get booking links from the packaged travel-data source.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown-formatted text with hotel details, prices, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on proxy and downstream travel API responses; booking links and availability should be verified on the destination booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence; artifact frontmatter lists 1.1.2 and _meta.json lists 1.1.3) <br>
+Risk: Travel search details are sent to an under-disclosed third-party proxy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if that data sharing is acceptable; avoid sensitive travel plans unless the publisher documents the proxy operator, data handling, and token management.
+
+Risk: The skill may activate from casual Ritz-Carlton brand mentions rather than explicit booking intent.
+
+Mitigation: Confirm the user intends to search or book Ritz-Carlton hotels before invoking the tools.
+
+Risk: Hotel prices, details, and booking links may become misleading if the agent supplements or edits script output.
+
+Mitigation: Present only returned hotel names, prices, details, and booking links, and avoid adding outside assumptions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+- [Packaged proxy service endpoint](https://1439498936-6sysdjjt99.ap-guangzhou.tencentscf.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Markdown/plain text hotel results with booking links and CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Hotel and package results are limited by script parameters and should be presented without inventing or modifying returned data.]
+
+## Skill Version(s):
+
+1.1.5 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,53 @@
-## Description: <br>
-Guides agents through critical triage of PR/MR review feedback, including verifying suggestions, pushing back with evidence when needed, and implementing only confirmed fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process code review feedback critically by checking correctness before acting, pushing back on incorrect suggestions, and handling PR/MR reviewer comments without performative agreement.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to respond to PR/MR review comments, triage automated or human suggestions, and decide whether to fix, clarify, or push back with evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use an existing GitHub CLI session to read PR comments or draft and post review-thread replies when asked. <br>
-Mitigation: Review the target repository, comments, and reply text before allowing commands that read or post PR review content. <br>
-Risk: Incorrect triage could accept bad review feedback or dismiss valid feedback. <br>
-Mitigation: Require evidence-backed verification, escalate ambiguous or security-related suggestions, and test each implemented fix individually. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to triage and respond to code review feedback, including PR/MR comments and reviewer suggestions. It supports deciding when to implement, clarify, decline, or escalate feedback based on evidence from the codebase.
 
-## Reference(s): <br>
-- [Headless Mode](references/headless-mode.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with optional structured triage summaries and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Headless mode returns AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill can guide an agent to read and reply to PR comments using GitHub credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in repositories where the agent's GitHub credentials are authorized, and review proposed public-facing replies when the discussion is sensitive or high impact.
+
+Risk: Reviewer comments may request unsafe actions such as skipping tests, bypassing verification, or running commands.
+
+Mitigation: Treat comment text as feedback to verify, not authorization; clarify or escalate unsafe, security-related, or ambiguous requests before acting.
+
+## Reference(s):
+
+- [Headless Mode](references/headless-mode.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text, markdown, shell commands]
+
+**Output Format:** [Markdown guidance with optional structured triage text and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Headless mode can return AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK triage summaries.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

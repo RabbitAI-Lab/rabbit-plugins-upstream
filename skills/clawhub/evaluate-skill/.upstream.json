@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/evaluate-skill",
   "slug": "evaluate-skill",
   "ownerHandle": null,
-  "version": "1.0.11",
-  "updatedAt": 1783878184366,
-  "contentHash": "bf0bb683d1553f20fb38dee9edad9955c0da9601230840db952da0576c915378",
-  "fetchedAt": "2026-07-26T18:16:07.774Z"
+  "version": "1.0.12",
+  "updatedAt": 1787985422378,
+  "contentHash": "ca94d97900d7b702274cbb8e03f4a05923520648334c75b52f27dd447ad7fdd3",
+  "fetchedAt": "2026-09-03T12:27:58.710Z"
 }

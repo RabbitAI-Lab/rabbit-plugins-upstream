@@ -2,11 +2,11 @@
 
 # 中国专利.skill
 
-> 中国专利 Agent Skill：**挖掘并写成可交付交底书**，或把**已有专利读成通俗笔记**。
+> 专利点挖掘与交底书（发明/实用/外观）编写，公布公告著录检索，通俗解读专利，对照审查口径出政策简报，辅助审查答复。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-blue.svg)](https://www.python.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-mermaid%2Fmmdc-339933.svg)](https://nodejs.org/)
+[![Playwright](https://img.shields.io/badge/Playwright-mermaid%20%2B%20CNIPA-2EAD33.svg)](https://playwright.dev/)
 [![AgentSkills](https://img.shields.io/badge/AgentSkills-Standard-green)](https://agentskills.io)
 
 <br>
@@ -15,148 +15,25 @@
 定稿后还要**多轮补材料、纠错**并留下修改追溯？<br>
 公开专利晦涩难懂，想**快速看懂权要与落地语境**？
 
-[愿景](#愿景) · [两种用法](#两种用法) · [功能特性](#功能特性) · [安装](#安装) · [使用](#使用) · [示例](#示例) · [运行效果](#运行效果) · [参考文档](#参考文档) · [详细安装说明](INSTALL.md) · [技能入口](SKILL.md)
+[初衷](#初衷) · [运行效果](#运行效果) · [功能特性](#功能特性) · [示例](#示例) · [支持作者](#支持作者) · [参考文档](#参考文档) · [安装说明](INSTALL.md) · [技能入口](SKILL.md)
 
 </div>
 
 ---
 
-## 愿景
+## 初衷
 
 ### 专利交底书编写
 
 > **做了多年核心研发，专利发明人那一栏从没写过我的名字。**
 
-代码是自己敲的，方案是自己扛的，轮到交底书却卡在「专利点怎么挖、查新怎么写、框图和 Word 怎么一次交得出去」。本技能把这一环打通：从项目材料梳出可申请的点，查新、脱敏、成文、迭代另存——让真正干活的人，也能把技术贡献写进可交付的交底书里。
+代码是自己敲的，方案是自己扛的，轮到交底书却卡在「专利点怎么挖、查新怎么写、框图和 Word 怎么一次交得出去」。本技能把这一环打通：覆盖发明 / 实用新型 / 外观设计，结构图与外观图都能读懂、写进交底；从项目材料梳出可申请的点，查新、脱敏、成文、迭代另存——让真正干活的人，也能把技术贡献写进可交付的交底书里。
 
 ### 专利通俗解读
 
 > **不止一篇。**
 
 公开专利常把阅读门槛抬得很高：权要绕、术语密、落地语境散落在说明书与附图里。本技能把单篇读成通俗笔记与图谱，并入库 Obsidian；依托双链、图谱、插件与 Bases 等生态，陆续解读的专利可以沉淀成**只属于自己的私有专利知识库**——权要、术语、线索与附图彼此勾连，越读越厚。再叠上 [Obsidian CLI](https://help.obsidian.md/cli) 与库内外连接能力，检索、批处理、和外部工具接力都更容易：从单篇通俗笔记，走向可检索、可关联、可继续生长的个人专利情报层，把沉睡在 PDF 里的技术细节重新点亮。库厚了之后，还能在这层之上做**专利比对、挖掘与分析**——同族对照、技术路线梳理、差异点扫描，把「读懂」推进到「用起来」。
-
----
-
-## 两种用法
-
-| | **专利交底书编写** | **专利通俗解读** |
-|--|-------------------|------------------|
-| **输入** | 项目文档 / 代码 / 主题 | 公开号、专利 PDF / 全文 |
-| **输出** | `{案件}_{时间戳}.md` + `.docx` | Obsidian 解读笔记（或 `outputs/patent_reader/`） |
-| **典型说法** | 专利挖掘、交底书、查新、`/交底书` | 读专利、专利解读、`/读专利`、`/patent-read` |
-| **入口** | `SKILL.md` 主流程 Step 1–8 | `prompts/patent_plain_reader.md` |
-
-提供专利号或专利全文/PDF 时，技能**优先走解读**，不会默认开交底书流水线。
-
----
-
-## 功能特性
-
-### 专利交底书编写
-
-<!-- 使用 HTML 表格：避免 GitHub 管道表把左列挤窄 -->
-<table>
-<colgroup>
-<col width="1%">
-<col>
-</colgroup>
-<thead>
-<tr><th align="left" nowrap width="1%">能力</th><th align="left">说明</th></tr>
-</thead>
-<tbody>
-<tr><td nowrap width="1%"><strong>项目扫描</strong></td><td>按优先级读文档 / 代码；<code>.docx</code> / <code>.pptx</code> 先转 Markdown 再扫（<code>prompts/project_scan.md</code>）</td></tr>
-<tr><td nowrap width="1%"><strong>专利点</strong></td><td>候选点讨论与融合（<code>patent_points_analyzer.md</code>）</td></tr>
-<tr><td nowrap width="1%"><strong>查新</strong></td><td><strong>优先</strong> <a href="http://epub.cnipa.gov.cn/">国知局 · 中国专利公布公告</a>（<code>tools/cnipa_epub_search.py</code>）；异常或无果时降级 WebSearch。著录写入第一章（<code>prior_art_search.md</code>）</td></tr>
-<tr><td nowrap width="1%"><strong>交底书成稿</strong></td><td>脱敏模版 + <strong>mermaid</strong> 框图与流程图；<code>mermaid_render.py</code> → PNG，默认再出 <strong>.docx</strong></td></tr>
-<tr><td nowrap width="1%"><strong>交付命名</strong></td><td><code>{案件名}_{YYYYMMDDHHmmss}.md</code> 与同名 <code>.docx</code>（<code>disclosure_builder.md</code> §7.3）</td></tr>
-<tr><td nowrap width="1%"><strong>自检 / 迭代</strong></td><td>逻辑与公式自检（不写入正文）；合并 / 纠正另存新文件 + <code>交底书修订对话记录.md</code></td></tr>
-</tbody>
-</table>
-
-### 专利通俗解读
-
-**强烈推荐安装 Obsidian**：索引、Canvas 知识图谱、术语网与 callout 配色依赖库内呈现，才能发挥本模式的完整体验。安装与可选社区插件见 [docs/obsidian-setup-guide.md](docs/obsidian-setup-guide.md)。
-
-<table>
-<colgroup>
-<col width="1%">
-<col>
-</colgroup>
-<thead>
-<tr><th align="left" nowrap width="1%">能力</th><th align="left">说明</th></tr>
-</thead>
-<tbody>
-<tr><td nowrap width="1%"><strong>取证解读</strong></td><td>全文 / PDF 抽取 → 权要树、术语表、特征—说明书—附图对照（<code>patent_plain_reader.md</code>）</td></tr>
-<tr><td nowrap width="1%"><strong>叙述故事线</strong></td><td>一句话总览 + 连贯叙事：把权要与说明书「讲成人话」，降低首次通读成本</td></tr>
-<tr><td nowrap width="1%"><strong>知识图谱</strong></td><td>单篇 <code>*_图谱.canvas</code>、多篇 <code>_专利关联.canvas</code>、术语双链与关系图配色；入库<strong>自动</strong>配置 CSS / Bases</td></tr>
-<tr><td nowrap width="1%"><strong>公开线索辅助</strong></td><td>联网检索公开材料（≤3 条）；Agent 读 URL 写摘要；L1–L4 旁注与 <code>clues/</code> 落地，用行业语境辅助理解（<strong>非</strong>权要 / 说明书证据）</td></tr>
-</tbody>
-</table>
-
----
-
-## 安装
-
-### 接入任意支持 Agent Skills 的环境
-
-通用做法（任选其一）：
-
-1. **克隆 / 复制到宿主的 skills 目录**（全局或当前项目均可），例如：
-   ```bash
-   git clone <本仓库 URL> <宿主-skills目录>/patent-disclosure-skill
-   ```
-2. **直接用 Agent 打开本仓库根目录**作为工作区；此时把「含 `SKILL.md` 的目录」当作技能根。
-3. 在对话里用自然语言或斜杠触发（如「写交底书」「读专利」）；以当前宿主是否扫描到本技能为准。
-
-Claude Code、Cursor、以及其他兼容 AgentSkills 的客户端，具体落盘路径不同，详见 [INSTALL.md](INSTALL.md)。装好后按宿主习惯重启 / 刷新，确认技能已被发现即可。
-
-### 依赖
-
-```bash
-# 共用基础（Office 转换、交底书相关 Python 包）
-pip install -r requirements.txt
-```
-
-```bash
-# 可选：国知局查新（交底书 Step 5）
-pip install -r tools/requirements-cnipa.txt
-python -m playwright install chromium
-```
-
-```bash
-# 可选：专利解读 PDF 抽取
-pip install -r tools/patent_reader/requirements.txt
-```
-
-- **交底书图示定稿**另需 **Node.js**：在 `tools/` 下 `npm install` 或使用 `npx mmdc`（见 [tools/README.md](tools/README.md)）。  
-- **解读 + Obsidian**：**强烈推荐**配置 Obsidian 库（`PATENT_READER_OBSIDIAN_VAULT`），才能完整体验索引、Canvas、术语网、关系图配色与公开线索旁注；无库时可降级到 `outputs/patent_reader/`，效果会弱一截。Windows 安装与可选社区插件见 [docs/obsidian-setup-guide.md](docs/obsidian-setup-guide.md)。  
-- 不装国知局依赖时，查新按 `prior_art_search.md` 降级为 **WebSearch**。
-
----
-
-## 使用
-
-### 专利交底书编写
-
-在 Agent 中用自然语言即可，例如：专利挖掘、专利点、**技术交底书**、查新、现有技术对比；斜杠如 `/patent-disclosure-skill`、`/交底书`。
-
-建议说明 **项目路径** 或 **技术主题**。查新优先 [中国专利公布公告](http://epub.cnipa.gov.cn/)，见 `prompts/prior_art_search.md`。  
-在**已有交底书**上补材料或纠错时无需说「迭代」——按 `merger.md` / `correction_handler.md` 另存新稿；细则见 [SKILL.md](SKILL.md)。
-
-### 专利通俗解读
-
-例如：读专利、专利解读、看懂权要、`/读专利`、`/patent-read`，并给出**公开号或 PDF 路径**。
-
-技能会走阅读模式：取证 → 叙述故事线 → 公开线索辅助 →（推荐）Obsidian 入库与知识图谱。**强烈推荐**配置库路径以获得完整体验；无库时仍可落到 `outputs/patent_reader/`。流程与工具见 [tools/patent_reader/README.md](tools/patent_reader/README.md)、[SKILL.md](SKILL.md)「专利通俗解读」。
-
----
-
-## 示例
-
-- **交底书**：虚构扫描原材料见 [examples/README.md](examples/README.md)（如 `examples/example_batch_job_scheduler/knowledge/`）。  
-- **专利解读**：示例 PDF 镜像见 [examples/example_patent_reader/README.md](examples/example_patent_reader/README.md)（材料本地自备，不入库）。  
-
-完整产物由流程生成到 **`outputs/`** 或 Obsidian 库。
 
 ---
 
@@ -175,6 +52,27 @@ pip install -r tools/patent_reader/requirements.txt
 </td>
 <td width="50%" valign="top" align="center">
 <img src="docs/效果例-迭代更新.jpg" alt="迭代更新：新时间戳文件与交底书修订对话记录" width="100%" />
+</td>
+</tr>
+</table>
+
+### 实用新型 / 外观 · 看图与出图
+
+<table width="100%" border="1" cellpadding="12" cellspacing="0">
+<tr>
+<th width="33%" align="center">外观线稿<br><sub>从产品图自动提炼造型轮廓</sub></th>
+<th width="33%" align="center">实用新型线稿<br><sub>从结构图自动生成轮廓与部件序号引出</sub></th>
+<th width="34%" align="center">CAD 三维模型投影<br><sub>从工程模型自动提取等轴测等多视角</sub></th>
+</tr>
+<tr>
+<td width="33%" valign="top" align="center">
+<img src="docs/效果例-外观专利线稿.png" alt="外观辅助线稿：产品造型黑白线稿示意" width="100%" />
+</td>
+<td width="33%" valign="top" align="center">
+<img src="docs/效果例-实用新型专利线稿含部件序号引出线.png" alt="实用新型辅助线稿：结构线稿与部件序号引出线" width="100%" />
+</td>
+<td width="34%" valign="top" align="center">
+<img src="docs/效果例-cad提取等轴测投影图.png" alt="CAD 三维模型等轴测投影：从工程模型自动提取多视角示意" width="100%" />
 </td>
 </tr>
 </table>
@@ -198,46 +96,182 @@ pip install -r tools/patent_reader/requirements.txt
 
 ---
 
-## 参考文档
+## 功能特性
 
-- [技能入口与 Agent 流程](SKILL.md)（交底书主流程 + 阅读模式）
-- [详细安装说明](INSTALL.md)
-- [交底书：图示与转换 / 国知局工具](tools/README.md)
-- [专利解读工具](tools/patent_reader/README.md)
-- [Obsidian 安装与可选社区插件（Windows）](docs/obsidian-setup-guide.md)
-- [示例案件与原材料](examples/README.md)
-- [交底书模版细则](prompts/template_reference.md)
+### 专利交底书编写
+
+支持 **发明**、**实用新型**、**外观设计** 三种专利类型（未指定时默认发明；材料偏结构/外观时可反问切换）。
+面向用户的专利清单、交底书、解读和审查答复默认使用**简体中文**；用户明确要求时可切换其他语言，脚本机读字段保持兼容。
+
+<!-- 使用 HTML 表格：避免 GitHub 管道表把左列挤窄 -->
+<table>
+<colgroup>
+<col width="1%">
+<col>
+</colgroup>
+<thead>
+<tr><th align="left" nowrap width="1%">能力</th><th align="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td nowrap width="1%"><strong>专利类型</strong></td><td>发明 / 实用新型 / 外观设计<strong>分模板成文</strong>；实用与外观先填 Schema，再写 <code>figure_plan.yaml</code> 排序入文图（成文不扫全 assets 临场挑图）</td></tr>
+<tr><td nowrap width="1%"><strong>项目扫描</strong></td><td>按优先级读文档 / 代码；<code>.docx</code> / <code>.pptx</code> 先转 Markdown 再扫；可选扫描 <code>.step</code>/<code>.stp</code> 与原生 CAD（<strong>默认不解析</strong>，遇 STEP 成文不中断，交底落盘后再问）（<code>project_scan.md</code>）</td></tr>
+<tr><td nowrap width="1%"><strong>外观线稿</strong></td><td>成文前选用或生成产品线稿（已有合格线稿优先，否则图生图 / 文生图）；与干净实拍一并写入 Markdown 和 Word（<code>design_lineart_assist.md</code>）</td></tr>
+<tr><td nowrap width="1%"><strong>实用结构线稿</strong></td><td>成文前选用或生成结构线稿，按 <code>structure_schema.parts</code> 写出子 SVG、总图相对引用并叠部件序号（<code>structure_lineart_assist.md</code> / <code>structure_lineart_compose.md</code>）</td></tr>
+<tr><td nowrap width="1%"><strong>专利点</strong></td><td>候选点讨论与融合（按类型：<code>invention|utility_model|design</code> 挖点文件）</td></tr>
+<tr><td nowrap width="1%"><strong>查新</strong></td><td><strong>优先</strong> <a href="http://epub.cnipa.gov.cn/">国知局 · 中国专利公布公告</a>（<code>skills/patent-disclosure/tools/crawl/cnipa_epub_search.py</code>，<code>--type</code> 对齐类型）；异常或无果时降级 WebSearch。著录写入第一章（<code>prior_art_search.md</code>）</td></tr>
+<tr><td nowrap width="1%"><strong>交底书成稿</strong></td><td>脱敏模版；发明用 <strong>mermaid</strong> 框图；实用/外观按 <code>figure_plan</code> 嵌结构图或视图；定稿可出 <strong>.docx</strong></td></tr>
+<tr><td nowrap width="1%"><strong>交付命名</strong></td><td><code>{案件名}_{YYYYMMDDHHmmss}.md</code> 与同名 <code>.docx</code>（<code>disclosure_builder.md</code> §7.3）</td></tr>
+<tr><td nowrap width="1%"><strong>自检 / 迭代</strong></td><td>逻辑与公式自检（不写入正文）；合并 / 纠正另存新文件 + <code>交底书修订对话记录.md</code></td></tr>
+</tbody>
+</table>
+
+怎么开口：自然语言即可（专利挖掘、交底书、查新等），或 `/交底书`、`/patent-disclosure-skill`；尽量带上**项目路径或技术主题**，并点明类型（未指定默认**发明**）。
+
+| 类型 | 典型场景 | 触发示例 |
+|------|----------|----------|
+| **发明** | 方法 / 系统 / 算法流程 | 「按发明写交底」「项目路径 …」 |
+| **实用新型** | 形状、构造、连接与装配 | 「实用新型」「一种…装置/结构」 |
+| **外观设计** | 外形、图案、色彩或其结合 | 「外观设计」「设计说明 / 视图」 |
+
+已有交底上补材料或纠错时，按 `merger.md` / `correction_handler.md` 另存新稿（实用/外观改图或主题时同步 `figure_plan`）。细则见 [SKILL.md](SKILL.md)、`skills/patent-disclosure/prompts/intake.md`。
+
+### 专利通俗解读
+
+**强烈推荐安装 Obsidian**：索引、Canvas 知识图谱、术语网与 callout 配色依赖库内呈现，才能发挥本流程的完整体验。安装与可选社区插件见 [skills/patent-reader/docs/obsidian-setup-guide.md](skills/patent-reader/docs/obsidian-setup-guide.md)。
+
+<table>
+<colgroup>
+<col width="1%">
+<col>
+</colgroup>
+<thead>
+<tr><th align="left" nowrap width="1%">能力</th><th align="left">说明</th></tr>
+</thead>
+<tbody>
+<tr><td nowrap width="1%"><strong>取证解读</strong></td><td>全文 / PDF 抽取 → 权要树、术语表、特征—说明书—附图对照（<code>patent_plain_reader.md</code>）</td></tr>
+<tr><td nowrap width="1%"><strong>叙述故事线</strong></td><td>一句话总览 + 连贯叙事：把权要与说明书「讲成人话」，降低首次通读成本</td></tr>
+<tr><td nowrap width="1%"><strong>知识图谱</strong></td><td>单篇 <code>*_图谱.canvas</code>、多篇 <code>_专利关联.canvas</code>、术语双链与关系图配色；入库<strong>自动</strong>配置 CSS / Bases</td></tr>
+<tr><td nowrap width="1%"><strong>公开线索辅助</strong></td><td>联网检索公开材料（≤3 条）；Agent 读 URL 写摘要；L1–L4 旁注与 <code>clues/</code> 落地，用行业语境辅助理解（<strong>非</strong>权要 / 说明书证据）</td></tr>
+</tbody>
+</table>
+
+怎么开口：读专利、专利解读、`/读专利`、`/patent-read`，并给出**公开号或 PDF 路径**。配置库环境变量 `PATENT_READER_OBSIDIAN_VAULT` 体验更完整；中间产物在工作区 `outputs/patent_reader/`，无库时笔记也落在该目录。流程见 [skills/patent-reader/tools/README.md](skills/patent-reader/tools/README.md)、[SKILL.md](SKILL.md)。
+
+### 审查答复辅助
+
+审查意见一来，往往要翻旧案、对法条、想策略。需要时可以说「审查答复 / `/审查答复`」：把通知书 PDF 交给技能，**先问清缺陷、再出意见陈述草稿**（须人审后才能递交）。草稿质量依赖自己的**历史案**和可选的**实务书经验手册**——库空时仍能出提纲式草稿，但会对不上旧打法。库里历史案或手册较少时，对话末尾会补一句短提示，引导提示使用「案例入库」或「实务书蒸馏」并给出本地 PDF 路径（先脱敏 / 先预读，不会偷偷改技能）。向量可跳过。细则见 [SKILL.md](SKILL.md) 审查答复入口、[skills/patent-oa/docs/README.md](skills/patent-oa/docs/README.md)、[skills/patent-oa/tools/README.md](skills/patent-oa/tools/README.md)。
+
+### 著录检索
+
+想按发明人、申请人、分类号或名称，把公布公告里已经公开的专利列成清单？需要时可以说「著录检索 / `/patent-search`」：走国知局公布站高级查询，结果落到 `outputs/patent-search/SEARCH-*.md`。默认先翻前面几页，对话里说「多翻几页」或「全部翻完」再加码；没翻完时不会当成完整清单。查某人公开专利时，带上「发明人姓名 + 当前及历史申请主体」，例如「检索某发明人在申请主体一、申请主体二名下的公开专利」——只覆盖已公开/公告记录，不等于单位内部实际提交总数。细则见 [skills/patent-search/SKILL.md](skills/patent-search/SKILL.md)。
+
+### 政策简报
+
+审查指南、智能审查口径一变，交底写法很容易「还按老习惯」。需要时可以说「政策简报 / 政策雷达 / `/政策简报`」：对照国知局等官网**近期口径**，整理观点和原文链接，说明对**交底写法**（若有定稿，也对**这篇稿**）的影响。默认 `outputs/exam-policy/POLICY-*.md`，**不改技能**。也可 `/patent-brief`、`/patent-exam-policy`。只有另说「按简报改交底技能」时，才作为旁路改交底包提示词。细则见 [skills/patent-exam-policy/SKILL.md](skills/patent-exam-policy/SKILL.md) 与 `skills/patent-exam-policy/prompts/`。
+
+接入宿主、Python / Node、可选 STEP 等见 **[INSTALL.md](INSTALL.md)**。
+
+---
+
+## 示例
+
+索引在各包 `examples/`。完整产物落在 **`outputs/`** 或 Obsidian 库。
+
+<!-- 使用 HTML 表格：前两列 nowrap 防挤窄，后两列自动换行 -->
+<table>
+<colgroup>
+<col width="1%">
+<col width="1%">
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th align="left" nowrap width="1%">示例</th>
+<th align="left" nowrap width="1%">类型</th>
+<th align="left">材料</th>
+<th align="left">怎么开口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td nowrap width="1%">批任务调度</td>
+<td nowrap width="1%"><strong>发明</strong>交底</td>
+<td><a href="skills/patent-disclosure/examples/example_batch_job_scheduler/"><code>skills/patent-disclosure/examples/example_batch_job_scheduler/</code></a>（扫 <code>knowledge/</code>）</td>
+<td>「按发明写交底，项目路径 …/knowledge/」或 <code>/交底书</code></td>
+</tr>
+<tr>
+<td nowrap width="1%">汽车集成式电驱桥</td>
+<td nowrap width="1%"><strong>实用新型</strong>交底</td>
+<td><a href="skills/patent-disclosure/examples/example_utility_model_ev_powertrain/"><code>skills/patent-disclosure/examples/example_utility_model_ev_powertrain/</code></a></td>
+<td>「实用新型交底，材料在 …/example_utility_model_ev_powertrain/」</td>
+</tr>
+<tr>
+<td nowrap width="1%">折臂台灯</td>
+<td nowrap width="1%"><strong>外观设计</strong>交底</td>
+<td><a href="skills/patent-disclosure/examples/example_design_desk_lamp/"><code>skills/patent-disclosure/examples/example_design_desk_lamp/</code></a></td>
+<td>「外观设计交底，材料在 …/example_design_desk_lamp/」</td>
+</tr>
+<tr>
+<td nowrap width="1%">公布公告查询</td>
+<td nowrap width="1%"><strong>著录检索</strong></td>
+<td>无需本地样例（联网出清单 → <code>outputs/patent-search/SEARCH-*.md</code>）</td>
+<td>「按发明人/申请人检索公开专利」；<code>/patent-search</code></td>
+</tr>
+<tr>
+<td nowrap width="1%">公开专利 PDF</td>
+<td nowrap width="1%"><strong>通俗解读</strong></td>
+<td><a href="skills/patent-reader/examples/example_patent_reader/"><code>skills/patent-reader/examples/example_patent_reader/</code></a>（PDF 本地自备）</td>
+<td>「读专利」+ 公开号或 PDF；<code>/读专利</code>、<code>/patent-read</code></td>
+</tr>
+<tr>
+<td nowrap width="1%">政策 / 审查动向</td>
+<td nowrap width="1%"><strong>政策简报</strong></td>
+<td>无需本地样例（联网出清单 → <code>outputs/exam-policy/POLICY-*.md</code>）</td>
+<td>「政策简报」：对照国知局口径，看交底写法/本稿；默认不改技能；<code>/政策简报</code>、<code>/patent-brief</code>、<code>/patent-exam-policy</code></td>
+</tr>
+<tr>
+<td nowrap width="1%">审查答复样例</td>
+<td nowrap width="1%"><strong>审查答复</strong></td>
+<td><a href="skills/patent-oa/examples/example_oa_response/"><code>skills/patent-oa/examples/example_oa_response/</code></a>（2 历史案 + 1 待答复通知书）</td>
+<td>「审查答复」+ 通知书路径；库空也可出草稿。想对照旧案可说「案例入库」；<code>/审查答复</code>、<code>/oa</code></td>
+</tr>
+</tbody>
+</table>
 
 ---
 
 ## 支持作者
 
-如果这个 Skill 帮您节省了写交底书或读专利的时间，可以请我喝杯咖啡☕随缘支持，感谢感谢🙏🙏
+如果这个 Skill 对您有帮助，可以请我喝杯咖啡☕随缘支持，感谢感谢🙏🙏
 
-<div align="left">
-
-<table>
+<table width="70%" border="1" cellpadding="12" cellspacing="0">
 <tr>
-<td valign="middle" align="left" style="padding-right: 16px;">
-
-<img src="docs/thanks.jpg" alt="随缘支持" width="280" />
-
+<th width="40%" align="center">随缘支持</th>
+<th width="60%" align="center">Star History</th>
+</tr>
+<tr>
+<td width="40%" valign="middle" align="center">
+<img src="docs/thanks.jpg" alt="随缘支持" width="200" />
 </td>
-<td valign="middle" align="left">
-
-<a href="https://www.star-history.com/?repos=handsomestWei%2Fpatent-disclosure-skill&type=date&legend=top-left">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&theme=dark&legend=top-left&sealed_token=3x7lB-ukmgYV6dQnnyC7mizaGl21b5P2rvt3hOF5jivrmOMC8ECvlFUwK43lQL4R5pv5RdhPx1otMUMRtT-yqdSdupltyMQXv2AwlATvoAt9vDDNDTgJ8R0mO3PZUOB6KUtFvi2N64K9vpWW5tHLUcTtN-bC56RsQ8n3CsujxIj-VcQszIwG20EET5pz" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&legend=top-left&sealed_token=3x7lB-ukmgYV6dQnnyC7mizaGl21b5P2rvt3hOF5jivrmOMC8ECvlFUwK43lQL4R5pv5RdhPx1otMUMRtT-yqdSdupltyMQXv2AwlATvoAt9vDDNDTgJ8R0mO3PZUOB6KUtFvi2N64K9vpWW5tHLUcTtN-bC56RsQ8n3CsujxIj-VcQszIwG20EET5pz" />
-    <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=handsomestWei/patent-disclosure-skill&type=date&legend=top-left&sealed_token=3x7lB-ukmgYV6dQnnyC7mizaGl21b5P2rvt3hOF5jivrmOMC8ECvlFUwK43lQL4R5pv5RdhPx1otMUMRtT-yqdSdupltyMQXv2AwlATvoAt9vDDNDTgJ8R0mO3PZUOB6KUtFvi2N64K9vpWW5tHLUcTtN-bC56RsQ8n3CsujxIj-VcQszIwG20EET5pz" width="600" />
-  </picture>
-</a>
-
+<td width="60%" valign="middle" align="center">
+<img alt="Star History Chart" src="https://raw.githubusercontent.com/handsomestWei/patent-disclosure-skill/star-history/star-history.svg" width="100%" />
 </td>
 </tr>
 </table>
 
-</div>
+---
+
+## 参考文档
+
+- [技能入口与 Agent 流程](SKILL.md)（交底 / 著录检索 / 解读 / 政策简报 / 审查答复）
+- [详细安装说明](INSTALL.md)
+- [交底书：图示与转换 / 国知局工具](skills/patent-disclosure/tools/README.md)
+- [著录检索](skills/patent-search/SKILL.md)
+- [专利解读工具](skills/patent-reader/tools/README.md)
+- [审查答复 · 案例 RAG](skills/patent-oa/tools/README.md)
+- [Obsidian 安装与可选社区插件（Windows）](skills/patent-reader/docs/obsidian-setup-guide.md)
+- [交底书模版细则](skills/patent-disclosure/prompts/invention/template_reference.md)
 
 ---
 

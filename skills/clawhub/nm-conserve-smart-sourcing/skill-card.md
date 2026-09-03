@@ -1,41 +1,54 @@
-## Description: <br>
-Selects optimal sources for tool calls, balancing accuracy with token cost for research tasks and citation decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Selects optimal sources for tool calls, balancing accuracy with token cost before research tasks or when deciding whether a claim needs verification.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and agents use this skill to decide when citations or source checks are warranted and when a concise uncertainty note is sufficient. It supports research and factual-response workflows that need to balance verification value against token cost. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The guidance may under-source legal, security, compliance, or current factual claims if used as the only citation policy. <br>
-Mitigation: Apply stricter sourcing and review requirements for high-stakes or time-sensitive claims. <br>
-Risk: Agents may make incorrect sourcing decisions when balancing verification value against token cost. <br>
-Mitigation: Review outputs before deployment and require source checks when accuracy materially affects user decisions. <br>
+## Use Case:
 
+Developers and agent operators use this skill to decide when web search, citations, or uncertainty markers are worth the cost for factual claims.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-smart-sourcing) <br>
-- [Conserve plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance with decision tables and examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill may influence when an agent chooses to search and cite sources, which can under-verify high-stakes claims if applied too broadly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require full verification standards for legal, compliance, security, medical, and formal research work.
+
+Risk: Citation cost heuristics may lead the agent to use an uncertainty marker instead of a source for claims that still need verification.
+
+Mitigation: Use the skill as lightweight sourcing guidance and escalate to comprehensive sourcing when accuracy or auditability matters.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-smart-sourcing)
+- [Conserve plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown guidance with decision criteria and citation examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No code execution; helps the agent decide whether to search, cite, or state uncertainty.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

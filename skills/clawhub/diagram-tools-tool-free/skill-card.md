@@ -1,42 +1,53 @@
-## Description: <br>
-图表工具基础版 helps an agent create Mermaid and Graphviz diagrams, including flowcharts, sequence diagrams, mind maps, architecture diagrams, and basic data charts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+图表工具基础版 helps agents generate Mermaid and Graphviz diagrams, including flowcharts, sequence diagrams, mind maps, Gantt charts, and data charts.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to turn natural-language diagram requests into Mermaid or Graphviz content, basic chart configuration, and rendering guidance for lightweight personal workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Diagram content or callback URLs may be sent outside the local environment because the release evidence says network/API behavior is not clearly scoped. <br>
-Mitigation: Use the skill only for non-sensitive diagrams unless local-only rendering is confirmed, and require explicit confirmation before sending content or callback URLs to a service. <br>
-Risk: The skill can propose shell commands for rendering, environment checks, or setup. <br>
-Mitigation: Review commands before execution, run them only in trusted workspaces, and avoid exposing API keys, tokens, or secrets. <br>
-Risk: The security evidence marks the release suspicious because its local-only privacy claim conflicts with unclear network/API behavior. <br>
-Mitigation: Treat installation as review-required and keep sensitive diagrams, credentials, and private infrastructure details out of inputs until the behavior is verified. <br>
+## Use Case:
 
+Developers, individual users, and workflow builders use this skill to turn natural-language diagram requests into Mermaid, Graphviz DOT, and related chart outputs for documentation or lightweight automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/diagram-tools-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with Mermaid, Graphviz DOT, JSON configuration, and inline shell or code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return structured status, result, and execution log fields; rendering behavior may depend on local runtimes or external APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill requests broad automatic tool use and shell execution for diagram work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated commands before execution and run the skill in a least-privilege workspace with only the files needed for the diagram task.
+
+Risk: Privacy and API-key handling are unclear, and some functions may use external APIs or network access.
+
+Mitigation: Avoid sensitive diagrams, prompts, or secrets until the publisher clarifies which operations stay local, which services are contacted, and how credentials should be stored.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/diagram-tools-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with Mermaid, Graphviz DOT, JSON/text/csv examples, and inline shell or code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require tool-use and shell execution; the free edition is described as single-task oriented.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -33,13 +33,15 @@ def ok(label, fn):
 
 
 DIVERSE = [
-    {"name": "Editorial", "bg": "#FCFAF5", "ink": "#1A1A1A", "accent": "#B0451F",
+    # preset-driven directions carry a `dna` marker (as preset_directions() stamps), so they are
+    # REAL STYLES, not motif-less colourways — the accurate representation of a preset slot.
+    {"name": "Editorial", "bg": "#FCFAF5", "ink": "#1A1A1A", "accent": "#B0451F", "dna": "editorial_paper",
      "font_display": "Georgia, serif", "font_body": "'Helvetica Neue', Arial, sans-serif",
      "cover": "low-left", "skeleton": "rail"},
-    {"name": "Swiss", "bg": "#FFFFFF", "ink": "#111111", "accent": "#D6002A",
+    {"name": "Swiss", "bg": "#FFFFFF", "ink": "#111111", "accent": "#D6002A", "dna": "swiss",
      "font_display": "'Helvetica Neue', sans-serif", "font_body": "'Helvetica Neue', sans-serif",
      "cover": "full-bleed-type", "skeleton": "split"},
-    {"name": "Night", "bg": "#0E1420", "ink": "#EAEEF5", "accent": "#4FD1C5",
+    {"name": "Night", "bg": "#0E1420", "ink": "#EAEEF5", "accent": "#4FD1C5", "dna": "dark_tech",
      "font_display": "'Trebuchet MS', sans-serif", "font_body": "'Helvetica Neue', sans-serif",
      "cover": "split-vertical", "skeleton": "band"},
 ]
@@ -50,10 +52,10 @@ COLLAPSED = [
      "font_display": "'Times New Roman', serif", "font_body": "Arial, sans-serif"},
 ]
 BRAND_LOCKED = [
-    {"name": "Brand Light", "bg": "#FFFFFF", "ink": "#111111", "accent": "#0057B8",
+    {"name": "Brand Light", "bg": "#FFFFFF", "ink": "#111111", "accent": "#0057B8", "dna": "consulting",
      "font_display": "Georgia, serif", "font_body": "Arial, sans-serif",
      "cover": "low-left", "skeleton": "rail"},
-    {"name": "Brand Dark", "bg": "#0B1020", "ink": "#F0F3F8", "accent": "#0057B8",
+    {"name": "Brand Dark", "bg": "#0B1020", "ink": "#F0F3F8", "accent": "#0057B8", "dna": "blueprint",
      "font_display": "'Helvetica Neue', sans-serif", "font_body": "'Helvetica Neue', sans-serif",
      "cover": "full-bleed-type", "skeleton": "island"},
 ]
@@ -63,16 +65,32 @@ def _run_div(dirs, d):
     p = os.path.join(d, "dirs.json")
     with open(p, "w", encoding="utf-8") as f:
         json.dump(dirs, f)
+    # UTF-8 forced on the child: this output is machine-read, not displayed. Inheriting the
+    # console code page makes these assertions fail under a legacy page — the child's
+    # safe_stdio() replaces what it cannot encode, and the parser then cannot find it.
     r = subprocess.run([sys.executable, os.path.join(HERE, "directions_diversity.py"), p],
-                       capture_output=True, text=True)
+                       capture_output=True, text=True, encoding="utf-8",
+                       env=dict(os.environ, PYTHONIOENCODING="utf-8"))
     return r.returncode, r.stdout + r.stderr
+
+
+def _flagged(dirs, d):
+    """DIVERGENCE only. The process exit code is shared with the bespoke gate, so asserting on
+    it here would make these tests fail for a reason they are not about."""
+    p = os.path.join(d, "dirs.json")
+    with open(p, "w", encoding="utf-8") as f:
+        json.dump(dirs, f)
+    r = subprocess.run([sys.executable, os.path.join(HERE, "directions_diversity.py"), p, "--json"],
+                       capture_output=True, text=True, encoding="utf-8",
+                       env=dict(os.environ, PYTHONIOENCODING="utf-8"))
+    return json.loads(r.stdout)
 
 
 def main():
     with tempfile.TemporaryDirectory() as d:
         def _diverse_passes():
-            rc, out = _run_div(DIVERSE, d)
-            assert rc == 0, "a genuinely divergent set was flagged:\n" + out
+            j = _flagged(DIVERSE, d)
+            assert not j["flagged"], "a genuinely divergent set was flagged:\n" + json.dumps(j)[:400]
         ok("diversity: three divergent directions pass", _diverse_passes)
 
         def _collapsed_flagged():
@@ -84,10 +102,26 @@ def main():
         ok("diversity: two skins of one idea are flagged (and not auto-killed)", _collapsed_flagged)
 
         def _brand_lock_redirects():
-            rc, out = _run_div(BRAND_LOCKED, d)
-            assert rc == 0, ("a brand-locked pair that diverged on composition+type was flagged — "
-                             "constraint must RELOCATE variance, not forbid it:\n" + out)
+            j = _flagged(BRAND_LOCKED, d)
+            assert not j["flagged"], ("a brand-locked pair that diverged on composition+type was "
+                                      "flagged — constraint must RELOCATE variance, not forbid "
+                                      "it:\n" + json.dumps(j)[:400])
         ok("diversity: brand-locked accent passes when composition+type diverge", _brand_lock_redirects)
+
+        def _bespoke_required():
+            j = _flagged(DIVERSE, d)          # DIVERSE is preset-only by construction
+            assert j["no_bespoke"], "a preset-only set must fail the bespoke gate"
+            rc, out = _run_div(DIVERSE, d)
+            assert rc == 2, "a preset-only set must exit 2"
+            assert "NO BESPOKE DIRECTION" in out, "no actionable message: " + out
+            assert "ESCAPE" in out and "record why" in out, \
+                "the hard gate ships without its named escape — those get routed around"
+            withb = list(DIVERSE) + [{"name": "Invented", "cover_motif": "<div/>",
+                                      "ambient_motif": "<i/>"}]
+            j2 = _flagged(withb, d)
+            assert not j2["no_bespoke"] and j2["bespoke"] == ["Invented"], \
+                "one bespoke candidate must satisfy the gate: " + json.dumps(j2)[:300]
+        ok("directions: >=1 bespoke register is required, with a named escape", _bespoke_required)
 
         def _composition_reaches_html():
             sys.path.insert(0, HERE)
@@ -263,8 +297,57 @@ def main():
             assert "Sonar" in open(out, encoding="utf-8").read()
         ok("bespoke register is first-class in the gate (renders its own DNA)", _bespoke_register_is_first_class)
 
+        def _colourway_excess_flagged():
+            """The STRUCTURE gate: at most ONE motif-less colourway (the branch-(c) colour-scheme
+            option). Several bare colourways pass every PAIRWISE divergence test yet are exactly the
+            'the options were just different colours' failure — so a set of 3 plain colourways + 1
+            bespoke (the real regression that shipped) must flag, and a proper 3-styled + 1-colour-
+            scheme set must clear."""
+            sys.path.insert(0, HERE)
+            import importlib, directions_diversity as dd
+            importlib.reload(dd)
+            # 3 motif-less colourways (no dna, no motif) + 1 bespoke — the mediocre set that shipped
+            under = [
+                {"name": "Signal", "bg": "#0E1116", "accent": "#E82127", "cover": "centred", "skeleton": "island"},
+                {"name": "Ledger", "bg": "#FBF9F4", "accent": "#C4271D", "font_display": "Georgia, serif",
+                 "cover": "low-left", "skeleton": "rail"},
+                {"name": "Steel", "bg": "#EEF1F4", "accent": "#E4231F", "font_display": "'Arial Black', sans-serif",
+                 "cover": "full-bleed-type", "skeleton": "band"},
+                {"name": "Bespoke", "bg": "#101018", "accent": "#31D0E6", "cover": "split-vertical",
+                 "skeleton": "split", "cover_motif": "<div/>", "ambient_motif": "<i/>"},
+            ]
+            r = dd.check(under)
+            assert r["colourway_excess"] == ["Ledger", "Steel"], \
+                "the two colourways beyond the allowed one must be named: " + str(r["colourway_excess"])
+            rc, out = _run_div(under, d)
+            assert rc == 2, "an under-designed set (3 colourways) must exit 2:\n" + out
+            assert "UNDER-DESIGNED SET" in out and "preset_directions" in out, "no actionable message: " + out
+            assert "record why" in out, "the named-justification escape is missing"
+            # a PROPER set: 3 styled (preset dna and/or bespoke) + exactly 1 colour-scheme option
+            proper = [
+                {"name": "Blueprint", "bg": "#0A1B38", "accent": "#46C9E0", "dna": "blueprint",
+                 "cover": "split-vertical", "skeleton": "band"},
+                {"name": "Report", "bg": "#0E0E12", "accent": "#E8434A", "dna": "editorial_report",
+                 "font_display": "Georgia, serif", "cover": "low-left", "skeleton": "rail"},
+                {"name": "Current", "bg": "#101018", "accent": "#31D0E6", "cover": "centred",
+                 "skeleton": "island", "cover_motif": "<div/>", "ambient_motif": "<i/>"},
+                {"name": "Signal — palette", "bg": "#FFFFFF", "accent": "#D6002A",
+                 "cover": "full-bleed-type", "skeleton": "statement"},   # the ONE allowed colourway
+            ]
+            rp = dd.check(proper)
+            assert rp["colourway_excess"] == [], \
+                "a 3-styled + 1-colourway set must NOT flag: " + str(rp["colourway_excess"])
+        ok("structure gate: >1 motif-less colourway flags, 3-styled+1-colour passes", _colourway_excess_flagged)
+
     print("smoke_directions: {} failure(s)".format(len(FAILS)))
     return 1 if FAILS else 0
+
+
+try:                                            # console safety: a legacy code page must
+    from _console import safe_stdio             # degrade a tick, never kill the report
+    safe_stdio()
+except Exception:
+    pass
 
 
 if __name__ == "__main__":

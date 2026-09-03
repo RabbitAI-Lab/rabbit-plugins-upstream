@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes pet full-body images or videos through server-side APIs to identify breed/body type and fur density, then returns a non-medical drying temperature and duration recommendation for pet dryers, grooming salons, and smart pet care devices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes full-body pet images or videos through server-side APIs to estimate breed or body type and fur density, then returns a non-medical drying temperature and duration curve for pet drying devices or grooming workflows.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External pet-care users and developers use this skill to submit pet images, videos, or media URLs for breed/body-type and fur-density analysis and receive a temperature/time curve for drying equipment or grooming workflows. The results are care references only and are not medical recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, URLs, and an internally resolved identity may be sent to lifeemergence.com cloud services. <br>
-Mitigation: Use the skill only with appropriate consent and approved data handling, avoid sensitive media when unnecessary, and review the service relationship before commercial deployment. <br>
-Risk: The skill can create local workspace data that stores account tokens or identity values for reuse across sessions. <br>
-Mitigation: Restrict access to the workspace data directory, review or clear local data files when reuse is not desired, and rotate credentials if the workspace is shared. <br>
-Risk: Temperature recommendations are non-medical care guidance and incorrect use could create drying safety risk. <br>
-Mitigation: Keep operator review in the workflow, respect documented temperature caps and special-care adjustments, and do not substitute the output for veterinary advice. <br>
+## Use Case:
 
+External users, developers, and pet-care operators use this skill to submit pet images, videos, or URLs for breed/body-type and fur-density analysis, receive drying temperature and time recommendations, and query prior cloud reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-adaptive-pet-drying-temperature-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text returned by the CLI, with optional saved result files and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include structured analysis results, drying temperature/time recommendations, history-list results, and cloud report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+Risk: Pet images or videos may be uploaded to a configured cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disclose cloud processing before use and require user confirmation before uploading media or analyzing remote URLs.
+
+Risk: The skill can automatically create or reuse cloud-linked identity state and transmit tokens with limited user control.
+
+Mitigation: Use fixed reviewed API endpoints, isolate runtime credentials, and apply a token storage, rotation, or deletion policy before production use.
+
+Risk: History queries can retrieve cloud-stored reports linked to the current internal identity.
+
+Mitigation: Require explicit confirmation before history queries and avoid using shared identities for sensitive or multi-user environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-adaptive-pet-drying-temperature-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Common Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text with JSON-style structured analysis and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a cloud report export URL and can save output to a file when requested.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/git-repo",
   "slug": "git-repo",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784815748131,
-  "contentHash": "a85612ee3512638b227170f4f527ef953a9629e62c3ecd6ca9ae2af84be7cb70",
-  "fetchedAt": "2026-07-26T18:06:59.705Z"
+  "version": "0.10.1",
+  "updatedAt": 1788302447972,
+  "contentHash": "e3f6e55c75dcf821472160550e866e0e08dd7c435ac238c8ac72862efa744527",
+  "fetchedAt": "2026-09-03T12:17:31.569Z"
 }

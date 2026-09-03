@@ -65,6 +65,23 @@ could sit on *any* slide) is decoration that *makes no sense* against the conten
 name, in one phrase, what the image shows about THIS slide's point.** If you can't — or if the same
 image could drop onto an unrelated slide without anyone noticing — it's not topical; use a real asset,
 a native diagram/chart, or plain whitespace instead. Put the slide's actual subject into the prompt.
+
+🔴 **CLICHÉ GUARD — topical is necessary but NOT sufficient: also avoid the DOMAIN STEREOTYPE.** The
+test above catches *generic filler* (an image that could sit on **any** slide). A **cliché** is the
+opposite trap and fails just as hard: an image that IS on-topic but is the reflex, stereotyped picture
+of the domain. The canonical one is **electric-blue neon / glowing HUD / circuit-board for anything
+"AI / tech"** — the exact glossy-sci-fi slop this skill bans (it is *topical* to "AI", which is why the
+generic-filler test waves it through); others are a full-screen gradient-orb mesh for every SaaS
+launch, a lightbulb for "ideas", a handshake for "partnership", gears for "engineering", a glowing
+brain for "intelligence". This applies to the generated **art-direction** exactly as it applies to a
+preset: **`references/design-by-topic.md` names the ANTI-PICK per domain, and the CLICHÉ GUARD there
+governs the generated hero too** — reason from the SPECIFIC subject, not the umbrella domain (an
+AI-method deck's hero is *the method made visible*, not a neon cityscape; a climate deck's is the real
+landscape, not a green globe). Test: *would this hero fit ANY deck in the same domain?* If yes, it is
+the cliché — re-art-direct from what makes THIS subject specific, and record the pick as
+`design_plan.style_pick` (`… · anti-pick avoided: <the image cliché>`, the same field the preset
+branch fills).
+
 And when the slide's title or source language is **figurative** (a metaphor, an idiom, a rhetorical
 image), the default is to **resolve it to the UNDERLYING concept first** — this resolution happens
 BEFORE the referent classification below, and the resolved concept gets a *native* visualization of
@@ -185,11 +202,48 @@ deck presents it as THAT entity's actual premises. **Real living people:** a CC 
 copyright, not personality/publicity rights — for a commercial deck prefer official press/headshot
 assets or user-supplied photos.
 
-**The sourced-photo pipeline (real-referent subjects):**
+**The sourced-photo pipeline (real-referent subjects) — `scripts/fetch_images.py` runs steps 1-3:**
+
+```bash
+python3 scripts/fetch_images.py search "Delft University of Technology campus"      # look first
+python3 scripts/fetch_images.py fetch  "Delft University of Technology campus" \
+    --out ~/Downloads/<deck>/assets/sourced --subject "TU Delft campus" --slide 4 --limit 3
+python3 scripts/image_qc.py ~/Downloads/<deck>/assets/sourced --at 6.2x4.0 --contact-sheet
+#   ^ OPEN the sheet — then adopt the one you chose:
+python3 scripts/fetch_images.py adopt ~/Downloads/<deck>/assets/sourced <file>
+python3 scripts/fetch_images.py ledger ~/Downloads/<deck>/assets/sourced --tokens   # plan rows
+python3 scripts/fetch_images.py ledger ~/Downloads/<deck>/assets/sourced --credits  # slide credits
+```
+
+Everything it does lands in `<assets>/sources.json` — every query with its outcome, every file with
+its licence, author, attribution string and sha256. That ledger is what `check_image_provenance.py`
+(run by both gate paths) holds the plan's evidence tokens against, so the rungs below stop being
+self-reported. **A failed search is not the same as an empty one:** when no source can be
+CONTACTED the script exits 2 and records `unreachable`, and the gate refuses to spend that as a
+`none found` rung — a blocked network is not evidence that no photo of a place exists.
+
 1. **Search license-clear sources only**: Wikimedia Commons and Openverse (both keyless APIs,
    CC-licensed, captioned), official press kits / brand pages, or the user's own material. Never
-   grab from arbitrary image-search results — provenance and license unknown.
-2. **Verify the subject, that the file is WATERMARK-FREE, and that it is AESTHETICALLY USABLE**: the
+   grab from arbitrary image-search results — provenance and license unknown. `fetch_images.py`
+   excludes NC/ND licences by default (a work deck is commercial use, and treating a photo to the
+   palette is a derivative) and REJECTS an unrecognised licence string rather than assuming it is
+   free. It also walks a **query-relaxation ladder** — the exact subject phrase first, then
+   stop-words dropped, then the most distinctive terms — because Commons search is AND-strict and
+   a natural six-word subject phrase returns ZERO where "Delft University" returns plenty
+   (measured); every rung it issued is recorded, so a `none found` rung says what was actually
+   asked.
+2. **Verify the subject, that the file is WATERMARK-FREE, and that it is AESTHETICALLY USABLE.**
+   `scripts/image_qc.py` measures the measurable half and prints ONE labelled contact sheet of
+   every candidate with its licence and flags — because "look at each file" is a step that gets
+   skipped and "open this one image" is not. It reports resolution against the box you actually
+   planned (a 1200px photo is 90dpi at full-bleed), crop loss against that box's aspect, softness,
+   flat/placeholder plates, letterbox bars, near-duplicates, a possible-watermark heuristic, and
+   **EXIF rotation** — a flag this skill's own render loop ignores (measured), so a Commons photo
+   carrying it lands sideways in a box sized for the wrong aspect with every other gate green;
+   `--fix` bakes it in. It also checks the SET, not just each file: **MIXED TREATMENT** reports a
+   monochrome photo sitting among colour ones, which is the commonest way step 4's "mixed sources
+   must read as ONE deck" breaks and is invisible to any per-file check. Everything after that is
+   EYES, and the script says so: the
    file's caption / description / geotag / Commons category must confirm it shows the *claimed*
    subject — a mislabeled photo is the photographic version of an invented number, and the critic's
    fidelity lens checks it. View the downloaded file for watermarks, stock-preview overlays,
@@ -220,14 +274,14 @@ assets or user-supplied photos.
    - `provided — user (own material)` — the user's own file (no license interrogation);
    - `generated — <tool>` — a generated plate (generic-concrete subject, or declared stylized
      illustration of a real one — say which);
-   - `searched, none found → generated, flagged illustrative` — the not-found rung: no license-clear
+   - `searched (Commons, Openverse), none found → generated, flagged illustrative` — the not-found rung: no license-clear
      photo exists (obscure place, private premises, pre-photography history, unreachable sources) →
      generate, clearly framed as illustration, never as photographic evidence;
-   - `searched, found but low-quality → generated, flagged illustrative` — the quality rung: a
+   - `searched (Commons, Openverse), found but low-quality → generated, flagged illustrative` — the quality rung: a
      license-clear photo exists but every candidate is unrepresentative/ugly (construction, poor shot,
      wrong preparation) → generate a declared-stylized illustration in the deck's art-direction
      instead (the aesthetic gate in step 2);
-   - `searched, none found → native form` — the other sanctioned exit: drop the photo, let a map /
+   - `searched (Commons, Openverse), none found → native form` — the other sanctioned exit: drop the photo, let a map /
      diagram / native form carry the slide.
    A `searched, none found` rung must NAME the origins tried — write it
    `searched (Commons, Openverse[, press kit]), none found → …`; a bare rung with no named origins
@@ -241,14 +295,71 @@ not fetch; the **main loop** runs the Commons/Openverse/press-kit search and fil
 (<license>)` into the checkpoint artifact before presenting it (exactly how the logo evidence line
 is assembled) — and records each found photo's **direct file URL** into the asset spec handed to
 asset-prep (or keeps it for itself on small inline decks where no asset-prep runs); the
-**asset-prep executor** downloads, subject-checks, and palette-treats after
-design approval.
+**asset-prep executor** downloads (`fetch_images.py fetch`), subject-checks against the contact
+sheet (`image_qc.py --contact-sheet`), adopts the chosen file (`fetch_images.py adopt` — the state
+that records that somebody LOOKED), and palette-treats after design approval. The credits line the
+licence obliges comes from `fetch_images.py ledger --credits`; put it on the image
+(`deckkit.source_note`) or on `deckkit.sources_page`, because the gate checks the DECK's text, not
+the plan's.
 
 **The dose rule is unchanged — only the PRESSURE inverts on photo-friendly topics:** on a travel /
 city / place-anchored deck the temptation flips from too-few earned images to wall-to-wall photos;
 the opt-in discipline (only the slides that genuinely earn one) and balanced fullness still rule,
 with native maps, routes, and cost tables doing the informational work while photos carry the few
 atmosphere beats that deserve them.
+
+## Visual research — a generated plate is grounded in what the thing ACTUALLY looks like
+
+A prompt can only carry the subject's NAME, and a name is exactly what a generator will illustrate
+wrongly: `generate_images_codex.py`'s topicality gate counts subject nouns, and no word count can
+know that a 7T magnet has a bore and a cryostat, or that this campus tower is grey with a red
+stripe. The skill already invites the USER to drop in reference material; it never went LOOKING
+itself. It should — the same license-clear search that serves sourced photos serves research.
+
+**The loop (any deck with generated plates whose subject exists in the world):**
+
+```bash
+# 1. get real references of the subject in front of your eyes
+python3 scripts/fetch_images.py fetch "<subject>" --out <deck>/assets/reference --slide 4 --limit 4
+python3 scripts/image_qc.py <deck>/assets/reference --contact-sheet     # 2. OPEN IT and look
+# 3. write down what you SAW, per slide, in visual-facts.md:
+#      ## <slide heading>
+#      - a single slab-like high-rise, ~20 storeys, grey concrete with red accent panels
+#      - flat parkland in front: mown grass, young birches, straight red-brick paths
+# 4. the facts become BINDING attributes in the prompt
+python3 scripts/image_prompts.py image-slides.md <deck>/assets/generated \
+    --style "<deck art direction>" --calm-zone "left third" --facts visual-facts.md
+```
+
+**Write only what you actually saw.** These lines enter the prompt as attributes that BIND, so a
+remembered detail is an invented one — the picture equivalent of a guessed number.
+
+**Reference-conditioned generation (`--ref-dir`) — governed, because it cuts both ways.**
+`generate_images_codex.py --ref-dir <dir> --ref-intent <intent>` stages the matching `slide-NN-*`
+reference files beside the generation and tells the agent to LOOK at them first (verified: codex
+opens local images and reads them accurately). It makes a generated illustration structurally
+right — and it makes a FAKE structurally right too. Measured on the first real run: a staged photo
+of a real university tower produced a plate that reads as a PHOTOGRAPH of that exact building,
+down to the red stripe and the brick paths, plus a garbled invented wordmark on the facade. That
+is the REFERENT RULE's fidelity bug, delivered faster and more convincingly than before.
+
+So `--ref-intent` is REQUIRED with `--ref-dir` and has exactly three legitimate values —
+`generic-concrete` (a CLASS of object: photoreal is fine, there is no entity to fake),
+`stylized-illustration` (a real subject in the deck's DECLARED stylized register), and
+`fallback-rung` (a recorded `searched … → generated, flagged illustrative`). **A real, specific
+subject with a usable licence-clear photo is not on that list: place the photo you already
+downloaded.** For the two illustration intents the tool also injects a RENDER MODE clause *inside*
+the image prompt — visibly drawn, no lens blur, no photo grain, no signage — because a
+"make it look illustrated" instruction in the wrapper reaches the agent and never reaches the
+image tool: measured, the wrapper-only version came back fully photoreal twice, and the same
+prompt with the clause inside came back as a plain watercolour rendering that still had the
+building's real form.
+
+**Design references (a look, not a subject) follow `bespoke-registers.md`'s rule unchanged:** keep
+the METHOD, swap the MATERIAL. Search them to see how a register was made legible and generative,
+never to transplant one — and never prompt "in the style of <living artist>" or reproduce a
+copyrighted layout. A reference informs how you build the deck's own register; it is not a thing
+to copy.
 
 ## Planning workflow
 
@@ -258,12 +369,13 @@ atmosphere beats that deserve them.
    exactly those.
 2. For generated plates, write the intended frame before prompting: full-bleed background,
    side panel, crop strip, texture block, or isolated object.
+
 3. Build the prompt manifest from a sub-outline of **only the plate-worthy slides**, not the
    whole deck. Write a tiny `image-slides.md` with one heading per slide you decided needs a
    plate (or reuse just those headings), then run:
 
    ```bash
-   python scripts/image_prompts.py image-slides.md ~/Downloads/<deck>/assets/generated \
+   python3 scripts/image_prompts.py image-slides.md ~/Downloads/<deck>/assets/generated \
      --deck-size 16:9 \
      --style "<deck art direction>" \
      --calm-zone "left third / right third / top band / none"
@@ -319,6 +431,121 @@ subject to sit well inside the central safe area, away from the edges.
 whole and uncropped — for *every* `picture()`, generated or source. A cropped-out subject is
 the most common generated-image failure; the static render is where you catch it.
 
+
+## Text legibility over images — a hard floor, not a preference
+
+🔴 **When an image serves as a background with text overlaid, TEXT LEGIBILITY is non-negotiable.**
+The contrast floor (WCAG 1.4.3, 3:1 minimum for body text, 4.5:1 for small text) applies equally
+to text-over-solid and text-over-image. A beautiful atmospheric plate that makes the slide title
+unreadable is a **design failure**, not an acceptable tradeoff.
+
+### The scrim rule for full-bleed backgrounds
+
+**ANY full-bleed photo or generated image used as a slide background with text overlay REQUIRES an
+opaque scrim layer between the image and the text.** The scrim is a solid-fill shape (box) with
+transparency, drawn AFTER the image and BEFORE the text:
+
+Use **`dk.scrim_overlay`** — the helper written for exactly this job. It emits a GRADIENT
+fill, which is the only way a scrim can carry transparency: `<a:alpha>` lives on gradient
+stops, and DrawingML's alpha scale is **0–100000**, not 0–255.
+
+```python
+# 1. Place the plate
+dk.picture(slide, img_path, 0, 0, 10, 5.625, fit="cover", alt="<what it shows>")
+
+# 2. Graduated scrim, AIMED at the text (angle 0 = darker at left, 90 = darker at bottom).
+#    Size it to the text's zone — a flat slab over the whole slide flattens the image.
+dk.scrim_overlay(slide, 0, 0, 10, 5.625,
+                 stops=((0.0, 0.82), (0.55, 0.55), (1.0, 0.12)),
+                 color="0A1420", angle=0.0)
+
+# 3. Text on top
+```
+
+🔴 **Never write `shape.fill.fore_color.alpha = ...`.** python-pptx's `ColorFormat` has no
+`alpha` setter and no `__slots__`, so the assignment **silently creates a dead attribute** and
+raises nothing. The emitted XML is `<a:srgbClr val="000000"/>` with **no `<a:alpha>`** — a 100%
+**opaque** rectangle that erases the plate entirely. Measured on a real deck: brightest pixel in
+the image region **0/765**, and **every lint passed green** — text is painted last so
+`TEXT NOT VISIBLE`/`OCCLUSION` cannot fire, and white-on-pure-black scores ~21:1 so
+`TEXT-ON-IMAGE CONTRAST` reports the *best* number in the deck. A solid fill cannot be
+translucent; reach for the gradient helper, or `deckkit.pic_alpha` to fade the picture itself.
+
+**Text over a plate must be legible — but a scrim is only one way to get there, and not always
+the right one.** When the plate already carries a calm dark region where the type sits, a scrim
+subtracts from the image and adds nothing. Measure first with `image_fx.quiet_region(path)`,
+then decide. `TEXT-ON-IMAGE CONTRAST` backstops the too-light direction; the too-heavy one is now
+backed by `PLATE NOT VISIBLE` (interior pages; flags an exposed plate varying <0.6 grey levels —
+measured 1.58 as generated vs 0.21 scrimmed to near-white). What still has **no** backstop is
+image LINEWORK crossing the glyphs: a scrim dims a bright line without erasing it, and three
+attempts at an edge-density metric failed to separate it from a clean crop on real renders, so it
+stays an eye check. **Nothing backstops the too-heavy
+too-heavy direction**, so that judgement is yours and it is the one that quietly ruins covers.
+
+**Do not trust a calm region you only eyeballed** — measure it, then size the scrim to what
+the measurement says. Three reasons the eye is optimistic here:
+- compression artifacts create micro-variation that hurts contrast
+- projectors and different displays render the same plate at different brightness
+- a viewer at the back of the room needs more contrast than your laptop shows
+
+So the rule is *measured legibility*, not *a slab by default*:
+- **Measured calm + dark region already ≥4.5:1 under the type** → no scrim; adding one only
+  dulls the plate. Record that you checked.
+- **Marginal or bright under the type** → a GRADUATED scrim aimed at the text
+  (`stops=((0.0, 0.8), (1.0, 0.1))`, `angle` pointed at the type), leaving the far side bright.
+- **Image linework crossing the glyphs** → a scrim will not save it: a scrim *dims* a bright
+  line, it does not remove it. Use a near-opaque panel (α ≥ 0.88) or move the text.
+- **Test by rendering** — if `TEXT-ON-IMAGE CONTRAST` reports < 3:1, deepen the stops nearest
+  the text. If the plate has gone muddy, you over-scrimmed: nothing will report that but you.
+
+**Exception: Panel-based images** that sit BESIDE text (not under it) need no scrim, because the
+text has its own opaque background:
+
+```python
+# Image in right panel (40% of slide width)
+dk.picture(slide, img_path, 6.0, 1.0, 3.5, 4.0, fit="contain", alt="Supporting visual")
+
+# Text in left panel (60%), fully opaque slide background
+dk.text(slide, 0.8, 1.5, 5.0, 4.0, content)
+```
+
+### Prompt discipline for legibility
+
+When generating an image intended as a background, **build legibility INTO the prompt**:
+
+✅ **Good prompts for text-overlay backgrounds:**
+- "… with large calm uniform region in [top third / center / left side] for text overlay"
+- "… dark vignette at edges, bright center area"
+- "… gradient from [dark color] at bottom to [light color] at top"
+- "… soft unfocused background, sharp subject in foreground"
+
+❌ **Bad prompts (will fight text legibility):**
+- "… high contrast, intricate detail everywhere" (no calm zone)
+- "… vibrant colors across entire frame" (no uniform region)
+- "… centered subject filling the frame" (blocks title placement)
+
+**Even with a well-prompted image, the scrim is still required** — the prompt increases the chance
+of a calm region, but does not guarantee sufficient contrast across all display conditions.
+
+### When to avoid background images entirely
+
+A full-bleed plate competes with whatever else the slide is asking the eye to do, so it earns
+its place most easily where there is little else:
+
+✅ **Natural fits** — section dividers · hero/cover · a closing beat (large type, few words)
+⚠️ **Usually fights the content** — dense text, tables, code, bullet lists, and especially
+   **chart/data slides**, where the chart already IS the visual
+
+That is a strong prior, not a prohibition: a faint, low-contrast interior plate behind a
+data slide is exactly what the generated-template branch mandates on every interior page
+(`references/generated-template.md`), and it works because it is *faint*. Judge the specific
+slide — and when you overrule the prior, say so in one clause in the design plan.
+
+**A well-composed slide with no image beats a poorly-composed slide with a distracting
+background** — but it does not beat a well-composed slide with the right one. Do not read this
+section as "default to plain typography".
+
+
 ## Generating the images — auto-detect the source (no API key needed)
 
 The skill creates ONE manifest (`scripts/image_prompts.py` → `image_prompt_manifest.json`); in the
@@ -335,7 +562,7 @@ references it.
 CLI is installed and logged in (check `which codex`; `codex login` once), shell out to it — it calls
 Codex's hosted `image_generation` tool on the user's subscription. **No key.** Just proceed.
 ```bash
-python scripts/generate_images_codex.py \
+python3 scripts/generate_images_codex.py \
   ~/Downloads/<deck>/assets/generated/image_prompt_manifest.json \
   --orientation landscape        # hint 16:9 for hero/divider plates
 ```
@@ -371,7 +598,7 @@ request a key when native imagegen or `codex` is present.
 # never paste a literal after the `=` (that shape is what secret scanners flag, and a scanner
 # cannot tell your placeholder from a real credential).
 export OPENAI_API_KEY="$(cat ~/.openai_key)"
-python scripts/generate_images_openai.py \
+python3 scripts/generate_images_openai.py \
   ~/Downloads/<deck>/assets/generated/image_prompt_manifest.json \
   --model gpt-image-2 --size 2048x1152 --quality medium
 ```
@@ -380,8 +607,10 @@ Both scripts share the manifest format and the `--out-dir` / `--limit` / `--over
 flags, save each output to the manifest path (e.g. `slide-01.png`), and skip existing files by default.
 
 **Generation is the slowest step in the pipeline, and a manifest's images are independent — so the
-scripts generate them CONCURRENTLY by default** (`--concurrency`, default 3 for the API path / 2 for the
-Codex path). Put hero + divider + interior-plate (and any per-slide heroes) in ONE manifest and run it
+scripts generate them CONCURRENTLY by default** (`--concurrency`, default 3 for the API path; the
+Codex path scales with the machine — `cores//3` clamped to 2–4, so a small CI box keeps the old 2
+and a workstation stops queueing against nothing, since each job spends its time waiting on a hosted
+model rather than on a local core). Put hero + divider + interior-plate (and any per-slide heroes) in ONE manifest and run it
 once: a 3-image generated template lands in roughly the time of one image, not three. Lower
 `--concurrency 1` only if you hit API rate limits; a single failure no longer aborts the batch (it's
 reported and the rest continue). This is the main multi-process win in slide generation — the deck

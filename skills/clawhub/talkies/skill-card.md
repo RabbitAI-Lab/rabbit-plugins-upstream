@@ -1,46 +1,65 @@
-## Description: <br>
-talkies helps agents use a self-hosted OpenAI-compatible speech service for audio transcription, subtitle generation, text-to-speech, voice cloning workflows, stereo diarization, and server-side file handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Talkies helps agents operate a self-hosted OpenAI-compatible speech service for transcription, live ASR, text-to-speech, voice cloning, diarization, URL-based audio fetching, and staged file workflows.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and operators use talkies to point an agent at a trusted self-hosted speech server for transcribing audio, generating subtitles, and producing speech from text. It is suited for OpenAI-compatible audio workflows where the operator controls the endpoint, authentication, model choice, and handling of media files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audio, text, and voice reference samples are sent to the configured talkies server, so private data can leave the local host. <br>
-Mitigation: Use only a server you run or explicitly trust, prefer localhost or HTTPS, and avoid sending secrets or private media to untrusted endpoints. <br>
-Risk: Shared or remote deployments can expose the API and staged files when bearer authentication is not configured. <br>
-Mitigation: Set TALKIES_AUTH_TOKEN for shared or remote use, restrict network exposure, and treat staged file management as an administrative operation. <br>
-Risk: Voice cloning or synthesized speech can impersonate a real person without authorization. <br>
-Mitigation: Clone or synthesize a voice only with explicit authorization or consent from the speaker. <br>
-Risk: Server-side staged files and cached URL downloads can persist after a workflow finishes. <br>
-Mitigation: Clean up staged files and cached downloads created for the task once they are no longer needed. <br>
+## Use Case:
 
+Developers and external users use talkies to transcribe audio, generate subtitles, stream live ASR, synthesize speech, and integrate self-hosted speech endpoints into OpenAI-compatible client workflows.
 
-## Reference(s): <br>
-- [talkies ClawHub listing](https://clawhub.ai/psyb0t/skills/talkies) <br>
-- [Setup reference](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-talkies) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and API request examples; generated service outputs include JSON, plain text, SRT/VTT subtitle files, and audio files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a configured TALKIES_URL; setup workflows use Docker and curl, with an optional TALKIES_AUTH_TOKEN for authenticated deployments.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release metadata) <br>
+Risk: Speech, text, and voice reference samples are sent to the configured Talkies server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use localhost or a server you operate or explicitly trust, and use HTTPS or a trusted tunnel when traffic leaves the local host.
+
+Risk: Shared or exposed deployments can accept requests without application-layer authentication if no token is configured.
+
+Mitigation: Enable TALKIES_AUTH_TOKEN for shared or exposed deployments and limit network exposure to trusted clients.
+
+Risk: Staged uploads and cached URL downloads can persist after a workflow completes.
+
+Mitigation: Avoid sending secrets or regulated data, and clean up staged files and cached URL downloads when finished.
+
+Risk: Voice cloning can reproduce a real speaker's voice.
+
+Mitigation: Only clone or synthesize a voice with explicit speaker consent and authorization.
+
+## Reference(s):
+
+- [talkies ClawHub listing](https://clawhub.ai/psyb0t/skills/talkies)
+- [talkies repository](https://github.com/psyb0t/docker-talkies)
+- [talkies setup](references/setup.md)
+- [Streaming ASR documentation](https://github.com/psyb0t/docker-talkies/blob/main/docs/streaming.md)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, curl, JSON, and configuration snippets; service workflows produce text, JSON, SRT, VTT, and audio files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes examples for direct API calls, Docker setup, MCP usage, and a bulk transcription shell workflow.]
+
+## Skill Version(s):
+
+1.3.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

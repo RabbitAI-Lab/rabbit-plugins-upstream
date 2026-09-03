@@ -1,39 +1,50 @@
-## Description: <br>
-Scans HN, Lobsters, Reddit, and tech blogs for community experience reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans HN, Lobsters, Reddit, and tech blogs for community experience reports.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers, researchers, and technical decision makers use this skill to gather public practitioner opinions and experience reports about a technology or approach from community discussion channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad prompts about blogs or discourse may generate external public search queries containing private or sensitive terms. <br>
-Mitigation: Avoid private or sensitive terms in requests and review source attribution before relying on the results. <br>
+## Use Case:
 
+Developers and technical evaluators use this skill to gather anecdotal community experience reports about a technology or approach from HN, Lobsters, Reddit, and tech blogs.
 
-## Reference(s): <br>
-- [Tome plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-discourse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown summaries with sourced findings and search queries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use public community sources such as Hacker News, Lobsters, Reddit, and technology blogs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: Public community discussions can be anecdotal or misleading when used as evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat results as informal signals and verify important claims against primary sources before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-discourse)
+- [Night Market tome plugin](https://github.com/athola/claude-night-market/tree/master/plugins/tome)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Analysis, Markdown]
+
+**Output Format:** [Markdown summaries with source attribution]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are gathered from public community sources and merged with source attribution.]
+
+## Skill Version(s):
+
+1.9.19 (source: release evidence; artifact frontmatter reports 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

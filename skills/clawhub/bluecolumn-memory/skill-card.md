@@ -1,44 +1,51 @@
-## Description: <br>
-Give AI agents persistent semantic memory using the BlueColumn API (bluecolumn.ai) for storing, recalling, and searching memories across notes, conversations, documents, and audio. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give AI agents persistent semantic memory using the BlueColumn API for storing, recalling, and searching selected notes, conversations, documents, and audio.
 
-## Publisher: <br>
-[bluecolumnconsulting-lgtm](https://clawhub.ai/user/bluecolumnconsulting-lgtm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bluecolumnconsulting-lgtm](https://clawhub.ai/user/bluecolumnconsulting-lgtm)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect an AI agent to BlueColumn memory endpoints so the agent can store approved session summaries, notes, documents, or audio-derived content and later retrieve relevant stored context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist conversation summaries and user-provided content to an external memory service. <br>
-Mitigation: Require explicit user consent before saving session summaries, documents, audio, personal data, credentials, confidential business details, or regulated information. <br>
-Risk: The skill requires a sensitive BlueColumn API key. <br>
-Mitigation: Store the API key only in a platform secret store, avoid logging or displaying it, and verify the provider endpoint before use. <br>
-Risk: Stored memory may have retention or deletion implications outside the agent runtime. <br>
-Mitigation: Review BlueColumn retention and deletion terms before using the skill for production or sensitive workflows. <br>
+## Use Case:
 
+Developers and agent operators use this skill to connect an agent to BlueColumn persistent memory, store selected text, documents, or audio, and recall previously stored context through API-backed queries.
 
-## Reference(s): <br>
-- [BlueColumn API Reference](references/api.md) <br>
-- [BlueColumn](https://bluecolumn.ai) <br>
-- [BlueColumn Memory on ClawHub](https://clawhub.ai/bluecolumnconsulting-lgtm/bluecolumn-memory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include endpoint selection guidance, curl commands, request fields, response-shape expectations, and API key handling instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can persist selected content to an external memory service, including conversations, documents, audio, credentials, regulated data, or third-party private information if the user permits it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the platform secret store for the BlueColumn API key, avoid plaintext key storage when possible, and only store content the user deliberately wants retained and searchable later.
+
+## Reference(s):
+
+- [BlueColumn API Reference](references/api.md)
+- [BlueColumn](https://bluecolumn.ai)
+- [ClawHub Skill Page](https://clawhub.ai/bluecolumnconsulting-lgtm/skills/bluecolumn-memory)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include endpoint selection guidance, API payload examples, and reminders to use a platform secret store for the BlueColumn API key.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

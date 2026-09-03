@@ -1,42 +1,60 @@
-## Description: <br>
-List and apply saved PostKing voice profiles when generating or rewriting content, and run the de-slop, humanize, and AI-detection pass on text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+List and apply saved PostKing voice profiles when generating or rewriting content, then run a de-slop pass that removes LLM cliches and filler.
 
-## Publisher: <br>
-[bitsandtea](https://clawhub.ai/user/bitsandtea) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bitsandtea](https://clawhub.ai/user/bitsandtea)
 
-## Use Case: <br>
-Marketing and content teams use this skill to rewrite existing content in a saved brand voice, obtain a voice profile ID for downstream PostKing generation workflows, and run a final humanizing and AI-content scoring pass before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to make AI-written content read as more human and may be misused to obscure AI authorship where disclosure is required. <br>
-Mitigation: Use it only for legitimate editing, clarity, and brand voice cleanup, and preserve any AI-use disclosures required by policy, platform rules, or law. <br>
-Risk: Rewritten or humanized text may change meaning, accuracy, claims, or compliance-sensitive wording before publication. <br>
-Mitigation: Review generated edits and AI-content score outputs before publishing, committing, or handing the content to downstream workflows. <br>
+## Use Case:
 
+Marketing teams, founders, and content operators use this skill to find an existing PostKing voice profile, apply it to generated or rewritten copy, and make the result plainer and more specific before publication.
 
-## Reference(s): <br>
-- [PostKing Brand Voice skill page](https://clawhub.ai/bitsandtea/skills/postking-brand-voice) <br>
-- [PostKing MCP hosted endpoint](https://mcp.postking.app/mcp) <br>
-- [PostKing Brand Voice icon asset](https://raw.githubusercontent.com/bitsandtea/postking-skills/main/assets/icons/postking-brand-voice.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance, shell commands] <br>
-**Output Format:** [Markdown or plain text with optional inline tool and CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include rewritten content, voice profile identifiers, AI-content scores, and suggested retry or billing next steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: User-selected text is sent to PostKing tools for rewriting and style cleanup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential text unless the user's PostKing account and data-handling expectations allow it.
+
+Risk: Brand-voice rewriting and de-slop passes can make AI-assisted writing sound more natural, which may create disclosure risk.
+
+Mitigation: Do not use the skill to conceal AI authorship where a platform, client, publisher, or law requires disclosure.
+
+Risk: AI-content checks can be misused as detector-score optimization instead of writing review.
+
+Mitigation: Treat check_ai_content as a diagnostic that points to generic or templated passages for human revision.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bitsandtea/skills/postking-brand-voice)
+- [Publisher profile](https://clawhub.ai/user/bitsandtea)
+- [PostKing MCP endpoint](https://mcp.postking.app/mcp)
+- [Skill icon asset](https://raw.githubusercontent.com/bitsandtea/postking-skills/main/assets/icons/postking-brand-voice.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with PostKing tool-call examples, optional shell commands, and rewritten text returned by PostKing tools.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an authenticated PostKing account with credits and an existing voice profile; AI-content checks are diagnostic signals for human review.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

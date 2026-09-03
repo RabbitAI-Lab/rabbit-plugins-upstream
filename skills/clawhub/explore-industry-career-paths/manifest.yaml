@@ -1,0 +1,35 @@
+# ClawHub 技能市场上架清单（提交审核时逐项抄入表单）
+slug: explore-industry-career-paths
+name: 转行创业顾问
+name_en: Career Switch & Startup Advisor
+version: 1.0.0
+author: zz
+license: MIT
+type: prompt
+category: research
+description: >-
+  把「转行」和「创业/开店/做副业」的模糊想法，拆成行业地图、能力路线、真实成本、隐性惯例、第一份机会
+  与低成本验证实验，输出零基础者能直接照着做的第一步。覆盖行业认知、职业入行、技能学习、商业验证四条主线；
+  涉及当前价格、政策、渠道等信息时联网核实并标注核实日期。适合想换赛道、零基础学手艺、接单、开店、
+  低成本创业、副业验证、行业调研等场景。
+tags:
+  - 行业调研
+  - 转行入行
+  - 低成本创业验证
+triggers:
+  - 了解行业
+  - 零基础怎么学
+  - 教我怎么做
+  - 怎么入行
+  - 内行怎么看
+  - 行业内幕
+  - 从哪里买
+  - 转行
+  - 副业
+  - 接单
+  - 开店
+  - 创业
+  - 行业调研
+acknowledgment: >-
+  方法论内核改编自 QingkaiWu/explore-industry-career-paths（MIT License），
+  保留其意图路由、行业认知、职业入行、技能学习、商业验证、证据分级与风险边界等完整框架。

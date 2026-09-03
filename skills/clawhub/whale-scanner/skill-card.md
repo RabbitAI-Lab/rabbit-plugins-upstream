@@ -1,41 +1,56 @@
-## Description: <br>
-Real-time institutional transaction monitoring for asset tickers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Real-time institutional transaction monitoring.
 
-## Publisher: <br>
-[ssidharhubble](https://clawhub.ai/user/ssidharhubble) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ssidharhubble](https://clawhub.ai/user/ssidharhubble)
 
-## Use Case: <br>
-Developers and agents use this skill to request whale-flow signals for a supplied asset ticker and return the resulting market-monitoring response. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ticker requests are sent to an external whale-flow API. <br>
-Mitigation: Use the skill only when sharing the requested ticker with the external service is acceptable. <br>
-Risk: Premium results may ask the user to send SOL to a listed wallet or use a pricing page. <br>
-Mitigation: Pay only after independently verifying the publisher, service, and payment destination. <br>
+## Use Case:
 
+Developers and analysts use this skill to request institutional transaction signals for asset tickers such as BTC, SPY, or TSLA. Premium results may require independent verification of a manual crypto payment request before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ssidharhubble/whale-scanner) <br>
-- [Premium pricing page](https://ssyopros.zo.space/pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON response or payment-required message] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output depends on the requested ticker and may include premium-payment information returned by the external service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: Requested tickers are sent to an external whale-signal API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when sharing ticker symbols with the listed API is acceptable.
+
+Risk: Premium responses may present a manual crypto payment request and pricing URL.
+
+Mitigation: Verify the wallet address, pricing page, and business need independently before sending funds.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ssidharhubble/skills/whale-scanner)
+- [Publisher profile](https://clawhub.ai/user/ssidharhubble)
+- [Whale signal API endpoint](https://x402-money-machine-api-ssyopros.zocomputer.io/api/whale/{ticker})
+- [Pricing page](https://ssyopros.zo.space/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [JSON object from the external API, or a payment-required error object with a message and pricing URL.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Ticker input is normalized to uppercase before the API request.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata; artifact/package.json reports 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -30,12 +30,14 @@ def _read_cli_version(cli_repo: Path) -> str:
     init_text = init_path.read_text()
     match = re.search(r'^__version__\s*=\s*"([^"]+)"', init_text, re.MULTILINE)
     init_version = match.group(1) if match else ""
-    if not pyproject_version or not init_version:
-        raise SystemExit("Could not read both CLI version fields.")
-    if pyproject_version != init_version:
+    if not pyproject_version:
+        raise SystemExit("Could not read the CLI version from pyproject.toml.")
+    if init_version and pyproject_version != init_version:
         raise SystemExit(
             f"CLI version mismatch: pyproject.toml={pyproject_version}, __init__.py={init_version}"
         )
+    if not init_version and "__version__ = _resolve_version()" not in init_text:
+        raise SystemExit("Could not verify the CLI version export in __init__.py.")
     return pyproject_version
 
 

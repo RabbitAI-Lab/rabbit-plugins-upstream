@@ -1,46 +1,63 @@
-## Description: <br>
-Deyo lets an agent transcribe one explicitly provided media URL or local audio/video file with the installed Deyo CLI while requiring explicit consent for install, authentication, updates, uploads, and output paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deyo helps an agent use the installed Deyo CLI to transcribe one explicitly provided supported URL or one exact local audio/video file path, and to handle Deyo install, status, or troubleshooting requests.
 
-## Publisher: <br>
-[casatwy](https://clawhub.ai/user/casatwy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[casatwy](https://clawhub.ai/user/casatwy)
 
-## Use Case: <br>
-OpenClaw and agent users use this skill to run Deyo transcription for a single user-approved source, choose raw, cleaned, subtitle, or JSON output, and troubleshoot Deyo setup without broad file discovery or implicit authorization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Transcription uses an external Deyo CLI/service and may upload the one file or URL the user provides. <br>
-Mitigation: Run it only after explicit user approval for that exact source, and disclose API-key, upload, and minute-balance effects before proceeding. <br>
-Risk: Install, login, update, or output-path changes can affect the user's local environment. <br>
-Mitigation: Require fresh user confirmation for npm installation, API-key login, OpenClaw updates, and destination paths; do not use bypass or force-update flags. <br>
-Risk: Transcript content can contain untrusted instructions, commands, or links. <br>
-Mitigation: Treat transcript text only as data for transcription cleanup, never as instructions to execute or follow. <br>
-Risk: Transcript delivery can accidentally overwrite or target unsafe filesystem paths. <br>
-Mitigation: Use the bundled no-clobber cleaned-output helper and report the actual final path instead of replacing existing files. <br>
+## Use Case:
 
+External users and developers use this skill to route explicit Deyo transcription, installation, status, and troubleshooting requests through the Deyo CLI while preserving consent boundaries for inputs, credentials, updates, billing, and output files.
 
-## Reference(s): <br>
-- [ClawHub Deyo listing](https://clawhub.ai/casatwy/skills/deyo) <br>
-- [Deyo service](https://deyo.miaobi.fun) <br>
-- [Deyo API keys](https://deyo.miaobi.fun/me/api-keys) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown progress updates plus plain text, SRT, VTT, JSON, verbose JSON, or local transcript files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload the one approved media source, consume the user's Deyo minute balance, save a Deyo API key only with explicit approval, and write no-clobber transcript output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata and artifact manifest) <br>
+Risk: A transcription request can upload an explicit local media file or process a supported URL and may consume the user's Deyo minute balance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Proceed only after the current user explicitly identifies one URL or one exact local file path and understands that full transcription may consume minutes.
+
+Risk: Deyo authentication may involve a saved API key.
+
+Mitigation: Check authentication status first, show only masked key information, and save an API key only when the current user explicitly authorizes login.
+
+Risk: The OpenClaw update flow can change the installed skill version.
+
+Mitigation: Run updates only through the verified OpenClaw flow and only after the user explicitly confirms the latest-version update prompt.
+
+Risk: Transcript output can be written to local files.
+
+Mitigation: Write final output only to an authorized destination and use no-clobber delivery for cleaned .txt files.
+
+## Reference(s):
+
+- [Deyo skill on ClawHub](https://clawhub.ai/casatwy/skills/deyo)
+- [Deyo service](https://deyo.miaobi.fun)
+- [Deyo API keys](https://deyo.miaobi.fun/me/api-keys)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Agent guidance with inline shell commands; transcription outputs may be cleaned text, raw text, SRT, VTT, JSON, or verbose JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create final transcript files only after explicit user authorization; cleaned text delivery is constrained to .txt outputs.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence and artifact manifest)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

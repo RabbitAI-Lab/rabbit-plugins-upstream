@@ -1,5 +1,113 @@
 # Changelog
 
+## [0.10.1](https://github.com/es6kr/skills/compare/git-repo-v0.10.0...git-repo-v0.10.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **git-repo:** add BASE-7 conflict marker guard to doctor topic ([79fe2b5](https://github.com/es6kr/skills/commit/79fe2b5d795cff905f9199f308347b3273bbd82c))
+* **git-repo:** document clobbered-branch-pointer recovery in rebase-audit ([#396](https://github.com/es6kr/skills/issues/396)) ([69b346f](https://github.com/es6kr/skills/commit/69b346fd382c8c3c4f25c9b407358b579fea304e))
+* **git-repo:** document COND-MD-STYLE in the doctor topic ([190b9c1](https://github.com/es6kr/skills/commit/190b9c1a3f7abb842ab443a5e9d261a99f7db71f))
+* staging branch next-fix sync into main ([bbbd460](https://github.com/es6kr/skills/commit/bbbd460bf3b6b1cba4c6d07b3641afa734c89860))
+
+## [0.10.0](https://github.com/es6kr/skills/compare/git-repo-v0.9.1...git-repo-v0.10.0) (2026-08-29)
+
+
+### Features
+
+* **git-repo:** add push commit count limit guard (BASE-6) to doctor and pre-push hook ([#383](https://github.com/es6kr/skills/issues/383)) ([3dde967](https://github.com/es6kr/skills/commit/3dde96749923f2c59788981b3133e7b922c0677d))
+* promote next-feat batch (backlog skill, hooks JS port, git-repo doctor, pre-push guard) ([0d76a4c](https://github.com/es6kr/skills/commit/0d76a4c01180fbdc78bfeec8dea91373b4912470))
+
+
+### Bug Fixes
+
+* address CodeRabbit and Copilot review feedback on PR [#385](https://github.com/es6kr/skills/issues/385) ([e94de34](https://github.com/es6kr/skills/commit/e94de34ce5e075c79b7edc5d672813cea94a0acc))
+* **git-repo:** exclude existing remote tracking commits in pre-push commit count limit guard ([2c5a793](https://github.com/es6kr/skills/commit/2c5a79369d43d41d6995668baf83fab7478ff0ea))
+* **git-repo:** refine pre-push base branch detection and update plane test candidate paths ([b09a6c8](https://github.com/es6kr/skills/commit/b09a6c895113eaf698a12c79744261ec4c5c78d8))
+* **hook-kit:** resolve RAG receiver from workspace config instead of mandating --rag ([58e85ec](https://github.com/es6kr/skills/commit/58e85ecbb437557544cd528281aa30b804bd2532))
+
+## [0.9.1](https://github.com/es6kr/skills/compare/git-repo-v0.9.0...git-repo-v0.9.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* accumulate 16 patch-level bug fixes and guard enhancements across skills ([d214e5d](https://github.com/es6kr/skills/commit/d214e5dcc7fac1bc07baf3b6cec62999aea732f0))
+* **git-repo:** add baseline .gitignore hygiene gate for worktrees and runtime artifacts ([32713d9](https://github.com/es6kr/skills/commit/32713d91e0e05936a78ea7df717b8fe87568269b))
+* **git-repo:** gate worktree reuse on dependency-install cost ([387653c](https://github.com/es6kr/skills/commit/387653c69e5a5172c37dc8f77261ae5ebc9013e7))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+
+## [0.9.0](https://github.com/es6kr/skills/compare/git-repo-v0.8.1...git-repo-v0.9.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **git-repo:** document conflict root-cause diagnosis (staleness vs divergence) ([f034168](https://github.com/es6kr/skills/commit/f0341685d6bf07c9d16e9375c93c22fea88b454f))
+* **git-repo:** document conflict root-cause diagnosis (staleness vs divergence) ([3f8e492](https://github.com/es6kr/skills/commit/3f8e4924bd8a656ea3fc1eeb573c9a629fea80cd))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.8.1](https://github.com/es6kr/skills/compare/git-repo-v0.8.0...git-repo-v0.8.1) (2026-08-17)
+
+
+### Bug Fixes
+
+* **git-repo:** add worktree-ancestry divergence pre-check for staging-branch model ([d28bbdb](https://github.com/es6kr/skills/commit/d28bbdb29a76306d143c812bef6363afb5c66fea))
+* **git-repo:** let rename-worktree base a new branch somewhere other than stale HEAD ([98e9201](https://github.com/es6kr/skills/commit/98e92018b94a9b52bb2c585fdabf158c2347379a))
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.8.0](https://github.com/es6kr/skills/compare/git-repo-v0.7.2...git-repo-v0.8.0) (2026-08-16)
+
+
+### Features
+
+* merge next-feat into main ([#313](https://github.com/es6kr/skills/issues/313)) ([2d9308a](https://github.com/es6kr/skills/commit/2d9308ab3e7e0086a88a7f64d3ed4d5c4d36e017))
+
+## [0.7.2](https://github.com/es6kr/skills/compare/git-repo-v0.7.1...git-repo-v0.7.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* **consolidate:** address CodeRabbit/Copilot review findings on PR [#270](https://github.com/es6kr/skills/issues/270) ([3b11a73](https://github.com/es6kr/skills/commit/3b11a730b5ad68803d35a8264eda540e48265d75))
+* **git-repo:** add worktree-reuse path-canonicality pre-check helper ([#267](https://github.com/es6kr/skills/issues/267)) ([020a94e](https://github.com/es6kr/skills/commit/020a94ee989596941c5669995a7f7ba340742313))
+* **git-repo:** preserve tracked mode in stage-isolated-content.sh cacheinfo ([#259](https://github.com/es6kr/skills/issues/259)) ([161f07d](https://github.com/es6kr/skills/commit/161f07d13bd19f17b190800062955d767e83bf04))
+* **git-repo:** validate worktree path canonicality before reuse ([#240](https://github.com/es6kr/skills/issues/240)) ([e44076b](https://github.com/es6kr/skills/commit/e44076bebe2e952bd042f0539b45322984cd3d72))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.7.1](https://github.com/es6kr/skills/compare/git-repo-v0.7.0...git-repo-v0.7.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/git-repo-v0.6.1...git-repo-v0.7.0) (2026-08-03)
+
+
+### Features
+
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
+
+### Bug Fixes
+
+* **git-repo:** add --push flag to local-to-staging-pr.sh ([#191](https://github.com/es6kr/skills/issues/191)) ([7eec556](https://github.com/es6kr/skills/commit/7eec556a6411352781de33121c42da0e186512b3))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/git-repo-v0.6.0...git-repo-v0.6.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **git-repo:** add commit-worktree-cherry-pick-draft-PR section + resolve stray merge markers ([4417701](https://github.com/es6kr/skills/commit/44177013a9e7af8a49cff79e1f7c82436410645e))
+* **git-repo:** add commit-worktree-cherry-pick-draft-PR section + resolve stray merge markers ([9f2dc23](https://github.com/es6kr/skills/commit/9f2dc2351874fda79e9ef4fe7608f51a6a5c5d68))
+* **git-repo:** scope conflict-resolution to next-fix, add missing script ([a23f749](https://github.com/es6kr/skills/commit/a23f749bfbf8ad8702f887ed5e85c0bd6fdff860))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* resolve PR [#197](https://github.com/es6kr/skills/issues/197) review findings (CodeRabbit + Copilot + Internal Review) ([b54236a](https://github.com/es6kr/skills/commit/b54236a4fa4b3fef23645dfc3b184916980b7f65))
+
 ## [0.6.0](https://github.com/es6kr/skills/compare/git-repo-v0.5.0...git-repo-v0.6.0) (2026-07-23)
 
 

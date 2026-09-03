@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes pet training videos or video URLs through server-side APIs to recognize whether a pet executes Sit, Down, or Stay commands and returns structured posture-matching, timing, and execution results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet training videos or video URLs to determine whether a pet executed Sit, Down, or Stay commands, returning posture-match, timing, success, and report-link information without medical or behavior-therapy guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and operators of smart pet-training or remote training workflows use this skill to submit training videos and receive structured command-execution recognition results, response-latency data, and report links. The skill is for training-effect reference and does not provide medical diagnosis or behavior-therapy advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images or videos are sent to Life Emergence server APIs for analysis. <br>
-Mitigation: Use only with media appropriate for remote processing and review privacy or compliance requirements before deployment. <br>
-Risk: The skill can silently create or reuse a local internal identity and register or log in to a remote service. <br>
-Mitigation: Run it in account-isolated workspaces and confirm identity behavior before enabling it for shared or multi-user environments. <br>
-Risk: Reusable tokens and local user data may persist in the workspace data area. <br>
-Mitigation: Review or clear the local data database and smyx-api-key file when separating users, sessions, or environments. <br>
+## Use Case:
 
+External users and developers use this skill to analyze pet training-area videos for command execution, posture matching, response latency, and training report retrieval. It is intended for smart dog-training devices, remote pet training, and behavior-correction workflows, not for medical diagnosis or behavior-therapy plans.
 
-## Reference(s): <br>
-- [API Documentation](artifact/references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-training-command-execution-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON] <br>
-**Output Format:** [Markdown text containing structured JSON-style analysis results, historical report lists, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a user-specified output file; analysis and history queries are backed by remote API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release and frontmatter) <br>
+Risk: Pet videos or supplied video URLs are sent to the publisher's remote analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that remote processing is acceptable, and obtain explicit consent before upload or history queries.
+
+Risk: The skill creates or reuses a local account identity and persists tokens locally.
+
+Mitigation: Document account and token storage for users and provide a reset or deletion path for persisted identity data.
+
+Risk: The release includes private development API endpoints.
+
+Mitigation: Replace private development endpoints with intended production HTTPS endpoints before approval.
+
+## Reference(s):
+
+- [Pet Training Command API Documentation](references/api_doc.md)
+- [Common Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-training-command-execution-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-like structured analysis text with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the rendered analysis to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence; artifact frontmatter reports 1.0.11 and artifact _meta reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

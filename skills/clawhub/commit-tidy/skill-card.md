@@ -1,45 +1,65 @@
-## Description: <br>
-Analyze staged and committed Git changes and recommend split, squash, amend, staging, secret-scan, and commit-message strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze staged and committed changes and recommend split, squash, amend, staging, security-scan, or commit-message strategy.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to keep Git commit history atomic, reviewable, and aligned with repository-specific commit rules. It helps plan split or squash strategies, draft structured commit messages, audit staged files, and apply safer history-rewrite workflows when needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: History-rewrite or force-push guidance can disrupt shared or protected branches if applied without coordination. <br>
-Mitigation: Use rewrite steps only on branches you own or after coordinating with collaborators, verify CI state, and prefer force-with-lease when a force push is required. <br>
-Risk: Optional hook installation changes local commit behavior. <br>
-Mitigation: Review any hook before enabling it and install it only when the pre-commit blocking behavior matches the repository workflow. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to keep Git history reviewable by auditing staged changes, planning atomic commits, checking public-repo secret risk, and guiding safe amend or squash workflows.
 
-## Reference(s): <br>
-- [Commit Tidy on ClawHub](https://clawhub.ai/drumrobot/skills/commit-tidy) <br>
-- [interactive-amend.md](artifact/interactive-amend.md) <br>
-- [message-discipline.md](artifact/message-discipline.md) <br>
-- [security-scan.md](artifact/security-scan.md) <br>
-- [soft-reset-amend.md](artifact/soft-reset-amend.md) <br>
-- [staging-discipline.md](artifact/staging-discipline.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and commit-message drafts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include split or squash recommendations, staged-file audits, rewrite procedures, and pre-commit security checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.3 (source: server release metadata and changelog, released 2026-07-16) <br>
+Risk: The skill includes powerful Git history-rewrite workflows, including amend, rebase, and force-with-lease push guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before commits, rewrites, or pushes; verify CI or branch status before any force-with-lease push.
+
+Risk: The bundled commit-review-trigger hook can prompt a separate code-review action after successful commits, and the security evidence says that behavior is not clearly described in the main skill summary.
+
+Mitigation: Review the hook before installation and disable it unless post-commit code-review prompts are desired.
+
+Risk: Incorrect staging or secret handling can place unintended files or sensitive values into public Git history.
+
+Mitigation: Run the staged-file audit and public-repo secret scan described by the skill before committing, then re-scan after sanitizing any finding.
+
+## Reference(s):
+
+- [Commit Tidy skill page](https://clawhub.ai/drumrobot/skills/commit-tidy)
+- [SKILL.md](artifact/SKILL.md)
+- [Conflict Commit Review](artifact/conflict-commit-review.md)
+- [Hunk Split](artifact/hunk-split.md)
+- [Interactive Amend](artifact/interactive-amend.md)
+- [Message Discipline](artifact/message-discipline.md)
+- [Security Scan](artifact/security-scan.md)
+- [Soft Reset Amend](artifact/soft-reset-amend.md)
+- [Staging Discipline](artifact/staging-discipline.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose with command blocks and commit-message drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include recommended file groupings, commit subjects and bodies, staging commands, validation commands, and user-confirmation gates.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release metadata and CHANGELOG, released 2026-09-01)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

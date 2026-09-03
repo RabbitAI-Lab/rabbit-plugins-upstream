@@ -1,42 +1,59 @@
-## Description: <br>
-Use this skill to create, update, delete, list, sync, pull, and inspect documents in a Yuque knowledge base through Yuque OpenAPI-backed CLI workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill when a user wants to create, update, delete, or list documents in a Yuque knowledge base, or manage Yuque repository table of contents.
 
-## Publisher: <br>
-[cpsean](https://clawhub.ai/user/cpsean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cpsean](https://clawhub.ai/user/cpsean)
 
-## Use Case: <br>
-Developers and knowledge-base maintainers use this skill to push local Markdown content to Yuque, reconcile local and remote document changes, and inspect or update a Yuque repository table of contents. It is intended for single Yuque knowledge-base document operations, not team, permission, repository, or cross-repository administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a user-provided Yuque API token, creating a manageable credential exposure risk if the token is shared in chat, logs, shell history, process monitoring, or committed files. <br>
-Mitigation: Use the least-privileged token available, avoid repeating the token in responses, confirm .env is ignored by git, and rotate the token if exposure is suspected. <br>
-Risk: Document synchronization and update commands can change or delete content in the configured Yuque knowledge base. <br>
-Mitigation: Validate the target repository before running commands, use dry-run or status checks before mutating sync operations, and require explicit confirmation before remote deletion. <br>
+## Use Case:
 
+Developers and documentation maintainers use this skill to manage Yuque knowledge base documents from an agent workflow, including listing, creating, updating, deleting, pulling, and syncing Markdown content.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/CPsean/yuque-docs-skill) <br>
-- [ClawHub skill page](https://clawhub.ai/cpsean/skills/yuque-docs-skill) <br>
-- [Yuque token settings](https://www.yuque.com/settings/tokens) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May relay document IDs, titles, slugs, sync status, warnings, and errors; tokens must not be echoed back to the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: A local environment or configuration value can redirect the Yuque API token to an arbitrary server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation in untrusted repositories or shared shells, verify that .env uses a Yuque HTTPS base URL, and avoid project-controlled .env files that set YUQUE_BASE_URL to a non-Yuque host.
+
+Risk: A broad or misplaced Yuque token could expose documents outside the intended knowledge base.
+
+Mitigation: Use a Yuque token scoped to the intended knowledge base and keep .env ignored by git.
+
+Risk: Document write and delete operations can change or remove Yuque content.
+
+Mitigation: Use dry-run or list/get/toc checks before changes, and require explicit confirmation for deletion.
+
+## Reference(s):
+
+- [Yuque CLI command reference](artifact/references/yuque-cli.md)
+- [Source repository](https://github.com/CPsean/yuque-docs-skill)
+- [ClawHub skill page](https://clawhub.ai/cpsean/skills/yuque-docs-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-capable CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may create or update local configuration and sync-state files, and it can direct API-backed document changes in Yuque.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

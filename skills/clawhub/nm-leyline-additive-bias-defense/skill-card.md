@@ -1,41 +1,54 @@
-## Description: <br>
-Inverts burden of proof for code additions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inverts burden of proof for code additions.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and code reviewers use this guidance skill to challenge proposed code, file, abstraction, error-handling, and configuration additions before accepting them. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate during common PR review or refactor-planning conversations because of broad trigger wording. <br>
-Mitigation: Review the trigger wording and invoke the skill explicitly when tighter control is needed. <br>
-Risk: Guidance-oriented outputs may introduce incorrect or misleading review conclusions if accepted without review. <br>
-Mitigation: Review and scan the skill before deployment, and treat its verdicts as review guidance rather than automatic enforcement. <br>
+## Use Case:
 
+Developers and review-oriented agents use this skill to challenge proposed code, file, abstraction, configuration, or test additions by requiring evidence and assessing anti-patterns before accepting changes.
 
-## Reference(s): <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-additive-bias-defense) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with scrutiny questions, anti-pattern checks, and burden-of-proof verdicts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Broad trigger wording may activate during common PR review or refactor-planning conversations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+Risk: The skill may make an agent overly conservative about useful code additions by requiring stronger evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the scrutiny questions to require clear evidence while still allowing additions that are justified by task requirements and documented consequences.
+
+Risk: The skill can influence review outcomes even though it does not run code.
+
+Mitigation: Review the skill text before deployment and monitor outputs for excessive rejection of necessary implementation work.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-additive-bias-defense)
+- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text]
+
+**Output Format:** [Markdown guidance with scrutiny questions, anti-pattern checks, and verdict labels]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not run code or request runtime access; it shapes agent review behavior.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release evidence; artifact frontmatter says 1.9.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

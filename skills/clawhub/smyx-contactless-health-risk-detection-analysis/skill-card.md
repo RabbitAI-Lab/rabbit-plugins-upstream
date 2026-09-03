@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes frontal face images or videos with multimodal physiological features to provide early health-risk screening and alerts for conditions such as heart attack, stroke, hypertension, and hyperlipidemia. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes frontal face images or videos with a cloud health-risk service to produce early screening reports and alerts for conditions such as heart attack, stroke, hypertension, and hyperlipidemia.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and care-setting operators use this skill to submit a frontal face image or short video for early health-risk screening and to retrieve prior cloud reports. It supports daily screening workflows for homes, communities, and elderly care facilities, but its results are not a substitute for professional medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive face images, videos, and health-risk report queries are sent to the vendor cloud service. <br>
-Mitigation: Use only with informed consent and appropriate privacy approval, and avoid uploading data that is not authorized for vendor processing. <br>
-Risk: The skill may silently create or reuse persistent local identities and store tokens in the workspace. <br>
-Mitigation: Run it in a controlled workspace, review local credential-storage policy before use, and clear or revoke stored credentials when they are no longer needed. <br>
-Risk: Screening output could be mistaken for a medical diagnosis. <br>
-Mitigation: Present results as early screening information only and refer high-risk findings to qualified healthcare professionals. <br>
+## Use Case:
 
+External users, developers, and care-setting operators use this skill to submit frontal face media to the Smyx/Life Emergence cloud service and receive structured early health-risk screening reports or historical report lists. It is intended for screening support and does not replace professional medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-contactless-health-risk-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON report text, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a local image or video path, a public media URL, history-list mode, detail level, and optional output path; supports jpg/jpeg/png/mp4/avi/mov inputs up to 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.9) <br>
+Risk: Facial images or videos and health-risk screening results may be sent to the Life Emergence/Smyx cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with appropriate consent and avoid sensitive patient data unless the publisher provides clear privacy, retention, deletion, endpoint, and authentication controls.
+
+Risk: The skill can query report history and uses persistent identity/account data and tokens.
+
+Mitigation: Install only in trusted workspaces and review account, token storage, and access controls before production use.
+
+Risk: Screening reports may be mistaken for medical diagnosis.
+
+Mitigation: Treat outputs as early screening support only and route high-risk findings to qualified medical professionals.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-contactless-health-risk-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](references/api_doc.md)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown text with structured JSON report content, report links, and optional saved output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May upload local face media or submit media URLs to a cloud API; can also return cloud report history for the resolved account identity.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter reports 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

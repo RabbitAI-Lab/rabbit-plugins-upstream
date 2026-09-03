@@ -1,46 +1,63 @@
-## Description: <br>
-Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants to edit an existing photo, change outfits or backgrounds, compose from reference images, or apply prompt-driven edits.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and content teams use this skill to guide photo edits with Pruna's p-image-edit model, including reference upload, prompt drafting, aspect-ratio selection, and async prediction calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected reference images and prompts are sent to Pruna's API for editing. <br>
-Mitigation: Use the skill only when external API processing is acceptable, and avoid submitting images or prompts that should not leave the runtime environment. <br>
-Risk: The skill depends on a PRUNA_API_KEY from the environment. <br>
-Mitigation: Store the key in runtime secrets or environment variables and do not paste the raw key into chat or generated files. <br>
-Risk: The skill suggests installing related Pruna skills with npx, including an optional full-suite install. <br>
-Mitigation: Review the related skill packages and requested install command before allowing installation. <br>
-Risk: The skill exposes disable_safety_checker as an optional request field. <br>
-Mitigation: Require explicit user intent and content-policy review before using safety-checker bypass options. <br>
+## Use Case:
 
+External users, developers, and creative operators use this skill to guide image-editing workflows for existing photos, including background changes, outfit edits, and multi-reference compositions through Pruna's p-image-edit API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-edit) <br>
-- [Pruna file upload API](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides prompt construction, reference-image upload, and Pruna prediction requests; required inputs are a prompt and one to five image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: evidence.release.version and SKILL.md metadata.version) <br>
+Risk: Selected images and edit prompts are sent to Pruna's external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images and prompts intended for Pruna processing, and avoid submitting sensitive photos unless sharing them with that service is intended.
+
+Risk: The workflow requires a Pruna API key.
+
+Mitigation: Keep PRUNA_API_KEY in an environment variable or secret store and avoid exposing it in prompts, logs, files, or shared transcripts.
+
+Risk: The skill may suggest installing prerequisite skills before running the workflow.
+
+Mitigation: Review suggested prerequisite skill installs before accepting them.
+
+Risk: Prompt-driven edits can unintentionally alter image details the user wanted preserved.
+
+Mitigation: Use explicit keep-clauses for identity, pose, lighting, background, or product details, and review the proposed prompt before submitting the API request.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-edit)
+- [Pruna file upload endpoint](https://api.pruna.ai/v1/files)
+- [Pruna predictions endpoint](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY and one to five uploaded image URLs; may send prompts and selected images to Pruna's external API.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

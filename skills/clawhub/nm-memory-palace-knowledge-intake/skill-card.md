@@ -1,46 +1,60 @@
-## Description: <br>
-Processes external resources into stored knowledge with quality scoring and routing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Processes external resources into stored knowledge with quality scoring and routing.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and knowledge-maintenance agents use this skill to evaluate linked articles, documents, papers, and session findings, then decide whether and where to store them in a persistent knowledge corpus. It also guides routing to local codebase updates, meta-infrastructure updates, queue processing, pruning review, and optional GitHub Discussion promotion for evergreen entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish or update knowledge entries in GitHub Discussions. <br>
-Mitigation: Use Discussion promotion only when the target repository and content are intended to be public, and require explicit review before any public Discussion update. <br>
-Risk: The skill can mutate local or agent knowledge stores, including corpus entries, developer drafts, queue records, and curation logs. <br>
-Mitigation: Avoid --auto-accept on real corpora, use sandbox output paths for tests, and require explicit approval before skill, module, agent, or knowledge-store changes. <br>
-Risk: External resources may be converted into durable knowledge with incorrect attribution or low-quality prose. <br>
-Mitigation: Apply the skill's content-boundary, scribe validation, document verification, and human review steps before finalizing stored entries. <br>
+## Use Case:
 
+Developers and knowledge workers use this skill to evaluate external articles, papers, documents, and session outputs, then route valuable material into a structured knowledge corpus or related project updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-knowledge-intake) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [KonMari Method](https://konmari.com/about-the-konmari-method/) <br>
-- [Spark Joy Philosophy](https://konmari.com/marie-kondo-rules-of-tidying-sparks-joy/) <br>
-- [Why the KonMari Method Works](https://konmari.com/what-is-konmari-method/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with YAML examples and inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local knowledge entries, developer drafts, curation logs, queue records, and GitHub Discussion summaries when approved.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+Risk: The skill can maintain a persistent knowledge corpus that may retain private URLs, local file paths, or sensitive research context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated entries before storage and remove private URLs, local paths, credentials, and sensitive context.
+
+Risk: Evergreen knowledge can be promoted to GitHub Discussions by default.
+
+Mitigation: Disable default publishing or require explicit yes-style confirmation before any GitHub post or update.
+
+Risk: The skill can direct code, documentation, or skill changes without tight boundaries.
+
+Mitigation: Run in a sandbox, avoid auto-accept, and require explicit approval before repository edits or knowledge pruning.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-knowledge-intake)
+- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace)
+- [KonMari Method](https://konmari.com/about-the-konmari-method/)
+- [Spark Joy Philosophy](https://konmari.com/marie-kondo-rules-of-tidying-sparks-joy/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured evaluation notes, example code, shell commands, and configuration snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose persistent corpus entries, GitHub Discussion publication, repository edits, and pruning actions that require human review.]
+
+## Skill Version(s):
+
+1.9.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

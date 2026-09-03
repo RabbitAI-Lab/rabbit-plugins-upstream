@@ -1,41 +1,54 @@
-## Description: <br>
-Detects likely time and space complexity hotspots in project code using static analysis with optional enrichment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects time and space complexity hotspots with static AST analysis.
 
-## Publisher: <br>
-[athola](https://clawhub.ai/user/athola) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[athola](https://clawhub.ai/user/athola)
 
-## Use Case: <br>
-Developers and engineers use this skill before merges or during performance triage to scan target code paths for likely time and space complexity hotspots and receive ranked findings with suggested validation steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Static-analysis findings may be false positives or may not reflect real runtime impact. <br>
-Mitigation: Confirm important findings with profiling, benchmark reruns, or manual review before applying or claiming a performance fix. <br>
-Risk: Optional gauntlet and kuva integrations may read additional project data or require separate tool installation. <br>
-Mitigation: Review optional integrations and tool installs separately in environments with network, package, or source-code access restrictions. <br>
+## Use Case:
 
+Developers and code reviewers use this skill to scan changed files or a specified path for likely time and space complexity hotspots before performance-sensitive merges or optimization work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-performance-review) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown report with inline code and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings are informational and should be validated with profiling or benchmarks before fixes are treated as proven.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+Risk: The skill may activate on broad performance-related phrasing and inspect changed repository files when no explicit path is provided.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an explicit file or directory path when the review should be scoped tightly.
+
+Risk: Optional gauntlet and kuva integrations may read local code graphs or benchmark outputs.
+
+Mitigation: Review local graph and benchmark inputs before using optional integrations, and treat the generated findings as advisory.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-performance-review)
+- [Project Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown report grouped by severity with file, line, message, suggestion, and tier coverage.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are informational and should be confirmed with profiling or benchmark evidence before fixes are treated as complete.]
+
+## Skill Version(s):
+
+1.9.19 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Agent Plugins"
+  short_description: "Design portable agent capabilities safely"
+  default_prompt: "Use $build-agent-plugins to choose and build the smallest portable skill, MCP server, or Agent Plugin for this capability."

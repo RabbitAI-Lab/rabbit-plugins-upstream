@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/anti-hallucination-skill",
   "slug": "anti-hallucination-skill",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778701009528,
-  "contentHash": "dfd5fd73f1f675bfde7b16f4323be5621f218e91a34d5b3244f2aa4c135e7380",
-  "fetchedAt": "2026-07-26T19:13:42.881Z"
+  "version": "1.1.1",
+  "updatedAt": 1788336872389,
+  "contentHash": "00673b6901a0f79b63dafac63db5a3679782af2ca801e23d05a2b5d3d682422a",
+  "fetchedAt": "2026-09-03T12:15:15.164Z"
 }

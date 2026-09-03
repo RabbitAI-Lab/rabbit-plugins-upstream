@@ -1,49 +1,64 @@
-## Description: <br>
-Runs NoxInfluencer creator discovery and marketing-ops workflows through its CLI, covering influencer search, creator evaluation, outreach operations, campaign and CRM management, brand monitoring, and exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate NoxInfluencer creator intelligence and marketing systems through the CLI, including search, analysis, contacts, monitoring, campaigns, CRM, outreach operations, products, affiliation, brand intelligence, exports, account setup, quota, and troubleshooting.
 
-## Publisher: <br>
-[noxinfluencer](https://clawhub.ai/user/noxinfluencer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[noxinfluencer](https://clawhub.ai/user/noxinfluencer)
 
-## Use Case: <br>
-Marketing teams and agents use this skill to discover and evaluate creators across YouTube, TikTok, and Instagram, operate NoxInfluencer outreach and campaign workflows, monitor brand and video performance, and export operational data after user-approved actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a NoxInfluencer account and access marketing, creator-contact, CRM, brand-monitor, export, and download data. <br>
-Mitigation: Install only when account-level operation is intended, review contact exports, email sends, CRM updates, brand-monitor unlocks, and downloads before approval, and apply organizational consent and retention rules. <br>
-Risk: Write or unlock workflows can change NoxInfluencer state or consume quota and entitlements. <br>
-Mitigation: Use documented dry-run, validate, and preview steps before execution, and apply force or send actions only after explicit approval of the exact object, recipients, timing, and content. <br>
-Risk: Creator contact details may include personal data intended for controlled outreach or export workflows. <br>
-Mitigation: Retrieve visible contact information only when explicitly requested for external use, limit the returned details to what is needed, and handle the data under the user's consent and retention obligations. <br>
+## Use Case:
 
+Marketing teams, agencies, and their agents use this skill to operate NoxInfluencer workflows for creator discovery, due diligence, outreach operations, campaign and CRM management, monitoring, exports, and brand intelligence across supported social platforms.
 
-## Reference(s): <br>
-- [NoxInfluencer Skills](https://www.noxinfluencer.com/skills) <br>
-- [ClawHub Skill Page](https://clawhub.ai/noxinfluencer/skills/nox-influencer-marketing) <br>
-- [Brand Monitor Workflows](references/brand-monitor.md) <br>
-- [CLI Response Format](references/cli-response-format.md) <br>
-- [Marketing Ops Workflows](references/marketing-ops.md) <br>
-- [Platform Support](references/platform-support.md) <br>
-- [Search Filter Semantics](references/search-filters.md) <br>
-- [Verdict Heuristics Reference](references/verdict-heuristics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Plain-language Markdown summaries with CLI-backed JSON result interpretation and occasional file paths for exports.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the noxinfluencer CLI and NoxInfluencer account access; write actions use dry-run, validation, preview, and explicit approval flows where supported.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server release evidence) <br>
+Risk: The skill can operate NoxInfluencer account workflows that send messages, schedule email, change CRM or campaign data, unlock brand data, retrieve contacts, upload attachments, or create exports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review sensitive actions before execution and use approval or dry-run checks for writes, exports, contact retrieval, attachments, and quota-consuming operations.
+
+Risk: Some actions may consume Skill quota, SaaS capability quota, membership entitlements, or email service quota.
+
+Mitigation: Check quota and current tool pricing before broad searches, exports, contact retrieval, unlocks, or other paid operations.
+
+Risk: Approved files or exported contact and campaign data may be exposed through NoxInfluencer workflows.
+
+Mitigation: Confirm the intended recipient, task, file, and export scope before uploads, downloads, sends, schedules, or attachment changes.
+
+## Reference(s):
+
+- [NoxInfluencer Skill Homepage](https://www.noxinfluencer.com/skills)
+- [Usage and Billing](https://www.noxinfluencer.com/skills/usage-billing)
+- [Brand Monitor Workflows](references/brand-monitor.md)
+- [CLI Response Format](references/cli-response-format.md)
+- [Marketing Ops Workflows](references/marketing-ops.md)
+- [Platform Support](references/platform-support.md)
+- [Search Filter Semantics](references/search-filters.md)
+- [Verdict Heuristics Reference](references/verdict-heuristics.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Plain-language responses with CLI-backed results, status summaries, identifiers, and next-step guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce approved file exports, downloaded reports, or JSON body files when a NoxInfluencer workflow requires them.]
+
+## Skill Version(s):
+
+0.1.18 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
