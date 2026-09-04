@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mailgun-api",
   "slug": "mailgun-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739754641,
-  "contentHash": "96edb9e13908058d4a87c93230f425d2a0c8f90dfd8f23cc80cb42a9441eae24",
-  "fetchedAt": "2026-07-26T18:27:33.423Z"
+  "version": "1.2.0",
+  "updatedAt": 1788518389643,
+  "contentHash": "46d6051cd85b81118fb68e6eb817e4c9ebf76cc7be2bc0fb92ca923c93ec04fd",
+  "fetchedAt": "2026-09-04T12:12:50.342Z"
 }

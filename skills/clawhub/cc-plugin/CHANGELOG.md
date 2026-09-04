@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.6.2](https://github.com/es6kr/skills/compare/cc-plugin-v0.6.1...cc-plugin-v0.6.2) (2026-09-01)
+
+
+### Bug Fixes
+
+* staging branch next-fix sync into main ([bbbd460](https://github.com/es6kr/skills/commit/bbbd460bf3b6b1cba4c6d07b3641afa734c89860))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/cc-plugin-v0.6.0...cc-plugin-v0.6.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* **cc-plugin:** remove duplicate cache-cleanup.sh from scripts/ ([1a64d24](https://github.com/es6kr/skills/commit/1a64d2421d6b8f42bd149c6c4bb3b1af0b146965))
+* **hook-kit:** resolve RAG receiver from workspace config instead of mandating --rag ([58e85ec](https://github.com/es6kr/skills/commit/58e85ecbb437557544cd528281aa30b804bd2532))
+* **hook-kit:** scope PR-URL bare-ref check to per-number match, allow force-push in worktrees ([dd50dce](https://github.com/es6kr/skills/commit/dd50dced989eed4847daaf9a0cd4be12a04426e1))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.3...cc-plugin-v0.6.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+## [0.5.3](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.2...cc-plugin-v0.5.3) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.5.2](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.1...cc-plugin-v0.5.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
 ## [0.5.1](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.0...cc-plugin-v0.5.1) (2026-07-23)
 
 

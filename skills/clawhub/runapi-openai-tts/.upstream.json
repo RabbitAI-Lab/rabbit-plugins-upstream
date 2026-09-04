@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-openai-tts",
   "slug": "runapi-openai-tts",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784551759665,
-  "contentHash": "cbdb4050d0a42bf119119107d565312b6a9441a04de536b98477b87acfdb71ef",
-  "fetchedAt": "2026-07-26T18:10:03.719Z"
+  "version": "0.1.3",
+  "updatedAt": 1788521791346,
+  "contentHash": "05dc67a8f613e2e188fcc6aa68f778149bc67fce00a6af9065fd55c90ad9bdea",
+  "fetchedAt": "2026-09-04T12:12:12.268Z"
 }

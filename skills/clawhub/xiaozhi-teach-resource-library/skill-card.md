@@ -1,45 +1,66 @@
-## Description: <br>
-Helps independent teachers organize, tag, retrieve, adapt, and maintain reusable teaching resources while applying copyright and student-privacy safeguards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language resource library skill that helps independent teachers store, tag, search, adapt, and reuse handouts, questions, review scripts, and de-identified error cases.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to build a searchable resource library for handouts, question banks, review language, error cases, and lesson plans, then adapt those assets for new students and lessons. It supports resource indexing, tagging, reuse records, copyright annotation, and de-identified case handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The resource library may accumulate identifiable student history or be shared across teaching skills without appropriate consent. <br>
-Mitigation: Use de-identified learning patterns, confirm consent settings before cross-skill sharing, avoid real names and contact details, and periodically delete or archive stale records. <br>
-Risk: Teaching materials may include copyrighted source content or unauthorized copies of workbook questions and scans. <br>
-Mitigation: Require copyrightStatus annotations, store only indexes for restricted third-party materials, record sources for adapted or publicly reusable items, and avoid storing unauthorized originals or scans. <br>
+## Use Case:
 
+Independent teachers use this skill to maintain a searchable teaching-resource library, retrieve resources by knowledge point and difficulty, adapt materials for a student context, and record reuse notes. It is intended for teacher-facing resource management, not direct student delivery, grading, lesson generation, or parent contact.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-resource-library) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Resource categorization and copyright template](references/resource-categorization.md) <br>
-- [Resource entry examples](references/resource-entry-examples.md) <br>
-- [Copyright annotation template](references/copyright-annotation-template.md) <br>
-- [Reuse record template](references/reuse-record-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with structured text templates for resource entries, reuse records, and copyright annotations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Designed for reusable teaching assets, de-identified learning patterns, resource indexes, tagging metadata, and consent-aware cross-skill sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Student cases or resource notes could expose identifiable student information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: De-identify cases before saving them, avoid real names, school names, contact details, addresses, and uniquely identifying context, and honor deletion requests by reviewing related case entries.
+
+Risk: Copyrighted teaching materials could be copied into the library without authorization.
+
+Mitigation: Record a copyrightStatus for every resource and keep teaching-aid originals, exam papers, scans, and unauthorized reposts as indexes only instead of storing full content.
+
+Risk: AI-generated questions may contain errors, ambiguous answers, unsuitable difficulty, or invalid conditions.
+
+Mitigation: Mark AI-generated questions as aiGenerated and keep them out of student-facing use until a teacher verifies each item and sets verifiedByTeacher to true.
+
+Risk: Built-in crisis contacts may not fit users outside Mainland China.
+
+Mitigation: Replace listed emergency and mental-health contacts with local crisis resources before relying on them in another region.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-resource-library)
+- [Resource categorization, search, and de-identification](references/resource-categorization.md)
+- [Resource entry examples](references/resource-entry-examples.md)
+- [Copyright annotation template](references/copyright-annotation-template.md)
+- [AI item check protocol](shared/ai-item-check.md)
+- [Shared vocabulary](shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown or plain text recommendations with structured resource-entry field guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing outputs include search results, reuse recommendations, tagging guidance, copyright-status guidance, and verification reminders for AI-generated questions.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

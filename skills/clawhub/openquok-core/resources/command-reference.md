@@ -1,4 +1,4 @@
-# Openquok CLI — command reference
+# OpenQuok CLI — command reference
 
 Agent-oriented reference for `@openquok/auto-cli` (`openquok`). Hard rules, auth, and workflows live in [SKILL.md](../SKILL.md).
 
@@ -40,7 +40,7 @@ openquok auth:logout
 - **Messaging hosts:** `--json --no-poll` then `auth:login:poll` after the user authorizes — otherwise credentials are never stored.
 - **Agents:** forward `verification_uri_complete` from stdout only — never fabricate codes or URLs.
 - **Humans with TTY:** `openquok auth:login` without `--json` is fine locally.
-- **Session start:** see Rule 0 in [SKILL.md](../SKILL.md) — run version + `auth:status` (+ `auth:workspace` when connected) via shell before the first assistant message; greet as the Openquok bot, not the host persona.
+- **Session start:** see Rule 0 in [SKILL.md](../SKILL.md) — run version + `auth:status` (+ `auth:workspace` when connected) via shell before the first assistant message; greet as the OpenQuok bot, not the host persona.
 - **Invalid or expired code:** Re-run `auth:login --json --no-poll` and `auth:login:poll` with a fresh `device_code` (~30 min).
 
 
@@ -65,8 +65,8 @@ openquok integrations:trigger <integration-uuid> <method-name> [--data '<json>' 
 
 - `integrations:groups` — channel groups (`integration_customers`); pass an `id` to `integrations:list --group`.
 - `integrations:settings` — rules, `maxLength`, settings schema, allow-listed `tools` (`methodName`, `dataSchema`). Publish-time keys per channel: [provider-settings.md](./provider-settings.md).
-- `integrations:trigger` — single allow-listed method; `--data` must be a JSON object when required.
-- New channels are connected in the web app; the CLI uses integration UUIDs from `integrations:list`.
+- `integrations:trigger` — single allow-listed method; `--data` must be a JSON object when required. Live examples: Dev.to `tags` / `organizations`; LinkedIn `company` (URL in `--data`).
+- New channels are connected in the web app (OAuth, or a dashboard API key for Dev.to); the CLI uses integration UUIDs from `integrations:list`.
 
 ## Posts
 
@@ -158,7 +158,7 @@ openquok upload ./image.png
 openquok upload-from-url "https://cdn.example.com/banner.png"
 ```
 
-Both return `data.id` and `data.path` or `data.filePath` for use in `-m` / JSON `media`.
+Both return `data.id` and `data.filePath` for use in `-m` / JSON `media` (`path` is the post field). `openquok upload` switches to direct-to-storage multipart for files over ~4 MB so hosted Cloud does not return HTTP 413.
 
 ## Help
 

@@ -148,7 +148,7 @@ describe("createMcpSession — lifecycle / protocol", () => {
 });
 
 describe("createMcpSession — tools/list", () => {
-  it("lists exactly the 16 tools", async () => {
+  it("lists exactly the 21 tools", async () => {
     const h = harness();
     const session = createMcpSession(h.io);
     const res = await rpc(session, { jsonrpc: "2.0", id: 1, method: "tools/list" });
@@ -160,9 +160,13 @@ describe("createMcpSession — tools/list", () => {
         "pages_get",
         "stats",
         "leaderboard",
+        "referrals_top",
+        "winners_list",
         "entries_list",
         "surveys_list",
         "templates_list",
+        "actions_catalog",
+        "events_catalog",
         "pages_clone",
         "pages_update",
         "pages_publish",
@@ -171,12 +175,50 @@ describe("createMcpSession — tools/list", () => {
         "webhooks_list",
         "webhooks_create",
         "webhooks_delete",
+        "media_upload",
       ].sort(),
     );
     for (const tool of res.result.tools as any[]) {
       expect(typeof tool.description).toBe("string");
       expect(tool.description.length).toBeGreaterThan(0);
       expect(tool.inputSchema.type).toBe("object");
+    }
+  });
+
+  it("every tool has a title and readOnlyHint/destructiveHint annotations (Connectors Directory requirement)", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, { jsonrpc: "2.0", id: 1, method: "tools/list" });
+    for (const tool of res.result.tools as any[]) {
+      expect(typeof tool.title).toBe("string");
+      expect(tool.title.length).toBeGreaterThan(0);
+      expect(typeof tool.annotations?.readOnlyHint).toBe("boolean");
+      if (tool.annotations.readOnlyHint === false) {
+        expect(typeof tool.annotations.destructiveHint).toBe("boolean");
+      }
+    }
+  });
+
+  // T3b (0.3.5). Deleting a subscription CASCADEs its webhook_deliveries rows
+  // (20260611_webhook_delivery_queue.sql:20), and repeating the delete is a
+  // harmless 404 — both facts belong in the annotation surface.
+  it("webhooks_delete declares idempotentHint and names the delivery cascade", () => {
+    const tool = TOOLS.find((t) => t.name === "webhooks_delete")!;
+    expect(tool.annotations).toMatchObject({
+      readOnlyHint: false,
+      destructiveHint: true,
+      idempotentHint: true,
+    });
+    expect(tool.description).toContain("webhook_deliveries");
+  });
+
+  // T3c (0.3.5). Tool text describes what the API does; it does not instruct the
+  // agent how to behave (Connectors Directory review point).
+  it("tool text stays declarative rather than instructing the agent", () => {
+    const unpublish = TOOLS.find((t) => t.name === "pages_unpublish")!;
+    expect(unpublish.description).not.toContain("Tell your user");
+    for (const tool of TOOLS) {
+      expect(tool.description).not.toMatch(/slow down/i);
     }
   });
 
@@ -188,10 +230,16 @@ describe("createMcpSession — tools/list", () => {
     expect(byName("entries_create").inputSchema.required).toEqual(["contest_id", "email"]);
     expect(byName("pages_publish").inputSchema.required).toEqual(["contest_id"]);
     expect(byName("pages_unpublish").inputSchema.required).toEqual(["contest_id"]);
+    expect(byName("media_upload").inputSchema.required).toEqual(["file_path"]);
     const meRequired = byName("me").inputSchema.required;
     expect(meRequired === undefined || meRequired.length === 0).toBe(true);
     const templatesListRequired = byName("templates_list").inputSchema.required;
     expect(templatesListRequired === undefined || templatesListRequired.length === 0).toBe(true);
+    const actionsCatalogRequired = byName("actions_catalog").inputSchema.required;
+    expect(actionsCatalogRequired === undefined || actionsCatalogRequired.length === 0).toBe(true);
+    const eventsCatalogRequired = byName("events_catalog").inputSchema.required;
+    expect(eventsCatalogRequired === undefined || eventsCatalogRequired.length === 0).toBe(true);
+    expect(byName("winners_list").inputSchema.required).toEqual(["contest_id"]);
   });
 
   it("pages_clone advertises a template input (alternative to source_promotion_id)", () => {
@@ -209,7 +257,7 @@ describe("createMcpSession — tools/list", () => {
     const props = tool.inputSchema.properties as Record<string, any>;
 
     expect(props.template).toBeDefined();
-    expect(props.template.enum).toEqual(["basic-new", "showcase", "future"]);
+    expect(props.template.enum).toEqual(["basic-new", "showcase", "future", "simple"]);
 
     expect(props.dark_mode_enabled).toBeDefined();
     expect(props.dark_mode_enabled.type).toBe("boolean");
@@ -222,13 +270,109 @@ describe("createMcpSession — tools/list", () => {
       "narrow",
       "medium",
       "wide",
+      "xl",
       "max-w-2xl",
       "max-w-3xl",
       "max-w-4xl",
+      "max-w-7xl",
     ]);
 
     // contest_id stays the only required field — the new fields are optional.
     expect(tool.inputSchema.required).toEqual(["contest_id"]);
+  });
+
+  it("pages_update advertises entry_methods, including the custom-link row shape", () => {
+    // Since 0.3.5 callTool allowlists args against inputSchema.properties, so an
+    // undeclared field is DROPPED rather than forwarded — which makes the
+    // advertised schema the only way an agent can send entry_methods at all.
+    // The custom-link row (no actionType) is the one shape actions_catalog
+    // cannot describe, so the description has to carry it.
+    const tool = TOOLS.find((t) => t.name === "pages_update")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+
+    expect(props.entry_methods).toBeDefined();
+    expect(props.entry_methods.type).toBe("array");
+    expect(props.entry_methods.maxItems).toBe(30);
+    expect(props.entry_methods.description).toContain("actionType");
+    expect(props.entry_methods.description).toContain("link");
+    expect(props.entry_methods.description).toContain("actionsRequired");
+    expect(tool.description).toContain("entry_methods");
+  });
+
+  // Outstanding item 2 of the API wave. marketing_consent is documented public-API
+  // surface (docs/using-custom-apis.md) and is accepted by createEntrySchema, but
+  // it was never declared here — so 0.3.5's allowlist began silently dropping it.
+  // It is not an audit field: marketing-sync-queue.service.ts gates ESP sync on
+  // `marketing_consent !== true`, so dropping it means an agent can import 500
+  // consented entrants, get 201 on every one, and sync none of them.
+  it("entries_create declares marketing_consent, which gates ESP sync", () => {
+    const tool = TOOLS.find((t) => t.name === "entries_create")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+
+    expect(props.marketing_consent).toBeDefined();
+    expect(props.marketing_consent.type).toBe("boolean");
+    // The tool cannot verify consent, so the caller's obligation has to be in words.
+    expect(props.marketing_consent.description).toMatch(/consent/i);
+  });
+
+  // Outstanding item 3. status stays undeclared on purpose — pages_publish /
+  // pages_unpublish are the affordances and pages_publish enforces the
+  // future-end_date check a raw status: "active" would bypass. But an agent that
+  // sends it now gets a confusing 422 "At least one field is required", so the
+  // description has to say where status lives.
+  it("pages_update leaves status undeclared and says where it lives instead", () => {
+    const tool = TOOLS.find((t) => t.name === "pages_update")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+
+    expect(props.status).toBeUndefined();
+    expect(tool.description).toContain("pages_publish");
+    expect(tool.description).toContain("pages_unpublish");
+  });
+
+  it("pages_update advertises custom_css and the simple template", () => {
+    const tool = TOOLS.find((t) => t.name === "pages_update")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+
+    expect(props.custom_css).toBeDefined();
+    expect(props.custom_css.type).toEqual(["string", "null"]);
+    // Launched 2026-08-10 — the pre-launch gate wording must be GONE, or an
+    // agent will refuse to use a field that works.
+    expect(props.custom_css.description).not.toContain("re-launch");
+    expect(props.template.description).not.toContain("re-launch");
+    expect(props.template.enum).toContain("simple");
+    expect(props.custom_css.description).toContain("tokei-simple-");
+  });
+
+  it("pages_update advertises the seven media fields", () => {
+    const tool = TOOLS.find((t) => t.name === "pages_update")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+
+    for (const field of [
+      "image_video",
+      "secondary_image",
+      "third_image",
+      "fourth_image",
+      "fifth_image",
+      "background_image",
+      "og_image",
+    ]) {
+      expect(props[field]).toBeDefined();
+      expect(props[field].type).toEqual(["string", "null"]);
+      expect(typeof props[field].description).toBe("string");
+    }
+
+    // contest_id stays the only required field.
+    expect(tool.inputSchema.required).toEqual(["contest_id"]);
+  });
+
+  it("media_upload declares file_path (required) and content_type (optional)", () => {
+    const tool = TOOLS.find((t) => t.name === "media_upload")!;
+    const props = tool.inputSchema.properties as Record<string, any>;
+    expect(props.file_path).toBeDefined();
+    expect(props.file_path.type).toBe("string");
+    expect(props.content_type).toBeDefined();
+    expect(props.content_type.type).toBe("string");
+    expect(tool.inputSchema.required).toEqual(["file_path"]);
   });
 });
 
@@ -296,6 +440,51 @@ describe("createMcpSession — tools/call wiring to the HTTP layer", () => {
     expect(url.searchParams.get("per_page")).toBe("50");
   });
 
+  it("referrals_top passes page/per_page", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "referrals_top", arguments: { contest_id: "c1", page: 2, per_page: 50 } },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.pathname).toBe("/api/v1/contests/c1/referrals");
+    expect(url.searchParams.get("page")).toBe("2");
+    expect(url.searchParams.get("per_page")).toBe("50");
+  });
+
+  it("winners_list -> GET /contests/:id/winners, no query params, no body", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "winners_list", arguments: { contest_id: "c1" } },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.pathname).toBe("/api/v1/contests/c1/winners");
+    expect(url.search).toBe("");
+    expect(h.calls[0].init.method).toBe("GET");
+    expect(h.calls[0].init.body).toBeUndefined();
+  });
+
+  it("winners_list missing contest_id -> isError true, no fetch call", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "winners_list", arguments: {} },
+    });
+    expect(res.result.isError).toBe(true);
+    expect(res.result.content[0].text).toContain("contest_id");
+    expect(h.calls).toEqual([]);
+  });
+
   it("templates_list -> GET /templates, no query, no body", async () => {
     const h = harness();
     const session = createMcpSession(h.io);
@@ -309,6 +498,66 @@ describe("createMcpSession — tools/call wiring to the HTTP layer", () => {
     expect(url.origin + url.pathname).toBe("https://tokei.io/api/v1/templates");
     expect(h.calls[0].init.method).toBe("GET");
     expect(h.calls[0].init.body).toBeUndefined();
+  });
+
+  it("actions_catalog -> GET /actions/catalog, no query when type omitted, no body", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "actions_catalog", arguments: {} },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.origin + url.pathname).toBe("https://tokei.io/api/v1/actions/catalog");
+    expect(url.searchParams.get("type")).toBeNull();
+    expect(h.calls[0].init.method).toBe("GET");
+    expect(h.calls[0].init.body).toBeUndefined();
+  });
+
+  it("actions_catalog maps the optional type argument to ?type=", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "actions_catalog", arguments: { type: "twitter_follow" } },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.pathname).toBe("/api/v1/actions/catalog");
+    expect(url.searchParams.get("type")).toBe("twitter_follow");
+  });
+
+  it("events_catalog -> GET /events/catalog, no query when type omitted, no body", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "events_catalog", arguments: {} },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.origin + url.pathname).toBe("https://tokei.io/api/v1/events/catalog");
+    expect(url.searchParams.get("type")).toBeNull();
+    expect(h.calls[0].init.method).toBe("GET");
+    expect(h.calls[0].init.body).toBeUndefined();
+  });
+
+  it("events_catalog maps the optional type argument to ?type=", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "events_catalog", arguments: { type: "entry.created" } },
+    });
+    const url = new URL(h.calls[0].url);
+    expect(url.pathname).toBe("/api/v1/events/catalog");
+    expect(url.searchParams.get("type")).toBe("entry.created");
   });
 
   it("pages_clone with a template argument POSTs {title, template}", async () => {
@@ -412,6 +661,109 @@ describe("createMcpSession — tools/call wiring to the HTTP layer", () => {
     });
   });
 
+  // T3a (0.3.5). Before the allowlist, `{ ...fixedBody, ...args }` forwarded any
+  // undeclared field straight to PATCH /contests/{id}, where settings.prizes is a
+  // wholesale replace — so this exact call wiped the prize list while the tool
+  // advertised destructiveHint: false.
+  it("pages_publish drops an undeclared prizes argument instead of wiping the prize list", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "pages_publish",
+        arguments: { contest_id: "c1", prizes: [], title: "hijacked" },
+      },
+    });
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({ status: "active" });
+  });
+
+  it("pages_unpublish, whose only property is contest_id, sends nothing but the fixed status", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "pages_unpublish",
+        arguments: { contest_id: "c1", prizes: [], entry_methods: [], status: "active" },
+      },
+    });
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({ status: "draft" });
+  });
+
+  it("pages_update keeps every declared field while dropping undeclared ones", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "pages_update",
+        arguments: { contest_id: "c1", title: "Kept", user_id: "not-mine", id: "not-mine" },
+      },
+    });
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({ title: "Kept" });
+  });
+
+  // Outstanding item 3. Silently swallowing arguments is how marketing_consent
+  // went missing for a whole release: the allowlist is right, its silence is not.
+  // An agent told which keys were ignored can self-correct.
+  it("names the arguments it dropped rather than discarding them in silence", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "pages_update",
+        arguments: { contest_id: "c1", title: "Kept", status: "active", nonsense: 1 },
+      },
+    });
+    const notice = res.result.content.map((c: { text: string }) => c.text).join("\n");
+    expect(notice).toMatch(/ignored/i);
+    expect(notice).toContain("status");
+    expect(notice).toContain("nonsense");
+    // The drop itself is unchanged — the note is advisory, not a new pass-through.
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({ title: "Kept" });
+  });
+
+  it("says nothing extra when every argument was declared", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "pages_update", arguments: { contest_id: "c1", title: "Kept" } },
+    });
+    expect(res.result.content.length).toBe(1);
+  });
+
+  // Outstanding item 2, on the wire: the field has to survive the allowlist.
+  it("entries_create forwards marketing_consent to the API", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "entries_create",
+        arguments: { contest_id: "c1", email: "a@b.example", marketing_consent: true },
+      },
+    });
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({
+      email: "a@b.example",
+      marketing_consent: true,
+    });
+  });
+
   it('pages_unpublish PATCHes {"status":"draft"}', async () => {
     const h = harness();
     const session = createMcpSession(h.io);
@@ -489,6 +841,91 @@ describe("createMcpSession — tools/call wiring to the HTTP layer", () => {
     const url = new URL(h.calls[0].url);
     expect(url.pathname).toBe("/api/v1/webhooks/w1");
     expect(h.calls[0].init.method).toBe("DELETE");
+  });
+});
+
+const MEDIA_TICKET_DATA = {
+  upload_url:
+    "https://xyz.supabase.co/storage/v1/object/upload/sign/tokei-public/api-uploads/u1/uuid.png?token=tok",
+  token: "tok",
+  method: "PUT",
+  headers: { "content-type": "image/png", "x-upsert": "false" },
+  bucket: "tokei-public",
+  path: "api-uploads/u1/uuid.png",
+  public_url: "https://xyz.supabase.co/storage/v1/object/public/tokei-public/api-uploads/u1/uuid.png",
+  content_type: "image/png",
+  filename: "hero.png",
+  max_bytes: 5242880,
+  expires_in: 7200,
+  expires_at: "2026-07-26T12:00:00.000Z",
+};
+
+describe("createMcpSession — tools/call media_upload", () => {
+  it("does the two-step upload (POST ticket, PUT bytes) and returns the public_url", async () => {
+    const h = harness({ response: jsonRes({ success: true, data: MEDIA_TICKET_DATA }) });
+    const putCalls: { url: string; init: { method: string; headers: Record<string, string>; body: Uint8Array } }[] =
+      [];
+    (h.io as any).binaryFetchImpl = async (
+      url: string,
+      init: { method: string; headers: Record<string, string>; body: Uint8Array },
+    ) => {
+      putCalls.push({ url, init });
+      return { status: 200, headers: { get: () => null }, text: async () => "" };
+    };
+    (h.io as any).readFileBytes = (_path: string) => new Uint8Array(150).fill(3);
+
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "media_upload", arguments: { file_path: "hero.png" } },
+    });
+
+    expect(res.result.isError).toBe(false);
+    expect(h.calls).toHaveLength(1);
+    const jsonUrl = new URL(h.calls[0].url);
+    expect(jsonUrl.pathname).toBe("/api/v1/media");
+    expect(h.calls[0].init.method).toBe("POST");
+    expect(JSON.parse(h.calls[0].init.body!)).toEqual({
+      filename: "hero.png",
+      content_type: "image/png",
+      size_bytes: 150,
+    });
+
+    expect(putCalls).toHaveLength(1);
+    expect(putCalls[0].url).toBe(MEDIA_TICKET_DATA.upload_url);
+
+    const payload = JSON.parse(res.result.content[0].text);
+    expect(payload.success).toBe(true);
+    expect(payload.data.public_url).toBe(MEDIA_TICKET_DATA.public_url);
+  });
+
+  it("missing file_path -> tool error, isError true, no HTTP calls", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "media_upload", arguments: {} },
+    });
+    expect(res.result.isError).toBe(true);
+    expect(h.calls).toEqual([]);
+  });
+
+  it("Io without readFileBytes/binaryFetchImpl -> tool error mentioning 'not supported', no HTTP calls", async () => {
+    const h = harness();
+    const session = createMcpSession(h.io);
+    const res = await rpc(session, {
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: { name: "media_upload", arguments: { file_path: "hero.png" } },
+    });
+    expect(res.result.isError).toBe(true);
+    expect(res.result.content[0].text).toMatch(/not supported in this environment/);
+    expect(h.calls).toEqual([]);
   });
 });
 
@@ -577,7 +1014,7 @@ describe("createMcpSession — tools/call errors", () => {
     });
     expect(initRes.result.protocolVersion).toBe("2025-06-18");
     const listRes = await rpc(session, { jsonrpc: "2.0", id: 2, method: "tools/list" });
-    expect(listRes.result.tools.length).toBe(16);
+    expect(listRes.result.tools.length).toBe(21);
   });
 });
 

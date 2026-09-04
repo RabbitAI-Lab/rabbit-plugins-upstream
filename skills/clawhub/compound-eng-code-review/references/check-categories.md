@@ -16,6 +16,7 @@ Load this reference during the line-by-line review step. Use the category lists 
 - Function length — long functions that force scrolling; prefer extractable blocks with clear names. Split by responsibility, not line count
 - Nesting depth — more than 3 levels of indentation signals a need for early returns, guard clauses, or extraction
 - Comment quality — comments explain WHY (constraints, workarounds, non-obvious decisions), not WHAT. Flag comments that restate code or will rot as the code changes
+- Comment referents — a WHY comment is often the only record of a hidden constraint, so an unresolvable "this", "it", or "the above" destroys it. Flag any comment whose pronoun has more than one antecedent in scope; name the subject instead (`// Must run before the cache warm — otherwise it reads stale IDs` → `// The cache warm reads user IDs; run this migration first or the warm reads stale ones`). A reviewer agent honors or re-raises a rationale comment based on how it parses, with no author available to ask
 - God classes / SRP violations — class with unrelated responsibilities. Split into focused classes
 - Leaky abstractions — implementation details exposed in interfaces or public APIs
 - Structural remedy — when flagging a structural problem, name the move that fixes it (extract a helper, collapse duplicate branches, separate orchestration from logic, replace a conditional chain with a typed dispatcher), not just the smell. Then test the proposed refactor: does it *reduce* the concepts a reader must hold, or just *relocate* complexity elsewhere? Prefer deleting an abstraction over polishing one
@@ -34,6 +35,7 @@ Load this reference during the line-by-line review step. Use the category lists 
 - Agentic confused-deputy — a tool or function exposed to an LLM can invoke an action the requesting user isn't authorized for; the model runs with broader scope than the caller. Check tool authorization against the caller's identity, not the agent's
 - Edge cases under pressure — max input size, zero items, first-run-ever, double-click within 100ms, concurrent identical requests
 - Partial completion — operations that can crash mid-way leaving state inconsistent (no rollback, no cleanup)
+- Floor guards — tightening a quality gate is silent, loosening is loud only if someone looks. Flag: a lowered threshold (coverage, lint level, timeout), a test weakened (`.skip`, deleted, assertion removed), a new suppression comment (`eslint-disable`, `# noqa`, `@ts-ignore`, `#[allow]`), a stub or empty catch replacing real handling, a new row in a tracked-exceptions list
 
 ## AI-generated code lens
 

@@ -1,0 +1,93 @@
+{
+  "session_id": "example-001",
+  "status": "awaiting_answers",
+  "context": {
+    "target_role": "后端开发实习",
+    "seniority": "本科应届",
+    "experience_density": "rich",
+    "density_note": null
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "text": "你说独立负责了订单服务的缓存层重构。当时为什么要重构,不重构会怎样?",
+      "competency": "决策点",
+      "source_quote": "独立负责订单服务的缓存层重构",
+      "probes": [
+        "重构前具体是什么问题,怎么发现的",
+        "考虑过哪些方案,最后为什么选这个",
+        "当时有没有反对意见"
+      ],
+      "is_generic": false
+    },
+    {
+      "id": "q2",
+      "text": "你提到 p99 从 800ms 降到 120ms。这个数字是怎么测出来的?",
+      "competency": "量化口径",
+      "source_quote": "p99 800ms→120ms",
+      "probes": [
+        "在什么环境测的,压测还是线上真实流量",
+        "只看 p99 的话会不会漏掉什么",
+        "上线后有没有回归验证"
+      ],
+      "is_generic": false
+    },
+    {
+      "id": "q3",
+      "text": "这次重构里,哪一部分是你一个人从头做完的,哪些是团队里其他人做的?",
+      "competency": "贡献边界",
+      "source_quote": "独立负责",
+      "probes": [
+        "代码是你一个人写的吗",
+        "方案设计有没有别人参与评审",
+        "上线和监控谁做的"
+      ],
+      "is_generic": false
+    },
+    {
+      "id": "q4",
+      "text": "重构过程里有没有哪一步判断错了、后来返工的?",
+      "competency": "返工点",
+      "source_quote": "缓存层重构",
+      "probes": [
+        "是怎么发现judgment错了的",
+        "返工花了多久,影响到进度了吗",
+        "现在回头看会怎么做"
+      ],
+      "is_generic": false
+    },
+    {
+      "id": "q5",
+      "text": "你说服务有 4 个实例、本地缓存搞不定一致性 —— 具体是什么场景下会不一致?",
+      "competency": "技术细节",
+      "source_quote": "订单服务有 4 个实例,本地缓存一致性搞不定",
+      "probes": [
+        "举一个会出问题的具体时序",
+        "Redis 方案是怎么解决的",
+        "有没有考虑过缓存失效的雪崩问题"
+      ],
+      "is_generic": false
+    }
+  ],
+  "answers": [],
+  "scores": null,
+  "raw_material": {
+    "target_role": "后端开发实习",
+    "seniority": "本科应届",
+    "school": "示例大学 计算机科学 大四",
+    "internships": [
+      {
+        "org": "某电商公司",
+        "role": "后端开发实习",
+        "duration": "3个月",
+        "ownership": "独立负责订单服务缓存层重构",
+        "details": "p99 800ms→120ms,测过本地缓存/Redis/多级缓存三种方案,订单服务有 4 个实例、本地缓存一致性搞不定"
+      }
+    ],
+    "projects": [],
+    "competitions": [],
+    "clubs": [],
+    "opensource": [],
+    "density": "rich"
+  }
+}

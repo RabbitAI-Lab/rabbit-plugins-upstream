@@ -1,45 +1,65 @@
-## Description: <br>
-帮助老师从凭经验判断学情升级为数据驱动的教学决策，基于成绩数据生成班级画像、共性弱项、个体诊断和差异化教学建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns class assessment score tables into actionable teaching adjustments, including class profiles, knowledge-point heatmaps, student tiers, and teacher-facing recommendations.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to analyze class assessment data, identify common weak points, diagnose individual learning patterns, and turn findings into differentiated teaching actions. It is intended for authorized education data supplied by the teacher or connected teaching skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student or class data could be exposed in reports or cross-skill sharing. <br>
-Mitigation: Use only authorized class data, prefer student IDs or aliases, avoid public reports with real names, and confirm before sharing or writing outputs into other skills. <br>
-Risk: Individual diagnoses may be overstated when the data sample is too small. <br>
-Mitigation: Require repeated evidence for stable conclusions and mark conclusions as evidence insufficient when history is limited. <br>
-Risk: Score analysis could turn into misleading forecasts, labels, or anxiety-inducing parent communication. <br>
-Mitigation: Do not predict future scores or rankings, avoid character judgments, and keep parent-facing output grounded in objective evidence and practical next steps. <br>
+## Use Case:
 
+Teachers use this skill to analyze class assessment data, identify common knowledge-point weaknesses, prepare individual diagnosis cards, and turn evidence into differentiated teaching adjustments. It is intended for upper-primary and middle-school contexts, with privacy controls for student records and parent-facing summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer) <br>
-- [学情分析框架与模板](references/analysis-framework.md) <br>
-- [班级学情报告模板](references/class-report-template.md) <br>
-- [学生个体诊断卡模板](references/student-diagnosis-card-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown reports and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided class data; outputs should avoid real names in public reports and mark insufficient evidence when data is limited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Student assessment records may be stored or shared across a class-teaching workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases where possible, confirm writes before saving, and review sharing plus parent-consent settings before generating parent-facing material.
+
+Risk: Crisis referral guidance may not match every user's country or region.
+
+Mitigation: Adapt emergency and crisis-resource guidance to the user's actual location before deployment.
+
+Risk: Small samples, total-score-only data, or missing item-to-knowledge mappings can make detailed trends and heatmaps unreliable.
+
+Mitigation: Limit output to supported analyses, mark insufficient evidence clearly, and avoid stable trend or knowledge-point conclusions when required data is missing.
+
+Risk: Generated example or practice items may contain errors if reused without review.
+
+Mitigation: Run the included AI item self-check and require teacher verification before adding generated items to a resource bank or assessment.
+
+## Reference(s):
+
+- [analysis-framework.md](artifact/references/analysis-framework.md)
+- [class-report-template.md](artifact/references/class-report-template.md)
+- [student-diagnosis-card-template.md](artifact/references/student-diagnosis-card-template.md)
+- [class-teaching-workspace.schema.json](artifact/shared/class-teaching-workspace.schema.json)
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown reports and structured classWorkspace entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses student aliases where possible and generates teacher-confirmed record updates.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

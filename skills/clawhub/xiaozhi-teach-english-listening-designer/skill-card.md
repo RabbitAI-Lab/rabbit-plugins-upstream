@@ -1,47 +1,71 @@
-## Description: <br>
-帮助英语老师把听力课从放录音和刷题转为围绕目标、材料、听前预测、听中分层、听后任务、微技能训练和学员档案的系统化教学设计。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs English listening lessons for Chinese-language teaching contexts, turning simple playback and answer checking into a structured workflow for goals, material selection, pre-listening prediction, layered listening tasks, post-listening activities, micro-skill practice, and teacher-authorized workspace updates.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design listening lessons, choose appropriately licensed materials, create pre-listening and while-listening tasks, plan micro-skill practice, and maintain pseudonymous listening profiles for students. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student listening profiles may contain identifiable or sensitive learning information. <br>
-Mitigation: Use pseudonyms, avoid sensitive student identifiers, and require teacher confirmation before saving profile data to shared records. <br>
-Risk: Listening materials may have copyright or licensing restrictions. <br>
-Mitigation: Confirm copyright status before use and rely on textbook, original, Creative Commons, or authorized materials rather than copying unauthorized audio. <br>
-Risk: Assessment suggestions could be mistaken for automated grading. <br>
-Mitigation: Use the skill's rubrics and frameworks as teacher-reviewed guidance; keep dictation scoring and final listening grades under teacher control. <br>
+## Use Case:
 
+External English teachers use this skill to design listening lessons, select or adapt materials with copyright status, create pre-listening and while-listening tasks, and plan micro-skill training for upper-primary and middle-school learners. It is intended for Chinese-language classroom support and teacher-facing planning rather than automatic student scoring.
 
-## Reference(s): <br>
-- [Listening Material Sources](references/listening-material-sources.md) <br>
-- [Listening Rubric](references/listening-rubric.md) <br>
-- [Micro-Skill Training](references/micro-skill-training.md) <br>
-- [Pre-Listening Prediction Sample](references/pre-listening-prediction-sample.md) <br>
-- [Student Listening Profile Template](references/student-listening-profile-template.md) <br>
-- [While-Listening Task Sample](references/while-listening-task-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style teaching plans, task templates, rubrics, and profile guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teaching design guidance and structured templates; it does not execute code, grade dictation, or assign final listening scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Crisis-support wording includes mainland China emergency and hotline references that may not fit other locations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify or replace crisis hotline text before using the skill outside mainland China.
+
+Risk: Student listening records and profile writeback may expose learner performance data.
+
+Mitigation: Pseudonymize student records, honor privacy controls, and require teacher authorization before profile writeback.
+
+Risk: AI-generated listening materials or questions may be incorrect, unsuitable for the grade band, or unready for formal assessment.
+
+Mitigation: Run the item self-check, mark AI-generated items, and require teacher verification before adding them to a resource bank or exam.
+
+Risk: Listening materials may include audio or text with unclear usage rights.
+
+Mitigation: Require copyrightStatus for each material and keep only source links or index entries when authorization is unclear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-listening-designer)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Listening material sources](artifact/references/listening-material-sources.md)
+- [Listening rubric](artifact/references/listening-rubric.md)
+- [Micro-skill training](artifact/references/micro-skill-training.md)
+- [Pre-listening prediction sample](artifact/references/pre-listening-prediction-sample.md)
+- [While-listening task sample](artifact/references/while-listening-task-sample.md)
+- [Student listening profile template](artifact/references/student-listening-profile-template.md)
+- [AI item check protocol](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance, lesson plans, listening-task designs, rubrics, and JSON-compatible workspace entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is required for student profile writeback and AI-generated exam or resource-bank items.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

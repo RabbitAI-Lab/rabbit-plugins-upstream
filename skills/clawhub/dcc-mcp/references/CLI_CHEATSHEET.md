@@ -31,10 +31,20 @@ Keep an official build current through the release manifest:
 ```bash
 dcc-mcp-cli update check
 dcc-mcp-cli update apply
+dcc-mcp-cli components status dcc-cua
+dcc-mcp-cli components ensure dcc-cua --yes
 ```
 
-`update apply` downloads and stages the latest CLI for the next launch. It does
-not update a running `dcc-mcp-server`; update that server in its own environment.
+`update apply` requires the available entry's 64-hex SHA-256, verifies the
+streamed download, and stages one component bound to the exact CLI installation.
+The next launch re-verifies the bytes before replacement and restarts with the
+original arguments. Legacy unsigned staging is quarantined. It does not update
+a running `dcc-mcp-server`; update that server in its own environment. Gateway
+Admin remains check-only for every binary.
+The official CLI installer also reconciles the independently released
+`dcc-cua` sibling. `components status` is read-only; `components ensure`
+requires explicit `--yes`, a mandatory archive SHA-256, and an exact official
+release-manifest binding.
 
 For repository development only, the same consent-gated verified
 bootstrap/fallback is:
@@ -101,6 +111,24 @@ treated as deletion. When the same instance becomes ready, query the core job.
 For an `isolated` operation, rediscover its typed status tool and query the
 operation ID even after adapter restart.
 
+`call --wait` keeps polling the same job across transient gateway connection,
+404, 429, 502, 503, and 504 failures until the total wait timeout. It emits
+`control_plane_reconnecting` and adds `wait_recovery` after recovery; neither
+path resubmits work. A 410 lifecycle response becomes
+`tracking_status=owner_exited`. Read `previous_status`, `retryable`, and
+`recommended_next_action` instead of treating every missing route as 503.
+
+Async responses identify the wrapper as `core_job_id` with
+`job_id_owner=core`; legacy `job_id` is the same Core ID. A direct or terminal
+Core call may expose a second `adapter_job_id`. `call --wait` resolves the Core
+wrapper and automatically follows `adapter_job.poll` on the same instance when
+the declared status tool is synchronous, read-only, idempotent, and declares a
+string `job_id` as its only required input. Every other input must be optional
+and safe when omitted. Never pass an adapter ID to `jobs_get_status`, and do not assume
+Core parent cancellation propagates to it. Missing/unsafe poll metadata,
+non-canonical status, or a different returned ID fails closed without replay;
+inspect `wait` and `tracking_status` instead of treating the launch as terminal.
+
 If owner death or remote TTL expiry removes the row, wait for an explicitly
 authorized DCC restart, then use the replacement instance and fresh
 `search`/`describe` results. Old instance IDs, slugs, direct URLs, and core jobs
@@ -123,17 +151,69 @@ plus bounded task and validation summaries to the `review_skill_improvement`
 prompt in `dcc-mcp-skills-creator`; do not include raw prompts, secrets, private
 paths, or full tool payloads.
 
+## Failure findings and public-safe bundles
+
+```bash
+dcc-mcp-cli feedback route finding.json --json
+dcc-mcp-cli feedback bundle reviewed-finding.json --json
+dcc-mcp-cli feedback bundle reviewed-finding.json \
+  --install-report install-report.json --json
+dcc-mcp-cli feedback bundle reviewed-finding.json \
+  --dcc-pid 4321 --log-dir /safe/log/root --host-error-lines 50 --json
+dcc-mcp-cli feedback file reviewed-finding.json --json
+# Only after reviewing the plan and receiving explicit user authorization,
+# execute the returned next_step.argv exactly.
+```
+
+`route` resolves exact ownership without a Gateway. `bundle` also avoids
+Gateway auto-start, but uses an already reachable endpoint for the stable
+public-safe issue report when the Finding has a request id. Run it only after
+human review has set `redaction_status.mode=public-safe` and every exclusion
+flag to true. The host-error source is one exact regular file, capped at 256
+KiB and at most 200 requested records; raw messages, tracebacks, metadata,
+paths, tokens, and PID are excluded. When `install --execute --json` produced a
+terminal report, save that single stdout object and pass it with
+`--install-report`. The bundle accepts only a regular non-symlink file up to
+256 KiB whose DCC/core/adapter identity matches the Finding, then projects only
+public-safe Install SOP v1 fields. Invalid or mismatched input fails closed.
+The raw report is validated against the published Draft 2020-12 schema first,
+including mutually exclusive `command`/`file_edit` next steps. Public output
+redacts sensitive option/value pairs, relative and absolute paths, and all URL
+schemes; it omits `file_edit.content` and the input report path.
+Treat `unavailable` components and `complete=false` as incomplete evidence.
+Keep raw issue reports and host logs local, and never infer permission to create
+or attach to an external issue. A
+failed `DccServerBase.start()` is available through `feedback list`/`export` as
+a `needs-review` startup Finding without a request id; review and redact its
+exception-derived observed text before using `route`, `bundle`, or `file`.
+`file` is read-only unless `--yes` is paired with exactly one explicit decision
+and the complete authorization binding from the plan. It searches the routed
+repository by fingerprint before title keywords. The replay binds the canonical
+Finding path, canonical catalog path or exact bundled-catalog sentinel, Finding
+content SHA-256, fingerprint, repository, and catalog SHA-256, then rechecks
+that binding and the exact match immediately before a write. Every `gh` call is
+pinned to `github.com`, limited to 30 seconds, and started in an owned process
+tree; a timeout terminates and reaps the full tree under bounded pipe cleanup.
+Issue/comment bodies above 65,536 Unicode scalar values are rejected before
+tracker I/O. Exact conflicts, drift, closed issues, tracker errors, and
+ambiguous candidates stop the command. Never auto-select keyword-only results,
+reconstruct the replay argv, or add `--yes` without user authorization.
+
 ## Install and marketplace
 
 | Command | Purpose |
 |---------|---------|
-| `dcc-mcp-cli install --dcc-type maya --version 2026` | Build an auditable adapter install plan with machine-readable `next_steps`, without changing local state |
-| `dcc-mcp-cli install --dcc-type maya --version 2026 --python "<mayapy>" --execute` | Execute package install after consent; rolls back on failure and verifies pip/path outputs |
+| `dcc-mcp-cli install --dcc-type maya` | Build an auditable adapter install plan with a catalog-pinned wheel URL, version, SHA-256, and machine-readable `next_steps` |
+| `dcc-mcp-cli install --dcc-type maya --python "<mayapy>" --execute` | Execute the verified wheel after consent; roll back on failure and verify the installed package version |
+| `dcc-mcp-cli install --dcc-type maya --dcc-path "<maya-executable>"` | Supply a non-standard DCC executable/application path when the host is not found automatically |
 | `dcc-mcp-cli marketplace search --query "maya rigging" --limit 20` | Find installable Skill packages with released and current CLI builds |
 | `dcc-mcp-cli marketplace inspect <package_name>` | Inspect the selected skill package metadata before installing |
-| `dcc-mcp-cli marketplace install <package_name> --dcc maya` | Install a skill package into the local marketplace root |
+| `dcc-mcp-cli marketplace install <package_name> --dcc maya --reload` | Install an exact package ID and ask running Maya adapters to re-scan skill paths |
+| `dcc-mcp-cli marketplace install <package_name> --target game:the-bazaar` | Install a typed CUA Profile for a generic application target; no DCC reload is requested |
 | `dcc-mcp-cli reload-skills --dcc-type maya` | Ask running Maya adapters to re-scan installed skill paths |
 | `dcc-mcp-cli marketplace update <package_name> --dcc maya` | Update an installed skill package from the catalog |
+| `dcc-mcp-cli marketplace add-repo <repo> --commit <40-hex-oid> --dcc maya` | Install a direct repository source only at the reviewed immutable commit; `--list` may omit the commit |
+| `dcc-mcp-cli marketplace uninstall <package_name> --reload` | Remove an installed skill package; infer its DCC when it is installed for one DCC and refresh the adapter |
 
 After adapter package install, follow the plan's `next_steps`: read the
 adapter-maintained `install.md` when `read-install-instructions` is present,
@@ -150,10 +230,10 @@ any log paths, then run `wait-ready` or `doctor` before calling tools.
 Marketplace search and inspect do not require a live DCC instance. Always query
 the CLI before recommending a marketplace Skill. If the first query is empty,
 retry once with fewer capability words or without the DCC filter; never invent
-a package name. Inspect the selected package before a consent-gated install or
-update.
-After installing or updating marketplace skills, run `reload-skills`, then use
-`load-skill` if the adapter has not auto-loaded the new skill.
+a package name. Inspect unfamiliar packages before a consent-gated mutation;
+an exact known ID can be installed directly, and `--dcc` can be omitted for a
+single-DCC package. Prefer install `--reload`; after updates or installs without
+that flag, run `reload-skills`, then use `load-skill` if needed.
 
 ## Example: inventory
 
@@ -219,5 +299,6 @@ python scripts/dcc_gateway.py call maya.a1b2c3d4.maya_primitives__create_sphere 
 | `total == 0` | Start a DCC adapter, then re-run `dcc-mcp-cli list` |
 | Listed row is booting or `dispatch_status=unavailable` | Read `direct_control.recommended_next_action` and `direct_control.diagnostics`, then run `dcc-mcp-cli wait-ready --dcc-type <dcc> --instance-id <id>` or `dcc-mcp-cli doctor`; do not call tools until `direct_control.ready=true` |
 | `unknown-slug` | Re-run `search`; the instance may have restarted |
+| `instance-offline` | Read `previous_status`: `never-registered` is 404, temporary unroutability is 503, and `exited` / `host-died` / `heartbeat-timeout` is 410. Preserve any job ID and never replay a mutation blindly |
 | `invalid-params` | Fix the JSON object per `describe` output |
 | `instance-leased` / `lease-owner-mismatch` | Pass the exact workflow owner with `--meta-json`, or select another instance; do not guess another owner's value |

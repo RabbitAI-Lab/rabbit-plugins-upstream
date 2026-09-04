@@ -1,47 +1,60 @@
-## Description: <br>
-Cloudflare R2 (cloudflare.com). Use this skill for ANY Cloudflare R2 request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cloudflare R2 agent skill for listing accounts and buckets, managing buckets and CORS policies, handling object transfers, and generating presigned URLs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Cloudflare R2 accounts, buckets, bucket details, and bucket-level CORS policies through an OOMOL-connected Cloudflare R2 account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write-capable Cloudflare R2 actions can create or modify buckets and CORS policies. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write. <br>
-Risk: Destructive Cloudflare R2 actions can delete buckets or bucket CORS policies. <br>
-Mitigation: Confirm the target resource and obtain explicit user approval before running actions tagged as destructive. <br>
-Risk: Connector payload assumptions can be wrong if the live Cloudflare R2 action schema changes. <br>
-Mitigation: Inspect the live connector schema for the selected action before constructing or running a payload. <br>
-Risk: Security confidence is limited by the available scanner evidence. <br>
-Mitigation: Review the skill instructions and metadata for requested tools, credentials, network access, file access, and write-capable behavior before installation. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Cloudflare R2 storage through an OOMOL-connected account, including bucket administration, CORS policy management, object upload and download, and presigned URL generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cloudflare-r2) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Cloudflare R2 homepage](https://www.cloudflare.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing Cloudflare R2 action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence and skill frontmatter) <br>
+Risk: The fallback setup path can execute a remote oo CLI installer script.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official install instructions or verify the installer before execution, and run it only when the publisher and installer source are trusted.
+
+Risk: Bucket, CORS, and object actions can change or delete Cloudflare R2 resources.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+Risk: Connector actions depend on the authenticated OOMOL account and connected Cloudflare R2 credential.
+
+Mitigation: Use the live connector schema before constructing payloads and limit actions to the intended account, bucket, and object scope.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cloudflare-r2)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Cloudflare R2](https://www.cloudflare.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,67 @@
-## Description: <br>
-Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts via Microsoft Graph API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts through Microsoft Graph.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to make Microsoft Teams requests through Maton's managed OAuth proxy, including listing teams and channels, sending channel or chat messages, scheduling meetings, and retrieving meeting recordings or transcripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Teams messages, chats, meetings, recordings, transcripts, and metadata are routed through Maton's OAuth proxy. <br>
-Mitigation: Install only when Maton is trusted for the connected Teams account and the organization allows this data path. <br>
-Risk: A leaked MATON_API_KEY or unintended OAuth connection selection could expose or change Teams resources in the connected account. <br>
-Mitigation: Keep MATON_API_KEY private, specify the Maton-Connection header when multiple accounts exist, and revoke unused connections. <br>
-Risk: Write-capable API calls can create, update, or delete Teams channels, messages, meetings, or connections. <br>
-Mitigation: Require explicit user approval after checking the exact team, channel, message, meeting, or connection and the intended effect. <br>
+## Use Case:
 
+Employees, external collaborators, and developers use this skill to inspect and manage Microsoft Teams resources through Microsoft Graph, including teams, channels, messages, chats, meetings, recordings, and transcripts. It is suited to agent-assisted Teams administration and communication tasks where OAuth authorization, least-privilege access, and explicit confirmation for writes are required.
 
-## Reference(s): <br>
-- [Microsoft Teams API Overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview) <br>
-- [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/byungkyu/microsoft-teams) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP routes, shell commands, and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include requests that read or modify Microsoft Teams resources; write actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: Broad Microsoft Graph passthrough access with write-capable actions can send messages, create or update resources, schedule meetings, or delete Teams data through the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested OAuth scopes, prefer read-only access, avoid generic Graph passthrough unless needed, and confirm every send, update, delete, meeting, or connection action with the exact target and payload.
+
+Risk: OAuth tokens, API keys, and provider-issued credentials can expose Microsoft Teams or Microsoft Graph access if printed, persisted, or passed to untrusted hosts.
+
+Mitigation: Use managed OAuth where possible, keep credentials in the operating system credential store, never inspect or export token values, and revoke unused connections after the task.
+
+Risk: Teams messages, comments, transcripts, and other API responses may contain untrusted content that attempts to influence follow-up actions.
+
+Mitigation: Treat fetched Teams content as data, validate identifiers before acting, and do not execute or interpolate API response content into shell commands or prompts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/microsoft-teams)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Microsoft Teams API Overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview)
+- [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Microsoft Graph Channel Resource](https://learn.microsoft.com/en-us/graph/api/resources/channel)
+- [Microsoft Graph ChatMessage Resource](https://learn.microsoft.com/en-us/graph/api/resources/chatmessage)
+- [Microsoft Graph Team Resource](https://learn.microsoft.com/en-us/graph/api/resources/team)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, code, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON/API request snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, OAuth or API-key authentication, and explicit user confirmation for connection creation and write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: release evidence; artifact frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,67 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SKILL 编写工具 is a Chinese-language authoring guide for creating or revising learning skills with clear role, rule, memory, output, safety, and privacy boundaries.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+Developers, skill authors, and prompt-capable high-school learners use this skill to draft, revise, and diagnose Xiaozhi/OpenClaw learning skills while keeping platform conventions, memory fields, safety boundaries, and shared vocabulary consistent.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Crisis-support guidance includes mainland China emergency-channel assumptions that may not fit all user locations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize crisis referral text and hotline information before deploying the skill for users outside mainland China.
+
+Risk: The artifact references SECURITY_BASELINE.md, but that file is not included in the release evidence.
+
+Mitigation: Obtain and review the publisher's SECURITY_BASELINE.md before relying on that baseline in deployment or review workflows.
+
+Risk: The release license evidence conflicts with artifact frontmatter.
+
+Mitigation: Confirm whether MIT-0 or MIT is the authoritative license before publishing the rendered card.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [Skill Templates Library](artifact/references/skill-templates-library.md)
+- [Shared Vocabulary](artifact/shared/vocab.md)
+- [Platform Conventions](artifact/shared/platform-conventions.md)
+- [Crisis Exception](artifact/shared/crisis-exception.md)
+- [Hint Ladder](artifact/shared/hint-ladder.md)
+- [AI Item Check](artifact/shared/ai-item-check.md)
+- [Grade Bands](artifact/shared/grade-bands.md)
+- [DNA Profile Schema](artifact/shared/dna-profile.schema.json)
+- [Handover Protocol Schema](artifact/shared/handover-protocol.schema.json)
+- [External DNA Profile Schema URL](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with reusable prompt and skill templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces human-reviewed skill-writing guidance and template text; it does not execute tools or write student records.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

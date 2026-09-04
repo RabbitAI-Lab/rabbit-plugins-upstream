@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ticktick-api-skill",
   "slug": "ticktick-api-skill",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1781739755927,
-  "contentHash": "3fdbb3086558655d6e6f7441eb7a4225424b5a89530c39c150832d98df19e155",
-  "fetchedAt": "2026-07-26T18:27:31.860Z"
+  "version": "1.2.0",
+  "updatedAt": 1788519273356,
+  "contentHash": "2ebdd48c264c3c4dc9eae6806d1f5a943926f038214db354e9f1c7cd88dff837",
+  "fetchedAt": "2026-09-04T12:12:25.595Z"
 }

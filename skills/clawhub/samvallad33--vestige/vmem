@@ -1,0 +1,85 @@
+#!/bin/bash
+# Vestige Memory Helper - vmem
+# Usage: vmem [recall|search|save|backfill|stats|health] [args]
+
+VESTIGE_MCP=$(command -v vestige-mcp 2>/dev/null || true)
+VESTIGE=$(command -v vestige 2>/dev/null || true)
+
+# MCP requires initialization before tool calls
+mcp_call() {
+  local TOOL="$1"
+  local ARGS="$2"
+  if [ -z "$VESTIGE_MCP" ]; then
+    echo "vestige-mcp not on PATH. Install with: npm install -g vestige-mcp-server@2.7.1" >&2
+    echo "Then re-open this shell so command -v vestige-mcp resolves." >&2
+    exit 1
+  fi
+  (
+    echo '{"jsonrpc":"2.0","id":0,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"vmem","version":"1.0"}}}'
+    sleep 0.3
+    echo "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$TOOL\",\"arguments\":$ARGS}}"
+  ) | "$VESTIGE_MCP" 2>/dev/null | grep '"id":1' | jq -r '.result.content[0].text // .error.message // "No response"'
+}
+
+json_obj() {
+  jq -nc "$@"
+}
+
+need_vestige_cli() {
+  if [ -z "$VESTIGE" ]; then
+    echo "vestige CLI not on PATH (optional). MCP tools still work via vestige-mcp." >&2
+    exit 1
+  fi
+}
+
+if [ $# -lt 1 ]; then
+  ACTION=""
+else
+  ACTION=$1
+  shift
+fi
+
+case $ACTION in
+  recall|search|s)
+    QUERY="$*"
+    mcp_call "recall" "$(json_obj --arg query "$QUERY" '{query:$query}')"
+    ;;
+  save|add)
+    CONTENT="$*"
+    mcp_call "smart_ingest" "$(json_obj --arg content "$CONTENT" '{content:$content}')"
+    ;;
+  backfill)
+    # Live schema: failure_id, manual, lookback_days, promote, scan_limit
+    # (crates/vestige-mcp/src/tools/backfill.rs). No query argument.
+    if [ -n "${1:-}" ]; then
+      mcp_call "backfill" "$(json_obj --arg failure_id "$1" '{failure_id:$failure_id}')"
+    else
+      mcp_call "backfill" "{}"
+    fi
+    ;;
+  stats)
+    need_vestige_cli
+    "$VESTIGE" stats
+    ;;
+  health)
+    need_vestige_cli
+    "$VESTIGE" health
+    ;;
+  *)
+    echo "Vestige Memory Helper"
+    echo ""
+    echo "Usage: vmem <command> [args]"
+    echo ""
+    echo "Commands:"
+    echo "  recall <query>       Retrieve (search is an alias of recall)"
+    echo "  save <content>       smart_ingest"
+    echo "  backfill [id]        Causal trail from a later failure (optional failure_id)"
+    echo "  stats                Show memory statistics (needs vestige CLI)"
+    echo "  health               Run health check (needs vestige CLI)"
+    echo ""
+    echo "Examples:"
+    echo "  vmem save \"User prefers dark mode\""
+    echo "  vmem recall \"user preferences\""
+    echo "  vmem backfill"
+    ;;
+esac

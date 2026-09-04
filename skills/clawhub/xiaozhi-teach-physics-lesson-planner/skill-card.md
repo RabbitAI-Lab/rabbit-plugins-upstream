@@ -1,47 +1,64 @@
-## Description: <br>
-Helps physics teachers design lesson frameworks that build physics concepts through classroom contexts, demonstrations, data, modeling, applications, and student reflection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese middle-school physics teachers draft lesson plans organized around physics concepts, concept building, law instruction, model building, application practice, classroom summaries, differentiation, and question chains.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Physics teachers use this skill to plan lessons that move from physics concepts to concept construction, law teaching, modeling, applications, classroom summaries, and student-profile updates. It is intended to support teacher review and adaptation, not replace teacher preparation or classroom judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Student profiles and lab reports may contain identifiable or sensitive student information. <br>
-Mitigation: Use aliases, desensitize student reports, and sync profile data only with appropriate school or administrator authorization. <br>
-Risk: Lab activity suggestions may need classroom-specific safety controls before use. <br>
-Mitigation: Have a qualified teacher review lab examples, add concrete safety controls, set safety levels, and exclude dangerous experiments. <br>
-Risk: Generated lesson frameworks could be mistaken for complete teacher preparation or final student answers. <br>
-Mitigation: Use outputs as teacher-reviewed planning frameworks and guidance, not as a substitute for teacher preparation, direct answer delivery, or classroom judgment. <br>
+## Use Case:
 
+Teachers and teaching-support agents use this skill to prepare Chinese middle-school physics lessons for topics in mechanics, heat, optics, electricity, magnetism, and sound. It structures lessons around physical concepts, classroom questioning, differentiated support, model building, applications, and review notes rather than replacing teacher judgment.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-lesson-planner) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
-- [Physics Concepts Map](references/physics-concepts-map.md) <br>
-- [Lab Design Template](references/lab-design-template.md) <br>
-- [Physics Model Examples](references/model-examples.md) <br>
-- [Student Physics Profile Template](references/student-physics-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style lesson-planning guidance with structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teacher-facing frameworks, prompts, checklists, and templates; it does not execute code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Experiment guidance may be incomplete for real classroom lab setup and safety decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat experiment sections as teacher-reviewed drafts, route lab setup and safety procedures to a dedicated experiment-safety workflow, and verify hazards such as lasers, heating, glassware, and household electricity before classroom use.
+
+Risk: Generated physics questions, examples, or teaching materials may contain mistakes.
+
+Mitigation: Apply the bundled AI-generated item self-check protocol and require teacher verification before using generated materials in class, resource libraries, or assessments.
+
+Risk: Class profile notes may expose student information or be saved without appropriate consent.
+
+Mitigation: Use class codes, aliases, or seat numbers instead of real names; keep profile data pseudonymous; and confirm profile or lesson-plan writes before saving.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-lesson-planner)
+- [Initial physics lab design template](artifact/references/lab-design-template.md)
+- [Initial physics model examples](artifact/references/model-examples.md)
+- [Initial physics concepts map](artifact/references/physics-concepts-map.md)
+- [Class physics profile template](artifact/references/student-physics-profile-template.md)
+- [Experiment safety-level definitions](artifact/shared/experiment-types.md)
+- [AI-generated item self-check protocol](artifact/shared/ai-item-check.md)
+- [Platform capability and privacy controls](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown lesson-planning guidance with structured templates and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include AI-generated teaching materials that require teacher review before classroom use.]
+
+## Skill Version(s):
+
+2.1.0 (source: SKILL.md frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

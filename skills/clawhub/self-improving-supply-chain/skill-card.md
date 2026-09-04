@@ -1,45 +1,59 @@
-## Description: <br>
-Captures forecast errors, supplier risks, logistics delays, inventory mismatches, quality deviations, and demand signal shifts to support continuous supply chain improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures forecast errors, supplier risks, logistics delays, inventory mismatches, quality deviations, and demand signal shifts to enable continuous supply chain improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Supply chain teams and agent users use this skill to record disruptions, forecast misses, supplier risks, inventory mismatches, quality issues, and feature requests as local Markdown learnings. Recurring patterns can be promoted into scorecards, safety stock policies, routing playbooks, demand planning models, quality criteria, or reusable skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional Bash output detection may inspect command output that contains sensitive operational data. <br>
-Mitigation: Enable Bash output detection only where command output will not include sensitive data, and prefer targeted project-level hook matchers. <br>
-Risk: A user-level global hook can display supply chain reminders in sessions where they are not relevant. <br>
-Mitigation: Use project-level hooks with supply-chain-specific matchers unless reminders are intentionally wanted in all sessions. <br>
-Risk: Learning logs may capture proprietary supplier pricing, negotiated contract terms, or customer-identifiable order data if users include raw operational details. <br>
-Mitigation: Record aggregated metrics and redacted summaries instead of raw purchase order numbers, customer names, negotiated terms, or proprietary pricing. <br>
+## Use Case:
 
+Supply chain, procurement, logistics, inventory, quality, and demand-planning teams use this skill to capture operational disruptions and recurring patterns as structured markdown learning logs. Agents can use it to document stockouts, delivery misses, supplier lead-time changes, forecast variance, quality issues, capacity breaches, and related improvement requests.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/jose-compu/self-improving-supply-chain) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and hook configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local learning logs when an agent follows the workflow; optional hooks emit reminder text and can inspect Bash output for supply chain disruption terms.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Project-local supply-chain learning logs may include sensitive supplier, pricing, contract, or customer-identifiable order information if users enter raw operational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow the skill guidance to use aggregated metrics and redacted summaries, and avoid proprietary supplier pricing, negotiated contract terms, and customer-identifiable order data.
+
+Risk: Optional hooks run with the same permissions as the agent and may add reminders based on prompts or Bash output.
+
+Mitigation: Keep hooks project-scoped, enable only the needed hooks, prefer the UserPromptSubmit reminder by default, and avoid the optional Bash-output detector unless disruption detection is needed.
+
+Risk: Promoting logged patterns into agent instructions, generated skills, or operational standards can introduce incorrect or misleading guidance.
+
+Mitigation: Review proposed edits and generated skills before applying them, and scan the skill before deployment.
+
+## Reference(s):
+
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces project-local learning logs and reminder text; optional hooks are opt-in and project-scoped.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

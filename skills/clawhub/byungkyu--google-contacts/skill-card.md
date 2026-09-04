@@ -1,45 +1,67 @@
-## Description: <br>
-Google Contacts API integration with managed OAuth for managing contacts, contact groups, and address book searches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Contacts API integration with managed OAuth for managing contacts, contact groups, and address book search.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to read, create, update, and delete Google Contacts and contact groups through Maton's managed OAuth proxy. It is suited for address book lookup, contact maintenance, group management, and Google People API troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete contacts and contact groups in a connected Google account. <br>
-Mitigation: Confirm the active Google connection, target resource, and intended effect before any write operation. <br>
-Risk: Deleting a contact group with deleteContacts=true can also delete member contacts. <br>
-Mitigation: Use deleteContacts=false unless the user explicitly approves deleting both the group and its member contacts. <br>
-Risk: The integration depends on Maton as the OAuth proxy for Google Contacts. <br>
-Mitigation: Install and use the skill only when the user trusts Maton to broker the Google Contacts connection. <br>
+## Use Case:
 
+Developers and agents use this skill to access Google Contacts through Maton-managed OAuth, including contact lookup, contact and group management, and address book search. It is intended for workflows that need controlled Google Contacts API calls with explicit approval before connection creation or data modification.
 
-## Reference(s): <br>
-- [Google People API Overview](https://developers.google.com/people/api/rest) <br>
-- [People Resource](https://developers.google.com/people/api/rest/v1/people) <br>
-- [Contact Groups Resource](https://developers.google.com/people/api/rest/v1/contactGroups) <br>
-- [Person Fields Reference](https://developers.google.com/people/api/rest/v1/people#Person) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with API endpoints, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Google Contacts access is routed through Maton, introducing dependence on a third-party gateway for contact data operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if this routing is acceptable, verify the Maton CLI source before use, and prefer OAuth over long-lived API keys.
+
+Risk: Creating, updating, or deleting contacts, contact groups, or connections can alter user address book data.
+
+Mitigation: Default to read-only calls and require explicit user confirmation before any connection creation or POST, PUT, PATCH, or DELETE operation.
+
+Risk: Multiple Maton profiles or Google Contacts connections can cause actions to apply to the wrong account.
+
+Mitigation: Specify the intended Maton profile and connection when more than one is available, and verify identifiers before write operations.
+
+Risk: Long-lived API keys or provider-issued tokens can leak through logs, command lines, files, or copied output.
+
+Mitigation: Prefer OAuth, never print or persist credentials, pass keys only through controlled process environments when the CLI is unavailable, and rotate any exposed key.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-contacts)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Google People API Overview](https://developers.google.com/people/api/rest)
+- [People Resource](https://developers.google.com/people/api/rest/v1/people)
+- [Contact Groups Resource](https://developers.google.com/people/api/rest/v1/contactGroups)
+- [Person Fields Reference](https://developers.google.com/people/api/rest/v1/people#Person)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, Google Contacts API paths, request payload examples, SDK snippets, and operational safety guidance.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,63 @@
-## Description: <br>
-Helps independent teachers draft paced, specific, low-anxiety, and actionable parent communications for routine updates, stage reports, urgent discussions, renewal conversations, and group announcements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+家长沟通助手 helps independent teachers draft concrete, low-anxiety, actionable parent communication while checking consent, communication cadence, and send-status logging.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External educators and independent teachers use this skill to turn informal parent messaging requests into reviewed parent-message drafts, communication reminders, group announcement templates, and communication-log suggestions. It is intended for teacher-parent education workflows where the teacher reviews all generated text before sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated messages may expose sensitive student details or individual learner performance in the wrong channel. <br>
-Mitigation: Use pseudonyms, keep content limited to teaching-related facts, avoid group-posting individual feedback, and review each message before sending. <br>
-Risk: The skill may be used outside its intended teacher-parent communication workflow. <br>
-Mitigation: Install and activate it only for education communication scenarios, and honor workspace consent fields before using or sharing student data. <br>
-Risk: Drafts about learner performance or renewals may be inaccurate, overly anxious, or misleading if sent without review. <br>
-Mitigation: Require teacher confirmation, check drafts against source lesson or workspace records, and keep language specific, low-anxiety, and actionable. <br>
+## Use Case:
 
+External independent teachers use this skill to draft parent messages for lesson updates, learning concerns, renewal conversations, and weekly group announcements. It is intended to keep communication factual, low-anxiety, consent-aware, and teacher-reviewed before sending.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-parent-communication) <br>
-- [qizhitang publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Parent message templates](references/parent-message-templates.md) <br>
-- [Typical scenario scripts](references/typical-scenario-scripts.md) <br>
-- [Weekly group announcement template](references/weekly-group-announcement-template.md) <br>
-- [Communication principles examples](references/communication-principles-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text drafts, templates, reminders, and communication-log field suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; generated communications require teacher review before sending.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: A reference file expands beyond parent-message drafting into changing student status or communication preferences and touching stage-report-like workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep normal use scoped to drafting and parentCommunicationLogs; require explicit teacher authorization for student status or preference changes and route stage reports to the dedicated renewal-report workflow.
+
+Risk: Crisis referral guidance includes region-specific emergency and hotline references that may be wrong for users outside that locale.
+
+Mitigation: Confirm the user's country or region before presenting hotline guidance, and use local emergency and professional-support resources.
+
+Risk: Parent communications can disclose student performance or emotional observations without proper consent or in an inappropriate group channel.
+
+Mitigation: Check parent communication and emotion-sharing consent before drafting, use aliases, keep individual feedback in private channels, and avoid storing contact details or parent reply text.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-parent-communication)
+- [communication-principles-examples.md](references/communication-principles-examples.md)
+- [typical-scenario-scripts.md](references/typical-scenario-scripts.md)
+- [weekly-group-announcement-template.md](references/weekly-group-announcement-template.md)
+- [vocab.md](shared/vocab.md)
+- [crisis-exception.md](shared/crisis-exception.md)
+- [crisis-referral-protocol.md](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown or plain-text parent-message drafts with structured communication log fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher reviews and sends drafts; logs should record channel/status only and avoid contact details or parent reply text.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

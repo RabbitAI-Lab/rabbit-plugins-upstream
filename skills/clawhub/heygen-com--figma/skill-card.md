@@ -1,41 +1,57 @@
-## Description: <br>
-Import Figma content into a HyperFrames composition, including rendered assets, brand tokens, components, storyboard sections, connector-assisted motion when available, and shaders from a connector or native export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Imports Figma designs, assets, brand tokens, components, storyboard sections, motion, and shader exports into local HyperFrames compositions.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and motion designers use this skill to bring Figma designs, frames, logos, brand tokens, components, storyboards, animations, and shader assets into HyperFrames compositions while keeping render inputs local and repeatable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks the agent to silently update the skill package and related core skills before use. <br>
-Mitigation: Require explicit user approval before updating installed skills or dependencies, and review the updated package before relying on it. <br>
-Risk: Connector-assisted phases include telemetry or beacon behavior. <br>
-Mitigation: Make telemetry clearly opt-in and explain when events are sent before running connector-assisted motion, shader, or storyboard workflows. <br>
-Risk: Imported assets and raw connector responses can be stored locally in the project. <br>
-Mitigation: Use a Figma token with only documented read-only scopes and avoid importing sensitive Figma content into projects where local storage is not acceptable. <br>
+## Use Case:
 
+Developers and creative engineers use this skill to bring Figma frames, assets, brand tokens, components, storyboards, motion, and shader exports into HyperFrames video or composition projects while keeping imported outputs local and deterministic.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands, generated local files, HTML components, JSON sidecars, and GSAP timeline code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Imports freeze Figma-derived assets locally; motion verification may use MP4 references and render outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The skill can read any Figma files available to the configured token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only Figma token with the narrow file, metadata, library, and variable scopes needed for the intended import.
+
+Risk: The skill creates local project artifacts such as frozen media, cache files, components, sidecars, and binding records.
+
+Mitigation: Review generated files and run the project checks before approving or publishing imported compositions.
+
+Risk: Motion and shader workflows may need a separate connector authorization or native Figma export, and unsupported paths can reduce fidelity.
+
+Mitigation: Confirm connector availability before those phases, use native exports when required, and run the provided motion verification workflow for motion imports.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/figma)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration, markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands, code snippets, and configuration instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs guide an agent to create local frozen files, component files, sidecars, binding records, timeline scripts, and verification commands.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

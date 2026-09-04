@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/x-apify",
   "slug": "x-apify",
   "ownerHandle": null,
-  "version": "1.0.8",
-  "updatedAt": 1778487899210,
-  "contentHash": "d743f35d3f6e2252c1a7b0a1e32d58e1e81cc6d901650b80307b65ef140f625d",
-  "fetchedAt": "2026-07-26T20:25:19.508Z"
+  "version": "1.1.0",
+  "updatedAt": 1788193324180,
+  "contentHash": "24c3bd3e18bf86176f0cc8f8b57ab22d05c962212ab05c4fc2d899efcd31ab7a",
+  "fetchedAt": "2026-09-04T12:27:00.705Z"
 }

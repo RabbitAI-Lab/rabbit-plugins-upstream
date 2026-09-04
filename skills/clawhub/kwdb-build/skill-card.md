@@ -1,46 +1,58 @@
-## Description: <br>
-KWDB Build helps agents configure, build, and run C++ or Go unit tests for KaiwuDB using the documented CMake workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+KWDB Build helps agents configure, build, clean, install, and test KaiwuDB source checkouts using CMake and bundled C++ and Go test workflows.
 
-## Publisher: <br>
-[kwdb](https://clawhub.ai/user/kwdb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kwdb](https://clawhub.ai/user/kwdb)
 
-## Use Case: <br>
-Developers and engineers use this skill to guide KaiwuDB source builds, CMake configuration, cleanup checks, and C++ or Go unit test runs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cleanup steps may delete broad workspace or GOPATH content, including wildcard build paths and GOPATH-native content. <br>
-Mitigation: Require the agent to show the exact cleanup paths before execution, confirm they are inside the intended KaiwuDB source checkout, and manually approve any GOPATH or wildcard deletion. <br>
-Risk: Build and test commands can run shell scripts and CMake or Make targets on a local source checkout. <br>
-Mitigation: Run the skill only in a disposable or backed-up workspace with reviewed source paths and user-confirmed configuration values. <br>
+## Use Case:
 
+Developers and engineers working on KaiwuDB use this skill to confirm build settings, prepare CMake build or install commands, and run C++ or Go unit tests. The skill also guides agents to report compile or test failures without automatically fixing source code.
 
-## Reference(s): <br>
-- [KWDB Build on ClawHub](https://clawhub.ai/kwdb/skills/kwdb-build) <br>
-- [Build configuration questions](references/build-questions.md) <br>
-- [CMake options reference](references/cmake-options.md) <br>
-- [C++ unit test workflow](references/cpp-unittest.md) <br>
-- [Go unit test workflow](references/golang-unittest.md) <br>
-- [Dependency reference](references/dependencies.md) <br>
-- [Project structure reference](references/project-structure.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and configuration choices] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before build or test actions and should report failures without automatic fixes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Cleanup and test workflows can delete broad project and GOPATH paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only on disposable or backed-up KaiwuDB checkouts, confirm the exact source root and GOPATH, and require the agent to show resolved cleanup targets before running destructive cleanup commands.
+
+Risk: Build and test guidance may install dependencies or run project test scripts.
+
+Mitigation: Review proposed apt-get, make clean, test script, and shell commands before execution, and run them in an isolated development environment when possible.
+
+## Reference(s):
+
+- [Build Questions](references/build-questions.md)
+- [CMake Options](references/cmake-options.md)
+- [C++ Unit Test](references/cpp-unittest.md)
+- [Go Unit Test](references/golang-unittest.md)
+- [Dependencies](references/dependencies.md)
+- [Project Structure](references/project-structure.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands and configuration checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-confirmed source root, GOPATH, build type, and allowed CMake options before commands are run.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

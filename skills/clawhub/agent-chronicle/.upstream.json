@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-chronicle",
   "slug": "agent-chronicle",
   "ownerHandle": null,
-  "version": "0.7.2",
-  "updatedAt": 1778485891685,
-  "contentHash": "eaec4aa0195d303ad6247750e1b2896367cddd3a584a8efcab973e5e2ce24775",
-  "fetchedAt": "2026-07-26T20:29:23.606Z"
+  "version": "0.8.0",
+  "updatedAt": 1788192696893,
+  "contentHash": "a8f9a93098584ddea46012c66bcfc620d29ebe03750f3465ef2124e1f6200e41",
+  "fetchedAt": "2026-09-04T12:27:05.902Z"
 }

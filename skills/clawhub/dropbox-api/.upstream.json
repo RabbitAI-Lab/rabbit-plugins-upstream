@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dropbox-api",
   "slug": "dropbox-api",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781739754641,
-  "contentHash": "2ebb36d1656dfda593c22241f779b983a610fe3610073267ddfeae9403317ff6",
-  "fetchedAt": "2026-07-26T18:27:34.406Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517604485,
+  "contentHash": "3ecb1df468f71d3865fd3afce5280bf653e634a765fd3b5759842f88d97c4783",
+  "fetchedAt": "2026-09-04T12:13:23.860Z"
 }

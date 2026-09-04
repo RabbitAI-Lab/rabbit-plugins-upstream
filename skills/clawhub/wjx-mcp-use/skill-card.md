@@ -1,47 +1,62 @@
-## Description: <br>
-Guides agents using wjx-mcp-server MCP tools to create, manage, analyze, and administer Wenjuanxing surveys, forms, polls, exams, contacts, SSO links, and response data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in administering Wenjuanxing (问卷星) surveys, responses, contacts, accounts, analysis workflows, and SSO links.
 
-## Publisher: <br>
-[orzwq](https://clawhub.ai/user/orzwq) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orzwq](https://clawhub.ai/user/orzwq)
 
-## Use Case: <br>
-Developers and operators use this skill to guide an agent through Wenjuanxing survey administration workflows, including creating surveys, querying and exporting responses, analyzing metrics, managing contacts, and generating SSO or survey links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent operating a real Wenjuanxing account with sensitive credentials. <br>
-Mitigation: Install only for intended account administration, use least-privileged credentials, and avoid sharing API keys or passwords in chat. <br>
-Risk: The documented workflows include deletion, exports, admin changes, response clearing, and SSO link generation. <br>
-Mitigation: Require explicit user confirmation with the exact target before irreversible or account-affecting actions. <br>
-Risk: Survey responses and participant data may contain sensitive information. <br>
-Mitigation: Avoid exposing participant data or SSO URLs in chat and limit exports to authorized users and necessary fields. <br>
+## Use Case:
 
+Developers and business operators use this skill to let an agent help administer a Wenjuanxing account, including creating surveys, forms, exams, and polls; retrieving and analyzing response data; and managing related contacts, accounts, and links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orzwq/wjx-mcp-use) <br>
-- [DSL and question types](references/dsl-and-types.md) <br>
-- [Survey tools](references/tools-survey.md) <br>
-- [Response tools](references/tools-response.md) <br>
-- [Other tools](references/tools-other.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration instructions, Shell commands] <br>
-**Output Format:** [Markdown guidance with inline commands and structured tool-use recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include natural-language instructions, survey JSON guidance, configuration steps, and safety confirmations for account-affecting actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.3 (source: server release evidence) <br>
+Risk: The skill can guide broad Wenjuanxing account administration, including changes to survey, response, exam, contact, department, and account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for agents that are intended to administer a Wenjuanxing account, scope use to relevant survey-management tasks, and use a least-privilege API key where possible.
+
+Risk: Destructive operations may delete surveys, responses, contacts, departments, accounts, participant records, or recycle-bin data.
+
+Mitigation: Require explicit human confirmation and verify target identifiers before deletion, clearing, score modification, or status-changing actions.
+
+Risk: API keys, custom domains, corporate identifiers, and admin SSO links can expose or grant account access if mishandled.
+
+Mitigation: Keep credentials in environment or MCP configuration, avoid exposing them in chat or logs, and require confirmation before generating administrator SSO links.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orzwq/skills/wjx-mcp-use)
+- [DSL syntax and question types](references/dsl-and-types.md)
+- [Survey tool reference](references/tools-survey.md)
+- [Response data tool reference](references/tools-response.md)
+- [Account, SSO, and analysis tool reference](references/tools-other.md)
+- [Troubleshooting guide](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline JSONL and shell-command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May lead an agent to call Wenjuanxing account-administration tools when configured with account credentials.]
+
+## Skill Version(s):
+
+0.4.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

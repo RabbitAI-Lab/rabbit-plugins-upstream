@@ -1,48 +1,66 @@
-## Description: <br>
-Filtmall Shopping helps agents search, compare, cart, checkout, pay, and follow up on consumer shopping requests through the bundled Filtalgo CLI while keeping authorization and payment control with the user. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Filtmall Shopping helps agents search, recommend, compare, and purchase real Filtmall products, then support checkout, payment links, orders, logistics, returns, after-sales, customer service, and allergy-related safety blocking.
 
-## Publisher: <br>
-[filtmall](https://clawhub.ai/user/filtmall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[filtmall](https://clawhub.ai/user/filtmall)
 
-## Use Case: <br>
-External users and shopping agents use this skill to turn natural-language shopping intent into live product search, comparison, cart, checkout, payment-link, order, logistics, address, refund, and after-sales workflows. The user should confirm SKU, quantity, address, amount, and payment intent before high-impact actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-executable checkout actions can advance or complete purchases. <br>
-Mitigation: Require explicit user confirmation of SKU, quantity, address, amount, and payment intent before checkout or payment actions; do not allow automatic checkout completion. <br>
-Risk: The skill can operate with a Filtmall session for account, cart, checkout, order, logistics, address, customer-service, and after-sales actions. <br>
-Mitigation: Install only when comfortable granting shopping-session access, avoid exposing session identifiers or tokens, and revoke the session with auth logout when finished. <br>
-Risk: Live prices, stock, specifications, and links may change during shopping. <br>
-Mitigation: Treat CLI-returned product, price, stock, SKU, order, and URL data as the source of truth and re-check live results before purchase decisions. <br>
-Risk: Beauty and personal-care shopping can intersect with active health symptoms. <br>
-Mitigation: Do not search for or recommend cosmetics for active allergic reactions, redness, swelling, or similar symptoms; advise professional medical care instead. <br>
+## Use Case:
 
+External consumers use this skill through an agent to discover Filtmall beauty and personal-care products, compare live price and specification evidence, and continue through cart, checkout, orders, logistics, returns, and after-sales. Account authorization, order confirmation, and payment remain buyer-controlled.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/filtmall/skills/filtmall-shopping) <br>
-- [Filtmall website](https://www.filtalgo.com/) <br>
-- [About Filtmall](https://www.filtalgo.com/about) <br>
-- [Official LLM reference](https://www.filtalgo.com/llms.txt) <br>
-- [Machine-readable service directory](https://www.filtalgo.com/agents.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured JSON CLI results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 18 or later; account, checkout, order, address, customer-service, and after-sales actions require a valid Filtmall session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: evidence release, skill metadata, README) <br>
+Risk: The skill can access account, cart, address, order, payment-link, and after-sales workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before high-impact account or transaction actions, and keep credentials, tokens, full addresses, payment evidence, and complete identifiers out of responses.
+
+Risk: The bundled CLI disables TLS certificate verification for service calls, which could expose or allow tampering with account, session, and transaction data on an untrusted network.
+
+Mitigation: Review the bundled CLI before deployment and use the skill only in trusted environments until certificate verification is fixed.
+
+Risk: Broad automatic invocation could route vague shopping or payment-status prompts into live commerce workflows.
+
+Mitigation: Limit invocation to real-shopping and Filtmall account intents, respect explicit requests for other marketplaces, and preserve confirmation gates for checkout, payment, cancellation, and after-sales actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/filtmall/skills/filtmall-shopping)
+- [Filtmall website](https://www.filtalgo.com/)
+- [About Filtmall](https://www.filtalgo.com/about)
+- [LLM reference](https://www.filtalgo.com/llms.txt)
+- [Machine-readable service directory](https://www.filtalgo.com/agents.json)
+- [Product search workflow](references/product-search.md)
+- [Product follow-up workflow](references/product-followups.md)
+- [Cart, address, checkout, and payment workflow](references/cart-address-checkout.md)
+- [Orders and logistics workflow](references/orders-logistics.md)
+- [Customer service and after-sales workflow](references/customer-service-after-sales.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with product recommendations, comparison summaries, buyer-facing links, and command-backed status results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include authorization, product, checkout, payment, order, logistics, after-sales, or customer-service links returned by Filtmall services.]
+
+## Skill Version(s):
+
+1.10.0 (source: evidence.release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

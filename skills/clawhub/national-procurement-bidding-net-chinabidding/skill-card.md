@@ -1,48 +1,62 @@
-## Description: <br>
-全国采购与招标信息查询与分析助手，帮助用户检索招标、中标、采购意向和合同公告，并分析企业画像、竞争对手、采购单位、中标单位、品牌、价格趋势和市场机会。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides procurement and bidding search, company analysis, market aggregation, price trends, and account lookups for China's procurement and bidding data through the Zhiliaobiaoxun API.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, bidding, and market analysts use this skill to search nationwide Chinese procurement and bidding notices, review company participation, identify competitors or potential suppliers, and analyze pricing and market trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic registration can send local device and user identifiers to a remote service. <br>
-Mitigation: Prefer a manually supplied ZLBX_API_KEY; enable automatic registration only after explicit user consent and data-minimization review. <br>
-Risk: The skill may store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Restrict local file access, avoid shared machines, and rotate or remove the key when it is no longer needed. <br>
-Risk: Quota exhaustion can produce login or recharge links tied to the service account. <br>
-Mitigation: Verify the zhiliaobiaoxun domain and user intent before following payment, recharge, or auto-login links. <br>
-Risk: Procurement contacts and company relationship data may include sensitive business or personal information. <br>
-Mitigation: Use retrieved data only for authorized procurement analysis and follow applicable privacy and data-handling obligations. <br>
+## Use Case:
 
+External users and developers use this skill to query Chinese procurement and bidding notices, inspect company bidding history, identify buyers and suppliers, analyze markets, and check account usage. It helps agents turn procurement questions into API-backed searches, summaries, and follow-up analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [SKILL 自动注册详细流程](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON API request examples and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call zhiliaobiaoxun APIs, store an API key in ~/.zlbx/config.json, and generate login or recharge links when automatic registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Procurement queries are sent to the third-party vendor service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user or organization is comfortable sharing procurement search terms and analysis requests with the publisher.
+
+Risk: If no API key is configured, the skill can register a device-based trial account and store an API key locally.
+
+Mitigation: Preconfigure ZLBX_API_KEY to avoid auto-registration, require user consent before registration, and review ~/.zlbx/config.json for stored keys.
+
+Risk: Returned project contact information may include sensitive business contact details.
+
+Mitigation: Handle contact data carefully, avoid exposing API keys, and do not attempt to bypass service-side masking of contact information.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding)
+- [Search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Auto-registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with JSON request examples, result summaries, links, and concise operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a ZLBX_API_KEY or local configuration; may create and store a trial API key only after user consent when no key is configured.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

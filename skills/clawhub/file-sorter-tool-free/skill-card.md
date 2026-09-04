@@ -1,42 +1,58 @@
-## Description: <br>
-视觉文件整理免费版 helps agents visually inspect local files, rename them, and move them into simple category folders for personal desktop or downloads cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses a vision-capable agent to inspect local files, summarize visible content, rename files, and move them into fixed categories for personal desktop or downloads-folder cleanup.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Individuals use this skill to preview and organize intentionally selected desktop or downloads folders by file content, especially invoices, contracts, documents, and images. It is best suited for lightweight personal filing where file moves and renames can be reviewed before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can rename and move local files, and server security evidence flags scope and deletion inconsistencies. <br>
-Mitigation: Run dry-run first, restrict execution to folders intentionally selected by the user, keep backups for important documents, and review proposed moves before applying them. <br>
-Risk: Visual inspection of local documents may expose sensitive contents if routed through an unintended model or service. <br>
-Mitigation: Use only approved local or default agent vision capabilities and avoid sending screenshots or document contents to unauthorized third-party APIs. <br>
-Risk: Incorrect classification or renaming can make files harder to locate or associate with their original context. <br>
-Mitigation: Preserve file extensions, keep unrecognized files under an unclassified prefix or folder, and verify renamed financial or work documents before relying on the results. <br>
+## Use Case:
 
+External users and individual developers use this skill to organize local folders by previewing files, identifying content with visual model support, and producing rename or move actions for categories such as finance, work, images, and unclassified files.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/file-sorter-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-style execution summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file rename and move operations, dry-run previews, category summaries, and execution logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill asks for broad local file inspection and command authority while organizing files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it first in dry-run mode on a small, explicit folder and review every proposed rename and destination before allowing changes.
+
+Risk: Loose triggers could apply the skill to unrelated conversion or content-extraction requests.
+
+Mitigation: Use it only for explicit local file organization workflows and avoid unrelated conversion, extraction, or recovery tasks.
+
+Risk: Automatic rename and move actions can disrupt local file organization if the classification is wrong.
+
+Mitigation: Keep deletion disabled, preserve file extensions, and back up or copy important folders before applying bulk moves.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/file-sorter-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Text]
+
+**Output Format:** [Markdown with inline shell commands and structured status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local file inspection, rename, and move operations; dry-run review is recommended before applying changes.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

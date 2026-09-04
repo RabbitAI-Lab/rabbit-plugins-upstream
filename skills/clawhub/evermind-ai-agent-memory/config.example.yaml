@@ -1,0 +1,33 @@
+# Evermind — example configuration
+# Copy to config.yaml and point at your actual memory files.
+
+memory_root: /path/to/your/memory/vault   # memory root (the script only reads files listed below)
+
+# L3 must-read layer: core files read at the start of EVERY session.
+# name is display-only (any language).
+must_read:
+  - path: /path/to/your/memory/vault/identity.md
+    name: Identity & rules
+  - path: /path/to/your/memory/vault/user-profile.md
+    name: User profile
+  - path: /path/to/your/memory/vault/todos.md
+    name: Todo list
+  - path: /path/to/your/memory/vault/work-log/latest.md
+    name: Latest work log
+
+# L2 change-tracked layer: secondary files re-read ONLY when the index flags a change.
+# Each entry: path / display name / one-line description of when it matters.
+tracked_files:
+  - path: /path/to/your/memory/vault/roles/assistant-role.md
+    name: Assistant role
+    note: read in full only when role definitions change
+  - path: /path/to/your/memory/vault/projects/active.md
+    name: Active projects
+    note: read when project state matters to the current task
+  - path: /path/to/your/memory/vault/configs/settings.md
+    name: Tool settings
+    note: consult before installing or reconfiguring tools
+
+# Where the generated index + state file are written (defaults to the script directory).
+# index_output: memory_index.md
+# state_output: memory_index_state.json

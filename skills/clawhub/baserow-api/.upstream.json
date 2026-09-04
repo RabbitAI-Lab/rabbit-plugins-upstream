@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/baserow-api",
   "slug": "baserow-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "1f677dfcd8998e68751dc4d131aae53283b437323a7d7e7859eff323cf4dadf9",
-  "fetchedAt": "2026-07-26T18:27:35.455Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517284309,
+  "contentHash": "54f5381e5ecd6b396f14ba10b9738c874a3e3effc13ddfed4242eb85c47fb7a2",
+  "fetchedAt": "2026-09-04T12:13:34.107Z"
 }

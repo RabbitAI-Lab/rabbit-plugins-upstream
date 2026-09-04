@@ -29,6 +29,7 @@ Grep-able patterns for the common vulnerability classes. Each entry: what to sea
 | `jwt.decode.*verify.*False`, `alg.*none` | JWT validation disabled or algorithm confusion | Enforce `verify_signature=True`, allowlist algorithms |
 | Route without `Depends(get_current_user)` or auth middleware | Missing per-request authorization | Every state-changing endpoint must verify auth server-side |
 | Frontend-only route guards (no server check) | Client-side auth bypass | Server-side authorization on every request; client guards are UX only |
+| `===`, `!=`, `==`, `.equals(` comparing a bearer token, API key, webhook signature, or reset token | Byte-by-byte timing leak from early-exit comparison (CWE-208) | Compare length first (length is not secret), then `crypto.timingSafeEqual` (Node), `hash_equals` (PHP), `hmac.compare_digest` (Python), `subtle::ConstantTimeEq` (Rust). Guard the absent-header case before comparing |
 
 ## CSRF
 
@@ -43,6 +44,7 @@ Grep-able patterns for the common vulnerability classes. Each entry: what to sea
 | Search for | Vulnerable pattern | Fix |
 |-----------|-------------------|-----|
 | `innerHTML =`, `insertAdjacentHTML`, `dangerouslySetInnerHTML`, `v-html=` | Untrusted HTML injected into DOM | `.textContent`, DOMPurify, or framework auto-escaping |
+| A helper containing both `textContent =` and `.innerHTML` (the round-trip escaper) | Text-node serialization escapes only `&`, `<`, `>` and U+00A0 -- quotes pass through, so the result still breaks out of `attr="${escaped}"` | Escape `"` and `'` explicitly, or set the attribute via `setAttribute`/`dataset` instead of building HTML |
 | `mark_safe(`, `Markup(`, `\|safe` in templates | Marking untrusted content as safe | Remove unsafe marking; auto-escape by default |
 | `render_template_string(`, `Template(.*render`, `from_string(` | Server-side template injection (SSTI) | Static templates only; never render user input as template |
 | `document.write(`, `eval(`, `new Function(`, `setTimeout(.*string` | String-to-code execution | Static imports, no dynamic code eval |
@@ -65,6 +67,7 @@ Grep-able patterns for the common vulnerability classes. Each entry: what to sea
 | Upload without content validation | Malicious file type bypass (rename .php to .jpg) | Validate via magic bytes (file signature), not extension |
 | Serving uploaded files with `Content-Disposition: inline` | Uploaded HTML/JS executes in browser | Force `Content-Disposition: attachment`, serve from separate domain |
 | `file.name` or `original_name` used for storage path | User-controlled filename = path traversal | Generate server-side UUID, store with randomized path |
+| `stat`/`lstat` on a path, then `open`/`unlink`/`chmod` on the same path | Link-following race (CWE-59/367) -- the path can be swapped for a symlink between the check and the operation, so a check on the path never covers the operation | Open with `O_NOFOLLOW`, then verify identity via `fstat` on the *descriptor* against a fresh `lstat` of the path (compare `dev`+`ino`), and reject `nlink != 1` to catch hardlink aliasing. A pre-open `lstat` check alone is still exploitable |
 
 ## SQL / NoSQL Injection
 
@@ -91,6 +94,14 @@ Grep-able patterns for the common vulnerability classes. Each entry: what to sea
 | `res.redirect(req.query`, `redirect(request.GET`, `window.location = params` | Redirect to untrusted URL | Validate against allowlist, allow only relative paths |
 | `next=`, `return_to=`, `redirect=`, `url=`, `continue=` in params | Open redirect parameter without validation | `url_has_allowed_host_and_scheme` (Django), allowlist check |
 | `location.href.*javascript:` | Protocol-based redirect attack | Reject non-http/https, validate with `new URL()` |
+
+## CRLF / Header Injection
+
+| Search for | Vulnerable pattern | Fix |
+|-----------|-------------------|-----|
+| `setHeader(`, `header(`, `Response.headers[...] =`, `add_header` with a request-derived or externally-sourced value | `\r`/`\n` in the value splits the header block -- injects extra headers, or a whole second response (response splitting) | Reject any byte below `0x20` (except tab) and `0x7f` *before* trimming whitespace; reject multi-line values outright. Prefer the framework's header API over string-built raw responses |
+| `Location:`, `Set-Cookie:`, `Content-Disposition: ...filename=` built by interpolation | Cookie or redirect forged via a smuggled newline; `filename=` also carries a quote-escape | Allowlist or percent-encode the interpolated part; for `filename` use RFC 5987 `filename*=UTF-8''...` |
+| A secret or config value fetched at runtime (env, file, `credential_process`-style subprocess) used verbatim as an `Authorization` header | An opaque header-validation error at best; a control byte in the fetched value is a header-injection primitive | Validate the fetched value for control bytes at the point it is read, not at the point it is sent |
 
 ## CORS
 

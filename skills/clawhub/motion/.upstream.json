@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/motion",
   "slug": "motion",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739754641,
-  "contentHash": "e06ecdedd94ba4ff33d757f5e4c213c34fb0718c7c4062c8200a4d7ac4330355",
-  "fetchedAt": "2026-07-26T18:27:32.404Z"
+  "version": "1.2.0",
+  "updatedAt": 1788518474319,
+  "contentHash": "b98f54f436409bc8b43a4dec2eaeb3d772779716343cf1aa7cf05c660b27c82b",
+  "fetchedAt": "2026-09-04T12:12:45.339Z"
 }

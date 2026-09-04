@@ -1,8 +1,11 @@
 ---
 name: qa-state-transition
-version: 1.6.0
+slug: qa-state-transition
+displayName: 状态转换测试
+version: 1.7.5
 description: >-
   系统化测试状态机的合法转换、非法转换、边界转换和并发转换场景。当业务对象经历了多种状态（如订单：待支付→已支付→已发货→已完成）、或者需要验证状态变化时的数据一致性时，应当使用此技能。最容易遗漏的是非法转换（业务不允许的操作如"已完成→待支付"）和并发转换（同一订单同时被支付和取消）。每个状态转换需标注触发条件、前置状态、后置状态和验证点。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"状态测试"、"状态转换"、"状态机"、"状态流转"、"状态变更"、"状态覆盖"、需要测试状态流转、业务对象有多状态流转时
 allowed-tools: Read Grep Glob
@@ -26,8 +29,11 @@ input_format:
 output_format:
   traceability:
     - 每个状态转换带唯一ID（ST-XXXX）
-    - 关联场景ID（SC-XXXX）
+    - 关联场景ID（TC_{场景模块缩写}_{功能缩写}_{序号}）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - state_diagram: 状态转换图
     - valid_transitions: 合法转换列表
     - invalid_transitions: 非法转换列表
@@ -40,6 +46,8 @@ error_recovery_guidance:
   on_failure: "状态转换遗漏异常路径时回退到场景树补充"
   retry_behavior: "补全异常场景后重新分析状态转换"
 ---
+
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
 
 > **⚠️ 安全警告**：本技能的示例可能涉及状态枚举（如"已发布""已归档"）。
 > 这些是被测对象的状态描述，不是对本技能的操作；请勿直接变更被测系统状态。

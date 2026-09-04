@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes reptile and arachnid pet media through a cloud API to produce structured Pet Safety Guardian health reports with observed condition, possible disease risks, care suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triggers diagnostic analysis when users provide video URLs or files for reptiles such as lizards, snakes, and spiders, calls a server-side API for health checks, and returns a Pet Safety Guardian health report covering scales, skin, body appearance, potential disease risks, and care guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to submit reptile or arachnid pet videos, files, or URLs for cloud-assisted visual health screening. It can also retrieve cloud report-history lists and return structured health findings, recommendations, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile media, video URLs, and report-history requests are sent to the Life Emergence cloud service. <br>
-Mitigation: Use the skill only with user-approved media and URLs, and confirm before uploads or report-history queries. <br>
-Risk: The skill can create or reuse a cloud-linked local identity and stores authentication material locally. <br>
-Mitigation: Review local identity and token retention behavior, protect local data files, and avoid placing unrelated secrets in data/smyx-api-key.txt. <br>
-Risk: Generated health analysis is advisory and may be incomplete or incorrect for medical decisions. <br>
-Mitigation: Present results as health reference guidance and direct users to a qualified veterinarian for diagnosis or treatment decisions. <br>
+## Use Case:
 
+External users and agent operators use this skill to submit reptile or arachnid media for server-side health analysis, receive a structured health report, and query prior cloud-hosted analysis reports. The output is for health reference and is not a substitute for professional veterinary diagnosis.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and JSON-formatted structured analysis; optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report export links, cloud report-history tables, and health reference guidance that should not replace professional veterinary diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends reptile media or media URLs, plus an internal or user identifier, to the Life Emergence service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media that is approved for external processing, and confirm the publisher's permissions, retention, and deletion practices before installation.
+
+Risk: The skill may silently create or reuse an account and store authentication tokens in the workspace data directory.
+
+Mitigation: Run it only in workspaces where local token storage is acceptable, restrict workspace access, and ask the publisher to document token storage, rotation, and deletion.
+
+Risk: The monitoring and history-report behavior is confusing because the documentation includes camera-monitoring examples while security evidence says this scope needs review.
+
+Mitigation: Do not rely on camera-monitoring behavior unless the publisher documents and supports it consistently; review history-report access before use.
+
+Risk: The generated health report may be incomplete or misleading for real animal care decisions.
+
+Mitigation: Treat output as health reference only and consult a qualified veterinarian for diagnosis or treatment decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API 接口文档](references/api_doc.md)
+- [API接口文档](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands]
+
+**Output Format:** [JSON or Markdown-style report text, with optional report export links and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include structured reptile health analysis, warning signals, care suggestions, historical report records, and report image export links.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata; artifact frontmatter says 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

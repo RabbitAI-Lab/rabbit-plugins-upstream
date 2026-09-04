@@ -1,44 +1,62 @@
-## Description: <br>
-Audits Claude or Agent Skill directories for SKILL.md trigger quality, size, progressive disclosure, externalized scripts, portability, and hardcoded secret risks, then produces a prioritized scorecard and repair guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Skill Doctor checks Claude/Agent Skill directories for SKILL.md quality, trigger clarity, progressive disclosure, portability, security hygiene, host compatibility, and produces a scorecard with prioritized fixes.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Developers and skill authors use this skill to inspect Claude or Agent Skill packages, produce local text or JSON audit reports, and decide which SKILL.md structure, trigger, portability, and safety issues to fix first. It can also propose or perform skill refactors after the user approves the target path and intended edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can suggest or carry out rewrites of a target skill directory. <br>
-Mitigation: Approve rewrite steps only after confirming the exact target path and intended edits. <br>
-Risk: Optional SkillSpector, Docker, and CI commands may run external tools or containerized workflows. <br>
-Mitigation: Review those commands before execution and run them only against skill directories intended for inspection. <br>
-Risk: Audit recommendations could be incorrect or overly broad if treated as final decisions. <br>
-Mitigation: Use the report as review guidance and verify proposed changes before deployment. <br>
+## Use Case:
 
+Developers and skill maintainers use this skill to audit Agent Skill packages, run local SKILL.md quality checks, review JSON or text reports, and receive concrete remediation guidance before release or CI adoption.
 
-## Reference(s): <br>
-- [Skill writing vocabulary and advanced review criteria](references/skill-writing-vocab.md) <br>
-- [NVIDIA SkillSpector](https://github.com/NVIDIA/skillspector) <br>
-- [ClawHub release page](https://clawhub.ai/huiyonghkw/skills/hekouwang-claude-skill-doctor-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain-text audit report, optional JSON report, and proposed edits or commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports prioritize findings and may include rewrite recommendations; any file-changing rewrite step requires user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: frontmatter, changelog, server release metadata) <br>
+Risk: Optional trigger evaluation calls the Claude CLI and can incur user-side cost.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run trigger evaluation only when needed, start with a small eval set, and review expected cost before increasing samples or runs.
+
+Risk: The suite wrapper expects related doctor skills in the local skills directory and runs checks across selected project paths.
+
+Mitigation: Confirm HEKOUWANG_SKILLS_DIR and target paths before running the suite on broad directories or CI jobs.
+
+Risk: Reports and remediation guidance can influence future skill behavior if applied without review.
+
+Mitigation: Review suggested edits, re-run the checker, and scan the updated skill before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huiyonghkw/skills/hekouwang-claude-skill-doctor-skill)
+- [Project homepage](https://github.com/huiyonghkw/hekouwang-claude-skill-doctor-skill)
+- [Doctor suite reference](references/doctor-suite.md)
+- [Trigger evaluation reference](references/trigger-eval.md)
+- [Skill writing vocabulary reference](references/skill-writing-vocab.md)
+- [SkillSpector](https://github.com/NVIDIA/skillspector)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text reports, optional JSON reports, shell commands, and prioritized remediation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include scores, grades, gate status, PASS/WARN/FAIL/INFO counts, references, and suggested edits; optional trigger evaluation invokes the Claude CLI and can incur user-side cost.]
+
+## Skill Version(s):
+
+1.8.0 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

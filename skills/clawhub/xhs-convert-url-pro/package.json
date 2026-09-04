@@ -1,0 +1,14 @@
+{
+  "name": "xhs-convert-url-pro",
+  "version": "1.1.0",
+  "description": "小红书转链 CLI — 封装小红书转链后台服务 API，供 AI agent（workbuddy 等）调用",
+  "main": "cli.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "private": true,
+  "license": "UNLICENSED"
+}

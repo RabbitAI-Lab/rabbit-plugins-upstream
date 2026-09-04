@@ -1,47 +1,67 @@
-## Description: <br>
-ClickSend API integration with managed authentication for sending SMS, MMS, and voice messages, managing contacts and lists, managing verified email addresses, and viewing account configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClickSend API integration with managed authentication for sending SMS, MMS, and voice messages and managing contacts, lists, verified email addresses, and account configuration.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to make user-approved ClickSend requests through Maton, including sending SMS, MMS, and voice messages and managing contacts, lists, verified email addresses, and account settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive credentials are required for ClickSend access through Maton. <br>
-Mitigation: Keep MATON_API_KEY in trusted environment variables and avoid printing API keys in shared logs or screenshots. <br>
-Risk: Messaging and voice operations can contact real recipients and may incur charges. <br>
-Mitigation: Review recipient, content, timing, and cost impact before approving any send operation. <br>
-Risk: Write operations can modify contacts, lists, verified email addresses, or other account data. <br>
-Mitigation: Approve create, update, or delete requests only after confirming the target resource and intended effect. <br>
-Risk: Accounts with multiple ClickSend connections can route a request to the wrong account. <br>
-Mitigation: Specify the intended connection when multiple active connections exist. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent interact with a connected ClickSend account through Maton for messaging, delivery tracking, contact and list management, verified sender management, and account checks.
 
-## Reference(s): <br>
-- [ClickSend on ClawHub](https://clawhub.ai/byungkyu/clicksend) <br>
-- [Maton](https://maton.ai) <br>
-- [ClickSend Developer Portal](https://developers.clicksend.com/) <br>
-- [ClickSend REST API v3 Documentation](https://developers.clicksend.com/docs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Messaging operations can contact real recipients and may incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the recipient, message content, sender identity, and send timing before approving any SMS, MMS, or voice send.
+
+Risk: Account, contact, list, and verified sender changes can affect live ClickSend resources.
+
+Mitigation: Use read or list calls first, verify the target account and resource identifiers, and require explicit approval before write operations.
+
+Risk: Long-lived Maton API keys can be exposed through logs, command history, or child processes.
+
+Mitigation: Prefer OAuth through the Maton CLI and avoid printing, persisting, or passing credentials on command lines.
+
+Risk: Multiple Maton profiles or ClickSend connections can route a write to the wrong account.
+
+Mitigation: Specify the intended profile or connection when more than one account or connection is available.
+
+## Reference(s):
+
+- [ClickSend skill page](https://clawhub.ai/byungkyu/skills/clicksend)
+- [Maton homepage](https://maton.ai)
+- [ClickSend Developer Portal](https://developers.clicksend.com/)
+- [ClickSend REST API v3 Documentation](https://developers.clicksend.com/docs)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON request bodies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized ClickSend connection]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

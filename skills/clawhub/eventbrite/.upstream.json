@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/eventbrite",
   "slug": "eventbrite",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1781739755927,
-  "contentHash": "cc27b24de55dd923908627c1574a05e855b9aa18849ce316d5ff159a6f4c026f",
-  "fetchedAt": "2026-07-26T18:27:32.088Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517608403,
+  "contentHash": "397b658bf62dbf83a3b2129b24b54bcd0641b5313821bbf1ecfbe3256c6f53cf",
+  "fetchedAt": "2026-09-04T12:13:23.745Z"
 }

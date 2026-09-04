@@ -14,7 +14,7 @@ Teammate({ operation: "spawnTeam", team_name: "code-review" })
 Task({
   team_name: "code-review",
   name: "security",
-  subagent_type: "whetstone:review:security-sentinel",
+  subagent_type: "whetstone:ia-security-sentinel",
   prompt: "Review the PR for security vulnerabilities. Focus on: SQL injection, XSS, auth bypass. Send findings to team-lead.",
   run_in_background: true
 })
@@ -22,7 +22,7 @@ Task({
 Task({
   team_name: "code-review",
   name: "performance",
-  subagent_type: "whetstone:review:performance-oracle",
+  subagent_type: "whetstone:ia-performance-oracle",
   prompt: "Review the PR for performance issues. Focus on: N+1 queries, memory leaks, slow algorithms. Send findings to team-lead.",
   run_in_background: true
 })
@@ -30,7 +30,7 @@ Task({
 Task({
   team_name: "code-review",
   name: "simplicity",
-  subagent_type: "whetstone:review:code-simplicity-reviewer",
+  subagent_type: "whetstone:ia-code-simplicity-reviewer",
   prompt: "Review the PR for unnecessary complexity. Focus on: over-engineering, premature abstraction, YAGNI violations. Send findings to team-lead.",
   run_in_background: true
 })
@@ -70,7 +70,7 @@ TaskUpdate({ taskId: "5", addBlockedBy: ["4"] })
 Task({
   team_name: "feature-pipeline",
   name: "researcher",
-  subagent_type: "whetstone:research:best-practices-researcher",
+  subagent_type: "whetstone:ia-best-practices-researcher",
   prompt: "Claim task #1, research best practices, complete it, send findings to team-lead. Then check for more work.",
   run_in_background: true
 })
@@ -147,7 +147,7 @@ Research first, then implement:
 ```javascript
 // 1. Research phase (synchronous, returns results)
 const research = await Task({
-  subagent_type: "whetstone:research:best-practices-researcher",
+  subagent_type: "whetstone:ia-best-practices-researcher",
   description: "Research caching patterns",
   prompt: "Research best practices for implementing API caching. Include: cache invalidation strategies, Redis vs Memcached, cache key design."
 })
@@ -211,20 +211,20 @@ Teammate({ operation: "spawnTeam", team_name: "refactor-auth" })
 // 2. Create tasks with clear file boundaries
 TaskCreate({
   subject: "Refactor User model",
-  description: "Extract authentication methods to AuthenticatableUser concern",
+  description: "Extract authentication methods to an `AuthenticatableUser` trait/mixin (src/lib/authenticatableUser.ts)",
   activeForm: "Refactoring User model..."
 })
 
 TaskCreate({
   subject: "Refactor Session controller",
-  description: "Update to use new AuthenticatableUser concern",
+  description: "Update src/controllers/api/v1/sessionsController.ts to use the new `AuthenticatableUser` trait/mixin",
   activeForm: "Refactoring Sessions..."
 })
 
 TaskCreate({
-  subject: "Update specs",
-  description: "Update all authentication specs for new structure",
-  activeForm: "Updating specs..."
+  subject: "Update tests",
+  description: "Update all authentication tests for new structure",
+  activeForm: "Updating tests..."
 })
 
 // Dependencies: specs depend on both refactors completing
@@ -249,9 +249,9 @@ Task({
 
 Task({
   team_name: "refactor-auth",
-  name: "spec-worker",
+  name: "test-worker",
   subagent_type: "general-purpose",
-  prompt: "Wait for task #3 to unblock (when #1 and #2 complete), then update specs",
+  prompt: "Wait for task #3 to unblock (when #1 and #2 complete), then update tests",
   run_in_background: true
 })
 ```
@@ -271,7 +271,7 @@ Teammate({ operation: "spawnTeam", team_name: "pr-review-123", description: "Rev
 Task({
   team_name: "pr-review-123",
   name: "security",
-  subagent_type: "whetstone:review:security-sentinel",
+  subagent_type: "whetstone:ia-security-sentinel",
   prompt: `Review PR #123 for security vulnerabilities.
 
   Focus on:
@@ -288,7 +288,7 @@ Task({
 Task({
   team_name: "pr-review-123",
   name: "perf",
-  subagent_type: "whetstone:review:performance-oracle",
+  subagent_type: "whetstone:ia-performance-oracle",
   prompt: `Review PR #123 for performance issues.
 
   Focus on:
@@ -304,7 +304,7 @@ Task({
 Task({
   team_name: "pr-review-123",
   name: "arch",
-  subagent_type: "whetstone:review:architecture-strategist",
+  subagent_type: "whetstone:ia-architecture-strategist",
   prompt: `Review PR #123 for architectural concerns.
 
   Focus on:
@@ -355,7 +355,7 @@ TaskUpdate({ taskId: "5", addBlockedBy: ["4"] })
 Task({
   team_name: "feature-oauth",
   name: "researcher",
-  subagent_type: "whetstone:research:best-practices-researcher",
+  subagent_type: "whetstone:ia-best-practices-researcher",
   prompt: "Claim task #1. Research OAuth2 best practices, compare providers, document findings. Mark task complete and send summary to team-lead.",
   run_in_background: true
 })
@@ -387,7 +387,7 @@ Task({
 Task({
   team_name: "feature-oauth",
   name: "reviewer",
-  subagent_type: "whetstone:review:security-sentinel",
+  subagent_type: "whetstone:ia-security-sentinel",
   prompt: "Wait for task #5 to unblock. Review the complete OAuth implementation for security. Send final assessment to team-lead.",
   run_in_background: true
 })

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/stripe-api",
   "slug": "stripe-api",
   "ownerHandle": null,
-  "version": "1.0.11",
-  "updatedAt": 1782600509515,
-  "contentHash": "be1fa5ce7798e9bfa40651623a1a37e69e680d917ff62624abf7d2a35bc1cb3c",
-  "fetchedAt": "2026-07-26T18:22:53.614Z"
+  "version": "1.2.0",
+  "updatedAt": 1788519131292,
+  "contentHash": "18b9cd3bd66e16c4752876536e6c7f0e83e9cb8d7cfef2ad57f0899b01e8c646",
+  "fetchedAt": "2026-09-04T12:12:27.848Z"
 }

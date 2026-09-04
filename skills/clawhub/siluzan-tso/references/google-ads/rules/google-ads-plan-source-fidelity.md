@@ -23,14 +23,14 @@
         └─ 通过 → 确认摘要 → ad campaign-create
 ```
 
-| 步 | 谁做 | 动作 |
-| -- | ---- | ---- |
-| 1 | Agent + 脚本 | 读全 Sheet，按语义抽出预算/组/词+匹配类型/RSA/否词/国家等，写出 `campaign.json`（**先忠实落盘，勿静默改用户方案**） |
-| 2 | CLI | 国家列表 → `ad geo resolve -a <id> --from-file … --json-out …`，把返回的 `locations` / `targetedLocations` 写入 JSON（**禁止**编造 id） |
-| 3 | CLI | `ad campaign-validate --config-file ./campaign.json` |
-| 3b | Agent → 用户 | **若有不合规**：列出问题清单 → **询问**「您自己改方案/文件，还是我帮您改？」→ 按用户选择处理后再 validate（见下节） |
-| 4 | Agent → 用户 | 摘要确认：国家↔id、Exact/Phrase/Broad 条数（可抽样几条），**勿**贴整份 JSON |
-| 5 | CLI | 用户确认后 `ad campaign-create` → `batch get` / `batch diff` |
+| 步  | 谁做         | 动作                                                                                                                                    |
+| --- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Agent + 脚本 | 读全 Sheet，按语义抽出预算/组/词+匹配类型/RSA/否词/国家等，写出 `campaign.json`（**先忠实落盘，勿静默改用户方案**）                     |
+| 2   | CLI          | 国家列表 → `ad geo resolve -a <id> --from-file … --json-out …`，把返回的 `locations` / `targetedLocations` 写入 JSON（**禁止**编造 id） |
+| 3   | CLI          | `ad campaign-validate --config-file ./campaign.json`                                                                                    |
+| 3b  | Agent → 用户 | **若有不合规**：列出问题清单 → **询问**「您自己改方案/文件，还是我帮您改？」→ 按用户选择处理后再 validate（见下节）                     |
+| 4   | Agent → 用户 | 摘要确认：国家↔id、Exact/Phrase/Broad 条数（可抽样几条），**勿**贴整份 JSON                                                             |
+| 5   | CLI          | 用户确认后 `ad campaign-create` → `batch get` / `batch diff`                                                                            |
 
 ---
 
@@ -38,11 +38,11 @@
 
 **适用**：计划来源是用户提供的（Excel / 表格 / 粘贴方案 / 用户自写的 JSON），且出现下列任一情况：
 
-| 类型 | 示例 |
-| ---- | ---- |
+| 类型                                | 示例                                                                                         |
+| ----------------------------------- | -------------------------------------------------------------------------------------------- |
 | `campaign-validate` error / warning | 词面非法字符、嵌套引号、RSA 跨组标题重复、超长、匹配类型与符号不一致、locations 数量不一致等 |
-| 政策 / 合规明显风险 | 违禁宣称、落地页与文案严重不符等（见 `google-ads-compliance.md`） |
-| 转换时发现方案自相矛盾 | 同组同词多匹配类型冲突、必填块缺失等 |
+| 政策 / 合规明显风险                 | 违禁宣称、落地页与文案严重不符等（见 `google-ads-compliance.md`）                            |
+| 转换时发现方案自相矛盾              | 同组同词多匹配类型冲突、必填块缺失等                                                         |
 
 **禁止**：未询问就替用户改方案内容（改词面、改标题消重、截断、删词、改匹配类型等）然后直接 create。  
 **禁止**：只丢一句「校验失败」就停住，不给选项。
@@ -62,40 +62,41 @@
 
 ---
 
-## Agent 代改后：创建完成报告（必出）
+## 创建完成报告（必出）
 
-**何时必出**：用户选择「我帮您改」且最终完成了 `campaign-create`（含 batch get / batch diff / 必要补建）之后。  
-**何时不必出完整修改表**：用户全程自己改方案、Agent 未改业务内容——只需常规创建结果摘要。
+**何时必出系列创建详情**：凡最终完成了 `campaign-create`（含 `batch get` / `batch diff` / 必要补建）之后——**无论是否代改方案**。结构见下节「创建了哪些」；多系列按系列分节。总纪律见 `agent-conventions.md` §四。
+
+**何时另出完整修改表**：仅当用户选择「我帮您改」且 Agent 改过业务内容。用户全程自己改方案、Agent 未改业务内容 → **不必**出修改表，但仍须出系列创建详情。
 
 ### 变更账本（代改过程中维护）
 
 落盘建议：`./snap-campaign/plan-edits.json`（或同目录 Markdown）。每条至少：
 
-| 字段 | 说明 |
-| ---- | ---- |
-| `path` | JSON 路径或业务位置（如组名 + 关键词 / RSA 标题序号） |
-| `from` | 用户原方案中的值（改前） |
-| `to` | 实际写入并创建的值（改后） |
-| `reason` | 修改原因（对应哪条 validate/合规规则，一句话） |
+| 字段     | 说明                                                  |
+| -------- | ----------------------------------------------------- |
+| `path`   | JSON 路径或业务位置（如组名 + 关键词 / RSA 标题序号） |
+| `from`   | 用户原方案中的值（改前）                              |
+| `to`     | 实际写入并创建的值（改后）                            |
+| `reason` | 修改原因（对应哪条 validate/合规规则，一句话）        |
 
 **禁止**：创建结束后凭印象写「改了一些标题」；必须以账本为准。
 
 ### 面向用户的报告结构（业务语言）
 
-创建与核对结束后，用一份短报告回复用户，至少含三块：
+创建与核对结束后，用一份短报告回复用户：
 
-1. **创建了哪些**  
-   账户 ID/名称、系列名与 `campaignId`、广告组数、关键词数（可附 Exact/Phrase/Broad）、否词数、投放国家数、RSA/附加信息条数；batch 状态；若有自动补建（Sitelink/地域等）写明补了几条。
+1. **创建了哪些（每个系列必有）**  
+   **直接发送** `ad batch diff` 生成的 **`reportMarkdown` 全文**（Markdown；亦见 `reportMarkdownFile`）。报告已含账户/系列/`campaignId`、数量汇总、按组展开的关键词与 RSA 文案状态、仍未创建项。若有自动补建可在文末补一句。**禁止**只汇总条数或不发 Markdown。
 
-2. **修改了哪些（相对您的原方案）**  
-   表格逐条：**位置 | 从（原值） | 改成（新值） | 原因**。  
-   - `from` / `to` 写清原文，勿只写「已优化」。  
-   - 无修改则写「相对您的原方案无业务内容修改」（仅 geo id 解析等不写进此表）。
+2. **修改了哪些（相对您的原方案）**——**仅代改时必出**  
+   表格逐条：**位置 | 从（原值） | 改成（新值） | 原因**。
+   - `from` / `to` 写清原文，勿只写「已优化」。
+   - 无业务修改则写「相对您的原方案无业务内容修改」（仅 geo id 解析等不写进此表）。
 
 3. **未改动的说明（可选一句）**  
    如：匹配类型/国家列表按您的方案保留。
 
-**禁止**：只说「已创建成功」而不交代代改明细；**禁止**把创建结果与修改混成一团让用户自己猜改了啥。
+**禁止**：只说「已创建成功 / 未发现缺失」而不列系列详情；代改时**禁止**省略修改表；**禁止**把创建结果与修改混成一团让用户自己猜改了啥。
 
 可选脚手架（非必须）：`assets/plan-extract.example.json` + `assets/scripts/assemble-campaign-from-plan.mjs`——若 Agent 更习惯先抽中间件再组装，可以用；**不强制**。
 
@@ -112,10 +113,10 @@
 
 ## CLI 硬校验（兜底）
 
-| 条件 | `campaign-validate` |
-| ---- | ------------------- |
-| `locations` 非空且与 `targetedLocations` 数量不一致 | error |
-| location `id` 非数字 | error |
+| 条件                                                | `campaign-validate` |
+| --------------------------------------------------- | ------------------- |
+| `locations` 非空且与 `targetedLocations` 数量不一致 | error               |
+| location `id` 非数字                                | error               |
 
 匹配类型是否与方案一致，靠 Agent 转换脚本 + 确认摘要；validate 负责契约与词面/`MatchTypeV2` 对齐。
 
@@ -123,6 +124,6 @@
 
 ## 相关文档
 
-- `google-ads-campaign-plan.md` — W3 总流程  
-- `assets/campaign-create-template.json` — JSON 结构真相源  
-- `google-ads.md` — `ad geo resolve` / `campaign-create` 命令  
+- `google-ads-campaign-plan.md` — W3 总流程
+- `assets/campaign-create-template.json` — JSON 结构真相源
+- `google-ads.md` — `ad geo resolve` / `campaign-create` 命令

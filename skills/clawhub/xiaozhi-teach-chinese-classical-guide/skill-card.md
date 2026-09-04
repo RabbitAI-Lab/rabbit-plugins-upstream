@@ -1,47 +1,72 @@
-## Description: <br>
-帮助语文老师把文言文教学组织为诵读正音、训诂、串讲、主题分析、文化背景和学员积累档案的系统化流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向语文老师的文言文与古诗词教学设计工具，支持诵读正音、训诂、串讲框架、主题讨论、文化背景联结和班级古文积累记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-语文老师和教学助手使用该技能设计文言文、古诗词和诗词鉴赏课程，生成诵读、字词句式、串讲、主题讨论、文化背景和学员积累档案方面的课堂指导。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Learner progress records may contain sensitive educational data if teachers enter real names, contact details, or identifiable classroom notes. <br>
-Mitigation: Use pseudonyms, avoid real names and contact details, store records only in approved school systems, and delete records when they are no longer needed. <br>
-Risk: Classroom use could unintentionally copy protected modern textbook notes, translations, or lesson designs. <br>
-Mitigation: Use public-domain classical originals as the base, keep outputs to frameworks and key-sentence scaffolds, and have the teacher supply and review any edition-specific notes or translations. <br>
+## Use Case:
 
+External Chinese-language teachers use this skill to design classical Chinese and poetry lessons for upper-primary and middle-school learners. It produces teaching frameworks, discussion prompts, recitation and exegesis guidance, homework suggestions, and class-record updates while leaving full translation, line-by-line exposition, and grading decisions to the teacher.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-classical-guide) <br>
-- [古文积累档案模板](references/classical-accumulation-profile-template.md) <br>
-- [文言词汇速查](references/classical-vocab-quick-ref.md) <br>
-- [训诂方法卡](references/exegesis-method-card.md) <br>
-- [诗词意象目录](references/poetry-image-catalog.md) <br>
-- [诵读节奏指南](references/recitation-rhythm-guide.md) <br>
-- [串讲样板模板](references/serial-explain-sample-template.md) <br>
-- [主题讨论问题题库](references/theme-discussion-question-bank.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with structured workflows, tables, checklists, and classroom templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; guidance is intended for teacher review before classroom use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Persistent class records could be saved or shared without the intended consent settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm classWorkspace writeback, parent-sharing, and student-consent settings before saving or sharing records.
+
+Risk: AI-generated lesson or homework items may contain inaccuracies or unsuitable examples.
+
+Mitigation: Require teacher review before using generated lesson content, homework entries, or resource-library items.
+
+Risk: Crisis-support resources in the package are specific to Mainland China and may not fit other regions.
+
+Mitigation: Replace hotline and referral guidance with locally valid emergency and professional-support resources before classroom use outside Mainland China.
+
+Risk: Textbook annotations, translations, teaching-aid questions, and exam items may be copyright-protected even when source classical texts are public domain.
+
+Mitigation: Use framework-level guidance, avoid copying protected materials, and preserve copyrightStatus labeling for cited or adapted resources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-classical-guide)
+- [Classical accumulation profile template](artifact/references/classical-accumulation-profile-template.md)
+- [Classical vocabulary quick reference](artifact/references/classical-vocab-quick-ref.md)
+- [Exegesis method card](artifact/references/exegesis-method-card.md)
+- [Poetry image catalog](artifact/references/poetry-image-catalog.md)
+- [Recitation rhythm guide](artifact/references/recitation-rhythm-guide.md)
+- [Serial explanation sample template](artifact/references/serial-explain-sample-template.md)
+- [Theme discussion question bank](artifact/references/theme-discussion-question-bank.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [AI item check protocol](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Shared vocabulary](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON-compatible classWorkspace record structures]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include teaching frameworks, discussion questions, recitation plans, homework suggestions, and class-record updates for teacher review.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -11,12 +11,10 @@ if _SERVER_DIR not in sys.path:
     sys.path.insert(0, _SERVER_DIR)
 
 from huahua_mcp_runtime.client import (  # noqa: E402,F401 -- compatibility facade
-    ESTIMATE_TTL as _ESTIMATE_TTL,
     OFFICIAL_API as _OFFICIAL_API,
     PORTFOLIO_TTL as _PORTFOLIO_TTL,
     clear_session_caches as _clear_session_caches,
     delete as _delete,
-    estimate_cache as _estimate_cache,
     get as _get,
     get_client as _get_client,
     get_download_lock as _get_download_lock,
@@ -26,6 +24,7 @@ from huahua_mcp_runtime.client import (  # noqa: E402,F401 -- compatibility faca
     post as _post,
     post_files as _post_files,
     put as _put,
+    request_generation as _request_generation,
     require_token as _require_token,
     session as _session,
     url as _url,
@@ -52,7 +51,6 @@ from huahua_mcp_runtime.portfolio_adapter import (  # noqa: E402,F401 -- compati
     is_empty_plain_object as _is_empty_plain_object,
     is_restorable_fund as _is_restorable_fund,
     is_valid_fund_code_value as _is_valid_fund_code_value,
-    parse_sync_payload as _parse_sync_payload,
     portfolio_payload_source as _portfolio_payload_source,
     summarize_sync_payload as _summarize_sync_payload,
     unwrap_sync_payload as _unwrap_sync_payload,
@@ -82,7 +80,7 @@ from huahua_mcp_runtime.tool_registry import TOOL_NAMES as _TOOL_NAMES  # noqa: 
 from huahua_mcp_runtime.tool_registry import register_tools  # noqa: E402
 
 MCP_INSTRUCTIONS = (
-    "每个会话首次使用 HuahuaDaily 前先调用 get_tool_manifest。"
+    "仅在首次接入、配置变更或排障时调用 get_tool_manifest；普通会话无需重复。"
     "若 runtime.updateCheck.updateAvailable=true，先告知用户当前版本、最新版本和更新步骤；"
     "不要自行安装或覆盖用户环境。"
 )
@@ -99,7 +97,7 @@ mcp._mcp_server.version = __version__
 
 async def _fetch_estimates(
     codes: list,
-    default_data_source_mode: str = "huahua",
+    default_data_source_mode: str = "source_a",
     data_source_mode_by_code: Optional[dict] = None,
 ) -> dict:
     return await _fetch_estimates_impl(

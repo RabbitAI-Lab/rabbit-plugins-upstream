@@ -1,42 +1,53 @@
-## Description: <br>
-Generates Markdown daily report drafts from user-supplied dates, highlights, and blockers and writes them to a reports directory for personal work tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据输入生成日报 Markdown 草稿并写入 reports 目录，适合个人工作记录。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Individual users use this skill to turn daily work inputs into a consistent Markdown report with highlights, blockers, status, and next-action information. It is intended for lightweight personal work tracking rather than team reporting or advanced analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad local command and search tools for a simple report-writing task. <br>
-Mitigation: Review proposed commands before execution and limit file inspection to the intended report workspace. <br>
-Risk: The skill includes credential and environment-check guidance that could expose unrelated local secrets. <br>
-Mitigation: Do not allow scans of unrelated environment variables or secret stores; provide only the inputs needed for the report. <br>
-Risk: Callback URLs or external APIs could receive report content if enabled by the user. <br>
-Mitigation: Use local report generation by default and enable callbacks or external API delivery only after confirming the destination and content. <br>
+## Use Case:
 
+Individuals and lightweight teams use this skill to turn dates, highlights, and blockers into daily Markdown work-report drafts for personal records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/daily-report-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report draft plus structured JSON status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes a dated report under reports/ when the agent has file-system permission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The security evidence says the skill can guide an agent to run commands and inspect API-related environment variables.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require review before shell execution, secret reads, file writes, or environment inspection.
+
+Risk: The security evidence flags unclear network, API key, and credential-adjacent instructions for a daily-report workflow.
+
+Mitigation: Review network and API behavior before installation and avoid sending sensitive work notes to external services unless explicitly approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/daily-report-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown report file with structured status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes a daily report under the reports directory and may return a nextAction status.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

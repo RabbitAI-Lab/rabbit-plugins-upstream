@@ -1,46 +1,69 @@
-## Description: <br>
-Netlify API integration with managed OAuth for viewing sites, deploys, builds, DNS zones, environment variables, webhooks, forms, and related Netlify resources, with administrative write operations gated by explicit user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Netlify API integration with managed OAuth for viewing and administering sites, deploys, builds, DNS zones, environment variables, forms, functions, services, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, site operators, and teams with Netlify accounts use this skill to inspect Netlify sites, deploys, builds, DNS zones, environment variables, webhooks, forms, functions, and related account resources through Maton-managed OAuth. Administrative changes such as creating sites, triggering builds, modifying DNS, or changing environment variables require exact resource identifiers and explicit user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and OAuth access to Netlify resources. <br>
-Mitigation: Keep MATON_API_KEY private, connect only the intended Netlify account, and review OAuth scopes before authorizing access. <br>
-Risk: Administrative actions can affect live Netlify sites, builds, DNS records, environment variables, webhooks, forms, or deploys. <br>
-Mitigation: Default to read-only operations and require exact resource identifiers, a consequence summary, and explicit user confirmation before write operations. <br>
-Risk: Requests may target the wrong Netlify account when multiple Maton connections are active. <br>
-Mitigation: Use the Maton-Connection header with the intended connection ID when more than one Netlify connection exists. <br>
+## Use Case:
 
+Developers and site operators use this skill to inspect Netlify account, site, deploy, build, DNS, environment variable, form, function, service, and webhook state through Maton. It can also guide administrative changes after confirming the target resource, intended effect, and user approval.
 
-## Reference(s): <br>
-- [ClawHub Netlify Skill](https://clawhub.ai/byungkyu/netlify-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Netlify API Documentation](https://open-api.netlify.com/) <br>
-- [Netlify CLI Documentation](https://docs.netlify.com/cli/get-started/) <br>
-- [Netlify Build Hooks Documentation](https://docs.netlify.com/configure-builds/build-hooks/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with endpoint references and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Netlify OAuth connection; API responses are JSON from Maton and Netlify endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill gives an agent broad Netlify API authority through a generic passthrough.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Netlify administration is intended, prefer OAuth, review requested scopes, and default to read/list calls before proposing changes.
+
+Risk: Site, DNS, webhook, build, form, and environment-variable operations can affect live Netlify services.
+
+Mitigation: Require explicit confirmation with specific resource identifiers, payload details, and the intended effect before any create, update, trigger, or delete operation.
+
+Risk: Requests may target the wrong account when more than one Maton or Netlify connection exists.
+
+Mitigation: Specify the intended profile and connection before acting, especially before write operations.
+
+Risk: Using an API key fallback can expose a long-lived credential through environment, logs, or command history.
+
+Mitigation: Prefer OAuth through the Maton CLI; if an API key is unavoidable, do not print or persist it and send it only to api.maton.ai.
+
+## Reference(s):
+
+- [ClawHub Netlify Skill](https://clawhub.ai/byungkyu/skills/netlify-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Netlify API Documentation](https://open-api.netlify.com/)
+- [Netlify CLI Documentation](https://docs.netlify.com/cli/get-started/)
+- [Netlify Build Hooks Documentation](https://docs.netlify.com/configure-builds/build-hooks/)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON request examples, and SDK code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Netlify connection.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

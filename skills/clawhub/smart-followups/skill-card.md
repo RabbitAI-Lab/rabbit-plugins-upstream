@@ -1,45 +1,58 @@
-## Description: <br>
-Generate contextual follow-up suggestions after AI responses. Shows 3 clickable buttons (Quick, Deep Dive, Related) when user types "/followups". <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate three contextual follow-up suggestions after AI responses, grouped as Quick, Deep Dive, and Related for /smart-followups or natural-language requests.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-OpenClaw users use this skill to generate three contextual follow-up questions after an AI response, with button output on supported chat channels and numbered text fallback elsewhere. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Recent chat context is used to generate suggestions, which can expose sensitive conversation details to the configured AI provider. <br>
-Mitigation: Use the explicit /followups trigger for normal use and avoid requesting suggestions in conversations containing sensitive information. <br>
-Risk: Auto-trigger mode can broaden when suggestions are generated after responses. <br>
-Mitigation: Keep autoTrigger disabled unless continuous follow-up suggestions are intentionally desired. <br>
-Risk: The standalone CLI can rely on API keys for external providers. <br>
-Mitigation: Prefer OpenClaw-native auth for the main skill and avoid storing API keys in shell startup files when using the CLI. <br>
+## Use Case:
 
+OpenClaw users and developers use this skill to generate short, context-aware next-question suggestions after an assistant response across supported chat channels.
 
-## Reference(s): <br>
-- [Smart Follow-ups on ClawHub](https://clawhub.ai/robbyczgw-cla/skills/smart-followups) <br>
-- [OpenClaw](https://openclaw.com) <br>
-- [Channel Support Guide](CHANNELS.md) <br>
-- [Quick Start](QUICKSTART.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or channel-native button/text suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces three categorized follow-up suggestions: Quick, Deep Dive, and Related.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.8 (source: server release evidence, SKILL.md frontmatter, changelog released 2026-03-27) <br>
+Risk: Recent chat context is used to generate suggestions, which can expose sensitive conversation content to the active provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only where the active provider's data handling is acceptable, and avoid running it on sensitive conversations unless that review is complete.
+
+Risk: The standalone CLI can send conversation context to OpenRouter or Anthropic and requires API keys.
+
+Mitigation: Use the CLI only with intended providers, keep keys out of shared shell startup files, and rotate or revoke exposed keys.
+
+Risk: Auto-triggering can run suggestion generation after responses without a separate command.
+
+Mitigation: Keep autoTrigger disabled unless users have been told the skill will run automatically after responses.
+
+## Reference(s):
+
+- [Smart Follow-ups on ClawHub](https://clawhub.ai/robbyczgw-cla/skills/smart-followups)
+- [OpenClaw](https://openclaw.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Three categorized follow-up questions rendered as interactive button labels where supported or as a numbered text list.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generates one Quick, one Deep Dive, and one Related suggestion from recent conversation context.]
+
+## Skill Version(s):
+
+2.2.0 (source: frontmatter, changelog, release evidence; released 2026-08-31)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

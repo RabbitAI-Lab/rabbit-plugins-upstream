@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/confluence-api",
   "slug": "confluence-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739754641,
-  "contentHash": "644e7ce39075f935d9670d6f0dae4a7d0e02aa67a89bb091dcabed7235f3adf6",
-  "fetchedAt": "2026-07-26T18:27:32.547Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517560773,
+  "contentHash": "07c073212fb6ad0e57d1f54e03556ccfa7e616d12a11cee0d21dae752d6f7013",
+  "fetchedAt": "2026-09-04T12:13:27.519Z"
 }

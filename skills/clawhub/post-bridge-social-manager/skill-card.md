@@ -1,45 +1,65 @@
-## Description: <br>
-Turn your OpenClaw into an autonomous social media manager using Post Bridge API for scheduling, posting, and managing content across TikTok, Instagram Reels, YouTube Shorts, Twitter/X, LinkedIn, Pinterest, Facebook, Threads, and Bluesky. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, schedule, and manage social media posts across Instagram, TikTok, YouTube, X, LinkedIn, Facebook, Pinterest, Threads, and Bluesky via the Post Bridge API, including media upload, post creation, scheduling, platform-specific configs, draft mode, analytics, and post result tracking.
 
-## Publisher: <br>
-[jackfriks](https://clawhub.ai/user/jackfriks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jackfriks](https://clawhub.ai/user/jackfriks)
 
-## Use Case: <br>
-Creators, marketers, and social media operators use this skill to help an agent upload media, create posts, schedule or queue publishing, manage scheduled posts, and check posting results through Post Bridge. It is intended for workflows where the user has connected social accounts and wants agent-assisted publishing with human approval controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can enable an agent to post, schedule, edit, sync analytics for, or delete content through connected Post Bridge social accounts. <br>
-Mitigation: Require explicit user approval after the agent shows the target accounts, caption, media, timing, and action type before any posting, scheduling, editing, analytics sync, or deletion. <br>
-Risk: The Post Bridge API key can grant access to connected social accounts if exposed. <br>
-Mitigation: Keep POST_BRIDGE_API_KEY out of shared logs and rotate it immediately if it is exposed. <br>
-Risk: Multi-platform posting can send content to unintended accounts or apply the wrong platform-specific settings. <br>
-Mitigation: Review the selected account IDs and platform_configurations for each target platform before creating or updating a post. <br>
+## Use Case:
 
+External users and developers use this skill to create, schedule, update, delete, and review social media posts across connected Post Bridge accounts from an agent workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jackfriks/post-bridge-social-manager) <br>
-- [Post Bridge](https://post-bridge.com) <br>
-- [Post Bridge API reference](https://api.post-bridge.com/reference) <br>
-- [Post Bridge API base URL](https://api.post-bridge.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline HTTP examples, shell commands, and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API request plans, captions, scheduling details, account selections, media upload steps, and status-checking instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: frontmatter and server release metadata) <br>
+Risk: The skill can publish or schedule posts to real connected social accounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm before live posting or scheduling unless the user explicitly asks to publish immediately, and use draft mode when intent is unclear.
+
+Risk: The skill uses a Post Bridge API key that can act on connected accounts.
+
+Mitigation: Install and configure it only when the user is comfortable letting an agent use that key, and stop if no valid key is available.
+
+Risk: Media files, captions, account identifiers, and scheduling metadata are sent to Post Bridge.
+
+Mitigation: Review selected accounts, media, captions, and scheduling details before sending them to the service.
+
+Risk: Optional video workflows can run local commands, move files, or add cron jobs.
+
+Mitigation: Ask for confirmation with exact commands, paths, or crontab lines before taking those optional local actions.
+
+## Reference(s):
+
+- [Post Bridge website](https://post-bridge.com)
+- [Post Bridge API reference](https://api.post-bridge.com/reference)
+- [Post Bridge API key settings](https://www.post-bridge.com/dashboard/api-keys)
+- [Post Bridge MCP](https://post-bridge.com/mcp)
+- [ClawHub skill listing](https://clawhub.ai/jackfriks/skills/post-bridge-social-manager)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Command execution returns JSON responses from Post Bridge operations when used through the CLI or API.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

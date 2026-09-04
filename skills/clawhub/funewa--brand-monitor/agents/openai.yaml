@@ -1,0 +1,4 @@
+interface:
+  display_name: "亚马逊品牌口碑监控 · 评论舆情追踪"
+  short_description: "多 ASIN 持续追踪，差评集中爆发即预警"
+  default_prompt: "使用 $amazon-brand-monitor 查看店铺情感预警并分析一个 Amazon ASIN 的口碑变化。"

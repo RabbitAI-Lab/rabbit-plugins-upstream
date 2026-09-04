@@ -1,42 +1,60 @@
-## Description: <br>
-Operate the Message-in-a-Bottle (MIAB) LIFO callback stack for asynchronous inter-agent delegation, return, resolution, cancellation, listing, and stale-callback reaping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate the Message-in-a-Bottle (MIAB) LIFO callback stack, a local asynchronous callback broker that lets agents delegate work, yield, and resume when results return.
 
-## Publisher: <br>
-[albzhu](https://clawhub.ai/user/albzhu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[albzhu](https://clawhub.ai/user/albzhu)
 
-## Use Case: <br>
-Developers and agent operators use this skill to manage file-based MIAB callback lifecycles so delegated agent work can be resumed without polling. It provides guidance and commands for registering wake targets, creating and forwarding callback stacks, returning results, resolving or cancelling callbacks, listing active work, and reaping stale bottles. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Callback state and wake routing are stored and mutated on disk without clear access-control or integrity safeguards. <br>
-Mitigation: Use a private CLAW_HOME directory, restrict filesystem permissions, and run the broker only where agents with access to callback state are trusted. <br>
-Risk: Callback summaries, results, and ledger entries may expose sensitive task context if agents include secrets or private data. <br>
-Mitigation: Avoid placing secrets in callback summaries, resume contexts, results, artifacts, or ledger-retained final notes. <br>
-Risk: The reaper, cancel, return, resolve, and wake flows can alter or route active agent work. <br>
-Mitigation: Review callback state before running mutating commands and only enable reaper or wake automation for trusted agents and scheduler contexts. <br>
+## Use Case:
 
+Developers and agent operators use this skill to register wake paths, create and forward callback bottles, return or resolve delegated work, inspect active callback state, and reap stale local callback envelopes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/albzhu/skills/miab-broker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON, text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands read and mutate callback state under CLAW_HOME/state/callbacks and may emit dispatch messages for agent wake routing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: The broker is designed for a single-user trust boundary and assumes local agents with access to CLAW_HOME are trusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on a single-user machine with trusted local agents and keep CLAW_HOME private.
+
+Risk: Callback task, result, and resume text is persisted locally and may be copied into dispatch messages.
+
+Mitigation: Do not place secrets in callback task, result, summary, or resume fields; reference locations instead of secret values when needed.
+
+Risk: The stale callback reaper can fail and purge pending callback envelopes when the global TTL is too short for the workload.
+
+Mitigation: Measure the workload and run the reaper in dry-run mode before enabling purging.
+
+## Reference(s):
+
+- [ClawHub miab-broker listing](https://clawhub.ai/albzhu/skills/miab-broker)
+- [SKILL.md](artifact/SKILL.md)
+- [SECURITY.md](artifact/SECURITY.md)
+- [CHANGELOG.md](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON CLI output descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local command guidance for callback lifecycle operations; no network output is declared by the artifact.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release evidence, CHANGELOG.md, and claw-callback.py VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

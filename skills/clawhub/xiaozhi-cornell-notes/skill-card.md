@@ -1,41 +1,73 @@
-## Description: <br>
-康奈尔笔记 helps students convert classroom notes into Cornell-format cue questions, concise summaries, searchable note records, and consent-based study prompts for review, wrong-answer analysis, and Feynman testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把课堂笔记整理成能被再次用上的形式：左栏线索问题 + 右栏内容 + 底部一句话总结，并按学科课题归档。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students and tutoring agents use this skill to organize photographed or pasted classroom notes into Cornell-note study material, store consent-based study memory, retrieve related notes, and generate review prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may remember and reuse uploaded class notes, generated summaries, keywords, links to other notes, and retrieval history. <br>
-Mitigation: Use the skill only when this study-memory behavior is acceptable, and rely on platform controls to disable or delete saved note data when needed. <br>
-Risk: Photo-based note extraction depends on multimodal vision or OCR capability and may be unavailable or inaccurate. <br>
-Mitigation: Ask the student to confirm recognized subject and topic details, and fall back to pasted or manually entered note text when image recognition is not available. <br>
+## Use Case:
 
+Students in upper primary, middle school, and high school use this skill to turn class notes or uploaded note images into Cornell-style study notes, retrieve relevant prior notes, and connect note summaries to review workflows. It is not intended for teaching new material, error analysis, or independent understanding checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes) <br>
-- [cornell-format-guide.md](references/cornell-format-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cue questions, short summaries, keyword tags, related-note prompts, and note-health report sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Persistent student note memory can retain student learning records beyond the current session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only with explicit memory consent and visible controls to view, correct, delete, pause, and export notes; keep long-term writeback to note summary fields rather than full note text.
+
+Risk: OCR or image interpretation can misread handwritten or photographed class notes.
+
+Mitigation: Ask the student to confirm subject and topic before saving, allow correction before final storage, and fall back to typed note bullets when images cannot be read reliably.
+
+Risk: Cross-skill note lookup can surface study-note context outside the student's intended workflow.
+
+Mitigation: Require cross-skill sharing consent, share only minimal relevant summaries, and limit retrieval prompts to the most relevant note entries.
+
+Risk: Reminders, parent sharing, and teacher writeback can affect students or minors if enabled without the right consent.
+
+Mitigation: Require reminder, parent-sharing, and teacher-writeback consent as applicable, and apply age or guardian consent checks before using the skill with younger students.
+
+Risk: Student notes or conversations may contain crisis signals outside the skill's study-support scope.
+
+Mitigation: Use the bundled crisis referral protocol, provide locale-appropriate help resources, and record only the disposition fact rather than sensitive crisis details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Cornell format guide](references/cornell-format-guide.md)
+- [Grade bands](shared/grade-bands.md)
+- [Platform conventions](shared/platform-conventions.md)
+- [AI item check protocol](shared/ai-item-check.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+- [Learning DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown study-note guidance and structured note summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Cornell cue questions, bottom-line summaries, note tags, retrieval prompts, and consent-gated memory or writeback guidance.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

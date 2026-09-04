@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/monid-skill",
   "slug": "monid-skill",
   "ownerHandle": null,
-  "version": "0.0.7",
-  "updatedAt": 1778492536962,
-  "contentHash": "17438b0f758d7e859164c5cf7c465d93f35006fc7e4344449b78156178d809a7",
-  "fetchedAt": "2026-07-26T19:29:54.244Z"
+  "version": "0.1.7",
+  "updatedAt": 1788140261739,
+  "contentHash": "deb342752a1f133b20240f71b6896f1f3a861cd21beb8f8f808911e7b1659e26",
+  "fetchedAt": "2026-09-04T12:29:32.135Z"
 }

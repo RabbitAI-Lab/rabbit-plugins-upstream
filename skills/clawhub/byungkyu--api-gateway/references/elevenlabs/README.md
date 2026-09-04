@@ -2,6 +2,14 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Voice recordings are biometric data.** This app handles audio of real people speaking. A voice sample is a biometric identifier under GDPR Art. 9, BIPA, and similar laws — a stricter category than ordinary personal data — and the recordings themselves are usually private conversations: meetings, calls, voice notes, interviews, therapy or medical discussions.
+>
+> - **Voice cloning needs the speaker's consent, not just the user's.** Never create or fine-tune a voice from a recording unless the user confirms the person consented to a clone of their voice. A cloned voice can be used to impersonate them, including to defeat voice authentication and to fabricate statements they never made. Never clone a public figure or a voice taken from media the user does not own.
+> - **Never upload audio the user did not name.** Speech-to-text and voice creation read a local file or URL and transmit it to ElevenLabs. Take the path from the user verbatim; do not search directories for audio, and do not upload a recording captured for some other purpose.
+> - **Transcripts inherit the sensitivity of the conversation.** A meeting recording routinely contains third parties who never agreed to transcription, plus credentials, financials, and health details spoken aloud. Return the narrowest answer the task needs rather than printing whole transcripts, and do not forward them to another app or a trigger destination without explicit approval for that transfer.
+> - **Generated speech is attributable to a person.** Confirm the exact text before synthesizing with a cloned or custom voice; the output sounds like a real human saying it.
+> - Audio and voices persist in the user's ElevenLabs account until deleted, and generation consumes paid credits.
+
 **App name:** `elevenlabs`
 **Base URL proxied:** `api.elevenlabs.io`
 

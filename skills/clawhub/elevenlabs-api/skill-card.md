@@ -1,47 +1,64 @@
-## Description: <br>
-ElevenLabs API integration with managed authentication for text-to-speech, voice cloning, sound effects, and audio processing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs API integration with managed authentication for text-to-speech, voice cloning, sound effects, and audio processing.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call ElevenLabs through Maton-managed authentication for speech generation, voice management, audio cleanup, transcription, and related audio workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive MATON_API_KEY that can authorize access to connected ElevenLabs accounts. <br>
-Mitigation: Keep the key private, pass it through a secure environment variable, and install the skill only if Maton is trusted to proxy the account. <br>
-Risk: User-provided text, audio, recordings, and voice samples may be sent to Maton and ElevenLabs for processing. <br>
-Mitigation: Avoid confidential recordings, regulated data, private text, and third-party voice samples unless consent and processing approval are clear. <br>
-Risk: When multiple ElevenLabs connections exist, requests may target the wrong connected account. <br>
-Mitigation: Include the intended Maton-Connection header and confirm the selected connection before making requests. <br>
-Risk: Write operations can create, update, or delete voices, projects, history items, and related resources. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing create, update, or delete calls. <br>
+## Use Case:
 
+Developers and agent operators use this skill to access ElevenLabs API capabilities through Maton-managed authentication for speech generation, voice management, audio processing, transcription, and related account operations.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ElevenLabs API Documentation](https://elevenlabs.io/docs/api-reference) <br>
-- [ElevenLabs Developer Portal](https://elevenlabs.io/developers) <br>
-- [ElevenLabs Models Overview](https://elevenlabs.io/docs/overview/models) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; examples may return JSON metadata, binary audio, streaming audio, or downloaded files when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: ElevenLabs API access is routed through Maton-managed authentication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this routing is acceptable, use OAuth when possible, and review connection prompts before authorizing access.
+
+Risk: Write, delete, voice-cloning, and billable generation actions can change account data or incur usage costs.
+
+Mitigation: Confirm the target resource, payload, and intended effect before running any modifying or billable operation.
+
+Risk: Broad or ambiguous account access can affect the wrong ElevenLabs connection or Maton profile.
+
+Mitigation: Choose the narrowest available scopes and specify the intended connection or profile when multiple accounts are available.
+
+## Reference(s):
+
+- [ElevenLabs API Documentation](https://elevenlabs.io/docs/api-reference)
+- [ElevenLabs Developer Portal](https://elevenlabs.io/developers)
+- [ElevenLabs Models Overview](https://elevenlabs.io/docs/overview/models)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/elevenlabs-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce ElevenLabs API responses, including JSON metadata and audio data, through the Maton gateway.]
+
+## Skill Version(s):
+
+1.2.0 (source: release metadata; artifact frontmatter metadata lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Guides developers converting a client-side Next.js App Router static export into an Electron desktop app, including offline Windows packaging, custom app protocol setup, locale and window persistence, system tray behavior, and GitHub Actions builds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when packaging a Next.js static export as a Windows Electron app, notably offline/intranet boxes with no WebView2.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-Developers and engineers use this skill to wrap static-export Next.js applications in Electron for Windows desktop distribution, especially for offline or intranet machines without WebView2. It provides implementation guidance, shell commands, configuration, and copy-paste templates for Electron, electron-builder, and CI release workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Electron and GitHub Actions templates may not match the target repository's project names, checkout branch, release permissions, or contents:write policy. <br>
-Mitigation: Review and adjust generated templates before use, especially app identifiers, workflow refs, release upload behavior, and repository permissions. <br>
-Risk: Desktop packaging guidance affects local application state and must be verified on the intended Windows runtime environment. <br>
-Mitigation: Confirm local persistence is limited to expected app state such as locale and window size, then test the built app on target Windows machines before distribution. <br>
+## Use Case:
 
+Developers and engineers use this skill to convert client-side Next.js static exports into Windows Electron desktop apps for offline or intranet environments where WebView2 may be unavailable.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/nextjs-to-electron) <br>
-- [electron-files.md](electron-files.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and code/configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project-specific instructions and copy-paste Electron, electron-builder, and GitHub Actions templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated Electron and GitHub Actions templates may contain project-specific placeholders or release-upload behavior that is wrong for the target application.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review appId, product names, release-upload steps, and packaging paths before applying the templates.
+
+Risk: The generated desktop app stores locale and window state locally, which may be unexpected in tightly controlled environments.
+
+Mitigation: Confirm the small local settings file is acceptable for the deployment environment and document its purpose for operators.
+
+Risk: Close-to-tray behavior can make the app appear to stay open after the window is closed.
+
+Mitigation: Review the tray quit path and close-to-hide behavior during Windows QA before release.
+
+## Reference(s):
+
+- [nextjs-to-electron on ClawHub](https://clawhub.ai/rockbenben/skills/nextjs-to-electron)
+- [electron-files.md](artifact/electron-files.md)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JavaScript, JSON, YAML, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces implementation guidance and copy-paste templates for Electron main-process files, electron-builder configuration, tests, and GitHub Actions.]
+
+## Skill Version(s):
+
+1.1.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
