@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/video",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "video",
+  "branch": "main",
+  "pushedAt": "2026-09-04T11:56:11Z",
+  "contentHash": "3d0928f2c23741c2ca02b08742c7f8bb12e449632c73bea9ae9fdbe22e287415",
+  "fetchedAt": "2026-09-04T12:12:39.295Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/run-smoke-tests",
+  "repo": "cursor/plugins",
+  "skillId": "run-smoke-tests",
+  "branch": "main",
+  "pushedAt": "2026-09-04T12:10:05Z",
+  "contentHash": "3a309ee6563c2792792a9fbd72f0c347c8e8192c9c9d03bf750ece47536772dc",
+  "fetchedAt": "2026-09-04T12:11:22.667Z"
+}

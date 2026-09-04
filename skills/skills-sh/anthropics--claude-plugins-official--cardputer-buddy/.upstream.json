@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/cardputer-buddy",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "cardputer-buddy",
+  "branch": "main",
+  "pushedAt": "2026-09-04T07:37:42Z",
+  "contentHash": "50c57abb726b311db9638332e23adfd1358b9cb1398f82ba899ce6e7323a1014",
+  "fetchedAt": "2026-09-04T12:12:15.086Z"
+}

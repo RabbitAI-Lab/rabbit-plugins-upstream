@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openclaw/openclaw/sherpa-onnx-tts",
+  "repo": "openclaw/openclaw",
+  "skillId": "sherpa-onnx-tts",
+  "branch": "main",
+  "pushedAt": "2026-09-04T12:10:13Z",
+  "contentHash": "dcc0a1c26e8a36e648783fc196ad88fb33efcfc8d7db3eb3fc9b5d69a5c63a3c",
+  "fetchedAt": "2026-09-04T12:12:20.774Z"
+}
