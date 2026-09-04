@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-market",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-market",
+  "branch": "github-main",
+  "pushedAt": "2026-09-01T07:50:27Z",
+  "contentHash": "4adbd416e99c6605388083ae9dcad5acf0902ee6afa5f0e5315d78e3ab7a0e3c",
+  "fetchedAt": "2026-09-04T12:12:43.862Z"
+}

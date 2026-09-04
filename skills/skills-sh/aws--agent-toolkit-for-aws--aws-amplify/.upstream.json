@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-amplify",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-amplify",
+  "branch": "main",
+  "pushedAt": "2026-09-03T18:20:39Z",
+  "contentHash": "ad5c7eef4dde38835cd09d9ac84876c42f19e77f98c58afa7e6d96ea80ca4dad",
+  "fetchedAt": "2026-09-04T12:13:09.144Z"
+}

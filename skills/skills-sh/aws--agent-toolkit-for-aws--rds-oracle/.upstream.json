@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/rds-oracle",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "rds-oracle",
+  "branch": "main",
+  "pushedAt": "2026-09-03T18:20:39Z",
+  "contentHash": "264cd89365434d0c3f3de4e026bdd1ed12b2a15a6831497bfae3ff91b2a81110",
+  "fetchedAt": "2026-09-04T12:13:09.490Z"
+}

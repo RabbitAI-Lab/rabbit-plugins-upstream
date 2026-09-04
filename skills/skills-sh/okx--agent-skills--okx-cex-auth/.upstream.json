@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-auth",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-auth",
+  "branch": "github-main",
+  "pushedAt": "2026-09-01T07:50:27Z",
+  "contentHash": "d757ac18c71eca2a96617865dd47d94f7c766f965a6ab28667a4b2d5818ae200",
+  "fetchedAt": "2026-09-04T12:12:43.866Z"
+}

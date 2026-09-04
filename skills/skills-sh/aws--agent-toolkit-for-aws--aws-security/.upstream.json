@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-security",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-security",
+  "branch": "main",
+  "pushedAt": "2026-09-03T18:20:39Z",
+  "contentHash": "98076c1d351a8df1ec720d228b6b09fcc437b6488a3b5065494ac61a86c67311",
+  "fetchedAt": "2026-09-04T12:13:09.606Z"
+}

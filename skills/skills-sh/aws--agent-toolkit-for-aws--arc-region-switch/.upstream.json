@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/arc-region-switch",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "arc-region-switch",
+  "branch": "main",
+  "pushedAt": "2026-09-03T18:20:39Z",
+  "contentHash": "bf4e7ae14f692633234c3b68879ca038c3dfbc1039af995f208c95c6b9637e30",
+  "fetchedAt": "2026-09-04T12:13:09.564Z"
+}

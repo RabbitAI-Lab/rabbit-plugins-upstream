@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/running-release-tests",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "running-release-tests",
+  "branch": "main",
+  "pushedAt": "2026-09-03T18:20:39Z",
+  "contentHash": "551a2ba36d83b3c9b43f83c1e7a8f6ca1842b762230008a8eaee9f140210907c",
+  "fetchedAt": "2026-09-04T12:13:09.743Z"
+}
