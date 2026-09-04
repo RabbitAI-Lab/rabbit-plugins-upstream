@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/training/trl-fine-tuning",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "39a0cb9885435f5eb0fd57e3ad8df0de603ca9d5a0697b78747b14def640eb9c",
-  "fetchedAt": "2026-07-26T17:03:56.980Z"
+  "pushedAt": "2026-09-04T11:56:13Z",
+  "contentHash": "d595b2e814409dd6d073009aeebbdba39ed59f0c778e6c7d07ff2b43e5335e43",
+  "fetchedAt": "2026-09-04T12:10:57.998Z"
 }
