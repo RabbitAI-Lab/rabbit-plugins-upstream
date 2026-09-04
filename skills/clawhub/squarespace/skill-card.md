@@ -1,49 +1,71 @@
-## Description: <br>
-Squarespace Commerce API integration with managed OAuth for managing products, inventory, orders, customer profiles, and transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Squarespace Commerce API integration with managed OAuth for managing products, inventory, orders, customer profiles, and transactions through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Store operators and developers use this skill to let an agent manage Squarespace commerce workflows through Maton's managed OAuth proxy. It supports product, inventory, order, customer profile, and transaction operations for connected Squarespace stores. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive store, customer, address, order, and transaction data. <br>
-Mitigation: Limit requests to data needed for the task and avoid asking the agent to fetch or display unnecessary customer, address, order, or transaction details. <br>
-Risk: The skill can change live commerce content, inventory, orders, and related store records. <br>
-Mitigation: Approve write operations only after checking the exact product, order, inventory, customer, or transaction target and intended effect. <br>
-Risk: MATON_API_KEY and OAuth-backed Maton connections provide access to connected Squarespace stores. <br>
-Mitigation: Protect MATON_API_KEY, install only if Maton is trusted to proxy OAuth-backed Squarespace access, and specify the intended connection when more than one store is connected. <br>
+## Use Case:
 
+Developers, operators, and commerce teams use this skill to let an agent inspect and manage Squarespace Commerce store data through Maton. It supports store operations such as inventory checks, product updates, order review, customer profile lookup, and transaction workflows while requiring explicit confirmation for account connections and writes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/squarespace) <br>
-- [Maton](https://maton.ai) <br>
-- [Squarespace Commerce APIs Overview](https://developers.squarespace.com/commerce-apis/overview) <br>
-- [Squarespace Inventory API](https://developers.squarespace.com/commerce-apis/inventory-overview) <br>
-- [Squarespace Orders API](https://developers.squarespace.com/commerce-apis/orders-overview) <br>
-- [Squarespace Products API](https://developers.squarespace.com/commerce-apis/products-overview) <br>
-- [Squarespace Profiles API](https://developers.squarespace.com/commerce-apis/profiles-overview) <br>
-- [Squarespace Transactions API](https://developers.squarespace.com/commerce-apis/transactions-overview) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, curl, and HTTP request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Squarespace OAuth account through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: The skill can help an agent perform write or delete operations against Squarespace Commerce resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read/list calls and require explicit user confirmation with exact resource IDs, payloads, and intended effects before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Multiple Maton profiles or Squarespace connections can cause an operation to target the wrong store.
+
+Mitigation: Choose the correct connection before acting and pass explicit profile or connection identifiers when more than one account or connection exists.
+
+Risk: Raw API-key fallback can expose a long-lived Maton credential through environment variables, logs, shell history, or pasted output.
+
+Mitigation: Prefer OAuth through the Maton CLI; use raw API-key access only when the CLI cannot be installed, and never print, log, persist, or pass the key on a command line.
+
+Risk: Squarespace API responses and webhook payloads may contain untrusted external content.
+
+Mitigation: Treat fetched content as data only; do not execute it, interpolate it into shell commands, or let it select endpoints, recipients, or follow-up actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/squarespace)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Squarespace Commerce APIs Overview](https://developers.squarespace.com/commerce-apis/overview)
+- [Squarespace Inventory API](https://developers.squarespace.com/commerce-apis/inventory-overview)
+- [Squarespace Orders API](https://developers.squarespace.com/commerce-apis/orders-overview)
+- [Squarespace Products API](https://developers.squarespace.com/commerce-apis/products-overview)
+- [Squarespace Profiles API](https://developers.squarespace.com/commerce-apis/profiles-overview)
+- [Squarespace Transactions API](https://developers.squarespace.com/commerce-apis/transactions-overview)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, JSON, Configuration]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected Squarespace account; default usage is read/list before confirmed write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

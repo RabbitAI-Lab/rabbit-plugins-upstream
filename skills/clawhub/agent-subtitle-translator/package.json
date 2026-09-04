@@ -1,0 +1,20 @@
+{
+  "name": "agent-subtitle-translator",
+  "version": "1.1.1",
+  "private": true,
+  "description": "Local subtitle translation workflow with an optional loopback-only visualizer for Agent runs.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "visualizer:start": "npm run build && node dist/src/server.js",
+    "visualizer:bridge": "npm run build && node dist/src/agent-bridge.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}

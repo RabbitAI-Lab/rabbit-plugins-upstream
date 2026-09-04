@@ -8,17 +8,17 @@
 
 数据块（Bing 实际支持的 9 类业务维度 + 总览）：总览、设备、地域、受众（年龄/性别）、系列、广告组、广告、关键词、搜索字词。
 
-| CLI `--sections` | 落盘形状（生产实测） | 报告 `tables.*` / KPI |
-| --- | --- | --- |
-| `overview` | 对象：`currentPeriod` / `previousPeriod` / `balance` / `averageDailyCost` … | → `meta` + `kpis`（环比、余额、日均） |
-| `device` | `{ devices: Row[] }` | → `tables.devices[]` |
-| `geographic` | `{ countries: Row[] }` | → `tables.geographic[]` |
-| `audience-merged`（或 `age-audience`/`gender-audience`） | `{ data: { ageAudience.audience[], genderAudience.audience[] } }` | → `tables.audienceAge[]` / `audienceGender[]` |
-| `campaigns` | **根节点数组** | → `tables.campaigns[]`；**本期 KPI 优先由此累加** |
-| `ad-groups` | **根节点数组** | → `tables.adGroups[]`（含 `qualityScore`） |
-| `ads` | **根节点数组** | → `tables.ads[]` |
-| `keywords` | **根节点数组**（默认 limit=100） | → `tables.keywords[]` |
-| `search-terms` | **根节点数组**（默认 limit=100） | → `tables.searchTerms[]` |
+| CLI `--sections`                                         | 落盘形状（生产实测）                                                        | 报告 `tables.*` / KPI                             |
+| -------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------- |
+| `overview`                                               | 对象：`currentPeriod` / `previousPeriod` / `balance` / `averageDailyCost` … | → `meta` + `kpis`（环比、余额、日均）             |
+| `device`                                                 | `{ devices: Row[] }`                                                        | → `tables.devices[]`                              |
+| `geographic`                                             | `{ countries: Row[] }`                                                      | → `tables.geographic[]`                           |
+| `age-audience` / `gender-audience`（默认）或 `audience-merged` | 拆分维 `{ audience: [] }`；merged `{ data: { ageAudience, genderAudience } }` | → `tables.audienceAge[]` / `audienceGender[]`（merged 空则回退拆分维） |
+| `campaigns`                                              | **根节点数组**                                                              | → `tables.campaigns[]`；**本期 KPI 优先由此累加** |
+| `ad-groups`                                              | **根节点数组**                                                              | → `tables.adGroups[]`（含 `qualityScore`）        |
+| `ads`                                                    | **根节点数组**                                                              | → `tables.ads[]`                                  |
+| `keywords`                                               | **根节点数组**（默认 limit=100）                                            | → `tables.keywords[]`                             |
+| `search-terms`                                           | **根节点数组**（默认 limit=100）                                            | → `tables.searchTerms[]`                          |
 
 > Bing **没有** Google 的 `daily-metrics` / `dimension-summary`；报告模板也不渲染这两章。
 
@@ -26,12 +26,12 @@
 
 ## 标准四步流程（默认 · 交付 HTML）
 
-| 步骤             | 执行者       | 动作                                                                                                                                                      |
-| ---------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. 拉数**      | Agent 调 CLI | `bing-analysis -a <id> --start <s> --end <e> --json-out ./snap-bing`（见下方「日期规则」，全 11 维或 `--sections` 指定子集）                              |
-| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），把网关原始字段映射为下方 `tables.*` 契约，完成聚合与洞察                               |
+| 步骤             | 执行者       | 动作                                                                                                                                        |
+| ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1. 拉数**      | Agent 调 CLI | `bing-analysis -a <id> --start <s> --end <e> --json-out ./snap-bing`（见下方「日期规则」，默认 10 维含年龄/性别、不含 `audience-merged`）                |
+| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），把网关原始字段映射为下方 `tables.*` 契约，完成聚合与洞察                 |
 | **3. 写 JSON**   | Agent        | 撰写 `bing-period-report.json`：仅 `meta.accountId` + `narrative`（9 个分析小节）为必填；`kpis`/`tables` 可省略由 `--snapshot-dir` 自动合并 |
-| **4. 渲染 HTML** | CLI          | `bing-analysis render` — **校验 narrative 9 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                                      |
+| **4. 渲染 HTML** | CLI          | `bing-analysis render` — **校验 narrative 9 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                        |
 
 ```bash
 # 步骤 1
@@ -55,7 +55,7 @@ siluzan-tso bing-analysis render \
   - `audienceGender[]`：`{gender, spend, impressions, clicks, ctr, averageCpc, conversions}`
   - `campaigns[]`：`{campaignName, campaignStatus, campaignStatusDisplay, spend, impressions, clicks, ctr, conversions, costPerConversion}`
   - `adGroups[]`：`{adGroupName, campaignName, qualityScore, spend, clicks, ctr, conversions, costPerConversion}`
-  - `ads[]`：`{adTitle, adGroupName, adType, spend, clicks, ctr, conversions}`
+  - `ads[]`：`{adTitle, adGroupName, adType, spend, clicks, ctr, conversions}`（RSA 的报表 `adTitle` 常为空，`render` 用「系列 / 广告组」兜底展示并在表上方注明）
   - `keywords[]`：`{keyword, matchType, qualityScore, spend, ctr, averageCpc, conversions, costPerConversion}`
   - `searchTerms[]`：`{searchQuery, keyword, deliveredMatchType, spend, ctr, conversions, costPerConversion}`
 - `narrative`（**Agent 必填，唯一由 Agent 撰写的叙事内容**）：
@@ -67,18 +67,18 @@ siluzan-tso bing-analysis render \
 
 `render` 传 `--snapshot-dir` 时，CLI 自动补全：
 
-1. `meta` / `kpis`（含余额、日均、环比；本期 KPI 优先 campaigns 累加）
-2. `tables.*`（按上表落盘形状映射；Agent 已填字段不覆盖）
+1. `meta`（仅补空字段）
+2. **`kpis` / `tables.*` 一律以 CLI 快照覆盖**（有对应 section 时；本期 KPI 优先 campaigns 累加）——数值口径不以 Agent 预填为准
 
-Agent 只需撰写 `narrative`；**禁止手写 HTML**。`ctr` / `conversionRate` 落盘已为 0~1 小数。
+Agent 只需撰写 `narrative`；**禁止手写 HTML**，也**禁止**自填 `kpis`/`tables` 数值（尤其 `ctr` 须为 CLI 落盘的 0~1 小数）。
 
 ---
 
 ## 日期规则（必读）
 
-- Bing 接口**无法**拉取过新的数据；时间范围内**任意一天**若为**今天**或**昨天**，请求会失败。
-- **CLI**：`--start` / `--end` 须**同传或同省略**；省略时默认**截至前天**的近 7 天（与 `bing-analysis` 实现一致）。
-- **自选区间且靠近当前日期**时，结束日须 ≤ **前天**（仅当区间会碰到今天/昨天才需要压到前天；**不是**把历史自然月最后一天减 1 天）。
+- 可以含**昨天**；**今天**也可以拉，但可能不完整（网关未显式传 `returnOnlyCompleteData` 时自动近实时）。含昨天/今天时**不要**显式传 `--return-only-complete-data true`。
+- **CLI**：`--start` / `--end` 须**同传或同省略**；省略时默认**截至昨天**的近 7 天（与 `bing-analysis` 实现一致）。
+- 小时/日分桶（当日花费、近两小时 CPA）仍须对 `campaigns`/`ad-groups`/`ads` 传 `--aggregation Daily|Hourly`。
 
 ### 用户说「X 月 / X月份 / 月报」（已结束的完整自然月）
 
@@ -96,7 +96,7 @@ Agent 只需撰写 `narrative`；**禁止手写 HTML**。`ctr` / `conversionRate
 siluzan-tso bing-analysis -a <id> --start 2026-06-01 --end 2026-06-30 --json-out ./snap-bing
 ```
 
-**禁止**因「Bing 不能含今天/昨天」而对**已结束的历史自然月**把 `--end` 减 1 天——该限制只针对区间内的日历日是否等于**执行当天的今天或昨天**；6 月 30 日在 7 月 8 日拉数完全合法。拉数后核对 `overview` 落盘里的 `activeDays` 应等于该月日历天数（6 月 = 30）。
+**禁止**因旧规则「Bing 不能含今天/昨天」而对**已结束的历史自然月**把 `--end` 减 1 天。6 月 30 日在 7 月 8 日拉数完全合法。拉数后核对 `overview` 落盘里的 `activeDays` 应等于该月日历天数（6 月 = 30）。
 
 ---
 
@@ -107,13 +107,13 @@ mkdir -p ./snap-bing
 
 siluzan-tso list-accounts -m BingV2 -k <mediaCustomerId> --json-out ./snap-bing
 
-# 一次批跑全部 11 维（等价于逐个 --sections 拉取，见下方速查表）
+# 一次批跑默认 10 维（含 age-audience / gender-audience，不含 audience-merged）
 siluzan-tso bing-analysis -a <mediaCustomerId> --start <S> --end <E> --json-out ./snap-bing
 siluzan-tso balance -m BingV2 --accounts <mediaCustomerId> --json-out ./snap-bing
 
-# 或仅拉本次报告所需维度（--sections 逗号分隔）
+# 或仅拉本次报告所需维度（--sections 逗号分隔；不要同时写拆分维和 audience-merged）
 siluzan-tso bing-analysis -a <mediaCustomerId> --start <S> --end <E> \
-  --sections overview,campaigns,device,geographic,audience-merged,ad-groups,ads,keywords,search-terms \
+  --sections overview,campaigns,device,geographic,age-audience,gender-audience,ad-groups,ads,keywords,search-terms \
   --limit 100 --json-out ./snap-bing
 ```
 
@@ -206,9 +206,9 @@ Bing 网关常不返回 `averageDailyCost`、`activeDays`（或为 0）。CLI �
 
 ## 4. 受众
 
-- **CLI**：推荐 `bing-analysis --sections audience-merged`（年龄+性别合并 JSON）；或分别 `--sections age-audience` / `--sections gender-audience`
+- **CLI**：默认已含 `--sections age-audience,gender-audience`。不要与 `audience-merged` 同时拉（Bing SDK 会抢同一份受众 csv，merged 常 400）。`render --snapshot-dir` 优先 merged，空则回退拆分维。
 
-**数据呈现**：年龄段、性别的展示、点击、消耗、CTR、CPC（按 `data.ageAudience.audience` / `data.genderAudience.audience`）。写入 JSON `tables.audienceAge[]` / `tables.audienceGender[]`。
+**数据呈现**：年龄段、性别的展示、点击、消耗、CTR、CPC。拆分维读 `age-audience-*.json` / `gender-audience-*.json` 的 `audience[]`（标签字段 `audience`）。写入 JSON `tables.audienceAge[]`（`ageRange`）/ `tables.audienceGender[]`（`gender`）。
 
 **分析（必写）** → 写入 `narrative.sections.audience.{analysis,suggestions}`：
 
@@ -225,7 +225,7 @@ Bing 网关常不返回 `averageDailyCost`、`activeDays`（或为 0）。CLI �
 | 广告组 | `bing-analysis --sections ad-groups` | `ad-groups-*.json`           |
 | 广告   | `bing-analysis --sections ads`       | `ads-*.json`                 |
 
-**数据呈现**：各表按消耗降序；系列含 `campaignStatus`；广告组可含质量分相关字段（以 outline 为准）。写入 JSON `tables.campaigns[]` / `tables.adGroups[]` / `tables.ads[]`。
+**数据呈现**：各表按消耗降序；系列含 `campaignStatus`；广告组可含质量分相关字段（以 outline 为准）。写入 JSON `tables.campaigns[]` / `tables.adGroups[]` / `tables.ads[]`。RSA 无创意标题时 HTML 仍展示「广告标题」列，内容为「系列 / 广告组」。
 
 **分析（必写，三个子块各写一段，不可合并为一句带过）**：
 

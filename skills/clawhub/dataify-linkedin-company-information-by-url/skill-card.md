@@ -1,44 +1,53 @@
-## Description: <br>
-Prepare Dataify builder requests for the linkedin.com scraper family rooted at linkedin_company_information_by-url, including tool selection, saved parameter lookup, and generation of a scraperapi.dataify.com/builder curl request using DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured LinkedIn company information from one or more known company URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to prepare Dataify builder requests for LinkedIn company and job scraping tools. It guides tool selection, parameter collection, and curl command generation for the Dataify builder API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DATAIFY_API_TOKEN may be exposed if copied into logs, shell history, or shared command output. <br>
-Mitigation: Keep DATAIFY_API_TOKEN private, prefer a secure secret store or carefully protected environment variable, and avoid pasting token values directly into shared commands. <br>
-Risk: The generated curl command sends the API token and supplied parameters to Dataify. <br>
-Mitigation: Review the generated curl command and parameter values before running it. <br>
+## Use Case:
 
+External users and developers use this skill to prepare authenticated Dataify Builder requests for known LinkedIn company URLs and return the collected result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-linkedin-company-information-by-url) <br>
-- [Publisher profile](https://clawhub.ai/user/dataify-server) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
-- [Tool parameter catalog](references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated curl commands use DATAIFY_API_TOKEN from the environment and include Dataify spider_name, spider_id, spider_parameters, spider_errors, and file_name fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: The skill is advertised for LinkedIn company-URL collection but also exposes LinkedIn job-scraping options through an authenticated Dataify workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the broader LinkedIn scraper family is intended, and review the selected Dataify tool before execution.
+
+Risk: Permanent API-token setup can retain credentials beyond the immediate task.
+
+Mitigation: Prefer session-scoped DATAIFY_API_TOKEN configuration unless a persistent shell variable is deliberately required.
+
+## Reference(s):
+
+- [Tool parameter catalog](references/tool-params.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a Dataify task ID and resume command if asynchronous monitoring times out or is interrupted.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

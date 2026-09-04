@@ -1,49 +1,66 @@
-## Description: <br>
-1688 Shop Health Check helps 1688 merchants assess shop health across core metrics, abnormal products, top products, activity effectiveness, customer geography, and top-customer retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides 1688 shop health checks across traffic, inquiries, transactions, products, customers, advertising, and risk, producing summary conclusions, an HTML data report, and prioritized follow-up actions for one or more bound shops.
 
-## Publisher: <br>
-[1688aiinfra](https://clawhub.ai/user/1688aiinfra) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[1688aiinfra](https://clawhub.ai/user/1688aiinfra)
 
-## Use Case: <br>
-1688 merchants and commerce operators use this skill to run an interactive shop health diagnostic, identify operational risks, and choose focused follow-up analyses for products, traffic, activities, customer geography, and high-value customers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a 1688 AccessKey for shop analytics. <br>
-Mitigation: Use a least-privileged or dedicated key and install only when the credential access is acceptable. <br>
-Risk: Configuration depends on the intended local gateway endpoint. <br>
-Mitigation: Verify OPENCLAW_GATEWAY_URL before running configure. <br>
-Risk: Telemetry may be unsuitable for strict privacy environments. <br>
-Mitigation: Review and disable telemetry when required by local policy. <br>
-Risk: Optimizer handoff cards may trigger downstream optimization workflows. <br>
-Mitigation: Treat handoff cards as action requests and confirm downstream optimizer skills separately before use. <br>
+## Use Case:
 
+External 1688 merchants and shop operators use this skill to diagnose shop performance, compare bound shops, identify operational risks, and choose prioritized optimization actions after the report.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/1688aiinfra/1688-shop-health-check) <br>
-- [CLI Commands Reference](artifact/references/cli-commands.md) <br>
-- [Analysis Methodology](artifact/references/analysis-methodology.md) <br>
-- [Interaction Specifications](artifact/references/interaction-specs.md) <br>
-- [Visualization Rules](artifact/references/visualization-rules.md) <br>
-- [Anti-Patterns](artifact/references/anti-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown diagnostic reports with seller-report JSON visualization blocks and interactive card payloads; CLI commands return JSON with success, markdown, and data fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only analytics commands support diagnostics; configure stores a local 1688 AccessKey configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The skill can access 1688 shop and business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in environments where that data access is intended and authorized.
+
+Risk: The skill can store a 1688 AK in OpenClaw configuration.
+
+Mitigation: Confirm credential storage is acceptable before configuration and rotate or remove the AK when access is no longer needed.
+
+Risk: The skill may install packages automatically.
+
+Mitigation: Use an environment where automatic package installation is acceptable, or disable/review package installation before execution.
+
+Risk: The skill can propose follow-up action cards and scheduled daily diagnostics.
+
+Mitigation: Review action cards before confirming and enable scheduling only when recurring diagnostics are intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/1688aiinfra/skills/1688-shop-health-check)
+- [Publisher profile](https://clawhub.ai/user/1688aiinfra)
+- [Analysis methodology](artifact/references/analysis-methodology.md)
+- [CLI commands](artifact/references/cli-commands.md)
+- [Interaction specs](artifact/references/interaction-specs.md)
+- [Wiki routing rules](artifact/references/wiki-routing-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Chinese Markdown summary plus an HTML report file and interactive action-card options]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON command results, generated report files, and follow-up scheduling or optimization guidance.]
+
+## Skill Version(s):
+
+1.4.0 (source: ClawHub release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

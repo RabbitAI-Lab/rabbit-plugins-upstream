@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vimeo",
   "slug": "vimeo",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781739755927,
-  "contentHash": "72b661e6ddb9b3934c3c060315fe500766b62a749d67e286162a2a442a027de3",
-  "fetchedAt": "2026-07-26T18:27:30.535Z"
+  "version": "1.2.0",
+  "updatedAt": 1788519367924,
+  "contentHash": "a5051f7d2ce528e0b801236d204695e4d12c51d036101653317f6590b6abda46",
+  "fetchedAt": "2026-09-04T12:12:21.354Z"
 }

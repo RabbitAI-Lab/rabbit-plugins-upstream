@@ -1,8 +1,11 @@
 ---
 name: qa-shift-left
-version: 1.6.0
+slug: qa-shift-left
+displayName: 测试左移
+version: 1.7.5
 description: >-
   当项目还在需求阶段或者开发正在写代码时使用此技能——这时候介入能花最小的成本避免最多的缺陷。从需求可测试性评审（需求模糊/矛盾/不可测）、开发阶段测试设计（单元测试/接口契约/测试桩）和技术方案评审（影响面分析/风险识别）三个维度提前发现缺陷。越早发现 Bug 修复成本越低——需求阶段的 Bug 修复成本是线上阶段的 1/100。输出左移检查清单和阶段性介入记录。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"测试左移"、"左移"、"提前测试"、"需求可测试性（左移阶段）"、"需求评审（左移介入）"、"开发阶段测"、需要将测试提前、项目早期需要介入测试时
 allowed-tools: Read Grep Glob Bash
@@ -29,6 +32,9 @@ output_format:
   traceability:
     - 本技能规划左移，不产出唯一ID；可溯源到需求评审ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - shift_left_plan: 左移测试计划
     - early_activities: 早期介入活动清单
     - quality_gates_early: 前置质量门禁
@@ -41,6 +47,8 @@ error_recovery_guidance:
   on_failure: "左移介入遗漏可测试性问题时回退到需求评审补充"
   retry_behavior: "补充评审后重新评估左移点"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 测试左移实践
 
 ## 核心原则

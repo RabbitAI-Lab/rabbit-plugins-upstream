@@ -1,48 +1,64 @@
-## Description: <br>
-学习DNA helps agents maintain an opt-in, minimal student learning profile for personalized tutoring continuity, with controls to view, correct, delete, pause memory, and pause sharing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds, reviews, updates, exports, pauses, and deletes a student learning profile only after explicit consent, covering subject strengths and weaknesses, error patterns, learning preferences, growth milestones, and controlled sharing.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners, guardians, and education agents use this skill to create and update a controlled long-term learning profile only after explicit consent. It supports personalized tutoring continuity, learning-style adaptation, growth milestones, cross-subject connections, and crisis referral handling without treating inferred emotional fields as clinical assessments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill maintains persistent student learning profiles and inferred emotional data. <br>
-Mitigation: Use it only after explicit student or guardian opt-in, and confirm view, correct, delete, pause-memory, and pause-sharing controls are available. <br>
-Risk: Automatic profile updates and cross-skill sharing can expand the amount of retained or shared student data. <br>
-Mitigation: Keep emotion tracking, reminders, and cross-skill sharing disabled unless separately needed and explicitly authorized. <br>
-Risk: Inferred learning-emotion fields could be mistaken for clinical or authoritative assessments. <br>
-Mitigation: Treat emotion fields as learning-state observations only, avoid clinical labels, and follow the crisis referral protocol for safety signals. <br>
+## Use Case:
 
+External education agents, students, and guardians use this skill to maintain a consent-controlled long-term learning profile for personalized tutoring continuity. It is intended for learning support workflows that need profile access, correction, deletion, export, cross-skill sharing limits, and crisis-escalation boundaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-dna) <br>
-- [学习DNA template](references/dna-template.md) <br>
-- [Crisis referral protocol](references/crisis-referral-protocol.md) <br>
-- [Cross-subject concept connections](references/cross-subject-connections.md) <br>
-- [Growth milestones reference](references/growth-milestones.md) <br>
-- [学习DNA JSON Schema README](schemas/README.md) <br>
-- [Published DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json) <br>
+### Deployment Geography for Use:
 
+Global; crisis referral resources and minor consent handling should be localized before deployment.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, JSON, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON schema definitions, reference templates, and validation commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should remain consent-gated, privacy-minimized, and clearly labeled when conclusions are inferred from limited learning data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill handles sensitive student learning, emotion, sharing, and crisis records, including data about minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only where per-student identity, guardian consent where required, explicit emotion and interest tracking opt-in, and export, correction, deletion, and pause controls are enforced.
+
+Risk: Cross-skill sharing and teacher writeback could expose more profile data than a task requires.
+
+Mitigation: Limit sharing to the minimum necessary profile fields, require the relevant consent flags, and enforce teacher writeback boundaries before accepting updates.
+
+Risk: Crisis handling and minor-consent expectations may vary by locale.
+
+Mitigation: Localize crisis resources and legal consent workflows before production deployment, and record only crisis referral actions rather than sensitive event details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-dna)
+- [Learning DNA template](artifact/references/dna-template.md)
+- [Growth milestone standards](artifact/references/growth-milestones.md)
+- [Cross-subject concept connection templates](artifact/references/cross-subject-connections.md)
+- [Crisis referral protocol](artifact/references/crisis-referral-protocol.md)
+- [Learning DNA JSON Schema](artifact/schemas/dna-profile.schema.json)
+- [Schema overview](artifact/schemas/README.md)
+- [Shared vocabulary and consent flags](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON profile fields, consent-control language, and profile update instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be treated as sensitive student-profile material and should honor explicit consent, pause, export, correction, deletion, and sharing controls.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

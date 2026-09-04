@@ -1,47 +1,65 @@
-## Description: <br>
-Dropbox API integration with managed OAuth for files, folders, search, metadata, and cloud storage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dropbox API integration with managed OAuth for files, folders, search, metadata, and cloud storage.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Dropbox files and folders through Maton-managed OAuth, including listing, searching, uploading, downloading, moving, deleting, and reading metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, upload, move, and delete Dropbox data through Maton-managed OAuth. <br>
-Mitigation: Confirm exact Dropbox paths before uploads, moves, deletes, and batch operations. <br>
-Risk: The skill requires a sensitive MATON_API_KEY and can return temporary Dropbox download links. <br>
-Mitigation: Avoid sharing logs containing MATON_API_KEY or temporary links, and revoke unused Dropbox connections when finished. <br>
-Risk: Dropbox access is brokered through Maton rather than directly through Dropbox credentials in the skill. <br>
-Mitigation: Install only when the operator trusts Maton to broker Dropbox access. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to Dropbox through Maton-managed OAuth, list and search files, inspect metadata, and perform approved file operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/dropbox-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Dropbox HTTP API overview](https://www.dropbox.com/developers/documentation/http/overview) <br>
-- [Dropbox Developer Portal](https://www.dropbox.com/developers) <br>
-- [Dropbox API Explorer](https://dropbox.github.io/dropbox-api-v2-explorer/) <br>
-- [DBX File Access Guide](https://developers.dropbox.com/dbx-file-access-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with Python, JavaScript, curl, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; Dropbox content endpoints use binary request bodies with Dropbox-API-Arg headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill routes Dropbox access through Maton as an OAuth/API gateway, so Dropbox account access depends on trusting that gateway.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user trusts Maton for Dropbox access, prefer the CLI OAuth flow, and approve each new connection explicitly.
+
+Risk: Dropbox write actions such as upload, delete, move, share, or other modifications can change or expose user data.
+
+Mitigation: Default to read and list operations, verify the target account and resource identifiers, and require explicit user approval before every write action.
+
+Risk: The MATON_API_KEY/raw HTTP fallback can expose a long-lived credential and the server security guidance identifies a read-only Dropbox API v2 protocol mistake in the appendix.
+
+Mitigation: Avoid the raw HTTP fallback unless the CLI cannot be used; when raw HTTP is unavoidable, keep the key out of logs and commands and use POST with the required request body, such as JSON null, for Dropbox API v2 calls.
+
+## Reference(s):
+
+- [Dropbox HTTP API Overview](https://www.dropbox.com/developers/documentation/http/overview)
+- [Dropbox Developer Portal](https://www.dropbox.com/developers)
+- [Dropbox API Explorer](https://dropbox.github.io/dropbox-api-v2-explorer/)
+- [DBX File Access Guide](https://developers.dropbox.com/dbx-file-access-guide)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related ClawHub API Gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls, markdown]
+
+**Output Format:** [Markdown with inline shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and user-approved Dropbox authorization.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

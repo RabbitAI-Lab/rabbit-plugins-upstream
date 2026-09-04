@@ -1,52 +1,64 @@
-## Description: <br>
-帮助独立教师把试听体验组织为系统化诊断、学员建档、试听记录、转化判断和后续跟进流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把试听从“体验课”变成一次双向诊断，并按最小化原则给新学员建档。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External independent teachers use this skill to collect minimal student intake information, guide parent or student needs interviews, plan diagnostic trial lessons, record observations, and prepare formal student profiles. It also helps the teacher draft follow-up timing and wording for conversion, renewal, or attrition cases while keeping teacher confirmation in the loop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles student and minor intake records, which may include identifiable or sensitive information. <br>
-Mitigation: Require guardian consent for identifiable minor data, prefer pseudonyms, and avoid writing real names or contacts into shared dashboards unless strictly necessary. <br>
-Risk: Security evidence notes ambiguity about whether risk labels are stored or only derived. <br>
-Mitigation: Decide before use whether risk markers may be stored or must remain derived-only, and document that choice in the shared workspace policy. <br>
-Risk: Follow-up wording could be mistaken for automatic outreach or pressure to convert. <br>
-Mitigation: Keep all follow-up messages as teacher-reviewed suggestions and require teacher confirmation before any communication is sent. <br>
+## Use Case:
 
+Independent teachers use this skill to run diagnostic trial lessons, collect minimal student intake information, draft follow-up language, and create pseudonymous student records for tutoring workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-intake) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Intake interview guide](artifact/references/intake-interview-guide.md) <br>
-- [Student basic information form](artifact/references/student-basic-info-form.md) <br>
-- [Needs interview 5W checklist](artifact/references/needs-interview-5w-checklist.md) <br>
-- [Needs profile card](artifact/references/needs-profile-card.md) <br>
-- [Diagnosis card template](artifact/references/diagnosis-card-template.md) <br>
-- [Trial lesson 5-segment structure](artifact/references/trial-lesson-5-segment-structure.md) <br>
-- [Trial observation record](artifact/references/trial-observation-record.md) <br>
-- [Follow-up scripts for three stages](artifact/references/followup-scripts-three-stages.md) <br>
-- [Formal student profile template](artifact/references/formal-student-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured templates, and workspace field guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include student intake templates, interview questions, diagnostic lesson structure, observation notes, follow-up wording, and profile fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill stores student learning records and extends into renewal, churn, scheduling-state, and retention workflows beyond a narrow intake boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review scope before deployment, route renewal, churn, scheduling, lesson logs, and stage reports to companion skills, and keep this skill focused on intake and pseudonymous trial records.
+
+Risk: The skill handles records about minors and tutoring needs.
+
+Mitigation: Confirm guardian consent before creating or sharing records, retain only the minimum fields needed for teaching, and define a deletion window for trial students who do not enroll.
+
+Risk: Crisis-support references may include China-specific contacts.
+
+Mitigation: Replace crisis contacts and referral instructions with locally appropriate resources before use outside that jurisdiction.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-intake)
+- [Student Basic Info Form](artifact/references/student-basic-info-form.md)
+- [Needs Interview 5W Checklist](artifact/references/needs-interview-5w-checklist.md)
+- [Trial Lesson 5-Segment Structure](artifact/references/trial-lesson-5-segment-structure.md)
+- [Trial Observation Record](artifact/references/trial-observation-record.md)
+- [Formal Student Profile Template](artifact/references/formal-student-profile-template.md)
+- [Follow-up Scripts for Three Stages](artifact/references/followup-scripts-three-stages.md)
+- [Crisis Referral Protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance and structured student-record field content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended to use pseudonymous student fields and avoid contact details or direct message sending.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

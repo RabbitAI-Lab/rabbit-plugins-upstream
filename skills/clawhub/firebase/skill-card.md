@@ -1,44 +1,67 @@
-## Description: <br>
-Firebase Management API integration with managed OAuth for managing Firebase projects, web apps, Android apps, iOS apps, and Google Analytics links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firebase Management API integration with managed OAuth for managing Firebase projects, web apps, Android apps, iOS apps, and Google Analytics links.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and manage Firebase projects and apps through Maton-managed OAuth. It is useful for listing projects, creating or updating app registrations, retrieving app configuration, and linking Google Analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton can act on the connected Firebase account through the OAuth connection. <br>
-Mitigation: Install only if you trust Maton with the connected Firebase projects, use the least-privileged connection available, and periodically review or revoke Maton OAuth connections you no longer need. <br>
-Risk: Create, update, and delete operations can change Firebase projects and app registrations. <br>
-Mitigation: Confirm the target resource and intended effect before executing write or delete actions, and specify the intended Maton connection when multiple Firebase connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and manage Firebase projects and registered web, Android, and iOS apps through Maton-managed OAuth. It is suited for listing resources, retrieving app configuration, creating or updating apps, and linking or removing Google Analytics when the user has confirmed the intended account and change.
 
-## Reference(s): <br>
-- [Firebase Skill on ClawHub](https://clawhub.ai/byungkyu/firebase) <br>
-- [Maton](https://maton.ai) <br>
-- [Firebase Management API Overview](https://firebase.google.com/docs/projects/api/workflow_set-up-and-manage-project) <br>
-- [Firebase Management REST API Reference](https://firebase.google.com/docs/reference/firebase-management/rest) <br>
-- [Firebase Projects Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API paths, JSON examples, and inline shell, Python, and JavaScript snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a Firebase OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can operate on Firebase resources in the connected account, including writes and deletions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read or list calls first, confirm the target account and resource identifiers, and require explicit user approval before POST, PUT, PATCH, or DELETE operations.
+
+Risk: Authorizing Maton grants it access to the selected Firebase account.
+
+Mitigation: Prefer OAuth, choose the narrowest available Firebase scopes, specify the intended connection when multiple accounts exist, and revoke unused Firebase connections when work is complete.
+
+Risk: Fallback API-key authentication can expose a long-lived credential if printed, persisted, or passed on a command line.
+
+Mitigation: Use OAuth where possible; when an API key is unavoidable, read it from the process environment only, never log or persist it, and rotate it if exposure occurs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/firebase)
+- [Maton Homepage](https://maton.ai)
+- [Firebase Management API Overview](https://firebase.google.com/docs/projects/api/workflow_set-up-and-manage-project)
+- [Firebase Management REST API Reference](https://firebase.google.com/docs/reference/firebase-management/rest)
+- [Firebase Projects Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects)
+- [Firebase Web Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.webApps)
+- [Firebase Android Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.androidApps)
+- [Firebase iOS Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.iosApps)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Maton CLI commands, SDK snippets, Firebase API paths, JSON request bodies, and operational guidance.]
+
+## Skill Version(s):
+
+1.2.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,66 @@
-## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Default DCC-MCP router for 35 released creative products and 3 current application routes that uses typed DCC-MCP tools first and keeps DCC-CUA/ui-control application UI work on the project-owned route without falling back to generic Computer Use providers.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+## Use Case:
 
+Developers, technical artists, and agent operators use this skill to route DCC and application UI requests across supported creative products through typed DCC-MCP tools, CLI workflows, and scoped DCC-CUA control.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+Risk: The skill can direct agents to install or update CLI tools, adapters, marketplace packages, launch GUI applications, and change DCC application state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user consent before installs, updates, launches, setup execution, adapter changes, marketplace changes, or issue-filing actions; inspect unfamiliar packages first and follow CLI-returned next steps.
+
+Risk: Application UI control can operate real browser or desktop UI and may encounter authentication, security, purchase, or permission boundaries.
+
+Mitigation: Use exact DCC-CUA binding, fresh observations, and post-action readback; hand CAPTCHA, authentication, purchase, and security confirmations to a human, and stop on interruption or permission failure.
+
+Risk: Cached local application paths could be stale or could launch software unexpectedly if reused without confirmation.
+
+Mitigation: Store only user-provided normalized paths and verification timestamps; verify the path, tell the user what was found, and ask for explicit confirmation before launching.
+
+Risk: Remote gateway profiles and fallback REST paths can target local or remote application control surfaces.
+
+Mitigation: Confirm the intended gateway profile and target before control actions, use gateway-required attribution when evidence is needed, and do not silently switch routes or fallback control providers.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/loonghao/skills/dcc-mcp)
+- [Declared homepage](https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp/SKILL.md)
+- [CLI cheatsheet](references/CLI_CHEATSHEET.md)
+- [Local application path cache](references/LOCAL_APP_PATH_CACHE.md)
+- [Released product catalog](references/PRODUCTS.json)
+- [Zero instances CLI setup guide](references/ZERO_INSTANCES_CLI.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text with inline shell commands and JSON-oriented CLI output guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agents should prefer concise toon output for human-readable CLI results and JSON only when another program must parse the result.]
+
+## Skill Version(s):
+
+0.19.97 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

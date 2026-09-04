@@ -1,47 +1,60 @@
-## Description: <br>
-PixVerse C1 video model for text-to-video, image-to-video, first/last-frame video generation, and reference-image video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PixVerse C1 is a dLazy video-generation skill for text-to-video, image-to-video, first/last-frame-to-video, and reference-to-video workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke dLazy's hosted PixVerse C1 video-generation service from an agent. It supports prompt-driven video generation and optional image inputs for reference, component, or first/last-frame workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media inputs are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Use only prompts and files appropriate for upload to dLazy's service; avoid passing local images or videos unless that data sharing is acceptable. <br>
-Risk: The skill depends on installing or running a third-party npm CLI. <br>
-Mitigation: Review the referenced npm package and source repository before global installation, and prefer the pinned npx command for one-off use. <br>
-Risk: The broad video-generation trigger could route requests to this skill unintentionally. <br>
-Mitigation: Use explicit trigger language such as "pixverse c1" when invoking the skill. <br>
-Risk: API keys are stored in the local dLazy CLI configuration or supplied through the environment. <br>
-Mitigation: Authenticate only on trusted machines and rotate or revoke keys from the dLazy dashboard when access changes. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate short videos through the dLazy PixVerse C1 CLI, with optional reference images, first and last frames, resolution, aspect ratio, duration, audio generation, async polling, and local save options.
 
-## Reference(s): <br>
-- [Dlazy Pixverse C1 on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-pixverse-c1) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown instructions with bash command examples and JSON response examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Invoked CLI responses may include generated media URLs or asynchronous task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.6 (source: frontmatter and server release evidence) <br>
+Risk: Prompts, parameters, and selected local media files are sent to third-party dLazy services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and file inputs before use, and avoid sending sensitive or restricted media unless approved for the dLazy service.
+
+Risk: The dLazy CLI can store an API key in the local user configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation authentication when persistent local key storage is not desired, and rotate or revoke keys from the dLazy dashboard as needed.
+
+Risk: Generation can consume account credits and may fail when the account balance is insufficient.
+
+Mitigation: Use --dry-run for payload and cost checks before calling the API, and confirm account credit availability for expected workloads.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-pixverse-c1)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result envelopes containing generated media URLs or async task identifiers.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted media URLs from files.dlazy.com; with --save it can download generated assets to a local path.]
+
+## Skill Version(s):
+
+1.2.13 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

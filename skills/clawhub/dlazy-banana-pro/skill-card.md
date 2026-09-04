@@ -1,45 +1,64 @@
-## Description: <br>
-Dlazy Banana Pro lets agents generate or edit images with Nano Banana Pro through the dLazy CLI, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Nano Banana Pro using text-to-image and image-to-image prompts.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to request generated or edited images from dLazy's hosted Nano Banana Pro service, including prompts with optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local files may be sent to dLazy API and media storage endpoints. <br>
-Mitigation: Use only data approved for dLazy processing, avoid sensitive local files unless permitted, and confirm file paths before invocation. <br>
-Risk: Login stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The security summary notes a minor risk of broad auto-triggering. <br>
-Mitigation: Confirm user intent before running commands that upload files, call the hosted service, or consume account credits. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to generate or edit images through the dLazy Nano Banana Pro CLI, including prompts with optional reference images.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Repository](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, images] <br>
-**Output Format:** [JSON returned by the dLazy CLI, typically containing generated image URLs or an asynchronous task ID.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy authentication; selected local input files may be uploaded to dLazy endpoints, and async jobs can be polled with a generateId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected media files can be uploaded to dLazy cloud services for generation or editing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit prompts and media the user intends to share with dLazy, and avoid confidential or sensitive inputs unless the user's policy allows it.
+
+Risk: Generated outputs are hosted by dLazy and may be returned as remote file URLs.
+
+Mitigation: Handle generated URLs and downloaded assets according to the user's data handling requirements.
+
+Risk: The dLazy CLI may store an API key in the local user configuration.
+
+Mitigation: Use per-invocation environment variables or npx when less persistence is desired, and rotate or revoke API keys from the dLazy dashboard when needed.
+
+Risk: Using the skill requires running a third-party npm or npx CLI.
+
+Mitigation: Install only if comfortable using dLazy as a third-party cloud service and prefer the pinned command from the release metadata.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return hosted image URLs, download generated assets with --save, or return an asynchronous task identifier when --no-wait is used.]
+
+## Skill Version(s):
+
+1.2.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

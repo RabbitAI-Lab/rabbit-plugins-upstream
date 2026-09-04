@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/kibana",
   "slug": "kibana",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739753410,
-  "contentHash": "0c1de035ac0cfc530340c5606e10361a5a6630efc6c86108286571a058f14267",
-  "fetchedAt": "2026-07-26T18:27:34.816Z"
+  "version": "1.2.0",
+  "updatedAt": 1788518226868,
+  "contentHash": "00ee07ce6e98e25ecfdd43712ff657390b98c7c6d74b521e82089090e0784f56",
+  "fetchedAt": "2026-09-04T12:12:54.532Z"
 }

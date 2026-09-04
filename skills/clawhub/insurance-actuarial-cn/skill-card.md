@@ -1,40 +1,57 @@
-## Description: <br>
-Provides China insurance actuarial pricing, reserve, solvency-capital, and reporting guidance using the 4th Life Table (2025), C-ROSS Phase II, IFRS 17 / HKFRS 17 concepts, and Python example templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides China-focused actuarial pricing reference guidance using the 4th Life Table (2025), C-ROSS Phase II, IFRS 17/HKFRS 17, and illustrative Python templates for premiums, reserves, solvency capital, and product pricing.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External actuarial, product-pricing, and insurance product development teams use this skill as an educational reference for China-focused premium calculation, reserve estimation, solvency-capital analysis, and actuarial report drafting. Outputs require qualified actuarial review before use in pricing, reserving, compliance, or product filings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Actuarial examples, regulatory summaries, or life-table assumptions may be incomplete or unsuitable for real pricing, reserve, or compliance decisions. <br>
-Mitigation: Use outputs as educational reference material only; require qualified actuarial review, testing, and verification against official regulatory and life-table sources before operational use. <br>
+## Use Case:
 
+External actuarial, insurance pricing, product development, and insurance modeling teams use this skill to draft China-focused pricing methodology, formulas, assumptions, examples, and review checklists. Real-world pricing, reserving, solvency, regulatory, or financial outputs require review by a qualified actuary.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-actuarial-cn) <br>
-- [Fourth Life Table (2025) usage guide](references/life_table_2025_usage.md) <br>
-- [Actuarial pricing formulas and code examples](references/actuarial_pricing_formulas.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Analysis] <br>
-**Output Format:** [Markdown with formulas, tables, and Python example code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Educational actuarial reference output; examples and assumptions require human actuarial validation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.1.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Actuarial calculations, regulatory summaries, and pricing assumptions may be incomplete, outdated, or unsuitable for a specific insurer, product, jurisdiction, or filing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use outputs as starting points only, verify current official rules and assumptions, and require review and sign-off by a qualified actuary before real-world use.
+
+Risk: Insurance pricing and health-related workflows may involve policyholder, health, claims, or other sensitive personal data.
+
+Mitigation: Avoid entering undeidentified policyholder or health data into general-purpose agent environments; use only compliant, authorized, and appropriately deidentified data.
+
+Risk: Illustrative Python snippets may be mistaken for validated production actuarial models.
+
+Mitigation: Treat snippets as examples and independently implement, test, validate, and govern any model code used in production or regulatory work.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-actuarial-cn)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown guidance with formulas, tables, checklists, and illustrative Python code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference-only output; no executable files, persistent storage, network calls, credential collection, or background execution are included in the artifact.]
+
+## Skill Version(s):
+
+5.1.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

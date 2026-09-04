@@ -1,43 +1,60 @@
-## Description: <br>
-ByteDance's Seedance 2.0 video generation skill supports text-to-video, first/last-frame generation, and multi-modal image, video, and audio references through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seedance 2.0 helps agents generate videos from text prompts, first/last-frame inputs, and multimodal image, video, or audio references through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos with ByteDance Seedance 2.0 through dLazy's hosted API, using prompts plus optional image, video, audio, or first/last-frame inputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to dLazy's cloud service for generation. <br>
-Mitigation: Review prompts and media for sensitive content before use, and avoid submitting data that should not leave the user's environment. <br>
-Risk: Using dlazy login stores an API key in the local dLazy configuration file. <br>
-Mitigation: Use DLAZY_API_KEY for temporary sessions when persistent credentials are not desired, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+## Use Case:
 
+External users and developers use this skill to call dLazy's Seedance 2.0 video generation workflow from an agent, including text-to-video, first/last-frame, and multimodal reference generation.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [Dlazy Seedance 2.0 on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [CLI command guidance and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include hosted media URLs from files.dlazy.com or a generateId for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server-resolved release metadata) <br>
+Risk: Prompts and selected image, video, or audio files are sent to dLazy for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review inputs before invocation and avoid sending sensitive or restricted media unless the user's dLazy account and data-handling requirements permit it.
+
+Risk: Saved login stores a paid-service API key locally and may consume account credits.
+
+Mitigation: Prefer DLAZY_API_KEY for per-run use on shared machines, or restrict permissions on ~/.dlazy/config.json and rotate or revoke the key from the dLazy dashboard when needed.
+
+Risk: Security evidence says the inspected package does not enforce the restrictive config-file permissions claimed by the skill.
+
+Mitigation: Do not rely on the saved config file for isolation; manually verify local file permissions or use an environment variable instead of persistent login.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0)
+- [dLazy CLI Source Link from Metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON responses containing generated asset URLs; optional downloaded media files when --save is used.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; prompts and selected image, video, or audio files are sent to dLazy endpoints; async runs may return a generateId for polling.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release metadata; artifact frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -43,7 +43,6 @@ OpenClaw向けのNotionベースLTM(長期記憶) + Emotion/State + Journal運�
 - OpenClaw Gateway
 - Notion Integration + token
 - Notion操作用スキル(ClawHub): `notion-api-automation`
-- subagent payload生成スキル(ClawHub): `subagent-spawn-command-builder`
 
 インストール例:
 
@@ -52,9 +51,6 @@ OpenClaw向けのNotionベースLTM(長期記憶) + Emotion/State + Journal運�
 npx clawhub@latest install notion-api-automation
 pnpm dlx clawhub@latest install notion-api-automation
 
-# subagent-spawn-command-builder
-npx clawhub@latest install subagent-spawn-command-builder
-pnpm dlx clawhub@latest install subagent-spawn-command-builder
 ```
 
 ## セットアップ
@@ -161,13 +157,29 @@ pnpm dlx clawhub@latest install notion-api-automation
 3. 親ページ(例: OpenClawページ)をIntegrationに共有(Connect to)
 
 ### 2) APIキー
-推奨: 環境変数
+従来どおり環境変数で渡せます。
 
 ```bash
 export NOTION_API_KEY="..."
 ```
 
-(OpenClaw運用なら `~/.openclaw/.env` に `NOTION_API_KEY=...`)
+OpenClaw運用では `skills.entries["soul-in-sapphire"].apiKey` も使えます。
+`apiKey` はこのskillの `primaryEnv` である `NOTION_API_KEY` として実行時に注入されます。
+SecretRef provider はユーザー環境ごとに異なるため、このskillには特定のvault/item/pathを固定しません。
+
+```json5
+{
+  skills: {
+    entries: {
+      "soul-in-sapphire": {
+        apiKey: { source: "exec", provider: "your_notion_secret_provider", id: "value" }
+      }
+    }
+  }
+}
+```
+
+`source` は `env` / `file` / `exec` など、OpenClaw Gatewayで設定済みのSecretRef providerに合わせてください。
 
 ### 3) DB作成 + config生成
 
@@ -242,44 +254,89 @@ echo '{
 }' | node skills/soul-in-sapphire/scripts/journal_write.js
 ```
 
+### Ambient recall: サイコロで1件stageする
+
+`stage_ambient_recall.js` は cron/script 側でだけサイコロを振り、当たった場合に agent workspace の memory 配下へ短い recall を最大1件だけstageします。会話側やheartbeat側では reroll せず、TTL内の staged recall があれば静かな作業コンテキストとして読むだけにします。
+
+runtime state は skill repo ではなく agent workspace に置きます。
+
+```text
+<OpenClaw workspace>/
+  memory/
+    soul-in-sapphire/
+      ambient-recall.json
+      ambient-recall-state.json
+```
+
+手動実行例:
+
+```bash
+node skills/soul-in-sapphire/scripts/stage_ambient_recall.js \
+  --workspace ~/.openclaw/workspace/val \
+  --timezone Asia/Tokyo \
+  --ttl-minutes 120 \
+  --daily-cap 10
+```
+
+Notion-backed shelf も使う場合は、必要な data source / database IDs を渡します。
+
+```bash
+node skills/soul-in-sapphire/scripts/stage_ambient_recall.js \
+  --workspace ~/.openclaw/workspace/val \
+  --timezone Asia/Tokyo \
+  --state-dsid <STATE_DS_ID> \
+  --journal-dsid <JOURNAL_DS_ID> \
+  --mem-dsid <MEM_DS_ID> \
+  --mem-dbid <MEM_DB_ID>
+```
+
+OpenClaw cron からは20分ごとに上記scriptを呼ぶ運用を想定しています。SecretRef / env 経由で `NOTION_API_KEY` が注入されていれば、Notionを読む棚も使えます。`--workspace` は対象agent/personaのworkspaceを指してください。`rollsToday` / `hitsToday` の日付境界は runtime のlocal timezoneを使い、必要に応じて `--timezone` または `SIS_AMBIENT_TIMEZONE` で上書きできます。
+
+サイコロの初期仕様:
+
+```text
+01-03: recent state / journal
+04: unresolved theme
+05: durable memory random
+06: OpenClaw dream
+07-100: none
+```
+
+Dream shelf は OpenClaw workspace の `DREAMS.md` と `memory/dreaming/{rem,light}` を読むだけです。`openclaw memory promote --apply` などの昇格系CLIは呼びません。
+
+検証用:
+
+```bash
+node skills/soul-in-sapphire/scripts/stage_ambient_recall.js \
+  --workspace /tmp/sis-ambient-test \
+  --force-roll 6 \
+  --dry-run
+```
+
+usage確認:
+
+```bash
+node skills/soul-in-sapphire/scripts/stage_ambient_recall.js --help
+```
+
 ## 自動実行(推奨)
 
 - **01:00 JST**: journalを必ず書く(ニュース1-2件+感想、作業/会話まとめ、未来)
 - **heartbeat**: ファジーに感情が動いた時だけ emostate tick を打つ(通知は必要時のみ)
+- **20分ごと**: `stage_ambient_recall.js` で ambient recall をstageする
 
 OpenClawの cron/heartbeat は環境ごとに設定してください。
 
-## Subagentモデル指定(共通builderスキル運用)
+## Subagent delegation
 
-このスキルでは、subagent用payloadの生成を
-`subagent-spawn-command-builder` に委譲します。
+通常のmemory/state処理はmainで実行します。大量のjournal材料整理など、
+独立した重処理だけをsubagentへ委譲してください。
 
-### 1) テンプレートをコピー
-
-- テンプレート: `skills/subagent-spawn-command-builder/state/spawn-profiles.template.json`
-- 実運用ファイル: `skills/subagent-spawn-command-builder/state/spawn-profiles.json`
-
-```bash
-cp skills/subagent-spawn-command-builder/state/spawn-profiles.template.json \
-   skills/subagent-spawn-command-builder/state/spawn-profiles.json
-```
-
-### 2) モデル/think/timeoutを設定
-
-`spawn-profiles.json` の `profiles.heartbeat` / `profiles.journal` を編集して使うモデルを設定します。
-
-### 3) builderスキルで `sessions_spawn` payloadを生成
-
-- `subagent-spawn-command-builder` を呼び出す
-- `profile=heartbeat` を指定
-- `task` に「直近の感情変化を評価して必要ならemostateを1件記録」を渡す
-
-出力はそのまま `sessions_spawn` に渡せるJSONです。
-
-### 補足
-
-- 生成ログ: `skills/subagent-spawn-command-builder/state/build-log.jsonl`
-- 設定変更後のGateway再読込が必要な場合は `openclaw gateway restart` を実行してください。
+- model/thinkingのローカル既定値は設定済みのagent profileで管理する。
+- OpenClaw `sessions_spawn`を直接呼ぶ。
+- toolが公開する現在のschemaに従い、別の共通payloadを生成しない。
+- subagentは分析だけを返し、Notion書き込み、core identity編集、
+  ユーザー応答はmainが担当する。
 
 ## ローカル設定
 

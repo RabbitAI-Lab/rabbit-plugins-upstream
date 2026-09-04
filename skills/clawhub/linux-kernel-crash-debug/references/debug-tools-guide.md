@@ -3,6 +3,20 @@
 > **This guide provides advanced debugging methods beyond crash utility analysis.**
 > These tools typically require kernel recompilation with specific config options or writing kernel modules.
 
+## Live-System Safety Gate
+
+Prefer offline vmcore analysis. The commands below that load modules, change
+boot parameters, write debugfs/procfs controls, or enable tracing mutate a live
+kernel. Do not execute them unless the user explicitly authorizes the exact host
+and action and confirms a disposable lab or approved maintenance window.
+
+For every authorized live capture: record the current setting, select the
+narrowest function/object and a short duration, write output only to a protected
+case directory, and define cleanup before enabling the tool. Apply cleanup in
+the same session. Do not capture pathnames, buffers, credentials, or business
+payloads unless they are essential and explicitly approved. An agent must not
+trigger a deliberate panic or reboot.
+
 ---
 
 ## Overview
@@ -12,7 +26,9 @@ When crash utility analysis cannot pinpoint the root cause, consider these advan
 | Tool | Purpose | Requires Kernel Rebuild | Suitable For |
 |------|---------|------------------------|--------------|
 | **KASAN** | Memory error detection | Yes (CONFIG_KASAN) | Development |
-| **Kprobes** | Dynamic function tracing | No (module only) | Development/Production |
+| **KFENCE** | Sampled memory error detection | Yes (CONFIG_KFENCE) | Production / fleet |
+| **KCSAN** | Data-race detection | Yes (CONFIG_KCSAN) | Testing / staging |
+| **Kprobes** | Dynamic function tracing | No (module only) | Lab / approved maintenance |
 | **Kmemleak** | Memory leak detection | Yes (CONFIG_DEBUG_KMEMLEAK) | Development |
 | **UBSAN** | Undefined behavior detection | Yes (CONFIG_UBSAN) | Development |
 | **SLUB Debug** | Slab corruption detection | Yes (CONFIG_SLUB_DEBUG) | Development |
@@ -39,17 +55,19 @@ CONFIG_KASAN_OUTLINE=y           # Outline instrumentation (smaller)
 # or
 CONFIG_KASAN_INLINE=y            # Inline instrumentation (faster)
 
-# Optional: Enable stack tracking
-CONFIG_KASAN_STACK=y
+# Include allocation/free stack traces
+CONFIG_STACKTRACE=y
+# For physical-page allocation/free stacks
+CONFIG_PAGE_OWNER=y            # boot with page_owner=on
 ```
 
 ### Overhead
 
-| Mode | Memory Overhead | Performance Impact | Platform |
+| Mode | Relative Overhead | Intended Environment | Platform |
 |------|-----------------|-------------------|----------|
-| Generic | ~1/8 of RAM | ~3x slowdown | x86_64, arm64, arm |
-| Software tag-based | Lower | ~1.5x slowdown | arm64 only |
-| Hardware tag-based | Minimal | ~1.1x slowdown | arm64 (MTE) |
+| Generic | High | Precise development debugging | Multiple architectures |
+| Software tag-based | Moderate | Real-workload testing | arm64 only |
+| Hardware tag-based | Low | In-field detection / mitigation | arm64 with MTE |
 
 ### Usage
 
@@ -57,12 +75,19 @@ CONFIG_KASAN_STACK=y
 # Verify KASAN is enabled
 $ grep KASAN /boot/config-$(uname -r)
 
-# Run KASAN tests
+# LAB ONLY: test_kasan intentionally exercises invalid accesses. Obtain
+# explicit authorization for a disposable test kernel before loading it.
 $ sudo modprobe test_kasan
+$ sudo modprobe -r test_kasan  # cleanup when built as an unloadable module
 
-# Enable kasan_multi_shot for multiple reports
-$ echo 1 > /proc/sys/kernel/kasan_multi_shot
+# Test-kernel boot parameters: report repeatedly, or panic on invalid access
+kasan_multi_shot
+kasan.fault=panic
 ```
+
+`kasan_multi_shot` is a boot parameter, not a runtime sysctl. On current
+kernels, `kasan.fault=report|panic|panic_on_write` controls report/panic
+behavior independently. Tag-based modes also have mode-specific boot controls.
 
 ### Sample Report
 
@@ -74,6 +99,44 @@ Allocated by task 1234:
  kasan_save_stack+0x1b/0x40
  __kasan_kmalloc+0x7c/0x90
 ```
+
+## KFENCE - Low-Overhead Sampled Memory Safety
+
+KFENCE samples heap allocations into guarded pages and detects out-of-bounds
+access, use-after-free, and invalid free. It is designed for production kernels
+with near-zero overhead, but sampling means it will not observe every object.
+
+```bash
+CONFIG_KFENCE=y
+# Optional: build support but leave disabled until boot time
+CONFIG_KFENCE_SAMPLE_INTERVAL=0
+
+# Milliseconds; non-zero enables sampling
+kfence.sample_interval=100
+# Choose report, oops, or panic behavior
+kfence.fault=report
+```
+
+Use KFENCE when the bug appears only under long-running production workloads.
+Use KASAN when a deterministic reproducer exists and precise coverage matters
+more than overhead. Preserve the KFENCE allocation/free stacks: the faulting
+instruction is the detection site, while the lifetime stacks often identify
+the root cause.
+
+## KCSAN - Data-Race Detection
+
+KCSAN is a dynamic, watchpoint-based sampling detector for data races. A normal
+report contains both racing access stacks, access sizes/types, and sometimes an
+observed value transition.
+
+```bash
+CONFIG_KCSAN=y
+```
+
+An `unknown origin` report can occur when the other access was not
+instrumented or came from DMA. Treat it as a strong race lead, but do not invent
+a second writer. Verify the intended memory-ordering primitive and reproduce
+under the same workload.
 
 ---
 
@@ -95,16 +158,22 @@ CONFIG_KALLSYMS_ALL=y
 
 #### Method 1: Dynamic Kprobes (No Code Required)
 
+Kprobe output may reveal function arguments and workload activity. Use a
+non-secret-bearing target first, keep the capture bounded, and prepare cleanup
+before enabling the event. The placeholder below is intentionally not a
+copy-paste production probe.
+
 ```bash
-# Add a kprobe event
+# LAB / approved maintenance only
 $ cd /sys/kernel/debug/tracing
-$ echo 'p:myprobe do_sys_open dfd=%di pathname=%si flags=%dx' > kprobe_events
+$ echo 'p:myprobe <target_function>' > kprobe_events
 $ echo 1 > events/kprobes/myprobe/enable
 
-# View trace output
-$ cat trace_pipe
+# Bounded capture into an access-controlled incident directory
+$ timeout 30 cat trace_pipe > /secure/case/myprobe.trace
 
-# Cleanup
+# Cleanup even when capture fails or is interrupted
+$ echo 0 > events/kprobes/myprobe/enable
 $ echo '-:myprobe' > kprobe_events
 ```
 
@@ -126,9 +195,12 @@ static struct kprobe kp = {
 ### Kretprobe (Return Value Tracing)
 
 ```bash
-# Trace function return values
-$ echo 'r:myretprobe do_sys_open retval=$retval' > kprobe_events
+# LAB / approved maintenance only; avoid return values containing sensitive data
+$ echo 'r:myretprobe <target_function> retval=$retval' > kprobe_events
 $ echo 1 > events/kprobes/myretprobe/enable
+$ timeout 30 cat trace_pipe > /secure/case/myretprobe.trace
+$ echo 0 > events/kprobes/myretprobe/enable
+$ echo '-:myretprobe' > kprobe_events
 ```
 
 ---
@@ -148,6 +220,10 @@ CONFIG_DEBUG_KMEMLEAK_EARLY_LOG_SIZE=400
 
 ### Usage
 
+`scan` and `dump` alter detector control state; `clear` discards the current
+findings. Preserve the output first and require explicit confirmation before
+clearing it on a shared incident host.
+
 ```bash
 # Trigger a memory scan
 $ echo scan > /sys/kernel/debug/kmemleak
@@ -155,7 +231,7 @@ $ echo scan > /sys/kernel/debug/kmemleak
 # View detected leaks
 $ cat /sys/kernel/debug/kmemleak
 
-# Clear all reported leaks (after fixing)
+# Destructive to diagnostic state: export results and confirm before clearing
 $ echo clear > /sys/kernel/debug/kmemleak
 
 # Dump specific address info
@@ -282,7 +358,7 @@ $ cat /proc/lock_stat
 # View lock dependencies
 $ cat /proc/lockdep
 
-# Clear lock statistics
+# Destructive to diagnostic state: save /proc/lock_stat and confirm first
 $ echo 0 > /proc/lock_stat
 ```
 
@@ -305,6 +381,10 @@ CONFIG_STACK_TRACER=y
 
 ### Usage
 
+Function tracing can impose substantial overhead and generate sensitive,
+high-volume output. Use a narrow filter and a short approved window; restore
+`current_tracer` and clear the filter immediately afterward.
+
 ```bash
 # List available tracers
 $ cat /sys/kernel/debug/tracing/available_tracers
@@ -317,6 +397,10 @@ $ echo do_sys_open > /sys/kernel/debug/tracing/set_ftrace_filter
 
 # View trace
 $ cat /sys/kernel/debug/tracing/trace
+
+# Cleanup
+$ echo nop > /sys/kernel/debug/tracing/current_tracer
+$ echo > /sys/kernel/debug/tracing/set_ftrace_filter
 ```
 
 ---
@@ -329,10 +413,17 @@ Problem: Kernel crash/panic
 ├─ Have vmcore file?
 │  └─ YES → Use crash utility (main skill)
 │
+├─ Need a live-kernel change?
+│  └─ Require exact-host authorization, a bounded window, and cleanup first
+│
 ├─ Suspect memory corruption?
-│  ├─ Random crashes → Enable KASAN
+│  ├─ Deterministic test reproducer → Enable KASAN
+│  ├─ Production-only / rare crash → Enable KFENCE sampling
 │  ├─ Memory leak suspected → Enable Kmemleak
 │  └─ Slab corruption → Enable SLUB debug
+│
+├─ Suspect a data race?
+│  └─ Enable KCSAN and preserve both access stacks
 │
 ├─ Need to trace function calls?
 │  ├─ Quick check → Dynamic Kprobes
@@ -350,6 +441,8 @@ Problem: Kernel crash/panic
 ## Additional Resources
 
 - **KASAN**: https://www.kernel.org/doc/html/latest/dev-tools/kasan.html
+- **KFENCE**: https://docs.kernel.org/dev-tools/kfence.html
+- **KCSAN**: https://docs.kernel.org/dev-tools/kcsan.html
 - **Kprobes**: https://www.kernel.org/doc/html/latest/trace/kprobes.html
 - **Kmemleak**: https://www.kernel.org/doc/html/latest/dev-tools/kmemleak.html
 - **Ftrace**: https://www.kernel.org/doc/html/latest/trace/ftrace.html

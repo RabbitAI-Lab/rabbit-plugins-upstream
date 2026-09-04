@@ -1,37 +1,52 @@
-## Description: <br>
-Helps QA practitioners write complete bug reports with reproducible steps, expected and actual results, root-cause notes, impact assessment, and attachment guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners and development teams create consistent, reproducible bug reports with clear steps, expected versus actual results, impact assessment, attachments, and optional root-cause notes.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA testers, developers, and teams use this skill to draft or improve bug reports when reporting new defects, responding to rejected reports, or standardizing inconsistent bug-report quality.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Bug reports may contain production secrets, customer records, financial credentials, identity numbers, phone numbers, or unredacted screenshots and logs.
+
+Mitigation: Redact sensitive data before use, avoid pasting real production or customer information, and share only sanitized evidence.
+
+Risk: Optional packet-capture or log collection examples could be run in inappropriate environments.
+
+Mitigation: Run any packet-capture or log commands only in controlled environments where the user has authorization.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, testers, and product teams use this skill to draft or improve bug reports that developers can reproduce and triage with less follow-up. It is useful when a bug report was rejected as incomplete or when a team wants a consistent defect-reporting structure. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Bug reports and attachments can include production secrets, customer personal data, payment details, screenshots, logs, or HAR files. <br>
-Mitigation: Redact sensitive data before sharing reports or attachments, and run any capture commands only in a controlled test environment. <br>
+**Output Format:** [Markdown or structured text bug-report templates and checklists]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [May include bug titles, severity and priority labels, reproduction steps, expected and actual results, impact assessments, attachment lists, and optional root-cause hypotheses.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown bug-report structure with checklist-style guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bug IDs, test case IDs, reproduction steps, expected versus actual results, root-cause notes, impact assessments, and attachment lists.] <br>
+1.7.6 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

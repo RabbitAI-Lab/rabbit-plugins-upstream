@@ -1,43 +1,62 @@
-## Description: <br>
-音频生成工具免费版 helps personal creators use the dlazy CLI to generate text-to-speech audio and basic sound effects from text prompts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A lightweight text-to-speech and basic sound-effect generation skill for personal content creation, supporting multilingual TTS through the dlazy CLI.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators and agent users use this skill to prepare dlazy CLI commands, API key setup guidance, and generation parameters for multilingual narration, audiobook chapters, social media audio, and simple sound effects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the external dlazy CLI and sends user prompts to dlazy's cloud audio service. <br>
-Mitigation: Use it only when cloud processing is acceptable for the text being converted to speech or sound effects. <br>
-Risk: The skill requires a dlazy API key for authentication. <br>
-Mitigation: Keep the key private, prefer environment variables or a protected config file, and rotate the key if it may have been exposed. <br>
-Risk: The free edition is scoped to TTS and basic sound-effect generation, not broad media editing or professional post-production. <br>
-Mitigation: Confirm the requested task matches the documented free-edition models and route unsupported work to another tool. <br>
+## Use Case:
 
+Creators and developers use this skill to generate narration, audiobook-style reading, and simple sound effects from text prompts through a third-party audio CLI and hosted audio service.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/thcjp/skills/dlazy-audio-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance is intended for TTS and basic sound-effect generation through the external dlazy CLI and cloud audio service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: The skill invokes a third-party CLI and cloud audio service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution and use the skill only for explicit TTS or sound-effect generation tasks.
+
+Risk: API key handling may expose credentials if keys are persisted locally or included in generated commands.
+
+Mitigation: Prefer DLAZY_API_KEY as an environment variable and avoid hardcoding or storing keys in shared files.
+
+Risk: Input text and hosted output URLs may be processed by or exposed through the dlazy service.
+
+Mitigation: Do not send private scripts, business text, regulated content, or other sensitive material unless that processing is acceptable.
+
+Risk: The skill text includes broader triggers than the stated audio-generation purpose.
+
+Mitigation: Constrain use to text-to-speech and sound-effect generation rather than translation, media conversion, or general file-processing workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/dlazy-audio-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or link to generated audio files through the dlazy service.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

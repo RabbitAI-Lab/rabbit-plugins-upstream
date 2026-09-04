@@ -1,45 +1,60 @@
-## Description: <br>
-Synthesize text into natural and fluent speech using Doubao TTS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Synthesize text into natural and fluent speech using Doubao TTS.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to authenticate with dLazy and generate Chinese or English text-to-speech audio through the pinned dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected parameters are sent to dLazy's hosted API. <br>
-Mitigation: Avoid sensitive prompts unless the dLazy service is trusted for the intended use. <br>
-Risk: A persistent global CLI install may be undesirable on shared or tightly controlled systems. <br>
-Mitigation: Use the documented npx invocation when a non-persistent CLI execution path is preferred. <br>
-Risk: The skill's output example appears to use an image schema instead of an audio schema. <br>
-Mitigation: Verify returned result types before relying on generated outputs in downstream workflows. <br>
+## Use Case:
 
+External users and developers use this skill to turn text prompts into natural speech through dLazy's hosted Doubao TTS service. It supports Chinese and English voices, speech speed selection, asynchronous generation, and optional local saving of generated assets.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-doubao-tts) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Guidance] <br>
-**Output Format:** [Markdown instructions with CLI commands and JSON result metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated output URLs; async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Text prompts and referenced media may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this skill only for content appropriate for dLazy processing, avoid unnecessary sensitive inputs, and review service terms before deployment.
+
+Risk: The skill stores or uses a dLazy API key for authenticated requests.
+
+Mitigation: Prefer explicit user requests before invocation, use the documented dLazy authentication flow, and keep the API key rotation and revocation path available.
+
+Risk: Generated outputs are hosted remotely and API usage may consume credits.
+
+Mitigation: Use dry-run or explicit confirmation for cost-sensitive work, monitor account credits, and save required outputs locally when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-doubao-tts)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration guidance, JSON, Audio files]
+
+**Output Format:** [JSON responses from the dLazy CLI, with hosted output URLs and optional local files when --save is used]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; generated outputs are hosted remotely by dLazy unless saved locally.]
+
+## Skill Version(s):
+
+1.3.11 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

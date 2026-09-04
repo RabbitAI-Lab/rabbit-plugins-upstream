@@ -6,7 +6,7 @@ description: >-
   when working with Python code, building CLI apps, FastAPI services,
   async with asyncio, background jobs, or configuring uv, ruff, ty, pytest, or
   pyproject.toml.
-paths: "**/*.py"
+paths: "**/*.py,**/pyproject.toml,**/ruff.toml,**/uv.lock"
 ---
 
 # Python Services & CLI
@@ -26,6 +26,7 @@ paths: "**/*.py"
 - `uv tree --outdated` to preview what would be upgraded before committing
 - `uv.lock` goes in version control
 - uv treats an exactly-pinned (`==`) yanked transitive version as unsolvable; plain `pip` only warns and installs it. If a dependency hard-pins a yanked release (and bumping the leaf won't help because the pin is exact), `uv pip install` fails resolution where a pip-based script stays green. Drop the package from the requirements you feed uv when it's off your code path; fall back to `pip` only when the path genuinely needs it
+- A user-level `~/.config/uv/uv.toml` carrying `exclude-newer` is serialized into `uv.lock` as an `[options]` block, and a clean CI runner with no matching global policy then rejects the committed lock: `Ignoring existing lockfile due to removal of global exclude newer`, followed by `uv sync --locked` failing. Pinning CI to the same uv version does not fix it -- the difference is configuration, not resolver. Generate repository locks with `uv --no-config lock` and spell canonical commands `uv --no-config sync --locked` / `uv --no-config run …`; strip any inherited `[options]` `exclude-newer` from the committed lock and add a contract test that rejects those entries and pins the `--no-config` command shape, or a later local regeneration reintroduces the CI failure silently
 - Use `[dependency-groups]` (PEP 735) for dev/test/docs, not `[project.optional-dependencies]`
 - PEP 723 inline metadata for standalone scripts with deps
 - `ruff check --fix . && ruff format .` for lint+format in one pass
@@ -74,6 +75,7 @@ See [cli-tools.md](./references/cli-tools.md) for Click patterns, argparse, and 
 **asyncio patterns:**
 - `asyncio.gather(*tasks)` for concurrent I/O -- use `return_exceptions=True` for partial failure tolerance
 - `asyncio.TaskGroup` (3.11+) for structured concurrency -- automatic cancellation of sibling tasks on failure; prefer over `gather` when all tasks must succeed
+- A bare `asyncio.create_task(...)` whose result is discarded can vanish mid-flight: the event loop holds only a weak reference, so an unreferenced task may be garbage-collected before it finishes, and any exception it raised is swallowed with at most a "Task exception was never retrieved" warning. Keep a strong reference (`_bg = set()`; `t = asyncio.create_task(c)`; `_bg.add(t)`; `t.add_done_callback(_bg.discard)`) or use `TaskGroup`, which holds its children until they finish
 - `asyncio.Semaphore(n)` to limit concurrency (rate limiting external APIs)
 - `asyncio.wait_for(coro, timeout=N)` for timeouts
 - `asyncio.Queue` for producer-consumer
@@ -96,7 +98,7 @@ See [fastapi.md](./references/fastapi.md) for project structure, lifespan, confi
 - Return job ID immediately, process async. Client polls `/jobs/{id}` for status
 - **Celery**: `@app.task(bind=True, max_retries=3, autoretry_for=(ConnectionError,))` -- exponential backoff: `raise self.retry(countdown=2**self.request.retries * 60)`
 - **Alternatives**: Dramatiq (modern Celery), RQ (simple Redis), cloud-native (SQS+Lambda, Cloud Tasks)
-- **Idempotency is mandatory** -- tasks may retry. Use idempotency keys for external calls, check-before-write, upsert patterns
+- **Idempotency is mandatory** -- tasks may retry. Use idempotency keys for external calls and atomic upserts for writes (`ON CONFLICT DO UPDATE`, `INSERT ... ON DUPLICATE KEY UPDATE`). A read-then-write pair is not idempotent under concurrent retry: two workers both read "absent" and both insert. Uniqueness has to be enforced by a database constraint, not by the preceding read
 - Dead letter queue for permanently failed tasks after max retries
 - Task workflows: `chain(a.s(), b.s())` for sequential, `group(...)` for parallel, `chord(group, callback)` for fan-out/fan-in
 
@@ -117,11 +119,14 @@ def call_api(url: str) -> dict: ...
 
 - Retry only transient errors: network, 429/502/503/504. Never retry 4xx (except 429), auth errors, validation errors
 - Every network call needs a timeout
-- `@fail_safe(default=[])` decorator for non-critical paths -- return cached/default on failure
+- `@fail_safe(default=[])` decorator for non-critical paths -- return cached/default on failure. **Never on a path where the call is the security decision** (authz check, trust score, entitlement or license gate): there the default has to be deny, and a `default=[]` or `default=None` that a caller reads as "no restrictions" is a fail-open with a decorator on it. Any fail-open allowance scopes to transport failure alone -- `ConnectError`, `ConnectTimeout`. A response that arrived but cannot be trusted (4xx/5xx, malformed JSON, a body that fails schema validation, an unrecognized verdict string) stays denied, because the endpoint was reached and did not answer. Same for a "no record yet" state: reject by default, allow only through an explicit onboarding opt-in
 - `functools.lru_cache(maxsize=N)` for pure-function memoization; `functools.cache` (unbounded) for small domains
 - Stack decorators: `@traced @with_timeout(30) @retry(...)` -- separate infra from business logic
 
 **Connection pooling** is mandatory for production: reuse `httpx.AsyncClient()` across requests, configure SQLAlchemy `pool_size`/`max_overflow`, use `aiohttp.TCPConnector(limit=N)`.
+
+- **Switching to a shared pooled `requests.Session` newly exposes stale keep-alive failures.** Module-level `requests.get`/`requests.post` build a fresh `Session` and connection pool per call, so a dead or half-closed socket can never be served; a process-wide `Session` reuses keep-alive connections, and urllib3 does not liveness-probe one before reuse. When an LB or NAT has silently dropped an idle socket (an ALB's default idle timeout is 60s), the next reuse raises `ConnectionError` wrapping urllib3 `ProtocolError` / `http.client.RemoteDisconnected` -- and under `HTTPAdapter(max_retries=0)`, chosen to "keep behavior unchanged", it reaches the caller unretried. That claim is true of *response* semantics (status, timeouts, body) and false of *connection-failure* semantics. It bites hardest during traffic lulls, when the connection has been idle past the LB timeout
+- **`Retry(connect=1)` does not cover a stale keep-alive** -- wrong layer. urllib3 routes errors by class and a stale socket is a *read*/protocol error: `Retry._is_connection_error(ProtocolError('Connection aborted.', OSError()))` is `False` while `_is_read_error(...)` is `True`, so a connect budget never applies. Covering it needs `read >= 1`, but `Retry.DEFAULT_ALLOWED_METHODS` is `{GET, HEAD, PUT, DELETE, OPTIONS, TRACE}` -- POST and PATCH are excluded, and widening `allowed_methods` retries non-idempotent writes that may already have reached the server. There is no one-liner that safely covers everything: either scope the retry to idempotent verbs and let writes bubble, or accept the risk deliberately because an outer layer (a queue redelivery that re-runs the whole unit of work) self-heals it -- and then stop claiming the behavior is unchanged. Before prescribing any HTTP-retry config, name the exact exception class, map it through `_is_connection_error`/`_is_read_error`, and check `allowed_methods` against the verbs actually in use
 
 ## Production Resilience
 
@@ -159,6 +164,7 @@ def call_api(url: str) -> dict: ...
 - **Test markers**: register in `pyproject.toml` under `[tool.pytest.ini_options]` with `markers = ["slow", "integration"]`. Run fast tests with `-m "not slow"`.
 - **Protocol duck typing**: use `class Renderable(Protocol)` for structural typing at service boundaries -- enables testing with plain objects instead of mocks
 - **Context managers**: `@contextmanager` for connection/transaction lifecycle. Always implement `__exit__` cleanup.
+- **A package `__init__.py` that eager-imports a heavy stack defeats every in-test skip guard.** Under pytest's default `prepend` import mode, importing `pkg.test_foo` imports `pkg` first and runs its `__init__.py` before any line of the test module executes -- so `pytest.importorskip(...)` and a module-level `pytest.skip(allow_module_level=True)` are both dead code, and a `conftest.py` *inside* the package imports as `pkg.conftest` and fails identically. `collect_ignore`/`collect_ignore_glob` prune directory *recursion* and are **not** honored for paths named explicitly on the command line, so they cannot skip a broken file either. There is no clean in-test-file option once `__init__` is the failing layer: make the package `__init__` lazy (the real fix, but it touches production code), drop `__init__.py` from the test directory so a module-level guard can run, or scope `testpaths` so a bare `pytest` never collects it -- and document the limitation in the test docstring rather than shipping a guard that cannot fire.
 
 ## Error Handling
 

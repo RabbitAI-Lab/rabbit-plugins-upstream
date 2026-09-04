@@ -1,44 +1,58 @@
-## Description: <br>
-A Chinese reading-comprehension tutoring skill that helps learners analyze modern prose questions through common error diagnosis, close-reading steps, examiner-perspective reasoning, and guided review rather than direct answer delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+阅读理解拆解师 coaches students through modern Chinese reading-comprehension practice by separating passage understanding from exam-style answer structure.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutors use this skill for Chinese modern-reading practice, especially diagnosing why a learner loses points, identifying the examiner's intended test point, and improving answer structure without simply giving the final answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may encourage recording recurring mistakes, useful passages, and review reminders as part of an education profile. <br>
-Mitigation: Use clear consent and data-minimization practices, avoid saving sensitive personal content, and allow learners or guardians to review and remove stored learning notes. <br>
-Risk: Reading-comprehension feedback can be incomplete or mismatched to a specific teacher, exam board, or rubric. <br>
-Mitigation: Treat guidance as tutoring support, compare final answers against the assigned rubric or teacher feedback, and keep the learner's own reasoning visible before revision. <br>
+## Use Case:
 
+External learners use this skill to practice modern Chinese reading-comprehension tasks, including prose, argumentative, explanatory, and non-continuous texts. It helps students diagnose common answer-pattern issues, locate textual evidence, and revise answers after making their own attempt.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-reading-decoder) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Chinese error dimension table](references/chinese-error-dimension-table.md) <br>
-- [Reading-comprehension pit training](references/pit-training.md) <br>
-- [Modern prose question-type library](references/question-type-library.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with structured feedback, diagnostic prompts, answer-framework checklists, and review questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill is designed to prompt learner reasoning and revision instead of directly supplying final reading-comprehension answers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can use long-term learning-profile storage and cross-skill sharing for reading-pattern support.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile and cross-skill sharing disabled unless needed, and use the provided view, correct, delete, pause, sharing, and export controls.
+
+Risk: The bundled crisis and emergency resources are China-specific.
+
+Mitigation: Localize crisis or emergency resources before use with learners outside Mainland China.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-reading-decoder)
+- [语文错因维度表](artifact/references/chinese-error-dimension-table.md)
+- [阅读五坑专项训练策略](artifact/references/pit-training.md)
+- [现代文各题型出题逻辑与答题模板详解](artifact/references/question-type-library.md)
+- [学习DNA profile schema](artifact/shared/dna-profile.schema.json)
+- [Handover protocol schema](artifact/shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown conversational guidance with optional structured profile handoff data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Keeps coaching responses concise and uses consent-gated profile controls when memory or cross-skill sharing is available.]
+
+## Skill Version(s):
+
+2.1.0 (source: evidence release and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -34,9 +34,12 @@ Before any setup step, confirm:
 
 Local `dcc-mcp-cli list` first ensures the machine-wide loopback gateway, then
 reads the FileRegistry directly. In the built-in `local` profile, `search`,
-`describe`, `load-skill`, `call`, `wait-ready`, and guarded `stop-instance` use
-the registered DCC instance's own MCP/readyz/safe-stop endpoints after the same
-gateway lifecycle check. Endpoint/admin/update workflows also auto-ensure a
+`describe`, `call`, and guarded `stop-instance` use the registered DCC
+instance's own MCP/safe-stop endpoints after the same gateway lifecycle check.
+`load-skill` goes through that ensured gateway so its capability index stays
+coherent, while explicit `--no-auto-gateway` mode retains direct loading.
+`wait-ready` combines the instance readyz report with the discovery MCP catalog
+contract when `skill_catalog` is absent. Endpoint/admin/update workflows also auto-ensure a
 machine-wide gateway daemon when they target loopback HTTP.
 Per-DCC adapters register themselves through their own sidecar/server runtime.
 The legacy first-wins election is only for explicit
@@ -62,6 +65,9 @@ execution:
 dcc-mcp-cli install --dcc-type <dcc> --python "<dcc-python>" --execute
 ```
 
+If the DCC is installed outside standard locations, ask the user for its
+absolute executable or application path and pass `--dcc-path "<dcc-path>"`.
+
 Execution installs/verifies packages only. The online registration signal is
 still `dcc-mcp-cli list`: the DCC plugin or sidecar must start, stay alive, and
 self-register in the FileRegistry or selected gateway.
@@ -78,8 +84,8 @@ remaining steps after installation: start/enable the DCC plugin, run
 `dcc-mcp-cli doctor`, confirm `dcc-mcp-cli list`, wait with
 `dcc-mcp-cli wait-ready --dcc-type <dcc>`, search tools, then install optional
 marketplace skills by running marketplace search, inspecting the selected
-package, installing it, and finally running
-`dcc-mcp-cli reload-skills --dcc-type <dcc>`.
+package when unfamiliar, then installing it with
+`dcc-mcp-cli marketplace install <package_name> --dcc <dcc> --reload`.
 
 Alternatively, when the CLI binary is not yet available:
 
@@ -128,7 +134,8 @@ When `total >= 1`, continue with the plan's CLI next steps:
 `direct_control.ready=false`, inspect `direct_control.diagnostics` first; it
 carries sidecar `failure_stage`, `failure_reason`, host RPC metadata, gateway
 recovery fields, and any supervisor-recorded stdout/stderr log paths. If
-marketplace skills are installed, finish with `reload-skills`.
+marketplace skills were installed without `--reload`, finish with
+`reload-skills`.
 
 If neither Python nor `py` is available, stop and ask the operator to provision
 Python or `vx` through a trusted OS or studio package manager. Do not fetch and

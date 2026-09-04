@@ -1,48 +1,62 @@
-## Description: <br>
-Generates MP3 speech with OpenAI TTS through RunAPI for one-off CLI requests and production SDK integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate MP3 speech with OpenAI TTS through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and engineers use this skill to generate synchronous MP3 speech with OpenAI TTS models through RunAPI. It guides one-off generation with the RunAPI CLI and production application integration through target-language SDKs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: RunAPI requests, generated audio metadata, or generated audio URLs may pass through RunAPI-managed services. <br>
-Mitigation: Use this skill only when RunAPI is an intended service dependency and review data handling requirements before sending text for speech generation. <br>
-Risk: RUNAPI_API_KEY or saved CLI tokens could be exposed through shell history, logs, or committed configuration. <br>
-Mitigation: Store credentials in protected environment variables or saved RunAPI configuration and avoid printing or committing token values. <br>
-Risk: Using the CLI as a production integration layer can create brittle runtime behavior. <br>
-Mitigation: Use target-language SDKs for application, backend, worker, library, service, or production workflow integrations. <br>
+## Use Case:
 
+Developers and agents use this skill to generate one-off MP3 speech artifacts through the RunAPI CLI or to integrate OpenAI TTS into applications through a target-language SDK.
 
-## Reference(s): <br>
-- [RunAPI OpenAI TTS model overview](https://runapi.ai/models/openai-tts.md) <br>
-- [RunAPI OpenAI TTS homepage](https://runapi.ai/models/openai-tts) <br>
-- [tts-1 variant](https://runapi.ai/models/openai-tts/tts-1.md) <br>
-- [tts-1-hd variant](https://runapi.ai/models/openai-tts/tts-1-hd.md) <br>
-- [RunAPI OpenAI provider page](https://runapi.ai/providers/openai.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands, SDK package names, and request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance covers SDK integration, one-off CLI use, request fields, authentication, and generated audio result handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: TTS prompts are sent through third-party RunAPI/OpenAI services and may contain sensitive text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review request.json before submission and avoid sending sensitive content unless the user accepts that external processing.
+
+Risk: RunAPI/OpenAI requests may incur API charges.
+
+Mitigation: Submit only once per authorized request, retry only when evidence shows no task or billing occurred, and ask for user authorization before another paid submission.
+
+Risk: Using the third-party RunAPI CLI requires local trust in its installed binary and authentication path.
+
+Mitigation: Confirm the user accepts the RunAPI CLI dependency, prefer RUNAPI_API_KEY or saved CLI credentials, and use browser login only on explicit request.
+
+## Reference(s):
+
+- [RunAPI OpenAI TTS model overview](https://runapi.ai/models/openai-tts.md)
+- [RunAPI OpenAI provider overview](https://runapi.ai/providers/openai.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI OpenAI TTS homepage](https://runapi.ai/models/openai-tts)
+- [RunAPI OpenAI TTS SDK](https://github.com/runapi-ai/openai-tts-sdk)
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-openai-tts)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to produce and verify MP3 audio deliverables, preserve response evidence, and report terminal service failures without repeat paid submissions.]
+
+## Skill Version(s):
+
+0.1.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

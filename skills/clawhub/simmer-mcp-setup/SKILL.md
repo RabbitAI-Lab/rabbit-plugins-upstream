@@ -1,11 +1,11 @@
 ---
 name: simmer-mcp-setup
-version: "0.1.2"
+version: "0.2.0"
 published: true
-description: One-shot bootstrap for the Simmer MCP server. Detects your agent runtime (Claude Code / Cursor / OpenClaw / Hermes / Codex), installs simmer-mcp via npm, writes the right MCP config, prompts a restart, and verifies the tool handshake. Use after registering an agent on simmer.markets to run pre-built Simmer trading strategies through your MCP-aware agent.
+description: One-shot bootstrap for the Simmer MCP server. Detects your agent runtime (Claude Code / Cursor / OpenClaw / Hermes / Codex / Grok Bot), installs simmer-mcp via npm, writes the right MCP config, prompts a restart, and verifies the tool handshake. Use after registering an agent on simmer.markets to run pre-built Simmer trading strategies through your MCP-aware agent.
 metadata:
   author: "Simmer (@simmer_markets)"
-  version: "0.1.2"
+  version: "0.2.0"
   displayName: Simmer MCP Setup
   difficulty: beginner
   primaryEnv: SIMMER_API_KEY
@@ -21,22 +21,25 @@ One-shot bootstrap that wires the Simmer MCP server into your agent runtime. Rea
 
 ## What the Simmer MCP is (and isn't)
 
-The Simmer MCP gives your agent a catalog of **pre-built Simmer trading skills** it can invoke as tools — strategies like `polymarket_copytrading`, `polymarket_fast_loop`, `kalshi_weather_trader`, etc. — plus utility tools (skill discovery, error troubleshooting).
+The Simmer MCP gives your agent raw market/trade tools plus a small pinned catalog of **core Simmer skills** it can invoke as tools. Strategy skills such as `polymarket-copytrading`, `polymarket-fast-loop`, and `kalshi-weather-trader` install on demand from ClawHub instead of shipping inside the npm package.
 
-**What this MCP is for:** running pre-baked Simmer trading strategies through your agent. Ask *"run the `polymarket_copytrading` skill on the top 3 markets in dry-run mode"* and Claude Code (or Cursor / OpenClaw / etc.) invokes it. Each skill runs as a subprocess that calls the Simmer API. Real trades land on the configured venue — paper `sim` by default, real venues require an explicit triple opt-in (`dry_run=false` + `trading_venue=polymarket|kalshi` + `SIMMER_MCP_ALLOW_LIVE=true` env var on the MCP server).
+**What this MCP is for:** querying markets, checking account state, placing guarded direct trades, and running the core bundled Simmer playbooks through your agent. For situational strategies, ask the agent to install the current ClawHub skill first (for example, `clawhub install polymarket-copytrading`) and then follow that skill's instructions. Real trades land on the configured venue — paper `sim` by default, real venues require an explicit triple opt-in (`dry_run=false` + `venue=polymarket|kalshi` + `SIMMER_MCP_ALLOW_LIVE=true` env var on the MCP server).
 
-**What this MCP doesn't do (yet):** expose raw trade primitives like `place_order` or `get_briefing` as standalone tools. Ad-hoc operations like *"buy $10 yes on this BTC market"* or *"show me my current portfolio"* aren't possible through MCP today — those still need the [Python SDK](https://clawhub.ai/skills/simmer), which exposes `client.trade()`, `client.get_briefing()`, etc. directly. Raw MCP primitives are a tracked follow-up.
+**Raw trade primitives (added in MCP v3.3.0):** the MCP now exposes raw primitives as standalone tools alongside the per-skill executors — `simmer_get_markets`, `simmer_get_market_context`, `simmer_get_briefing`, `simmer_trade`, `simmer_cancel_order`, and `get_portfolio`/`get_positions`/`get_expiring_positions`. So ad-hoc operations like *"show me Polymarket markets for the world cup"* or *"place a $2 paper YES on this market"* now work directly through MCP. `simmer_trade` is **paper-by-default** — live execution needs the triple gate (`dry_run=false` + a live `trading_venue` + `SIMMER_MCP_ALLOW_LIVE=true`). The [Python SDK](https://clawhub.ai/skills/simmer) still offers the fullest primitive surface (`client.trade()`, `client.get_briefing()`, etc.) for custom logic.
 
-So: MCP and SDK are different shapes, both legitimate. MCP runs pre-built strategies through your agent with safety defaults; SDK builds custom logic with full primitive access.
+So: MCP and SDK are different shapes, both legitimate. MCP runs pre-built strategies *and* raw primitives through your agent with safety defaults; the SDK builds custom logic with full primitive access.
 
 ## What you'll have at the end
 
 - `simmer-mcp` runnable via `npx -y simmer-mcp` (global install optional)
+- Optionally `simmer-sdk` on the host plus `SIMMER_MCP_PYTHON` pointing at it — needed
+  only by the `preflight` tool, the one bundled skill that runs Python. See Step 3b.
 - Your agent runtime's MCP config updated with a `simmer` entry
 - `SIMMER_API_KEY` plumbed into the MCP subprocess
 - Simmer tools visible to your agent:
   - **3 free utility tools** (always available): `list_skills`, `get_skill_docs`, `troubleshoot_error`
-  - **A catalog of per-skill execution tools** — one tool per bundled Simmer trading skill (Polymarket strategies, Kalshi weather trading, sentiment/copytrading skills, plus utilities like `preflight`). The catalog grows over time — call `list_skills` to see what's currently available, or browse the live catalog at [clawhub.ai/skills?q=simmer](https://clawhub.ai/skills?q=simmer).
+  - **Core Simmer skill tools** — the npm package bundles only foundational, pinned skills (`simmer`, `simmer-wallet-setup`, `simmer-mcp-setup`, `simmer-briefing`, and `preflight`). Situational strategies such as combo, shock-ladder, copytrading, weather, and DCA install on demand from ClawHub so they stay current.
+  - **Raw market/trade tools** — `simmer_get_markets`, `simmer_get_market_context`, `simmer_get_briefing`, `simmer_trade`, portfolio/position tools, and guarded order cancellation.
   - **4 Pro-gated autoresearch tools** (`init_experiment`, `run_experiment`, `log_experiment`, `backtest_experiment`) — only registered if you're on the Pro plan.
 
 ## Step 1 — confirm you have an API key
@@ -49,7 +52,7 @@ This skill needs `SIMMER_API_KEY` to wire into the MCP config. Three cases:
 ```
 If "OK", skip to Step 2.
 
-**Case B — key from prior dashboard registration.** Get it from [simmer.markets/dashboard](https://simmer.markets/dashboard) → your agent → **API key** tab. Paste it in (don't pipe from clipboard — pastes can pick up trailing characters):
+**Case B — key from prior dashboard registration.** Get it from [simmer.markets/dashboard](https://simmer.markets/dashboard?ref=sdk-skill&utm_campaign=sdk-skill) → your agent → **API key** tab. Paste it in (don't pipe from clipboard — pastes can pick up trailing characters):
 ```bash
 read -s -p 'SIMMER_API_KEY: ' KEY && export SIMMER_API_KEY=$KEY
 ```
@@ -100,6 +103,56 @@ This step is **optional**. The MCP config in Step 4 uses `npx -y simmer-mcp`, wh
 If you do install it and get an EACCES permission error on Linux/macOS: do NOT `sudo npm install` (creates permission tangles later). Either fix npm's global directory permissions per [npm's docs](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally), or just skip the global install — the `npx -y simmer-mcp` form in the config works either way.
 
 > **Why no `--version` check?** simmer-mcp's binary doesn't have CLI flags — every invocation starts the stdio MCP server. Verification happens in Step 6 when your agent calls a simmer tool and gets a real response.
+
+**If npm or `npx` is blocked or hangs on your host**, `bun` works as a drop-in:
+`bun add -g simmer-mcp`, and `bunx simmer-mcp` in place of `npx -y simmer-mcp` in the
+config below. Some agent runtimes gate npm behind a command review that never returns —
+observed on Grok Bot's cloud computer, 2026-09-04.
+
+## Step 3b — Python, only if you want the `preflight` tool
+
+**Scope first, because the server's own warning overstates this.** On startup you may see:
+
+```
+[simmer-mcp] ⚠ simmer-sdk not installed — per-skill execution will fail. Run: pip install simmer-sdk>=0.13.0
+```
+
+That line is wrong in two ways. **Exactly one bundled tool needs Python** — `preflight`,
+the only bundled skill with an executable entrypoint. The other four (`simmer`,
+`simmer-wallet-setup`, `simmer-briefing`, `simmer-mcp-setup`) return their SKILL.md text
+and never start a subprocess, and every raw tool (`simmer_trade`, `simmer_get_markets`,
+`get_portfolio`, …) is pure Node. And the version floor is wrong: `preflight` requires
+**`simmer-sdk>=0.17.13`**, not `0.13.0`.
+
+So if you do not need `preflight`, skip this step. If you do:
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install 'simmer-sdk>=0.17.13'
+```
+
+Use a venv — most Linux hosts mark the system Python "externally managed", so a bare
+`pip install` fails with PEP 668. If `python3 -m venv` itself fails with
+*"ensurepip is not available"*, the venv module is packaged separately on that distro:
+`sudo apt install python3-venv` (Debian/Ubuntu), or use `pipx`, or as a last resort
+`pip install --break-system-packages`.
+
+⚠️ **Creating the venv is not enough — you must point the server at it.** The server is
+launched by your runtime as `npx -y simmer-mcp` and inherits *that* environment, not your
+shell's. It resolves Python from `SIMMER_MCP_PYTHON`, then `which python`, then
+`which python3` — **it never looks for a `.venv`**. So a venv you made in a terminal is
+invisible to it, and `preflight` fails exactly as before.
+
+Add the absolute path to the `env` block of whichever config you write in Step 4:
+
+```json
+"env": {
+  "SIMMER_API_KEY": "sk_live_...",
+  "SIMMER_MCP_PYTHON": "/absolute/path/to/.venv/bin/python"
+}
+```
+
+The same key works in Hermes' YAML `env:` map. `SIMMER_MCP_PYTHON` is also the fix on
+legacy distros where `python` is Python 2.
 
 ## Step 4 — wire up the MCP config
 
@@ -185,7 +238,20 @@ Restart your OpenClaw runtime so it picks up the new server.
 
 ### Hermes
 
-Hermes uses YAML, not JSON. Edit `~/.hermes/config.yaml` and add under `mcp_servers` (snake_case — different from the other runtimes):
+**Find the live config first.** Hermes supports profiles, and each profile has its own
+`HERMES_HOME`. Editing the default config does nothing for an agent you run with `-p`:
+
+| You run Hermes as | Config to edit |
+|---|---|
+| `hermes …` (default) | `~/.hermes/config.yaml` |
+| `hermes -p <profile> …` | `~/.hermes/profiles/<profile>/config.yaml` |
+
+If you use both, add the block to both. A profile can have MCP wired and still be useless
+if that profile has no inference provider configured — **MCP and inference are separate**,
+and the profile that can think is the one that needs the entry.
+
+Hermes uses YAML, not JSON. Add under `mcp_servers` (snake_case — different from the other
+runtimes):
 ```yaml
 mcp_servers:
   simmer:
@@ -193,8 +259,15 @@ mcp_servers:
     args: ["-y", "simmer-mcp"]
     env:
       SIMMER_API_KEY: "sk_live_..."
-    enabled: true
 ```
+
+**Use the CLI rather than editing by hand where you can.** Hermes ships
+`hermes mcp add`, `hermes mcp list` and `hermes mcp test` — `hermes mcp test simmer`
+connects and counts the tools, which is a faster verification than Step 6's handshake
+(expect ~23 tools). `hermes mcp list` confirms which config Hermes actually read.
+
+Stderr from the server goes to `<HERMES_HOME>/logs/mcp-stderr.log`. Read it first when
+something is wrong.
 
 ### Codex
 
@@ -212,6 +285,27 @@ The canonical Codex MCP config path varies by install — consult [Codex's MCP d
   }
 }
 ```
+
+### Grok Bot
+
+Grok Bot has no MCP config file to edit — servers are added through its **Add MCP**
+control, with the same three fields: command `npx` (or `bunx` where npm is blocked),
+args `-y simmer-mcp`, and `SIMMER_API_KEY` in env.
+
+⚠️ **Use a separate, unclaimed agent here.** On Grok Bot the MCP server runs on the cloud
+computer that **every bot on your account shares**, and its env secrets are stored where
+any of those bots can read them. Do not rely on a convention to keep that key harmless —
+a Simmer API key is not venue-scoped, so anyone holding it can call the REST API with
+`venue="polymarket"` directly and never touch this server's `SIMMER_MCP_ALLOW_LIVE` gate.
+
+The control that actually holds is **claim status**: an unclaimed agent is $SIM-locked
+regardless of any `venue=` parameter (Step 1, Case C). So register a second agent for the
+shared VM, never send its `claim_url`, and keep your claimed agent's key off that machine.
+For real trading on Grok Bot, install the `simmer` skill and drive the SDK on your own
+machine through a granted local folder.
+
+Grok **CLI** (the coding agent, a different product) does use a config file — treat it as
+"Other / unknown runtime" below.
 
 ### Other / unknown runtime
 
@@ -241,11 +335,12 @@ Don't trust "looks installed" — verify with a real tool call.
 Ask your agent:
 > What simmer tools can you see? List them.
 
-The agent should respond with the 3 utility tools plus per-skill execution tools:
+The agent should respond with the 3 utility tools, raw market/trade tools, and the core bundled skill tools:
 - `list_skills`
 - `get_skill_docs`
 - `troubleshoot_error`
-- A catalog of per-skill execution tools (one per bundled Simmer trading skill). The exact count depends on how many skills are currently bundled — have the agent call `list_skills` for the up-to-date inventory.
+- Core bundled skill tools (`simmer_simmer`, `simmer_simmer_wallet_setup`, `simmer_simmer_mcp_setup`, `simmer_simmer_briefing`, `simmer_preflight`)
+- Raw market/trade tools (`simmer_get_markets`, `simmer_get_market_context`, `simmer_get_briefing`, `simmer_trade`, and portfolio/position tools)
 
 Then ask the agent to do something safe that exercises the API:
 > Use the simmer tools to show me a few of the most active markets on the sim venue.
@@ -258,10 +353,45 @@ The `sim` venue is paper money — no real funds at risk. If this returns market
 - Confirm the runtime fully restarted (not just reloaded the conversation).
 - Check the config file actually got written — `cat ~/.claude.json` (or equivalent) and look for the `simmer` entry under `mcpServers`.
 - For Claude Code: `claude mcp list` shows registered servers and their status.
+- For Hermes: `hermes mcp list` shows which config it actually read, and
+  `hermes mcp test simmer` connects and counts tools. If you run Hermes with `-p`, check
+  you edited that profile's config and not the default one.
+
+**Everything works except the `preflight` tool.**
+That is the one bundled tool that shells out to Python. Either `simmer-sdk` is missing, or
+it is installed in a venv the server cannot see.
+
+**Read the tool's own error first — it is the one signal every host gives you.** Calling
+`simmer_preflight` returns exit 2 with the cause:
+
+```
+ERROR: simmer-sdk not installed — run: pip install simmer-sdk>=0.17.13
+```
+
+The server also prints an interpreter line on startup, which is more useful because it
+names *which* Python got resolved:
+
+```
+[simmer-mcp] runtime: python3: v3.x (/path) | simmer-sdk: ...
+```
+
+⚠️ **Whether you can actually read that line depends on the host, so don't go hunting for
+a log file.** The server always emits it; where stderr lands is the host's choice.
+
+| Host | Where the startup line goes |
+|---|---|
+| Hermes | `<HERMES_HOME>/logs/mcp-stderr.log` — and a profile has its own, e.g. `~/.hermes/profiles/<name>/logs/mcp-stderr.log` |
+| Grok Bot | **No file.** stderr is a Unix socket into the MCP host. Use the tool error above. |
+| Others | Varies. If there is no log, run `npx -y simmer-mcp` once in a terminal with `SIMMER_API_KEY` set and read the line directly. |
+
+If the resolved path is not your venv, set `SIMMER_MCP_PYTHON` (Step 3b).
+
+Don't reach for any of this when a *different* skill tool fails — the other four bundled
+skills never run Python, so their failures have some other cause.
 
 **Tools listed but API calls return 401.**
 - `SIMMER_API_KEY` env didn't make it into the MCP subprocess. The env block in the config has to be a direct value, not a `$VAR` reference — most MCP clients don't expand shell vars at server-launch time.
-- Verify the key value: `printenv SIMMER_API_KEY | cut -c1-20` — must start with `sk_live_`. A common silent failure: install commands that use `pbpaste` or clipboard-read primitives can write the *install command text itself* as the key value when the user copies the command after copying the key. Fix: get a fresh key from [simmer.markets/dashboard](https://simmer.markets/dashboard), then `export SIMMER_API_KEY="sk_live_..."` typed/pasted directly.
+- Verify the key value: `printenv SIMMER_API_KEY | cut -c1-20` — must start with `sk_live_`. A common silent failure: install commands that use `pbpaste` or clipboard-read primitives can write the *install command text itself* as the key value when the user copies the command after copying the key. Fix: get a fresh key from [simmer.markets/dashboard](https://simmer.markets/dashboard?ref=sdk-skill&utm_campaign=sdk-skill), then `export SIMMER_API_KEY="sk_live_..."` typed/pasted directly.
 
 **`npm install -g simmer-mcp` fails with EACCES on Linux/macOS.**
 - Don't `sudo npm install` — that creates permission problems later. Either fix npm's global directory permissions per [npm's docs](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally), or just use the `npx -y simmer-mcp` form in your config (no global install needed; npx fetches on first launch).
@@ -285,4 +415,4 @@ The `sim` venue is paper money — no real funds at risk. If this returns market
 - General Simmer skill (Python SDK path): [clawhub.ai/skills/simmer](https://clawhub.ai/skills/simmer)
 - Wallet setup (real-money trading): [clawhub.ai/skills/simmer-wallet-setup](https://clawhub.ai/skills/simmer-wallet-setup)
 - Full Simmer docs: [docs.simmer.markets](https://docs.simmer.markets)
-- Dashboard: [simmer.markets/dashboard](https://simmer.markets/dashboard)
+- Dashboard: [simmer.markets/dashboard](https://simmer.markets/dashboard?ref=sdk-skill&utm_campaign=sdk-skill)

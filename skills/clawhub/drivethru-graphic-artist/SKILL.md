@@ -1,7 +1,7 @@
 ---
 name: drivethru-graphic-artist
 description: Graphic-artist tasks for Bacon & Co decorations — (1) generate product mockups by compositing a decoration (logo/graphic) onto a blank product photo (deterministic; no model-generated pixels; self-reviewed), (2) make a DTF decoration "production-ready" / "drop the art" — take the real thumbnail, size it to the decoration location, render at 300 DPI, upload the DTF production file, set size + colors, and create a print sample, driving the decoration toward the 'done' state via the drivethru_mcp decoration_* tools, and (3) clean up degraded / AI-generated flat art before production — deterministically snap it back to its true inks, rebuild faded/broken/jagged outlines, and re-render crisp at print size (fixes the "looks fine as a thumbnail, falls apart at 13 inches" problem). Use whenever the user wants to see a logo on a garment, place artwork on a blank, remove an image background (knock a solid color out of flat art, or segment a photographic subject), tune a print's size/position, clean up / fix / "drop for production" a low-quality or AI-generated logo (ghosting, haze, jagged or fading outlines, soft edges), OR make a decoration production-ready / drop art / get a DTF decoration to done.
-version: 0.7.0
+version: 0.9.1
 emoji: 🎨
 metadata:
   openclaw:
@@ -265,6 +265,42 @@ Note: a decoration can't actually reach `done` without a linked `design` in the
 other step and creating the ready sample.
 
 **Full step-by-step procedure: [`references/production_ready.md`](references/production_ready.md).**
+
+## Batch mockup routine (Mockup Artist Agent)
+
+Separate from the interactive workflow: the **Mockup Artist Agent** runs a
+scheduled routine that sweeps Odoo for open decoration requests **assigned to
+Zach Tucker**, and — for each one where both a **blank product image** and a
+**decoration image** are already attached — generates a mockup and writes it
+into the request's `mockup_image` field. Requests missing an input, or that
+already have a mockup, are recorded as `skipped` and left alone. Rendering is
+the same deterministic pipeline (`compose_mockup.py` + the mandatory
+[self-review loop](#self-review-loop-required)); this routine only wraps it
+in a per-request loop plus the Odoo read/write plumbing (dotted-path search
+across `sale.order.decoration_request_ids`, attachment listing, base64 write
+via `decoration_set_image`).
+
+**Full step-by-step procedure, per-outcome logging, and the exact routine
+prompt/cron to paste into the agent's Routines page:
+[`references/mockup_routine.md`](references/mockup_routine.md).**
+
+## Web-image routine — per-color storefront thumbnails (Mockup Artist Agent)
+
+A second scheduled routine — **"General Purpose Web image generation
+routine"** — images the **storefront catalog** rather than decoration requests.
+It sweeps decorated products (`product.template` with `product_type='bacon_item'`,
+preferably in draft `storefront.site` catalogues) that have no web image or only
+one image shared across colors, and for each color composites the product's
+`linked_decorations` graphic onto that color's blank (resolved through
+`blank_product_tmpl_id`), then writes the reviewed, web-sized mockup back to the
+color's `product.product` image (and the template default). Same deterministic
+pipeline and mandatory [self-review loop](#self-review-loop-required); a mockup
+is only as good as its blank, so colors whose blank is still a legacy
+on-model/low-res shot are skipped for the vendor-sync routine to fix first.
+
+**Full step-by-step procedure, the catalog/blank/decoration data path,
+per-outcome logging, and the exact routine prompt:
+[`references/web_image_routine.md`](references/web_image_routine.md).**
 
 ## Editing the rules catalog
 

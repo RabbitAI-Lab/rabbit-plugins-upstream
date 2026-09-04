@@ -2,6 +2,15 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Tenant-wide identity and access administration.** This is not an ordinary app integration. The connection carries Google Workspace *super-admin* authority over the whole organization: creating and deleting users, resetting passwords, suspending accounts, changing group membership, and assigning admin roles. Those are account-takeover and privilege-escalation primitives — a single call can hand someone administrative control of the tenant or lock a real employee out of their work account and mail.
+>
+> - **Confirm the human, not the identifier.** Resolve the user first and show their full name and primary email before any change. `{userKey}` accepts an email, an alias, or an opaque ID, so a near-miss silently targets the wrong employee.
+> - **Role assignment and group membership are privilege changes.** Adding someone to an admin role or a privileged group grants standing access to everyone's data. Never do it as a convenience step, never infer it from a request like "give them access", and state exactly what the role grants before asking for approval.
+> - **Deletion and suspension are disruptive and, for deletion, effectively irreversible** — Google's recovery window is short and does not restore everything. Prefer suspension over deletion, and require the user to name the account explicitly.
+> - **Password resets and 2SV changes are credential operations.** Never generate or set a password and never disable two-step verification unless the user asked for that specific account; deliver any secret to the user directly and never echo it into shared output.
+> - **Never act across users in bulk.** No looping over a list to change settings, no org-unit-wide edits, and no "apply to everyone" — each affected account needs its own approval.
+> - **Reads are sensitive too.** Listing users, groups, org units, and audit logs exposes the organization's staff directory and activity. Retrieve the narrowest scope the task needs rather than enumerating the tenant.
+
 **App name:** `google-workspace-admin`
 **Base URL proxied:** `admin.googleapis.com`
 

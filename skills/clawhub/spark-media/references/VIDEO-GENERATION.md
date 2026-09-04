@@ -1,59 +1,33 @@
-# 视频任务详细说明
+# 视频生成与轮询
 
-视频支持两种创建方式：
+## 创建任务
 
-- 文生视频：`POST /api/v1/video`
-- 图生视频：`POST /api/v1/video/image`
+- 文生视频：`POST /api/v1/spark-media/video`
+- 图生视频：`POST /api/v1/spark-media/video/image`
 
-## 请求参数
+JSON 参数：
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `prompt` | string | 是 | 视频描述文本，最大 4000 字符 |
-| `duration` | integer | 否 | 时长，支持 `5`、`10`，默认 `5` |
-| `resolution` | string | 否 | 分辨率，支持 `480p`、`720p`、`1080p`，默认 `720p` |
-| `ratio` | string | 否 | 画幅比例，支持 `16:9`、`9:16`、`1:1`，默认 `16:9` |
+| 字段 | 约束 |
+|---|---|
+| `prompt` | 必填，最多 8000 字符 |
+| `duration` | 可选，`5` 或 `10` 秒 |
+| `resolution` | 可选，`480p`、`720p` 或 `1080p` |
+| `ratio` | 可选，`16:9`、`9:16` 或 `1:1` |
+| `watermark` | 可选，布尔值 |
+| `image` | 仅图生视频必填；PNG/JPEG/WebP `data:` URL，解码后最大 5 MB |
 
-图生视频额外参数：
+两个创建接口都要求 `Idempotency-Key`，成功返回 HTTP 202、`task_id` 和初始 `status`。
+平台同一用户同一时刻只允许一个活跃视频任务；HTTP 409
+`video_task_in_progress`（视频任务处理中）表示应继续查询已有任务，不要创建并行任务。
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `reference_image` | file | 与 `image_url` 二选一 | multipart 上传的参考图片 |
-| `image_url` | string | 与 `reference_image` 二选一 | 已公网可访问的参考图片 URL |
+## 查询任务
 
-## 调用流程
+`GET /api/v1/spark-media/video/{task_id}`
 
-1. 文生视频调用 `POST /api/v1/video`；图生视频调用 `POST /api/v1/video/image`
-2. 拿到 `task_id` 与初始 `status`
-3. 继续调用 `GET /api/v1/video/{taskId}` 查询任务结果
-4. 当状态变为 `succeeded` 时，读取 `video_url` 与 `cover_url`
+每 5–10 秒轮询一次并限制总时长。`pending`（等待中）、`submitted`（已提交）、`queued`（已排队）、`running`（运行中）等状态
+视为进行中；`succeeded`（成功）为成功；`failed`（失败）、`error`、`cancelled`（已取消）、`canceled`（已取消）为终态失败。
+成功后读取响应中的 `video_url` 或 `result` 并立即保存需要的内容。
 
-## 任务状态
-
-| 状态 | 含义 |
-|------|------|
-| `submitted` | 任务已提交，等待处理 |
-| `processing` | 任务生成中 |
-| `succeeded` | 生成成功，可获取视频地址 |
-| `failed` | 生成失败，可调整提示词后重试 |
-
-## 使用限制
-
-- 当前每个用户同一时间只能有一个进行中的视频任务，文生视频与图生视频共用这个限制
-- 如果已有任务处于 `submitted` 或 `processing`，再次创建会返回 `409`
-- 视频是异步任务，不会像图片接口一样在一次调用中直接返回最终结果
-
-## 计费与返回
-
-- 当前视频任务创建和查询响应中会返回 `billing` 字段
-- 创建任务成功时会按预计费用预扣，`billing.charged` 为本次预扣金额
-- 如果任务最终失败，查询失败状态时会自动退款，`billing.charged` 可能为负数
-- `billing.balance` 可用于统一展示账号余额
-
-## 提示词建议
-
-- 清楚描述主体、动作、环境和镜头运动
-- 可补充画面氛围、光影、色彩和节奏
-- 如果要做短视频原型，尽量写出镜头语言，例如“推进、拉远、俯拍、跟拍”
-- 图生视频要说明参考图里的主体如何运动，例如“商品缓慢旋转、镜头轻微推进、光线扫过”
-- 失败时优先收敛提示词，不要一次堆太多主体和复杂动作
+`refunded: true` 表示失败任务的本次费用已退回。不要仅凭失败文本自行宣称退款；以该字段
+及账单记录为准。失败状态不能当作可无限重试的理由，新任务必须由用户意图或明确恢复策略
+驱动。

@@ -157,7 +157,7 @@ Is the finding a one-off or broadly applicable?
 
 OpenClaw provides tools for cross-session sharing of security findings.
 
-Use these only when cross-session sharing is explicitly needed and the environment is trusted. **Never forward raw secrets, credentials, or unredacted sensitive data.**
+Do not send cross-session messages unless the user explicitly consents to that specific send. A trusted environment is not enough. **Never forward raw secrets, credentials, or unredacted sensitive data.** Prefer an entry ID plus a redacted summary.
 
 ### sessions_send (Security Alerts)
 

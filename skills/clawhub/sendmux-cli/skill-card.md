@@ -1,39 +1,58 @@
-## Description: <br>
-Use the Sendmux CLI for terminal-driven Management, Mailbox, and Sending workflows with JSON output and scoped credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the Sendmux CLI for durable agent inbox registration, owner invites, profiles, and terminal-driven Management, Mailbox, and Sending workflows.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Sendmux from the terminal for account management, mailbox, and sending workflows. It is intended for exact CLI mechanics with JSON output and scoped credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to read mailboxes, send email, and manage account resources when credentials allow it. <br>
-Mitigation: Install only for agents intended to operate Sendmux from a terminal, prefer scoped agent or mailbox tokens over root keys, keep destructive or sending actions user-confirmed, and avoid storing broad credentials in shared environments. <br>
+## Use Case:
 
+Developers and operators use this skill to configure Sendmux CLI profiles, register durable agent inboxes, and run Management, Mailbox, and Sending workflows from a terminal.
 
-## Reference(s): <br>
-- [Sendmux CLI skill on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-cli) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-oriented CLI examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers --json for agent-readable output and relies on Sendmux environment variables or CLI profiles for credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.3.0) <br>
+Risk: API keys and mailbox credentials may grant access to account, mailbox, or sending workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped mailbox or agent tokens where possible, avoid pasting secrets into chat, and reserve root keys for management commands.
+
+Risk: The skill can guide actions that send mail or change account resources.
+
+Mitigation: Require explicit confirmation for destructive or externally visible actions, and prefer idempotency keys and --json output for auditable CLI runs.
+
+Risk: Durable agent inbox profiles can retain mailbox read access while the registration remains active.
+
+Mitigation: Review profile storage and revocation behavior before registering a durable agent inbox; use full registration revocation when read access and delegated tokens must be removed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-cli)
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands and JSON-oriented CLI examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI examples favor --json for agent-readable output.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

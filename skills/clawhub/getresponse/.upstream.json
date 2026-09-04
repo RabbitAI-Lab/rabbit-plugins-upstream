@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/getresponse",
   "slug": "getresponse",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739754641,
-  "contentHash": "e0b79446682b60fc6e6481cfaf80cd827eac79be09fbcd75f9a0b36dd96c5bd0",
-  "fetchedAt": "2026-07-26T18:27:32.550Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517750086,
+  "contentHash": "c818650969ab80bfc691b7ab8643b0318d8c3dc4fb7149a57c028ae655d95272",
+  "fetchedAt": "2026-09-04T12:13:16.278Z"
 }

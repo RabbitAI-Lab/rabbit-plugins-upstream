@@ -1,43 +1,54 @@
-## Description: <br>
-This skill guides an agent to conduct role-specific mock interviews for job seekers, adapt question difficulty by experience level, score answers, suggest improvements, and produce a session scorecard. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向个人的多岗位面试模拟工具，支持评分与改进建议。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External job seekers use this skill for self-directed mock interview practice across engineering, product, business, and functional roles. It helps them answer one question at a time, receive scoring and improvement feedback, and review a final scorecard for targeted study. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill declares broad read, exec, and write authority for a mock interview workflow. <br>
-Mitigation: Prefer a version that removes exec and write access, or require explicit user confirmation before any file operation or command execution. <br>
-Risk: The artifact describes create, modify, delete, import, and export behavior without a clear scope for a mock interview skill. <br>
-Mitigation: Limit any save, export, or import actions to user-requested interview notes or scorecards and review generated actions before execution. <br>
-Risk: Interview scoring and advice may be incomplete or misleading for specialized roles or high-stakes hiring decisions. <br>
-Mitigation: Treat the generated scorecard as practice feedback and supplement it with human review or domain-specific preparation. <br>
+## Use Case:
 
+Individual job seekers use this skill to run single-session interview simulations across engineering, product, business, and functional roles. It asks role- and seniority-adjusted questions, then returns per-question feedback, scores, a final scorecard, and study recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/interview-sim-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text with optional JSON-style summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces interview questions, per-question feedback, scores, ideal-answer guidance, and a final session scorecard.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill requests command execution and write-capable tooling for an interview-practice workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and enable it only if command execution and write-capable tooling are acceptable for the environment.
+
+Risk: The skill includes network diagnostics, secret-handling language, and generic data-operation claims that do not fit its stated interview-simulation purpose.
+
+Mitigation: Limit use to interview simulation, avoid providing secrets, and prefer a version that removes those unrelated instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/interview-sim-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown conversation with interview questions, per-question feedback, scoring, and a final scorecard.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include ideal-answer guidance, module-level scores, hiring-style judgment, and learning recommendations.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

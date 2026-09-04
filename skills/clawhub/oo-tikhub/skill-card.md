@@ -1,42 +1,56 @@
-## Description: <br>
-TikHub connector skill that lets agents inspect schemas and run TikHub actions through the OOMOL oo CLI for TikTok, Douyin, Xiaohongshu, and TikHub account queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TikHub (tikhub.io). Use this skill for ANY TikHub request - searching and reading data. Whenever a task involves TikHub, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve public TikTok, Douyin, and Xiaohongshu data and to check TikHub account, usage, endpoint, and pricing information through a connected OOMOL TikHub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some actions may expose TikHub account or API-key-related information. <br>
-Mitigation: Run account and usage actions only when needed, and review returned data before sharing or storing it. <br>
-Risk: Actions marked write may change TikHub state, and the exact side effect may depend on the live connector contract. <br>
-Mitigation: Fetch the live action schema, confirm the exact payload and expected effect with the user, and avoid write actions without explicit approval. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect TikHub connector action schemas, run read-oriented TikHub searches and data retrieval through an OOMOL-connected account, and review TikHub endpoint pricing, metadata, account, and quota information.
 
-## Reference(s): <br>
-- [TikHub homepage](https://tikhub.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub TikHub skill page](https://clawhub.ai/oomol/skills/oo-tikhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL oo CLI; action schemas should be fetched before constructing JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup may run a remote oo CLI installer script that has not been verified in the evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation path first and prefer installation from trusted OOMOL documentation with verification.
+
+Risk: TikHub account information, API key metadata, usage data, or endpoint invocations may expose sensitive or billable activity.
+
+Mitigation: Run only intended TikHub actions, inspect each live action schema before constructing payloads, and confirm scope-sensitive account or endpoint invocation requests.
+
+## Reference(s):
+
+- [TikHub homepage](https://tikhub.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tikhub)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Text]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions should be preceded by live schema inspection; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

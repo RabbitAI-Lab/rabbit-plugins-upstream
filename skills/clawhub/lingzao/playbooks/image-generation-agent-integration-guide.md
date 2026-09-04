@@ -50,7 +50,7 @@ pass a compact, structured brief.
 
 Domestic Agent wrappers must not treat a one-sentence poster request as a ready
 generation brief. If the user only says "给我做一张某某海报图", "帮我做个封面",
-or "做一张好看的图", the wrapper should pause before creating a paid
+or "做一张好看的图", the wrapper should pause before creating an
 generation job and ask for visual anchors.
 
 Ask these first:
@@ -61,7 +61,7 @@ Ask these first:
 If those are missing, ask at most one additional route-changing question:
 platform/size, exact on-image text, people/no-people, or material/product photo.
 Do not expose this as a long design form. The goal is to prevent low-information
-prompts from producing generic or ugly paid images.
+prompts from producing generic or unusable images.
 
 Minimum viable brief before generation:
 
@@ -90,7 +90,7 @@ Recommended input fields:
 - `on_image_text`: short title, subtitle, labels, page text
 - `materials`: optional reference image, face photo, product photo, food/place
   photo, screenshot, logo, article draft
-- `reference_mode`: `structure`, `style`, `layout`, `color`, `none`
+- `reference_role`: `structure`, `style`, `layout`, `color`, `none`
 - `negative_constraints`
 - `quality_gate`: whether to review and repair after generation
 
@@ -348,7 +348,7 @@ Symptoms:
 
 Mitigation:
 
-- specify `reference_mode`: structure/style/layout/color
+- specify `reference_role`: structure/style/layout/color
 - state which parts to borrow and which parts to change
 - avoid asking for "same style" without decomposition
 
@@ -488,15 +488,15 @@ Symptoms:
 - missing image URL
 - expired asset
 - generation timeout
-- missing API key/credits
+- missing API key or unavailable account access
 
 Mitigation:
 
 - return a friendly message and the prepared image brief
 - keep failure messages concise and user-facing
-- tell the user how to open Lingzao web setup/recharge/API Key entry
-- if a generation job fails before producing an image, clarify whether credits
-  were consumed according to backend truth
+- tell the user how to open the Lingzao web setup and API Key entry
+- if a generation job fails before producing an image, preserve the prepared
+  brief, report the failed state, and do not retry automatically
 
 ## Domestic Agent Experience Rules
 

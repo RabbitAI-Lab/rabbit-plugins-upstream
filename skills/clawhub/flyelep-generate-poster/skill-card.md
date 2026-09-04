@@ -1,41 +1,61 @@
-## Description: <br>
-Uses the Flyelep API to generate e-commerce product main images and detail-page poster images. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate Poster helps agents call the Flyelep API to create e-commerce product main images, detail-page posters, and white-background product images using asynchronous polling or synchronous image generation.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and e-commerce operators use this skill to prepare Flyelep API requests for product hero images and product detail posters across cross-border and Chinese marketplace formats. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product descriptions, reference image URLs, and the Flyelep API key are sent to Flyelep. <br>
-Mitigation: Use only product assets and prompts that are acceptable to share with Flyelep, avoid confidential inputs, and rotate the API key if it appears in logs or shared chats. <br>
-Risk: Image generation can be long-running or fail because of invalid credentials, service concurrency, queueing, or request timeouts. <br>
-Mitigation: Use 300-600 second request timeouts, handle 401 and 500 responses, check for empty data, and retry later when the service is busy. <br>
+## Use Case:
 
+External users and developers use this skill to collect e-commerce image-generation requirements, prepare optional reference images, call Flyelep poster-generation endpoints, and return generated image URLs for product listings.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/flyelepai/flyelep-generate-poster) <br>
-- [Flyelep poster generation API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/generate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request bodies, curl examples, and generated image URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include semicolon-separated image URLs returned by Flyelep; image generation requests can require 300-600 second timeouts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill requires a Flyelep API key to call the service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide the API key only at runtime and do not place real secrets in saved examples or shared files.
+
+Risk: Product images supplied by the user may be uploaded to Flyelep and made available through a permanent public URL.
+
+Mitigation: Upload only product images the user is comfortable sending to Flyelep and exposing through a public image link.
+
+Risk: Synchronous generation can time out or disconnect before a result is returned, and that mode does not provide a task ID for later lookup.
+
+Mitigation: Prefer asynchronous generation with polling unless the user explicitly needs a single blocking request.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/flyelepai/skills/flyelep-generate-poster)
+- [Flyelep asynchronous poster generation endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/generateAsync)
+- [Flyelep task result query endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/queryTaskResult)
+- [Flyelep synchronous poster generation endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/generate)
+- [Flyelep file upload endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/file/upload)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown]
+
+**Output Format:** [Markdown guidance with JSON payload examples and curl commands; Flyelep returns generated image URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided Flyelep secretKey at runtime; synchronous generation can hold a request open for up to 15 minutes.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

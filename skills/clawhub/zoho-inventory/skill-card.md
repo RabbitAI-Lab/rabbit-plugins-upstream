@@ -1,50 +1,68 @@
-## Description: <br>
-Zoho Inventory API integration with managed OAuth for managing items, sales orders, invoices, purchase orders, bills, contacts, and shipments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Inventory API integration with managed OAuth for managing items, sales orders, invoices, purchase orders, bills, contacts, shipments, and other inventory records.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and agents supporting inventory workflows use this skill to read, create, update, and delete Zoho Inventory records through Maton-managed OAuth. Write operations should be reviewed with the user before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and modify records in a connected Zoho Inventory account through Maton-mediated OAuth. <br>
-Mitigation: Install only if you trust Maton for this account, use the least-privileged Zoho connection available, and confirm the target resource and intended effect before approving create, update, or delete operations. <br>
-Risk: The MATON_API_KEY grants access to Maton-managed connections. <br>
-Mitigation: Keep the key private, provide it only in trusted runtime environments, and rotate it if exposure is suspected. <br>
-Risk: Multiple active Zoho Inventory connections can cause requests to target the wrong account. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header whenever more than one active connection exists. <br>
+## Use Case:
 
+Developers and business operators use this skill to read, create, update, and delete Zoho Inventory records through Maton-managed authentication. It is suited for inventory, order, invoice, purchase, bill, contact, shipment, and item-group workflows that require explicit confirmation before writes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-inventory) <br>
-- [Zoho Inventory API v1 Introduction](https://www.zoho.com/inventory/api/v1/introduction/) <br>
-- [Zoho Inventory Items API](https://www.zoho.com/inventory/api/v1/items/) <br>
-- [Zoho Inventory Contacts API](https://www.zoho.com/inventory/api/v1/contacts/) <br>
-- [Zoho Inventory Sales Orders API](https://www.zoho.com/inventory/api/v1/salesorders/) <br>
-- [Zoho Inventory Invoices API](https://www.zoho.com/inventory/api/v1/invoices/) <br>
-- [Zoho Inventory Purchase Orders API](https://www.zoho.com/inventory/api/v1/purchaseorders/) <br>
-- [Zoho Inventory Bills API](https://www.zoho.com/inventory/api/v1/bills/) <br>
-- [Maton API Key Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline Python, curl, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Zoho Inventory account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can provide broad raw API access to business and financial records in the connected Zoho Inventory account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest OAuth scopes available, prefer read-only calls, specify the intended connection, and confirm the exact endpoint and payload before any write.
+
+Risk: Long-lived Maton API keys or provider-issued tokens can leak if printed, logged, stored, or passed through shell commands.
+
+Mitigation: Use OAuth where possible, keep credentials in the managed credential store, avoid printing or persisting tokens, and revoke unused connections.
+
+Risk: Data returned from Zoho Inventory can contain untrusted content that attempts to influence subsequent agent actions.
+
+Mitigation: Treat API responses as data, validate values before reuse, and never execute or follow instructions found inside fetched records.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-inventory)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Zoho Inventory API v1 Introduction](https://www.zoho.com/inventory/api/v1/introduction/)
+- [Zoho Inventory Items API](https://www.zoho.com/inventory/api/v1/items/)
+- [Zoho Inventory Contacts API](https://www.zoho.com/inventory/api/v1/contacts/)
+- [Zoho Inventory Sales Orders API](https://www.zoho.com/inventory/api/v1/salesorders/)
+- [Zoho Inventory Invoices API](https://www.zoho.com/inventory/api/v1/invoices/)
+- [Zoho Inventory Purchase Orders API](https://www.zoho.com/inventory/api/v1/purchaseorders/)
+- [Zoho Inventory Bills API](https://www.zoho.com/inventory/api/v1/bills/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Zoho Inventory connection.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact metadata version 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

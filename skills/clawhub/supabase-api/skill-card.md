@@ -1,46 +1,61 @@
-## Description: <br>
-Supabase API integration with managed authentication for database tables, auth users, and storage buckets through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supabase API integration with managed authentication for database tables via PostgREST, auth users, and storage buckets.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect and operate connected Supabase projects, including PostgREST table access, auth user management, and storage bucket operations. It is intended for Supabase workflows that need managed Maton authentication through MATON_API_KEY. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change data in a connected Supabase project through Maton. <br>
-Mitigation: Install only if Maton is trusted with the project and prefer staging or least-privileged projects for exploration. <br>
-Risk: POST, PUT, PATCH, and DELETE operations can modify production data, auth users, or storage resources. <br>
-Mitigation: Review the target resource, filters, and intended effect before approving any write operation. <br>
-Risk: When multiple Supabase connections exist, requests may target the wrong project if the connection is ambiguous. <br>
-Mitigation: Specify the intended connection explicitly before executing project-specific requests. <br>
+## Use Case:
 
+Developers and agents use this skill to work with Supabase projects through Maton-managed authentication, including querying database tables, managing auth users, and handling storage buckets. It is suited to read-first project inspection and user-approved data changes.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Supabase REST API Guide](https://supabase.com/docs/guides/api) <br>
-- [PostgREST Documentation](https://postgrest.org/en/stable/) <br>
-- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api) <br>
-- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API operations act through Maton against the selected connected Supabase project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can access and modify live Supabase project data, auth users, and storage through the connected Maton account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Connect only the intended project, prefer read-only scopes, and require explicit confirmation before any write or deletion.
+
+Risk: Long-lived API keys or surfaced provider tokens could expose account access if printed, logged, or persisted.
+
+Mitigation: Use OAuth when possible and keep credentials in the Maton or operating system credential store rather than command lines, files, or logs.
+
+## Reference(s):
+
+- [Supabase Skill on ClawHub](https://clawhub.ai/byungkyu/skills/supabase-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Supabase REST API Guide](https://supabase.com/docs/guides/api)
+- [PostgREST Documentation](https://postgrest.org/en/stable/)
+- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api)
+- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Maton CLI commands and API request examples that affect the connected Supabase project only after user confirmation.]
+
+## Skill Version(s):
+
+1.2.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

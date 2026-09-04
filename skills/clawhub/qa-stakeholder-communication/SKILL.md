@@ -1,8 +1,11 @@
 ---
 name: qa-stakeholder-communication
-version: 1.6.0
+slug: qa-stakeholder-communication
+displayName: 测试干系人沟通
+version: 1.7.5
 description: >-
   当需要告诉开发"这个 Bug 必须修"、跟产品经理沟通需求变更的影响、或者向管理层汇报质量风险时使用此技能。不同角色关注的事情不同——开发要的是复现步骤和定位信息，产品要的是影响范围和优先级建议，管理层要的是风险判断和决策依据。此技能提供针对开发/产品/管理层的沟通模板和策略。产出根据不同角色定制的沟通话术和汇报材料模板。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"怎么沟通"、"跟开发说"、"跟PM说"、"跟领导说"、"沟通策略"、"向上汇报"、"干系人沟通"、需要与不同角色沟通、推动问题解决需要有效沟通时
 allowed-tools: Read Grep Glob
@@ -28,6 +31,9 @@ output_format:
   traceability:
     - 每份沟通策略带唯一ID（COMM-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - communication_plan: 沟通计划
     - tailored_report: 定制化报告
     - key_metrics: 关键指标呈现
@@ -40,6 +46,8 @@ error_recovery_guidance:
   on_failure: "沟通策略未能推动问题解决时回退到问题定位补充"
   retry_behavior: "补充定位后重新设计沟通策略"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

@@ -1,48 +1,65 @@
-## Description: <br>
-This skill lets an agent search SmartLib's Chinese and global literature indexes, review article metadata and source links, and retrieve authorized Chinese journal PDFs or open-access full text through supported channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides SmartLib-powered Chinese and global academic literature search, literature details, source-link display, citation-oriented ranking, and authorized or open-access PDF retrieval for research workflows.
 
-## Publisher: <br>
-[j-levee](https://clawhub.ai/user/j-levee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-levee](https://clawhub.ai/user/j-levee)
 
-## Use Case: <br>
-External researchers, students, librarians, and other knowledge workers use this skill to find academic literature, inspect citation metadata, trace source database links, and request full-text downloads when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates and uses an external SmartLib account and stores the user's email in local configuration. <br>
-Mitigation: Ask for only the email needed for SmartLib registration and quota management, and keep local configuration private. <br>
-Risk: The skill sends literature queries to SmartLib Gateway and related open-access services. <br>
-Mitigation: Avoid submitting sensitive, confidential, or unpublished research details unless the user accepts those external service dependencies. <br>
-Risk: The skill supports paid quota flows and may present payment QR codes or gateway-provided links. <br>
-Mitigation: Verify the destination, plan, amount, and order details before paying or clicking links. <br>
-Risk: Gateway-provided notices and links may be forwarded into the chat. <br>
-Mitigation: Treat forwarded notices as external service messages and review links before acting on them. <br>
+## Use Case:
 
+External users and researchers use this skill to search Chinese and global scholarly literature, inspect metadata and source links, and retrieve authorized Chinese journal PDFs or openly available international PDFs when they have rights to use them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/j-levee/skills/global-biblio-base) <br>
-- [README.md](README.md) <br>
-- [PIPELINE.md](PIPELINE.md) <br>
-- [SmartLib account and billing reference](references/account.md) <br>
-- [SmartLib website](https://www.vipslib.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown search results with article metadata, source links, quota notices, and optional PDF or full-text download outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on SmartLib account status, available quota, network access, and whether the requested document is authorized or open access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.9.3 (source: SKILL.md frontmatter and server release metadata, released 2026-07-22) <br>
+Risk: The skill sends user email addresses, search requests, document identifiers, and payment-order details through SmartLib and Alipay-related flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only after the user knowingly provides an email address, disclose email use before payment order creation, and avoid submitting unnecessary personal or sensitive information.
+
+Risk: The skill can initiate paid quota or download-plan flows after quota exhaustion or a user upgrade request.
+
+Mitigation: Require deliberate plan selection, verify the plan price and order details before payment, and do not treat payment as complete until the payment status endpoint confirms success.
+
+Risk: The automated PDF retrieval path includes broad open-access lookup and anti-hotlink workaround behavior.
+
+Mitigation: Run full-text retrieval only after an explicit user request, limit use to authorized Chinese journal downloads or clearly open-access sources, and stop or redirect users when content is closed access.
+
+Risk: The skill depends on gateway credentials and networked API access.
+
+Mitigation: Keep gateway secrets out of conversation output and generated payment pages, review the skill before installation, and verify where downloaded files will be written.
+
+## Reference(s):
+
+- [SmartLib account and billing](references/account.md)
+- [SmartLib payment page template](references/pay_page_template.html)
+- [SmartLib pipeline guide](PIPELINE.md)
+- [Skill README](README.md)
+- [VIP Smart official website](https://www.vipslib.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Markdown search results and reports, JSON API request bodies, payment HTML when initiated, and PDF download links or file references when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include quota status, source database links, payment-plan choices, masked payment email, and retrieval status labels for full-text attempts.]
+
+## Skill Version(s):
+
+3.10.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

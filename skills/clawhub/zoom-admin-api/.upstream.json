@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zoom-admin-api",
   "slug": "zoom-admin-api",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1784339469971,
-  "contentHash": "0f65c318c69429062b72b6e6b70ad81e8123b9a53f07f6998d7a2aba1657eedf",
-  "fetchedAt": "2026-07-26T18:11:06.493Z"
+  "version": "1.2.0",
+  "updatedAt": 1788519638678,
+  "contentHash": "0b59aadd441461420137fc68194a0bd3e7d4e7fe042c1169e775b71d3a1d4d4f",
+  "fetchedAt": "2026-09-04T12:12:14.164Z"
 }

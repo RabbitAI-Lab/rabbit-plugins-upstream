@@ -15,33 +15,37 @@
 
 Facebook's Graph API requires a **Page Access Token** for page-scoped endpoints (feed, insights, comments). The gateway injects the connection's User Access Token, which authorizes `me/accounts` and page metadata but not page-scoped operations. This is a Facebook API constraint, not a gateway feature — the token is issued by Facebook, scoped to pages the connected user already administers, and grants no access beyond what that user's existing connection already permits.
 
-> **Handling rules — the page token is a credential.** It is obtained from and used against `api.maton.ai` only.
+> **Handling rules — the page token is a credential.** `api.maton.ai` is the only host that issues it and the only host that accepts it.
 > - **Never** write it to disk, logs, environment files, shell history, or scrollback.
 > - **Never** print, echo, or include it in any output shown to the user or returned to a caller.
-> - **Never** send it to any host other than `api.maton.ai` — not in a webhook destination, trigger header, body template, or third-party request.
+> - **No other host may receive it** — not a webhook destination, trigger header, body template, or third-party request.
 > - Hold it in an in-memory variable for the duration of the current request sequence only; discard it afterward. Do not cache or reuse it across sessions.
-> - Request it only when a page-scoped call actually requires it. Prefer the User-Access-Token endpoints below when they satisfy the task.
+> - Request it only when a page-scoped call actually requires it. Prefer the endpoints below that need no page token at all.
 
 **Start here — do not retrieve a token you don't need.** These endpoints work with the gateway-injected User Access Token alone, with no `access_token` parameter and no token retrieval step:
 - `GET /facebook-page/v25.0/me/accounts`
 - `GET /facebook-page/v25.0/{page_id}`
 
-If one of these satisfies the task, stop — there is no reason to read a page token.
+If one of these satisfies the task, stop — no page token is needed at all.
 
 **Obtaining a page token** — only when a specific page-scoped endpoint below actually requires one, and only for the page the user named:
-1. `GET /facebook-page/v25.0/me/accounts?fields=id,name,access_token` — read the `access_token` field for that one page
+1. `GET /facebook-page/v25.0/me/accounts?fields=id,name,access_token` — the response carries an `access_token` field for that one page
 2. Pass it as the `access_token` query parameter on that page-scoped call, then discard it
 
 Retrieve and consume it inside a single script so the value never crosses a process boundary and never lands in shell history or scrollback:
 
 ```bash
 python <<'EOF'
-import urllib.request, os, json
-KEY = os.environ["MATON_API_KEY"]
+import json, os, subprocess, urllib.request
+
+# Short-lived token from the CLI; no long-lived key in the environment.
+TOKEN = subprocess.run(
+    ["maton", "token"], capture_output=True, text=True, check=True
+).stdout.strip()
 
 def call(path):
     req = urllib.request.Request(f'https://api.maton.ai/facebook-page/v25.0/{path}')
-    req.add_header('Authorization', f'Bearer {KEY}')
+    req.add_header('Authorization', f'Bearer {TOKEN}')
     return json.load(urllib.request.urlopen(req))
 
 pages = call('me/accounts?fields=id,name,access_token')     # token is never printed

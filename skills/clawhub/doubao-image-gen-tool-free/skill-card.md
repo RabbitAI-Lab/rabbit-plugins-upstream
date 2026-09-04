@@ -1,41 +1,57 @@
-## Description: <br>
-豆包图片生成-免费版 helps an agent collect a text prompt, use Doubao in a browser to generate AI image candidates, preview them for user selection, and save the selected image. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through a browser-based Doubao workflow to create a single AI image from a user-provided prompt, confirm candidate images with the user, and save the selected result.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and creators use this skill through an agent to create single-image visual assets from text prompts for personal creative work, social media images, design ideation, and AI drawing practice. The skill is best suited to lightweight generation workflows that involve prompt confirmation, candidate preview, user selection, and local saving. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generation requests are sent to Doubao through a browser-login account. <br>
-Mitigation: Use the skill only when sending those prompts to Doubao is acceptable for the user and organization. <br>
-Risk: Generated images are downloaded and copied to a user-selected location, which could be synced, shared, or sensitive. <br>
-Mitigation: Review the destination path before copying generated files and avoid sensitive or shared directories unless intended. <br>
+## Use Case:
 
+External creators, designers, and individual users use this skill to generate a single Doubao image from a text prompt, review candidates, and save the chosen image. It is suited to lightweight social-media imagery, design inspiration, and AI drawing practice rather than deterministic or high-stakes decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/doubao-image-gen-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance, files] <br>
-**Output Format:** [Markdown guidance with optional shell commands and generated image files saved locally] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces preview guidance and saves the user-selected generated image; prompts are sent to Doubao and local save paths should be reviewed before copying files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release evidence) <br>
+Risk: The skill's broad trigger and generic automation, file, API, and command claims could cause an agent to apply it outside its intended Doubao image-generation workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit Doubao image-generation tasks and scope browser, file, and command authority to the minimum needed by the platform.
+
+Risk: The workflow downloads and copies generated image files, which can place files in unexpected locations if the save path is unclear.
+
+Mitigation: Confirm the destination directory with the user before copying or saving generated images.
+
+Risk: Prompts are submitted to the external Doubao service during browser-based generation.
+
+Mitigation: Avoid including secrets, credentials, or sensitive personal data in prompts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/doubao-image-gen-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance with workflow steps and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces one selected image file after user confirmation; default aspect ratio is 3:4 and batch generation is out of scope.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

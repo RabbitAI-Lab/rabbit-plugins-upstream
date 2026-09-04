@@ -1,44 +1,60 @@
-## Description: <br>
-Tongyi Wanxiang 2.7 video model for text-to-video, first/last-frame-to-video, and reference-to-video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tongyi Wanxiang 2.7 video model covers text-to-video, first/last-frame-to-video, and reference-to-video generation through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke the dLazy hosted Wan2.7 video model from prompts and optional reference images, video, audio, or first and last frames. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local media may be uploaded to dLazy storage, and the security summary warns that uploads can occur even when using dry-run. <br>
-Mitigation: Avoid passing private local files unless upload is acceptable, and use `npx @dlazy/cli@1.2.3` for ad hoc runs when possible. <br>
-Risk: The skill uses a dLazy API key, and the security guidance warns that local CLI key storage may not enforce the restrictive permissions claimed by the artifact. <br>
-Mitigation: Prefer `DLAZY_API_KEY` per invocation in sensitive environments, or manually restrict permissions on `~/.dlazy/config.json` and rotate keys when needed. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate Wan 2.7 videos from text prompts, reference media, or first and last frames through dLazy's hosted service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7) <br>
-- [Publisher Profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The wrapped CLI returns hosted media URLs for completed jobs or async task identifiers when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts, parameters, and explicitly provided media paths can be sent to dLazy's third-party cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content appropriate to share with dLazy, and avoid passing sensitive prompts or media unless the user accepts that disclosure.
+
+Risk: Authentication stores a dLazy API key locally or uses the DLAZY_API_KEY environment variable.
+
+Mitigation: Protect the local config file and environment, rotate or revoke keys from the dLazy dashboard when needed, and prefer scoped credentials.
+
+Risk: Global installation of the dLazy CLI increases local dependency persistence.
+
+Mitigation: Use the pinned npx invocation when a user does not want to install the CLI globally.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-wan2-7)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides use of the dLazy CLI, which can return generated media URLs, output metadata, async task identifiers, or saved local assets.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

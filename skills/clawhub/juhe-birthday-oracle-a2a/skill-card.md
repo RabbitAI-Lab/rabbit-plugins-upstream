@@ -1,43 +1,58 @@
-## Description: <br>
-This skill lets agents run paid Juhe birthday-oracle lookups for a specified date, sending only the requested date to Juhe and returning structured birthday book, password, flower-language, and fortune-style results after Alipay payment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This third-party paid ClawHub skill queries Juhe's birthday-oracle service for a specified date and returns birthday book, birthday code, birthday flower, personality, fortune, career, health, tarot, and related entertainment readings after Alipay confirmation.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and consumer agents use this skill to request paid entertainment-oriented birthday information for a specific date through Juhe, with Alipay payment confirmation before the query. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill may initiate a paid Alipay-mediated query. <br>
-Mitigation: Require explicit user confirmation after disclosing the fee, payment method, and privacy behavior before continuing. <br>
-Risk: The query sends the user-provided birthday or date to Juhe. <br>
-Mitigation: Send only the requested date for the lookup and do not collect or transmit unrelated personal data. <br>
-Risk: Birthday interpretations are entertainment content and may be mistaken for factual or decision-grade advice. <br>
-Mitigation: Present results as reference and entertainment only, not as guidance for major personal, career, health, or relationship decisions. <br>
+## Use Case:
 
+External users and consumer agents use this skill to request entertainment-oriented birthday readings for a specific date through a disclosed paid Alipay flow. It is intended for birthday-book, birthday-code, birthday-flower, and date-specific reading requests, not general horoscope or life-decision guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/juhe-birthday-oracle-a2a) <br>
-- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Structured Markdown report with payment-flow guidance and API request details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a specific date; sends only the date to Juhe; payment is handled through an Alipay payment skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Users may not realize the lookup is paid entertainment content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask for explicit confirmation, show actual payment details through Alipay, and present results as entertainment rather than decision guidance.
+
+Risk: The query sends the selected date to Juhe's service.
+
+Mitigation: Send only the date chosen for the lookup and stop if unrelated personal information or payment outside the documented Alipay flow is requested.
+
+Risk: Payment handling could be confusing if order details are incomplete.
+
+Mitigation: Display the item name, amount, transaction number, user order number, and available Alipay payment channels before payment completion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-birthday-oracle-a2a)
+- [Juhe A2A birthday query endpoint](https://apis.juhe.cn/a2a/query)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Structured Markdown with payment-confirmation guidance and an HTTP POST command template]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-supplied date and Alipay payment confirmation; returned readings are entertainment content and should not be treated as factual predictions.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

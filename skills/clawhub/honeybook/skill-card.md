@@ -1,42 +1,57 @@
-## Description: <br>
-Honeybook helps an agent work with HoneyBook client-portal sessions to review vendor contracts, invoices, payment methods, workspace files, and signing or payment links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HoneyBook helps agents work with HoneyBook client-portal data including contracts, invoices, questionnaires, messages, meetings, tasks, notes, attachments, and payments.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and their agents use this skill to inspect HoneyBook portal data across wedding vendors, identify unsigned contracts or overdue invoices, and obtain confirmed deep links for signing or payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HoneyBook magic links and cached sessions can grant access to sensitive portal data. <br>
-Mitigation: Treat magic links as login secrets, use the skill only for HoneyBook-specific tasks, and delete or revoke cached sessions when access is no longer needed. <br>
-Risk: Signing and payment links can lead to contractual or financial action. <br>
-Mitigation: Require explicit user confirmation before returning signing or payment deep links, and have the user review the HoneyBook portal before completing the action. <br>
-Risk: Contract, invoice, and payment-method details may expose private vendor or client information. <br>
-Mitigation: Limit use to the intended vendor workspace and avoid sharing retrieved details outside the authorized requester. <br>
+## Use Case:
 
+External users and their agents use this skill to review HoneyBook vendor portal content, track contracts and invoices, read questionnaires and messages, inspect meetings and tasks, and prepare confirmed portal actions such as sending messages or opening signing and payment links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/honeybook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text summaries with HoneyBook portal links when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Signing and payment tools require explicit confirmation and return portal deep links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.13 (source: server release metadata) <br>
+Risk: HoneyBook magic links and flow links may grant access to sensitive contracts, invoices, questionnaires, messages, and payment-related data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Paste portal or flow links only when intentionally authorizing access, and keep cached session files private.
+
+Risk: Sending a message through HoneyBook can email vendors and co-clients in the workspace.
+
+Mitigation: Review the message preview first and use confirm:true only after the content and recipients are correct.
+
+Risk: Signing and payment flows involve consequential portal actions.
+
+Mitigation: Use returned deep links deliberately and require explicit confirmation before requesting signing or payment actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/honeybook)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Links]
+
+**Output Format:** [Structured text and portal deep links returned through MCP tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include HoneyBook portal data, message previews, meeting details, payment status, and action links that require user confirmation before sensitive actions.]
+
+## Skill Version(s):
+
+0.9.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

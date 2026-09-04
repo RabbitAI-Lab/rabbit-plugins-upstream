@@ -23,9 +23,9 @@
 
 根据媒体与用户意图，选择 `report-templates/` 下对应的 `*.md`：
 
-| 意图                                                                                  | Google                                                                                             | Meta                                                                               | TikTok                    | Bing                    |
-| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------- | ----------------------- |
-| 周期分析 / 月报 / 周报                                                                | `google-period-report.md`                                                                          | `meta-period-report.md`                                                            | `tiktok-period-report.md` | `bing-period-report.md` |
+| 意图                                                                                  | Google                                                                                             | Meta                                                                               | TikTok                    | Bing                    | Yandex                    |
+| ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------- | ----------------------- | ------------------------- |
+| 周期分析 / 月报 / 周报                                                                | `google-period-report.md`                                                                          | `meta-period-report.md`                                                            | `tiktok-period-report.md` | `bing-period-report.md` | `yandex-period-report.md` |
 | OKKI 周报 / 固定话术发客户（Google）                                                  | `okki-weekly-google-client.md`                                                                     | —                                                                                  | —                         | —                       |
 | **询盘分析** / 固定运营触发（Goog账户询盘分析 / 我给你询盘信息分析Google账号XXX效果） | `google-inquiry-analysis.md`（**严格 3 个月** + 用户上传询盘资料 + 8 Sheet xlsx；见 SKILL **P7**） | —                                                                                  | —                         | —                       |
 | 深度诊断 / 健康检查                                                                   | `google-account-diagnosis-report.md`                                                               | `meta-account-diagnosis-report.md`（`facebook-analysis diagnosis-render` 出 HTML） | 同周期，注明能力受限      | 同周期                  |
@@ -59,7 +59,7 @@
 
 ### 步骤 4：拉取数据
 
-- **`google-analysis` / `facebook-analysis` / `tiktok-analysis` / `bing-analysis` / `report …` 账户分析子命令**：统一 **`--json-out <目录>`** 落盘，再由脚本读 **`manifest-<accountId>.json` / `report-manifest-<accountId>.json`**（清单文件名见 stdout 摘要的 `manifestFile`）与各 **`<section>-<accountId>.json`**（见 `references/analytics/account-analytics.md`）。
+- **`google-analysis` / `facebook-analysis` / `tiktok-analysis` / `bing-analysis` / `yandex-analysis` / `report …` 账户分析子命令**：统一 **`--json-out <目录>`** 落盘，再由脚本读 **`manifest-<accountId>.json` / `report-manifest-<accountId>.json`**（清单文件名见 stdout 摘要的 `manifestFile`）与各 **`<section>-<accountId>.json`**（见 `references/analytics/account-analytics.md`）。
 - **`stats`、`ad campaigns` 等辅助命令**：按 `references/core/tips.md` 与各命令文档做结构化拉数。
 - 仅执行与**本次报告维度**对应的命令（默认 + 用户追加）。
 - 数据失败/缺失：在对应章节写 `[ 数据不可用：{原因} ]`，不写推测。
@@ -83,21 +83,25 @@
 - **Google 周期报告**：产出 `google-period-report.json`（见 `google-period-report.md`，仅 `meta` + `narrative` 为必填）。
 - **TikTok 周期报告**：产出 `tiktok-period-report.json`（见 `tiktok-period-report.md`，`meta` 可由 `--snapshot-dir` 自动合并）。
 - **Bing 周期报告**：产出 `bing-period-report.json`（见 `bing-period-report.md`，`meta`/`kpis` 可由 `--snapshot-dir` 自动合并）。
-- **其余场景**（OKKI、询盘等未接入 render 的模板）：可直接组织 Markdown/HTML 正文。
+- **Yandex 周期报告**：产出 `yandex-period-report.json`（见 `yandex-period-report.md`，`meta`/`kpis`/`tables` 可由 `--snapshot-dir` 自动合并）。
+- **OKKI（P6）**：产出 `okki-weekly-report.json` 后走 `google-analysis okki-render` 出 **5 Sheet `.xlsx`**（必产）；**询盘（P7）**仍由 Agent 脚本写 8 Sheet `.xlsx`。对话 Markdown 表 / 手写 HTML **不能**代替终稿。
 
 ### 步骤 5b：生成终稿（按媒体与格式）
 
 | 媒体                      | 用户未指定格式                                                    | 用户指定 Excel                                                                                     |
 | ------------------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| **Meta/Facebook 周期**    | `facebook-analysis render` → **HTML**（必做）                     | Agent 脚本按 `meta-period-report-excel.md` 写 xlsx；**不**默认 `render`                            |
+| **Meta/Facebook 周期**    | `facebook-analysis render` → **HTML**（必做）                     | `facebook-analysis render --format xlsx`（五 Sheet，见 `meta-period-report-excel.md`）             |
 | **Meta/Facebook 诊断**    | `facebook-analysis diagnosis-render` → **HTML**（必做）           | Agent 脚本写 xlsx；**不**默认 `diagnosis-render`                                                   |
 | **Google 周期报告**       | `google-analysis render` → **HTML**（必做）                       | **周期/定制 Sheet**：`google-period-report-excel.md`（P4，先 outline 后脚本）；**不**默认 `render` |
 | **TikTok 周期报告**       | `tiktok-analysis render` → **HTML**（必做）                       | Agent 脚本写 xlsx；**不**默认 `render`                                                             |
 | **Bing 周期报告**         | `bing-analysis render` → **HTML**（必做）                         | Agent 脚本写 xlsx；**不**默认 `render`                                                             |
-| **Google 诊断/OKKI/询盘** | 按 `report-template*.html` 写 HTML（默认 `report-template.html`） | **诊断**：同左；**OKKI**：P6；**询盘**：P7                                                         |
+| **Yandex 周期报告**       | `yandex-analysis render` → **HTML**（必做）                       | Agent 脚本按 `yandex-period-report-excel.md` 写 xlsx；**不**默认 `render`                          |
+| **Google 诊断**           | 按 `report-template*.html` 写 HTML（默认 `report-template.html`） | 同左；用户要 Excel 时 Agent 脚本写 xlsx                                                            |
+| **OKKI 周报（P6）**       | **必产 5 Sheet `.xlsx`**（`google-analysis okki-render`；「表格形式」= xlsx） | 同左；仅用户明确「只要话术 / 不要文件」才省略                                                      |
+| **Google 询盘（P7）**     | **必产 8 Sheet `.xlsx`**（Agent 脚本）                            | 同左                                                                                               |
 | **网站诊断**              | `website-diagnosis render` → HTML                                 | —                                                                                                  |
 
-**禁止**：Meta / Google / TikTok / Bing 周期报告与 Meta 诊断报告默认只交 Markdown/JSON；禁止 Agent 手写以上报告 HTML。
+**禁止**：Meta / Google / TikTok / Bing 周期报告与 Meta 诊断报告默认只交 Markdown/JSON；禁止 Agent 手写以上报告 HTML。**禁止 P6/P7** 用对话 Markdown 表或手写 HTML 代替 `.xlsx`。
 
 **Google 广告诊断报告**（`google-ads-diagnosis.md` / `google-account-diagnosis-report.md`）额外必遵：
 
@@ -121,7 +125,7 @@
 | 用户措辞                                                                                                                                              | 映射                                                                                                                                                                                                 |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 月报、周报、投放总结、效果回顾                                                                                                                        | 周期分析 → 对应媒体 `*-period-report.md`                                                                                                                                                             |
-| **使用 okki 周报模板 / OKKI 周报 / okki 周报**（Google + 区间）                                                                                       | **固定话术 + 精简表 +（按需）Excel** → `okki-weekly-google-client.md`（见 SKILL **P6**）；Excel **仅**由 Agent 脚本生成，**无** CLI 内置写表子命令                                                   |
+| **使用 okki 周报模板 / OKKI 周报 / okki 周报**（Google + 区间；含「表格形式」）                                                                        | **固定话术 + 必产 5 Sheet `.xlsx`** → `okki-weekly-google-client.md`（见 SKILL **P6**）；终稿必须 `google-analysis okki-render`；「表格形式」= Excel，**禁止**对话 Markdown 表 / 手写 HTML / Agent 手写 xlsx |
 | **Goog账户询盘分析 / Google 账户询盘分析 / 分析XXX Google账号的询盘效果 / 我给你询盘信息分析Google账号XXX效果**（或含「询盘 + 账户 + Google」三要素） | **询盘 + 账户合并分析 + 严格 3 个月 + 8 Sheet xlsx** → `google-inquiry-analysis.md`（见 SKILL **P7**）；询盘资料用户上传任意载体，宿主 Agent 解析落盘 `inquiries.json`，xlsx **仅**由 Agent 脚本生成 |
 | 健康检查、诊断、账户分析                                                                                                                              | 诊断 → `google-account-diagnosis-report.md`（Google）或周期型降级                                                                                                                                    |
 | 对比、汇报、给客户看                                                                                                                                  | 以周期型为骨架，简化版本                                                                                                                                                                             |
