@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-networking",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-networking",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "b8c770d9227f2685194392d39ad51aab6a34115771dec835bfc82c53ca034a69",
+  "fetchedAt": "2026-09-05T11:21:32.899Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/orderly-onboarding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "orderly-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-09-05T07:37:25Z",
+  "contentHash": "75da3caa5fb7305ee1093916b96c1be1e46da5d770aec8f143921386987370d2",
+  "fetchedAt": "2026-09-05T11:21:04.990Z"
+}

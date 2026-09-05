@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/skill-manager",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "skill-manager",
+  "branch": "main",
+  "pushedAt": "2026-09-05T07:37:25Z",
+  "contentHash": "f608fd4182de3fedc6a922ca44b7a8198b4277d6be30d084e4539aac212512ac",
+  "fetchedAt": "2026-09-05T11:21:05.204Z"
+}

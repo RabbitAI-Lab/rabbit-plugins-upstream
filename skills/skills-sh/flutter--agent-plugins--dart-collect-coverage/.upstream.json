@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/flutter/agent-plugins/dart-collect-coverage",
+  "repo": "flutter/agent-plugins",
+  "skillId": "dart-collect-coverage",
+  "branch": "main",
+  "pushedAt": "2026-09-03T00:38:31Z",
+  "contentHash": "6262627137da3ff2234848d91626d8e16e69bf47593310ab9bc7d7ba73cd5643",
+  "fetchedAt": "2026-09-05T11:19:04.014Z"
+}

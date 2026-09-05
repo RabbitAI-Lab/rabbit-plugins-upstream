@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useosint/skills/find-leaks-in-the-wild",
+  "repo": "useosint/skills",
+  "skillId": "find-leaks-in-the-wild",
+  "branch": "main",
+  "pushedAt": "2026-08-03T00:38:10Z",
+  "contentHash": "dcc51104dd24123cb9681c27ecd90720f7bf20a732d6df3c4565a2da458ff834",
+  "fetchedAt": "2026-09-05T11:19:01.148Z"
+}

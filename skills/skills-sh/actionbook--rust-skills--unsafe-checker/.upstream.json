@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/actionbook/rust-skills/unsafe-checker",
+  "repo": "actionbook/rust-skills",
+  "skillId": "unsafe-checker",
+  "branch": "main",
+  "pushedAt": "2026-08-23T11:09:39Z",
+  "contentHash": "c97a2bec025c444d729a2b5577ed20dbd82413bc353f943a9090b0413ee927ab",
+  "fetchedAt": "2026-09-05T11:21:28.270Z"
+}

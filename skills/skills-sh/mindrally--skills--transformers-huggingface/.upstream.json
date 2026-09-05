@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mindrally/skills/transformers-huggingface",
+  "repo": "mindrally/skills",
+  "skillId": "transformers-huggingface",
+  "branch": "main",
+  "pushedAt": "2026-09-03T15:59:25Z",
+  "contentHash": "a0caf7775d9970c34a900cf5c41aa86609cffecbaf2cd98d4724b0e7d04b59ae",
+  "fetchedAt": "2026-09-05T11:20:44.151Z"
+}

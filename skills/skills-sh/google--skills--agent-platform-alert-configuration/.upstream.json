@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-alert-configuration",
+  "repo": "google/skills",
+  "skillId": "agent-platform-alert-configuration",
+  "branch": "main",
+  "pushedAt": "2026-09-04T17:58:48Z",
+  "contentHash": "80b87cac16e5d9d3c417b4be9dd47497bbaf6eb48092ac86e55c5762539df8d3",
+  "fetchedAt": "2026-09-05T11:20:42.320Z"
+}

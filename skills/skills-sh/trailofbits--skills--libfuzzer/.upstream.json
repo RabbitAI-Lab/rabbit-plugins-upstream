@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/trailofbits/skills/libfuzzer",
+  "repo": "trailofbits/skills",
+  "skillId": "libfuzzer",
+  "branch": "main",
+  "pushedAt": "2026-09-02T17:44:12Z",
+  "contentHash": "489c202a313911af22226e453e8d53a9c7dba7c3bef4e96ea01da350c8d381ff",
+  "fetchedAt": "2026-09-05T11:21:24.511Z"
+}
