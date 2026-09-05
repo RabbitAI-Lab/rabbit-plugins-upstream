@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/resend-api",
   "slug": "resend-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739751880,
-  "contentHash": "0e45cef8dc6dabb6c20224b3f180cc8179a8ee3bec37e29916749b599e425a7a",
-  "fetchedAt": "2026-07-26T18:27:38.001Z"
+  "version": "1.2.0",
+  "updatedAt": 1788518889068,
+  "contentHash": "a7edd34ac01d8db41fc445763ea20c55ac3dd7ec1288bc03fb1f95addb71e5c4",
+  "fetchedAt": "2026-09-05T11:23:42.725Z"
 }

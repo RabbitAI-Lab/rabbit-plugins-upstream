@@ -1,43 +1,64 @@
-## Description: <br>
-Fast response and generation of short videos with Google Veo 3.1 Fast. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates short text-to-video or image-to-video clips with Google Veo 3.1 Fast through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy CLI for text-to-video, image-to-video, and video extension workflows with Google Veo 3.1 Fast. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and local media paths passed to the CLI may be sent or uploaded to dLazy services. <br>
-Mitigation: Invoke the skill explicitly for intended dLazy video generation tasks and confirm local file paths before running it. <br>
-Risk: The CLI can store a persistent API key in the user's local configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when persistent credential storage is not appropriate, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers and external users use this skill to ask an agent to invoke dLazy's hosted video generation service for fast Google Veo 3.1 Fast text-to-video, image-to-video, and video extension workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1-fast) <br>
-- [dLazy CLI](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted file URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: The dLazy CLI can store an API key in a local configuration file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use DLAZY_API_KEY per run or npx for non-persistent usage, and verify permissions on ~/.dlazy/config.json after login.
+
+Risk: Local media provided to image, video, or audio fields may be uploaded to dLazy-hosted storage.
+
+Mitigation: Confirm user approval before passing local media paths and avoid sending sensitive media unless the service terms and account controls are acceptable.
+
+Risk: Video generation can consume paid credits.
+
+Mitigation: Confirm expected cost and account balance before allowing generation, especially for high-resolution or repeated runs.
+
+Risk: The documented dry-run behavior should not be treated as a guarantee that no network or upload behavior occurs.
+
+Mitigation: Use dry-run only as an estimate aid and avoid passing sensitive local paths unless network behavior has been independently confirmed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1-fast)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands; CLI responses are JSON with hosted media URLs or task status, with optional downloaded video files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task identifiers when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

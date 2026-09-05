@@ -1,0 +1,29 @@
+{
+  "name": "@svetlyoh/lingry",
+  "version": "2.0.2",
+  "type": "module",
+  "files": [
+    ".clawhubignore",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md",
+    "SKILL.md",
+    "SUPPORT.md",
+    "bin/",
+    "src/",
+    "test/",
+    "package-lock.json",
+    "npm-shrinkwrap.json"
+  ],
+  "bin": {
+    "lingry-agent": "bin/lingry-agent.mjs"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}

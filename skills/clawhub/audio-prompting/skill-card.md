@@ -1,44 +1,59 @@
-## Description: <br>
-Use when crafting TTS, music, or bed prompts for any generative audio model - director style, song structure, and post-production layering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when crafting TTS, music, or bed prompts for any generative audio model - director style, song structure, and post-production layering.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to draft speech, music, and background-bed prompts, choose the right audio generation path, and plan narration-plus-music layering for video or audio production. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may lead an agent to install related Pruna skills or use paid audio and video APIs. <br>
-Mitigation: Review suggested related-skill installs before accepting them and confirm before paid generation, uploads, or API calls. <br>
-Risk: Audio and video workflows may require credentials such as PRUNA_API_KEY or REPLICATE_API_TOKEN. <br>
-Mitigation: Keep API keys in the intended environment variables and avoid placing secrets in prompts, generated files, or shared logs. <br>
-Risk: Narration can be truncated when audio is longer than the target video model's clip limit. <br>
-Mitigation: Probe generated audio duration, keep per-scene lines within the documented limit, and split long narration into multiple scene rows. <br>
+## Use Case:
 
+Developers and creative agents use this skill to draft TTS, song, instrumental bed, and audio-layering prompts for generative audio and video workflows.
 
-## Reference(s): <br>
-- [TTS style prompting](references/tts-style-prompting.md) <br>
-- [Music and bed prompting](references/music-and-bed-prompting.md) <br>
-- [Audio post-production](references/audio-post-production.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompt examples, workflow steps, command snippets, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May suggest related skill installs, API-key environment variables, audio duration checks, and ffmpeg-based assembly steps when the task requires them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence release and skill metadata) <br>
+Risk: Unpinned install commands can fetch a moving package reference.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review install commands before use and prefer trusted or pinned package references where available.
+
+Risk: Audio workflows can send voice or audio content to Pruna or Replicate and may incur paid API usage.
+
+Mitigation: Confirm before sending audio, avoid sensitive voice or audio content unless intended, and verify credential and cost expectations.
+
+Risk: Post-muxing narration over silent video can truncate voiceover that is longer than the video slot.
+
+Mitigation: Prefer audio-led video generation when narration exists, then probe, shorten, or split TTS lines to fit per-clip duration limits.
+
+## Reference(s):
+
+- [TTS Style Prompting](references/tts-style-prompting.md)
+- [Music and Bed Prompting](references/music-and-bed-prompting.md)
+- [Audio Post-Production](references/audio-post-production.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with prompt examples, inline shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include prompts for TTS, music, instrumental beds, narration timing, and audio layering decisions.]
+
+## Skill Version(s):
+
+1.0.11 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

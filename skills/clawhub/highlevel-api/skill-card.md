@@ -1,49 +1,64 @@
-## Description: <br>
-GoHighLevel Private Integration Token API integration with managed authentication for CRM, sales pipelines, calendars, conversations, payments, and marketing automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GoHighLevel (Private Integration Token) API integration with managed authentication for CRM, sales pipelines, calendars, conversations, payments, and marketing automation.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and operators use this skill to connect an agent to Maton-managed GoHighLevel Private Integration Token connections, choose agency or sub-account scope, and prepare approved API requests for CRM, pipeline, calendar, conversation, payment, and workflow tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access broad CRM, customer, pipeline, calendar, conversation, payment, and workflow data through connected GoHighLevel accounts. <br>
-Mitigation: Install only when Maton and the publisher are trusted, use least-privilege agency or sub-account tokens, and minimize sensitive reads. <br>
-Risk: Using the wrong agency or sub-account connection can route requests to an unintended scope. <br>
-Mitigation: Specify the intended Maton-Connection for each request and confirm whether the operation requires an agency token or a sub-account token. <br>
-Risk: Create, update, and delete calls can change business records or remove data. <br>
-Mitigation: Review the target resource and intended effect before approving every write or delete action. <br>
-Risk: The MATON_API_KEY and GoHighLevel Private Integration Tokens grant sensitive account access. <br>
-Mitigation: Keep credentials private, store them in environment variables or approved secret storage, and rotate or revoke them if exposed. <br>
+## Use Case:
 
+Developers and agents use this skill to operate on GoHighLevel CRM, pipeline, calendar, conversation, payment, location, and workflow data through Maton-managed Private Integration Token authentication.
 
-## Reference(s): <br>
-- [GoHighLevel API Documentation](https://highlevel.stoplight.io/docs/integrations/) <br>
-- [GoHighLevel Marketplace Documentation](https://marketplace.gohighlevel.com/docs/) <br>
-- [Private Integration Token Guide](https://marketplace.gohighlevel.com/docs/integrations/custom-token) <br>
-- [GoHighLevel Skill on ClawHub](https://clawhub.ai/byungkyu/highlevel-api) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with curl examples and JSON request and response snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write and delete operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can operate on CRM, messaging, billing, calendar, location, and workflow data in a connected GoHighLevel account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, connect only the needed account or location, and require explicit confirmation of the exact resource, payload, and intended effect before writes, deletions, messages, billing changes, or workflow operations.
+
+Risk: Credentials or provider-issued tokens could be exposed if copied into commands, logs, files, or prompts.
+
+Mitigation: Let Maton manage credentials through OAuth or the operating system credential store, and do not print, export, persist, or transmit credential values.
+
+Risk: Agency and Sub-Account tokens have different scopes, so an ambiguous connection can target the wrong account or location.
+
+Mitigation: Specify the intended Maton profile and connection for sensitive calls, and use read/list calls first to verify account context and resource identifiers.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/highlevel-api)
+- [Maton Homepage](https://maton.ai)
+- [GoHighLevel API Documentation](https://highlevel.stoplight.io/docs/integrations/)
+- [GoHighLevel Marketplace Documentation](https://marketplace.gohighlevel.com/docs/)
+- [Private Integration Token Guide](https://marketplace.gohighlevel.com/docs/integrations/custom-token)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval for new connections or write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

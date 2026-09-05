@@ -1,8 +1,11 @@
 ---
 name: qa-bug-root-cause-analysis
-version: 1.6.0
+slug: qa-bug-root-cause-analysis
+displayName: 缺陷根因分析
+version: 1.7.5
 description: >-
   当某个 Bug 频繁复现、线上有缺陷需要做事后分析、或者发现同一类问题反复出现需要根治时使用此技能。从症状出发用 5Why、因果图和鱼骨图等方法系统化定位缺陷根源，区分直接原因、间接原因和系统原因。不要只修症状——根因分析的价值在于找到让同类 Bug 不再发生的系统性改进措施，同时分析漏测原因来优化测试设计。 ⚠️ 本技能示例可能调用外部日志/监控工具，请在受控环境执行。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 when_to_use: 用户说"Bug根因"、"根因分析"、"为什么出Bug"、"深层原因"、"定位问题"、"排查方向"、需要分析Bug根因、反复出现同类问题需要根因改进时
 allowed-tools: Read Grep Glob Bash
 related_skills:
@@ -29,8 +32,11 @@ input_format:
 output_format:
   traceability:
     - 每个根因分析带唯一ID（ROOT-XXXX）
-    - 关联Bug ID（BUG-XXXX）
+    - 关联Bug ID（TC_{缺陷模块缩写}_{功能缩写}_{序号}，如 TC_BUG_LOGIN_001；缺陷追溯保留 BUG 前缀）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - root_cause: 根因分析结论
     - contributing_factors: 促成因素清单
     - impact_assessment: 影响范围评估
@@ -44,6 +50,8 @@ error_recovery_guidance:
   on_failure: "根因定位不充分时回退到执行观察收集更多信号"
   retry_behavior: "补充日志或环境信息后重新分析根因"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

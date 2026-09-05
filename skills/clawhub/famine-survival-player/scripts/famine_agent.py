@@ -136,7 +136,7 @@ def print_json(value: object) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Play Famine Survival through the safe Agent API")
-    parser.add_argument("--api-base", default=os.environ.get("FAMINE_API_BASE_URL", "https://famine.aicadegalaxy.com"))
+    parser.add_argument("--api-base", default=os.environ.get("FAMINE_API_BASE_URL", "https://famine.aipmedia.cn"))
     parser.add_argument("--timeout", type=float, default=20.0)
     parser.add_argument("--state-file", type=pathlib.Path, default=default_state_file())
     subparsers = parser.add_subparsers(dest="operation", required=True)

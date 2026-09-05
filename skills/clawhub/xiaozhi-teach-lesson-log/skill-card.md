@@ -1,43 +1,64 @@
-## Description: <br>
-Helps independent teachers turn post-class recollections into structured lesson records, learning-track updates, course-unit ledger entries, and follow-up planning notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把独立教师的课后记忆变成结构化教学档案，每节课 5 分钟记完。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill after lessons to capture what was taught, assess mastery and reactions, update learning trajectories, record course-unit consumption, and prepare next-lesson or parent-summary material. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent lesson records may contain sensitive student information. <br>
-Mitigation: Use aliases, avoid real names and family details, and verify consent settings before creating profiles or sharing data across skills. <br>
-Risk: Course-unit ledger updates can affect lesson balances. <br>
-Mitigation: Treat lesson-unit deductions as pre-deductions, review them within the 24-hour adjustment window, and correct exceptions such as absences, cancellations, trials, or technical disruptions. <br>
-Risk: Parent-summary drafts could be inaccurate, premature, or too negative if sent without review. <br>
-Mitigation: Manually check parent summaries before sending, keep wording behavior-based, and do not let the skill automatically send messages to parents. <br>
+## Use Case:
 
+External independent teachers use this skill to turn after-class notes into structured lesson logs, topic-level mastery records, pending course-unit confirmations, and next-lesson handoff points.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log) <br>
-- [Lesson log template](references/lesson-log-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-style structured lesson records, learning-trajectory notes, ledger updates, and planning summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes lesson-log fields, mastery evidence, next-lesson focus, course-unit consumption notes, and optional parent-summary drafts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The packaged workspace schema includes parent-communication records that do not fit the skill's stated lesson-log role.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, confirm the platform enforces field-level permissions so the skill cannot read or write parentCommunicationLogs; keep parentSummary as an internal draft.
+
+Risk: The skill handles persistent student lesson records and learning observations.
+
+Mitigation: Use pseudonyms, clear consent controls, retention limits, and deletion workflows before storing or sharing learner records.
+
+Risk: Course-unit suggestions could affect lesson-package accounting if applied automatically.
+
+Mitigation: Keep all course-unit changes as pending confirmations until the teacher explicitly approves the units to apply.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log)
+- [Lesson log template](artifact/references/lesson-log-template.md)
+- [AI item check protocol](artifact/shared/ai-item-check.md)
+- [Crisis exception](artifact/shared/crisis-exception.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [Solo teacher workspace schema](artifact/shared/solo-teacher-workspace.schema.json)
+- [Vocabulary](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance and structured workspace field updates for lesson logs, parent-summary drafts, and pending course-unit confirmations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Records and course-unit changes are presented for teacher review and require explicit confirmation before writing.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

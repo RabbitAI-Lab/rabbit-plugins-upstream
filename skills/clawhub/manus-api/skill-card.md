@@ -1,48 +1,69 @@
-## Description: <br>
-Manus AI Agent API integration with managed API key authentication for creating and managing AI agent tasks, projects, files, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manus AI Agent API integration with managed API key authentication for creating and managing AI agent tasks, projects, files, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to call the Manus API through Maton, manage Manus connections, create and inspect tasks, manage projects and files, and configure task lifecycle webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive Maton and Manus credentials and can expose prompts, files, task metadata, and outputs through the API. <br>
-Mitigation: Install only if you trust Maton and Manus, keep MATON_API_KEY secret, and avoid sending data that should not leave the current environment. <br>
-Risk: Create, delete, upload, and webhook actions can change resources in the connected Manus account. <br>
-Mitigation: Approve write actions only after checking the target account, target resource, and intended effect. <br>
-Risk: Requests may target the wrong Manus account when multiple connections are active. <br>
-Mitigation: Include the Maton-Connection header when multiple connections exist so each request targets the intended account. <br>
-Risk: Webhook setup can send task lifecycle data to an external destination URL. <br>
-Mitigation: Use webhook endpoints you control and trust, and verify the destination URL before registering it. <br>
+## Use Case:
 
+Developers and external users use this skill to access Manus through Maton, list or create tasks and projects, manage files, and configure webhooks while keeping credentials behind the gateway.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/manus-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Manus API Overview](https://open.manus.im/docs) <br>
-- [Manus API Reference](https://open.manus.im/docs/api-reference) <br>
-- [Manus Website](https://manus.im) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API requests that require MATON_API_KEY and explicit user approval for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can access a connected Manus account through Maton, including write-capable API operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Manus access through Maton is intended, use least-privilege connections, and confirm every create, update, upload, webhook, or delete action before execution.
+
+Risk: The Maton passthrough can reach endpoints beyond the examples if the connection permits.
+
+Mitigation: Default to documented read and list calls, verify the endpoint and payload with the user, and limit connection scopes where Manus offers scope selection.
+
+Risk: Raw HTTP fallback requires handling a long-lived Maton API key in the process environment.
+
+Mitigation: Prefer OAuth through the Maton CLI; use raw HTTP only where the CLI cannot be installed, avoid printing or logging the key, and rotate it if exposed.
+
+Risk: API responses and webhook payloads may contain personal data or adversarial content.
+
+Mitigation: Treat returned content as untrusted data, extract only fields needed for the task, and do not execute or persist raw responses unless explicitly requested.
+
+## Reference(s):
+
+- [Manus API Overview](https://open.manus.im/docs)
+- [Manus API Reference](https://open.manus.im/docs/api-reference)
+- [Manus Website](https://manus.im)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/manus-api)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration, markdown]
+
+**Output Format:** [Markdown with inline shell commands, HTTP examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON from Manus and Maton APIs.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

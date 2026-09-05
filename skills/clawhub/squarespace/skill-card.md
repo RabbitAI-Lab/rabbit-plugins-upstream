@@ -1,49 +1,71 @@
-## Description: <br>
-Squarespace Commerce API integration with managed OAuth for managing products, inventory, orders, customer profiles, and transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill gives agents managed OAuth access to Squarespace Commerce APIs for products, inventory, orders, customer profiles, and transactions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Store operators and developers use this skill to let an agent manage Squarespace commerce workflows through Maton's managed OAuth proxy. It supports product, inventory, order, customer profile, and transaction operations for connected Squarespace stores. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive store, customer, address, order, and transaction data. <br>
-Mitigation: Limit requests to data needed for the task and avoid asking the agent to fetch or display unnecessary customer, address, order, or transaction details. <br>
-Risk: The skill can change live commerce content, inventory, orders, and related store records. <br>
-Mitigation: Approve write operations only after checking the exact product, order, inventory, customer, or transaction target and intended effect. <br>
-Risk: MATON_API_KEY and OAuth-backed Maton connections provide access to connected Squarespace stores. <br>
-Mitigation: Protect MATON_API_KEY, install only if Maton is trusted to proxy OAuth-backed Squarespace access, and specify the intended connection when more than one store is connected. <br>
+## Use Case:
 
+Commerce operators, developers, and agents use this skill to inspect and manage Squarespace store inventory, products, orders, customer profiles, and transactions through Maton-authenticated API calls.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/squarespace) <br>
-- [Maton](https://maton.ai) <br>
-- [Squarespace Commerce APIs Overview](https://developers.squarespace.com/commerce-apis/overview) <br>
-- [Squarespace Inventory API](https://developers.squarespace.com/commerce-apis/inventory-overview) <br>
-- [Squarespace Orders API](https://developers.squarespace.com/commerce-apis/orders-overview) <br>
-- [Squarespace Products API](https://developers.squarespace.com/commerce-apis/products-overview) <br>
-- [Squarespace Profiles API](https://developers.squarespace.com/commerce-apis/profiles-overview) <br>
-- [Squarespace Transactions API](https://developers.squarespace.com/commerce-apis/transactions-overview) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, curl, and HTTP request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Squarespace OAuth account through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: The skill can connect an agent to a Squarespace store with scopes that may allow commerce data access or changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested Squarespace scopes during OAuth, prefer read-only access when possible, and install only for stores the user intends Maton to access.
+
+Risk: Product, inventory, order, or deletion operations can change store state or remove data.
+
+Mitigation: Default to read and list calls, specify the target connection for changes, and require explicit user confirmation of the resource, payload, and intended effect before write or delete actions.
+
+Risk: Raw HTTP fallback use requires handling a long-lived Maton API key in the process environment.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid printing or persisting API keys, send keys only to api.maton.ai, and rotate any key that was exposed.
+
+Risk: Squarespace responses can contain personal or commerce-sensitive data.
+
+Mitigation: Extract only fields needed for the task and avoid logging, saving, or broadly displaying raw API responses unless the user explicitly asks for them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/squarespace)
+- [Maton Homepage](https://maton.ai)
+- [Squarespace Commerce APIs Overview](https://developers.squarespace.com/commerce-apis/overview)
+- [Inventory API](https://developers.squarespace.com/commerce-apis/inventory-overview)
+- [Orders API](https://developers.squarespace.com/commerce-apis/orders-overview)
+- [Products API](https://developers.squarespace.com/commerce-apis/products-overview)
+- [Profiles API](https://developers.squarespace.com/commerce-apis/profiles-overview)
+- [Transactions API](https://developers.squarespace.com/commerce-apis/transactions-overview)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON request or response snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or run Maton CLI commands and raw HTTP fallback examples when the environment requires them.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cc-plugin",
   "slug": "cc-plugin",
   "ownerHandle": null,
-  "version": "0.5.1",
-  "updatedAt": 1784815587365,
-  "contentHash": "88bc22a363607f78930647e35d5d45a68486a42a56e92b950e9f567be0c91130",
-  "fetchedAt": "2026-07-26T18:06:59.739Z"
+  "version": "0.6.2",
+  "updatedAt": 1788302348946,
+  "contentHash": "95b8bf62ab417c437ff70b38de15c9e915f3252713d05dba8010d0c08c038ff0",
+  "fetchedAt": "2026-09-05T11:32:44.185Z"
 }

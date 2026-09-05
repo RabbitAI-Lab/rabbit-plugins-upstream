@@ -1,43 +1,51 @@
-## Description: <br>
-Pine Script v6: syntax, performance, error diagnosis, backtesting, visualization. Use when writing or debugging `.pine` files or TradingView Pine indicators/strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pine Script v6: syntax, performance, error diagnosis, backtesting, visualization. Use when writing or debugging `.pine` files or TradingView Pine indicators/strategies.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent workflows use this skill to write, debug, review, and tune TradingView Pine Script v6 indicators and strategies, including syntax fixes, performance patterns, backtesting checks, and visualization guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pine Script examples or backtesting guidance could be mistaken for financial advice or copied into live trading logic without review. <br>
-Mitigation: Treat generated trading code as an implementation aid only, verify behavior in TradingView, and avoid presenting examples as financial advice or performance guarantees. <br>
-Risk: Forward-looking references used for indicator accuracy testing can create misleading live alerts, entries, exits, or published backtests. <br>
-Mitigation: Use forward-looking references only for offline labeling or evaluation, and confirm live signals use only data available at the current bar. <br>
-Risk: Pine Script syntax and built-in functions change over time, so stale guidance can produce compile errors or incorrect scripts. <br>
-Mitigation: Check current TradingView Pine Script documentation for version-specific syntax and verify that generated `.pine` files compile before use. <br>
+## Use Case:
 
+Developers and engineers use this skill when writing, reviewing, or debugging TradingView Pine Script indicators and strategies, especially for Pine Script v6 syntax, performance, visualization, and backtesting patterns.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/compound-eng-pinescript) <br>
-- [ia-pinescript findings log](references/evidence/findings-log.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown] <br>
-**Output Format:** [Markdown with Pine Script code blocks and concise review guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include TradingView-specific validation notes, anti-repainting checks, and backtesting cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.0 (source: release evidence) <br>
+Risk: Pine Script syntax and built-ins may change after the bundled guidance was authored.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: For version-sensitive work, consult current Pine Script documentation before producing or changing code.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-pinescript)
+- [ia-pinescript specification](artifact/SPEC.md)
+- [ia-pinescript findings log](artifact/references/evidence/findings-log.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code]
+
+**Output Format:** [Markdown with Pine Script code examples and review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend documentation checks for version-sensitive Pine Script syntax or built-ins.]
+
+## Skill Version(s):
+
+4.4.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

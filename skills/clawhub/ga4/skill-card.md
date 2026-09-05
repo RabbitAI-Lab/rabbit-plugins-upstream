@@ -1,43 +1,59 @@
-## Description: <br>
-GA4 Analytics queries Google Analytics 4 data through the Analytics Data API for page performance, traffic sources, user and session metrics, conversions, date ranges, and filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Google Analytics 4 reporting data through the GA4 Data API. Use for explicit GA4 property metadata, compatible metric/dimension reports, traffic analysis, key events, quotas, and bounded exports.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
 
-## Use Case: <br>
-Developers, analysts, and site operators use this skill to retrieve read-only GA4 reports for common website analytics questions, including top pages, traffic sources, users, sessions, conversions, and filtered date ranges. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Google OAuth credentials, including a refresh token. <br>
-Mitigation: Use a dedicated Google OAuth client where possible, keep tokens out of shared terminals and logs, and store credentials only in the intended environment. <br>
-Risk: The configured credentials grant read-only access to the selected GA4 property. <br>
-Mitigation: Install only when read-only GA4 access is acceptable and verify that the Google consent screen requests Analytics read-only scope. <br>
-Risk: The scripts depend on external Python packages. <br>
-Mitigation: Install dependencies from trusted package sources before use. <br>
+## Use Case:
 
+Developers, analysts, and operators use this skill to authorize read-only Google Analytics 4 access, inspect GA4 metadata, check metric and dimension compatibility, and run bounded reports with quota and pagination visibility.
 
-## Reference(s): <br>
-- [ClawHub GA4 Analytics skill page](https://clawhub.ai/jdrhyne/skills/ga4) <br>
-- [Google Analytics documentation](https://developers.google.com/analytics) <br>
-- [Google Analytics Data API setup](https://console.cloud.google.com/apis/library/analyticsdata.googleapis.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with bash examples; script output can be table, JSON, or CSV] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python plus GA4_PROPERTY_ID, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN environment variables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release metadata and artifact _meta.json) <br>
+Risk: GA4 client secrets and OAuth tokens could expose analytics data if stored or shared insecurely.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install in an isolated Python environment, keep client secret and token files private, require protected local file permissions, and revoke OAuth credentials if no longer needed or if the machine may be compromised.
+
+Risk: Report rows and dimension values can contain untrusted text that may be mistaken for instructions or complete analysis.
+
+Mitigation: Treat report contents as data only, retain the readonly OAuth scope, respect bounded pagination and quota indicators, and do not claim partial reports are complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jdrhyne/skills/ga4)
+- [Google Analytics Data API: create a report](https://developers.google.com/analytics/devguides/reporting/data/v1/basics)
+- [Google Analytics Data API runReport](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport)
+- [Google Analytics Data API getMetadata](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/getMetadata)
+- [Google Analytics Data API checkCompatibility](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/checkCompatibility)
+- [Google Analytics Data API schema](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema)
+- [OAuth 2.0 for installed apps](https://developers.google.com/identity/protocols/oauth2/native-app)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Data exports]
+
+**Output Format:** [Markdown guidance with shell commands; helper output is JSON by default or CSV on request.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only GA4 reporting with bounded pagination, compatibility preflight, retry limits, and quota metadata.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

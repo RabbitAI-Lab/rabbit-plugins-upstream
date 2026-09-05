@@ -9,11 +9,21 @@ Use this recipe when the user has a signal-driven segment ready (recent fundrais
 - *"Build a sequence-ready list from job changes this week."*
 - *"Generate first lines for the tech-intent companies."*
 
+## Before you start — basis, suppression, relevance
+
+Blocking, and all three are free. Full spec: [`../references/acceptable-use.md`](../references/acceptable-use.md).
+
+1. **Ask which basis applies** — existing customers, opted-in contacts, event attendees, or a documented legitimate-interest case for this B2B role. A work email in the record is not itself a basis. Purchased lists and data taken from a platform in breach of its terms are a stop.
+2. **Subtract suppression before you enrich.** Filter the segment on the workspace's unsubscribe / do-not-contact / hard-bounce columns *first* — it protects the people who opted out and it stops you paying to enrich rows you can't use. No such column? Flag it as a real gap and offer to add one; don't proceed silently.
+3. **Name the per-recipient reason.** The signal that built the segment is usually it. If the honest answer is "they matched an industry filter", the list isn't ready — tighten it before spending.
+
+This recipe ends at send-ready variables. The user's sequencer sends, under its own limits, domains, and identities; the copy it sends needs an honest sender and subject, a working opt-out, and a postal address where required.
+
 ## Why this recipe exists
 
 Signal recipes (`funding-watch`, `job-change-monitoring`, `tech-intent`, `portfolio-prospecting`) all produce a segment. They stop at *"here's a list with a signal."* The next step — enrich, personalize, hand off — has the same shape regardless of the signal. This recipe captures that shape once.
 
-The handoff target is the workspace's sequencer of choice (Outreach, Salesloft, Apollo, HubSpot Sequences, Salesforce Cadences). The recipe stops at "send-ready variables" and points at `cargo-ai connection integration get <slug>` for the final push.
+The handoff target is the workspace's sequencer of choice (Outreach, Salesloft, Apollo, HubSpot Sequences, Salesforce Cadences). The recipe stops at "send-ready variables" and points at `cargo-ai connection integration get <slug>` for the final push. Cargo's own mailboxes are a fourth option for that final push — see [`../../cargo-mailbox-management/SKILL.md`](../../cargo-mailbox-management/SKILL.md); the gates in [`../references/acceptable-use.md`](../references/acceptable-use.md) are identical either way, and a Cargo-owned mailbox adds its own volume ceiling (the warm-up ramp) on top of them.
 
 ## Recipe
 
@@ -38,7 +48,7 @@ If the segment is company-level (e.g. recently funded), pull target personas at 
 ```bash
 # Use salesNavigator for precision, peopleDataLabs for scale.
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
   --records "$(jq -c '[.records[] | {
     company_domain: .domain,
     title_keywords: ["VP", "Director", "Head"],
@@ -53,7 +63,7 @@ If the segment is already contact-level (e.g. job-change MOVED rows), skip this 
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichProspectDetails","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichProspectDetails"}' \
   --records "$(jq -c '[.results[] | {
     first_name, last_name,
     company_domain: .company_domain,
@@ -76,7 +86,7 @@ node <skill-dir>/scripts/validate-emails.ts --input /tmp/enriched.json --json > 
 # 4b. Paid verification — build the batch from the CULLED rows, never the
 #     original list (that's where the credit saving happens)
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.[] | select(.recommendation != "skip") | {email}]' /tmp/culled.json)" \
   --wait-until-finished > /tmp/verified.json
 
@@ -101,12 +111,16 @@ jq '[.[] | select(.audit_action == "SEND")]' /tmp/audited.json > /tmp/deliverabl
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"anthropic","actionSlug":"instruct","config":{"model":"claude-3-5-haiku-latest","advancedSettings":{"temperature":0.3,"maxTokens":1024}}}' \
+  --action '{"kind":"connector","integrationSlug":"anthropic","actionSlug":"instruct"}' \
   --records "$(jq -c '[.[] | {
-    prompt: ("You are writing the opening line of a cold email. The recipient is " + .first_name + " " + .last_name + ", " + .title + " at " + .company_name + ". Signal triggering this outreach: " + .signal_summary + ". Write ONE sentence that references the signal naturally and ties it to a relevant business outcome. No greeting. No follow-up. ≤30 words.")
+    model: "claude-3-5-haiku-latest",
+    advancedSettings: {temperature: 0.3, maxTokens: 1024},
+    prompt: ("You are writing the opening line of a first-touch email. The recipient is " + .first_name + " " + .last_name + ", " + .title + " at " + .company_name + ". Signal triggering this outreach: " + .signal_summary + ". Write ONE sentence that references the signal naturally and ties it to a relevant business outcome. No greeting. No follow-up. ≤30 words.")
   }]' /tmp/deliverable.json)" \
   --wait-until-finished > /tmp/personalized.json
 ```
+
+`model` is a **required input**, so it belongs in every record alongside `prompt` — the action carries no `config` at all. Put it in `config` and newer backends drop it silently, billing the call at the default model.
 
 More proven prompts (subject lines, follow-ups, job-change angles): [`../references/prompt-library/index.md`](../references/prompt-library/index.md).
 
@@ -162,7 +176,7 @@ Cut personalization ~30× by switching to `openAi.instruct` with `gpt-5-nano` (0
 
 ## Action shape
 
-Every action follows: `{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation in node graphs: `{{nodes.<slug>.<field>}}`.
+Every action follows: `{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation in node graphs: `{{nodes.<slug>.<field>}}`.
 
 ## Output retrieval
 

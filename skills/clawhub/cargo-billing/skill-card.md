@@ -1,44 +1,61 @@
-## Description: <br>
-Pull usage metrics, check subscription status, view invoices, and manage credits using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cargo Billing helps agents answer Cargo credit, usage, subscription, invoice, and payment-method questions using the Cargo CLI.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Cargo workspace administrators and operators use this skill to inspect billing usage, subscription state, invoices, credit balances, and billing portal access through the Cargo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Billing, invoice, card-on-file, and portal-session commands can reveal sensitive workspace billing details. <br>
-Mitigation: Use trusted Cargo CLI credentials, limit use to intended admin workflows, and review commands before running them. <br>
-Risk: Sample workflow-run commands used for cost estimates can consume credits. <br>
-Mitigation: Run only small samples, check available credits before larger batches, and monitor usage during execution. <br>
+## Use Case:
 
+Developers, operators, and Cargo workspace admins use this skill to inspect spend, remaining credits, usage breakdowns, subscription state, invoices, and payment-method status. It is intended for users who can grant an agent admin-level Cargo billing access.
 
-## Reference(s): <br>
-- [Cargo Billing skill page](https://clawhub.ai/cargo-ai/skills/cargo-billing) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Usage metrics examples](references/examples/usage-metrics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and admin-level Cargo billing access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release metadata and skill frontmatter) <br>
+Risk: Admin billing access can expose workspace spend, subscription, invoice, and payment-method information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for billing work that requires admin access, use an admin Cargo token intentionally, and confirm the active workspace before payment or sample-run commands.
+
+Risk: Passing real card details as command-line flags can expose them through shell history or process listings.
+
+Mitigation: Prefer the Stripe hosted form or --card-stdin for card updates, and avoid passing real card details as command-line flags.
+
+Risk: Cost estimates can be misleading when mixed usage units or execution charges are interpreted as the same quantity.
+
+Mitigation: Use explicit --unit values for billing.credits, orchestration.executions, and storage.records, and include the execution charge when estimating batch costs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cargo-ai/skills/cargo-billing)
+- [Cargo skills repository](https://github.com/getcargohq/cargo-skills)
+- [Response shapes](artifact/references/response-shapes.md)
+- [Usage metrics examples](artifact/references/examples/usage-metrics.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON response interpretation]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON field references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the Cargo CLI and an admin Cargo token; billing commands return JSON.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter, release evidence, skill-metadata.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

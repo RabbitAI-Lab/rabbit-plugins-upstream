@@ -40,7 +40,7 @@ Good wording:
 
 我先按目前能看到的标题、封面、正文和公开互动来拆；如果你还想看评论区真实需求或视频逐字稿，会进入更深一层，我会先告诉你需要打开哪些内容。
 
-## Credit Scope
+## Research Scope
 
 For one known note link:
 

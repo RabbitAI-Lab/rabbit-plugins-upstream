@@ -5,6 +5,8 @@ import re
 import time
 from typing import Any, Optional
 
+from .validation import DATA_SOURCE_PREFERENCE_EPOCH
+
 
 estimate_semaphore = asyncio.Semaphore(3)
 _estimate_semaphore_loop: Optional[asyncio.AbstractEventLoop] = None
@@ -36,16 +38,15 @@ def _get_estimate_inflight_lock() -> asyncio.Lock:
 async def fetch_estimates(
     runtime: dict[str, Any],
     codes: list,
-    default_data_source_mode: str = "huahua",
+    default_data_source_mode: str = "source_a",
     data_source_mode_by_code: Optional[dict] = None,
 ) -> dict:
     """Fetch estimates while resolving patchable dependencies from the facade."""
     codes = list(dict.fromkeys(codes))
     normalize_mode = runtime["_normalize_data_source_mode"]
     validate_code = runtime["_validate_fund_code"]
-    estimate_cache = runtime["_estimate_cache"]
-    session = runtime["_session"]
-    session_generation = int(session.get("generation") or 0)
+    request_generation = runtime["_request_generation"]
+    session_generation = request_generation()
     default_mode = normalize_mode(default_data_source_mode)
     mode_by_code = {
         validate_code(str(code)): normalize_mode(mode)
@@ -56,7 +57,7 @@ async def fetch_estimates(
     def mode_for(code: str) -> str:
         return mode_by_code.get(code, default_mode)
 
-    def cache_key(code: str) -> str:
+    def request_key(code: str) -> str:
         return f"{code}:{mode_for(code)}"
 
     async def fetch_batch(batch: list) -> dict:
@@ -66,6 +67,7 @@ async def fetch_estimates(
                 {
                     "codes": batch,
                     "defaultDataSourceMode": default_mode,
+                    "dataSourcePreferenceEpoch": DATA_SOURCE_PREFERENCE_EPOCH,
                     "dataSourceModeByCode": {
                         code: mode_for(code) for code in batch if mode_for(code) != default_mode or code in mode_by_code
                     },
@@ -82,7 +84,6 @@ async def fetch_estimates(
             return_exceptions=True,
         )
         fetched: dict = {}
-        cache_ts = time.monotonic()
         for response in responses:
             if isinstance(response, Exception):
                 continue
@@ -98,18 +99,6 @@ async def fetch_estimates(
                 if not code_key:
                     continue
                 fetched[code_key] = item
-                if (
-                    item.get("source") != "timeout"
-                    and int(session.get("generation") or 0) == session_generation
-                ):
-                    mode = normalize_mode(
-                        item.get("dataSourceMode") or mode_for(code_key)
-                    )
-                    estimate_cache[f"{code_key}:{mode}"] = {
-                        "data": item,
-                        "ts": cache_ts,
-                        "generation": session_generation,
-                    }
         return fetched
 
     async def run_inflight(
@@ -129,25 +118,10 @@ async def fetch_estimates(
     inflight_key: tuple[str, ...] = ()
     task: Optional[asyncio.Task] = None
     async with _get_estimate_inflight_lock():
-        now = time.monotonic()
-        miss_codes: list = []
-        for code in codes:
-            entry = estimate_cache.get(cache_key(code))
-            if (
-                entry
-                and entry.get("generation") == session_generation
-                and now - entry["ts"] < runtime["_ESTIMATE_TTL"]
-            ):
-                result[code] = entry["data"]
-            else:
-                miss_codes.append(code)
-        if not miss_codes:
-            return result
-        if len(estimate_cache) > 500:
-            estimate_cache.clear()
+        miss_codes = codes
         inflight_key = (
             f"generation:{session_generation}",
-            *(sorted(cache_key(code) for code in miss_codes)),
+            *(sorted(request_key(code) for code in miss_codes)),
         )
         entry = _estimate_inflight.get(inflight_key)
         if entry is None:
@@ -160,7 +134,10 @@ async def fetch_estimates(
         entry["waiters"] += 1
 
     try:
-        result.update(await asyncio.shield(task))
+        fetched = await asyncio.shield(task)
+        if request_generation() != session_generation:
+            raise RuntimeError("Agent Token 已在请求期间变更，请重试")
+        result.update(fetched)
     finally:
         async with _get_estimate_inflight_lock():
             entry = _estimate_inflight.get(inflight_key)
@@ -176,8 +153,8 @@ async def fetch_estimates(
 async def download_portfolio(runtime: dict[str, Any]) -> dict:
     """Download and cache the canonical structured portfolio snapshot."""
     cache = runtime["_portfolio_cache"]
-    session = runtime["_session"]
-    requested_generation = int(session.get("generation") or 0)
+    request_generation = runtime["_request_generation"]
+    requested_generation = request_generation()
     now = time.monotonic()
     if (
         cache["data"] is not None
@@ -186,7 +163,7 @@ async def download_portfolio(runtime: dict[str, Any]) -> dict:
     ):
         return cache["data"]
     async with runtime["_get_download_lock"]():
-        if int(session.get("generation") or 0) != requested_generation:
+        if request_generation() != requested_generation:
             raise RuntimeError("Agent Token 已在请求期间变更，请重试")
         now = time.monotonic()
         if (
@@ -196,14 +173,15 @@ async def download_portfolio(runtime: dict[str, Any]) -> dict:
         ):
             return cache["data"]
         raw, source = await runtime["_download_portfolio_raw"]()
+        if request_generation() != requested_generation:
+            raise RuntimeError("Agent Token 已在请求期间变更，请重试")
         parsed = runtime["_unwrap_sync_payload"](raw if isinstance(raw, dict) else {}, source=source)
-        if int(session.get("generation") or 0) == requested_generation:
-            cache["data"] = parsed
-            cache["ts"] = time.monotonic()
-            cache["generation"] = requested_generation
+        cache["data"] = parsed
+        cache["ts"] = time.monotonic()
+        cache["generation"] = requested_generation
         return parsed
 
 
 async def download_portfolio_raw(runtime: dict[str, Any]) -> tuple[dict, str]:
-    structured = await runtime["_get"]("/api/portfolio/snapshot")
-    return structured if isinstance(structured, dict) else {}, "structured_portfolio"
+    state = await runtime["_get"]("/api/sync/v3/state")
+    return state if isinstance(state, dict) else {}, "portfolio_v3"

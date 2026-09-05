@@ -1,42 +1,62 @@
-## Description: <br>
-Access iOffice workspace and facility data through an MCP server for buildings, floors, spaces, reservations, visitors, maintenance requests, moves, and mail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access iOffice workspace and facility data via MCP.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Employees and workplace operations teams use this skill to query and manage iOffice or Eptura Workplace tenant data through MCP, including room reservations, visitors, maintenance requests, moves, users, buildings, floors, spaces, and mail. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes broad tenant administration and destructive actions, including record deletion, user management, approvals, check-ins, deliveries, and other persistent operational changes. <br>
-Mitigation: Use a least-privilege iOffice or Eptura Workplace account and require explicit confirmation before delete, user-management, approval, check-in/out, delivery, or status-changing actions. <br>
-Risk: The configured account can expose workplace data such as visitor, mail, reservation, user, and facility records. <br>
-Mitigation: Install only when authorized by the employer, scope credentials to the intended tenant, and avoid bulk extraction or use outside approved workplace workflows. <br>
+## Use Case:
 
+Employees, workplace administrators, and facility teams use this skill to query and manage iOffice buildings, floors, spaces, reservations, visitors, maintenance requests, moves, and mail through an MCP server connected to their own authorized tenant.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/ioffice-mcp) <br>
-- [ioffice-mcp npm package](https://www.npmjs.com/package/ioffice-mcp) <br>
-- [Project source link from artifact](https://github.com/chrischall/ioffice-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples, shell commands, and MCP tool-call instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses configured iOffice or Eptura Workplace credentials and may produce state-changing MCP tool calls when authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: server release evidence) <br>
+Risk: The skill gives an agent broad iOffice workplace administration capability, including create, update, delete, and workflow state-transition tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for authorized tenants, use least-privilege credentials, and require careful confirmation for write or administrative actions.
+
+Risk: Username and password authentication can expose higher-value credentials if used instead of a scoped token.
+
+Mitigation: Prefer IOFFICE_TOKEN, avoid username/password where possible, and store credentials only in approved secret-management locations.
+
+Risk: Automating employee, visitor, room, floor-plan, maintenance, move, and mail data may conflict with employer policy or service terms if used for bulk extraction or unauthorized administration.
+
+Mitigation: Confirm authorization with the tenant owner or employer IT team, avoid bulk extraction, and separate everyday booking workflows from tenant or user administration.
+
+Risk: Full read views may return media such as avatars, visitor photos, space images, or floor-plan image URLs.
+
+Mitigation: Use the default compact view unless media is specifically needed, and limit full-view access to users and workflows with a valid business need.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/ioffice-mcp)
+- [ioffice-mcp npm package](https://www.npmjs.com/package/ioffice-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, API calls]
+
+**Output Format:** [Markdown with JSON and shell command code blocks, plus structured MCP tool calls and responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read tools support compact or full views; compact is the default and removes media fields and image URLs.]
+
+## Skill Version(s):
+
+2.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

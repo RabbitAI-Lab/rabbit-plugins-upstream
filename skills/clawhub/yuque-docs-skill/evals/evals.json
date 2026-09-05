@@ -1,0 +1,96 @@
+{
+  "skill_name": "yuque-doc-push",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "List all documents in my Yuque knowledge base",
+      "expected_output": "The script runs `list` and returns a table of documents with IDs, titles, slugs, and update dates.",
+      "assertions": [
+        "Output contains document IDs",
+        "Output contains document titles",
+        "Exit code is 0"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a new Yuque document titled 'Test Doc' with body '# Hello World'",
+      "expected_output": "The script runs `create` with --title and --body, returns the created doc ID, and appends it to the TOC.",
+      "assertions": [
+        "Output contains 'Created doc'",
+        "Output contains 'Added to TOC'",
+        "The created doc appears in subsequent list output"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Update the Yuque document with slug 'test-doc' to have a new title 'Updated Title'",
+      "expected_output": "The script runs `update` with the slug and --title flag, returns confirmation of the update.",
+      "assertions": [
+        "Output contains 'Updated doc'",
+        "A subsequent get shows the new title"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Delete the Yuque document with ID 12345",
+      "expected_output": "The script fetches doc details first, prints what is being deleted to stderr, then runs `delete` with --confirm flag and returns confirmation of deletion.",
+      "assertions": [
+        "The --confirm flag is included in the command",
+        "Stderr contains the doc title before deletion",
+        "Output contains 'Deleted doc'",
+        "The doc no longer appears in list output"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Create a document from local file ./notes.md without adding it to the table of contents",
+      "expected_output": "The script runs `create` with --body-file and --no-toc flags.",
+      "assertions": [
+        "The --body-file flag is used instead of --body",
+        "The --no-toc flag is included",
+        "Output contains 'Created doc' but NOT 'Added to TOC'"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Try to list documents without a .env file configured",
+      "expected_output": "The script fails with a clear error about missing YUQUE_TOKEN.",
+      "assertions": [
+        "Exit code is 1",
+        "Stderr contains 'YUQUE_TOKEN not set'",
+        "No API call is made"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Set up the Yuque skill for the first time with URL 'https://www.yuque.com/mygroup/mybook' and a valid token",
+      "expected_output": "The script runs `setup`, parses the URL, verifies the connection, writes .env, and checks .gitignore.",
+      "assertions": [
+        "The setup command is used with --url and --token flags",
+        "Output or stderr indicates connection verified",
+        "Output or stderr indicates .env was written",
+        "Exit code is 0"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Try to set up with an invalid API token",
+      "expected_output": "The script runs `setup` but fails at the connection verification step with a clear auth error.",
+      "assertions": [
+        "Exit code is 1",
+        "Stderr contains an authentication error message",
+        "No .env file is written"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "Run setup again when a .env file already exists, without --force",
+      "expected_output": "The script detects the existing .env and stops with an error suggesting --force.",
+      "assertions": [
+        "Exit code is 1",
+        "Stderr contains '--force' hint",
+        "Existing .env is not overwritten"
+      ]
+    }
+  ]
+}

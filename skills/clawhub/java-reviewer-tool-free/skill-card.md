@@ -1,40 +1,53 @@
-## Description: <br>
-Java代码审查免费版 helps Java developers review code changes, classify findings across six review dimensions, and produce structured reports with fix suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Java 代码变更审查工具，按 6 大维度生成结构化审查报告与修复建议。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers use this skill to review Java git diffs or source files before submission, identify style, exception-handling, security, performance, design, and resource-management issues, and receive Markdown findings with suggested fixes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests command execution and file write access for a code review workflow. <br>
-Mitigation: Use it only in repositories where command execution and file writes are acceptable, and require explicit approval before running build, git, or other shell commands or modifying files. <br>
-Risk: The artifact describes broader modify, delete, deploy, and save-style behavior than a Java code review tool normally needs. <br>
-Mitigation: Keep use scoped to reviewing Java diffs or source files and treat generated fixes as proposals that must be reviewed before application. <br>
+## Use Case:
 
+Java developers and engineering teams use this skill to review git diffs or Java source files before submission. It identifies code quality, exception handling, security, performance, design, and resource-management issues, then returns severity-ranked findings and repair suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/java-reviewer-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with severity-ranked findings, Java code examples, and optional shell commands for inspecting diffs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Critical, Major, Minor, and Suggestion severity labels; generated fixes require developer review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill is broader in routing and capability text than its stated Java code review purpose, including unclear mutation-related authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for Java code review tasks and avoid granting write or deployment authority unless file modification is explicitly intended.
+
+Risk: Generated fixes may be incorrect, incomplete, or inappropriate for the surrounding codebase.
+
+Mitigation: Review and test generated changes before applying or committing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/java-reviewer-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown review report with Java code blocks and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language interaction; generated fixes require review before application.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

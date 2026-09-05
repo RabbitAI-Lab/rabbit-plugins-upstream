@@ -1,40 +1,53 @@
-## Description: <br>
-Provides QA guidance for bulk test data generation, data masking, compliance-aware data handling, and test data factory design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps QA teams design bulk test data generation, data masking, compliance checks, cleanup, and data-factory workflows for test environments.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test automation developers, and data engineers use this skill to plan repeatable test data construction, masking, cleanup, lifecycle management, and traceability for test environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Database cleanup examples could delete real data if applied to production or shared environments. <br>
-Mitigation: Use them only in isolated test environments, preview affected rows, wrap changes in transactions, require clear test-data markers, and obtain DBA approval before execution. <br>
-Risk: Production-data masking guidance could be applied without confirming compliance requirements or sensitive-field coverage. <br>
-Mitigation: Validate masking rules against the applicable privacy and compliance requirements before using production-derived data in tests. <br>
+## Use Case:
 
+QA engineers and developers use this skill to plan traceable test-data construction, masking rules, data cleanup, lifecycle management, and repeatable data-factory practices. It is most relevant when teams need large volumes of test data or need to prepare production-derived data safely for test use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-data-engineering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with structured sections, checklists, and inline SQL/Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include DATA-XXXX traceability identifiers and structured data_strategy, data_generation, data_mask_rules, and data_management sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Production-derived or sensitive data may be mishandled when preparing test data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use approved test environments, prefer synthetic data, validate masking before export, and follow documented permission requirements.
+
+Risk: Generated SQL DELETE, API mutation, Docker, or Bash examples could alter data or systems if run without review.
+
+Mitigation: Manually review commands before execution, confirm the target is a test environment, preview affected rows, and use transactions or DBA review for database cleanup.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-data-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with structured sections, checklists, tables, and inline SQL, Python, Bash, or configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include DATA-XXXX traceability identifiers, data strategy, generation approach, masking rules, and data management process guidance.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter says 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

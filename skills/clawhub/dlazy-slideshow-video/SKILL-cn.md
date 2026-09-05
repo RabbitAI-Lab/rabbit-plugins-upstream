@@ -2,10 +2,10 @@
 name: dlazy-slideshow-video
 version: 1.0.2
 description: "幻灯片视频、slideshow、图文幻灯转视频、幻灯片转视频——把幻灯 / 文档变成带配音和转场的幻灯视频。当用户想要幻灯片式视频时使用。"
-metadata: {"clawdbot":{"emoji":"📄","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill file-to-video --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
+metadata: {"clawdbot":{"emoji":"📄","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill file-to-video --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
 ---
 
-# slideshow-video
+# 幻灯片视频 Slideshow Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -51,7 +51,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)

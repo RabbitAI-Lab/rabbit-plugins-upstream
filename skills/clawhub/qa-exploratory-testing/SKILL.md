@@ -1,8 +1,11 @@
 ---
 name: qa-exploratory-testing
-version: 1.6.0
+slug: qa-exploratory-testing
+displayName: 探索式测试
+version: 1.7.5
 description: >-
   当脚本化测试覆盖得差不多了、但直觉告诉你"可能还有东西没测到"时使用此技能。用系统化的探索方法（场景漫游、角色扮演、失败路径、标杆对比）来发现预设测试用例覆盖不到的问题。探索式测试不是随便点——它是有明确 charter（任务书）和时长的有目的探索。每次探索需要记录 session 笔记和发现的问题列表。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"探索测试"、"自由测试"、"漫游测试"、"场景发现"、"到处点一点"、"随机测试"、"角色扮演"、"SBTM"、需要发现脚本化测试遗漏的问题、新产品快速验证时
 allowed-tools: Read Grep Glob Bash
@@ -32,6 +35,9 @@ output_format:
   traceability:
     - 每个探索session带唯一ID（EXP-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - exploration_charter: 探索章程
     - session_notes: 探索笔记
     - findings: 发现清单
@@ -45,6 +51,8 @@ depth_requirement_quantification:
   reference_value: "根据探索目标调整session深度：简单×1/中等×2/复杂×3"
   minimum: "至少完成1个charter的session笔记和发现清单"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

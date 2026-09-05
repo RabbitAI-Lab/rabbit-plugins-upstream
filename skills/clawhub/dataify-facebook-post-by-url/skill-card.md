@@ -1,42 +1,59 @@
-## Description: <br>
-Submits Dataify Builder tasks that collect Facebook post data from one or more Facebook post URLs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect a Facebook post and structured post data from a known post URL.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to configure a Dataify API TOKEN, confirm Facebook post URL parameters, submit Dataify Builder jobs, and receive the resulting task ID and status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use a saved DATAIFY_API_TOKEN and send selected Facebook post URL parameters to Dataify. <br>
-Mitigation: Install only when this Dataify submission behavior is intended, review the parameter confirmation before submission, and avoid saving the token on shared machines unless future reuse is acceptable. <br>
-Risk: A default Facebook post URL can be used if the user does not provide a URL after parameter confirmation. <br>
-Mitigation: Confirm or replace the URL before running the task, especially when collecting multiple posts. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify collection jobs for one or more Facebook post URLs and retrieve the final structured result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-facebook-post-by-url) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Successful submissions return spider_id, task_id, status, parameters, file_name, dashboard_url, and message.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: A clear collection request may use a saved DATAIFY_API_TOKEN and spend Dataify credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only for intended Facebook post URLs and confirm materially larger or ambiguous collection scopes before execution.
+
+Risk: The supplied Facebook post URL and task parameters are sent to Dataify for collection.
+
+Mitigation: Avoid submitting private, sensitive, or unauthorized URLs and review account access requirements before use.
+
+Risk: Asynchronous collection can time out after task submission.
+
+Mitigation: Preserve the returned task ID and resume monitoring instead of resubmitting the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-facebook-post-by-url)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task or result output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit Dataify collection jobs and wait for asynchronous task completion.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

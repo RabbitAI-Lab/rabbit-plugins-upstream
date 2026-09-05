@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes pet water-fountain videos or URLs through server-side APIs to estimate drinking frequency, session duration, daily intake, historical baseline changes, and abnormal intake alerts without providing diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet water fountain area videos or video URLs through a remote service to estimate drinking events, session duration, daily intake, historical changes, and health-reference alerts for drops or spikes in water consumption.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet-care product teams, and developers use this skill to submit water-fountain video evidence and receive structured drinking-behavior metrics, historical report links, and abnormal intake alerts for pet health monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos or video URLs are sent to lifeemergence.com services for analysis and historical report retrieval. <br>
-Mitigation: Submit only footage and URLs the user is permitted to share, and review privacy expectations before installation or use. <br>
-Risk: The skill can silently create or reuse a local identity and store reusable account tokens in a workspace SQLite database. <br>
-Mitigation: Run the skill in a controlled workspace, protect workspace data, and clear local data when the identity or tokens should not persist. <br>
-Risk: Water-intake estimates and health-risk alerts can be mistaken for medical diagnosis. <br>
-Mitigation: Treat results as informational monitoring signals and defer diagnosis or treatment decisions to a qualified veterinarian. <br>
+## Use Case:
 
+External users and developers use this skill to analyze pet water-fountain videos or URLs, retrieve structured drinking-intake reports, and query cloud-stored historical analysis records. Results are health references based on estimated intake behavior, not veterinary diagnosis or treatment advice.
 
-## Reference(s): <br>
-- [Pet Water Fountain Intake Analysis API Documentation](references/api_doc.md) <br>
-- [Common Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-water-fountain-intake-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with optional report export link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save output to a requested local file; local video inputs must be mp4/avi/mov and 10 MB or smaller.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: The skill sends pet water-fountain videos, URLs, and identity-linked history requests to a remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run only where users accept remote media processing and identity-linked cloud report retrieval for this publisher service.
+
+Risk: The skill silently creates or reuses an internal user identity and persists account tokens locally.
+
+Mitigation: Review local credential storage expectations before deployment and avoid use in environments that prohibit persistent local account tokens.
+
+Risk: The security verdict is suspicious because user control over identity-linked remote processing is limited.
+
+Mitigation: Require explicit deployment review before installation and communicate the remote processing and local persistence behavior to operators.
+
+## Reference(s):
+
+- [Pet Water Fountain Intake Analysis API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, API calls, shell commands, configuration]
+
+**Output Format:** [Markdown text with structured JSON analysis content and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can write the rendered analysis result to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

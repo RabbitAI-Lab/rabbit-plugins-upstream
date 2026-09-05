@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Deterministically upload a decoration production file — no base64, no chunking.
+"""Deterministically upload a binary to Odoo — no base64 arg, no chunking, no truncation.
+
+Works for decoration production files AND **storefront product web images**
+(``product.template.image_1920`` / ``product.product.image_variant_1920``):
+writing a real product photo as a base64 MCP *argument* is clipped by the
+tool-arg size cap (it arrives truncated), so this multipart upload is the
+byte-exact path for product images too.
 
 POSTs a **local file by path** straight to the drivethru_mcp upload endpoint
 (``POST /drivethru_mcp/v1/upload``). The Odoo server base64-encodes and writes
@@ -10,12 +16,21 @@ token stream. Prefer it for a real (large) production file when ``ODOO_MCP_URL``
 ``decoration_set_image`` MCP tool (which needs no extra env). Both enforce the
 same 20 MB server guard.
 
-Usage:
+Usage (decoration production file):
     python3 scripts/upload_production_file.py \
         --file /tmp/dtf_production.png \
         --record-id 18 \
         [--field dtf_production_png] [--model decoration] \
         [--base-url https://baconco.odoo.com/drivethru_mcp/v1] [--api-key <key>] [--timeout 60]
+
+Usage (storefront product web image):
+    python3 scripts/upload_production_file.py \
+        --file /tmp/web_image.jpg \
+        --model product.template --field image_1920 --record-id 22577
+    # per-color variant image:
+    python3 scripts/upload_production_file.py \
+        --file /tmp/web_image.jpg \
+        --model product.product --field image_variant_1920 --record-id 271696
 
 ``--base-url`` / ``--api-key`` default to the ``ODOO_MCP_URL`` /
 ``ODOO_MCP_TOKEN`` environment variables (the same credentials the other
@@ -61,11 +76,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description="Upload a local production file to a decoration binary field")
     parser.add_argument("--file", required=True, help="Path to the file to upload")
-    parser.add_argument("--record-id", required=True, help="decoration / decoration.request id")
+    parser.add_argument("--record-id", required=True,
+                        help="Target record id (decoration / decoration.request / "
+                             "product.template / product.product)")
     parser.add_argument("--field", default="dtf_production_png",
-                        help="Binary field to write (default dtf_production_png)")
+                        help="Binary field to write. Decoration: dtf_production_png "
+                             "(default), image, ... Product web image: image_1920 "
+                             "(product.template) or image_variant_1920 (product.product).")
     parser.add_argument("--model", default="decoration",
-                        choices=["decoration", "decoration.request"])
+                        choices=["decoration", "decoration.request",
+                                 "product.template", "product.product"])
     parser.add_argument("--base-url", default=os.environ.get("ODOO_MCP_URL", ""),
                         help="Odoo MCP endpoint, e.g. https://host/drivethru_mcp/v1 "
                              "(or set ODOO_MCP_URL)")

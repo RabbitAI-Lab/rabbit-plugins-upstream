@@ -1,46 +1,62 @@
-## Description: <br>
-Tracks in-session work progress by registering multi-step tasks, updating task status, recovering work after context compaction, and guiding cleanup or resume flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tracks in-session work as persistent tasks and checklists so agents can register multi-step work before execution, recover after compaction, ask for per-item direction, and clean up completed task state.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and coding agents use this skill to keep multi-step work visible during a session, resume remaining tasks after interruptions or compaction, and maintain task records across Claude Code and Antigravity environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can steer an agent to delete task records or mutate checklist files. <br>
-Mitigation: Review task cleanup decisions before installation and require explicit confirmation before deleting pending tasks or changing persistent checklist files. <br>
-Risk: The workflow can steer an agent to run GitHub, remote, deploy, ssh, or curl checks. <br>
-Mitigation: Require explicit user approval before external checks and restrict execution to repositories and endpoints the user has authorized. <br>
-Risk: The workflow may manage home-directory state such as a Claude cache file. <br>
-Mitigation: Install only if home-directory writes and removals are acceptable, and review any home-directory operation before allowing it. <br>
+## Use Case:
 
+Developers and agent operators use this skill to keep multi-step coding or operational work visible, recoverable, and synchronized across task tools, checklist files, and WIP commits. It is most useful when an agent needs explicit task registration, progress updates, cleanup, or resume handling after context loss.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/wip) <br>
-- [WIP skill entry](SKILL.md) <br>
-- [Resume workflow](resume.md) <br>
-- [Claude Code WIP guide](claude.md) <br>
-- [Antigravity WIP tracking](antigravity.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with task-record examples, inline code blocks, and a shell hook script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create, update, or delete task records and to run external verification checks when the workflow requires primary-source status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: Hooks and automatic workflows can inspect session logs and influence or block edit/write operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review hook registration before enabling the skill, and use it only in workspaces where transcript inspection and edit blocking are acceptable.
+
+Risk: The workflow can delete or rewrite task and checklist state while cleaning up completed or stale work.
+
+Mitigation: Review task deletion paths, keep durable work records in checklist files or commits when needed, and confirm pending-item deletion decisions with the user.
+
+Risk: The skill may run external verification commands through local tools such as GitHub CLI, git, curl, or shell scripts.
+
+Mitigation: Limit credentials and CLI context available to the agent, and review command behavior before enabling auto-run checks in sensitive repositories.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/wip)
+- [WIP Skill Definition](artifact/SKILL.md)
+- [Claude Code WIP Guide](artifact/claude.md)
+- [Antigravity WIP Tracking](artifact/antigravity.md)
+- [Resume Workflow](artifact/resume.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline code blocks, task-tool calls, checklist updates, and hook configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update task state through host task tools, markdown checklist artifacts, WIP commits, or bundled hook scripts depending on the agent environment.]
+
+## Skill Version(s):
+
+0.6.0 (source: ClawHub release metadata and artifact/CHANGELOG.md, released 2026-08-29)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

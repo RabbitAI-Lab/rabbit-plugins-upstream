@@ -1,40 +1,67 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用"讲给小智听"来检验学生是否真的学会了某个概念，并产出掌握度判定、卡住位置和下一步建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+Students, families, tutors, and learning agents use this skill to run a Feynman-style self-check after studying a concept. It guides the student through explanation, examples, reasoning, transfer, and age-appropriate critical verification, then reports mastery level and blind spots.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localized safety contacts, curriculum review, and minors-data consent checks before student-facing deployment.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Student mastery data can be saved or shared if platform consent boundaries are too loose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on platforms that enforce Learning DNA authorization checks, guardian consent where required, and writes limited to extensions.understanding after an explicit save request.
+
+Risk: Reminders, weekly reports, or parent-visible summaries could expose learning assessment data without clear consent.
+
+Mitigation: Treat reminders, weekly reports, and parent-visible summaries as opt-in sharing flows rather than automatic outputs.
+
+Risk: Safety guidance is designed around mainland China and may give inappropriate referral channels elsewhere.
+
+Mitigation: Localize emergency and youth-support contacts before use outside mainland China, and ask the student's region before giving location-specific crisis numbers.
+
+Risk: Generated transfer checks or practice items may be incorrect or outside the student's grade band.
+
+Mitigation: Apply the bundled AI item self-check before presenting generated questions, and require teacher review before teacher-facing item reuse.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Feynman 4+1 jump state machine](artifact/references/feynman-5jump-statemachine.md)
+- [Feynman dialogue patterns](artifact/references/feynman-dialogue-patterns.md)
+- [Platform conventions and degradation paths](artifact/shared/platform-conventions.md)
+- [Crisis exception](artifact/shared/crisis-exception.md)
+- [AI item self-check protocol](artifact/shared/ai-item-check.md)
+- [Learning DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Conversational guidance and a Markdown-style Feynman test assessment report; optional structured handover payloads when authorized.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose mastery records for extensions.understanding only after an explicit save request and valid cross-skill sharing consent.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Runs Bing video searches through the Dataify API after confirming the request parameters with the user. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Bing Videos for video results. Do not use for general Bing web search or media-file downloads.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to convert natural-language Bing video search requests into Dataify API parameters, confirm the full request table, and run the search with a user-provided Dataify API token. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed searches send the user's query and selected filters to Dataify. <br>
-Mitigation: Review the full parameter table before confirming a live call and avoid sending sensitive search terms unless that disclosure is acceptable. <br>
-Risk: Live calls require a Dataify API token that could be exposed if handled carelessly. <br>
-Mitigation: Prefer passing the token for the current run unless intentionally storing DATAIFY_API_TOKEN as an environment variable. <br>
+## Use Case:
 
+External users and developers use this skill to turn Bing Videos search requests into Dataify Scraper API calls and return video result data. It supports query, market, language, freshness, duration, resolution, source-site, price, cache, and output-format filters.
 
-## Reference(s): <br>
-- [Dataify Bing Videos API Reference](references/api.md) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-bing-videos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Text, Shell commands] <br>
-**Output Format:** [Markdown confirmation table followed by the raw Dataify API response, usually JSON or HTML when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Live API calls require user confirmation and a DATAIFY_API_TOKEN before search parameters are sent to Dataify.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill requires a Dataify API token for live Bing Videos searches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a session-scoped DATAIFY_API_TOKEN where possible, do not paste the token into chat, and avoid persistent shell configuration unless intentionally required.
+
+Risk: Search queries are sent to Dataify's scraper API during live execution.
+
+Mitigation: Run dry-run previews for parameter review when needed and avoid submitting sensitive search terms unless that external API use is acceptable.
+
+## Reference(s):
+
+- [Dataify Bing Videos API Reference](references/api.md)
+- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-bing-videos)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown, JSON, or raw API response text depending on the requested output mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live calls require DATAIFY_API_TOKEN; dry runs can emit parsed payload JSON or a Markdown parameter table without network access.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

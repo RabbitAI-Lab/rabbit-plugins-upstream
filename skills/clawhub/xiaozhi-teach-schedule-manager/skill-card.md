@@ -1,44 +1,62 @@
-## Description: <br>
-帮助独立教师系统化生成周课表、检测排课冲突、管理课时包台账，并处理补课、请假、调课和续费预警流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助独立教师生成周课表、检查老师和学员时间冲突，并在老师确认后维护课表与课时包台账。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-独立教师使用该技能把学员可上课时间、老师可用时段、课时包余额和调课记录整理为可检查的排课建议与台账。它适合需要在共享教学工作空间内保持课表清晰、冲突可见、课时消耗可追溯的日常教学运营场景。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student schedules and lesson-unit balances may expose sensitive learner information when kept in a shared workspace. <br>
-Mitigation: Use aliases, avoid real names, contact details, addresses, payment records, and other high-sensitivity fields, and honor view, correction, deletion, pause-recording, and sharing-control requests. <br>
-Risk: Incorrect schedule or lesson-unit changes could disrupt classes or ledger accuracy. <br>
-Mitigation: Treat generated schedules and ledger updates as proposals and require explicit teacher confirmation before writing changes. <br>
-Risk: Cross-skill sharing can broaden access to student records beyond the intended teaching workflow. <br>
-Mitigation: Confirm profile and cross-skill-sharing consent before creating records or sharing student data with related teaching skills. <br>
+## Use Case:
 
+External independent teachers use this skill to turn availability, lesson events, makeup requests, reschedules, and course-package balances into a visible weekly schedule and lesson-hour ledger. The workflow produces scheduling suggestions and records only after teacher confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-schedule-manager) <br>
-- [周课表与课时台账模板](references/weekly-schedule-template.md) <br>
-- [请假/补课/调课登记模板](references/leave-makeup-reschedule-forms.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; deployments in other regions require localization of K12 assumptions, safety contacts, and applicable minor-data rules.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown with structured schedules, ledgers, conflict reports, and plain-text registration templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires teacher confirmation before schedule changes, cross-skill sharing, or deletion of student records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The bundled workspace schema exposes broader lesson-log data than the scheduling workflow needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy with field-level access limited to the exact scheduling fields, or remove lessonLogs unless the platform enforces the documented scope.
+
+Risk: Scheduling or course-hour proposals may be wrong if they are written before teacher review or based on stale availability.
+
+Mitigation: Require teacher confirmation before writing lessonSchedule entries, registering makeup or reschedule records, or acting on remaining-hour warnings.
+
+Risk: The skill operates around K12 student scheduling records and may encounter sensitive minor data.
+
+Mitigation: Use aliases, avoid real names and contact or family details, respect consent controls, and localize China-specific safety contacts before use outside China mainland.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-schedule-manager)
+- [Publisher profile: qizhitang](https://clawhub.ai/user/qizhitang)
+- [Weekly schedule and course-hour ledger template](artifact/references/weekly-schedule-template.md)
+- [Leave, makeup, and reschedule forms](artifact/references/leave-makeup-reschedule-forms.md)
+- [Solo teacher workspace schema](artifact/shared/solo-teacher-workspace.schema.json)
+- [Platform conventions and localization guidance](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured schedule, conflict-check, makeup/reschedule, and course-package ledger entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires teacher confirmation before schedule writes, makeup/reschedule records, or course-hour ledger changes.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

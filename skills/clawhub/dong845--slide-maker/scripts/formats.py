@@ -52,6 +52,30 @@ class Format:
     columns_ok: bool     # side-by-side column splits advisable on this surface?
     lint_flags: tuple = field(default_factory=tuple)  # extra lint_deck.py flags
     aliases: tuple = field(default_factory=tuple)
+    # ABSOLUTE pt floors, ((role, pt), …), roles: display · section · body. Empty = the canvas is
+    # projected and the inch-normalization above governs, so lint's canvas-RELATIVE floor is the
+    # right one. Non-empty = the surface is PRINTED AT ACTUAL SIZE and read from a fixed distance,
+    # where relative size means nothing and only the printed point size does. A poster is the case
+    # this exists for: on a 33in-wide A0 canvas the relative rule would demand ~45pt body (absurd
+    # for a printed page read at 1m) while deckkit's own cover cap of 46pt would print a TITLE
+    # that fails to read at 5m. Both errors, in opposite directions, from one missing distinction.
+    type_floors: tuple = field(default_factory=tuple)
+    # (min, max) share of the canvas that content shapes may cover. Empty = not checked. A poster
+    # is the case: the whole board is the deliverable, read once, standing — so an under-filled one
+    # wastes the only space it gets and an over-filled one is the wall everybody walks past. A
+    # projected deck has neither problem (whitespace across a SEQUENCE is rhythm, not waste), which
+    # is why this is per-format and not a global rule.
+    fill_range: tuple = field(default_factory=tuple)
+    # (max text share, min graphics share) of the COMPOSED area, for a surface whose proportions
+    # are a published standard rather than a taste call. The poster literature converges on roughly
+    # 20-25% text / 40-50% graphics / 30-40% white space, and it converges because a board is read
+    # standing, by someone deciding in seconds whether to engage: text-dominant boards lose that
+    # decision. Empty = not checked, which is every projected surface — a slide's text/graphic
+    # balance is a per-slide design judgement the critic owns, not a deck-wide ratio.
+    text_graphic: tuple = field(default_factory=tuple)
+    # Content a surface is not finished without, ((label, (keyword, …)), …). Prose everywhere else;
+    # here it can be checked. See check_surface.py.
+    required_sections: tuple = field(default_factory=tuple)
 
 
 FORMATS = {f.name: f for f in [
@@ -97,6 +121,86 @@ FORMATS = {f.name: f for f in [
            density_units="self-read prose is the deliverable; document density is correct here",
            columns_ok=True, lint_flags=("--selfread",),
            aliases=("print", "a4-portrait", "handout", "onepager", "one-pager")),
+    # ── PRINTED AT ACTUAL SIZE ────────────────────────────────────────────────────────────────
+    # A conference poster is not a big slide. It is read at THREE distances by a moving audience:
+    # the title pulls someone in from across the hall (~5m), the section heads let them decide
+    # whether to stop (~2m), and the body is read standing at it (~1m). That is why the type
+    # floors below are ABSOLUTE points rather than a share of the canvas, and why they are three
+    # numbers rather than one.
+    #
+    # `required_sections` encodes the other finding: a poster in the "billboard" style (one big
+    # result, little text) tests better than a dense one, but readers of billboard posters
+    # consistently ask for MORE method and MORE limitation than the style tends to include — the
+    # two things a passer-by cannot reconstruct and cannot fairly judge the claim without. Both are
+    # therefore required content, not density-dependent extras. A poster that genuinely has neither
+    # (a purely descriptive display) waives them in writing.
+    Format("poster_a0", "Poster A0 (portrait)", 33.11, 46.81, "portrait",
+           "conference poster · printed A0 · read at 5m / 2m / 1m",
+           margin=1.6, safe_top=0.0, safe_bottom=0.0, chrome="print",
+           title_band=5.2, display_scale=2.2,
+           density_units="THREE reading distances: one headline claim, 4-6 sections, "
+                         "every body block short enough to read standing",
+           columns_ok=True, lint_flags=("--surface",),
+           aliases=("a0", "poster", "a0-portrait", "conference-poster", "海报"),
+           type_floors=(("display", 90), ("section", 36), ("body", 24)),
+           fill_range=(0.55, 0.90),
+           text_graphic=(0.35, 0.25),
+           required_sections=(("methods", ("method", "methods", "approach", "materials",
+                                           "procedure", "protocol", "pipeline", "方法")),
+                              ("limitations", ("limitation", "limitations", "caveat", "caveats",
+                                               "threats to validity", "weakness", "局限",
+                                               "不足")))),
+    Format("poster_a1", "Poster A1 (portrait)", 23.39, 33.11, "portrait",
+           "conference poster · printed A1 · smaller board, same reading distances",
+           margin=1.2, safe_top=0.0, safe_bottom=0.0, chrome="print",
+           title_band=3.8, display_scale=1.65,
+           density_units="as A0 with LESS content, not smaller type — the floors do not scale "
+                         "with the board",
+           columns_ok=True, lint_flags=("--surface",),
+           aliases=("a1", "a1-portrait", "poster-a1"),
+           type_floors=(("display", 72), ("section", 32), ("body", 20)),
+           fill_range=(0.55, 0.90),
+           text_graphic=(0.35, 0.25),
+           required_sections=(("methods", ("method", "methods", "approach", "materials",
+                                           "procedure", "protocol", "pipeline", "方法")),
+                              ("limitations", ("limitation", "limitations", "caveat", "caveats",
+                                               "threats to validity", "weakness", "局限",
+                                               "不足")))),
+    # Landscape boards are as standard as portrait ones — many venues specify them, and a wide
+    # board is a genuinely different composition (columns run ACROSS, the title band is shallower).
+    # Registering them explicitly rather than transposing a portrait entry keeps `kind`,
+    # `columns_ok` and `title_band` honest; a canvas with no entry reports NOT CHECKED, so the
+    # omission would have silently switched the whole contract off for half the posters printed.
+    Format("poster_a0_land", "Poster A0 (landscape)", 46.81, 33.11, "landscape",
+           "conference poster · printed A0 landscape · read at 5m / 2m / 1m",
+           margin=1.6, safe_top=0.0, safe_bottom=0.0, chrome="print",
+           title_band=4.4, display_scale=2.2,
+           density_units="as A0 portrait; the width takes MORE columns, never smaller type",
+           columns_ok=True, lint_flags=("--surface",),
+           aliases=("a0-landscape", "a0l", "poster-a0-landscape", "横版海报"),
+           type_floors=(("display", 90), ("section", 36), ("body", 24)),
+           fill_range=(0.55, 0.90),
+           text_graphic=(0.35, 0.25),
+           required_sections=(("methods", ("method", "methods", "approach", "materials",
+                                           "procedure", "protocol", "pipeline", "方法")),
+                              ("limitations", ("limitation", "limitations", "caveat", "caveats",
+                                               "threats to validity", "weakness", "局限",
+                                               "不足")))),
+    Format("poster_a1_land", "Poster A1 (landscape)", 33.11, 23.39, "landscape",
+           "conference poster · printed A1 landscape",
+           margin=1.2, safe_top=0.0, safe_bottom=0.0, chrome="print",
+           title_band=3.2, display_scale=1.65,
+           density_units="as A1 portrait; the width takes MORE columns, never smaller type",
+           columns_ok=True, lint_flags=("--surface",),
+           aliases=("a1-landscape", "a1l", "poster-a1-landscape"),
+           type_floors=(("display", 72), ("section", 32), ("body", 20)),
+           fill_range=(0.55, 0.90),
+           text_graphic=(0.35, 0.25),
+           required_sections=(("methods", ("method", "methods", "approach", "materials",
+                                           "procedure", "protocol", "pipeline", "方法")),
+                              ("limitations", ("limitation", "limitations", "caveat", "caveats",
+                                               "threats to validity", "weakness", "局限",
+                                               "不足")))),
 ]}
 
 _ALIAS = {}
@@ -119,6 +223,28 @@ def get(name):
         raise KeyError(f"unknown canvas format {name!r} — known: "
                        + ", ".join(f"{f.name} ({f.label})" for f in FORMATS.values()))
     return FORMATS[key]
+
+
+def match(w_in, h_in, tol=0.35):
+    """The registered Format whose canvas these dimensions are, or None.
+
+    A built PPTX carries only its size, so every check that wants to apply a format's contract
+    has to recover the format from the canvas. Without this the registry is advisory by
+    construction: build scripts opt into it and nothing downstream can tell whether they did.
+    Tolerance is generous on purpose — A0 rounded to 33.1x46.8 is the same surface as 33.11x46.81.
+    """
+    best, best_d = None, None
+    for f in FORMATS.values():
+        d = abs(f.w_in - w_in) + abs(f.h_in - h_in)
+        if d <= tol and (best_d is None or d < best_d):
+            best, best_d = f, d
+    return best
+
+
+def floors(fmt):
+    """{role: pt} absolute type floors, or {} when the canvas is projected rather than printed."""
+    f = fmt if isinstance(fmt, Format) else get(fmt)
+    return {role: pt for role, pt in f.type_floors}
 
 
 def blank_deck(fmt):
@@ -145,11 +271,19 @@ def band(fmt, *, title=True):
     return x, y, w, h
 
 
+try:                                            # console safety: a legacy code page must
+    from _console import safe_stdio             # degrade a tick, never kill the report
+    safe_stdio()
+except Exception:
+    pass
+
+
 if __name__ == "__main__":
-    print(f"{'name':8s} {'label':18s} {'W×H (in)':12s} {'kind':10s} {'safe T/B':10s} "
-          f"{'chrome':7s} {'cols':5s} lint")
+    print(f"{'name':15s} {'label':20s} {'W×H (in)':14s} {'kind':10s} {'safe T/B':10s} "
+          f"{'chrome':7s} {'cols':5s} {'type floors (pt)':22s} lint")
     for f in FORMATS.values():
-        print(f"{f.name:8s} {f.label:18s} {f.w_in:.2f}×{f.h_in:<6.2f} {f.kind:10s} "
+        fl = " ".join(f"{r} {pt}" for r, pt in f.type_floors) or "canvas-relative"
+        print(f"{f.name:15s} {f.label:20s} {f.w_in:.2f}×{f.h_in:<7.2f} {f.kind:10s} "
               f"{f.safe_top:.2f}/{f.safe_bottom:<5.2f} {f.chrome:7s} "
-              f"{'yes' if f.columns_ok else 'no':5s} {' '.join(f.lint_flags) or '—'}")
-        print(f"{'':8s} ↳ {f.use}")
+              f"{'yes' if f.columns_ok else 'no':5s} {fl:22s} {' '.join(f.lint_flags) or '—'}")
+        print(f"{'':15s} ↳ {f.use}")

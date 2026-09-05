@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/here-now",
   "slug": "here-now",
   "ownerHandle": null,
-  "version": "1.18.0",
-  "updatedAt": 1784675069212,
-  "contentHash": "2e7d21388fe63c16ae3ee5760a24908b5cd5f80de049f8f38846f5d310fea857",
-  "fetchedAt": "2026-07-26T18:08:33.811Z"
+  "version": "1.28.0",
+  "updatedAt": 1788551334204,
+  "contentHash": "59946dbd76f9feea035b9ef177bf618d474ca04e058be984b57e0a0ccec51a33",
+  "fetchedAt": "2026-09-05T11:22:27.126Z"
 }

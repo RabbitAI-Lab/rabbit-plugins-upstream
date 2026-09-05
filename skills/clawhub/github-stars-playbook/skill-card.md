@@ -1,43 +1,61 @@
-## Description: <br>
-A 14-day sprint that helps open-source maintainers grow GitHub stars with day-by-day guidance for Show HN, Reddit, Twitter/X, community outreach, and GitHub Trending momentum. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design and execute a 14-day GitHub repository growth sprint using README conversion, competitor-window research, launch channels, community activation, contributor loops, and measurement gates.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Open-source maintainers, developer advocates, and founders use this skill to plan a short repository growth campaign, draft launch-channel tactics, and sustain community momentum after the sprint. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide an agent to draft public promotional posts or outreach that conflict with platform rules or project messaging. <br>
-Mitigation: Review proposed posts and outreach before publication, especially for Reddit, Hacker News, email, and community channels. <br>
-Risk: Growth tactics and star-velocity targets can be misleading if treated as guaranteed outcomes. <br>
-Mitigation: Treat the playbook as planning guidance and validate claims, timing, and metrics against the repository's actual audience and launch data. <br>
+## Use Case:
 
+External developers, maintainers, and developer-marketing teams use this skill to evaluate launch readiness and produce a measurable 14-day open-source repository growth plan.
 
-## Reference(s): <br>
-- [English playbook reference](references/en/README.md) <br>
-- [Japanese playbook reference](references/ja/README.md) <br>
-- [Korean playbook reference](references/ko/README.md) <br>
-- [Related Gingiris skill](https://clawhub.ai/skill/gingiris-opensource) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown playbook guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tool execution, credential access, or privileged behavior is indicated by the release security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: release evidence) <br>
+Risk: Generated launch plans or posts could include misleading claims or unverifiable benchmarks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review all public-facing copy before publishing and verify marketing claims against source evidence.
+
+Risk: Community promotion can violate platform rules or appear manipulative if affiliation is hidden or engagement is automated.
+
+Mitigation: Follow each community's rules, disclose affiliation, avoid automated engagement or star manipulation, and do not buy or exchange stars.
+
+Risk: Distribution can drive attention before the repository is ready for new developers.
+
+Mitigation: Use the readiness gate, confirm the quickstart works on a clean machine, and pause promotion when activation, security, or data-handling blockers appear.
+
+## Reference(s):
+
+- [Skill definition](artifact/SKILL.md)
+- [English playbook reference](artifact/references/en/README.md)
+- [Japanese playbook reference](artifact/references/ja/README.md)
+- [Korean playbook reference](artifact/references/ko/README.md)
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/github-stars-playbook)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown with verdicts, tables, calendars, schemas, and action lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a readiness verdict, competitor-window table, README change list, 14-day channel calendar with owners and source tracking, measurement dashboard schema, stop conditions, and next experiment.]
+
+## Skill Version(s):
+
+1.2.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

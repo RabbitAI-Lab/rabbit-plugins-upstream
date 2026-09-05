@@ -62,7 +62,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v
 **62 tools** across 13 categories:
 
 - **Auth (1)** -- auth status check (login is via CLI)
-- **Mail Read (7)** -- list inbox (with Focused Inbox filter), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
+- **Mail Read (7)** -- list inbox (with Focused Inbox and uncategorized filters), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
 - **Mail Write (3)** -- send, reply/reply-all, forward
 - **Mail Triage (9)** -- move, delete (soft by default), flag, categorize, mark read/unread, reclassify (Focused Inbox), list/set/delete per-sender Focused Inbox overrides
 - **Calendar Read (3)** -- list events (with recurring expansion), get event details, delta-sync event changes
@@ -91,7 +91,7 @@ Two pure-code upgrades that make the same 57 tools cheaper and more recoverable 
 
 - **Concise mode** — pass `concise=True` to the five high-volume read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop bulky fields: full message bodies, per-event attendee lists, quoted prior-message text in threads, body previews/categories on inbox listings. Typical payload reduction ~10×. Default `concise=False` preserves the existing response shape — strict backward compat.
 
-- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, ROADMAP pointer on 403/`ErrorAccessDenied` (known unsupported-endpoint dead-ends), re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
+- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, a link to the repo's [ROADMAP dead-ends list](https://github.com/mpalermiti/outlook-mcp/blob/main/ROADMAP.md#investigated-and-not-viable) on 403/`ErrorAccessDenied`, re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
 
 ---
 

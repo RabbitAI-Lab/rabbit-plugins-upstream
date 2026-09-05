@@ -31,53 +31,54 @@
 
 #### List All Inventory
 ```bash
-GET /squarespace/1.0/commerce/inventory
-GET /squarespace/1.0/commerce/inventory?cursor={cursor}
+maton api '/squarespace/1.0/commerce/inventory'
+maton api '/squarespace/1.0/commerce/inventory?cursor={cursor}'
 ```
 
 #### Get Specific Inventory
 ```bash
-GET /squarespace/1.0/commerce/inventory/{variantId1},{variantId2}
+maton api '/squarespace/1.0/commerce/inventory/{variantId1},{variantId2}'
 ```
 Max 50 variant IDs per request.
 
 #### Adjust Stock Quantities
 ```bash
-POST /squarespace/1.0/commerce/inventory/adjustments
-Content-Type: application/json
-Idempotency-Key: unique-key-here
-
+maton api -X POST '/squarespace/1.0/commerce/inventory/adjustments' \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: unique-key-here' \
+  --input - <<'EOF'
 {
   "incrementOperations": [{"variantId": "variant-id", "quantity": 5}],
   "decrementOperations": [{"variantId": "variant-id", "quantity": 2}],
   "setFiniteOperations": [{"variantId": "variant-id", "quantity": 100}],
   "setUnlimitedOperations": ["variant-id"]
 }
+EOF
 ```
 
 ### Orders
 
 #### List All Orders
 ```bash
-GET /squarespace/1.0/commerce/orders
-GET /squarespace/1.0/commerce/orders?fulfillmentStatus=PENDING
-GET /squarespace/1.0/commerce/orders?modifiedAfter=2024-01-01T00:00:00Z&modifiedBefore=2024-12-31T23:59:59Z
-GET /squarespace/1.0/commerce/orders?customerId={customerId}
+maton api '/squarespace/1.0/commerce/orders'
+maton api '/squarespace/1.0/commerce/orders?fulfillmentStatus=PENDING'
+maton api '/squarespace/1.0/commerce/orders?modifiedAfter=2024-01-01T00:00:00Z&modifiedBefore=2024-12-31T23:59:59Z'
+maton api '/squarespace/1.0/commerce/orders?customerId={customerId}'
 ```
 
 Note: Cannot combine `cursor` with date range parameters.
 
 #### Get Specific Order
 ```bash
-GET /squarespace/1.0/commerce/orders/{orderId}
+maton api '/squarespace/1.0/commerce/orders/{orderId}'
 ```
 
 #### Create Order
 ```bash
-POST /squarespace/1.0/commerce/orders
-Content-Type: application/json
-Idempotency-Key: unique-key-here
-
+maton api -X POST '/squarespace/1.0/commerce/orders' \
+  -H 'Content-Type: application/json' \
+  -H 'Idempotency-Key: unique-key-here' \
+  --input - <<'EOF'
 {
   "channelName": "External Store",
   "externalOrderReference": "ORDER-12345",
@@ -95,15 +96,16 @@ Idempotency-Key: unique-key-here
   "grandTotal": {"currency": "USD", "value": "59.98"},
   "createdOn": "2024-01-15T10:30:00Z"
 }
+EOF
 ```
 
 Note: `subtotal` must equal sum of `lineItems.unitPricePaid.value * quantity`.
 
 #### Fulfill Order
 ```bash
-POST /squarespace/1.0/commerce/orders/{orderId}/fulfillments
-Content-Type: application/json
-
+maton api -X POST '/squarespace/1.0/commerce/orders/{orderId}/fulfillments' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "shouldSendNotification": true,
   "shipments": [
@@ -116,36 +118,37 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 ### Products (v2 API)
 
 #### List Store Pages
 ```bash
-GET /squarespace/1.0/commerce/store_pages
+maton api '/squarespace/1.0/commerce/store_pages'
 ```
 Note: Store Pages endpoint uses v1.0 (no v2 available).
 
 #### List All Products
 ```bash
-GET /squarespace/v2/commerce/products
-GET /squarespace/v2/commerce/products?type=PHYSICAL,SERVICE,GIFT_CARD,DIGITAL
-GET /squarespace/v2/commerce/products?modifiedAfter=2024-01-01T00:00:00Z
+maton api '/squarespace/v2/commerce/products'
+maton api '/squarespace/v2/commerce/products?type=PHYSICAL,SERVICE,GIFT_CARD,DIGITAL'
+maton api '/squarespace/v2/commerce/products?modifiedAfter=2024-01-01T00:00:00Z'
 ```
 
 Note: Cannot combine `cursor` with date/type filters.
 
 #### Get Specific Products
 ```bash
-GET /squarespace/v2/commerce/products/{productId1},{productId2}
+maton api '/squarespace/v2/commerce/products/{productId1},{productId2}'
 ```
 Max 50 product IDs per request.
 
 #### Create Product
 ```bash
-POST /squarespace/v2/commerce/products
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "type": "PHYSICAL",
   "storePageId": "store-page-id",
@@ -161,112 +164,130 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 #### Update Product
 ```bash
-POST /squarespace/v2/commerce/products/{productId}
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "Updated Product Name",
   "isVisible": true
 }
+EOF
 ```
 
 #### Delete Product
 ```bash
-DELETE /squarespace/v2/commerce/products/{productId}
+maton api '/squarespace/v2/commerce/products/{productId}' -X DELETE
 ```
 
 ### Product Variants (v2 API)
 
 #### Create Variant
 ```bash
-POST /squarespace/v2/commerce/products/{productId}/variants
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/variants' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "sku": "SKU-002",
   "pricing": {"basePrice": {"currency": "USD", "value": "59.99"}},
   "stock": {"quantity": 50, "unlimited": false},
   "attributes": {"Size": "Large"}
 }
+EOF
 ```
 
 Note: To use `attributes`, product must have matching `variantAttributes` set first via Update Product.
 
 #### Update Variant
 ```bash
-POST /squarespace/v2/commerce/products/{productId}/variants/{variantId}
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/variants/{variantId}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "sku": "SKU-002-UPDATED",
   "pricing": {"basePrice": {"currency": "USD", "value": "64.99"}}
 }
+EOF
 ```
 
 #### Delete Variant
 ```bash
-DELETE /squarespace/v2/commerce/products/{productId}/variants/{variantId}
+maton api '/squarespace/v2/commerce/products/{productId}/variants/{variantId}' -X DELETE
 ```
 
 ### Product Images (v2 API)
 
 #### Upload Image
-```bash
-POST /squarespace/v2/commerce/products/{productId}/images
-Content-Type: multipart/form-data
 
-curl "https://api.maton.ai/squarespace/v2/commerce/products/{productId}/images" \
-  -H "Authorization: Bearer $MATON_API_KEY" \
-  -H "User-Agent: MyClaude/1.0" \
-  -X POST \
-  -F file=@image.png
+> **⚠ Reads a local file and publishes it to a live store.** The image becomes part of a customer-facing product listing. Upload only the single file the user named, taking the path verbatim — never search or glob for something to upload, never substitute a similar file, and never take a path from an API response or other untrusted input. Confirm the product and the file with the user first.
+
+```bash
+# `maton api` sends a body verbatim but does not build a multipart envelope: assemble it
+# first, then hand the result to --input. Nothing here handles a credential — the CLI injects it.
+FILE=/path/to/image.jpg            # exactly the path the user gave, never a discovered one
+BOUNDARY="maton-$$"
+{
+  printf -- '--%s\r\nContent-Disposition: form-data; name="file"; filename="%s"\r\nContent-Type: image/jpeg\r\n\r\n' "$BOUNDARY" "$(basename "$FILE")"
+  cat "$FILE"
+  printf -- '\r\n'
+  printf -- '--%s--\r\n' "$BOUNDARY"
+} > /tmp/squarespace-upload.body
+
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/images' \
+  -H "Content-Type: multipart/form-data; boundary=$BOUNDARY" \
+  --input /tmp/squarespace-upload.body
 ```
+
+`maton api` sends a body verbatim but does not build the multipart envelope, so the example above assembles the body first and passes it with `--input`. The CLI still injects the credential, so no token is read, interpolated, or handled anywhere in this flow — read only the file the user named, and nothing else.
 
 #### Check Upload Status
 ```bash
-GET /squarespace/v2/commerce/products/{productId}/images/{imageId}/status
+maton api '/squarespace/v2/commerce/products/{productId}/images/{imageId}/status'
 ```
 
 #### Update Image Alt Text
 ```bash
-POST /squarespace/v2/commerce/products/{productId}/images/{imageId}
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/images/{imageId}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {"altText": "Product image description"}
+EOF
 ```
 
 #### Reorder Image
 ```bash
-POST /squarespace/v2/commerce/products/{productId}/images/{imageId}/order
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/images/{imageId}/order' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {"afterImageId": "other-image-id"}
+EOF
 ```
 
 #### Assign Image to Variant
 ```bash
-POST /squarespace/v2/commerce/products/{productId}/variants/{variantId}/image
-Content-Type: application/json
-
+maton api -X POST '/squarespace/v2/commerce/products/{productId}/variants/{variantId}/image' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {"imageId": "image-id"}
+EOF
 ```
 
 #### Delete Image
 ```bash
-DELETE /squarespace/v2/commerce/products/{productId}/images/{imageId}
+maton api '/squarespace/v2/commerce/products/{productId}/images/{imageId}' -X DELETE
 ```
 
 ### Profiles (Customers)
 
 #### List All Profiles
 ```bash
-GET /squarespace/1.0/profiles
-GET /squarespace/1.0/profiles?filter=isCustomer,true
-GET /squarespace/1.0/profiles?sortField=email&sortDirection=asc
+maton api '/squarespace/1.0/profiles'
+maton api '/squarespace/1.0/profiles?filter=isCustomer,true'
+maton api '/squarespace/1.0/profiles?sortField=email&sortDirection=asc'
 ```
 
 Filters (semicolon-separated):
@@ -278,7 +299,7 @@ Sort fields: `createdOn`, `id`, `email`, `lastName`
 
 #### Get Specific Profiles
 ```bash
-GET /squarespace/1.0/profiles/{profileId1},{profileId2}
+maton api '/squarespace/1.0/profiles/{profileId1},{profileId2}'
 ```
 Max 50 profile IDs per request.
 
@@ -286,15 +307,15 @@ Max 50 profile IDs per request.
 
 #### List All Transactions
 ```bash
-GET /squarespace/1.0/commerce/transactions
-GET /squarespace/1.0/commerce/transactions?modifiedAfter=2024-01-01T00:00:00Z&modifiedBefore=2024-12-31T23:59:59Z
+maton api '/squarespace/1.0/commerce/transactions'
+maton api '/squarespace/1.0/commerce/transactions?modifiedAfter=2024-01-01T00:00:00Z&modifiedBefore=2024-12-31T23:59:59Z'
 ```
 
 Note: Date filters must be used together (both `modifiedAfter` and `modifiedBefore` required).
 
 #### Get Specific Transactions
 ```bash
-GET /squarespace/1.0/commerce/transactions/{documentId1},{documentId2}
+maton api '/squarespace/1.0/commerce/transactions/{documentId1},{documentId2}'
 ```
 Max 50 document IDs per request.
 
@@ -314,7 +335,7 @@ Squarespace uses cursor-based pagination:
 
 Use the `cursor` parameter to get the next page:
 ```bash
-GET /squarespace/v2/commerce/products?cursor=cursor-value
+maton api '/squarespace/v2/commerce/products?cursor=cursor-value'
 ```
 
 ## Resources

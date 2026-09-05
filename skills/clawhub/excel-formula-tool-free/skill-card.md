@@ -1,43 +1,54 @@
-## Description: <br>
-Generates and diagnoses Excel formulas from natural-language requests, including common functions such as VLOOKUP, SUMIF, and COUNTIF for individual daily spreadsheet tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从自然语言描述生成 Excel 公式并诊断常见表格错误，包括 VLOOKUP、条件求和和日期处理等函数问题。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and spreadsheet authors use this skill to turn plain-language spreadsheet needs into Excel formulas, diagnose formula errors, and simplify common formulas for personal daily use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad file write and command execution capability could alter local files or run commands during spreadsheet assistance. <br>
-Mitigation: Install only when those permissions are acceptable, and review any command or file-changing action before allowing it. <br>
-Risk: The optional callback_url can send results or related data to an external endpoint. <br>
-Mitigation: Use callback_url only with endpoints you control and after confirming what data will be transmitted. <br>
-Risk: Untrusted spreadsheet content or vague natural-language requests may lead to incorrect or unsafe formula guidance. <br>
-Mitigation: Use trusted spreadsheet files, review generated formulas before applying them, and test changes on copies of important workbooks. <br>
+## Use Case:
 
+Personal users, developers, and business teams can use this skill to turn spreadsheet requests into Excel formulas and receive formula debugging, function conversion, and common table-processing guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/excel-formula-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Excel formula snippets, code examples, shell commands, configuration examples, and optional JSON-style structured results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution status, result data, execution logs, and error fields when presenting structured responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requests command execution and broad read access for a task that is primarily formula assistance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in an agent environment where tool access can be reviewed, restricted, and approved for spreadsheet-related work.
+
+Risk: The artifact describes file, API, and command behavior beyond ordinary Excel formula generation.
+
+Mitigation: Review requested actions before execution and avoid granting unnecessary filesystem, network, or shell permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/excel-formula-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline code blocks, Excel formula examples, and concise explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include formula snippets, troubleshooting steps, configuration examples, and command suggestions when the agent has tool access.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

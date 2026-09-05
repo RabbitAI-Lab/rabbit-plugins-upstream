@@ -1,46 +1,62 @@
-## Description: <br>
-Provides Checkly CLI command reference and Monitoring as Code workflows for creating, testing, deploying, importing, and troubleshooting synthetic monitors. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive Checkly CLI command reference and Monitoring as Code workflows for Checkly authentication, configuration, checks, monitors, testing, deployment, imports, constructs, and advanced patterns.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers and operators use this skill to guide Checkly CLI workflows for monitoring-as-code projects, including authentication, configuration, check creation, local testing, deployment, imports, account operations, and failure investigation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide actions that change Checkly resources or account access, including deploy, destroy, import commit or cancel, check delete, and member update or delete commands. <br>
-Mitigation: Review every sensitive command and require explicit user approval before execution; use dry-run or confirmation output where the Checkly CLI provides it. <br>
-Risk: Checkly API keys, account IDs, and project secrets may be exposed if copied into files, logs, or shared transcripts. <br>
-Mitigation: Keep credentials in environment variables or CI secret stores, and avoid committing or displaying secret values. <br>
+## Use Case:
 
+Developers and engineers use this skill to author, test, import, deploy, and troubleshoot Checkly Monitoring as Code projects through the Checkly CLI. It helps agents produce project configuration, TypeScript check definitions, Playwright check guidance, and reviewed CLI workflows for live Checkly accounts.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vince-winkintel/skills/checkly-cli-skills) <br>
-- [Checkly CLI Best Practices](artifact/references/best-practices.md) <br>
-- [Checkly CLI Troubleshooting](artifact/references/troubleshooting.md) <br>
-- [Checkly Documentation](https://www.checklyhq.com/docs/) <br>
-- [Checkly Runtimes](https://www.checklyhq.com/docs/runtimes/) <br>
-- [Playwright Documentation](https://playwright.dev/) <br>
-- [Checkly CLI GitHub Issues](https://github.com/checkly/checkly-cli/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash, TypeScript, JSON, and YAML snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes read-only investigation guidance and confirmation prompts for sensitive Checkly actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata and artifact/VERSION) <br>
+Risk: The skill can help perform live Checkly account actions such as deploying monitoring resources, deleting checks, or changing members.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target account with whoami and use dry-run, preview, or explicit confirmation flows before deploy, delete, import commit, cancel, destroy, or member changes.
+
+Risk: Checkly API keys, account IDs, and user-defined test secrets may be used during CLI workflows.
+
+Mitigation: Keep CHECKLY_API_KEY and other tokens in environment variables or CI secrets, and avoid printing or storing secret values in generated code, logs, or shared artifacts.
+
+Risk: Downloaded failure assets such as logs, traces, screenshots, videos, pcap files, and reports may contain application data.
+
+Mitigation: Download only the assets needed for investigation, store them in an approved location, and review contents before sharing or attaching them to reports.
+
+## Reference(s):
+
+- [Checkly CLI Skills on ClawHub](https://clawhub.ai/vince-winkintel/skills/checkly-cli-skills)
+- [Checkly Documentation](https://www.checklyhq.com/docs/)
+- [Checkly Runtimes](https://www.checklyhq.com/docs/runtimes/)
+- [Playwright Documentation](https://playwright.dev/)
+- [Best Practices](references/best-practices.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash and TypeScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Checkly CLI commands, TypeScript monitoring constructs, Playwright examples, configuration snippets, and review steps before live account changes.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata and artifact VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

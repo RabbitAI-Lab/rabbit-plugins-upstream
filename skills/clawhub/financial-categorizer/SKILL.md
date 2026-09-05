@@ -129,8 +129,8 @@ The following commands require confirmation:
 | `recurring [--status <active|cancelled|all>]` | List recurring payments configurations |
 | `add-recurring <name> <pattern> [options] [--dry-run]` | Manually create a recurring payment config and link transactions |
 | `update-recurring <id> [options] [--dry-run]` | Update recurring config fields and re-run transaction linking |
-| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration |
-| `discover-recurring [--dry-run]` | Auto-discover recurring transaction patterns and auto-close dead configurations |
+| `remove-recurring <id> [--hard] [--date <YYYY-MM-DD>] [--yes]` | Cancel (soft-close with end date) or hard-delete a recurring payment configuration (requires confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode) |
+| `discover-recurring [--dry-run] [--yes]` | Auto-discover recurring transaction patterns and auto-close dead configurations (saving, re-linking, and auto-closing require confirmation; use `--yes`/`-y` to bypass, mandatory in non-interactive mode — run `--dry-run` first to preview) |
 | `stats-recurring [query] [--month <YYYY-MM>] [--period-type <type>]` | Display subscription stats dashboard or detail reports for matching subscriptions |
 | `estimate-period [--days <int>] [--level <0|1|2>]` | Project spending and estimate total outflow remaining in current period (rollup levels: 0=none, 1=top, 2=detailed) |
 | `set-estimate-level <0|1|2>` | Set default category rollup level configuration for spending estimation |
@@ -196,6 +196,7 @@ This tool supports advanced, automated tracking and lifecycle management of recu
    Resumed subscriptions (after cancellation) are tracked as separate runs/rows in `recurring_payments`.
    * **Resumption**: If a transaction matches a pattern of a cancelled subscription (after its `end_date`), it automatically spawns a new run/configuration for the resumption.
    * **Auto-Closing**: Active configurations that are missing expected payments are automatically closed (`end_date` is set to the last matched payment date) when running `discover-recurring` or passing the `--close` flag to `import` / `categorize`.
+   * **Confirmation Gates**: `remove-recurring` and `discover-recurring` (without `--dry-run`) prompt for confirmation before making changes, like the other destructive commands. Use `--yes`/`-y` to bypass (mandatory in non-interactive mode), and `discover-recurring --dry-run` to preview first.
 3. **Flexible Date Intervals**
    Supports strict date/day checking with a configured tolerance window:
    * **Monthly**: Expected day of month (e.g. 25th, last day `-1`).
@@ -212,8 +213,8 @@ Scan transaction history to auto-identify recurring items (such as monthly subsc
 # Preview candidates without writing to the database
 python cli.py discover-recurring --dry-run
 
-# Run auto-discovery and save configurations
-python cli.py discover-recurring
+# Run auto-discovery and save configurations (prompts for confirmation; --yes to bypass)
+python cli.py discover-recurring --yes
 ```
 
 #### 2. Manually Add/Update Configurations

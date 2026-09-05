@@ -1,14 +1,13 @@
 ---
 name: dlazy-kling-v3
 version: 1.3.5
-description: Powerful video generation with Kling v3. Supports high-quality text-to-video and image-to-video. 使用可灵 (Kling) v3 强大的视频生成模型，支持高质量的文生视频与图生视频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-v3 -h for help."}}
+description: "Powerful video generation with Kling v3. Supports high-quality text-to-video and image-to-video. 使用可灵 (Kling) v3 强大的视频生成模型，支持高质量的文生视频与图生视频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy kling-v3 -h for help."}}
 ---
 
-# dlazy-kling-v3
+# 视频生成 可灵 Kling V3
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Powerful video generation with Kling v3. Supports high-quality text-to-video and image-to-video.
@@ -49,7 +48,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -82,9 +81,7 @@ dlazy kling-v3 -h
 
 Options:
   --prompt [prompt]                    Prompt
-  --generation_mode [generation_mode]  Generation Mode（frames=Frames; components=Components） [default: frames] (choices: "frames", "components")
-  --images [images...]                 Images [image: url or local path] (max 4)
-  --subjects [subjects...]             Subjects (max 3) [only when !(generation_mode="frames")]
+  --images [images...]                 Images [image: url or local path] (max 2)
   --aspect_ratio [aspect_ratio]        Aspect Ratio [default: 16:9] (choices: "16:9", "9:16", "1:1")
   --duration [duration]                Duration (s) [default: 5] (choices: "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15")
   --mode [mode]                        Mode [default: std] (choices: "std", "pro")
@@ -92,6 +89,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

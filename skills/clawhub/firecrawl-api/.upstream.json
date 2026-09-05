@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/firecrawl-api",
   "slug": "firecrawl-api",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739753410,
-  "contentHash": "838f2bc94fffafa4cb6156876a17884f72d9be2a9729cc5d29048d10c89d7eee",
-  "fetchedAt": "2026-07-26T18:27:34.600Z"
+  "version": "1.2.3",
+  "updatedAt": 1788555823615,
+  "contentHash": "be8687cf1792a61a0007ebabe2bfe42d0265ca567fecef19d2482525c5d94ca7",
+  "fetchedAt": "2026-09-05T11:22:21.176Z"
 }

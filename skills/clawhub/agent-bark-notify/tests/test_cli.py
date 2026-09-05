@@ -37,6 +37,9 @@ def run_main(argv, env=None, config_path=None, agents_path=None, stdin_text=None
 
 
 class BarkNotifyCliTest(unittest.TestCase):
+    def test_version_is_current(self):
+        self.assertEqual(cli.VERSION, "0.2.0")
+
     def test_body_words_after_title_are_joined(self):
         rc, calls, _ = run_main(["Title", "hello", "from", "agent"], env={"BARK_KEY": "test-key"})
 

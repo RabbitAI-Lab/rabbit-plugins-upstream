@@ -168,7 +168,7 @@ Cursor-based pagination with `first`, `after`, and `pageInfo`.
 - All requests are POST with JSON body
 - Use `query` field for queries, include `variables` for parameters
 - Scheduling requires ISO 8601 datetime strings
-- Uses API key authentication
+- Authentication is handled by the gateway. Upstream, Buffer uses an API key rather than OAuth, but that key belongs to the Maton connection and is injected server-side: do not build an `Authorization` header, do not ask the user for a Buffer key, and never place one in a request, a script, or a trigger destination. Requests carry the Maton credential only, exactly like every other app in this gateway.
 
 ## Resources
 

@@ -1,46 +1,68 @@
-## Description: <br>
-Supabase API integration with managed authentication for database tables, auth users, and storage buckets through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supabase API integration with managed authentication for database tables, auth users, and storage buckets through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect and operate connected Supabase projects, including PostgREST table access, auth user management, and storage bucket operations. It is intended for Supabase workflows that need managed Maton authentication through MATON_API_KEY. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change data in a connected Supabase project through Maton. <br>
-Mitigation: Install only if Maton is trusted with the project and prefer staging or least-privileged projects for exploration. <br>
-Risk: POST, PUT, PATCH, and DELETE operations can modify production data, auth users, or storage resources. <br>
-Mitigation: Review the target resource, filters, and intended effect before approving any write operation. <br>
-Risk: When multiple Supabase connections exist, requests may target the wrong project if the connection is ambiguous. <br>
-Mitigation: Specify the intended connection explicitly before executing project-specific requests. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to Supabase projects through Maton, inspect database tables, manage auth users, and work with storage buckets. It is intended for API-assisted project operations where read/list calls are preferred and mutations require explicit user confirmation.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Supabase REST API Guide](https://supabase.com/docs/guides/api) <br>
-- [PostgREST Documentation](https://postgrest.org/en/stable/) <br>
-- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api) <br>
-- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API operations act through Maton against the selected connected Supabase project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Authorized calls can affect real Supabase production data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer staging for experimentation, default to read/list requests, and confirm the target connection, resource, payload, and intended effect before any write or delete.
+
+Risk: Stored or exposed credentials could grant long-lived access.
+
+Mitigation: Use OAuth where possible, let the Maton CLI use the operating system credential store, avoid printing or persisting credentials, and revoke unused connections.
+
+Risk: Deleting a connection or Supabase resource can be irreversible.
+
+Mitigation: List and match exact identifiers first, avoid bypassing prompts unless the user has already confirmed the specific target, and require explicit approval before destructive operations.
+
+Risk: API responses may contain personal or sensitive project data.
+
+Mitigation: Return only the fields needed for the task and avoid dumping full responses into logs, files, or chat unless the user specifically requests them.
+
+## Reference(s):
+
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Supabase REST API guide](https://supabase.com/docs/guides/api)
+- [PostgREST documentation](https://postgrest.org/en/stable/)
+- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api)
+- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI commands, raw HTTP examples, SDK snippets, endpoint guidance, and operational cautions.]
+
+## Skill Version(s):
+
+1.2.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

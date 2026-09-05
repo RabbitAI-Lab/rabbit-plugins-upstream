@@ -1,40 +1,52 @@
-## Description: <br>
-Provides advisory templates, checklists, and decision-support frameworks for insurance claim OCR, liability review, anti-fraud assessment, and claim reporting, with human review required for every decision. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advisory skill for insurance claims processing workflows that provides templates, checklists, and decision-support frameworks for medical OCR, liability determination, anti-fraud assessment, and claims reporting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Insurance claims teams and developers use this skill to draft claim review checklists, OCR field guidance, liability analysis prompts, anti-fraud review prompts, and claims report templates. Its outputs are advisory drafts that require qualified human review before any claim decision or regulatory use.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: Users may treat advisory claim outputs as final approvals, denials, payout amounts, fraud labels, or regulatory interpretations.
+
+Mitigation: Require qualified human review and current legal or compliance verification before operational use.
+
+Risk: Claims workflows may involve sensitive medical records, claimant data, and OCR processing of personal information.
+
+Mitigation: Use only necessary or redacted data, confirm consent, and verify retention, access-control, and cross-border transfer requirements before using external OCR or analytics providers.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance claims teams, reviewers, and developers use this skill to draft claim analysis reports, OCR integration guidance, liability review checklists, anti-fraud review prompts, and standardized claim notices. Outputs are decision-support drafts and require licensed human review before customer, payment, denial, or fraud actions. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance, code]
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+**Output Format:** [Markdown advisory drafts, checklists, templates, and example code snippets]
 
-## Reference(s): <br>
-- [Insurance Claims Intelligence release page](https://clawhub.ai/gechengling/insurance-claims-intelligence) <br>
-- [Claims OCR technical reference](references/claims_ocr_tech.md) <br>
-- [Claims liability engine reference](references/claims_liability_engine.md) <br>
-- [Claims report templates](references/claims_report_templates.md) <br>
+**Output Parameters:** [1D]
 
+**Other Properties Related to Output:** [Outputs must include a disclaimer that claim decisions, denial conclusions, payout amounts, and fraud labels require review by a licensed insurance professional.]
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with checklists, report templates, structured draft outputs, and example code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft-only decision support; OCR examples require user-provided credentials and data, and claim decisions require licensed human review.] <br>
+## Skill Version(s):
 
-## Skill Version(s): <br>
-5.0.3 (source: server release metadata) <br>
+5.0.4 (source: frontmatter and server release evidence)
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

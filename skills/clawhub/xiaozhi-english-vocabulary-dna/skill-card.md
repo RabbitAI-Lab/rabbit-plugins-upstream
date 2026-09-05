@@ -1,41 +1,67 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps students maintain an English vocabulary profile, schedule spaced review with SM-2 style intervals, and produce one consent-controlled daily vocabulary card.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+External students and learning-support agents use this skill to save English words from pasted text, images when OCR is available, or conversation, then review due words through one daily card. It also supports lesson vocabulary preview, vocabulary health summaries, and consent-controlled sharing with related learning skills.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localization of safety contacts, curriculum assumptions, and minor-consent rules before student-facing use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can maintain vocabulary progress and reminder data for students, including younger learners or shared family chat accounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable profile, reminder, cross-skill, and parent-sharing consent only when those data flows are desired; use the built-in view, correct, delete, pause, sharing-control, and export controls.
+
+Risk: Vocabulary reminders could become excessive or feel unsolicited if reminder consent and response state are ignored.
+
+Mitigation: Queue at most one daily vocabulary card through the reminder system, require reminder consent, and pause vocabulary reminders after three consecutive non-responses until the student asks to resume.
+
+Risk: The skill is designed around Mainland China K12 curriculum, safety contacts, and minor-consent assumptions.
+
+Mitigation: Localize emergency contacts, curriculum mapping, grade-band assumptions, and minor-consent rules before using it in another region.
+
+Risk: Spaced-repetition outputs could overstate memory science or present retention percentages as learner-specific facts.
+
+Mitigation: Use SM-2 style due-date scheduling without promising exact retention rates, and present vocabulary health summaries as counts and confidence-labeled observations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+- [ClawHub publisher profile](https://clawhub.ai/user/qizhitang)
+- [Vocabulary radar topics](references/vocabulary-radar-topics.md)
+- [Shared vocabulary and consent conventions](shared/vocab.md)
+- [Platform capability and deployment conventions](shared/platform-conventions.md)
+- [Spaced review schedule parameters](shared/ebbinghaus-schedule.md)
+- [Crisis exception guidance](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown/text responses with vocabulary-card content and optional JSON handoff examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses consent-controlled profile updates and reminder queue entries when the hosting platform supports those capabilities.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

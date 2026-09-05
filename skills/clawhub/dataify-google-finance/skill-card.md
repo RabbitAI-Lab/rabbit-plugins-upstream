@@ -1,41 +1,59 @@
-## Description: <br>
-Dataify Google Finance turns a user's Google Finance request into a confirmed Dataify Scraper API form POST. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Finance for stocks, indices, funds, currencies, or futures through the Dataify Scraper API.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to prepare and confirm Google Finance lookup parameters before querying Dataify's scraper API for stocks, indices, funds, currencies, or futures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Finance query parameters and the Dataify API token are sent to scraperapi.dataify.com after confirmation. <br>
-Mitigation: Review the preview table before confirming, use the skill only in trusted environments, and avoid pasting tokens unless necessary. <br>
-Risk: Incorrect or unintended financial query parameters can produce irrelevant API results. <br>
-Mitigation: Confirm or modify q, json, hl, window, and no_cache values in the preview table before any API call. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Google Finance data for stocks, indices, funds, currencies, or futures by submitting a finance query and optional output, language, time-window, and cache settings to Dataify. It is not intended for general web search or personalized financial advice.
 
-## Reference(s): <br>
-- [Dataify Google Finance API reference](references/google_finance_api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-finance) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, API response body, guidance] <br>
-**Output Format:** [Markdown confirmation tables, shell commands, and raw Dataify API response bodies.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before API calls and returns the response body without summarizing or reshaping it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Finance lookup queries and the Dataify API token are sent to Dataify's scraper API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use DATAIFY_API_TOKEN from the environment, never paste tokens into chat, and install only if this data flow is acceptable.
+
+Risk: Broad requests or cache-bypassing requests can increase Dataify credit usage.
+
+Mitigation: Review query scope and cache settings before high-volume or no-cache searches.
+
+Risk: Finance data can be misread as personalized investment advice.
+
+Mitigation: Present results as retrieved market data, preserve source links, and avoid giving personalized financial advice.
+
+## Reference(s):
+
+- [Dataify Google Finance API](references/google_finance_api.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-finance)
+- [Dataify Scraper API Endpoint](https://scraperapi.dataify.com/request)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, shell commands, and raw JSON or HTML when explicitly requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Compact user-facing finance results by default; preserves source links and distinguishes missing fields from empty values.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

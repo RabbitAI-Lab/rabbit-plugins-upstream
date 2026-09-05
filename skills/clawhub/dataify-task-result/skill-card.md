@@ -1,41 +1,51 @@
-## Description: <br>
-Download the JSON result for a completed Dataify scraper task by task ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Download the JSON result of a completed Dataify scraper task.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve JSON output for completed Dataify scraper tasks when they have a task ID and a Dataify API token available in the environment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends DATAIFY_API_TOKEN to Dataify's download endpoint to retrieve task results. <br>
-Mitigation: Keep DATAIFY_API_TOKEN in the environment only, avoid placing it in chat or command arguments, and install the skill only when Dataify access is intended. <br>
-Risk: Task result content comes from a provider response and may contain unexpected or sensitive JSON data. <br>
-Mitigation: Review returned JSON before sharing it, and do not automatically retry failed downloads when the provider reports an error. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve JSON output for a known Dataify task ID after the task has completed successfully.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-task-result) <br>
-- [Dataify download endpoint](https://scraperapi.dataify.com/download) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [JSON response text or concise provider error text, with shell commands shown in Markdown when needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify task ID and DATAIFY_API_TOKEN in the environment; the script redacts the API token from output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill sends DATAIFY_API_TOKEN to Dataify's download endpoint to retrieve task results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a session-scoped DATAIFY_API_TOKEN environment variable, do not paste the token into chat, and install the skill only when Dataify result retrieval is intended.
+
+## Reference(s):
+
+- [Task Result API](references/task_result_api.md)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-task-result)
+- [Dataify download endpoint](https://scraperapi.dataify.com/download)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands and JSON result content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads DATAIFY_API_TOKEN from the environment and redacts the token from dry-run and error output.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

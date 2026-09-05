@@ -1,47 +1,68 @@
-## Description: <br>
-Create and manage Volcengine cloud resources using the Volcengine CLI (`ve` command), including ECS, VPC, CLB, RDS, Redis, and related services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create and manage Volcengine cloud resources using the Volcengine CLI (`ve` command), including services such as ECS, VPC, CLB, RDS, Redis, and related troubleshooting workflows.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to inspect, create, modify, and troubleshoot Volcengine infrastructure through the `ve` CLI while following account, profile, credential, and confirmation rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use cloud credentials and perform operations that create, modify, stop, delete, or register real Volcengine resources. <br>
-Mitigation: Review the active account and profile before use, keep read-only operations as the default, and require explicit confirmation before write or destructive commands. <br>
-Risk: The login helper can read local Volcengine CLI credential files and may automatically replace an existing login session. <br>
-Mitigation: Install only where agent access to the intended Volcengine account is acceptable, and verify the current identity after authentication or re-authentication. <br>
+## Use Case:
 
+Developers and cloud engineers use this skill to inspect, create, update, and delete Volcengine infrastructure through the `ve` CLI, with service-specific notes for common Volcengine products. It also supports troubleshooting failed CLI calls, console login setup, and fallback OpenAPI calls when CLI metadata is incomplete.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-cli) <br>
-- [Volcengine CLI releases](https://github.com/volcengine/volcengine-cli/releases) <br>
-- [Common error handling](references/common-errors.md) <br>
-- [Extension APIs](references/extend-apis.md) <br>
-- [ECS service notes](references/ecs.md) <br>
-- [VPC service notes](references/vpc.md) <br>
-- [RDS service notes](references/rds.md) <br>
-- [Redis service notes](references/redis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Volcengine CLI commands, confirmation prompts for write or destructive operations, polling guidance, and troubleshooting steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: The installer path can execute remotely downloaded code and update local `ve` skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted Volcengine distribution paths, prefer npm or the bundled installer with a pinned version, review the installer before running it, and set `VOLCENGINE_CLI_SKIP_SKILLS=1` when automatic skill updates are not desired.
+
+Risk: The skill can create, modify, or delete Volcengine cloud resources after confirmation.
+
+Mitigation: Use least-privilege Volcengine credentials, verify the selected profile and region, and require explicit confirmation before write or destructive operations.
+
+Risk: Credential and session configuration is involved in CLI login and helper-script fallback paths.
+
+Mitigation: Avoid exposing access keys or session tokens in prompts, logs, shell history, or process arguments, and prefer scoped temporary credentials where practical.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/volc-sdk-team/skills/volcengine-cli)
+- [Volcengine CLI GitHub releases](https://github.com/volcengine/volcengine-cli/releases)
+- [Volcengine CLI CDN](https://cloudcache.volccdn.com/ve)
+- [Console Login Procedure](references/console-login.md)
+- [Common Error Handling](references/common-errors.md)
+- [Cloud Control API Service Notes](references/cloudcontrol.md)
+- [Extended APIs](references/extend-apis.md)
+- [ECS Service Notes](references/ecs.md)
+- [VPC Service Notes](references/vpc.md)
+- [RDS Service Notes](references/rds.md)
+- [Redis Service Notes](references/redis.md)
+- [VKE Service Notes](references/vke.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, CLI arguments, JSON examples, and operational checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce commands that call Volcengine APIs or helper scripts and may reference environment variables for credentials, region, endpoints, profile selection, and installer behavior.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
