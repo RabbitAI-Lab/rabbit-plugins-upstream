@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/tao-port-huggingface-model",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "7a9e1fc8e68c63fb8587235fe4f8b1e119ac65acb6f17b2f432d857ce06d3ec3",
-  "fetchedAt": "2026-07-26T17:03:52.405Z"
+  "pushedAt": "2026-09-05T11:11:14Z",
+  "contentHash": "93ca7f1faff4df6e15a6d79336d294bc6f1d3f631a77dd791ef640d5a89b28df",
+  "fetchedAt": "2026-09-05T11:19:06.023Z"
 }
