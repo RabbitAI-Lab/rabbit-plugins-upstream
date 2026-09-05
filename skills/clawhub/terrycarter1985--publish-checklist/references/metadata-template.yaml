@@ -1,0 +1,30 @@
+# ClawHub 技能元数据模板
+# 发布前请逐项确认所有字段
+
+# 必填字段
+name: "your-skill-slug"              # 小写连字符格式，如 my-awesome-skill
+description: "技能用途描述（10-200字）"  # 一句话说清楚做什么、何时用
+author: "your-name-or-team"
+created: "YYYY-MM-DD"                # ISO 日期
+version: "1.0.0"                     # SemVer: major.minor.patch
+license: "MIT"                       # 常见: MIT, Apache-2.0, GPL-3.0
+tags:                                 # 3-8 个标签
+  - "tag-1"
+  - "tag-2"
+  - "tag-3"
+
+# 可选字段
+source: ""                           # 来源仓库或文档链接
+dependencies: []                     # 依赖的其他技能
+related: []                          # 关联技能
+lastReviewed: "YYYY-MM-DD"          # 最近审核日期
+
+# 命名规范
+# - name 必须是小写字母、数字和连字符
+# - 以字母开头，不以连字符结尾
+# - 同一作者下 name 不可重复
+
+# 标签建议
+# - 功能标签: workflow, automation, review
+# - 场景标签: devops, research, writing
+# - 平台标签: browser, shell, api

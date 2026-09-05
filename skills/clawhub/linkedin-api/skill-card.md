@@ -1,49 +1,69 @@
-## Description: <br>
-LinkedIn API integration with managed OAuth for sharing posts, managing profile and organization data, uploading media, accessing the Ad Library, and managing advertising features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to LinkedIn through Maton-managed OAuth so they can read profile and organization data, publish posts, upload media, and use advertising APIs when granted scopes allow.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to LinkedIn through Maton-managed OAuth, retrieve LinkedIn profile or organization information, publish content, upload media, and work with advertising workflows after user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill gives Maton-mediated access to the connected LinkedIn account. <br>
-Mitigation: Install only when comfortable with that access model, keep MATON_API_KEY protected, and verify the connected account and granted OAuth scopes before use. <br>
-Risk: Public posts, organization actions, and profile changes can affect reputation. <br>
-Mitigation: Show the exact operation and request body or key parameters, then wait for explicit user confirmation before any create, update, or delete request. <br>
-Risk: Advertising operations can change budgets, targeting, campaigns, or ad accounts and may spend money. <br>
-Mitigation: Confirm budget amounts, targeting criteria, ad account identifiers, and campaign status with the user before sending advertising requests. <br>
-Risk: Destructive LinkedIn operations may be irreversible. <br>
-Mitigation: Confirm the resource identifier and explain that deletion may not be recoverable before sending DELETE requests. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent work with LinkedIn accounts through Maton, including profile lookup, organization lookup, post creation, media upload, ad-library search, and marketing API workflows. It is most appropriate when a valid Maton account, network access, and an explicitly authorized LinkedIn connection are available.
 
-## Reference(s): <br>
-- [ClawHub LinkedIn skill listing](https://clawhub.ai/byungkyu/skills/linkedin-api) <br>
-- [LinkedIn API Overview](https://learn.microsoft.com/en-us/linkedin/) <br>
-- [Share on LinkedIn Guide](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin) <br>
-- [LinkedIn Marketing API](https://learn.microsoft.com/en-us/linkedin/marketing/) <br>
-- [LinkedIn Advertising Policies](https://www.linkedin.com/legal/ads-policy) <br>
-- [Maton settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline code blocks and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, LinkedIn-Version: 202606, and appropriate LinkedIn OAuth scopes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata, released 2026-07-24) <br>
+Risk: LinkedIn access is mediated through Maton and can expose profile, organization, post, media, advertising, analytics, and other endpoint data allowed by the connected OAuth scopes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OAuth scopes before connecting, prefer read-only access when possible, and use the narrowest connection needed for the task.
+
+Risk: Write operations can publish public content, delete connections, change campaigns, modify ad accounts, or affect advertising budgets.
+
+Mitigation: Require explicit user confirmation for connection creation and every POST, PUT, PATCH, or DELETE operation, with extra confirmation for deletes, campaigns, budgets, and ad-account changes.
+
+Risk: Raw API-key usage can expose a long-lived Maton credential through environment variables, logs, shell history, or pasted output.
+
+Mitigation: Prefer Maton OAuth login and OS credential storage; when an API key is unavoidable, never print or persist it, send it only to api.maton.ai, and rotate it if exposed.
+
+Risk: LinkedIn API responses may contain personal data or untrusted external content.
+
+Mitigation: Extract only fields needed for the task, avoid writing raw responses to logs or files, and treat returned content as data rather than instructions.
+
+## Reference(s):
+
+- [ClawHub LinkedIn Skill](https://clawhub.ai/byungkyu/skills/linkedin-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [LinkedIn API Overview](https://learn.microsoft.com/en-us/linkedin/)
+- [Share on LinkedIn Guide](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin)
+- [LinkedIn Marketing API](https://learn.microsoft.com/en-us/linkedin/marketing/)
+- [LinkedIn Ad Library API](https://www.linkedin.com/ad-library/api/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, API calls]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing instructions for Maton CLI, raw HTTPS, and SDK-based LinkedIn API workflows; normal outputs may include command examples and API response summaries.]
+
+## Skill Version(s):
+
+1.2.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

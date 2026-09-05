@@ -1,45 +1,63 @@
-## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Default DCC-MCP router for 35 released creative products and 3 current application routes; it directs agents to typed DCC-MCP tools first and uses the project-owned DCC-CUA route for supported application UI tasks.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+## Use Case:
 
+Developers and automation agents use this skill to discover, route, and call DCC-MCP capabilities for supported creative tools and application UI workflows while preserving explicit boundaries for setup, gateway use, and UI control.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+Risk: The skill can route an agent to control supported creative tools and application UIs, which can change local or external state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve CLI installation, app launches, marketplace install/update/uninstall actions, remote gateway changes, and GitHub feedback filing only after reviewing the exact command or requested action.
+
+Risk: UI automation can encounter authentication, CAPTCHA, purchase, security, or native confirmation boundaries.
+
+Mitigation: Keep those boundaries as human handoff points and stop on interruption, permission failure, stale binding data, or missing post-action readback.
+
+Risk: A zero live-instance result can be mistaken for proof that a product is unsupported or uninstalled.
+
+Mitigation: Use the zero-instance guide to keep catalog support, package installation, project bootstrap, live registration, readiness, and real-host effect evidence separate before any mutation.
+
+## Reference(s):
+
+- [DCC-MCP ClawHub page](https://clawhub.ai/loonghao/skills/dcc-mcp)
+- [DCC-MCP source skill homepage](https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp/SKILL.md)
+- [CLI cheatsheet](references/CLI_CHEATSHEET.md)
+- [Zero instances CLI guide](references/ZERO_INSTANCES_CLI.md)
+- [Local application path cache](references/LOCAL_APP_PATH_CACHE.md)
+- [Released products catalog](references/PRODUCTS.json)
+- [DCC discovery decision schema](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/contracts/dcc-discovery-decision-v1.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Code, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to execute CLI commands, inspect tool schemas, preserve operation identifiers, and request user consent before state-changing actions.]
+
+## Skill Version(s):
+
+0.19.98 (source: server release metadata, skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

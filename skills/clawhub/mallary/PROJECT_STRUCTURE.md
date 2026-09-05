@@ -2,7 +2,17 @@
 
 ## Overview
 
-Mallary CLI is the official command-line interface for the public Mallary API. It is designed for developers, operators, and AI agents that need to automate media uploads, posting, scheduling, analytics, dashboard profile targeting, profile-scoped settings, connected platform listing, webhooks, and platform disconnects.
+Mallary CLI is the official command-line interface for the public Mallary API. This architecture guide starts with read-only inspection paths. It also inventories explicit-request, state-changing code paths later in the document. For an AI agent, an implemented code path is not authorization to suggest or use it.
+
+## Agent Safety Boundary
+
+This file is an architecture inventory, not a workflow recommendation. An AI agent must:
+
+- start with the minimum read-only discovery needed for the user's request
+- never treat a listed command, endpoint, or code path as permission to invoke it
+- avoid suggesting an upload or state-changing command unless the user explicitly asks for that type of action
+- treat a clear request to publish, schedule, upload media for that post, or send a reply as authorization for that action; do not ask for a second confirmation
+- ask only for missing material details, keep the action within the request, run it once, and verify it with a read-only command
 
 ## Directory Structure
 
@@ -11,15 +21,18 @@ cli/
 ├── src/                          # Source code
 │   ├── index.ts                  # CLI entry point
 │   ├── main.ts                   # Command parsing, request handling, rendering
+│   ├── oauth.ts                  # OAuth device flow, refresh, revocation, credential storage
 │   └── version.ts                # Version export
 │
 ├── dist/                         # Build output (generated)
 │   ├── index.js                  # Executable entry
 │   ├── main.js                   # Compiled command logic
+│   ├── oauth.js                  # Compiled OAuth logic
 │   └── version.js                # Compiled version module
 │
 ├── test/                         # CLI tests
-│   └── cli.test.ts               # Command and behavior tests
+│   ├── cli.test.ts               # Command and behavior tests
+│   └── oauth-auth.test.ts        # OAuth, refresh, precedence, and token-safety tests
 │
 ├── package.json                  # Package configuration
 ├── package-lock.json             # npm lockfile
@@ -31,8 +44,8 @@ cli/
 ├── PROFILES.md                   # Profile IDs, scoping, API endpoints, and limits
 ├── PROJECT_STRUCTURE.md          # This file
 ├── FEATURES.md                   # Feature summary
-├── PROVIDER_SETTINGS.md          # Platform-specific posting fields
-├── SUPPORTED_FILE_TYPES.md       # Upload behavior and file types
+├── PROVIDER_SETTINGS.md          # Provider-settings agent safety boundary
+├── SUPPORTED_FILE_TYPES.md       # Read-only media format reference
 └── other supporting .md docs     # Additional usage, workflow, and publishing notes
 ```
 
@@ -49,16 +62,23 @@ cli/
 #### `src/main.ts`
 
 - primary implementation file
-- uses Node’s built-in `parseArgs`
+- uses the built-in `parseArgs` module of Node
 - validates CLI input
 - resolves local media files
 - uploads local files to Mallary
 - sends authenticated requests to the Mallary API
-- renders human output and JSON output
+- shows human output and JSON output
+
+#### `src/oauth.ts`
+
+- starts OAuth device authorization with read, publish, engage, and manage access in one login
+- exchanges and refreshes tokens without printing them
+- revokes OAuth access on logout
+- stores credentials outside the project with restrictive local permissions
 
 #### `src/version.ts`
 
-- exports the CLI version used in help/version output
+- exports the CLI version for the help output and the version output
 
 ### Configuration Files
 
@@ -78,16 +98,16 @@ cli/
 
 #### `README.md`
 
-- authoritative installation and usage documentation
-- includes command examples, payload examples, and platform notes
+- read-only OpenClaw agent overview
+- intentionally omits write commands, payloads, and mutation workflows
 
 #### `SKILL.md`
 
-- condensed reference for AI agents and LLM-driven workflows
+- condensed safety contract and command reference for AI agents and LLM-driven workflows
 
 #### `QUICK_START.md`
 
-- shortest path from install to first post
+- read-only installation, authentication, and discovery guide that routes any requested write to the request-handling rules in `SKILL.md`
 
 #### `PROFILES.md`
 
@@ -143,7 +163,7 @@ Build characteristics:
 ### Command Flow
 
 ```text
-User Input
+Read-only or explicitly requested input
     ↓
 src/index.ts
     ↓
@@ -151,84 +171,50 @@ runCli() in src/main.ts
     ↓
 Argument parsing / validation
     ↓
-Optional local file upload handling
+Optional local file upload handling (user-requested)
     ↓
 Authenticated request to Mallary API
     ↓
 Human output or --json output
 ```
 
-### Available Commands
+### Read-Only Discovery Commands
 
-1. `health`
-   - check Mallary service health
-   - lowest-risk read-only command; does not require authentication
+This is the only command inventory intended for agent discovery. Request the minimum data needed and redact sensitive output before sharing it.
 
-2. `upload <file...>`
-   - create upload URLs
-   - upload local files end-to-end
-   - data-transmitting command: sends local files to Mallary storage/CDN infrastructure, including third-party hosting/CDN providers; confirm the file path and contents before running
+1. `health` - check Mallary service health without authentication
+2. `profiles list` - inspect profile IDs and account structure
+3. `platforms list` - inspect connected-platform state
+4. `posts list` - inspect grouped post history and status
+5. `jobs get <id>` - inspect one job and its result
+6. `analytics list` - inspect available analytics rows
+7. `audience list` - inspect follower and subscriber counts
+8. `settings get` - inspect saved brand configuration
+9. `webhooks list` - inspect configured webhook destinations
 
-3. `posts create`
-   - create or schedule posts
-   - supports flag mode and file mode
-   - publish side effect: creates a real public or scheduled social-media post; do not use as a harmless test
+### Explicit-Request Code Paths (Syntax Intentionally Omitted)
 
-4. `posts list`
-   - list grouped posts
-   - read-only command; output can expose post metadata and profile context, so redact before sharing
+The implementation also contains data-transmitting and state-changing handlers. Their executable CLI syntax is intentionally omitted from this agent-facing architecture guide. Their presence in `src/main.ts` is not permission to suggest or invoke them.
 
-5. `posts delete <id>`
-   - delete queued or scheduled posts
-   - destructive command: permanently removes a queued/scheduled Mallary post/job that has not started publishing; confirm the post ID, profile, and schedule before running
-
-6. `jobs get <id>`
-   - inspect job status and result data
-   - read-only command; output can expose job, post, profile, platform, or provider result metadata
-
-7. `jobs attach-tiktok-url <id> --url <url>`
-   - attach a TikTok post URL for inbox-style TikTok publish flows
-   - state-changing command: records a public TikTok URL against a Mallary job; confirm the job ID and URL before running
-
-8. `analytics list`
-   - fetch analytics rows
-   - read-only command; output can expose account performance and platform metadata
-
-9. `profiles list`
-   - list profiles and their profile IDs
-   - read-only command; output exposes profile IDs and account structure, so minimize and redact
-
-10. `webhooks list|create|delete`
-   - manage webhook endpoints
-   - external data-transmission and destructive commands: create sends future Mallary events to the configured URL; delete removes delivery configuration; confirm the destination URL, events, and webhook ID before running
-
-11. `settings get|update`
-   - read or partially update profile-scoped settings
-   - settings update is account-impacting: can change brand context and AI auto-reply behavior; confirm the target profile and JSON fields before running
-
-12. `platforms list`
-   - list Mallary-supported platforms and show which are connected for a profile
-   - read-only command; output exposes connected-platform state and account labels, so minimize and redact
-
-13. `platforms disconnect <platform>`
-   - disconnect a connected social platform from a profile
-   - destructive/account-impacting command: removes Mallary's ability to post, reply, or fetch analytics for that platform until reconnected; confirm platform and profile before running
+If the user explicitly asks for a state-changing Mallary action, follow the Agent Safety Boundary and `SKILL.md`: use read-only discovery only as needed, ask for missing material details, carry out a clear publishing request without another confirmation, run it once, and verify it with a read-only command.
 
 ## Environment Variables
 
 | Variable | Required | Default | Usage |
 | --- | --- | --- | --- |
-| `MALLARY_API_KEY` | Yes | none | Authentication for all authenticated commands |
+| `MALLARY_API_KEY` | No | stored OAuth | Optional API-key override for CI or other non-interactive environments |
 
 ### Credential Handling
 
-`MALLARY_API_KEY` is a bearer credential that can authorize posting, uploads, webhook changes, settings updates, and platform/account-management actions. Treat it as a secret.
+OAuth is the interactive default. It grants read, publish, engage, and manage access in one login, refreshes automatically, and stores credentials outside the project. Users do not choose scopes. When `MALLARY_API_KEY` is set, it takes precedence over stored OAuth.
 
-- Store keys in a local secret manager, a locked-down untracked env file, or a CI secret store; never commit them to source control.
+`MALLARY_API_KEY` is a bearer credential. It can authorize posts, uploads, webhook changes, settings updates, and account-management actions. Treat it as a secret.
+
+- Store keys in a local secret manager, a locked-down untracked env file, or a CI secret store. Never commit them to source control.
 - Avoid shell-history exposure: do not paste a real key into shared terminals, documentation, tickets, prompts, or screenshots.
-- Do not print keys with `echo`, `printenv`, debug traces, request logs, or CI output; redact all but the last few characters before sharing logs.
-- In CI, pass the key through masked secrets such as `secrets.MALLARY_API_KEY`, disable shell tracing around Mallary commands, and restrict log access.
-- If a key appears in logs, chat, shell history, or a committed file, rotate or revoke it before continuing.
+- Do not print keys with `echo`, `printenv`, debug traces, request logs, or CI output. Redact all characters except the last few before you share logs.
+- In CI, pass the key through masked secrets such as `secrets.MALLARY_API_KEY`. Disable shell tracing around Mallary commands. Restrict log access.
+- If a key appears in logs, chat, shell history, or a committed file, rotate or revoke it before you continue.
 
 ## Dependencies
 
@@ -254,26 +240,26 @@ Human output or --json output
 
 ### With the Mallary API
 
-1. `GET /health`
-2. `POST /api/v1/upload`
-3. `POST /api/v1/post`
-4. `GET /api/v1/posts`
-5. `DELETE /api/v1/posts/{id}`
-6. `GET /api/v1/jobs/{id}`
-7. `POST /api/v1/jobs/{id}/tiktok/post-url`
-8. `GET /api/v1/analytics`
-9. `GET/POST /api/v1/profiles`
-10. `POST /api/v1/profiles/{id}`
-11. `GET/POST/DELETE /api/v1/webhooks`
-12. `GET/POST /api/v1/settings`
-13. `GET /api/v1/platforms`
-14. `POST /api/v1/disconnect`
+Read-only integration endpoints used during discovery:
 
-Profile-aware endpoints accept a public `profile_id` where relevant. Omitting it selects the default Dashboard profile.
+1. `GET /health`
+2. `GET /api/v1/profiles`
+3. `GET /api/v1/platforms`
+4. `GET /api/v1/posts`
+5. `GET /api/v1/jobs/{id}`
+6. `GET /api/v1/analytics`
+7. `GET /api/v1/audience`
+8. `GET /api/v1/settings`
+9. `GET /api/v1/webhooks`
+
+Explicit-request write endpoint paths are intentionally omitted from this agent-facing architecture guide. An endpoint implemented by the API is not authorization to call it.
+
+Profile-aware endpoints accept a public `profile_id`. If you omit it, Mallary selects the default Dashboard profile.
 
 Authentication:
 
-- Bearer token using `MALLARY_API_KEY`
+- Bearer token from stored OAuth or `MALLARY_API_KEY`
+- OAuth device authorization, token refresh, and token revocation use `https://auth.mallary.ai`
 - CLI also sends `x-mallary-client: cli`
 
 ## Publishing
@@ -300,8 +286,11 @@ npm publish --access public
 # Build
 cd cli && npm run build
 
-# Test without API key (should fail for authenticated commands)
+# Test without OAuth or an API key. Authenticated commands must fail
 node dist/index.js posts list
+
+# Test safe OAuth status output
+node dist/index.js auth status
 
 # Test general help
 node dist/index.js --help
@@ -316,10 +305,10 @@ npm test
 
 ## Future Enhancements
 
-- richer command-specific help without requiring auth
-- additional platform-specific helper commands where they make sense
+- more command-specific help without authentication
+- more platform-specific helper commands
 - more structured JSON output for automation-heavy workflows
-- broader CLI-side validation for advanced `platform_options`
+- more CLI-side checks for advanced `platform_options`
 
 ## Support
 

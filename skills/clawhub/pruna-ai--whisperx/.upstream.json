@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/whisperx",
   "slug": "whisperx",
   "ownerHandle": "pruna-ai",
-  "version": "1.0.0",
-  "updatedAt": 1778491857969,
-  "contentHash": "610fe749707b118930b6cd8b50d5cd90bea1f9622aef1113e653f84d35a1ef85",
-  "fetchedAt": "2026-07-26T18:07:13.281Z"
+  "version": "1.0.11",
+  "updatedAt": 1788445387496,
+  "contentHash": "e5f5cdd4ab0d1abfafd6d75f730313f57fc1390fbeccd44073ba6419b84e27b5",
+  "fetchedAt": "2026-09-05T11:26:54.149Z"
 }

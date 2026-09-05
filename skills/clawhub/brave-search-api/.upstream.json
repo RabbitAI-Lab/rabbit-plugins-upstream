@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/brave-search-api",
   "slug": "brave-search-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "c23a6551464cc57e110d62b1e205649f901594b00595c526110571774ed45ae3",
-  "fetchedAt": "2026-07-26T18:27:34.552Z"
+  "version": "1.2.3",
+  "updatedAt": 1788552119065,
+  "contentHash": "71d79573893af60a3cc4f5ff7d5af1dccd471686a13555d32292d950939d2fdb",
+  "fetchedAt": "2026-09-05T11:22:25.530Z"
 }

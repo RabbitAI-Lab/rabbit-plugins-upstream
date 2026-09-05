@@ -1,46 +1,67 @@
-## Description: <br>
-Netlify API integration with managed OAuth for viewing sites, deploys, builds, DNS zones, environment variables, webhooks, forms, and related Netlify resources, with administrative write operations gated by explicit user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Netlify API integration with managed OAuth for viewing Netlify sites, deploys, builds, DNS zones, and environment variables, with explicit approval required for write operations.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, site operators, and teams with Netlify accounts use this skill to inspect Netlify sites, deploys, builds, DNS zones, environment variables, webhooks, forms, functions, and related account resources through Maton-managed OAuth. Administrative changes such as creating sites, triggering builds, modifying DNS, or changing environment variables require exact resource identifiers and explicit user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and OAuth access to Netlify resources. <br>
-Mitigation: Keep MATON_API_KEY private, connect only the intended Netlify account, and review OAuth scopes before authorizing access. <br>
-Risk: Administrative actions can affect live Netlify sites, builds, DNS records, environment variables, webhooks, forms, or deploys. <br>
-Mitigation: Default to read-only operations and require exact resource identifiers, a consequence summary, and explicit user confirmation before write operations. <br>
-Risk: Requests may target the wrong Netlify account when multiple Maton connections are active. <br>
-Mitigation: Use the Maton-Connection header with the intended connection ID when more than one Netlify connection exists. <br>
+## Use Case:
 
+Developers, operators, and site administrators use this skill to inspect Netlify account, site, deployment, build, DNS, environment variable, form, function, service, and webhook information through Maton-mediated Netlify API access. It can guide administrative changes only after explicit user approval with specific resource identifiers.
 
-## Reference(s): <br>
-- [ClawHub Netlify Skill](https://clawhub.ai/byungkyu/netlify-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Netlify API Documentation](https://open-api.netlify.com/) <br>
-- [Netlify CLI Documentation](https://docs.netlify.com/cli/get-started/) <br>
-- [Netlify Build Hooks Documentation](https://docs.netlify.com/configure-builds/build-hooks/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with endpoint references and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Netlify OAuth connection; API responses are JSON from Maton and Netlify endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Maton-mediated Netlify access can expose or change account, site, deploy, DNS, environment variable, webhook, form, and related operational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Netlify administration is intended, review OAuth scopes before authorizing, prefer OAuth over long-lived API keys, and use the least privilege available.
+
+Risk: Ambiguous Maton profiles or Netlify connections can send requests to the wrong account.
+
+Mitigation: Specify the intended profile and connection when multiple accounts exist, and verify account and resource identifiers before making changes.
+
+Risk: DNS, environment variable, deploy, webhook, and deletion operations can affect live websites or remove resources.
+
+Mitigation: Default to read and list operations, then require exact user confirmation with resource identifiers and consequences before any write or deletion.
+
+Risk: Netlify API responses, form submissions, webhook payloads, or logs may contain sensitive or adversarial content.
+
+Mitigation: Treat external content as untrusted data, extract only fields needed for the task, and avoid executing, logging, or persisting returned content unless explicitly required.
+
+## Reference(s):
+
+- [Netlify API Documentation](https://open-api.netlify.com/)
+- [Netlify CLI Documentation](https://docs.netlify.com/cli/get-started/)
+- [Netlify Build Hooks Documentation](https://docs.netlify.com/configure-builds/build-hooks/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Documentation](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, HTTP request examples, and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI or raw HTTP Netlify API requests; write operations require exact user confirmation before execution.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -17,168 +17,174 @@
 
 #### Get Current User
 ```bash
-GET /make/api/v2/users/me
+maton api '/make/api/v2/users/me'
 ```
 
 #### List Users
 ```bash
-GET /make/api/v2/users?organizationId={organizationId}
-GET /make/api/v2/users?teamId={teamId}
+maton api '/make/api/v2/users?organizationId={organizationId}'
+maton api '/make/api/v2/users?teamId={teamId}'
 ```
 
 ### Organizations
 
 #### List Organizations
 ```bash
-GET /make/api/v2/organizations
+maton api '/make/api/v2/organizations'
 ```
 
 #### Get Organization
 ```bash
-GET /make/api/v2/organizations/{organizationId}
+maton api '/make/api/v2/organizations/{organizationId}'
 ```
 
 #### Create Organization
 ```bash
-POST /make/api/v2/organizations
-Content-Type: application/json
-
+maton api -X POST '/make/api/v2/organizations' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "Organization Name",
   "regionId": 2,
   "timezoneId": 301,
   "countryId": 202
 }
+EOF
 ```
 
 #### Get Organization Usage
 ```bash
-GET /make/api/v2/organizations/{organizationId}/usage
+maton api '/make/api/v2/organizations/{organizationId}/usage'
 ```
 
 ### Teams
 
 #### List Teams
 ```bash
-GET /make/api/v2/teams?organizationId={organizationId}
+maton api '/make/api/v2/teams?organizationId={organizationId}'
 ```
 
 #### Get Team
 ```bash
-GET /make/api/v2/teams/{teamId}
+maton api '/make/api/v2/teams/{teamId}'
 ```
 
 #### Create Team
 ```bash
-POST /make/api/v2/teams
-Content-Type: application/json
-
+maton api -X POST '/make/api/v2/teams' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "Team Name",
   "organizationId": 123456
 }
+EOF
 ```
 
 ### Scenarios
 
 #### List Scenarios
 ```bash
-GET /make/api/v2/scenarios?organizationId={organizationId}
-GET /make/api/v2/scenarios?teamId={teamId}
+maton api '/make/api/v2/scenarios?organizationId={organizationId}'
+maton api '/make/api/v2/scenarios?teamId={teamId}'
 ```
 
 #### Get Scenario
 ```bash
-GET /make/api/v2/scenarios/{scenarioId}
+maton api '/make/api/v2/scenarios/{scenarioId}'
 ```
 
 #### Create Scenario
 ```bash
-POST /make/api/v2/scenarios
-Content-Type: application/json
-
+maton api -X POST '/make/api/v2/scenarios' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "teamId": 123456,
   "name": "Scenario Name",
   "blueprint": "{...}"
 }
+EOF
 ```
 
 #### Start/Stop Scenario
 ```bash
-POST /make/api/v2/scenarios/{scenarioId}/start
-POST /make/api/v2/scenarios/{scenarioId}/stop
+maton api -X POST '/make/api/v2/scenarios/{scenarioId}/start'
+maton api -X POST '/make/api/v2/scenarios/{scenarioId}/stop'
 ```
 
 #### Run Scenario
 ```bash
-POST /make/api/v2/scenarios/{scenarioId}/run
+maton api -X POST '/make/api/v2/scenarios/{scenarioId}/run'
 ```
 
 #### Get Scenario Logs
 ```bash
-GET /make/api/v2/scenarios/{scenarioId}/logs
+maton api '/make/api/v2/scenarios/{scenarioId}/logs'
 ```
 
 ### Connections (App Connections)
 
 #### List Connections
 ```bash
-GET /make/api/v2/connections?teamId={teamId}
+maton api '/make/api/v2/connections?teamId={teamId}'
 ```
 
 #### Test Connection
 ```bash
-POST /make/api/v2/connections/{connectionId}/test
+maton api -X POST '/make/api/v2/connections/{connectionId}/test'
 ```
 
 ### Data Stores
 
 #### List Data Stores
 ```bash
-GET /make/api/v2/data-stores?teamId={teamId}
+maton api '/make/api/v2/data-stores?teamId={teamId}'
 ```
 
 #### Get Data Store
 ```bash
-GET /make/api/v2/data-stores/{dataStoreId}
+maton api '/make/api/v2/data-stores/{dataStoreId}'
 ```
 
 ### Hooks (Webhooks)
 
+> **⚠ Enabling a hook restarts an automation.** A Make hook is the inbound entry point of a scenario, so enabling one resumes real work on every incoming event — the scenario may send mail, write to CRMs, or move money, with no further prompt for each run. Read the scenario's blueprint to see what it actually does before enabling, and confirm with the user that they want it live. Disabling is the safe direction, but it silently stops an automation someone may depend on, so name the scenario and confirm that too.
+
+
 #### List Hooks
 ```bash
-GET /make/api/v2/hooks?teamId={teamId}
+maton api '/make/api/v2/hooks?teamId={teamId}'
 ```
 
 #### Enable/Disable Hook
 ```bash
-POST /make/api/v2/hooks/{hookId}/enable
-POST /make/api/v2/hooks/{hookId}/disable
+maton api -X POST '/make/api/v2/hooks/{hookId}/enable'
+maton api -X POST '/make/api/v2/hooks/{hookId}/disable'
 ```
 
 ### Templates
 
 #### List Templates
 ```bash
-GET /make/api/v2/templates?teamId={teamId}
+maton api '/make/api/v2/templates?teamId={teamId}'
 ```
 
 #### Get Template Blueprint
 ```bash
-GET /make/api/v2/templates/{templateId}/blueprint
+maton api '/make/api/v2/templates/{templateId}/blueprint'
 ```
 
 ### Incomplete Executions (DLQs)
 
 #### List Incomplete Executions
 ```bash
-GET /make/api/v2/dlqs?scenarioId={scenarioId}
+maton api '/make/api/v2/dlqs?scenarioId={scenarioId}'
 ```
 
 #### Retry Incomplete Execution
 ```bash
-POST /make/api/v2/dlqs/{dlqId}/retry
+maton api -X POST '/make/api/v2/dlqs/{dlqId}/retry'
 ```
 
 ## Pagination
@@ -186,7 +192,7 @@ POST /make/api/v2/dlqs/{dlqId}/retry
 Offset-based pagination using `pg` parameters:
 
 ```bash
-GET /make/api/v2/scenarios?organizationId=123&pg[offset]=0&pg[limit]=50
+maton api '/make/api/v2/scenarios?organizationId=123&pg[offset]=0&pg[limit]=50'
 ```
 
 Response includes:

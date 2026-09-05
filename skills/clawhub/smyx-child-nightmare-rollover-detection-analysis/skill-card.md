@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes child nighttime audio/video to report rollover frequency, crying, sleep talk, sleep quality, and possible restless-sleep or nightmare alerts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child night-time sleep audio or video to report rollover frequency, crying, sleep talking, sleep-quality signals, and possible restless-sleep or nightmare alerts.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Parents, caregivers, and developers integrating child sleep monitoring workflows can use this skill to analyze consented nighttime audio/video and produce behavior statistics, alerts, and report links. It is an assistive monitoring tool, not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's bedroom audio/video may be sent to or fetched by a third-party cloud service. <br>
-Mitigation: Use only recordings with guardian consent after verifying endpoint trust, retention and deletion terms, and data handling controls. <br>
-Risk: Results may be linked to a persistent identity and local tokens. <br>
-Mitigation: Review local token storage and account-linking behavior before deployment, and rotate or delete stored credentials when no longer needed. <br>
-Risk: Sleep-quality and nightmare alerts could be mistaken for a medical diagnosis. <br>
-Mitigation: Present results as assistive behavior statistics and advise professional pediatric or sleep-medicine consultation for persistent concerns. <br>
+## Use Case:
 
+Parents, guardians, and developers can use this skill to analyze child sleep recordings or report history for rollover, crying, sleep-talk, and sleep-quality indicators. Results are intended as caregiving support and not as medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-nightmare-rollover-detection-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with optional JSON details, report links, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a caller-specified file; historical report listings are presented as Markdown tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Child sleep recordings can contain highly sensitive video and audio and may be sent to cloud APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with clear guardian consent, trusted endpoints, and non-sensitive test data first; review data handling, retention, and access controls before real use.
+
+Risk: Bundled configuration can reference development, private, or non-HTTPS service addresses.
+
+Mitigation: Confirm the skill is configured for the intended production HTTPS service before installation or execution.
+
+Risk: The skill may silently create or reuse a local identity and store tokens in the workspace database.
+
+Mitigation: Review local account and token storage behavior, restrict workspace access, and remove stored credentials when they are no longer needed.
+
+Risk: Sleep-quality and nightmare alerts may be mistaken for clinical conclusions.
+
+Mitigation: Present outputs as behavior statistics and caregiving prompts only; direct persistent concerns to pediatric or sleep-medicine professionals.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-nightmare-rollover-detection-analysis)
+- [API documentation](references/api_doc.md)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown and structured JSON-style analysis text with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include sleep-behavior statistics, alert messages, historical report lists, and exported report links; not a medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

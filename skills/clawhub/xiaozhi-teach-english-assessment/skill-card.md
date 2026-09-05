@@ -1,47 +1,67 @@
-## Description: <br>
-Helps English teachers design CSE-first, CEFR-referenced assessments across listening, speaking, reading, and writing, with learner profiles and intervention guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语综合测评 helps English teachers turn a single test into a four-skill assessment and learner ability profile across listening, speaking, reading, and writing.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers and tutoring teams use this skill to plan four-skill assessments, map learner ability against CSE with CEFR as an international reference, draft learner profiles, and prepare teaching interventions for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student assessment profiles or CEFR/CSE levels could be written into downstream systems without clear confirmation or rollback. <br>
-Mitigation: Use read-only or draft-review mode for student records, anonymize learner identifiers, and require teacher approval of the exact level, profile, and intervention fields before any write-back. <br>
-Risk: Draft assessment guidance could be mistaken for final teacher scoring or ranking. <br>
-Mitigation: Keep outputs as teacher-reviewed assessment frameworks and ability profiles; do not use the skill to rank students or replace teacher scoring decisions. <br>
+## Use Case:
 
+English teachers use this skill to design K12 four-skill assessments, summarize scores and micro-skill strengths or weaknesses, and prepare teaching intervention suggestions. It supports CSE-first level judgment with CEFR used only as an international reference, and it keeps final level decisions with the teacher.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment) <br>
-- [CEFR can-do statements](references/cefr-can-do-statements.md) <br>
-- [CEFR four-skill descriptors](references/cefr-four-skill-descriptors.md) <br>
-- [Four-skill rubric](references/four-skill-rubric.md) <br>
-- [Assessment template](references/assessment-template.md) <br>
-- [Student ability profile template](references/student-ability-profile-template.md) <br>
-- [Intervention suggestion sample](references/intervention-suggestion-sample.md) <br>
-- [English growth archive sample](references/english-growth-archive-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style assessment plans, learner profiles, rubrics, and intervention recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces draft CSE/CEFR mappings, four-skill profiles, and intervention fields for teacher review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Class assessment records and weak-point updates may expose student learning data if stored or shared without consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases instead of real names, review every writeback, and rely on the described delete, pause, and sharing controls.
+
+Risk: Assessment results may be overstated if raw scores are treated as CSE or CEFR levels.
+
+Mitigation: Keep scores as evidence for strengths and weaknesses, and require the teacher to make any level judgment against CSE descriptors with supporting evidence.
+
+Risk: AI-generated assessment items or copied source material may be incorrect or unsuitable for reuse.
+
+Mitigation: Apply the artifact's AI item self-check, mark AI-generated items for teacher verification, and track the copyright status of assessment materials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment)
+- [English comprehensive assessment template](artifact/references/assessment-template.md)
+- [Can-do statements and leveling workflow](artifact/references/cefr-can-do-statements.md)
+- [CEFR four-skill descriptor quick reference](artifact/references/cefr-four-skill-descriptors.md)
+- [Four-skill assessment rubric](artifact/references/four-skill-rubric.md)
+- [Comprehensive assessment sample](artifact/references/comprehensive-assessment-sample.md)
+- [Student ability profile template](artifact/references/student-ability-profile-template.md)
+- [Teaching intervention suggestion sample](artifact/references/intervention-suggestion-sample.md)
+- [English growth archive sample](artifact/references/english-growth-archive-sample.md)
+- [AI item self-check protocol](artifact/shared/ai-item-check.md)
+- [Platform conventions and privacy controls](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured assessment templates and optional workspace update instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include assessment designs, scoring rubrics, learner ability profiles, intervention suggestions, consent-aware writeback notes, and teacher review prompts.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

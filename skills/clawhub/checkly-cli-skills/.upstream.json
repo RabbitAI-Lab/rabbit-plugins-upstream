@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/checkly-cli-skills",
   "slug": "checkly-cli-skills",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784388565653,
-  "contentHash": "7951e83b5943c78dadb9cc097e9b51c5cc88e91e4a2a2df96e9ff81f7fdfaf40",
-  "fetchedAt": "2026-07-26T18:10:52.062Z"
+  "version": "1.0.16",
+  "updatedAt": 1788533256982,
+  "contentHash": "028cb08233e9624151903ef377292cb04c78e2c287b4b6661c39e5c8c259cc4d",
+  "fetchedAt": "2026-09-05T11:23:09.403Z"
 }

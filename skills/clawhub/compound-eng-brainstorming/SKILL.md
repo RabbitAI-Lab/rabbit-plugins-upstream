@@ -5,7 +5,7 @@ description: >-
   Pre-implementation exploration: deep interview, approach comparison, design
   doc. Use when exploring a vague feature idea, clarifying ambiguous
   requirements, or comparing approaches before coding. For the full workflow,
-  use `/ia-brainstorm`.
+  use the ia-brainstorm command (Claude Code).
 ---
 
 # Brainstorming
@@ -48,7 +48,7 @@ Read signals from the user's first message to calibrate communication register:
 
 Adjust question style accordingly. Technical users get architecture-level probing. Non-technical users get experience-level probing. Don't ask about this calibration -- just do it. If signals are ambiguous, default to the vocabulary the user is already using.
 
-**Explore project context first:** Before asking questions, read existing files, docs, and recent commits related to the idea. Understanding what exists prevents asking questions the codebase already answers and grounds the conversation in reality.
+**Explore project context first:** Before asking questions, read existing files, docs, and recent commits related to the idea. Understanding what exists prevents asking questions the codebase already answers and grounds the conversation in reality. When the user's wording conflicts with what the code verifiably does ("the retry queue" when nothing retries; a table or endpoint named that doesn't exist), surface the conflict before treating the wording as settled -- silently adopting either side buries a requirements error.
 
 Ask questions **one at a time** by default. When probing a single dimension (e.g., data model, auth flow), clustering 2-3 related questions together is acceptable.
 
@@ -228,8 +228,8 @@ Present the design doc to the user for approval. The user explicitly confirming 
 
 ## Integration
 
-Brainstorming answers WHAT to build. Planning answers HOW. When brainstorm output exists, `/ia-plan` detects it and skips idea refinement.
+Brainstorming answers WHAT to build. Planning answers HOW. When brainstorm output exists, `/ia-plan` (Claude Code) or the ia-planning skill detects it and skips idea refinement.
 
-- **Next step:** `/ia-plan` (always)
+- **Next step:** planning, always (`/ia-plan` in Claude Code; the `ia-planning` skill elsewhere)
 - **Threat modeling:** when the brainstorm involves auth, payments, external API surfaces, or multi-tenant data, suggest a `ia-security-sentinel` threat model before moving to planning. Catching trust boundary issues at the design stage prevents costly rework.
 - **Predecessor:** user request or ambiguous feature description

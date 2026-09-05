@@ -1,44 +1,65 @@
-## Description: <br>
-Helps teachers design differentiated assignments, scoring rubrics, feedback templates, and follow-up data handoffs from lesson goals and student-learning evidence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs differentiated, time-bounded homework task cards with rubrics, feedback templates, and aggregate completion writeback guidance for teachers.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers use this skill to turn a knowledge point, lesson emphasis, or student-learning summary into leveled homework task cards, scoring criteria, and concise feedback templates. It is intended for teacher review and classroom use, not automatic grading or independent student placement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assignment results sent to student-analysis workflows may contain sensitive student information. <br>
-Mitigation: Confirm organizational permission before sharing de-identified results, and avoid real names, home addresses, parent identities, and individual score comparisons. <br>
-Risk: Leveled assignment output could be mistaken for automatic grading or final placement decisions. <br>
-Mitigation: Use the skill output as teacher-reviewed assignment design and scoring guidance; the artifact states that it outputs rubrics rather than automatic grading. <br>
-Risk: A/B/C differentiated task cards may be unsupported when no student-learning summary is available. <br>
-Mitigation: When student context is unavailable, use the artifact's basic-assignment fallback and label the output as lacking student-learning evidence. <br>
+## Use Case:
 
+Teachers use this skill to turn a topic, class learning profile, or existing assignment into differentiated A/B/C homework cards, scoring rubrics, student feedback, and aggregate completion summaries. It is intended for classroom assignment design, not review scheduling, exam generation, or automated grading.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-assignment-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [assignment-rubric.md](references/assignment-rubric.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text with assignment plans, leveled task cards, rubrics, and feedback templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include A/B/C differentiation, estimated completion time, scoring criteria, de-identified feedback templates, and student-analyzer handoff fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Classroom learning records may be used to design homework and write aggregate completion summaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable parent-facing output and cross-skill sharing only when the relevant consents are present, and keep completion writebacks aggregate and de-identified.
+
+Risk: AI-generated homework items may be incorrect, unsuitable for the declared grade band, or not ready for formal assignment use.
+
+Mitigation: Apply the bundled AI item self-check, label teacher-facing generated items as requiring human validation, and do not place unverified items into formal homework.
+
+Risk: The skill may encounter student crisis disclosures while handling homework feedback or parent-facing summaries.
+
+Mitigation: Stop the homework workflow, follow the crisis exception protocol, contact trusted adults or local emergency channels as appropriate, and avoid storing sensitive details beyond the referral fact.
+
+Risk: Excessive homework volume can displace sleep, movement, or other subjects.
+
+Mitigation: Default to concise assignments, include estimated minutes for every task, and confirm added workload before increasing assignment volume.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-assignment-designer)
+- [Assignment rubric and leveled task card template](artifact/references/assignment-rubric.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [AI item self-check protocol](artifact/shared/ai-item-check.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown task cards, rubrics, feedback templates, and structured workspace-field guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include estimated minutes per task, aggregate completion-summary fields, and teacher-facing labels for AI-generated items requiring human validation.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

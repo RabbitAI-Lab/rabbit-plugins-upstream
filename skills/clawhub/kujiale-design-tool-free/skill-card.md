@@ -1,41 +1,55 @@
-## Description: <br>
-酷家乐设计-免费版 guides an agent through a step-by-step interior-design workflow for confirming floor plans, selecting styles, generating layouts, and producing render or panorama links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+分步式室内设计工具,完成户型确认到渲染出图,适合个人用户快速生成装修方案。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and personal design learners use this skill to preview home-renovation ideas, search or upload floor plans, select basic hard-decoration styles, and request Kujiale-powered layout and rendering outputs through an agent-guided workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks users to provide a Kujiale API token and may handle floor plans or related design data. <br>
-Mitigation: Treat the API token as sensitive, keep it out of shared projects, shell history, logs, and version control, and use the skill only when sharing design data with Kujiale is acceptable. <br>
-Risk: The security summary says the package only contains Markdown instructions and does not provide the runtime scripts referenced by the command examples. <br>
-Mitigation: Confirm or supply the required runtime implementation before executing commands, and review any added scripts before use. <br>
+## Use Case:
 
+External users and developers use this skill to guide an agent through a Chinese-language interior design workflow, including floor plan lookup or upload, style selection, automated layout, rendering, and panorama link generation.
 
-## Reference(s): <br>
-- [Kujiale Skills](https://www.kujiale.com/skills) <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/kujiale-design-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples, shell command examples, and structured JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent-facing workflow steps and expected response fields; the release evidence indicates missing runtime scripts must be supplied by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill asks users to run local scripts that are not bundled in the artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the local ./scripts/*.js files before installation or execution, and use the skill only in a clean project where those scripts are trusted.
+
+Risk: The workflow requires an access token and mentions a local .kjlconfig.json file.
+
+Mitigation: Prefer a managed secret or environment variable, add local config files to .gitignore, restrict file permissions, and avoid passing long-lived tokens as command-line arguments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/kujiale-design-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Kujiale skills page](https://www.kujiale.com/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to call local Node.js scripts and handle access tokens for the Kujiale design workflow.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-文件浏览器(免费版) helps an agent browse directories, preview text files, search filenames and file contents, and perform basic local file operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+文件浏览器(免费版) helps agents browse directories, preview text files, search file names and contents, and perform basic local file-management operations.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users and developers use this skill to inspect local directories, preview text files, search files, and perform basic copy, move, delete, rename, and directory-creation tasks through an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide broad local file actions, including delete, move, copy, overwrite, and cross-filesystem operations. <br>
-Mitigation: Use explicit paths, keep backups, avoid sensitive directories, and require manual confirmation before destructive or recursive operations. <br>
-Risk: Shell commands or file-management guidance may modify files reachable by the agent's local permissions. <br>
-Mitigation: Review commands before execution and run the agent in the least-privileged workspace that still supports the task. <br>
-Risk: Directory browsing, text preview, and search can expose sensitive local content. <br>
-Mitigation: Limit searches to intended folders and avoid using the skill on directories containing secrets, credentials, or private data. <br>
+## Use Case:
 
+External users, developers, and automation teams use this skill for lightweight local file browsing, text preview, simple search, and basic file organization tasks. It is best suited to scoped workspace file management rather than unrestricted system-wide operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/file-browser-tool-free) <br>
-- [Detailed reference](references/detail.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell commands, Python snippets, and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include file paths, status messages, execution logs, and local filesystem operation results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: The skill enables broad command-driven local file mutation, including deletion and cross-filesystem moves, without clear workspace limits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit use to a specific workspace, avoid sensitive directories, and require explicit confirmation before move, delete, rename, or copy operations.
+
+Risk: The skill text should not be treated as a complete safety boundary for shell-based file operations.
+
+Mitigation: Rely on host agent sandboxing, permission controls, and pre-execution review for file-management commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/file-browser-tool-free)
+- [Detailed Reference](artifact/references/detail.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell and Python code examples; runtime results are text or status output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read, move, copy, create, or delete local files when the host agent has permission; no API key is required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

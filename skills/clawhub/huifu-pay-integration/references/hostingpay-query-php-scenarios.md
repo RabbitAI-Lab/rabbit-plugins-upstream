@@ -2,6 +2,8 @@
 
 本文件覆盖托管支付查询、关单与对账的 PHP 调用方式。
 
+> 真实请求只使用官方 PHP SDK 的 `BsPayClient::postRequest()`；不得改写 Guzzle、curl 或自实现 HTTP+签名客户端。联调/生产仍须满足共享凭据边界和 DEBUG 硬检查点。
+
 ## 目录
 
 - 交易查询
@@ -29,7 +31,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentQueryorderinfoReque
 use BsPaySdk\request\V2TradeHostingPaymentQueryorderinfoRequest;
 
 $request = new V2TradeHostingPaymentQueryorderinfoRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -40,6 +42,7 @@ $result = $client->postRequest([
     ],
 ]);
 
+$result = $client->postRequest($requestShape);
 $response = $result->getRspDatas()['data'] ?? [];
 $transStat = $response['trans_stat'] ?? 'P';
 ```
@@ -64,7 +67,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentSplitpayQueryReques
 use BsPaySdk\request\V2TradeHostingPaymentSplitpayQueryRequest;
 
 $request = new V2TradeHostingPaymentSplitpayQueryRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -75,8 +78,19 @@ $result = $client->postRequest([
     ],
 ]);
 
+$result = $client->postRequest($requestShape);
 $response = $result->getRspDatas()['data'] ?? [];
-$transList = $response['trans_list'] ?? [];
+$transListRaw = $response['trans_list'] ?? null;
+if ($transListRaw === null || $transListRaw === '') {
+    $transList = [];
+} elseif (!is_string($transListRaw)) {
+    throw new UnexpectedValueException('trans_list 必须是 String(JSON Array)');
+} else {
+    $transList = json_decode($transListRaw, true, 512, JSON_THROW_ON_ERROR);
+    if (!is_array($transList) || array_values($transList) !== $transList) {
+        throw new UnexpectedValueException('trans_list 解码后必须是 JSON 数组');
+    }
+}
 ```
 
 用途：
@@ -89,6 +103,7 @@ $transList = $response['trans_list'] ?? [];
 1. 这是拆单支付订单查询，不是普通托管 `queryorderinfo`。
 2. `org_req_date` 和 `org_req_seq_id` 必须来自原拆单支付请求落库字段。
 3. `order_stat` 是订单级状态，不能替代子交易 `trans_list[].trans_stat`。
+4. `trans_list` 在线上响应中是 `String(JSON Array)`；必须先验证字符串并解码成列表，再逐条读取，不能用数组默认值掩盖未解码报文。
 
 ## 交易关单
 
@@ -98,7 +113,7 @@ require_once HUIFU_SDK_ROOT . '/request/V2TradeHostingPaymentCloseRequest.php';
 use BsPaySdk\request\V2TradeHostingPaymentCloseRequest;
 
 $request = new V2TradeHostingPaymentCloseRequest();
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -108,6 +123,8 @@ $result = $client->postRequest([
         'org_req_seq_id' => $order->getReqSeqId(),
     ],
 ]);
+$result = $client->postRequest($requestShape);
+$response = $result->getRspDatas()['data'] ?? [];
 ```
 
 用途：
@@ -125,7 +142,7 @@ use BsPaySdk\request\V2TradeCheckFilequeryRequest;
 $request = new V2TradeCheckFilequeryRequest();
 $tradeDate = new DateTimeImmutable('-1 day');
 $fileDate = $tradeDate->modify('+1 day')->format('Ymd');
-$result = $client->postRequest([
+$requestShape = (static function (array $request): array { return $request; })([
     'funcCode' => $request->getFunctionCode(),
     'params' => [
         'req_date' => date('Ymd'),
@@ -136,6 +153,7 @@ $result = $client->postRequest([
     ],
 ]);
 
+$result = $client->postRequest($requestShape);
 $response = $result->getRspDatas()['data'] ?? [];
 $fileDetails = $response['file_details'] ?? [];
 $downloadUrl = $fileDetails[0]['download_url'] ?? '';

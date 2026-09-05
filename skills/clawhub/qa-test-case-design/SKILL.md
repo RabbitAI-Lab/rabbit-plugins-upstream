@@ -1,8 +1,11 @@
 ---
 name: qa-test-case-design
-version: 1.6.0
+slug: qa-test-case-design
+displayName: 测试用例设计
+version: 1.7.5
 description: >-
   当所有分析（需求解构、场景树、边界清单、组合矩阵）都已完成，需要把分析结果转化为结构化的测试用例时使用此技能。专注用例结构规范、分类体系、覆盖策略和优先级编排。不要在分析还没做完时就跳到用例生成——没有充分的输入，用例一定是泛泛的。适用于将前面的分析产出物整合为 P0-P3 分级、可追溯的标准格式测试用例。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"设计测试用例"、"用例评审"、"用例覆盖"、"测试用例设计"、"用例模板"、"用例规范"、"用例格式"、需要测试用例结构指导、需要编写或规范测试用例时
 allowed-tools: Read Grep Glob
@@ -36,6 +39,8 @@ input_format:
       description: 业务目标和用户角色
 output_format:
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - test_case_id: "TC_模块_功能_序列"
     - test_type: "功能/性能/安全/兼容性"
     - priority: "P0/P1/P2/P3"
@@ -44,9 +49,9 @@ output_format:
     - test_steps: "留空（用户补充）"
     - expected_results: "预期结果"
   traceability:
-    - 每个用例带唯一ID（TC-XXXX）
-    - 关联需求ID（REQ-XXXX）
-    - 关联场景ID（SC-XXXX）
+    - 每个用例带唯一ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
+    - 关联需求ID（TC_{需求模块缩写}_{功能缩写}_{序号}）
+    - 关联场景ID（TC_{场景模块缩写}_{功能缩写}_{序号}）
 depth_requirement_quantification:
   reference_value: "根据需求复杂度调整用例设计深度：简单×2/中等×3/复杂×4"
   minimum: "用例总数不低于需求点的3倍"
@@ -55,6 +60,8 @@ error_recovery_guidance:
   on_failure: "用例设计遗漏维度时回退到边界分析和场景树补充"
   retry_behavior: "补充上游后重新设计用例"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 高级测试用例设计专项
 
 ## 核心原则

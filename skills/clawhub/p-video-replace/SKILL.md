@@ -3,7 +3,7 @@ name: p-video-replace
 description: Use when someone wants to swap a person, outfit, or product inside existing footage while keeping the camera move and audio.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.11"
   package: pruna-skills
   pruna_model: p-video-replace
 ---
@@ -24,7 +24,7 @@ Follow each skill's **Before generating** / craft sections — do not restate gu
 
 ## Agent habit
 
-In the **first reply**, name `` `p-video-replace` `` in backticks, confirm `PRUNA_API_KEY` (or stop with signup links from `pruna-api`), then ask for required inputs. Draft swaps with **Prompt craft (dynamic + faithful)** — do not paste skill examples. Redirect when **When NOT to use** fits better.
+In the **first reply**, name `` `p-video-replace` `` in backticks, confirm `PRUNA_API_KEY` (or stop with signup links from `pruna-api`), then ask for required inputs. Open intake → **`generation-diversity`** clarification intake before the first `POST`. Draft swaps with **Prompt craft (dynamic + faithful)** — do not paste skill examples. Redirect when **When NOT to use** fits better.
 
 ## Prompt craft (dynamic + faithful)
 
@@ -41,14 +41,15 @@ In the **first reply**, name `` `p-video-replace` `` in backticks, confirm `PRUN
 
 ## Skill boundary
 
-| | **p-video-replace** | **p-video-animate** |
-|---|---------------------|---------------------|
-| **User question** | *Replace this person in this video?* | *Animate this picture with some motion?* |
-| **Goal** | Swap identity **into** existing footage | Drive a **still** with motion from another clip |
-| **Source video** | The **final scene** | A **motion template** only |
-| **Reference images** | **`images`** — **1 to 4** in **one** call | **`image`** — **one** subject per call |
+| | **p-video-replace** | **p-video-edit** | **p-video-animate** |
+|---|---------------------|------------------|---------------------|
+| **User question** | *Replace this person in this video?* | *Change the color / environment / object / text / lighting in this clip?* | *Animate this picture with some motion?* |
+| **Goal** | Swap identity **into** existing footage | Instruction edit of the **source clip** | Drive a **still** with motion from another clip |
+| **Source video** | The **final scene** | The **scene to edit** (≤15s) | A **motion template** only |
+| **Reference images** | Required **`images`** — **1 to 4** | Optional **`images`** — **0 to 4** | **`image`** — **one** subject per call |
+| **Prompt field** | **`instruction_prompt`** | **`prompt`** | Optional **`instruction_prompt`** |
 
-**Use `p-video-animate`** when the user has a still and wants it to **perform** from a separate template video.
+**Use `p-video-edit`** for prompt-driven attribute, environment, object, text, or lighting edits. **Use `p-video-animate`** when the user has a still and wants it to **perform** from a separate template video.
 
 ## When NOT to use
 
@@ -56,6 +57,7 @@ Use a different skill instead:
 
 | Skill | Description | Install |
 | --- | --- | --- |
+| `p-video-edit` | Use when someone wants to edit an existing video with a text instruction — recolor, restyle, remove or add objects, change environment or lighting, update on-screen text, or apply optional reference-guided product and accessory edits. Not for a new clip from scratch or ffmpeg assembly. | `npx skills add PrunaAI/pruna-skills@p-video-edit -y` |
 | `p-video-animate` | Use when someone wants a photo to move like another video — motion transfer, dance remixes, or performance variations from a template clip. | `npx skills add PrunaAI/pruna-skills@p-video-animate -y` |
 | `p-video-avatar` | Use when someone wants a person on camera speaking a script — lip-synced host, spokesperson, or narrated avatar from a portrait photo. | `npx skills add PrunaAI/pruna-skills@p-video-avatar -y` |
 
@@ -148,7 +150,7 @@ Common follow-ons after this skill:
 | Skill | Description | Install |
 | --- | --- | --- |
 | `p-video-animate` | Use when someone wants a photo to move like another video — motion transfer, dance remixes, or performance variations from a template clip. | `npx skills add PrunaAI/pruna-skills@p-video-animate -y` |
-| `p-image` | Use when someone wants a fast AI image — product shots, hero visuals, mood boards, or draft photos from a text prompt. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
+| `p-image` | Use when someone explicitly wants the fastest, cheapest photo generation — mood boards, bulk panels, or quick iterations — not when controlled photoreal or in-image text is needed. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
 | `p-image-edit` | Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. | `npx skills add PrunaAI/pruna-skills@p-image-edit -y` |
 | `video-editing` | Use when assembling or polishing already-rendered clips with ffmpeg — concat, crossfades, burned captions and subtitles, text/logo overlays, before/after sliders, background music beds, platform export — or when composing a multi-layer HTML combination video with Hyperframes. Not for AI video generation, prompt craft, or model-based video edits. | `npx skills add PrunaAI/pruna-skills@video-editing -y` |
 

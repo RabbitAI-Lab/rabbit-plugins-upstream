@@ -1,39 +1,57 @@
-## Description: <br>
-Helps QA teams design layered, risk-based test strategies for new projects, iterations, refactors, and urgent fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners design a risk-based, layered test strategy for new projects, iterations, refactors, or urgent fixes, including scope, testing methods, entry and exit criteria, tool choices, risk matrices, and graded test plans.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to turn risk assessments and requirement analysis into an actionable test strategy covering scope, layered test approach, resource allocation, and entry and exit criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad Chinese testing-planning phrases, which may produce a test strategy when the request is not actually about QA strategy. <br>
-Mitigation: Confirm that the user is asking for test strategy design before relying on the generated plan. <br>
-Risk: Generated release, CI/CD, and testing recommendations could be mistaken for approved operational actions. <br>
-Mitigation: Treat outputs as planning guidance only and review them before any release decision, pipeline change, or production action. <br>
+## Use Case:
 
+QA engineers, developers, and delivery teams use this skill when they need to decide what to test, what not to test, and why before a project launch or iteration. It turns risk assessment, requirement analysis, project timing, and resource constraints into a layered test strategy with scope, resource allocation, and entry and exit criteria.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy document with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs risk matrices, strategy IDs, requirement traceability, scope definitions, test approach guidance, resource plans, and entry and exit criteria.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: The skill may trigger on broad QA planning language and produce guidance beyond the user's intended scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the project context, risk inputs, and expected strategy depth before relying on the output.
+
+Risk: CI/CD and release references could be mistaken for authorization to change pipelines or release processes.
+
+Mitigation: Treat those references as planning guidance only and require explicit authorization before pipeline or release changes.
+
+Risk: The standalone skill notes that full workflow coverage depends on a separate QA skill set.
+
+Mitigation: Install or consult the broader QA Test Skills workflow when upstream risk assessment or requirement decomposition is needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-strategy-design)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown strategy document with structured tables and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include a risk matrix, layered test strategy, scope definition, testing-method selection, resource allocation, entry and exit criteria, and a fixed-column test-case table.]
+
+## Skill Version(s):
+
+1.7.6 (source: ClawHub release metadata; artifact frontmatter shows 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

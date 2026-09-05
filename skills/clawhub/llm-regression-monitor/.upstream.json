@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/llm-regression-monitor",
   "slug": "llm-regression-monitor",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1778492243485,
-  "contentHash": "f097351864373a1a08606b35e236dd0142afa95bc9516f016520eaefd1cce4d9",
-  "fetchedAt": "2026-07-26T19:45:33.058Z"
+  "version": "1.1.0",
+  "updatedAt": 1788323311836,
+  "contentHash": "61acbda6a629ccd6d24e621818da71b39ae1fab1ba0e1a8eb0bac07ec1165baf",
+  "fetchedAt": "2026-09-05T11:32:08.368Z"
 }

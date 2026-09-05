@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>user-research-assistant 功能与样例说明</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Microsoft YaHei", "SimSun", "PingFang SC", sans-serif;
+    color: #2f3b34;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .page { width: 210mm; min-height: 297mm; padding: 22mm 20mm 24mm; page-break-after: always; position: relative; }
+  .page:last-child { page-break-after: auto; }
+  .footer { position: absolute; bottom: 10mm; left: 20mm; right: 20mm; font-size: 10px; color: #9aa8a0; border-top: 0.5px solid #dde5df; padding-top: 4px; text-align: center; }
+
+  /* 封面 */
+  .cover { background: linear-gradient(155deg, #1f2a3a 0%, #35506b 55%, #4f7a9e 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; padding: 32mm 26mm; }
+  .cover .tag { display: inline-block; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.35); border-radius: 24px; padding: 4px 16px; font-size: 12px; letter-spacing: 3px; align-self: flex-start; margin-bottom: 14mm; }
+  .cover h1 { font-size: 40px; font-weight: 700; letter-spacing: 3px; margin-bottom: 7mm; }
+  .cover .sub { font-size: 18px; opacity: 0.95; margin-bottom: 18mm; line-height: 1.9; }
+  .cover .meta { font-size: 13px; opacity: 0.82; line-height: 2.1; }
+  .cover .badge-row { margin-top: 20mm; display: flex; gap: 6mm; }
+  .cover .badge { background: rgba(255,255,255,0.12); border-radius: 10px; padding: 9px 16px; font-size: 12px; text-align: center; line-height: 1.6; }
+
+  h2 { font-size: 23px; color: #1f2a3a; border-left: 6px solid #4f7a9e; padding-left: 12px; margin-bottom: 6mm; }
+  h2 .en { font-size: 12px; color: #8aa0b2; font-weight: 400; margin-left: 10px; letter-spacing: 2px; }
+  h3 { font-size: 16px; color: #35506b; margin: 6mm 0 3.5mm; }
+  p { margin-bottom: 4mm; text-align: justify; }
+  ul, ol { margin: 0 0 5mm 7mm; }
+  li { margin-bottom: 1.8mm; }
+
+  .card { background: #f2f6fa; border: 1px solid #d5e0ea; border-radius: 12px; padding: 4.6mm 6.5mm; margin-bottom: 3.4mm; }
+  .card b { color: #3a6a8c; }
+  .card .num { display: inline-block; background: #4f7a9e; color: #fff; border-radius: 50%; width: 22px; height: 22px; text-align: center; line-height: 22px; font-size: 12px; margin-right: 8px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 3mm 0 5mm; font-size: 12.3px; }
+  th { background: #35506b; color: #fff; padding: 5px 8px; text-align: left; font-weight: 600; }
+  td { border: 1px solid #d5e0ea; padding: 5px 8px; vertical-align: top; }
+  tr:nth-child(even) td { background: #f6f9fb; }
+
+  .phase { display: flex; gap: 4mm; margin-bottom: 1.7mm; align-items: flex-start; }
+  .phase-num { flex: 0 0 10.5mm; height: 10.5mm; background: #4f7a9e; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .phase-body { flex: 1; background: #f6f9fb; border: 1px solid #dce5ec; border-radius: 10px; padding: 2.5mm 4mm; }
+  .phase-body b { color: #35506b; }
+
+  /* 聊天气泡 */
+  .chat { margin: 3mm 0 4mm; }
+  .msg { display: flex; margin-bottom: 3.5mm; align-items: flex-start; }
+  .avatar { flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; margin-top: 2px; }
+  .u-av { background: #e8f0f5; }
+  .c-av { background: #e9f0f6; }
+  .bubble { max-width: 80%; border-radius: 12px; padding: 4mm 5.5mm; font-size: 13px; line-height: 1.75; }
+  .u .bubble { background: #eef3f6; border: 1px solid #dde7ec; margin-left: 12px; border-top-left-radius: 4px; }
+  .c .bubble { background: #eff4f9; border: 1px solid #d6e3ee; margin-right: 12px; border-top-right-radius: 4px; }
+  .msg .name { font-size: 10.5px; color: #8aa0b2; margin-bottom: 2px; }
+  .c .name { text-align: right; }
+  .c { flex-direction: row-reverse; }
+
+  .note { font-size: 12px; color: #5d6f7e; background: #f3f7fa; border-radius: 8px; padding: 3.5mm 5mm; margin: 3mm 0 4mm; }
+  .danger { background: #fdf4f2; border: 1px solid #eccbc4; border-radius: 12px; padding: 6mm 7mm; }
+  .danger h3 { color: #b04a3a; margin-top: 0; }
+
+  .code { background: #1f2a3a; color: #e8eef4; border-radius: 10px; padding: 5.5mm 6.5mm; font-family: "Consolas", "Courier New", monospace; font-size: 12.5px; line-height: 2; margin: 4mm 0 5mm; }
+  .code .cm { color: #8fa3b8; }
+
+  .filetree { background: #f6f9fb; border: 1px solid #dce5ec; border-radius: 10px; padding: 6mm 7mm; font-family: "Consolas", "Courier New", monospace; font-size: 12.8px; line-height: 2; }
+  .filetree .dir { color: #3a6a8c; font-weight: 700; }
+  .filetree .cm { color: #8aa0b2; }
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<div class="page cover">
+  <span class="tag">OPENCLAW SKILL · 功能与样例说明</span>
+  <h1>user-research-assistant</h1>
+  <div class="sub">用户研究助手<br>心理学 × UX × 科研方法</div>
+  <div class="meta">
+    技能名称：user-research-assistant（用户研究助手）<br>
+    版本：1.0.0 ｜ 语言：中文 ｜ 平台：OpenClaw / ClawHub<br>
+    文档日期：2026 年 8 月
+  </div>
+  <div class="badge-row">
+    <div class="badge">🔬 研究方法<br>访谈/问卷/测试</div>
+    <div class="badge">📐 心理测量<br>信度效度审查</div>
+    <div class="badge">🧩 UX 研究<br>可用性测试</div>
+    <div class="badge">📊 数据与报告<br>编码/主题/洞察</div>
+  </div>
+</div>
+
+<!-- ============ 1 技能简介 ============ -->
+<div class="page">
+  <h2>一、技能简介<span class="en">WHAT IT IS</span></h2>
+  <p><b>user-research-assistant</b> 让 OpenClaw 能以「用户研究方法顾问」的身份与用户对话。它把深度访谈、问卷设计与心理测量、可用性测试、定性/定量分析等专业方法论，转化为一套可执行的协助流程：把模糊的"我想研究 xxx"一步步变成<b>可回答的研究问题 → 合适的方法 → 可直接使用的研究工具（访谈提纲/问卷/测试脚本）→ 数据分析路径 → 有依据的结论与建议</b>。</p>
+
+  <h3>设计目标</h3>
+  <div class="card"><b>问题先行：</b>不急着给工具，先把研究问题定清楚——方法服务于问题。</div>
+  <div class="card"><b>专业深度：</b>肚子里有真方法论（心理测量、访谈技术、可用性工程），不是套模板。</div>
+  <div class="card"><b>可落地：</b>交付物是能直接用的工件：提纲、问卷、审查报告、测试脚本、报告骨架。</div>
+  <div class="card"><b>诚实边界：</b>不编造数据、不假装分析、不替代统计软件与伦理审查。</div>
+
+  <h3>理论依据（均出自专业文献）</h3>
+  <ul>
+    <li>访谈研究：Kvale &amp; Brinkmann（2009）《InterViews》；阶梯法 Reynolds &amp; Gutman（1988）</li>
+    <li>质性研究方法（中文）：陈向明（2000）《质的研究方法与社会科学研究》</li>
+    <li>主题分析：Braun &amp; Clarke（2006, 2021）</li>
+    <li>问卷设计：Dillman et al.（2014）；Krosnick &amp; Presser（2010）；Tourangeau et al.（2000）</li>
+    <li>量表开发与信效度：DeVellis &amp; Thorpe（2021）八步；Nunnally &amp; Bernstein（1994）；Cronbach（1951）</li>
+    <li>可用性：Nielsen（1993）；Nielsen &amp; Landauer（1993）；Brooke（1996）SUS；ISO 9241-11</li>
+    <li>样本量：Guest et al.（2006）；Hennink &amp; Kaiser（2022）；Cochran（1977）；Cohen（1988）</li>
+    <li>研究伦理：Belmont Report（1979）</li>
+  </ul>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 2 页</div>
+</div>
+
+<!-- ============ 2 核心功能 ============ -->
+<div class="page">
+  <h2>二、核心功能<span class="en">FEATURES</span></h2>
+  <div class="card"><span class="num">1</span><b>研究问题澄清</b>：把"我想研究 xxx"变成可回答的研究问题（对象 + 现象 + 情境 + 指标），并逼出"答案用来做什么决定"。</div>
+  <div class="card"><span class="num">2</span><b>方法选型决策</b>：按问题类型（探索/描述/解释/评估）、研究阶段、资源，给访谈/问卷/可用性测试/日记法的决策矩阵。</div>
+  <div class="card"><span class="num">3</span><b>半结构化访谈提纲</b>：开场暖场 → 宽泛开场 → 关键问题 → 追问库（阶梯法）；八类问题对照（行为/故事/感官/情绪/认知/态度/动机），不诱导、不问双重问题、不用术语。</div>
+  <div class="card"><span class="num">4</span><b>问卷设计与逐题审查</b>：10 项审查清单（双重否定、诱导、术语、同意偏差、选项穷尽、锚点一致等），逐题指出问题并给改写。</div>
+  <div class="card"><span class="num">5</span><b>心理测量与信效度方案</b>：构念题量、反向计分、Cronbach's α / McDonald's ω、EFA/CFA、DeVellis 八步量表开发。</div>
+  <div class="card"><span class="num">6</span><b>可用性测试方案</b>：think-aloud 协议、任务场景设计、SUS 计分、5 用户法则的适用边界（定性发现 vs 定量指标）。</div>
+  <div class="card"><span class="num">7</span><b>定性分析指引</b>：编码 → Braun &amp; Clarke 六阶段主题分析 / KJ 亲和图 → 编码者间信度（Cohen's κ）→ 证据-洞察-建议。</div>
+  <div class="card"><span class="num">8</span><b>样本量与报告</b>：样本量估算公式与经验值（明确标注性质）、报告骨架、数据卫生与偏差声明。</div>
+  <div class="card"><span class="num">9</span><b>伦理与诚实边界</b>：知情同意、隐私脱敏、拒绝编造数据、明确不替代统计软件与伦理审查。</div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 3 页</div>
+</div>
+
+<!-- ============ 3 工作流程 ============ -->
+<div class="page">
+  <h2>三、工作流程<span class="en">WORKFLOW</span></h2>
+  <p>一次完整的研究协助按以下结构推进，核心原则：先澄清问题，再给工具，一次只推进一步。</p>
+
+  <div class="phase"><div class="phase-num">0</div><div class="phase-body"><b>伦理与边界筛查</b>——知情同意与脱敏提醒；发现"想编数据"立即拒绝并给合规替代。</div></div>
+  <div class="phase"><div class="phase-num">1</div><div class="phase-body"><b>研究问题澄清</b>（最关键）——从泛泛而谈落到一句可回答的研究问题。</div></div>
+  <div class="phase"><div class="phase-num">2</div><div class="phase-body"><b>方法选型</b>——按问题类型、阶段、资源选方法，不默认"先做个问卷"。</div></div>
+  <div class="phase"><div class="phase-num">3</div><div class="phase-body"><b>访谈提纲设计</b>——半结构化四段结构 + 八类问题对照 + 追问库 + 不诱导审查。</div></div>
+  <div class="phase"><div class="phase-num">4</div><div class="phase-body"><b>问卷设计与心理测量审查</b>——构念 → 量表 → 题项 → 逐题 10 项审查 → 信效度方案。</div></div>
+  <div class="phase"><div class="phase-num">5</div><div class="phase-body"><b>可用性测试方案</b>——think-aloud、任务场景、SUS、样本量边界。</div></div>
+  <div class="phase"><div class="phase-num">6</div><div class="phase-body"><b>数据分析指引</b>——定性（编码/主题）与定量（信度/检验选型）路径，不替用户跑分析。</div></div>
+  <div class="phase"><div class="phase-num">7</div><div class="phase-body"><b>报告产出</b>——背景 → 方法 → 结果 → 洞察与建议 → 局限；每条建议对应一条证据。</div></div>
+
+  <h3>技术选型速查</h3>
+  <table>
+    <tr><th style="width:42%">用户状况</th><th>首选回应</th></tr>
+    <tr><td>"我想研究 xxx / 做个调研"（问题模糊）</td><td>研究问题澄清，先缩小再谈方法</td></tr>
+    <tr><td>"帮我设计一份问卷"（默认问卷）</td><td>先问研究问题与决策场景，必要时建议访谈替代</td></tr>
+    <tr><td>问卷题项质量存疑</td><td>10 项逐题审查清单 + 心理测量原则</td></tr>
+    <tr><td>"访谈问什么好"</td><td>半结构化提纲（八类问题）+ 不诱导原则 + 阶梯追问</td></tr>
+    <tr><td>"想快速收集多人观点碰撞"</td><td>焦点小组（8-12 人，防从众/领导效应）</td></tr>
+    <tr><td>"测一下这个 App 好不好用"</td><td>可用性测试：think-aloud + 任务场景 + SUS</td></tr>
+    <tr><td>一堆访谈记录不会分析</td><td>编码 → 主题分析 / 亲和图 → 洞察</td></tr>
+    <tr><td>"帮我编点数据 / 结果"</td><td>明确拒绝：结果必须来自真实数据</td></tr>
+    <tr><td>涉及真实用户 / 隐私</td><td>知情同意、脱敏、学校伦理审查提醒</td></tr>
+  </table>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 4 页</div>
+</div>
+
+<!-- ============ 4 样例对话 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程<span class="en">SAMPLE CHAT</span></h2>
+  <p>以下为教学示范对话：学生小周要做课程作业"大学生使用 AI 学习工具的体验"，助手陪他走完"研究问题澄清 → 方法选型 → 访谈提纲 → 问卷审查 → 数据分析 → 报告骨架"。</p>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">我想研究大学生用 AI 学习工具的体验，老师说要做一个用户研究，但我完全不知道从哪开始。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">那我们先从最值钱的一步开始：把"研究什么"定清楚。你拿到这个研究结果之后，最想回答的一个具体问题是什么？</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">就是……大家用得怎么样？好不好用？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">"好不好用"有点大，我们缩小一点：你更想知道大家用得顺不顺手，还是更想知道他们为什么用、为什么又不用？</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">后者吧，感觉更有意思，老师也说用户体验不只是好用。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">好，那我们把问题写成一句能研究的话：大学生在完成作业、复习等学习任务时，使用 AI 工具的真实行为是什么，什么促使他们持续使用，什么让他们放弃？这个版本你认吗？</div></div></div>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 5 页</div>
+</div>
+
+<!-- ============ 5 样例对话 续 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程（续）<span class="en">SAMPLE CHAT II</span></h2>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">认。但我怎么知道该用问卷还是访谈？我本来想直接发问卷的。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">你这个问题是探索性的——问卷适合验证你已经猜到的，不适合发现你没想到的。建议先访谈 8-10 个人把情况摸清，访谈完你才知道问卷该问什么。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">有道理。那访谈提纲怎么设计？我怕问得很干。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">半结构化提纲按四段走：开场暖场、宽泛开场、关键问题、收尾。先聊聊你自己：你最近一次用 AI 工具学习，是什么时候？当时在做什么任务？</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">昨天写课程论文大纲的时候。先让它给我列个框架，我再自己改。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">这就是一条很好的开场问题，让用户讲故事。关键问题我们定三个：一，你一般什么时候会想到用它，什么时候不会？二，它给你的回答，你怎么判断能不能信？三，有没有哪次你用完之后决定再也不用了？</div></div></div>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 6 页</div>
+</div>
+
+<!-- ============ 6 样例对话 续2 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程（续）<span class="en">SAMPLE CHAT III</span></h2>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">第三个好，肯定有故事。但"你怎么判断能不能信"是不是有点难答？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">所以关键问题后面要配追问库，把抽象的变成具体的：能举个例子吗？那次它答错了，你什么感觉？</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">懂了。我还有个担心：我朋友都说"AI 让我变懒了"，我直接问"你是不是变懒了"，是不是不太好？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">对，这是诱导性问题——你已经把答案塞进问题里了。可以换成：和用 AI 之前比，你觉得自己的学习方式有什么变化？让用户自己说。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">好。但我其实还是想发个问卷，因为老师要求样本量大一点，访谈 10 个人感觉不够。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">可以，访谈用来发现，问卷用来验证——这是常见组合。不过问卷设计比访谈提纲更容易出错，我陪你逐题过。先说你打算测什么？</div></div></div>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 7 页</div>
+</div>
+
+<!-- ============ 7 样例对话 续3 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程（续）<span class="en">SAMPLE CHAT IV</span></h2>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">想测"使用意愿"和"对 AI 的信任感"。我写了几个题，你帮我看看：一，AI 工具让我的学习效率极大提升；二，我不觉得 AI 的回答不可信；三，我经常使用 AI 工具。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">三题里有两题要改。第二题是双重否定，"我不觉得……不可信"读起来绕，改成：我觉得 AI 的回答是可信的。第一题"极大提升"太满了，这是诱导加夸张，改成：AI 工具提高了我的学习效率。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">明白了。那"信任感"和"使用意愿"各放几题合适？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">一个构念至少 3-5 题，不然信度算不出来。另外每个构念里加一题反向的，防止有人全程无脑点同意——比如信任感里放一题：我担心 AI 会给我错误的答案。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">量表用几点的？我看到有的问卷用 5 点有的用 7 点。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">都可以，但一份问卷里只能统一用一种，而且两端要写文字标签。学生样本 5 点就够稳。</div></div></div>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 8 页</div>
+</div>
+
+<!-- ============ 8 样例对话 续完 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程（续完）<span class="en">SAMPLE CHAT V</span></h2>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">那我的样本量要多少？我打算发问卷星，转发朋友圈。</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">先提醒一句：朋友圈转发是便利样本，报告里必须写"样本为便利抽样，结论推广受限"。样本量按 5% 误差粗算要 385 份左右，你按回收率打个折去发；如果只是课程作业，也可以和老师确认能否放宽。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">好。访谈和问卷都收完数据之后呢？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">访谈稿做编码，把相似的说法归成主题——比如"效率""不信任""依赖感"各成一类，每条主题下面贴用户的原话当证据；问卷那边先算信度，再按你的研究问题做描述统计。</div></div></div>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 9 页</div>
+</div>
+
+<!-- ============ 8b 样例对话 续完2 ============ -->
+<div class="page">
+  <h2>四、样例对话 · 研究全流程（续完）<span class="en">SAMPLE CHAT VI</span></h2>
+  <div class="chat">
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">然后写报告？</div></div></div>
+    <div class="msg c"><div class="avatar c-av">🧑‍⚕️</div><div><div class="name">助手</div><div class="bubble">对，报告骨架是：研究问题 → 方法 → 结果 → 洞察与建议 → 局限。每条建议都要对应一条证据。我可以在你整理好数据后帮你搭这个骨架。</div></div></div>
+    <div class="msg u"><div class="avatar u-av">🙋</div><div><div class="name">用户</div><div class="bubble">太好了，那我先去访谈。</div></div></div>
+  </div>
+  <div class="note">这段样例展示了技能的关键能力：先澄清研究问题再谈方法；探索性问题优先访谈；访谈提纲不诱导；问卷逐题做心理测量审查（双重否定/诱导夸张/反向计分/Likert 锚点）；给样本量时标注是经验估算并提醒抽样偏差；全程不编造数据、不替用户跑分析。</div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 10 页</div>
+</div>
+
+<!-- ============ 9 安装使用 ============ -->
+<div class="page">
+  <h2>五、安装与使用<span class="en">INSTALL &amp; USE</span></h2>
+  <h3>安装（用户侧）</h3>
+  <div class="code">
+    <span class="cm"># 从 ClawHub 搜索并安装</span><br>
+    openclaw skills search user-research<br>
+    openclaw skills install user-research-assistant<br><br>
+    <span class="cm"># 新开会话即自动生效，无需任何命令</span>
+  </div>
+  <h3>使用方式</h3>
+  <ul>
+    <li>直接说需求："帮我设计一个用户研究的访谈提纲""这份问卷帮我审查一下""我想研究 xxx"——技能会自动以研究顾问方式回应；</li>
+    <li>需要模板时说"给我访谈提纲模板 / SUS 量表 / 问卷审查清单"，技能会输出可复制填写的工件；</li>
+    <li>技能全程中文，会模仿用户的语言风格，专业术语会配大白话解释。</li>
+  </ul>
+  <h3>技能包结构</h3>
+  <div class="filetree">
+    <span class="dir">user-research-assistant/</span><br>
+    ├── <b>SKILL.md</b> <span class="cm">—— 工作流程、风格规则、伦理边界（核心）</span><br>
+    ├── <span class="dir">references/</span><br>
+    │&nbsp;&nbsp;&nbsp;├── framework.md <span class="cm">—— 理论依据、研究方法手册（访谈/问卷/测量/可用性/分析）</span><br>
+    │&nbsp;&nbsp;&nbsp;├── examples.md <span class="cm">—— 完整协助对话示范</span><br>
+    │&nbsp;&nbsp;&nbsp;└── tone.md <span class="cm">—— 口吻规范（输出前润色）</span><br>
+    └── <span class="dir">assets/</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── worksheets.md <span class="cm">—— 访谈提纲、问卷审查清单、SUS、报告大纲等模板</span>
+  </div>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 11 页</div>
+</div>
+
+<!-- ============ 10 伦理与边界 ============ -->
+<div class="page">
+  <h2>六、研究伦理与边界<span class="en">ETHICS &amp; BOUNDARIES</span></h2>
+  <div class="danger">
+    <h3>⚠ 诚实与伦理优先</h3>
+    <ul>
+      <li><b>不编造数据</b>：拒绝生成假访谈记录、假问卷结果、假统计数据；研究的意义就在于它是真的；</li>
+      <li><b>知情同意</b>：涉及真人参与者，提醒说明研究目的、流程、录音、自愿与退出权、数据用途；</li>
+      <li><b>隐私脱敏</b>：姓名、学号、联系方式、公司名匿名化；原始数据不外传；</li>
+      <li><b>伦理审查</b>：涉及未成年人、病人等弱势群体必须走学校伦理审查；学生研究按学校规定报备；</li>
+      <li><b>数据卫生</b>：不选择性报告显著结果（p-hacking）、不把相关说成因果。</li>
+    </ul>
+  </div>
+  <h3>能力边界</h3>
+  <ul>
+    <li>本技能提供<b>方法指导</b>，不替代专业统计软件（SPSS / R / Python 的分析要在用户侧完成）；</li>
+    <li>不替代伦理审查委员会（IRB）的正式审批；</li>
+    <li>不提供医疗、临床或心理诊断结论；</li>
+    <li>样本量、α 阈值等数字是<b>经验法则</b>，正式研究需 priori power analysis（如 G*Power）。</li>
+  </ul>
+  <h3>免责声明</h3>
+  <ul>
+    <li>本技能内容用于研究方法科普与科研辅助，不构成学术不端建议；</li>
+    <li>请遵守所在机构的研究伦理规范与学术诚信要求。</li>
+  </ul>
+  <div class="footer">user-research-assistant · 功能与样例说明 · 第 12 页</div>
+</div>
+
+</body>
+</html>

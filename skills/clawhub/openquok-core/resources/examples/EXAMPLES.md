@@ -1,4 +1,4 @@
-# Openquok CLI — JSON post examples
+# OpenQuok CLI — JSON post examples
 
 Copy-paste payloads for `openquok posts:create --json ./examples/<file>.json`. Each file uses the **POST /public/posts** shape (`scheduledAt`, `status`, `body`, `integrationIds`, optional `media`, `providerSettingsByIntegrationId`, …).
 
@@ -34,6 +34,7 @@ openquok posts:create --json ./examples/threads-text-only.json
 | [facebook-with-image.json](./facebook-with-image.json) | Single photo |
 | [facebook-link-preview.json](./facebook-link-preview.json) | Link preview (`url`) |
 | [facebook-reel.json](./facebook-reel.json) | Reel from MP4 |
+| [facebook-story.json](./facebook-story.json) | Story (`post_type: story`) |
 | [facebook-multi-photo.json](./facebook-multi-photo.json) | Multi-photo carousel |
 | [facebook-follow-up-comment.json](./facebook-follow-up-comment.json) | Follow-up comments via `replies` |
 
@@ -83,6 +84,15 @@ Shared recipes — use the same JSON with `instagram-standalone` or `instagram-b
 | File | Scenario |
 | --- | --- |
 | [x-cross-account-repost.json](./x-cross-account-repost.json) | Internal plug — `x.crossAccountPlugs` (repost from other X channels) |
+
+## Dev.to
+
+| File | Scenario |
+| --- | --- |
+| [devto-article-title-tags.json](./devto-article-title-tags.json) | Markdown article + title + tags |
+| [devto-series.json](./devto-series.json) | Free-text series name |
+| [devto-canonical.json](./devto-canonical.json) | Canonical URL syndication |
+| [devto-organization.json](./devto-organization.json) | Organization id + cover `mainImage.path` |
 
 ## Multi-channel
 

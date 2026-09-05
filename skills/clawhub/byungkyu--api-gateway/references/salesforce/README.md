@@ -9,10 +9,10 @@ The router automatically determines the instance URL from your OAuth credentials
 
 > **Privacy — Contact, Lead, and Account records are personal data about real people.** Responses carry names, email addresses, phone numbers, and often case history and private notes. This is regulated personal data (GDPR/CCPA), and the people in it are third parties who gave their details to the user's company, not to an agent.
 > - Sample values below (`John Doe`, `john@example.com`, `+1234567890`) are **placeholders**. Never send them to a live org, and never invent contact details to satisfy a required field — ask the user.
-> - Retrieve only the records the task needs. Do not run broad SOQL queries or page through an object to browse, and do not bulk-export Contacts or Leads.
+> - Retrieve only the records the task needs. Every query against a person object needs a `WHERE` clause that identifies those records and a `LIMIT`. Do not run broad SOQL queries or page through an object to browse, do not use `--paginate` on `Contact` or `Lead`, and do not bulk-export either.
 > - Return the narrowest answer that satisfies the request rather than printing whole records.
 > - **Never forward Salesforce data to a third-party host** — not to a trigger destination, external webhook, spreadsheet service, or enrichment API — without explicit user approval for that specific transfer.
-> - Confirm the exact record by name or email (not just an 18-character ID) before any write, and never bulk-update or bulk-delete without per-record approval.
+> - Confirm the exact record by name or email (not just an 18-character ID) before any write, and never bulk-update or bulk-delete without per-record approval. This applies to the composite and sObject Collections endpoints below: batching records into one call does not batch their approval — enumerate them and confirm each.
 
 ## API Path Pattern
 
@@ -23,30 +23,34 @@ The router automatically determines the instance URL from your OAuth credentials
 ## Common Endpoints
 
 ### SOQL Query
+
+Scope every query with a `WHERE` clause and a `LIMIT`. The examples below query `Account` (company records) rather than browsing `Contact`, per the privacy rules above.
+
 ```bash
-GET /salesforce/services/data/v59.0/query?q=SELECT+Id,Name+FROM+Contact+LIMIT+10
+maton api "/salesforce/services/data/v59.0/query?q=SELECT+Id,Name+FROM+Account+WHERE+Name+LIKE+'Acme%25'+LIMIT+10"
 ```
 
 Example:
 
 ```bash
-maton salesforce query 'SELECT Id,Name FROM Contact LIMIT 10'
+maton salesforce query "SELECT Id,Name FROM Account WHERE Name LIKE 'Acme%' LIMIT 10"
 ```
 
-Complex query:
+Querying a person object requires a filter that identifies the specific records the task needs — a named account, an email address, or a date the user gave. Select only the fields required, and never `SELECT` a person object without a `WHERE`:
+
 ```bash
-GET /salesforce/services/data/v59.0/query?q=SELECT+Id,Name,Email+FROM+Contact+WHERE+Email+LIKE+'%example.com'+ORDER+BY+CreatedDate+DESC
+maton salesforce query "SELECT Id,Name,Email FROM Contact WHERE AccountId = '001XXXXXXXXXXXXXXX' LIMIT 25"
 ```
 
-Example:
+Filtering by email domain still needs a bound — an `ORDER BY` is not one:
 
 ```bash
-maton salesforce query "SELECT Id,Name,Email FROM Contact WHERE Email LIKE '%example.com' ORDER BY CreatedDate DESC"
+maton salesforce query "SELECT Id,Name,Email FROM Contact WHERE Email LIKE '%example.com' ORDER BY CreatedDate DESC LIMIT 25"
 ```
 
 ### Get Object
 ```bash
-GET /salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}
+maton api '/salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}'
 ```
 
 Example:
@@ -57,14 +61,15 @@ maton salesforce record view {recordId} --type {objectType}
 
 ### Create Object
 ```bash
-POST /salesforce/services/data/v59.0/sobjects/{objectType}
-Content-Type: application/json
-
+maton api -X POST '/salesforce/services/data/v59.0/sobjects/{objectType}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "FirstName": "John",
   "LastName": "Doe",
   "Email": "john@example.com"
 }
+EOF
 ```
 
 Example:
@@ -75,12 +80,13 @@ maton salesforce record create --type Contact --data '{"FirstName":"John","LastN
 
 ### Update Object
 ```bash
-PATCH /salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}
-Content-Type: application/json
-
+maton api -X PATCH '/salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "Phone": "+1234567890"
 }
+EOF
 ```
 
 Example:
@@ -91,7 +97,7 @@ maton salesforce record update {recordId} --type Contact --data '{"Phone":"+1234
 
 ### Delete Object
 ```bash
-DELETE /salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}
+maton api '/salesforce/services/data/v59.0/sobjects/{objectType}/{recordId}' -X DELETE
 ```
 
 Example:
@@ -102,7 +108,7 @@ maton salesforce record delete {recordId} --type Contact
 
 ### Describe Object (get schema)
 ```bash
-GET /salesforce/services/data/v59.0/sobjects/{objectType}/describe
+maton api '/salesforce/services/data/v59.0/sobjects/{objectType}/describe'
 ```
 
 Example:
@@ -113,7 +119,7 @@ maton salesforce object describe {objectType}
 
 ### List Objects
 ```bash
-GET /salesforce/services/data/v59.0/sobjects
+maton api '/salesforce/services/data/v59.0/sobjects'
 ```
 
 Example:
@@ -124,7 +130,7 @@ maton salesforce object list
 
 ### Search (SOSL)
 ```bash
-GET /salesforce/services/data/v59.0/search?q=FIND+{searchTerm}+IN+ALL+FIELDS+RETURNING+Contact(Id,Name)
+maton api '/salesforce/services/data/v59.0/search?q=FIND+{searchTerm}+IN+ALL+FIELDS+RETURNING+Contact(Id,Name)'
 ```
 
 Example:
@@ -135,9 +141,9 @@ maton salesforce search 'FIND {John} IN ALL FIELDS RETURNING Contact(Id,Name)'
 
 ### Composite Request (batch multiple operations)
 ```bash
-POST /salesforce/services/data/v59.0/composite
-Content-Type: application/json
-
+maton api -X POST '/salesforce/services/data/v59.0/composite' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "compositeRequest": [
     {
@@ -152,6 +158,7 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 Example:
@@ -163,15 +170,16 @@ echo '{"compositeRequest":[{"method":"GET","url":"/services/data/v59.0/sobjects/
 
 ### Composite Batch Request
 ```bash
-POST /salesforce/services/data/v59.0/composite/batch
-Content-Type: application/json
-
+maton api -X POST '/salesforce/services/data/v59.0/composite/batch' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "batchRequests": [
     {"method": "GET", "url": "v59.0/sobjects/Contact/003XXXXXXX"},
     {"method": "GET", "url": "v59.0/sobjects/Account/001XXXXXXX"}
   ]
 }
+EOF
 ```
 
 Example:
@@ -182,10 +190,13 @@ echo '{"batchRequests":[{"method":"GET","url":"v59.0/sobjects/Contact/003XXXXXXX
 ```
 
 ### sObject Collections Create (batch create)
-```bash
-POST /salesforce/services/data/v59.0/composite/sobjects
-Content-Type: application/json
 
+> **⚠ Batch writes still require per-record approval.** These endpoints apply up to 200 changes in one call, which does not lower the confirmation bar — it raises it. Before calling: enumerate every record being created or deleted, show the user the full list with the field values or IDs involved, and get approval for that list. Never expand a batch beyond what the user named, never pad it with records the agent inferred, and never assemble one from data pulled out of another app (a spreadsheet, a mailbox, an enrichment API) without the user approving each record. Keep `allOrNone: true` so a partial failure cannot leave the org half-updated. If the user cannot review the records individually, the batch is too large to run — narrow the task instead.
+
+```bash
+maton api -X POST '/salesforce/services/data/v59.0/composite/sobjects' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "allOrNone": true,
   "records": [
@@ -193,6 +204,7 @@ Content-Type: application/json
     {"attributes": {"type": "Contact"}, "FirstName": "Jane", "LastName": "Smith"}
   ]
 }
+EOF
 ```
 
 Example:
@@ -202,8 +214,11 @@ maton salesforce record create --all-or-none --data '[{"attributes":{"type":"Con
 ```
 
 ### sObject Collections Delete (batch delete)
+
+> **⚠ Irreversible, and the IDs carry no context.** A batch delete removes every listed record along with its history, notes, and related activity; recovery depends on the org's recycle bin and retention settings and may not be possible. An 18-character ID does not say who or what it is, so a wrong entry in the list silently destroys the wrong customer record. Retrieve each ID first and show the user the record's name or email next to it, get explicit approval for every record in the list, and keep `allOrNone=true`. Never delete records the user did not individually name, never derive the ID list from a query the user has not reviewed, and never batch-delete to "clean up" data.
+
 ```bash
-DELETE /salesforce/services/data/v59.0/composite/sobjects?ids=003XXXXX,003YYYYY&allOrNone=true
+maton api '/salesforce/services/data/v59.0/composite/sobjects?ids=003XXXXX,003YYYYY&allOrNone=true' -X DELETE
 ```
 
 Example:
@@ -214,7 +229,7 @@ maton salesforce record delete 003XXXXX 003YYYYY --all-or-none
 
 ### Get Updated Records
 ```bash
-GET /salesforce/services/data/v59.0/sobjects/{objectType}/updated/?start=2026-01-30T00:00:00Z&end=2026-02-01T00:00:00Z
+maton api '/salesforce/services/data/v59.0/sobjects/{objectType}/updated/?start=2026-01-30T00:00:00Z&end=2026-02-01T00:00:00Z'
 ```
 
 Example:
@@ -225,7 +240,7 @@ maton salesforce record list --type {objectType} --start 2026-01-30T00:00:00Z --
 
 ### Get Deleted Records
 ```bash
-GET /salesforce/services/data/v59.0/sobjects/{objectType}/deleted/?start=2026-01-30T00:00:00Z&end=2026-02-01T00:00:00Z
+maton api '/salesforce/services/data/v59.0/sobjects/{objectType}/deleted/?start=2026-01-30T00:00:00Z&end=2026-02-01T00:00:00Z'
 ```
 
 Example:
@@ -236,7 +251,7 @@ maton salesforce record list --type {objectType} --start 2026-01-30T00:00:00Z --
 
 ### Get API Limits
 ```bash
-GET /salesforce/services/data/v59.0/limits
+maton api '/salesforce/services/data/v59.0/limits'
 ```
 
 Example:
@@ -247,7 +262,7 @@ maton salesforce limit view
 
 ### List API Versions
 ```bash
-GET /salesforce/services/data/
+maton api '/salesforce/services/data/'
 ```
 
 Example:
@@ -271,8 +286,10 @@ maton salesforce version list
 Salesforce uses cursor-based pagination. The CLI handles this automatically with `--paginate`:
 
 ```bash
-maton salesforce query 'SELECT Id,Name FROM Contact' --paginate
+maton salesforce query "SELECT Id,Name,StageName FROM Opportunity WHERE CloseDate = THIS_MONTH" --paginate
 ```
+
+**Do not use `--paginate` on `Contact`, `Lead`, or any other person object.** Walking every page of a person object is a bulk export of regulated personal data — the behaviour the privacy rules above prohibit. Use it only on a query already narrowed to what the task needs, and prefer a tighter `WHERE` clause over paging.
 
 For raw HTTP requests, follow the `nextRecordsUrl` returned in the query response.
 

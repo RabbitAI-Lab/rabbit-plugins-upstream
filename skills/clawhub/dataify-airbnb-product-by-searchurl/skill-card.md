@@ -1,42 +1,56 @@
-## Description: <br>
-Prepare Dataify builder requests for the airbnb.com scraper family rooted at airbnb_product_by-searchurl, including tool selection, saved parameter lookup, and generation of a scraperapi.dataify.com builder curl request using DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured Airbnb listing results from a known Airbnb search-results URL.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and automation users use this skill to prepare Dataify Airbnb scraper builder calls by choosing an available scraper tool, collecting parameter values, and producing an executable curl request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DATAIFY_API_TOKEN is required and could be exposed through shell history, profile edits, terminals, or logs. <br>
-Mitigation: Treat the token as a secret, avoid committing or sharing token setup commands, and review generated commands before running them. <br>
-Risk: User-provided spider parameters may include sensitive personal data sent to Dataify. <br>
-Mitigation: Only include personal or sensitive data in spider_parameters when the user intends to send it to Dataify. <br>
+## Use Case:
 
+External users and developers use this skill to prepare and run Dataify Builder requests that collect Airbnb listing results from a supplied Airbnb search URL, then wait for and return the collected JSON result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-airbnb-product-by-searchurl) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Saved tool parameter catalog](references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown containing a curl command and brief setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and user-provided scraper parameter values; generated requests target Dataify's builder endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill submits Airbnb target URLs and collection parameters to Dataify using the user's account token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when Dataify collection is intended, avoid sharing tokens in chat, and prefer a session-scoped DATAIFY_API_TOKEN unless persistent setup is required.
+
+Risk: The package exposes broader Airbnb scraping behavior than the search-URL-focused description suggests because it includes both search-URL and location-based collection options.
+
+Mitigation: Review the selected tool before execution and confirm scope when a request could increase collection volume or credit usage.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-airbnb-product-by-searchurl)
+- [Publisher profile](https://clawhub.ai/user/dataify-server)
+- [Dataify dashboard](https://dashboard.dataify.com/login?utm_source=skill)
+- [Tool parameter catalog](references/tool-params.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit paid external Dataify scraping tasks and return summarized collected JSON while preserving access to the raw result.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

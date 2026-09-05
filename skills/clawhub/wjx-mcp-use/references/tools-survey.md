@@ -1,32 +1,16 @@
-# 问卷管理工具详解（13 tools）
+# 问卷管理工具详解（11 个当前工具）
 
-## create_survey — 创建问卷
+## create_survey_by_json — 用 JSONL 创建问卷（推荐）
 
-从零创建或复制已有问卷。
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `title` | string | 是 | 问卷名称 |
-| `atype` | number | 否 | 问卷类型：1=调查(默认), 2=测评, 3=投票, 6=考试, 7=表单 |
-| `desc` | string | 否 | 问卷描述 |
-| `publish` | boolean | 否 | 是否立即发布（默认 false） |
-| `questions` | string | 否 | 题目列表 JSON 字符串 |
-| `source_vid` | string | 否 | 源问卷编号（复制模式） |
-| `creater` | string | 否 | 创建者子账号用户名 |
-| `compress_img` | boolean | 否 | 是否压缩图片 |
-| `is_string` | boolean | 否 | 是否使用原始 activity string 格式 |
-
-## create_survey_by_json — 用 JSON 创建问卷（推荐）
-
-**首选方式**：支持 70+ 题型，覆盖全部 q_type/q_subtype 编码。配合 prompt 模板（generate-survey-json、generate-exam-json、generate-form-json）使用效果最佳。
+**首选方式**：支持 70+ 题型。`jsonl` 是 MCP 工具的唯一题目输入；不要传 `questions` 数组或旧的 `q_type/q_subtype` 创建结构。配合 prompt 模板（generate-survey-json、generate-exam-json、generate-form-json）使用效果最佳。
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `title` | string | 是 | 问卷标题 |
-| `questions` | array | 是 | 题目 JSON 数组（格式同 create_survey 的 questions 参数） |
-| `atype` | number | 否 | 问卷类型：1=调查(默认), 2=测评, 3=投票, 6=考试, 7=表单 |
-| `desc` | string | 否 | 问卷描述 |
-| `publish` | boolean | 否 | 是否立即发布（默认 false） |
+| `jsonl` | string | 是 | JSONL 字符串；首行为 `qtype:"问卷基础信息"`，后续每行一个题目对象 |
+| `title` | string | 否 | 覆盖 JSONL 首行中的问卷标题 |
+| `atype` | number | 否 | 问卷类型：1=调查(默认), 2=测评, 3=投票, 4=360度评估, 5=360评估无测评关系, 6=考试, 7=表单, 9=教学评估, 10=量表, 11=民主评议；8 用户体系不能新建 |
+| `publish` | boolean | 否 | 是否立即发布；未指定时普通题型默认 true，包含纯框架题型时默认 false |
+| `optional_titles` | string[] | 否 | 允许设为选填的题目标题；其余题目默认必答 |
 | `creater` | string | 否 | 创建者子账号用户名 |
 
 ### 常见题型 qtype 片段
@@ -42,18 +26,7 @@
 **多项填空（qtype="多项填空"）特殊规则**：
 - 子填空位数量 = title 中 `{_}` 占位符的数量。例 `"电话 {_}，邮箱 {_}"` 生成 2 个输入框。
 - **禁止使用 `rowtitle` 数组定义子项** — `rowtitle` 是矩阵题/比重题/Kano/PSM 的字段，多项填空不支持，服务端会忽略并只生成 1 个空位。
-- 考试多项填空（`qtype="考试多项填空"`）和考试完形填空同理，都依赖 `{_}` 占位符。
-
-## create_survey_by_text — 用 DSL 文本创建问卷（已弃用）
-
-> **已弃用**：新项目请改用 `create_survey_by_json`（支持 70+ 题型，覆盖更全）。本工具仅为兼容保留，不再推荐使用。
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `text` | string | 是 | DSL 格式的问卷文本（语法见 dsl-and-types.md） |
-| `atype` | number | 否 | 问卷类型：1=调查(默认), 2=测评, 3=投票, 6=考试, 7=表单 |
-| `publish` | boolean | 否 | 是否立即发布（默认 false） |
-| `creater` | string | 否 | 创建者子账号用户名 |
+- 考试多项填空（`qtype="考试多项填空"`）依赖 `{_}` 占位符；考试完形填空不在当前 JSONL 创建支持集合中。
 
 ## get_survey — 获取问卷详情
 
@@ -84,7 +57,7 @@
 | `is_xingbiao` | boolean | 否 | 只获取星标问卷 |
 | `query_all` | boolean | 否 | 获取企业所有问卷 |
 | `verify_status` | number | 否 | 审核状态筛选 |
-| `time_type` | number | 否 | 时间查询类型（0-2） |
+| `time_type` | number | 否 | 时间查询类型：0=不按时间查询（默认），1=按问卷开始时间，2=按问卷创建时间 |
 | `begin_time` | number | 否 | 起始时间（毫秒时间戳） |
 | `end_time` | number | 否 | 结束时间（毫秒时间戳） |
 
@@ -107,11 +80,11 @@
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `vid` | number | 是 | 问卷编号 |
-| `api_setting` | string/JSON | 否 | API 请求次数限制设置 |
-| `after_submit_setting` | string/JSON | 否 | 作答后跳转设置 |
-| `msg_setting` | string/JSON | 否 | 数据推送设置 |
-| `sojumpparm_setting` | string/JSON | 否 | 自定义链接参数设置 |
-| `time_setting` | string/JSON | 否 | 时间设置 |
+| `api_setting` | string | 否 | API 请求次数限制设置 JSON 字符串 |
+| `after_submit_setting` | string | 否 | 作答后跳转设置 JSON 字符串 |
+| `msg_setting` | string | 否 | 数据推送设置 JSON 字符串 |
+| `sojumpparm_setting` | string | 否 | 自定义链接参数设置 JSON 字符串 |
+| `time_setting` | string | 否 | 时间设置 JSON 字符串 |
 
 ## delete_survey — 删除问卷（不可恢复）
 

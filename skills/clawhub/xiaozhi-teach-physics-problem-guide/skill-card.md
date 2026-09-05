@@ -1,48 +1,69 @@
-## Description: <br>
-Helps physics teachers turn problem explanation into systematic problem-solving instruction using question reading, modeling, process analysis, equation setup, solution checking, reflection, variation training, and student problem-solving profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮初中物理老师把讲题升级为系统化的解题教学，围绕审题、建模、过程分析、列式、求解反思、变式训练和班级解题档案形成可复用指导。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External physics teachers use this skill to guide students through structured physics problem-solving, model selection, process analysis, variation practice, and pseudonymous learning-profile updates. It is intended to support teacher-led instruction rather than provide complete answers, rankings, or unauthorized problem-bank copying. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create persistent student learning profiles without explicit consent, retention, or scope controls. <br>
-Mitigation: Require teacher approval before creating or storing student-specific error history; use pseudonyms, minimize retained data, and define retention limits before deployment. <br>
-Risk: The skill may pass student summaries to parent-communication, resource-library, or other teaching workflows. <br>
-Mitigation: Require teacher approval before sharing profile summaries, disclose the destination workflow, and share only the minimum pseudonymous information needed. <br>
-Risk: Physics problems may include copyrighted textbook or tutoring-bank content. <br>
-Mitigation: Require copyrightStatus labeling and avoid copying unauthorized problem-bank text into generated materials. <br>
+## Use Case:
 
+External teachers and education agents use this skill to turn junior-middle-school physics problem explanation into structured teaching guidance, model-selection prompts, variation practice, and class-level problem-solving records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-problem-guide) <br>
-- [五步物理解题模板](artifact/references/five-step-template.md) <br>
-- [五步解题样板](artifact/references/five-step-worked-examples.md) <br>
-- [物理模型选择参考](artifact/references/model-selection.md) <br>
-- [一题多解样板](artifact/references/multi-solution-example.md) <br>
-- [学员物理解题档案模板](artifact/references/student-solving-profile-template.md) <br>
-- [物理解题变式设计](artifact/references/variation-physics.md) <br>
+### Deployment Geography for Use:
 
+Global, subject to local student-data, guardian-consent, and emergency-referral requirements before use outside mainland China.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured teaching templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include pseudonymous student problem-solving profile updates and variation-training templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Classroom records, student aliases, or writeback data could be stored or shared without the expected consent controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only on platforms that enforce teacher confirmation, consent checks, aliasing, deletion/export controls, and sharing restrictions before records are stored or sent.
+
+Risk: AI-generated or adapted physics items could contain incorrect calculations, unsuitable difficulty, or unsupported source use.
+
+Mitigation: Label AI-generated questions, run the item-check workflow, require manual teacher verification before entry into repositories or assessments, and mark copyright status for each item.
+
+Risk: Use outside mainland China may conflict with local student-data, guardian-consent, or emergency-referral requirements.
+
+Mitigation: Review local legal requirements, replace region-specific help channels, and avoid presenting mainland-China emergency numbers as universal before deployment in other regions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-problem-guide)
+- [Five-step template](references/five-step-template.md)
+- [Five-step worked examples](references/five-step-worked-examples.md)
+- [Model selection](references/model-selection.md)
+- [Physics variation training](references/variation-physics.md)
+- [Multi-solution example](references/multi-solution-example.md)
+- [Student solving profile template](references/student-solving-profile-template.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+- [Platform conventions](shared/platform-conventions.md)
+- [AI item check](shared/ai-item-check.md)
+- [Shared vocabulary](shared/vocab.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown teaching guidance with optional structured classWorkspace proposals]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is required for stored records or writeback; AI-generated questions are labeled for manual checking.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

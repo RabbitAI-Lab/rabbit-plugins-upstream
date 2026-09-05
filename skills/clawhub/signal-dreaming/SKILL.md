@@ -1,167 +1,131 @@
 ---
 name: "signal-dreaming"
-description: "Safe single-owner bounded memory consolidation with guarded backups, recovery, and deterministic audits."
+description: "Consolidate daily session logs into L2 topic files and a compact MEMORY.md index, in three bounded phases with backups, lifecycle and secret guards."
 ---
 
 # Signal Dreaming
 
-Consolidate daily logs into L2 topic files and a compact `MEMORY.md` index. Preserve the proven v1.3.1 `Sense → Consolidate → Settle` model while adding deterministic P0 safety guards.
+Memory consolidation in three phases: **Sense → Consolidate → Settle**.
 
-Release candidate: `3.0.0-rc.1`.
+Daily session logs accumulate raw detail. This skill reads the ones written since the last run, promotes what matters into durable topic files, and keeps the top-level index worth reading at session start.
 
-## Ownership contract
+## Memory Architecture Assumed
 
-Use exactly one memory consolidation writer.
+A two-layer memory layout:
 
-- Require built-in OpenClaw Dreaming to be disabled before any write.
-- Refuse write mode when more than one enabled signal-dreaming cron is visible.
-- Treat missing CLI fields, schema drift, unsafe paths, or ambiguous ownership as read-only failures.
-- Never modify OpenClaw configuration, cron, Gateway, another agent, or memory-core internals.
-- Do not read private plugin state, SQLite, recall locks, `DREAMS.md`, `memory/dreaming/**`, or `memory/.dreams/**`.
+- **Daily logs** (`memory/YYYY-MM-DD*.md`) — raw session notes, read-only, never moved or deleted
+- **L2 topic files** (`memory/<topic>.md`) — curated durable knowledge per subject (e.g. `memory/clash-verge.md`)
+- **Index** (`MEMORY.md`) — high-level status with pointers down to L2
 
-Collect three fixed read-only public CLI outputs into a private temporary directory, then run preflight:
+If you are starting fresh, create `MEMORY.md` and `memory/dream-log.md` before the first run. L2 files are created on demand.
 
-```bash
-openclaw --version > <EVIDENCE_DIR>/version.txt
-openclaw config get plugins.entries.memory-core.config.dreaming.enabled --json > <EVIDENCE_DIR>/dreaming.json
-openclaw cron list --all --json > <EVIDENCE_DIR>/cron.json
-node <SKILL_DIR>/scripts/preflight.mjs <WORKSPACE_ROOT> \
-  --version-file <EVIDENCE_DIR>/version.txt \
-  --dreaming-file <EVIDENCE_DIR>/dreaming.json \
-  --cron-file <EVIDENCE_DIR>/cron.json
-```
+`memory/dream-log.md` doubles as the only state this skill keeps: entries record a **`Consolidated through:`** date — the newest daily log already folded into memory. The next run scans back for the most recent entry carrying that field to know where to resume. There is no state file, no lock file, and nothing to migrate or repair.
 
-If any collection command fails, stop. Keep evidence local; do not paste cron payloads into chat.
-Create the evidence directory with owner-only permissions and remove it after preflight.
-Use the raw command outputs; do not hand-author alternative evidence schemas.
+## Quick Start
 
-Use `--read-only` only for diagnosis when built-in Dreaming is enabled. A read-only pass does not authorize writes.
-Zero scheduled writers is acceptable for an explicitly invoked manual run and produces a warning. Every scheduled invocation must add `--scheduled`; it then fails unless exactly one enabled writer is visible.
+### Manual dream
 
-## Runtime support
+Tell your agent:
 
-- Minimum and tested OpenClaw: `2026.7.1-2`.
-- Minimum and tested Node.js: `22.23.1`.
-- Tested platform for this release candidate: macOS arm64.
-- Linux and Windows are not supported by `3.0.0-rc.1` until their isolated acceptance matrices pass.
-- No third-party npm packages or Bash runtime are required.
+> "Run a memory dream consolidation. Follow the protocol in `<SKILL_PATH>/references/dream-protocol.md`. Workspace root: `<YOUR_WORKSPACE_PATH>`."
 
-Future OpenClaw releases may work only when the public CLI fields still match the validated contract. Unknown fields fail closed.
+Or just *"run a dream consolidation"* — if this skill is loaded, the agent will know what to do.
 
-## Durable model
-
-- `memory/YYYY-MM-DD*.md` — immutable daily source logs; never move, delete, or edit.
-- `memory/<topic>.md` — durable L2 topic detail.
-- `MEMORY.md` — compact current-state index and L2 pointers.
-- `memory/dream-log.md` — human-readable diary, at most 30 entries.
-- `logs/signal-dreaming/state.json` — rebuildable hash cursor outside memory indexing.
-- `.backup/memory-dreams/<run-id>/manifest.json` — run status, plan, hashes, and backup map.
-
-Do not depend on recall JSON. Detect work from daily-log SHA-256 changes, including same-day appends and suffixed logs.
-
-## Workflow
-
-Read `references/dream-protocol.md` completely before a write run.
-
-1. Run `preflight.mjs`.
-2. Generate a read-only delta plan:
-
-   ```bash
-   node <SKILL_DIR>/scripts/delta-state.mjs plan <WORKSPACE_ROOT> > <PLAN_FILE>
-   ```
-
-   `<PLAN_FILE>` is the saved JSON file path passed to `begin`.
-
-3. Inspect the saved plan. Stop with zero writes when it says `"noop": true`.
-   `"batchCapped": true` means additional eligible logs were deferred by the per-run count or byte ceiling; it does not describe the 7-day bootstrap window.
-4. Read only the selected daily logs and relevant L2 files. Build an exact list of intended L2 and `MEMORY.md` changes.
-5. Create a unique run id and begin guarded backup:
-
-   ```bash
-   node <SKILL_DIR>/scripts/run-guard.mjs create-run-id <WORKSPACE_ROOT>
-   node <SKILL_DIR>/scripts/run-guard.mjs begin <WORKSPACE_ROOT> <RUN_ID> <PLAN_FILE> MEMORY.md memory/dream-log.md memory/<topic>.md
-   node <SKILL_DIR>/scripts/run-guard.mjs verify-before-write <WORKSPACE_ROOT> <RUN_ID>
-   ```
-
-   Copy the exact id printed by `create-run-id` into every `<RUN_ID>` position.
-
-6. Edit only the planned L2 files and `MEMORY.md`. Do not edit `memory/dream-log.md`; finalization appends and trims it deterministically.
-7. Prepare the diary entry JSON described in the protocol.
-8. Semantically review touched L2 files for topic identity, lifecycle, authority, contradictions, and privacy.
-9. Finalize:
-
-   ```bash
-   node <SKILL_DIR>/scripts/run-guard.mjs finalize <WORKSPACE_ROOT> <RUN_ID> <ENTRY_JSON> --semantic-review-confirmed
-   ```
-
-Finalization audits paths, backups, daily-log immutability, planned-file scope, sizes, pointers, diary numbering, and credential categories before advancing state. Omit `--semantic-review-confirmed` when no L2 file is touched.
-
-## Limits
-
-- Missing state: process only the most recent 7 calendar days.
-- Per run: at most 32 daily logs and 512 KiB total input.
-- `--full-history` is manual only and still processes one bounded oldest-first batch.
-- `MEMORY.md` at `0–8192` bytes is healthy.
-- `8193–10240` bytes is a soft warning.
-- More than `10240` bytes is a hard failure and cannot commit.
-
-## Failure and recovery
-
-Never start over an active, stale, or unreviewed incomplete run.
-
-- On a known failure, record it:
-
-  ```bash
-  node <SKILL_DIR>/scripts/run-guard.mjs fail <WORKSPACE_ROOT> <RUN_ID> <REASON>
-  ```
-
-- Inspect `.backup/memory-dreams/<run-id>/manifest.json` and its `files/` backups.
-- Restore or reconcile files manually; P0 does not provide automatic rollback.
-- Only after human review, acknowledge the exact run id:
-
-  ```bash
-  node <SKILL_DIR>/scripts/run-guard.mjs ack-incomplete <WORKSPACE_ROOT> <RUN_ID> --confirm <RUN_ID>
-  ```
-
-Acknowledgement does not restore files. It records review and clears only that stale lock.
-
-For `STATE_INVALID` or `STATE_SCHEMA_UNSUPPORTED`, do not delete or edit the state cursor. Inspect its hash, review the file, then quarantine that exact version:
-
-```bash
-node <SKILL_DIR>/scripts/delta-state.mjs inspect-state <WORKSPACE_ROOT>
-node <SKILL_DIR>/scripts/delta-state.mjs quarantine-state <WORKSPACE_ROOT> --confirm <STATE_SHA256>
-```
-
-Quarantine verifies a recoverable `.bak` copy under `.backup/memory-dreams/state-recovery/` before removing the active cursor. The next plan uses the normal bounded 7-day bootstrap.
-
-Run a standalone read-only audit when needed:
-
-```bash
-node <SKILL_DIR>/scripts/dream-audit.mjs <WORKSPACE_ROOT>
-```
-
-Run the isolated acceptance suite:
-
-```bash
-node <SKILL_DIR>/scripts/self-test.mjs
-```
-
-## Scheduling
-
-Provide cron only as a template; never create or modify it automatically. Schedule one isolated agent turn and include the workspace root. The job must run preflight and stop on no-op or any ambiguity.
+### Automated daily dream (cron)
 
 ```json
 {
-  "name": "signal-dreaming-v3-daily",
-  "schedule": { "kind": "cron", "expr": "<MINUTE> <HOUR> * * *", "tz": "<TIMEZONE>" },
+  "name": "daily-dream",
+  "schedule": { "kind": "cron", "expr": "0 7 * * *", "tz": "<YOUR_TIMEZONE>" },
   "sessionTarget": "isolated",
   "payload": {
     "kind": "agentTurn",
     "timeoutSeconds": 900,
-    "message": "Run signal-dreaming as a scheduled invocation. Read its SKILL.md and references/dream-protocol.md completely. Workspace root: <WORKSPACE_ROOT>. Run preflight with --scheduled. Stop on preflight failure, no-op, ambiguity, or an unfinished run."
+    "message": "Run a memory dream consolidation. Read <SKILL_PATH>/SKILL.md and <SKILL_PATH>/references/dream-protocol.md in full, then follow the protocol phases in order. Workspace root: <YOUR_WORKSPACE_PATH>. Do not modify cron jobs, agent config, the Gateway, any daily log, or memory/dreaming/**. End your final response with a one-line dream summary — the cron delivery mechanism will auto-announce it."
   },
-  "delivery": { "mode": "announce", "channel": "<CHANNEL>", "to": "<TARGET>" }
+  "delivery": { "mode": "announce", "channel": "<CHANNEL_TYPE>", "to": "<CHANNEL_ID>" }
 }
 ```
 
-For a v1.3.1 upgrade, leave existing memories and diary in place. Missing V3 state triggers the bounded 7-day bootstrap; diary numbering uses the maximum valid existing Dream number plus one.
+Set `expr` and `tz` to when your human is asleep.
+
+## Three-Phase Safety Model
+
+| Phase | Writes | Purpose |
+|-------|--------|---------|
+| **Sense** | ❌ None | Select logs since the watermark, plan the work |
+| **Consolidate** | ✅ L2 files only | Promote content into topic files |
+| **Settle** | ✅ MEMORY.md + dream-log.md | Update index, write diary entry |
+
+Phase 1 is always read-only. An error in Sense never corrupts files.
+
+## Quality Gates
+
+A read-only planning checkpoint runs before any write: **topic identity** (do not merge legacy and current projects on name similarity), **lifecycle** (closed work must not reappear as an active TODO), **secret propagation** (never promote credentials into curated memory), **backup** (existing L2 files and `MEMORY.md` are copied to `<WORKSPACE_ROOT>/.backup/memory-dreams/YYYYMMDD-HHMM/` with a `.bak` suffix first), and a **post-write audit** reporting size, structure, lifecycle separation, and credential patterns without gating the run. `references/dream-audit.sh` covers the common checks; it is not full DLP.
+
+## Failure Philosophy
+
+This protocol is written for an agent to follow, not for a program to enforce. It fails **soft**:
+
+- Do the work you can do, then report what you skipped and why.
+- Diagnostics inform the final summary. They never block consolidation.
+- An oversized `MEMORY.md` is the reason to run, not a reason to abort.
+- Limits are derived from the runtime, never hard-coded into the protocol.
+- Never wait on an answer that cannot arrive. A scheduled run has nobody to ask, so out-of-bounds work is dropped and reported, not blocked on.
+
+Exactly two conditions cancel writes: a **failed backup**, or a **write plan reaching outside the allowed paths** — and the second cancels only those targets, not the run.
+
+The secret guard is the one hard block on content — and it blocks the offending value, not the run.
+
+## Where this sits in OpenClaw's memory stack
+
+Verified against OpenClaw **2026.7.1**. This skill operates entirely on the documented Markdown layer — `MEMORY.md` plus `memory/*.md` — which remains the durable memory model.
+
+**Built-in memory-core Dreaming** is a separate system, opt-in and disabled by default:
+
+| | memory-core built-in Dreaming | signal-dreaming (this skill) |
+|---|---|---|
+| Trigger | Managed cron when enabled | Cron agentTurn |
+| Source | Short-term recall store under `memory/.dreams/` | Daily logs on disk |
+| Output | `DREAMS.md` / `memory/dreaming/{phase}/` | `memory/dream-log.md` + L2 files |
+
+The two are independent; run this skill with built-in Dreaming on or off. This protocol never reads or writes `memory/dreaming/**` or `memory/.dreams/**`, and skips `## Light Sleep` / `## REM Sleep` blocks if it finds them inside a daily log (older `inline` mode).
+
+Adjacent components this protocol deliberately does not touch:
+
+- **`memory-wiki`** — per the OpenClaw docs it "does not replace the active memory plugin"; its vault is its own layer, neither read nor written here.
+- **Alternate backends** (QMD, Honcho, LanceDB) — they change how `memory_search` retrieves, not where durable notes live. This protocol reads and writes files, so it is backend-agnostic.
+- **Database-first state** — the SQLite migration covers runtime state (sessions, transcripts, task ledgers). Workspace Markdown memory is out of scope.
+- **Automatic memory flush** — the pre-compaction pass writes daily notes; this protocol consumes them. No conflict.
+
+Tool names in the protocol (`exec`, `edit`) are OpenClaw's; on another harness use its equivalents.
+
+## Key Rules
+
+- **Never move or delete daily logs** — archiving breaks `memory_search` indexing
+- **dream-log.md is Markdown** — append text directly, never write JSON
+- **Never copy secrets into curated memory** — omit/redact and alert instead
+- **Keep lifecycle state sticky** — closed/archived/snowed lines stay non-active
+- **Back up before rewriting** `MEMORY.md` and any existing L2 file
+- **MEMORY.md budget is derived, never hard-coded** — headroom = `min(bootstrapMaxChars, bootstrapTotalMaxChars − other bootstrap files)`; target = **80%** of it (`SD_INDEX_TARGET_PCT`, a knob), the remaining 20% being growth slack. Count characters, not bytes. Crossing the target means sink detail into L2 — it never blocks and never justifies deleting facts
+- **Batch limit**: 32 logs or 192 KiB per run, cut on date boundaries. Sized so one batch fits inside the task timeout; a single date that exceeds it on its own is still processed whole. When resuming after a gap it takes the oldest first so the watermark advances contiguously
+
+## Full Protocol
+
+See `references/dream-protocol.md` for the complete three-phase workflow, quality gates, dream-log format, and safety rules.
+
+## Version Note
+
+**4.0.1** fixes a guardian that could skip work it should have done, and sizes the batch cap to the task timeout.
+
+The guardian tested for daily logs dated strictly *after* the watermark, while Phase 1 selects `>=` precisely because a watermark-dated log can be appended to after the last run read it. Since the guardian runs first, that defence never applied: inside the debounce window a run reported no-op while same-day additions waited for a later pass. Session-reset hooks that write `YYYY-MM-DD-HHMM.md` files make several logs share the watermark date every day, so this is now the normal case rather than an edge one. The two log conditions are merged into one that reuses Phase 1's `>=` and asks whether any selected log changed since the last entry's heading timestamp.
+
+The byte cap moves from `512 KB` to `192 KiB`. A cap means something only if the batch it admits can finish before the scheduler kills the run: at a measured `0.12-0.21 KiB/s`, an `1800 s` timeout admits roughly `216 KiB`, so the old number was never reachable. **If your task timeout differs, recompute the cap from your own slowest observed throughput.** The cap bounds accumulation across days and cannot bound a single day — the date-boundary rule still processes an oversized date whole, and such a run now records its actual input size and duration in the dream-log.
+
+**4.0.0** returns to the protocol-only design of the 1.x line and removes the 2.x/3.x script layer entirely.
+
+Those versions compiled the same rules into enforced JavaScript preconditions — a transaction state machine, run manifests, lock files, staged candidate directories. That layer added no new safety rules; it changed who enforced them, and in production turned recoverable conditions into aborted runs: an over-limit index refused to run the pass that shrinks it, and an optional audit's path error cancelled an otherwise complete consolidation.
+
+It also retires the byte-based index target inherited from 1.x. That `8 KB` was written where a byte and a character were the same thing; the real limit is `bootstrapMaxChars`, measured in **characters**. For a CJK workspace at ~1.7 bytes per character it enforced about a quarter of the real budget — and 3.x then made crossing it a hard error, so a healthy index could block its own consolidation pass. 4.0.0 does not substitute another constant: headroom is derived from the runtime's own caps, and the target is a configurable percentage of it (default 80%, leaving a growth band). A hard-coded threshold caused the original damage, so the protocol no longer contains one.
+
+Upgrading from 2.x or 3.x: delete any cron payload steps invoking `preflight`, `begin`, `finalize`, `run-guard`, or `dream-audit.mjs` and use the template above. There is no state to migrate. Existing `.backup/memory-dreams/` directories can stay; nothing reads them. Your existing `dream-log.md` works as-is — the watermark is found by scanning back for the newest entry that carries a `Consolidated through:` field, and if none does, the newest entry's heading date is used.

@@ -2,12 +2,21 @@
 name: ia-writing
 class: discipline
 description: >-
-  Prose editing, rewriting, and humanizing text for natural tone. Use when asked
-  to write, rewrite, edit, humanize, proofread, fix tone, or remove AI language.
-  For copy, docs, blog posts, emails, or PRs.
+  Prose editing, rewriting, and humanizing text for natural tone, or auditing a
+  draft for AI tells without rewriting. Use when asked to write, rewrite, edit,
+  humanize, proofread, fix tone, remove AI language, or check whether writing
+  reads as AI. For copy, docs, blog posts, emails, or PRs.
 ---
 
 # Human Writing
+
+## Modes
+
+**Edit (default)** -- rewrite the draft to strip AI tells while preserving the writer's voice; produce corrected text plus a changelog.
+
+**Detect** -- when asked whether text reads as AI, or to audit, scan, or flag a draft without rewriting: name each pattern that appears, quote the offending line, and give the fix in a few words. Do not rewrite, do not score, do not claim whether AI wrote it -- named patterns are evidence the reader can check; an authorship verdict is a guess. Run detection per Phase 1 of [audit-workflow.md](./references/audit-workflow.md), stop there, and offer to edit afterward.
+
+**Not this skill** -- text whose reader is a model rather than a person: tool descriptions, system prompts, skill and agent instructions, error strings, inter-agent messages. The human-voice rules below (contractions, varied rhythm, fragments, opinions, let-some-mess-in) make that text harder to parse, not easier. Route it to `ia-refine-prompt`.
 
 ## Core Principles
 
@@ -37,7 +46,9 @@ Weight detection toward structure: models reproduce sentence *structures* more r
 - False ranges: "from X to Y" where X and Y aren't on a meaningful scale
 - Formulaic challenges: "Despite X, Y continues to thrive"
 - Dramatic fragmentation: "[Noun]. That's it. That's the [thing]." -- performative simplicity
+- Fake-profound kicker: a final "deep" line that turns the point into a metaphor, aphorism, or mic-drop. Delete it -- don't rewrite into a better line; end on the clearest concrete sentence already present.
 - Rhetorical setups: "What if I told you..." / "Think about it:" / "Here's what I mean:"
+- Colon reveals: noun phrase, colon, lowercase dramatic reveal ("The best part: it learns"). Rewrite as a plain sentence. Reserve colons for lists, labels, and quotes; sentence case after a colon unless grammar, a proper noun, a title, or code requires it.
 - Wh- sentence openers: sentences starting with What/When/Where/Which/Who/Why/How as filler. Restructure to lead with the subject or verb.
 - Narrator-from-a-distance: "This happens because...", "People tend to...", "Nobody designed this." Put the reader in the room instead.
 - Lazy extremes: every, always, never, everyone, nobody -- false authority. Use specifics instead of sweeping claims.
@@ -64,6 +75,8 @@ Core offenders:
 - Generic conclusions: "The future looks bright" → state the actual plan
 
 **Communication artifacts** (remove entirely): sycophantic openers and closers ("Great question!", "I hope this helps!"), knowledge-cutoff hedges ("As of my last update"), vague attributions ("Experts argue").
+
+**Chat-UI artifacts** (grep before publishing): text and links copied out of a chat interface carry machine fingerprints that no amount of tone editing removes. Strip the AI-referrer tracking parameter from URLs -- `utm_source=chatgpt.com`, `utm_source=claude.ai`, `utm_source=perplexity.ai`, `referrer=grok.com` -- leaving the rest of the query string intact. Leaked citation markup is the `[OAICITE]` class in [audit-workflow.md](./references/audit-workflow.md) -- extend that list rather than starting a second one; `citeturn0search0`, `contentReference[oaicite:0]{index=0}`, `[attached_file:1]`, and `grok_card` belong there alongside the `[oai_citation:...]` and `【...†source】` forms already listed. These are mechanical, so check them mechanically; unlike a vocabulary tell they are not a judgement call, and shipping one in a README or PR body is not a style problem but a provenance leak.
 
 ## False Agency
 
@@ -97,6 +110,7 @@ Route by length first. Short-form (commits, PR descriptions, comments, posts): q
 **Restraint -- over-editing is a failure mode, equal in weight to under-editing.**
 - If a sentence already reads naturally, leave it. Touching prose that was fine introduces new tells and strips voice.
 - Match the smell, not the string. A listed word that reads naturally in its actual context stays -- flag the tone, not the token. Blanket-banning a word is mechanical editing, the same defect the skill exists to remove.
+- Before the first edit, name the draft's core point and 3-5 concrete voice signals to preserve -- vocabulary, cadence, bluntness, humour, admitted uncertainty, digressions, how polished it is meant to sound. Keep the note internal; it is the reference the two checks below are measured against, not output.
 
 **Long-form output skeleton** (tag vocabulary, severity suffixes, and fix actions live in the audit workflow reference above):
 
@@ -123,6 +137,7 @@ Route by length first. Short-form (commits, PR descriptions, comments, posts): q
 
 ## Composition
 
+- First sentence earns the second. In long-form prose, open on a concrete fact, number, or specific the reader doesn't have yet -- not on context-setting, a definition, or what the piece will cover. Test: delete the opening sentence. If nothing is lost, it was throat-clearing.
 - One paragraph, one topic. Lead with the topic sentence.
 - Keep related words together. Place emphatic words at end of sentence.
 - Don't join independent clauses with a comma. Don't break sentences in two.
@@ -135,7 +150,9 @@ Route by length first. Short-form (commits, PR descriptions, comments, posts): q
 2. Grep the text against the entries in [phrases.md](./references/phrases.md); zero matches required.
 3. Check for false agency: any inanimate thing performing a human verb? Name the person.
 4. Check for em dashes, mechanical bold, and synonym cycling.
-5. Cut quotables: if a sentence sounds like a pull-quote or aphorism, rewrite it.
+5. Cut quotables: if a sentence sounds like a pull-quote, aphorism, or mic-drop kicker, delete it -- don't rewrite it into a better line. End on the clearest concrete sentence already in the draft; add a plain takeaway or next action only if the ending needs closure.
+6. Proportionality: is the amount cut proportional to the slop actually found? Compression that strips character is over-editing, not thoroughness.
+7. Recognizability: against the voice signals captured before editing, would the writer still recognize this as their own? If it now reads like a different, tidier author, restore what carried the voice.
 
 ## Changelog Voice
 

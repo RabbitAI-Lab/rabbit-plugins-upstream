@@ -1,0 +1,47 @@
+{
+  "region": "cn-north-4",
+  "test_cases": [
+    {
+      "id": "TC-01",
+      "name": "Count all DCS instances (CLI)",
+      "command": "hcloud DCS ListInstances --cli-region=cn-north-4 --limit=100",
+      "expected": "HTTP 200 with instances list and instance_num"
+    },
+    {
+      "id": "TC-02",
+      "name": "Extract DCS count only (CLI)",
+      "command": "hcloud DCS ListInstances --cli-region=cn-north-4 --limit=100 | jq -r '.instance_num'",
+      "expected": "Numeric count, no other fields"
+    },
+    {
+      "id": "TC-03",
+      "name": "Count DCS instances by status (CLI)",
+      "command": "hcloud DCS ListInstances --cli-region=cn-north-4 --status=RUNNING --limit=100",
+      "expected": "HTTP 200 with RUNNING instances and instance_num"
+    },
+    {
+      "id": "TC-04",
+      "name": "Per-status count breakdown (CLI)",
+      "command": "hcloud DCS ListNumberOfInstancesInDifferentStatus --cli-region=cn-north-4",
+      "expected": "HTTP 200 with per-status counts (redis.running_count, etc.)"
+    },
+    {
+      "id": "TC-05",
+      "name": "Redis-only count (CLI)",
+      "command": "hcloud DCS ListNumberOfInstancesInDifferentStatus --cli-region=cn-north-4 | jq '[.redis | to_entries[].value | tonumber] | add'",
+      "expected": "Numeric Redis instance count"
+    },
+    {
+      "id": "TC-06",
+      "name": "Running Redis count (CLI)",
+      "command": "hcloud DCS ListNumberOfInstancesInDifferentStatus --cli-region=cn-north-4 | jq -r '.redis.running_count'",
+      "expected": "Numeric running Redis count"
+    },
+    {
+      "id": "TC-07",
+      "name": "Count DCS instances (SDK)",
+      "command": "python3 scripts/count_dcs_instances.py --region cn-north-4 --limit 100",
+      "expected": "DCS instance count printed"
+    }
+  ]
+}

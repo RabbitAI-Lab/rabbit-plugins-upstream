@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>喷泉之所以漂亮，是因为有压力；瀑布之所以壮观，是因为没有退路。人生也是如此，你最美的样子，不是性感妖娆，也不是花枝招展，而是靠自己努力拥有了不错的生活；虽然辛苦，却依然努力的模样。#敬一直努力的自己 - 视频拆解看板</title>
+<style>
+/* 视频号视频拆解报告 - 专业报告样式
+   设计原则：单一强调色、以内容层级代替装饰、事实与推断可区分、可直接打印成 PDF */
+
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#1a1d21;        /* 正文标题 */
+  --body:#3d4450;       /* 正文 */
+  --muted:#7a828e;      /* 辅助信息 */
+  --rule:#e3e6ea;       /* 分隔线 */
+  --bg:#f2f3f5;         /* 页面底色 */
+  --paper:#fff;         /* 纸面 */
+  --accent:#1f4e79;     /* 强调色（深蓝） */
+  --accent-soft:#eef3f8;
+  --flag:#8a6d3b;       /* 提示/不确定 */
+}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--body);line-height:1.75;-webkit-font-smoothing:antialiased}
+.dashboard{max-width:960px;margin:0 auto;padding:28px 16px;counter-reset:sec}
+
+/* 封面区 */
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;
+  background:var(--paper);border:1px solid var(--rule);border-top:4px solid var(--accent);
+  padding:30px 36px;margin-bottom:18px}
+.header-left{flex:1;min-width:0}
+.eyebrow{font-size:12px;letter-spacing:3px;color:var(--muted)}
+.header h1{font-size:25px;line-height:1.45;font-weight:700;color:var(--ink);margin:10px 0 16px;word-break:break-word}
+.meta-row{display:flex;flex-wrap:wrap;gap:6px 28px;font-size:13px;color:var(--muted);
+  border-top:1px solid var(--rule);padding-top:14px}
+.meta-item strong{color:var(--ink);font-weight:600}
+.header-right{flex-shrink:0}
+.cover-img{width:132px;height:88px;object-fit:cover;border:1px solid var(--rule)}
+
+/* 执行摘要 */
+.exec{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--accent);
+  padding:22px 32px;margin-bottom:18px}
+.exec-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:1px}
+.exec-body{font-size:14px;line-height:1.9;color:var(--body)}
+.exec-body p{margin-bottom:6px}
+.exec-body p:last-child{margin-bottom:0}
+.exec-kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 24px;
+  margin:12px 0 14px;padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.exec-kv div{font-size:13px;color:var(--muted)}
+.exec-kv b{display:block;font-size:19px;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* 章节 */
+.card{background:var(--paper);border:1px solid var(--rule);padding:28px 34px;margin-bottom:18px;counter-increment:sec}
+.card-title{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:.5px;
+  padding-bottom:12px;margin-bottom:18px;border-bottom:1px solid var(--rule);
+  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card-title::before{content:counter(sec,decimal-leading-zero);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:13px;color:var(--accent);font-weight:700}
+.src-tag{font-size:11px;font-weight:600;letter-spacing:.5px;padding:2px 8px;border-radius:2px;color:#fff}
+.src-fact{background:#5b7c99}      /* 实测：接口返回 */
+.src-model{background:#7f8c8d}     /* 模型输出 */
+.src-infer{background:var(--accent)}/* 推断：分析结论 */
+.sub-title{font-size:14px;font-weight:700;color:var(--ink);margin:20px 0 10px}
+.muted{font-size:12px;color:var(--muted);margin-top:8px}
+.note{font-size:12px;color:var(--muted);line-height:1.7;margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule)}
+.summary-text{font-size:14px;line-height:1.9;color:var(--body)}
+
+/* KPI（实测数据，等宽数字、不用彩色块） */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+  border:1px solid var(--rule);background:var(--paper);margin-bottom:18px}
+.kpi-card{padding:16px 18px;border-right:1px solid var(--rule);text-align:left}
+.kpi-card:last-child{border-right:none}
+.kpi-label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.kpi-value{font-size:24px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+
+/* 条形图 */
+.bars{margin:14px 0}
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.bar-label{width:44px;font-size:13px;color:var(--muted);text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:8px;background:#eef0f2;overflow:hidden}
+.bar-fill{height:100%;background:var(--accent);min-width:2px}
+.bar-val{width:62px;font-size:12px;color:var(--body);flex-shrink:0;font-variant-numeric:tabular-nums;text-align:right}
+
+/* 表格 */
+.data-table{width:100%;border-collapse:collapse;font-size:13px}
+.data-table th{background:#f7f8f9;padding:9px 12px;text-align:left;font-weight:600;color:var(--muted);
+  border-bottom:1px solid var(--rule);border-top:1px solid var(--rule);font-size:12px;letter-spacing:.5px}
+.data-table td{padding:10px 12px;border-bottom:1px solid #f0f1f3;vertical-align:top;line-height:1.7}
+.data-table tr:last-child td{border-bottom:1px solid var(--rule)}
+.data-table .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted)}
+.total-row td{font-weight:700;color:var(--ink)}
+.total-row td:first-child{text-align:right}
+
+/* 时间线 */
+.timeline{border-left:2px solid var(--rule);padding-left:20px;margin-left:4px}
+.tl-item{display:flex;gap:14px;margin-bottom:18px;position:relative}
+.tl-marker{flex-shrink:0;width:9px;height:9px;margin-top:7px;background:var(--accent);
+  border-radius:50%;position:absolute;left:-25px}
+.tl-content{flex:1}
+.tl-header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.tl-seg{font-weight:700;font-size:14px;color:var(--ink)}
+.tl-time{font-size:12px;color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.tl-conf{font-size:11px;color:var(--muted);border:1px solid var(--rule);padding:1px 6px}
+.tl-field{font-size:13px;line-height:1.8;margin-bottom:2px;color:var(--body)}
+.tl-field strong{color:var(--muted);font-weight:600}
+.tl-note{font-size:13px;line-height:1.8;margin-top:8px;padding:10px 14px;
+  background:var(--accent-soft);border-left:2px solid var(--accent);color:var(--body)}
+
+/* 不确定项 */
+.uncert-list{list-style:none;counter-reset:uc}
+.uncert-item{display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;font-size:13px;line-height:1.8}
+.uncert-num{flex-shrink:0;font-size:12px;color:var(--flag);font-weight:700;
+  font-family:ui-monospace,monospace;min-width:22px}
+
+/* 互动结构反推 */
+.infer-banner{display:flex;flex-wrap:wrap;gap:28px;margin:4px 0 16px;padding:14px 0;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.infer-label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:2px}
+.infer-dominant{font-size:18px;color:var(--ink);font-weight:700}
+.infer-type{font-size:16px;color:var(--accent);font-weight:600}
+.signal-list{list-style:none}
+.signal-item{padding:10px 0 10px 14px;margin-bottom:2px;border-left:2px solid var(--rule);
+  border-bottom:1px solid #f4f5f6}
+.signal-item.lv-high{border-left-color:var(--accent)}
+.signal-item.lv-mid{border-left-color:#9aa5b1}
+.signal-item.lv-low{border-left-color:#d5d9de}
+.signal-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--muted);
+  letter-spacing:.5px;margin-right:8px;min-width:52px}
+.signal-text{font-size:13px;line-height:1.85;color:var(--body)}
+.action-list{margin:0;padding-left:20px;line-height:1.9;font-size:13px;color:var(--body)}
+.action-list li{margin-bottom:6px}
+
+/* 总体评估 */
+.overall-card{display:flex;gap:32px;align-items:flex-start;background:var(--paper)}
+.overall-score{flex-shrink:0;text-align:center;min-width:96px;padding-right:28px;border-right:1px solid var(--rule)}
+.overall-num{font-size:40px;font-weight:700;color:var(--accent);line-height:1;font-variant-numeric:tabular-nums}
+.overall-stars{font-size:15px;color:var(--accent);letter-spacing:2px;margin-top:8px}
+.overall-unit{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+.overall-body{flex:1;min-width:0}
+.overall-body p{font-size:13px;line-height:1.85;margin-bottom:8px}
+.hl-good,.hl-bad{color:var(--body)}
+.hl-good strong,.hl-bad strong{color:var(--ink);font-weight:700;margin-right:6px}
+.hl-fix{color:var(--body);padding-top:8px;border-top:1px dashed var(--rule)}
+.hl-fix strong{color:var(--accent);font-weight:700;margin-right:6px}
+
+/* 分析层细节 */
+.aud-table td:first-child{width:96px;color:var(--muted);font-weight:600;font-size:13px}
+.struct-type{font-size:13px;margin-bottom:8px;color:var(--body)}
+.struct-rationale{font-size:13px;line-height:1.85;color:var(--muted);margin-bottom:10px}
+.struct-summary{font-size:13px;margin-top:12px;color:var(--body);padding-top:10px;border-top:1px dashed var(--rule)}
+.layer-chip{display:inline-block;font-size:11px;padding:1px 7px;border:1px solid var(--rule);
+  color:var(--muted);white-space:nowrap}
+.contrib-detail{font-size:12.5px;line-height:1.7;min-width:190px}
+.contrib-bar{height:6px;background:#eef0f2;overflow:hidden;min-width:70px;margin-bottom:3px}
+.contrib-fill{height:100%;background:var(--accent)}
+.contrib-num{font-size:11px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums}
+.evid-cell{font-size:12px;color:var(--muted);min-width:110px;line-height:1.7}
+.formula-box{background:var(--accent-soft);border-left:2px solid var(--accent);padding:14px 18px;
+  font-size:14px;line-height:1.8;color:var(--body)}
+.repl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.repl-item{padding:12px 0;border-top:1px solid var(--rule);font-size:12.5px;line-height:1.75}
+.repl-label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;margin-bottom:4px}
+.repl-val{font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.repl-text{color:var(--body)}
+.score-row{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid #f4f5f6}
+.score-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.score-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.score-name{font-weight:700;font-size:14px;color:var(--ink)}
+.score-val{font-weight:700;font-size:14px;color:var(--accent);font-variant-numeric:tabular-nums}
+.score-track{height:6px;background:#eef0f2;overflow:hidden;margin-bottom:10px}
+.score-fill{height:100%;background:var(--accent)}
+.score-evid{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:3px}
+.score-reason{font-size:13px;line-height:1.8;color:var(--body);margin-bottom:3px}
+.score-sugg{font-size:12.5px;color:var(--body);line-height:1.7;padding-left:10px;border-left:2px solid var(--rule)}
+.ops-list{padding-left:20px}
+.ops-list li{font-size:13.5px;line-height:1.9;margin-bottom:8px;color:var(--body)}
+.tag-chips{display:flex;flex-wrap:wrap;gap:8px}
+.tag-chip{font-size:12px;padding:4px 12px;border:1px solid var(--rule);color:var(--muted)}
+
+/* 方法论与声明 */
+.method{background:var(--paper);border:1px solid var(--rule);padding:24px 34px;margin-bottom:18px;font-size:12px;
+  line-height:1.9;color:var(--muted)}
+.method h3{font-size:13px;color:var(--ink);font-weight:700;margin-bottom:8px;letter-spacing:.5px}
+.method ul{padding-left:18px;margin-bottom:10px}
+.method li{margin-bottom:4px}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.footer{text-align:center;padding:18px 0 30px;color:var(--muted);font-size:11.5px;line-height:1.9}
+
+@media(max-width:640px){
+  .dashboard{padding:16px 10px}
+  .header,.card,.exec,.method{padding:20px}
+  .header{flex-direction:column}
+  .header-right{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .kpi-card{border-bottom:1px solid var(--rule)}
+  .overall-card{flex-direction:column;gap:18px}
+  .overall-score{border-right:none;border-bottom:1px solid var(--rule);padding:0 0 14px;width:100%}
+}
+@media print{
+  body{background:#fff}
+  .dashboard{max-width:none;padding:0}
+  .card,.header,.exec,.method{border:none;border-top:1px solid var(--rule);box-shadow:none;page-break-inside:avoid}
+  .card-title{page-break-after:avoid}
+}
+
+</style>
+</head>
+<body>
+<div class="dashboard">
+<header class="header">
+<div class="header-left">
+<div class="badge">视频号视频拆解报告</div>
+<h1>喷泉之所以漂亮，是因为有压力；瀑布之所以壮观，是因为没有退路。人生也是如此，你最美的样子，不是性感妖娆，也不是花枝招展，而是靠自己努力拥有了不错的生活；虽然辛苦，却依然努力的模样。#敬一直努力的自己</h1>
+<div class="meta-row">
+<span class="meta-item">发布账号：<strong>果粒粒爱分享</strong></span>
+<span class="meta-item">发布时间：2026-08-24 12:05:14</span>
+<span class="meta-item">时长：20.3秒</span>
+<span class="meta-item">分辨率：1080x1920</span>
+<span class="meta-item">大小：8.7 MB</span>
+</div>
+</div>
+<div class="header-right">
+<img src="https://finder.video.qq.com/251/20304/stodownload?encfilekey=2fG3V4WwQPkO5qEyicpAFZ5AkT7yGDZ9QuskyFNwXLISiaBgfCSvPA9SE5gL6b67G0scibZOuCPYKd6Ej0hMPJh5gvT3MemujFO39qcXicmu2UY&amp;token=ic1n0xDG6awibKjVJs3MblYJ2DUYoK0gK7ibpQh6artBsHm0f8jrqGYCEGVQFV5QFKLZCrNuichckVNtv4laSx63cAzjiasmfwzPrfMuiabMszQD4eRPqqpwRw3kC3dibz45JCUSaZzV5dXF2TVmDVwqre7MIKkDF4qqHUf2ia0rXWvoQfwbDs5ngVd1azhPF0hynq1q3LypJayEVKiaXd47q0bFmo0j2aqIYTic7V&amp;hy=SZ&amp;idx=1&amp;m=e05982e19bffc3d5ebd40e4e2a956a1f&amp;uzid=1&amp;picformat=200&amp;wxampicformat=503" alt="封面" class="cover-img">
+</div>
+</header>
+<section class="exec">
+<div class="exec-title">执行摘要</div>
+<div class="exec-kv">
+<div>点赞<b>28</b></div>
+<div>转发<b>12</b></div>
+<div>评论<b>1</b></div>
+<div>收藏<b>7</b></div>
+<div>时长<b>20.3秒</b></div>
+<div>综合评分<b>58 / 100</b></div>
+</div>
+<div class="exec-body">
+<p>互动结构显示：主导指标为<b>点赞</b>（占四指标总量 58.3%），内容性质判定为<b>社交货币型 + 情绪认同型</b>。
+<p>首要爆款因素：金句类比降低认同成本（贡献度约 35%）——文案用“喷泉/瀑布”类比人生，把抽象的“靠自己努力”具象为可感知的自然现象，观众无需思考即可产生认同，对应点赞主导的结构。
+<p>最优先改进项：在结尾字幕加入一句开放提问（如“你靠自己努力拥有了什么”），并在评论区置顶，将点赞型认同转化为评论与转发。</p>
+</div>
+</section>
+<div class="legend" style="background:var(--paper);border:1px solid var(--rule);padding:12px 34px;margin-bottom:18px">
+<span class="legend-item"><span class="src-tag src-fact">实测</span>接口直接返回的数据</span>
+<span class="legend-item"><span class="src-tag src-model">模型输出</span>视觉理解模型的画面观察结果</span>
+<span class="legend-item"><span class="src-tag src-infer">推断</span>基于上述数据作出的分析判断，非事实</span>
+</div>
+<section class="card overall-card">
+<div class="overall-score">
+<div class="overall-num">58</div>
+<div class="overall-unit">/100 总体评分</div>
+<div class="overall-stars">★★★★☆</div>
+<div class="overall-unit">可复制性</div>
+</div>
+<div class="overall-body">
+<p class="hl-good"><strong>【亮点】</strong>转发/点赞达 42.9%，文案含可独立引用的态度句（#敬一直努力的自己），用户转发行为本身构成立场表达；全片静态镜头+淡入转场与沉静氛围一致，7 段意象排比结构清晰。</p>
+<p class="hl-bad"><strong>【问题】</strong>评论/点赞仅 3.57%（1 条评论），观点单一缺讨论空间；结尾无互动引导，以点赞为主的互动未向粉丝沉淀转化。</p>
+<p class="hl-fix"><strong>首要改进：</strong>在结尾字幕加入一句开放提问（如“你靠自己努力拥有了什么”），并在评论区置顶，将点赞型认同转化为评论与转发。</p>
+</div>
+</section>
+<section class="card">
+<h2 class="card-title">受众画像<span class="src-tag src-infer">推断</span></h2>
+<table class="data-table aud-table">
+<tbody>
+<tr><td class="aud-label">年龄段</td><td>推断以 30-55 岁为主（约核心占比 60%），依据为茶道、人生感悟、慢生活类内容的互动人群分布，非平台官方统计</td></tr>
+<tr><td class="aud-label">性别比例</td><td>推断女性偏多（约 65:35），依据为生活感悟与情感治愈类内容的互动人群结构</td></tr>
+<tr><td class="aud-label">兴趣标签</td><td>人生感悟、茶生活、励志文案、慢生活、生活美学</td></tr>
+<tr><td class="aud-label">消费能力</td><td>推断为注重生活品质但非高客单价，更关注情绪价值与精神共鸣的群体</td></tr>
+</tbody></table>
+</section>
+<section class="kpi-grid">
+<div class="kpi-card" style="border-top:3px solid #E74C3C">
+<div class="kpi-label">点赞</div>
+<div class="kpi-value">28</div>
+</div>
+<div class="kpi-card" style="border-top:3px solid #2ECC71">
+<div class="kpi-label">转发</div>
+<div class="kpi-value">12</div>
+</div>
+<div class="kpi-card" style="border-top:3px solid #F39C12">
+<div class="kpi-label">评论</div>
+<div class="kpi-value">1</div>
+</div>
+<div class="kpi-card" style="border-top:3px solid #9B59B6">
+<div class="kpi-label">收藏</div>
+<div class="kpi-value">7</div>
+</div>
+<div class="kpi-card" style="border-top:3px solid #34495E">
+<div class="kpi-label">互动总量</div>
+<div class="kpi-value">48</div>
+</div>
+</section>
+<section class="card">
+<h2 class="card-title">互动数据对比<span class="src-tag src-fact">实测</span></h2>
+<div class="bar-row">
+<span class="bar-label">点赞</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:100.0%;background:#E74C3C"></div>
+</div>
+<span class="bar-val">28</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">转发</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:42.9%;background:#2ECC71"></div>
+</div>
+<span class="bar-val">12</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">评论</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:3.6%;background:#F39C12"></div>
+</div>
+<span class="bar-val">1</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">收藏</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:25.0%;background:#9B59B6"></div>
+</div>
+<span class="bar-val">7</span>
+</div>
+<p class="muted">视频号 API 不返回播放量（viewCount），故不展示播放与互动率。</p>
+</section>
+<section class="card">
+<h2 class="card-title">互动数据反推<span class="src-tag src-infer">推断</span></h2>
+<p class="muted">视频号不提供播放量，但四指标的相对结构就是内容性质的指纹——不同指标主导，意味着完全不同的传播机制。</p>
+<div class="infer-banner">
+<div><span class="infer-label">主导指标</span><strong class="infer-dominant">点赞</strong></div>
+<div><span class="infer-label">内容类型</span><strong class="infer-type">社交货币型 + 情绪认同型</strong></div>
+</div>
+<div class="bars">
+<div class="bar-row">
+<span class="bar-label">点赞</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:58.3%"></div>
+</div>
+<span class="bar-val">58.3%</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">转发</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:25.0%"></div>
+</div>
+<span class="bar-val">25.0%</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">评论</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:2.1%"></div>
+</div>
+<span class="bar-val">2.1%</span>
+</div>
+<div class="bar-row">
+<span class="bar-label">收藏</span>
+<div class="bar-track">
+<div class="bar-fill" style="width:14.6%"></div>
+</div>
+<span class="bar-val">14.6%</span>
+</div>
+</div>
+<p class="muted">占比 = 该指标 / 四指标之和；转发/点赞 42.9%｜评论/点赞 3.6%｜收藏/点赞 25.0%</p>
+<h3 class="sub-title">逐项解读</h3>
+<ul class="signal-list">
+<li class="signal-item lv-low"><span class="signal-tag">收藏 · 弱</span><span class="signal-text">收藏占比 14.6%，内容缺少可供留存的信息沉淀</span></li>
+<li class="signal-item lv-low"><span class="signal-tag">评论 · 弱</span><span class="signal-text">评论占比 2.1%，观点较为单一，未形成讨论空间</span></li>
+<li class="signal-item lv-high"><span class="signal-tag">转发 · 强</span><span class="signal-text">转发占比 25.0%，转发/点赞比 42.9%：用户愿付出高于点赞的社交成本进行扩散，常见动机为表明立场、提醒特定人群或传递实用信息</span></li>
+<li class="signal-item lv-high"><span class="signal-tag">点赞 · 强</span><span class="signal-text">点赞占比 58.3%，互动以低门槛的情绪认同为主，内容接受度高，但深层参与度有限</span></li>
+</ul>
+<h3 class="sub-title">由互动结构推导的动作</h3>
+<ol class="action-list">
+<li>提炼一句可被直接引用的结论或态度，使转发行为本身成为立场表达；该结论需在封面与前 3 秒内出现</li>
+<li>当前互动集中在点赞，缺少深层参与：可在结尾设置争议性提问或悬念，将点赞转化为评论与转发</li>
+</ol>
+<h3 class="sub-title">分析层补充解读</h3>
+<ul class="action-list">
+<li>点赞 28 占四指标总量 58.3% 主导，互动以低门槛情绪认同为主（评论仅 1 条），内容接受度高但深层参与有限。</li>
+<li>转发 12（转发/点赞 42.9%）为第二强项，文案含可独立引用的态度句（#敬一直努力的自己），用户转发多用于借内容表态或提醒同类人群。</li>
+<li>收藏 7（14.6%）偏弱，内容偏情绪体验而非可留存的方法或信息，用户少有“回头看”动机。</li>
+</ul>
+</section>
+<section class="card">
+<h2 class="card-title">内容摘要<span class="src-tag src-model">模型输出</span></h2>
+<p class="summary-text">视频以茶具、自然景观为视觉载体，通过静态镜头、淡入转场，配合哲理文字传递“靠自身努力生活”的核心观点，整体氛围沉静舒缓。</p>
+<p class="muted">模型估计时长：19.0 秒</p>
+</section>
+<section class="card">
+<h2 class="card-title">结构拆解<span class="src-tag src-infer">推断</span></h2>
+<p class="struct-type">脚本类型：<strong>金句类比+茶道意象型（治愈系哲理短视频）</strong></p>
+<p class="struct-rationale"><strong>判断依据：</strong>判断依据：片段 1（0-1.77s）以“喷泉之所以漂亮”类比点题；片段 2-3（1.77-6.19s）用“压力/退路”建立对比前提；片段 4-7（6.19-19s）落到人生感悟，否定外在妖娆、肯定内在努力。全片画面与屏幕文字逐句同步，叙事由自然类比前提推至人生结论。</p>
+<div class="timeline">
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 1</span>
+<span class="tl-time">0.00s – 1.77s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>深色桌面摆放茶具，白色蒸汽向上飘动，背景为模糊绿植</p>
+<p class="tl-field"><strong>屏幕文字：</strong>靠自 ｜ 喷泉之所以漂亮</p>
+<p class="tl-field"><strong>语音/解说：</strong>喷泉漂亮的原因</p>
+<p class="tl-field"><strong>景别：</strong>特写</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>叙事作用：</strong>引出核心主题“靠自”，以喷泉漂亮类比</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：以“喷泉”类比开场，把抽象“靠自己”具象为可感知的自然现象，认同门槛低、易接住。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 2</span>
+<span class="tl-time">1.77s – 3.54s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>手握着盛有深色液体的白瓷茶杯，背景有暖光蜡烛</p>
+<p class="tl-field"><strong>屏幕文字：</strong>靠自 ｜ 是因为有压力</p>
+<p class="tl-field"><strong>语音/解说：</strong>人有压力才需自立</p>
+<p class="tl-field"><strong>景别：</strong>特写</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入淡出</p>
+<p class="tl-field"><strong>情绪：</strong>手部动作平稳，无情绪外露</p>
+<p class="tl-field"><strong>叙事作用：</strong>阐释“靠自”的原因是存在压力</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：用“压力”解释喷泉之美，建立“有压力才需自立”的因果，为后续人生类比铺逻辑。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 3</span>
+<span class="tl-time">3.54s – 6.19s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>深蓝色茶具摆放在石制茶台上，背景为模糊绿色植物</p>
+<p class="tl-field"><strong>屏幕文字：</strong>瀑布之所以壮观 ｜ 是因为没有退路</p>
+<p class="tl-field"><strong>语音/解说：</strong>瀑布壮观因无退路</p>
+<p class="tl-field"><strong>景别：</strong>中景</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>叙事作用：</strong>以瀑布壮观类比，说明无退路才需努力</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：以“瀑布/退路”与“喷泉/压力”形成对仗前提，类比结构清晰，观众无需思考即可跟随。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 4</span>
+<span class="tl-time">6.19s – 8.84s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>两杯盛有浅棕色液体的白瓷杯放在木质桌面，杯口冒蒸汽，桌面散落茶渣</p>
+<p class="tl-field"><strong>屏幕文字：</strong>人生也是如此</p>
+<p class="tl-field"><strong>语音/解说：</strong>人生如茶般沉静</p>
+<p class="tl-field"><strong>景别：</strong>特写</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>叙事作用：</strong>将人生与茶类比，引出人生感悟</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：从自然意象切到“人生也是如此”，把前述类比正式落到人生，完成话题转换。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 5</span>
+<span class="tl-time">8.84s – 12.38s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>棕色茶壶放在石台上，旁置浅绿色茶杯，背景为模糊山水绿植</p>
+<p class="tl-field"><strong>屏幕文字：</strong>你最美的样子不是性感妖娆</p>
+<p class="tl-field"><strong>语音/解说：</strong>美不在外在妖娆</p>
+<p class="tl-field"><strong>景别：</strong>中景</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>叙事作用：</strong>阐释美的定义，否定外在妖娆</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：否定“性感妖娆”等外在美，制造价值对立，为“靠自己努力”的正面结论蓄势。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 6</span>
+<span class="tl-time">12.38s – 16.80s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>手触碰棕色茶壶，壶口冒蒸汽，桌面有茶叶</p>
+<p class="tl-field"><strong>屏幕文字：</strong>而是靠自己努力 ｜ 拥有了不错的生活</p>
+<p class="tl-field"><strong>语音/解说：</strong>生活靠努力获得</p>
+<p class="tl-field"><strong>景别：</strong>特写</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>情绪：</strong>手部动作平稳，无情绪外露</p>
+<p class="tl-field"><strong>叙事作用：</strong>点明生活靠自身努力获得，总结核心观点</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：点明核心观点“靠自己努力拥有不错的生活”，是全片结论段，文字与画面（手触茶壶）同步强化。</p>
+</div>
+</div>
+<div class="tl-item">
+<div class="tl-marker">
+<div class="tl-dot"></div>
+</div>
+<div class="tl-content">
+<div class="tl-header">
+<span class="tl-seg">片段 7</span>
+<span class="tl-time">16.80s – 19.00s</span>
+<span class="tl-conf" style="background:#2ECC71">90%</span>
+</div>
+<p class="tl-field"><strong>画面：</strong>园林水景，碧绿池塘、草坪、树木、传统建筑</p>
+<p class="tl-field"><strong>屏幕文字：</strong>虽然辛苦却依然努力的模样</p>
+<p class="tl-field"><strong>语音/解说：</strong>辛苦仍努力生活</p>
+<p class="tl-field"><strong>景别：</strong>全景</p>
+<p class="tl-field"><strong>运镜：</strong>静态</p>
+<p class="tl-field"><strong>转场：</strong>淡入</p>
+<p class="tl-field"><strong>叙事作用：</strong>以园林劳作的场景呼应辛苦努力的主题</p>
+<p class="tl-note"><strong>💡 为什么有效：</strong>为什么有效：以园林水景收尾呼应“辛苦仍努力”，画面留白让情绪落地；但止于意象、未设互动钩子。</p>
+</div>
+</div>
+</div>
+<p class="struct-summary"><strong>结构总结：</strong>自然类比（喷泉/瀑布）→ 人生点题 → 否定外在 → 肯定内在努力 → 园林意象收尾</p>
+</section>
+<section class="card">
+<h2 class="card-title">爆款归因<span class="src-tag src-infer">推断</span></h2>
+<table class="data-table">
+<thead><tr><th>#</th><th>层</th><th>因素</th><th>详细描述</th><th>贡献度</th><th>数据佐证</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><span class="layer-chip">内容因素</span></td>
+<td><strong>金句类比降低认同成本</strong></td>
+<td class="contrib-detail">文案用“喷泉/瀑布”类比人生，把抽象的“靠自己努力”具象为可感知的自然现象，观众无需思考即可产生认同，对应点赞主导的结构。</td>
+<td><div class="contrib-bar"><div class="contrib-fill" style="width:35%"></div></div><span class="contrib-num">35%</span></td>
+<td class="evid-cell">点赞 28 占四指标总量 58.3%，互动以低门槛情绪认同为主</td>
+</tr>
+<tr>
+<td>2</td>
+<td><span class="layer-chip">内容因素</span></td>
+<td><strong>治愈意象降低观看抵触</strong></td>
+<td class="contrib-detail">茶具、蒸汽、自然景观配合静态镜头与淡入转场，模型输出判定整体氛围“沉静舒缓”，适合碎片化放松场景，降低划走概率。</td>
+<td><div class="contrib-bar"><div class="contrib-fill" style="width:25%"></div></div><span class="contrib-num">25%</span></td>
+<td class="evid-cell">模型输出：整体氛围沉静舒缓；7 段全部为静态运镜、淡入转场</td>
+</tr>
+<tr>
+<td>3</td>
+<td><span class="layer-chip">传播因素</span></td>
+<td><strong>文案可独立引用带来社交货币属性</strong></td>
+<td class="contrib-detail">文案含可独立引用的态度句（#敬一直努力的自己），用户转发行为本身即构成立场表达，转发成本虽高于点赞但比例不低。</td>
+<td><div class="contrib-bar"><div class="contrib-fill" style="width:25%"></div></div><span class="contrib-num">25%</span></td>
+<td class="evid-cell">转发 12，转发/点赞 42.9%</td>
+</tr>
+<tr>
+<td>4</td>
+<td><span class="layer-chip">表现因素</span></td>
+<td><strong>缺讨论钩子导致评论极弱</strong></td>
+<td class="contrib-detail">全片为单一视角的哲理陈述，观点无分歧点，观众缺少评论动机；结尾亦无提问或争议设计，评论区未形成独立战场。</td>
+<td><div class="contrib-bar"><div class="contrib-fill" style="width:15%"></div></div><span class="contrib-num">15%</span></td>
+<td class="evid-cell">评论 1，评论/点赞 3.57%</td>
+</tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2 class="card-title">爆款公式<span class="src-tag src-infer">推断</span></h2>
+<div class="formula-box">金句类比文案 + 治愈意象空镜 + 可独立引用的态度句。前两项降低认同成本，第三项把点赞型认同转化为转发。</div>
+<div class="repl-grid">
+<div class="repl-item"><span class="repl-label">可复刻性</span><span class="repl-val">4/5</span></div>
+<div class="repl-item"><span class="repl-label">可复刻策略</span><span class="repl-text">选定一个生活意象（茶/自然/日常）→ 写一句可独立引用的金句 → 画面与文字逐句同步 → 结尾落到“努力/自洽”等普适主题。</span></div>
+<div class="repl-item"><span class="repl-label">不适用场景</span><span class="repl-text">需要强信息密度或争议讨论的内容、商业带货（画面无产品展示路径）。</span></div>
+<div class="repl-item"><span class="repl-label">说明</span><span class="repl-text">结构极易复制：文字+空镜+淡入，拍摄门槛低，普通手机即可完成；限制在于金句文案需要原创积累，且同类治愈内容同质化竞争强，单纯模仿难出头。</span></div>
+</div>
+</section>
+<section class="card">
+<h2 class="card-title">六维评分<span class="src-tag src-infer">推断</span></h2>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">Hook强度</span>
+<span class="score-val" style="color:#F39C12">7.0/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:70%;background:#F39C12"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>0-1.77s 画面为茶具蒸汽+文字“靠自｜喷泉之所以漂亮”，以类比而非冲突开场。</p>
+<p class="score-reason">用类比点题，认同门槛低，但缺少好奇钩子，前 2 秒留存偏被动接收。</p>
+<p class="score-sugg"><strong>改进建议：</strong>可在前 2 秒用更反常识的对比句（如“你以为的轻松，都是别人扛下的压力”）强化停留。</p>
+</div>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">信息密度</span>
+<span class="score-val" style="color:#F39C12">6.0/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:60%;background:#F39C12"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>20.3 秒内 7 段，每段约 2.9 秒，画面与文字一一对应；信息均为情绪/哲理，无数据或案例层。</p>
+<p class="score-reason">单位时间信息量适中，但信息类型单一，密度偏向情绪体验而非认知增量。</p>
+<p class="score-sugg"><strong>改进建议：</strong>在不破坏氛围前提下叠加一个具体生活场景（如清晨通勤/深夜加班），增强代入。</p>
+</div>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">节奏控制</span>
+<span class="score-val" style="color:#F39C12">7.5/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:75%;background:#F39C12"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>7 段全部静态运镜、淡入转场，无硬切或推拉。</p>
+<p class="score-reason">匀速节奏与治愈定位一致，但全程无变化，长版本易产生疲倦。</p>
+<p class="score-sugg"><strong>改进建议：</strong>在核心结论段（12-16s“靠自己努力”）加一次轻微镜头推进或音效节点。</p>
+</div>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">产品展示</span>
+<span class="score-val" style="color:#E74C3C">4.0/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:40%;background:#E74C3C"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>茶具、茶杯作为隐喻载体持续出现，无品牌露出或购买指向。</p>
+<p class="score-reason">本片非带货内容，道具按意象功能评分；茶具出现客观强化了“慢生活”调性。</p>
+<p class="score-sugg"><strong>改进建议：</strong>不适用；若后续接茶具类带货需重构叙事，替换现有隐喻结构。</p>
+</div>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">情绪曲线</span>
+<span class="score-val" style="color:#F39C12">7.5/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:75%;background:#F39C12"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>0-1.77s 轻快类比 → 中段平稳铺陈 → 16.8-19s 园林水景收尾呼应“努力”。</p>
+<p class="score-reason">情绪推进温和连贯，匹配放松场景；但缺少一次情绪峰值形成记忆点。</p>
+<p class="score-sugg"><strong>改进建议：</strong>结尾可加一句与“辛苦”呼应的真实场景（如劳动者手部特写）强化共鸣。</p>
+</div>
+<div class="score-row">
+<div class="score-head">
+<span class="score-name">转化引导</span>
+<span class="score-val" style="color:#E74C3C">3.0/10</span>
+</div>
+<div class="score-track"><div class="score-fill" style="width:30%;background:#E74C3C"></div></div>
+<p class="score-evid"><strong>节奏证据：</strong>16.8-19s 园林画面直接结束，无关注/评论/转发引导，无话题承接。</p>
+<p class="score-reason">情感类内容常弱化转化，但当前互动已偏点赞单一，缺承接会限制粉丝沉淀。</p>
+<p class="score-sugg"><strong>改进建议：</strong>结尾字幕加一句开放提问（如“你靠自己努力拥有了什么”）并评论区置顶，把点赞转为评论。</p>
+</div>
+</section>
+<section class="card">
+<h2 class="card-title">运营建议<span class="src-tag src-infer">推断</span></h2>
+<ol class="ops-list">
+<li>文案沉淀为可引用金句库：把“喷泉/瀑布/茶”等类比句整理成系列，结尾统一落到“敬努力的自己”，形成账号记忆点。</li>
+<li>补互动承接：结尾加开放提问+评论区置顶，把点赞转化评论，缓解评论/点赞仅 3.57% 的问题。</li>
+<li>节奏微创新：在核心结论段（12-16s）加一次轻微镜头推进或环境音效，制造记忆点而不破坏治愈氛围。</li>
+<li>系列化选题：围绕“自然意象+人生感悟”做合辑（茶/花/雨/山），匹配慢生活人群的内容消费习惯。</li>
+</ol>
+</section>
+<section class="card">
+<h2 class="card-title">标签<span class="src-tag src-infer">推断</span></h2>
+<div class="tag-chips">
+<span class="tag-chip">人生感悟</span>
+<span class="tag-chip">励志文案</span>
+<span class="tag-chip">茶生活</span>
+<span class="tag-chip">慢生活</span>
+<span class="tag-chip">意象隐喻</span>
+<span class="tag-chip">治愈系</span>
+</div>
+</section>
+<section class="card">
+<h2 class="card-title">画面事实与证据<span class="src-tag src-fact">实测</span></h2>
+<table class="data-table">
+<thead><tr><th>#</th><th>画面事实</th><th>时间范围</th><th>证据类型</th><th>置信度</th></tr></thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0-1.77s：深色桌面摆放茶具，白色蒸汽向上飘动，背景为模糊绿植，叠加文字“靠自 喷泉之所以漂亮”</td>
+<td>0.00s – 1.77s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1.77-3.54s：手握着盛有深色液体的白瓷茶杯，背景有暖光蜡烛，叠加文字“靠自 是因为有压力”</td>
+<td>1.77s – 3.54s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3.54-6.19s：深蓝色茶具摆放在石制茶台上，背景为模糊绿色植物，叠加文字“瀑布之所以壮观 是因为没有退路”</td>
+<td>3.54s – 6.19s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>6.19-8.84s：两杯盛有浅棕色液体的白瓷杯放在木质桌面，杯口冒蒸汽，桌面散落茶渣，叠加文字“人生也是如此”</td>
+<td>6.19s – 8.84s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>5</td>
+<td>8.84-12.38s：棕色茶壶放在石台上，旁置浅绿色茶杯，背景为模糊山水绿植，叠加文字“你最美的样子不是性感妖娆”</td>
+<td>8.84s – 12.38s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>6</td>
+<td>12.38-16.80s：手触碰棕色茶壶，壶口冒蒸汽，桌面有茶叶，叠加文字“而是靠自己努力 拥有了不错的生活”</td>
+<td>12.38s – 16.80s</td>
+<td></td>
+<td>90%</td>
+</tr>
+<tr>
+<td>7</td>
+<td>16.80-19.00s：园林水景，碧绿池塘、草坪、树木、传统建筑，叠加文字“虽然辛苦却依然努力的模样”</td>
+<td>16.80s – 19.00s</td>
+<td></td>
+<td>90%</td>
+</tr>
+</tbody></table>
+</section>
+<section class="card">
+<h2 class="card-title">费用明细<span class="src-tag src-fact">实测</span></h2>
+<table class="data-table">
+<thead><tr><th>步骤</th><th>接口</th><th>消费(元)</th><th>余额(元)</th></tr></thead>
+<tbody>
+<tr>
+<td>作品资料（缓存）</td>
+<td class="mono">/openapi/wechat-native-channel-info/videos/info</td>
+<td>0.000000</td>
+<td>-</td>
+</tr>
+<tr>
+<td>视觉理解</td>
+<td class="mono">/openapi/stepfun-video-understanding/analyze</td>
+<td>0.240000</td>
+<td>10011.264000</td>
+</tr>
+<tr class="total-row">
+<td colspan="2">合计</td>
+<td>0.240000</td>
+<td></td>
+</tr>
+</tbody></table>
+</section>
+<section class="method">
+<h3>方法论与数据说明</h3>
+<ul>
+<li><b>数据来源</b>：作品元信息与互动数据取自曼格云视频号作品资料接口；画面分段、镜头语言、屏幕文字、语音摘要取自阶跃视觉理解模型（analysisMode=decompose）。</li>
+<li><b>数据性质</b>：标注「实测」为接口返回值；「模型输出」为模型对画面的观察，可能存在识别误差；「推断」为基于前两者的分析判断，属于观点而非事实。</li>
+<li><b>互动结构反推口径</b>：占比 = 该指标 /（点赞+转发+评论+收藏）；相对比值 = 该指标 / 点赞。类型判定采用双通道（占比或相对比值命中即计），以避免单项独大时稀释其余指标。阈值见技能内 references/analysis-schema.md。</li>
+<li><b>口径限制</b>：视频号接口<b>不提供播放量</b>，因此本报告不含播放量与互动率；所有传播判断均基于四项互动的相对结构，不代表触达规模。评论区内容、账号粉丝量、流量来源未纳入本次采集范围。</li>
+</ul>
+<p><b>使用声明</b>：本报告为内容分析方法论产出，评分与结论用于创作参考，不构成对账号运营效果的保证，亦不构成任何商业或法律意见。受众画像、爆款归因等「推断」类内容依赖有限样本与经验规则，请结合账号自身数据判断。</p>
+</section>
+<footer class="footer">
+<p>生成时间：2026-09-03 10:33:26 ｜ 数据来源：曼格云 API ｜ 本报告由 WorkBuddy 视频拆解技能生成</p>
+</footer>
+</div>
+</body></html>

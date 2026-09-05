@@ -1,39 +1,59 @@
-## Description: <br>
-Automated wave counting and market cycle prediction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automated wave counting and market cycle prediction.
 
-## Publisher: <br>
-[ssidharhubble](https://clawhub.ai/user/ssidharhubble) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ssidharhubble](https://clawhub.ai/user/ssidharhubble)
 
-## Use Case: <br>
-External users and trading-oriented agents use this skill to request Elliott Wave-style market cycle signals for a supplied asset ticker. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ticker queries are sent to an external API, and premium responses may require payment. <br>
-Mitigation: Review the external service and payment flow before installing or using premium responses. <br>
-Risk: Returned market predictions are third-party financial information and may be inaccurate or unsuitable for investment decisions. <br>
-Mitigation: Verify signals independently and do not treat them as investment advice. <br>
+## Use Case:
 
+External users and developers use this skill to request automated Elliott Wave counts and market-cycle signals for a supplied asset ticker.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON response or payment-required message from an external API] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a ticker input; premium signals may return a 402 payment response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: ClawHub release evidence) <br>
+Risk: Requested asset tickers are sent to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when sharing the requested ticker with the listed external service is acceptable.
+
+Risk: Premium signals may prompt for third-party payment.
+
+Mitigation: Review pricing and payment requirements before following any payment prompt.
+
+Risk: Generated market-cycle predictions may be incorrect or incomplete.
+
+Mitigation: Treat outputs as informational market analysis, not financial advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ssidharhubble/skills/elliott-wave-counts)
+- [Publisher profile](https://clawhub.ai/user/ssidharhubble)
+- [Premium signals pricing](https://ssyopros.zo.space/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Analysis, Guidance]
+
+**Output Format:** [JSON response or structured payment-required message]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts an asset ticker, sends it to a remote Elliott Wave signal API, and may return a 402 payment-required response for premium signals.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

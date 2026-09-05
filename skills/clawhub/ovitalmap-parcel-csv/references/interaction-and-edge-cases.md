@@ -2,14 +2,14 @@
 
 ## Delivery
 
-Send or link the actual files and label them explicitly:
+Send or link the actual files in their returned order:
 
 ```text
-顶点表（导入为“标签”）：{vertices_filename}
-边界表（导入为“轨迹”）：{boundary_filename}
+1. {first_parcel_filename}
+2. {second_parcel_filename}
 ```
 
-Tell the user to open each CSV in 奥维地图, choose the stated import type, confirm the import page, select 导入, and confirm the import options.
+Give the import instruction once: open each boundary CSV in OvitalMap and choose `轨迹`. For vertex files, choose `标签`. If both modes were requested, distinguish them by the `_vertices` filename suffix.
 
 ## Archive model
 
@@ -18,10 +18,6 @@ Tell the user to open each CSV in 奥维地图, choose the stated import type, c
 - New parcels update both in one locked commit.
 - Archive hits are re-exported without another append.
 - Corrections back up and update both records.
-
-## Sharing the master archive
-
-Sharing is entirely user-directed. Do not prompt automatically or prescribe email, timing, sender, recipient, or delivery service. If the user asks to share `master.csv`, follow their requested method with the available tools and never store delivery details in the archive.
 
 ## Parcel codes
 
@@ -42,18 +38,19 @@ The archive allocates sequence continuity. An existing official code is blocking
 ## Archive hits
 
 - Reuse the archived parcel code and provider metadata.
-- Export only that parcel as its own CSV pair.
+- Export only that parcel as its own file in the requested export mode.
 - Do not append it again.
 - If a newly supplied official ID fills an empty cadastre field, update it during Step 3.
 - If the user insists identical coordinates represent a different parcel, require explicit confirmation and set `allow_duplicate_coordinates: true` with a note naming the matched code.
 
-For a mixed batch, export archive hits individually and new parcels as one batch. Present the groups separately.
+For a mixed batch, preserve the original `parcel_ref` order across archive hits and new parcels. Export each parcel separately; do not group the delivered files by archive status.
 
 ## Multi-parcel batches
 
 - Keep `parcel_ref` stable from intake through replies, CSV generation, and archive results. Numeric positions remain accepted only for backward-compatible input.
+- Generate one file per parcel for the requested mode and return the files in `parcel_ref` order. If both modes were requested, keep each parcel's normal file immediately before its `_vertices` file.
 - Use one country/region per pipeline run. If parcel-level country codes differ, split the batch and preserve each parcel's ref.
-- Report all current parcel-specific problems in one Chinese reply.
+- Report all current parcel-specific problems together in the user's language.
 - If two submitted parcels have identical boundaries, request `duplicate_resolutions.{parcel_ref}`:
   - `same`: skip the later duplicate.
   - `different`: keep both, record explicit confirmation, and allow the duplicate boundary during archive commit.
@@ -63,10 +60,8 @@ For a mixed batch, export archive hits individually and new parcels as one batch
 ## Provider matching
 
 - Exact normalized match: reuse automatically.
-- One non-exact candidate: ask whether it is the same provider.
-- Multiple top candidates: list all and ask the user to choose or create a new provider.
 - No match: keep the supplied provider.
-- Never merge providers based only on substring or pinyin similarity.
+- Never merge providers based on similarity alone.
 
 ## Corrections
 
@@ -77,6 +72,6 @@ Use `archive_manager.py` action `correct` with `country_code`, `parcel_code`, an
 3. Reject coordinates already belonging to another parcel.
 4. Back up both archives.
 5. Update both rows atomically.
-6. Regenerate the corrected vertex and boundary CSV files.
+6. Regenerate the corrected boundary file by default, or the explicitly requested vertex/both mode.
 
-Report the backup and generated file paths and ask the user to verify the new boundary.
+Report the backup and generated file paths and ask the user to verify the corrected parcel.

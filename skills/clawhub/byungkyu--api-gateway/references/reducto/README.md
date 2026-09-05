@@ -2,6 +2,14 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Documents are sent to an external processor.** Reducto is a third-party service: every `document_url` you submit is fetched and read by Reducto, every file you upload is transmitted to and stored on its infrastructure, and the parsed text, tables, and extracted fields come back through its servers. The documents this is used on are rarely trivial — contracts, invoices, IDs, medical and financial records, HR files, signed forms — so the content, and whatever the extraction schema pulls out of it, is disclosed off-platform.
+>
+> - **Confirm the specific document and that the user accepts an external processor.** Say what is being uploaded and where it goes before doing it. Never submit a document the user did not name, and never batch a folder of them.
+> - **A `document_url` discloses more than the file.** A signed S3 or Drive link, or any URL with a token in its query string, is a credential: handing it to Reducto lets that host fetch the object itself. Prefer an explicit upload of a file the user chose over passing a pre-signed URL.
+> - **`schema` and `system_prompt` values are sent verbatim** and often describe exactly what the user is looking for — keep internal context and party names out of them where the extraction does not require it.
+> - **Return the narrowest answer.** Extracted fields frequently contain personal data belonging to third parties (counterparties, patients, employees). Summarize rather than echoing whole documents, and do not forward results to another app or a trigger destination without approval for that transfer.
+> - Uploaded files and job results persist in the user's Reducto account until deleted, and processing consumes paid credits.
+
 **App name:** `reducto`
 **Base URL proxied:** `platform.reducto.ai`
 
@@ -36,31 +44,33 @@
 ### Parse Document
 
 ```bash
-POST /reducto/parse
-Content-Type: application/json
-
+maton api -X POST '/reducto/parse' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "document_url": "https://example.com/document.pdf"
 }
+EOF
 ```
 
 ### Parse Document (Async)
 
 ```bash
-POST /reducto/parse_async
-Content-Type: application/json
-
+maton api -X POST '/reducto/parse_async' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "document_url": "https://example.com/document.pdf"
 }
+EOF
 ```
 
 ### Extract Data
 
 ```bash
-POST /reducto/extract
-Content-Type: application/json
-
+maton api -X POST '/reducto/extract' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "document_url": "https://example.com/document.pdf",
   "schema": {
@@ -71,59 +81,63 @@ Content-Type: application/json
     }
   }
 }
+EOF
 ```
 
 ### Split Document
 
 ```bash
-POST /reducto/split
-Content-Type: application/json
-
+maton api -X POST '/reducto/split' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "document_url": "https://example.com/document.pdf",
   "split_description": [
     {"name": "section1", "description": "First section"}
   ]
 }
+EOF
 ```
 
 ### Edit Document
 
 ```bash
-POST /reducto/edit
-Content-Type: application/json
-
+maton api -X POST '/reducto/edit' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "document_url": "https://example.com/form.pdf",
   "edit_instructions": "Fill the name field with 'John Doe'"
 }
+EOF
 ```
 
 ### Upload File
 
 ```bash
-POST /reducto/upload
-Content-Type: application/json
-
+maton api -X POST '/reducto/upload' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {}
+EOF
 ```
 
 ### List Jobs
 
 ```bash
-GET /reducto/jobs
+maton api '/reducto/jobs'
 ```
 
 ### Get Job Status
 
 ```bash
-GET /reducto/job/{job_id}
+maton api '/reducto/job/{job_id}'
 ```
 
 ### Get Version
 
 ```bash
-GET /reducto/version
+maton api '/reducto/version'
 ```
 
 ## Job Status Values

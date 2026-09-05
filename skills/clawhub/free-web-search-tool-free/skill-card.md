@@ -1,40 +1,58 @@
-## Description: <br>
-Free Web Search Tool is a lightweight web-search helper that routes Bing and DuckDuckGo searches, optimizes for Chinese-language results, and can optionally fetch page text for everyday information lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+轻量级联网搜索工具，支持 Bing 与 DuckDuckGo 双引擎自动路由，针对中文环境优化，适合个人日常信息检索。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users, developers, students, and researchers use this skill to run lightweight live web searches, retrieve Chinese-optimized search results, and optionally fetch page text for technical questions, news, and study materials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, IP-region checks, and optional page fetches may be sent to third-party search or web services. <br>
-Mitigation: Avoid sensitive queries, keep full-text fetching disabled unless needed, and review results before relying on them. <br>
-Risk: The artifact includes overbroad SEO trigger wording that could be misread as support for ranking manipulation. <br>
-Mitigation: Use the skill for ordinary information retrieval and avoid black-hat SEO, search-engine cheating, or paid advertising management use cases. <br>
+## Use Case:
 
+Developers, students, researchers, and external users use this skill to run lightweight web searches, retrieve result summaries, and optionally fetch page text through an agent with browser and command execution capability.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/free-web-search-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and search-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run browser-based searches and optionally fetch page text; single-query results are capped at 10 and full-text fetches are capped at 5.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill requests command execution and file-read authority for package setup, browser setup, and search workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve only commands that are necessary for dependency installation, browser setup, or the intended search task, and review commands before execution.
+
+Risk: Full-text fetching may send sensitive queries or visit result pages that are not necessary for the task.
+
+Mitigation: Avoid sensitive internal queries and keep full-text fetching disabled unless page content is required.
+
+Risk: The artifact includes broad generic automation claims beyond the scoped web-search helper.
+
+Mitigation: Treat file, API, and general command automation claims as out of scope unless each action is explicitly reviewed and approved.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/free-web-search-tool-free)
+- [Publisher Profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and search-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-query searches return up to 10 results; optional full-text fetching covers up to 5 results with page text truncated at 8000 characters.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

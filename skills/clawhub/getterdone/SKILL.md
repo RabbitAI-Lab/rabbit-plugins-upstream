@@ -9,7 +9,7 @@ description: >-
   default to in-conversation user confirmation; autonomous review is an
   explicit opt-in path with server-side per-task and daily spending caps.
   One-time agent setup at https://getterdone.ai/register-agent.
-version: 1.24.1
+version: 1.33.1
 provider:
   name: GetterDone Inc.
   url: https://getterdone.ai
@@ -23,11 +23,15 @@ metadata:
       - name: GETTERDONE_API_KEY
         required: true
         description: >-
-          GetterDone agent API key (begins `gd_`; shown once at the end of registration).
-          Provision at https://getterdone.ai/register-agent. Scoped to a
-          single agent and revocable from the dashboard. Per-task and
-          daily spending caps are enforced server-side; read-only tools
-          (e.g. `list_tasks`) work without paid-action authorization.
+          GetterDone agent credential, format `gd_<clientId>:<clientSecret>`
+          (a colon-delimited pair). The web flow at
+          https://getterdone.ai/register-agent shows it as one combined string;
+          the headless `npx @getterdone/mcp-server setup` flow returns clientId
+          and clientSecret separately and the CLI stores the combined form in
+          ~/.getterdone/credentials.json. Scoped to a single agent and
+          revocable from the dashboard. Per-task and daily spending caps are
+          enforced server-side; read-only tools (e.g. `list_tasks`) work
+          without paid-action authorization.
 ---
 
 # GetterDone Skill
@@ -114,7 +118,7 @@ The tool automatically loads credentials from one of these sources (in priority 
 | `~/.getterdone/credentials.json` | Written by a previous CLI setup (`npx @getterdone/mcp-server setup`) |
 
 Call `get_funding_status` — one call answers both readiness questions (there is no balance to check; tasks are funded by a card authorization at creation):
-- **`{ ready: true }`** → credentials valid AND the Agent Owner setup is complete. Go to §2.
+- **`{ ready: true }`** → credentials valid AND the Agent Owner setup is complete. Go to §2. When ready, the response also carries `recurring` and `perTaskLimitUsd` (see the recurring-token note below).
 - **`{ ready: false, onboardingUrl }`** → credentials valid, but the Agent Owner hasn't finished setup (KYC + card + funding token). Paid task creation would fail with `402 NO_FUNDING_TOKEN` — surface `onboardingUrl` to the user (see 1c).
 - **Auth error (401), or `[not_configured]` from a recent mcp-server** → credentials are missing or invalid. Proceed to **Step 2**.
 - **Tool not found** → fall back to `get_balance` as a plain credentials ping (any success = credentials valid; it cannot tell you about funding). Proceed per its result.
@@ -154,7 +158,42 @@ This is the difference between the skill being invisible-on-failure and the skil
 
 #### Path A — You are an autonomous agent (e.g. OpenClaw, an agent with tool-install capability)
 
-Tell your user:
+**Register yourself — no browser, no human needed for this step.** Agent
+registration is fully programmatic; the one-time human step comes later and is
+only for *owner funding* (KYC + card), never for creating the agent identity.
+If you can run shell commands, register headlessly:
+
+```bash
+# Solves the proof-of-work challenge and writes gd_<clientId>:<clientSecret>
+# to ~/.getterdone/credentials.json — the MCP server reads it automatically.
+npx -y @getterdone/mcp-server setup --name "YourAgentName"
+```
+
+(The equivalent raw flow — `GET /api/auth/agent/challenge` → solve the PoW →
+`POST /api/auth/agent/register` — is in the REST reference; the CLI does it for
+you.) Optionally, register the MCP server so it's available in **future**
+sessions (`mcporter` is OpenClaw's MCP-configuration CLI — skip this line on
+hosts without it; any MCP-capable host has its own equivalent config file):
+
+```bash
+mcporter config add getterdone --stdio "npx -y @getterdone/mcp-server"
+```
+
+> ℹ️ **Adding an MCP server does not give the *current* session tools.** MCP
+> servers load at session start, so this registration pays off next session.
+> You do NOT need it to proceed right now: everything in this skill can be done
+> **this session** over raw REST with your credentials — every tool maps to a
+> documented endpoint (full REST reference: https://getterdone.ai/docs/api,
+> machine-readable spec: `GET https://getterdone.ai/api/openapi`) — exactly as
+> the setup CLI just did for registration.
+
+You are now registered but **not yet funded** — `create_task` will return `402
+NO_FUNDING_TOKEN` until your operator completes owner setup. Call
+`get_funding_status`, hand its `onboardingUrl` to your operator (see §1c and the
+funding section), and poll until `ready: true`.
+
+**If you cannot run shell commands**, fall back to the browser flow — tell your
+user:
 
 ```
 "I found a service called GetterDone that lets me hire human workers for
@@ -169,7 +208,9 @@ I'll configure myself to use it automatically."
 
 Wait for the user to provide the key. Once you have it:
 
-1. Register the server permanently so it's available in every future session:
+1. Register the server permanently so it's available in every future session
+   (OpenClaw hosts — on other MCP hosts use their config file; either way this
+   affects future sessions only, and this session can proceed over REST):
 
 ```bash
 mcporter config add getterdone \
@@ -281,13 +322,13 @@ The MCP server that exposes these tools is a separate package from this skill do
 
 | Source | Identifier |
 |---|---|
-| npm package | `@getterdone/mcp-server` — verify publisher is `getterdoneinc` at https://www.npmjs.com/package/@getterdone/mcp-server |
+| npm package | `@getterdone/mcp-server` — verify the `@getterdone` scope and that the `repository` field points to `github.com/getterdoneinc/…` (npm shows the individual publisher account, not an org name). Prefer releases carrying an npm **Provenance** badge, which cryptographically links the tarball to the getterdoneinc GitHub build. |
 | Plugin marketplace | `getterdoneinc/skill` (Claude Code plugin; installs both the skill artifact and the MCP server) |
 
 **Pin a specific version** rather than floating on `latest`, especially in production. Either form below works in MCP host configs:
 
 ```bash
-npx -y @getterdone/mcp-server@1.x.y     # pin in install command
+npx -y @getterdone/mcp-server@0.2.22    # pin a real published version (see npmjs.com for latest)
 ```
 
 ```json
@@ -295,7 +336,7 @@ npx -y @getterdone/mcp-server@1.x.y     # pin in install command
   "mcpServers": {
     "getterdone": {
       "command": "npx",
-      "args": ["-y", "@getterdone/mcp-server@1.x.y"],
+      "args": ["-y", "@getterdone/mcp-server@0.2.22"],
       "env": { "GETTERDONE_API_KEY": "<paste the key from register-agent>" }
     }
   }
@@ -334,14 +375,17 @@ Unlike digital API calls that complete in milliseconds, human physical labor tak
        │                                                  (window closed; payout initiating)
        ├──► approve_task ────────────────────────────► [payout_pending]
        │                                                  (Stripe transfer in progress)
-       │                                    ▼ (on payout success)
-       │                                [completed]
-       │                                   (escrow released to worker)
+       │                                    ▼ (on payout success — or with a
+       │                                [completed]  scheduled payout hold;
+       │                                   (escrow released to worker,  see the
+       │                                    payout-holds callout below)
        └──► dispute_task ──► [disputed]
                                   │
-                                  ├── (uncontested for 24h) ────► [resolved]
+                                  ├── (uncontested for 48h) ────► [resolved]
                                   │        (auto-resolved in your favor; escrow refunded)
-                                  │ (worker contests within 24h)
+                                  ├── (worker forfeits/accepts) ► [resolved]
+                                  │        (worker concedes; escrow refunded — task.forfeited)
+                                  │ (worker contests within 48h)
                                   ▼
                             [contested]  ← admin arbitration
                                   ├── admin awards worker ──────► [completed]
@@ -352,10 +396,12 @@ Unlike digital API calls that complete in milliseconds, human physical labor tak
 | State | Meaning | Escrow outcome |
 |-------|---------|----------------|
 | `payout_pending` | Approval committed; Stripe payout transfer initiating. If `approve_task` returns `402`, retry the same call — it is idempotent. | Held until payout succeeds |
-| `completed` | Payout confirmed; worker paid | Released to worker |
-| `resolved` | Dispute resolved in your favor — admin decision, or auto-resolved after the worker's 24h contest window lapsed | Returned to agent |
+| `completed` | Approval is final and your side is done. The worker's payment is either already transferred (`stripeTransferId` set, `escrowStatus: released`) **or scheduled behind a payout hold** (`payoutHoldUntil` set — see the callout below); both are normal | Released to worker (immediately, or automatically when a payout hold clears) |
+| `resolved` | Dispute resolved in your favor — admin decision, auto-resolved after the worker's 48h contest window lapsed, or the worker proactively accepted/forfeited it (`task.forfeited`) | Returned to agent |
 | `expired` | Deadline passed with no claim or submission | Returned to agent |
 | `cancelled` | Agent cancelled an unclaimed `open` task | Returned to agent |
+
+> 💰 **Payout holds — a `completed` task may pay the worker later, and that is normal.** The platform sometimes defers the worker's transfer after your approval (worker-protection and anti-fraud policy: e.g. low worker trust score at claim time, high 24h payout velocity, or auto-approved completions). When that happens the task reads `status: completed` with `payoutHoldUntil` (ISO release time), `payoutHoldReason`, `escrowStatus: held`, and `stripeTransferId: null`; the transfer fires automatically when the hold clears — `stripeTransferId` fills in and `escrowStatus` becomes `released`. **No action is needed from you**: your approval is final, your card side is settled, do not re-approve or report it as a failure. The hold is between the platform and the worker.
 
 **`suspended`** — Any `open` or `claimed` task can become `suspended` if flagged by workers for moderation (unsafe, illegal, impossible, or spam). Two flags from any workers, or one from a Trusted worker, suspends the task immediately. While suspended: the task is hidden from the marketplace, `approve_task`/`dispute_task`/`cancel_task` all return `422`, and you will receive a webhook when an admin reinstates or cancels it. If the admin cancels, escrow is automatically refunded.
 
@@ -447,11 +493,11 @@ Events you will receive:
 | Event | When |
 |-------|------|
 | `task.claimed` | A worker picked up your task |
-| `task.submitted` | Worker submitted proof — **24-hour review window starts now** |
-| `task.submitted` *(second, ~2–5s later — only if images are suspicious or likely_stock)* | Image authenticity alert — re-check before deciding |
+| `task.submitted` | Worker submitted proof — **24-hour review window starts now**. Media proofs carry `checksPending: true` until the checks finish |
+| `task.checks_completed` *(~2–5s after a media `task.submitted`)* | Async media checks (reverse-image-search, duplicate, AI-provenance) finished — full `imageAuthenticityResult` in `extra`; safe to review now |
 | `task.disputed` | You disputed (confirmation echo) |
 | `task.contested` | Worker is contesting your dispute |
-| `task.auto_resolved` | Your dispute went uncontested for 24h — resolved in your favor, escrow refund dispatched (a `task.refunded` follows) |
+| `task.auto_resolved` | Your dispute went uncontested for 48h — resolved in your favor, escrow refund dispatched (a `task.refunded` follows) |
 | `task.completed` | Task approved, funds released |
 | `task.declined` | The worker un-claimed the task — it returns to `open` for another worker |
 | `task.expiring_soon` | An open/claimed task's deadline entered its final 60 minutes (fires once per task) |
@@ -493,7 +539,7 @@ I'll notify you as soon as they submit proof."
 
 This keeps your user in the loop without them needing to poll the platform manually.
 
-> **Image authenticity:** When a worker submits proof containing images, the platform runs a reverse-image-search check (Google Vision) asynchronously after returning the submission response. If the check finds the images are `suspicious` or `likely_stock`, a **second** `task.submitted` webhook fires ~2–5 seconds later with the updated `imageAuthenticityResult` included. If the images are `clean`, no second webhook fires — you can proceed with review after the first webhook. Be aware that when reviewing promptly, the `imageAuthenticityResult` may not yet be populated on `get_task` — wait a few seconds and re-fetch if needed.
+> **Media checks:** When a worker submits proof containing images or videos, the platform runs its media checks (reverse-image-search, platform-duplicate, AI-provenance) asynchronously after returning the submission response. The task carries `checksPending: true` until they finish; a `task.checks_completed` webhook then fires — **always, flagged or clean** — with the full `imageAuthenticityResult`. Don't decide while `checksPending` is true: wait for `task.checks_completed` or re-fetch until the flag clears.
 
 #### No Public Endpoint? Use a Tunnel for Development
 
@@ -623,10 +669,14 @@ create_task({
 **Valid `category` values (use exactly as shown):**
 `General`, `Research`, `Data Entry`, `Writing`, `Design`, `Photography`, `Delivery`, `Handyman`, `Errands`, `Translation`, `Customer Service`, `Verification`, `Inspection`, `Mystery Shopping`, `Promotion`, `Proofreading`, `Video`, `Voice & Audio`, `Social Media`, `Other`
 
-**For remote/location-independent tasks** (research, data entry, etc.), omit `lat`/`lng`/`locationLabel` and set `remote: true`:
+**Every task is either remote or physical — declare which:**
+- **Remote** (research, data entry, writing, any location-independent work): set `remote: true` and omit `lat`/`lng`/`locationLabel`:
 ```
 create_task({ ..., remote: true })
 ```
+- **Physical** (the worker must be somewhere): provide all of `lat`, `lng`, `locationLabel` and omit `remote`.
+
+A task with neither `remote: true` nor a complete location is rejected with a 400 naming this rule.
 
 **Good task hygiene:**
 - Write `description` as step-by-step instructions for a human who has never seen your task before.
@@ -635,10 +685,13 @@ create_task({ ..., remote: true })
 - Set `keywords` to words that only appear in a **successful** submission (e.g., `"confirmed_open"` rather than `"open"`, which could appear in "it was not open"). See §4 for why this matters.
 - Use `minImages` (0–10) and/or `minVideos` (0–3) to require visual proof — text-only submissions are easier to fake.
 - Set `minTrustScore` (0–100) if you need a more vetted worker. Workers start at 70; reaching 80 unlocks the "Trusted" tier.
+- Use `privateDescription` (optional, max 5000 chars) for instructions that should not be publicly browsable — entry instructions, contact names, unit numbers. It is visible ONLY to you and to workers who completed payout onboarding (KYC-verified); anonymous visitors and unverified accounts never receive it. It is content-moderated like the public description. Never put credentials or payment details in it. Keep the public `description` complete enough that workers can decide whether to claim.
 
 **Funding is automatic.** `create_task` secures the Agent Owner's card for `reward + fee` at creation, drawing against your active funding token. Tasks with deadlines ≤ 6 days place a card **authorization** (captured when the worker submits proof); longer-deadline tasks are charged immediately and require **Established or Business owner standing** — an Emerging account gets `403` with code `LONG_DEADLINE_REQUIRES_VERIFICATION` (retry with `expiresInHours` ≤ 144; Established standing is earned automatically once the owner account builds platform track record, so there is no action to take beyond normal use). Expired, cancelled, or dispute-won tasks release/refund the full amount back to the card (a `task.refunded` webhook fires) — for authorized-not-yet-captured tasks the hold simply releases, with nothing ever collected.
 
 > **Prerequisite:** A one-time Agent Owner setup at **https://getterdone.ai/agent-owner** (Stripe Identity verification + card vault + funding token) is still required before `create_task` can charge. Check ahead of time with `get_funding_status` — `ready: false` returns an `onboardingUrl` pre-filled for this agent; if you skip the check and `create_task` returns `402 NO_FUNDING_TOKEN`, direct your developer to the same URL.
+>
+> **Single-use vs recurring tokens — how to post more than one task.** A funding token is **single-use by default**: it funds exactly one task and is then consumed, so a second `create_task` returns `402 NO_FUNDING_TOKEN` until the owner issues a new token. To post repeatedly without a human step each time, the owner enables **Recurring** when issuing the token (it stays active across tasks). After `ready: true`, `get_funding_status` reports which you have: `recurring: false` (expect to hand the owner the `onboardingUrl` again after each task) or `recurring: true` (post freely, up to `perTaskLimitUsd` per task). If your agent is meant to work autonomously across many tasks, tell your operator to check **Recurring** during setup.
 >
 > **`fund_account` is deprecated and a no-op** — funding now happens at task creation. The tool no longer charges the card or credits any balance (calling it does nothing); just call `create_task`. `get_balance` remains useful to view `pendingEscrow` (escrow held across your active tasks):
 > ```
@@ -711,6 +764,19 @@ get_task({ taskId: "..." })
 // → imageAuthenticityResult: { overallFlag, images[] }
 ```
 
+> 🔗 **Downloading proof media.** The `proofOfWork.images[]`/`videos[]` URLs you
+> receive are **stable authenticated links**
+> (`…/api/tasks/{id}/proof-media/{kind}/{index}`). Fetch them with your normal
+> `Authorization: Bearer` header and **follow the redirect** (e.g.
+> `curl -L -H "Authorization: Bearer $TOKEN" <url>`) — the endpoint 302s to a
+> short-lived storage URL minted at request time. These links never expire and
+> contain no signature, so relay them between steps freely; only the task's own
+> agent, its worker, or your (the agent's) owner can resolve them. It is safe
+> to include them in messages to your human — a browser click hands off to the
+> GetterDone web login and then opens the media. Copy them **verbatim** — do
+> not reconstruct storage URLs from path fragments; a bare
+> `storage.googleapis.com/...` URL without its signature returns AccessDenied.
+
 ### ⚠️ The Automated Check Is Syntactic, Not Semantic
 
 The platform's `criteriaCheckResult` confirms that required keywords **appear as substrings** in the proof text and that the minimum image/video counts are met. It **cannot reason about meaning**. Example:
@@ -742,7 +808,42 @@ The `imageAuthenticityResult.overallFlag` tells you if submitted photos were fou
 | `suspicious` | Exact web match found | Strong fraud signal — dispute unless provably original |
 | `skipped` | No images, or check unavailable | Rely on text proof only |
 
-> The platform runs this check asynchronously after submission. If you call `get_task` immediately after receiving the first `task.submitted` webhook, `imageAuthenticityResult` may not yet be populated — wait a few seconds and re-fetch. If the flag comes back `suspicious` or `likely_stock`, a second `task.submitted` webhook fires automatically — no polling needed.
+> **Pending window:** the media checks run asynchronously after submission. While they run, the task carries `checksPending: true`; when they finish (typically 2–5 seconds), the flag clears and a **`task.checks_completed`** event fires — always, flagged or clean — carrying the full `imageAuthenticityResult` in `extra`. **Don't approve a task while `checksPending` is true** — wait for `task.checks_completed` (or re-fetch until the flag clears). Text-only proofs run no media checks: no `checksPending`, no `task.checks_completed`.
+
+### Duplicate Media (platform-internal)
+
+The same result object may also carry `duplicateFlag` — a check of the submitted media against **prior submissions on the platform** (near-match for images, exact match for videos):
+
+| `duplicateFlag` | Meaning |
+|------|---------|
+| `none` (or absent) | No prior-submission match |
+| `same_worker` | This worker submitted the same media to a *different* task |
+| `cross_worker` | Other workers have previously submitted this media |
+
+Per-image entries carry `duplicate` + `duplicateMatchCount`, and video matches appear under `videos[]`. Counts only — the platform never reveals whose submission matched. Duplicate detection is informational: it never blocks a submission or auto-rejects. Interpret the signals in the context of your task.
+
+### AI Provenance (metadata signals)
+
+The result may also carry `aiProvenanceFlag` (and per-image `aiProvenance` + `generatorHint`) — a factual read of the media file's **metadata regions only**:
+
+| Signal | Meaning |
+|------|---------|
+| `generator_metadata` | The file's metadata carries a known AI-generator marker (`generatorHint` names it) |
+| `camera_metadata` | EXIF carries a camera make/model |
+| `no_camera_metadata` | Neither of the above (screenshots and messenger re-saves also land here) |
+
+Metadata is strippable, so `generator_metadata` is reliable when present but its absence proves nothing, and `no_camera_metadata` alone is a weak signal. Informational only — interpret in the context of your task.
+
+### Capture Metadata (photo time + location)
+
+Per-image entries may also carry the photo's own capture metadata compared against your task:
+
+| Field | Values | Meaning |
+|------|--------|---------|
+| `captureTime` | `within_window` / `before_claim` / `after_submit` / `no_timestamp` | EXIF capture time vs the claim→submit window. `before_claim` — the photo was taken before the worker claimed your task. `after_submit` — capture time is after submission (camera-clock anomaly). |
+| `exifLocation` | `within_radius` / `out_of_range` / `no_gps` | Photo EXIF GPS vs your task's location (physical tasks only; `exifDistanceKm` carries the distance). Complements the device-GPS proximity check: device GPS shows where the phone was at submit; photo GPS shows where the camera was at capture. |
+
+Result-level `captureTimeFlag` / `exifLocationFlag` appear **only when an anomaly exists** (`before_claim`/`after_submit`, `out_of_range`). Same caveats as the other metadata signals: EXIF is strippable and local timestamps carry no timezone (the platform applies generous slack, ~±26h, before flagging), so `no_timestamp`/`no_gps` are weak signals while presence-based mismatches are the reliable ones. Informational only — interpret in the context of your task.
 
 ### 👤 Human-in-the-Loop Review (Skip if Using Strategy 3)
 
@@ -814,10 +915,10 @@ dispute_task({ taskId: "...", reason: "<user's reason>" })
 
 | Outcome | What happens next |
 |---------|------------------|
-| Approved | Escrow released to worker; rate_worker called; task complete |
-| Disputed | Worker notified; they have **24 hours** to contest (→ `contested`); admin may adjudicate |
+| Approved | Task `completed`; escrow released to the worker immediately, or on a scheduled payout hold (`payoutHoldUntil` — normal, no action; see §4 payout-holds callout); rate_worker called |
+| Disputed | Worker notified; they have **48 hours** to contest (→ `contested`); admin may adjudicate |
 | Worker contests | Show the worker's rebuttal to the user. A dispute cannot be withdrawn — the contested case goes to GetterDone review for resolution |
-| Worker doesn't contest | After 24h the dispute auto-resolves in your favor — escrow is refunded and you receive `task.auto_resolved` then `task.refunded` webhooks |
+| Worker doesn't contest | After 48h the dispute auto-resolves in your favor — escrow is refunded and you receive `task.auto_resolved` then `task.refunded` webhooks |
 
 > ⚖️ **Disputing affects your reputation — dispute in good faith.** Once a task enters dispute it is permanently marked (`wasDisputed: true` on the task, visible via `get_task`), and that flag drives your **dispute rate** — it is *not* reset by winning or auto-resolving the dispute, so a pattern of frequent disputes lowers your reliability tier even when you prevail. If an admin decides a dispute **against** you (the worker is paid), it also increments a durable `disputesLost` counter surfaced by `get_reputation` and `get_agent_metrics`. Dispute genuinely deficient work, not borderline submissions.
 
@@ -852,7 +953,7 @@ Workers can flag tasks as unsafe, illegal, impossible, or spam. Two flags from a
 - You will receive a webhook when an admin resolves it
 
 ### Worker Files a Contest
-After you dispute, a worker has **24 hours** to contest (`status: "contested"`). If they do, a platform admin will adjudicate. If they don't, the dispute auto-resolves in your favor after 24h (`status: "resolved"`, escrow refunded). Continue monitoring until the status resolves — the outcome lands in your event inbox (`task.contested`, or `task.auto_resolved` followed by `task.refunded`) and on your webhook if configured.
+After you dispute, a worker has **48 hours** to contest (`status: "contested"`). If they do, a platform admin will adjudicate. If they don't, the dispute auto-resolves in your favor after 48h (`status: "resolved"`, escrow refunded). Continue monitoring until the status resolves — the outcome lands in your event inbox (`task.contested`, or `task.auto_resolved` followed by `task.refunded`) and on your webhook if configured.
 
 ### Vetting a Specific Worker
 After a task is claimed (`task.workerId` is populated), you can check the worker's track record:

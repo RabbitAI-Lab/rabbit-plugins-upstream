@@ -6,10 +6,14 @@ set -euo pipefail
 #   lg_agent_list.sh                    # list every skill visible to this token
 #   lg_agent_list.sh describe <skillId> # show one skill's params schema + example
 #
-# `describe` is a thin server-side-scoped GET /agent/skills?skillId=<id> —
-# the response still comes back scoped by the caller's granted scopes (a
-# skill you cannot call is simply absent from the result, same as the
-# unfiltered list), so this never discloses more than the bare list would.
+# `describe` is a thin GET /agent/skills?skillId=<id>.
+#
+# NOTE (2026-08-03): the list is NO LONGER filtered by the caller's granted
+# scopes. Every entry carries a `granted` boolean instead — read that to know
+# whether you can actually call it; ungranted entries also carry
+# `presetsGrantingScope`. Pass `?granted=true` for the old filtered shape.
+# Execution authorization is unchanged: /agent/skills/execute still checks
+# scope on every call, so a visible skill is not necessarily a callable one.
 # Every skill entry in the response carries a `params` schema array
 # ({name,in,required,type,example?,aliases?}) and a curated or auto-derived
 # `exampleInvocation` string for the new flat command-line form — read

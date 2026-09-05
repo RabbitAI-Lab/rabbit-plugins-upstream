@@ -1,43 +1,59 @@
-## Description: <br>
-Provides OKX account balance, positions, P&L, bills, fees, account configuration, withdrawal limit, position-mode, and internal transfer guidance through the OKX CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in using the OKX CLI to inspect account balances, positions, P&L, bills, fees, withdrawal capacity, transfers, and position mode.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-External users and developers use this skill to inspect OKX portfolio state, review account activity, check fees and limits, and prepare or confirm internal fund transfers. It is suited for account operations, not market data, order placement, or trading bot workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive OKX account data and may expose credential details if configuration output is shared. <br>
-Mitigation: Use a dedicated OKX sub-account with limited permissions and avoid displaying or summarizing `okx config show --json` output. <br>
-Risk: Some supported actions can perform internal fund transfers or change position mode. <br>
-Mitigation: Confirm live versus demo mode and the exact transfer or position-mode parameters before executing write commands, then verify account state afterward. <br>
-Risk: The npm install may download and retain an additional OKX executable under the user's home directory. <br>
-Mitigation: Review the package and installed executable before enabling the skill in an agent environment. <br>
+## Use Case:
 
+External users and developers use this skill to query OKX account balances, portfolio snapshots, open and closed positions, account bills, fees, account configuration, withdrawal limits, and account transfers through the OKX CLI after credential setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-portfolio) <br>
-- [OKX homepage](https://www.okx.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI output interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses should state whether live or demo mode was used and avoid exposing credential configuration output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The skill uses persistent OKX exchange credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated OKX sub-account or least-privilege API key, configure credentials through the OKX CLI instead of chat, and never paste credentials into the agent conversation.
+
+Risk: The npm installation path may download helper executables.
+
+Mitigation: Install only if the OKX CLI package is trusted and review the package before installation.
+
+Risk: Live transfers and position-mode changes can affect real accounts.
+
+Mitigation: Start in demo mode and require explicit confirmation before any live transfer or position-mode change.
+
+## Reference(s):
+
+- [OKX homepage](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-portfolio)
+- [Publisher profile](https://clawhub.ai/user/searchworld)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell command blocks and concise status notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON-output flags for OKX CLI commands; command responses should state whether live or demo mode was used.]
+
+## Skill Version(s):
+
+1.4.5 (source: artifact frontmatter metadata.version and server release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

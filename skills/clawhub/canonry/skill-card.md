@@ -1,49 +1,71 @@
-## Description: <br>
-Set up and operate Canonry AEO projects: inspect mention and citation coverage, diagnose regressions, run technical audits, and act through the Canonry CLI or MCP tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Canonry (`cnry` / `canonry`) for Answer Engine Optimization workflows, including project setup, integrations, sweeps, technical audits, indexing, mention and citation analysis, traffic sources, and guarded ads lifecycle operations.
 
-## Publisher: <br>
-[arberx](https://clawhub.ai/user/arberx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arberx](https://clawhub.ai/user/arberx)
 
-## Use Case: <br>
-Developers, marketers, and AEO operators use this skill to run Canonry projects, inspect AI mention and citation coverage, diagnose visibility regressions, and apply approved fixes through Canonry CLI or MCP workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Canonry can operate on connected AEO projects and services, including write-capable integrations when credentials allow it. <br>
-Mitigation: Use the narrowest API key or read-only scope that fits the task and require explicit approval for every mutation or quota-consuming run. <br>
-Risk: Canonry configuration can contain secret-bearing API keys and service credentials. <br>
-Mitigation: Protect ~/.canonry/config.yaml, do not print or paste credentials, and run interactive initialization outside the agent transcript. <br>
-Risk: Client domains, transcripts, and project memory can contain sensitive business material. <br>
-Mitigation: Avoid exposing real client data in public channels and clear Aero transcripts or memory when handling sensitive material. <br>
+## Use Case:
 
+Developers, marketers, and AEO operators use this skill to configure Canonry projects, run approved sweeps and audits, connect analytics, search, traffic, and local-business integrations, and turn mention and citation evidence into fixes and reports.
 
-## Reference(s): <br>
-- [Canonry](https://canonry.ai) <br>
-- [AINYC AEO Methodology](https://ainyc.ai/aeo-methodology) <br>
-- [AEO Analysis](references/aeo-analysis.md) <br>
-- [Canonry CLI Reference](references/canonry-cli.md) <br>
-- [Indexing Workflows for AEO](references/indexing.md) <br>
-- [Server-side traffic](references/server-side-traffic.md) <br>
-- [Google Business Profile Integration](references/google-business-profile.md) <br>
-- [WordPress Integration](references/wordpress-integration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, JSON outputs, and implementation instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Canonry runtime and explicit approval for mutations or quota-consuming sweeps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.134.0+46e3bd6 (source: ClawHub release metadata) <br>
+Risk: The skill can exercise broad, persistent access across Canonry-connected marketing, website, ads, traffic, and analytics workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended Canonry operations, prefer read-only or tightly project-scoped keys, and require explicit approval for every mutation, sweep, or live provider read.
+
+Risk: Local Canonry configuration may contain credentials or full-instance API keys.
+
+Mitigation: Protect ~/.canonry/config.yaml like a secret store, do not print or paste credentials, and avoid switching credentials to bypass missing tools or authorization failures.
+
+Risk: Schedules, webhooks, and Aero automation can continue operating after setup.
+
+Mitigation: Review active schedules, webhooks, and Aero automation before enabling or changing them, and keep automation bounded to the intended project and workflow.
+
+Risk: External AI providers and connected Google, WordPress, Cloudflare, Vercel, and analytics services may incur quota, cost, or data-exposure impact.
+
+Mitigation: Choose providers deliberately, use stored reads and dry runs where available, and confirm quota-consuming or live-service operations before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/arberx/skills/canonry)
+- [Canonry website](https://canonry.ai)
+- [Canonry GitHub documentation](https://github.com/Canonry/canonry)
+- [AINYC AEO Methodology](https://ainyc.ai/aeo-methodology)
+- [Canonry CLI Reference](references/canonry-cli.md)
+- [AEO Analysis: Interpreting Canonry Results](references/aeo-analysis.md)
+- [Indexing Workflows for AEO](references/indexing.md)
+- [WordPress Integration](references/wordpress-integration.md)
+- [Server-side traffic (AI Visibility - Server-Side)](references/server-side-traffic.md)
+- [Google Business Profile Integration](references/google-business-profile.md)
+- [Google Ads and Google Tag Manager](references/google-marketing.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, JSON-oriented reads, configuration instructions, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 22.14+ and a globally installed @canonry/canonry runtime with canonry-mcp on PATH.]
+
+## Skill Version(s):
+
+4.180.4+62e0b82 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

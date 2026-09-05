@@ -1,207 +1,194 @@
-# DeepEvidence API Reference
+# DeepEvidence Public API Reference
 
-Complete API specification for the DeepEvidence OpenAI-compatible interface.
+This reference follows the public DeepEvidence Open Platform docs at:
 
-**Base URL**: `https://deepevid.medsci.cn/`
+<https://deepevid.medsci.cn/platform/docs>
 
----
+Use this file for public skill packaging, public platform uploads, developer examples, and customer-facing integration guidance. For public marketplace listings, describe the skill as a DeepEvidence API access skill for physicians' evidence-based clinical decision support. Content is generated from retrieved literature and guidelines for clinical reference; specific diagnosis and treatment decisions remain the physician's responsibility.
 
-## Table of Contents
+## Base URL
 
-- [Authentication](#authentication)
-- [Chat Completions](#chat-completions)
-- [Conversations (Extension)](#conversations-extension)
-- [Error Handling](#error-handling)
-- [Rate Limits & Quotas](#rate-limits--quotas)
+```text
+https://deepevid.medsci.cn/api/v1
+```
 
----
+When using the OpenAI SDK, set `base_url` to the full value above.
 
 ## Authentication
 
-All requests require Bearer Token authentication:
+Pass the API key in the request header:
 
+```http
+Authorization: Bearer <api_key>
 ```
-Authorization: Bearer sk-xxxxxxxxxxxxxxxxxxxxxxxx
-```
 
-Contact your administrator to obtain an API key.
-
-### User Mapping
-
-Two methods for identifying end users (for multi-tenant scenarios):
-
-**Method 1 — Request body `user` parameter (recommended)**:
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `user` | string | External user ID (from third-party system) |
-| `metadata.user_name` | string | Display name (optional) |
-| `metadata.user_email` | string | Email (optional) |
-| `metadata.user_metadata` | object | Additional user metadata (optional) |
-
-**Method 2 — HTTP Headers**:
-
-| Header | Description |
-|--------|-------------|
-| `X-User-ID` | External user ID (required for mapping) |
-| `X-User-Name` | Username (optional) |
-| `X-User-Email` | Email (optional) |
-| `X-User-Avatar` | Avatar URL (optional) |
-
-> If both `user` param and `X-User-ID` header are provided, `user` param takes precedence.
-
----
+Do not log, print, commit, screenshot, or package API keys.
 
 ## Chat Completions
 
-### POST /v1/chat/completions
+### POST /chat/completions
 
-Create a chat completion with the medical AI assistant.
+Full URL:
 
-**Request Parameters**:
+```text
+https://deepevid.medsci.cn/api/v1/chat/completions
+```
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| `model` | string | No | Model ID, default `deepevidence-agent-v1` (fixed value) |
-| `messages` | array | Yes | Array of message objects |
-| `stream` | boolean | No | Stream response, default `false` |
-| `user` | string | No | External user ID |
-| `metadata` | object | No | Extension metadata |
-| `metadata.conversation_id` | string | No | Continue existing conversation |
-| `metadata.project_id` | string | No | Associate with a project |
-| `metadata.locale` | string | No | Language preference (`en`, `zh-CN`) |
-| `metadata.user_name` | string | No | Username (with `user`) |
-| `metadata.user_email` | string | No | Email (with `user`) |
-| `metadata.user_metadata` | object | No | Additional user metadata |
+DeepEvidence is compatible with the OpenAI Chat Completions request shape. The public model is `DeepEvidence-V1`.
 
-**Message format**:
+### Request Parameters
+
+| Parameter | Type | Required | Public-doc description |
+|---|---|---:|---|
+| `model` | `string` | Yes | Model name. Current public model: `DeepEvidence-V1`. Enterprise custom models may be available when authorized. |
+| `messages` | `array` | Yes | Message list. Supports `system`, `developer`, `user`, and `assistant` roles. User message `content` can be a string or an array of `text` / `image_url` parts. |
+| `stream` | `boolean` | No | Whether to stream output. Default is `true`. |
+| `stream_options` | `object` | No | When `{ "include_usage": true }`, usage is returned before the stream ends. |
+| `user` | `string` | No | End-user identifier for multi-tenant scenarios. Prefer stable opaque non-PII IDs. |
+
+### Text Request Example
+
+```bash
+curl https://deepevid.medsci.cn/api/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $DEEPEVIDENCE_API_KEY" \
+  -d '{
+    "model": "DeepEvidence-V1",
+    "messages": [
+      {"role": "user", "content": "阿司匹林的适应症有哪些？"}
+    ],
+    "stream": true
+  }'
+```
+
+### Image Input
+
+`messages[].content` supports OpenAI standard content parts with `text` and `image_url`.
+
+`image_url` accepts:
+
+- HTTPS image URLs
+- base64 data URLs, such as `data:image/jpeg;base64,...`
+
+Example:
 
 ```json
 {
-  "role": "user" | "assistant" | "system",
-  "content": "message content"
+  "model": "DeepEvidence-V1",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        { "type": "text", "text": "请分析这张医学图片的关键信息。" },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/medical-image.jpg",
+            "detail": "auto"
+          }
+        }
+      ]
+    }
+  ],
+  "stream": true
 }
 ```
 
-### Non-Streaming Response
+### Non-Streaming Calls
+
+The public docs show streaming examples and state that `stream` defaults to `true`. For SDK or script usage where a standard JSON response is easier to handle, set:
+
+```json
+{ "stream": false }
+```
+
+### Streaming Usage
+
+To request usage in streaming mode:
 
 ```json
 {
-  "id": "chatcmpl-abc123",
-  "object": "chat.completion",
-  "created": 1705123456,
-  "model": "deepevidence-agent-v1",
-  "choices": [
-    {
-      "index": 0,
-      "message": {"role": "assistant", "content": "Diabetes symptoms include..."},
-      "finish_reason": "stop"
-    }
-  ],
-  "usage": {
-    "prompt_tokens": 15,
-    "completion_tokens": 120,
-    "total_tokens": 135
-  },
-  "metadata": {
-    "conversation_id": "abc123def"
+  "stream": true,
+  "stream_options": {
+    "include_usage": true
   }
 }
 ```
 
----
+## OpenAI SDK Examples
 
-## Conversations (Extension)
+### Python
 
-> These are DeepEvidence extension APIs, NOT part of the OpenAI standard.
+```python
+import os
+from openai import OpenAI
 
-### GET /v1/conversations
+client = OpenAI(
+    api_key=os.environ["DEEPEVIDENCE_API_KEY"],
+    base_url="https://deepevid.medsci.cn/api/v1",
+)
 
-List conversations.
+resp = client.chat.completions.create(
+    model="DeepEvidence-V1",
+    messages=[
+        {"role": "user", "content": "阿司匹林的适应症有哪些？"}
+    ],
+    stream=False,
+)
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `limit` | number | Max results, default 20, max 100 |
-| `offset` | number | Pagination offset, default 0 |
-| `q` | string | Search keyword |
+print(resp.choices[0].message.content)
+```
 
-**Response**:
+### Node.js
 
-```json
-{
-  "object": "list",
-  "data": [
-    {
-      "id": "abc123",
-      "object": "conversation",
-      "title": "Diabetes symptoms",
-      "created_at": 1705123456,
-      "is_favorited": false,
-      "project_id": null
-    }
+```javascript
+import OpenAI from "openai";
+
+const client = new OpenAI({
+  apiKey: process.env.DEEPEVIDENCE_API_KEY,
+  baseURL: "https://deepevid.medsci.cn/api/v1",
+});
+
+const resp = await client.chat.completions.create({
+  model: "DeepEvidence-V1",
+  messages: [
+    { role: "user", content: "阿司匹林的适应症有哪些？" },
   ],
-  "has_more": false,
-  "offset": 0,
-  "limit": 10
-}
+  stream: false,
+});
+
+console.log(resp.choices[0].message.content);
 ```
 
-### GET /v1/conversations/:id
+## Error Codes
 
-Get conversation detail including messages.
+| Status | Description |
+|---:|---|
+| `200` | Request succeeded. |
+| `400` | Request parameter error. |
+| `401` | Authentication failed; API Key is invalid or expired. |
+| `403` | Forbidden, for example the project does not belong to the current tenant. |
+| `429` | Daily quota exhausted. |
+| `500` | Internal server error. |
 
-**Response** includes a `messages` array with all conversation messages.
+## Public vs Internal Extensions
 
-### DELETE /v1/conversations/:id
+The current server code includes additional OpenAI-compatible or platform extension endpoints and fields, such as conversations, project attachments, QA records, feedback, `metadata`, `store`, and code-level model aliases. These are not shown in the public platform docs above.
 
-Delete a conversation.
+For public distribution, marketplace uploads, public demos, and general developer documentation:
 
-**Response**:
+- Document only `POST /chat/completions` unless another endpoint is published in the public docs.
+- Use `https://deepevid.medsci.cn/api/v1` as the base URL.
+- Use `DeepEvidence-V1` as the public model name.
+- Treat any project, conversation, QA, feedback, `metadata`, `store`, or private/custom model behavior as an internal or explicitly authorized extension.
 
-```json
-{
-  "id": "abc123",
-  "object": "conversation.deleted",
-  "deleted": true
-}
-```
+For internal validation against source code, verify behavior directly in the server repository before documenting an extension publicly.
 
----
+## Safety and Privacy Notes
 
-## Error Handling
-
-All errors follow OpenAI standard format:
-
-```json
-{
-  "error": {
-    "message": "Error description",
-    "type": "error_type",
-    "param": null,
-    "code": "error_code"
-  }
-}
-```
-
-### Error Types
-
-| Type | HTTP Status | Description | Suggested Action |
-|------|-------------|-------------|-----------------|
-| `authentication_error` | 401 | Invalid or missing API key | Check `DEEPEVIDENCE_API_KEY` |
-| `permission_error` | 403 | Insufficient permissions | Contact admin for access |
-| `invalid_request_error` | 400 | Invalid request parameters | Check request body format |
-| `not_found_error` | 404 | Resource not found | Verify conversation/model ID |
-| `rate_limit_error` | 429 | Too many requests or quota exhausted | Reduce request frequency or contact admin |
-| `server_error` | 500 | Internal server error | Retry after a moment |
-
----
-
-## Rate Limits & Quotas
-
-Quotas are dynamically configured per API key by administrators:
-
-- **Daily quota**: Maximum requests per day
-- **Rate limit**: Maximum requests per minute/second
-- **Token limit**: Maximum tokens per single request
-
-Contact your administrator for specific quota details.
+- DeepEvidence output is generated from retrieved literature and guidelines for clinical reference.
+- Specific diagnosis and treatment decisions must be made by physicians based on the individual patient or pediatric patient context.
+- Clinicians should verify original literature and the latest guideline versions before applying outputs to clinical work.
+- Do not use the API as an emergency triage or first-aid substitute.
+- Avoid sending patient-identifiable data unless the integration, contract, consent, and compliance controls explicitly allow it.
+- Log minimal operational metadata only: status, latency, token usage, model, and redacted error codes.

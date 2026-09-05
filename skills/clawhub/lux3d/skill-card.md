@@ -1,41 +1,56 @@
-## Description: <br>
-Lux3D generates 3D models from images or text and performs material repaint through asynchronous Lux3D API workflows for international users. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use the Lux3D Global environment to generate 3D from image URLs or text, transfer materials onto an existing model, complete additional viewpoints from one object image, export model formats, and query task status or generation history.
 
-## Publisher: <br>
-[violalulu](https://clawhub.ai/user/violalulu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[violalulu](https://clawhub.ai/user/violalulu)
 
-## Use Case: <br>
-Developers and creative technical users use this skill to submit image-to-3D, text-to-3D, and material repaint jobs to Lux3D, poll for completion, and download generated 3D model files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys and submitted content can be sent to an unintended endpoint if LUX3D_BASE_URL or --base-url points to an untrusted server. <br>
-Mitigation: Use the documented Lux3D endpoint unless an approved trusted endpoint is required, and verify any base URL override before running the skill. <br>
-Risk: Prompts, images, model URLs, and API keys are sent to the Lux3D service during generation workflows. <br>
-Mitigation: Do not submit confidential or restricted assets unless your organization approves sending that data to Lux3D. <br>
+## Use Case:
 
+Developers and content-production agents use this skill to call Lux3D APIs for image-to-3D, text-to-3D, material transfer, four-view completion, model export, task queries, and task history workflows.
 
-## Reference(s): <br>
-- [Lux3D Website](https://lux3d.aholo3d.com/) <br>
-- [Lux3D API Key Application](https://labs.aholo3d.com/api-keys) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell snippets; generated assets download as ZIP, GLB, USDZ, OBJ ZIP, or FBX ZIP files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LUX3D_API_KEY; v3.0-standard is the default Lux3D version; generated download links are valid for 2 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release metadata) <br>
+Risk: The Lux3D API key and task data can be sent to a caller- or environment-selected base URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the documented Lux3D Global endpoint by default, keep LUX3D_API_KEY scoped to this service, and do not set LUX3D_BASE_URL or pass --base-url unless the endpoint is fully trusted.
+
+Risk: Prompts and asset URLs are sent to Lux3D during generation, export, query, and history workflows.
+
+Mitigation: Use only assets and prompts you are comfortable sending to Lux3D, and ensure referenced URLs are intentionally accessible to the service.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/violalulu/skills/lux3d)
+- [Lux3D Global API Key page](https://labs.aholo3d.com/api-keys)
+- [Lux3D Asset upload APIs](https://labs.aholo3d.com/api-docs/en/api-reference#tag/asset)
+- [Lux3D Pricing](https://www.aholo3d.com/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline bash and Python code blocks, JSON API responses, and generated 3D asset URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Lux3D task identifiers, status data, downloadable model URLs, or local downloaded files when an output path is supplied.]
+
+## Skill Version(s):
+
+4.1.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

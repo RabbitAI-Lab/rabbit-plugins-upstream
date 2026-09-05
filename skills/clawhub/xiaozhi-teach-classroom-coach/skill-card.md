@@ -1,45 +1,68 @@
-## Description: <br>
-Helps teachers turn lecture-heavy lessons into thinking-focused interactive classrooms by designing Bloom-layered question chains, Socratic follow-ups, group activities, cold-room recovery moves, feedback scripts, and aggregate post-class observations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps teachers turn direct instruction into classroom interaction by planning wait-time prompts, group activities, cold-start recovery moves, feedback moments, and short post-class observation records.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External educators and teaching assistants use this skill to plan classroom interaction for a specific lesson, including question design, group collaboration, quiet-classroom recovery, participation pathways, feedback moves, and aggregate reflection after class. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Teachers may include student names or sensitive individual performance details in classroom observations. <br>
-Mitigation: Use aggregate classroom signals for post-class records unless school policy explicitly permits identifiable details. <br>
-Risk: Very short prompts can omit lesson goals, student distribution, class size, or classroom constraints needed for reliable interaction planning. <br>
-Mitigation: Confirm missing context before tailoring the plan, or clearly mark the output as a generic interaction template. <br>
-Risk: The skill could be mistaken for an automated student-monitoring or student-calling tool. <br>
-Mitigation: Use it as a teacher-facing planning aid only; teachers retain final decisions and the skill should not point-name or require students to speak. <br>
+## Use Case:
 
+Teachers use this skill to adapt an existing lesson goal, student tier summary, and class profile into classroom interaction guidance. It produces practical prompts, grouping and timing recommendations, cold-start recovery options, and post-class observation drafts for teacher review.
 
-## Reference(s): <br>
-- [课堂提问策略与互动话术库](references/questioning-strategies.md) <br>
-- [小组合作任务卡模板与话术模板](references/group-task-card-and-scripts.md) <br>
-- [课后 5 分钟观察记录模板](references/post-class-record-template.md) <br>
-- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize crisis contacts, curriculum assumptions, and minor-data rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson-planning guidance with reusable templates and classroom scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires lesson goals, student distribution, class size, and classroom constraints for tailored output; otherwise it should label the result as a generic interaction template.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can use student tiers and class weakness summaries in a teacher-facing classroom workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm school consent and sharing controls before use, keep individual names out of records, and require teacher confirmation before saving classroom observations.
+
+Risk: The packaged safety contacts, curriculum assumptions, and minor-data defaults are designed for mainland China.
+
+Mitigation: Localize crisis contacts, curriculum alignment, and minor-data consent rules before deploying the skill outside mainland China.
+
+Risk: Improvised classroom examples or questions may be inaccurate if used without review.
+
+Mitigation: Apply the included AI item self-check, use examples orally unless reviewed, and label any AI-generated item that is stored for later use as requiring human verification.
+
+Risk: A classroom conversation may expose self-harm, bullying, severe despair, or family safety signals that exceed learning support.
+
+Mitigation: Stop the classroom-coaching flow, avoid diagnosis and detailed probing, direct the student to trusted adults and localized emergency channels, and record only the referral fact.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach)
+- [Classroom Questioning Strategies and Interaction Scripts](artifact/references/questioning-strategies.md)
+- [Group Task Card and Scripts Template](artifact/references/group-task-card-and-scripts.md)
+- [Post-Class Five-Minute Observation Record Template](artifact/references/post-class-record-template.md)
+- [Class Teaching Workspace Schema](artifact/shared/class-teaching-workspace.schema.json)
+- [Platform Conventions and Degradation Paths](artifact/shared/platform-conventions.md)
+- [Crisis Exception](artifact/shared/crisis-exception.md)
+- [Crisis Referral Protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown with structured classroom templates and short record drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is required before classroom records are saved; classroom records should avoid individual student names.]
+
+## Skill Version(s):
+
+2.1.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

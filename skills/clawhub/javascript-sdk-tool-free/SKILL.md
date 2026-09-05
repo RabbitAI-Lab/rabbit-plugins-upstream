@@ -1,117 +1,100 @@
----slug: javascript-sdk-tool-free
-name: javascript-sdk-tool-free
-version: 1.0.0
-displayName: JS SDK工具免费版
-summary: "JavaScript "
+---
+
+name: "javascript-sdk-tool-free"
+description: "JavaScript AI 应用 SDK 入门工具，支持模型调用、文件上传与基础代理配置。Use when 需要AI模型调用、智能对话、Agent编排、LLM应用时使用。不适用于需要100%确定性的关键决策。适用于独立开发者、企业团队和自动化工作流场景。支持中文交互，无需复杂配置即开即用。输出结果可直接使用，减少二次加工成本。"
 license: Proprietary
-edition: free
-description: '面向个人开发者的 JavaScript AI 应用 SDK 工具，提供基础的模型调用与文件处理能力。核心能力:
-
-  - AI 应用调用与结果获取
-
-  - 文件自动上传与手动上传
-
-  - 环境变量认证配置
-
-  - 基础错误处理
-
-  - CommonJS 与 ES Module 双支持
-
-  适用场景:
-
-  - 个人 AI 应用的快速集成
-
-  - 模型调用的基础封装
-
-  - 文件上传与处理场景
-
-  差异化: 免费版聚焦个人开发者的基础 AI 应用调用场景，提供简洁的 API 与示例，开箱即用'
-tags:
-  - 开发工具
-  - JavaScript
-  - AI应用
-  - SDK
-  - 工具
-  - 效率
-  - 创意
-  - client
-  - const
-  - sdk
-  - input
-  - createclient
+allowed-tools: read exec
+compatibility: "Requires LLM with tool-use capability"
+metadata:
+  displayName: "JS SDK工具免费版"
+  version: "1.0.0"
+  summary: "JavaScript AI 应用 SDK 入门工具，支持模型调用、文件上传与基础代理配置。"
+  tags:
+    - "开发工具"
+    - "JavaScript"
+    - "AI应用"
+    - "SDK"
+  source: "SkillHub"
+  converted_at: "2026-07-22T17:58:36"
 tools:
-  - read
   - exec
+  - read
   - write
-homepage: ""
-category: "Automation"---# JavaScript SDK 工具（免费版）
+
+---
+
+> **功能说明**: 本技能涵盖 中文交互、化工作流场景 等核心能力。
+
+
+# JavaScript SDK 工具（免费版）
 
 ## 概述
 
-本工具为个人开发者提供 JavaScript/TypeScript AI 应用 SDK 的基础使用指引，覆盖 SDK 安装、认证配置、应用调用、文件上传等核心场景。通过自然语言指令驱动，帮助开发者快速集成 AI 应用调用能力到 JavaScript 项目中。免费版聚焦个人开发者的基础调用场景，提供简洁的 API 示例与错误处理模板.
+本工具为个人开发者提供 JavaScript/TypeScript AI 应用 SDK 的基础使用指引，覆盖 SDK 安装、认证配置、应用调用、文件上传等核心场景。通过自然语言指令驱动，帮助开发者快速集成 AI 应用调用能力到 JavaScript 项目中。免费版聚焦个人开发者的基础调用场景，提供简洁的 API 示例与错误处理模板。
+
 ## 核心能力
 
 | 能力模块 | 描述 | 典型用法 |
-|----|---|----|
+| --- | --- | --- |
 | SDK 安装 | npm/yarn/pnpm 安装 | `npm install @ai/sdk` |
 | 认证配置 | API Key 与环境变量 | 直接配置或环境变量 |
 | 应用调用 | 运行 AI 应用并获取结果 | `client.run({ app, input })` |
 | 文件上传 | 自动或手动上传文件 | `client.uploadFile(path)` |
 | 错误处理 | 基础异常捕获 | try/catch + 类型判断 |
-**技术实现要点**：核心能力基于`input_params`参数与`output_format`配置实现,支持创建/查询/修改/删除等操作模式,通过`config_options`进行运行时配置.
-### 核心功能执行
-用`input_params`参数进行配置.
+**技术实现要点**：核心能力基于`input_params`参数与`output_format`配置实现,支持创建/查询/修改/删除等操作模式,通过`config_options`进行运行时配置。
 
-**处理**: 解析核心功能执行的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回核心功能执行的响应数据,包含状态码、结果和日志.
+### 核心功能执行
+用`input_params`参数进行配置。
+
+**输出**: 返回核心功能执行的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 参数配置与调用
-用`config_options`参数进行配置.
+用`config_options`参数进行配置。
 
-**处理**: 解析参数配置与调用的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回参数配置与调用的响应数据,包含状态码、结果和日志.
+**输出**: 返回参数配置与调用的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`config_options`参数,支持修改/重置/导入操作
 
 ### 结果处理与输出
-用`output_format`参数进行配置.
+用`output_format`参数进行配置。
 
-**处理**: 解析结果处理与输出的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回结果处理与输出的响应数据,包含状态码、结果和日志.
+**输出**: 返回结果处理与输出的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`output_format`参数,支持导出/保存/转换操作
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：JavaScript、入门工具、支持模型调用、文件上传与基础代、理配置、面向个人开发者的、提供基础的模型调、用与文件处理能力、应用调用与结果获、文件自动上传与手、环境变量认证配置、基础错误处理、CommonJS、Module、双支持等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：JavaScript、入门工具、支持模型调用、文件上传与基础代、理配置、面向个人开发者的、提供基础的模型调、用与文件处理能力、应用调用与结果获、文件自动上传与手、环境变量认证配置、基础错误处理、CommonJS、Module、双支持等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
+
 ## 使用场景
 
 ### 场景一：快速调用 AI 应用
 
-开发者需要在 JavaScript 项目中调用 AI 模型.
+开发者需要在 JavaScript 项目中调用 AI 模型。
+
 ```text
 用户：帮我在 Node.js 项目中调用 AI 模型生成图片
-# ...
+
 助手：
 1. 安装 SDK
    npm install @ai/sdk
-# ...
+
 2. 配置认证
    // 直接配置
    import { createClient } from '@ai/sdk';
    const client = createClient({ apiKey: 'your_api_key' });
-# ...
+   
    // 或使用环境变量（推荐）
    // .env 文件
    AI_API_KEY=your_api_key
-# ...
+   
    const client = createClient({ apiKey: process.env.AI_API_KEY });
-# ...
+
 3. 调用应用
    const result = await client.run({
        app: 'image-generator',
        input: { prompt: '山间日落' }
    });
-# ...
+   
    console.log(result.status);  // "completed"
    console.log(result.output);  // 输出数据
-# ...
+
 4. 错误处理
    try {
    } catch (e) {
@@ -125,11 +108,11 @@ category: "Automation"---# JavaScript SDK 工具（免费版）
 
 ### 场景二：文件上传与处理
 
-开发者需要上传文件并交给 AI 应用处理.
+开发者需要上传文件并交给 AI 应用处理。
+
 ```typescript
 import { createClient } from '@ai/sdk';
-// ...
-// ...
+
 // 方式一：自动上传（路径作为输入）
 const result1 = await client.run({
     app: 'image-processor',
@@ -137,19 +120,19 @@ const result1 = await client.run({
         image: '/path/to/image.png'  // 自动上传
     }
 });
-// ...
+
 // 方式二：手动上传
 const file = await client.uploadFile('/path/to/image.png', {
     filename: 'custom_name.png',
     contentType: 'image/png',
     public: true
 });
-// ...
+
 const result2 = await client.run({
     app: 'image-processor',
     input: { image: file.uri }
 });
-// ...
+
 // 方式三：浏览器文件上传
 const input = document.querySelector('input[type="file"]');
 uploadFile(input.files[0]);
@@ -160,20 +143,21 @@ const result3 = await client.run({
 
 ### 场景三：异步任务处理
 
-开发者需要处理耗时较长的 AI 任务.
+开发者需要处理耗时较长的 AI 任务。
+
 ```typescript
 // 异步执行（不等待完成）
 const task = await client.run({
     app: 'video-generator',
     input: { prompt: '无人机飞越山脉' }
 }, { wait: false });
-// ...
+
 console.log(`任务 ID: ${task.id}`);
-// ...
+
 // 后续查询任务状态
 const status = await client.getTask(task.id);
 console.log(`状态: ${status.status}`);
-// ...
+
 if (status.status === 'completed') {
     console.log('结果:', status.output);
 } else if (status.status === 'failed') {
@@ -186,12 +170,13 @@ if (status.status === 'completed') {
 以下场景JS SDK工具免费版不适合处理：
 
 - 逆向工程闭源API
-- API安全渗透测试
+- API安全安全评估
 - 非标准协议集成
 
 ## 触发条件
 
-需要API集成、接口对接、Webhook配置、系统连接时使用。不适用于非本工具能力范围的需求.
+需要API集成、接口对接、Webhook配置、系统连接时使用。不适用于非本工具能力范围的需求。
+
 ## 快速开始
 
 1. 阅读## 核心能力章节了解skill功能
@@ -205,10 +190,10 @@ if (status.status === 'completed') {
 ```bash
 # npm
 npm install @ai/sdk
-# ...
+
 # yarn
 yarn add @ai/sdk
-# ...
+
 # pnpm
 pnpm add @ai/sdk
 ```
@@ -219,12 +204,12 @@ pnpm add @ai/sdk
 
 ```typescript
 import { createClient } from '@ai/sdk';
-// ...
+
 // 方式一：直接配置 API Key
 const client = createClient({ apiKey: 'your_api_key' });
-// ...
+
 // 方式二：环境变量（推荐）
-// ...
+
 // 方式三：前端代理（不暴露 Key）
 const client = createClient({ proxyUrl: '/api/proxy' });
 ```
@@ -233,8 +218,7 @@ const client = createClient({ proxyUrl: '/api/proxy' });
 
 ```typescript
 import { createClient } from '@ai/sdk';
-// ...
-// ...
+
 async function main() {
     try {
             app: 'text-generator',
@@ -243,14 +227,14 @@ async function main() {
                 max_tokens: 100
             }
         });
-// ...
+        
         console.log('状态:', result.status);
         console.log('输出:', result.output);
     } catch (error) {
         console.error('调用失败:', error.message);
     }
 }
-// ...
+
 main();
 ```
 
@@ -259,7 +243,7 @@ main();
 ### 运行参数说明
 
 | 参数 | 类型 | 说明 |
-|:-----|:-----|:-----|
+| --- | --- | --- |
 | `app` | string | 应用 ID |
 | `input` | object | 匹配应用 schema 的输入 |
 | `setup` | object | 隐藏的配置参数 |
@@ -270,16 +254,16 @@ main();
 
 ```javascript
 const { createClient } = require('@ai/sdk');
-// ...
+
 const client = createClient({ apiKey: 'your_api_key' });
-// ...
+
 async function run() {
         app: 'text-generator',
         input: { prompt: '你好' }
     });
     console.log(result);
 }
-// ...
+
 run();
 ```
 
@@ -288,18 +272,21 @@ run();
 ```bash
 # .env 文件
 AI_API_KEY=your_api_key_here
-# ...
+
 # 加载环境变量（Node.js）
 # npm install dotenv
 import 'dotenv/config';
-# ...
+
 ```
 
-## 最佳实践
+## 优选实践
 
 1. **API Key 用环境变量**：不要硬编码在代码中
    ```typescript
-   ```
+// 本技能的核心实现逻辑
+// 请参考上方使用说明进行配置和调用
+const result = "implementation_ready";
+```
 
 2. **始终做错误处理**：网络和 API 调用可能失败
    ```typescript
@@ -341,7 +328,7 @@ Settings → API Keys → Create API Key
     app: 'video-generator',
     input: { prompt: '...' }
 }, { wait: false });
-// ...
+
 // 轮询任务状态
 async function waitForTask(taskId, interval = 5000) {
     while (true) {
@@ -350,7 +337,7 @@ async function waitForTask(taskId, interval = 5000) {
         await new Promise(r => setTimeout(r, interval));
     }
 }
-// ...
+
 const result = await waitForTask(task.id);
 ```
 
@@ -360,7 +347,7 @@ const result = await waitForTask(task.id);
 // 不要在浏览器中暴露 API Key
 // 使用代理模式
 const client = createClient({ proxyUrl: '/api/proxy' });
-// ...
+
 // 浏览器文件上传
 querySelector('input[type="file"]');
 uploadFile(input.files[0]);
@@ -370,7 +357,7 @@ uploadFile(input.files[0]);
 
 ```typescript
 import { RequirementsNotMetError, APIError } from '@ai/sdk';
-// ...
+
 try {
 } catch (e) {
     if (e instanceof RequirementsNotMetError) {
@@ -402,7 +389,7 @@ Node.js 18 以下需要安装 node-fetch polyfill
 ```typescript
 // 并行调用（注意速率限制）
 const prompts = ['问题1', '问题2', '问题3'];
-// ...
+
 const results = await Promise.all(
     prompts.map(prompt => 
         client.run({
@@ -411,7 +398,7 @@ const results = await Promise.all(
         })
     )
 );
-// ...
+
 // 串行调用（避免速率限制）
 const results = [];
 for (const prompt of prompts) {
@@ -433,7 +420,7 @@ for (const prompt of prompts) {
 ### 依赖详情
 
 | 依赖项 | 类型 | 是否必需 | 获取方式 |
-|---:|---:|---:|---:|
+|:-------|:-----|:---------|:---------|
 | Node.js | 运行时 | 必需 | nodejs.org 下载 |
 | @ai/sdk | npm 包 | 必需 | `npm install @ai/sdk` |
 | dotenv | 环境变量 | 推荐 | `npm install dotenv` |
@@ -451,7 +438,7 @@ for (const prompt of prompts) {
 ## 错误处理
 
 | 错误场景 | 原因 | 处理方式 |
-|:---:|:---:|:---:|
+|---------|------|---------|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |
@@ -461,19 +448,13 @@ for (const prompt of prompts) {
 - 需要API Key，无Key环境无法使用
 - 当前为免费版本,如需完整功能请升级到付费版获取全部能力
 
-## 输出格式
-```json
-{
-  "success": true,
-  "data": {
-    "result": "JS SDK工具免费版处理结果",
-    "execution_time": "0.5s",
-    "metadata": {
-      "version": "1.0",
-      "processor": "javascript sdk"
-    }
-  },
-  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
-  "error": null
-}
-```
+## 安全注意事项
+
+| 风险类型 | 防范措施 |
+|----------|---------|
+| API密钥泄露 | 通过环境变量配置，禁止硬编码到代码或配置文件中 |
+| 命令执行风险 | 仅执行白名单命令，避免拼接用户输入到命令行参数中 |
+| 网络通信安全 | 使用HTTPS协议，验证SSL证书有效性 |
+| 敏感数据暴露 | 输出结果中不包含密钥、令牌等敏感信息 |
+
+使用前请确认已阅读依赖说明章节，确保运行环境满足安全要求。

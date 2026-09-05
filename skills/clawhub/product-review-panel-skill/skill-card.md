@@ -1,53 +1,68 @@
-## Description: <br>
-Product Review Panel Skill convenes a structured multi-expert panel to review Product Requirements Documents or product proposals and return a GO, NO-GO, or CONDITIONAL GO verdict with dissent preserved. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convenes a multi-expert panel to review a Product Requirements Document (PRD) and return a GO, NO-GO, or CONDITIONAL GO verdict with preserved dissent and failure signals.
 
-## Publisher: <br>
-[cpsean](https://clawhub.ai/user/cpsean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cpsean](https://clawhub.ai/user/cpsean)
 
-## Use Case: <br>
-Product managers and product teams use this skill to stress-test written PRDs or product proposals across product, UX, and business-model dimensions before committing engineering resources. It is intended for critical review and decision support, not brainstorming, technical architecture review, or user research synthesis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive PRDs or private document links may be read by the runtime during review. <br>
-Mitigation: Use approved environments for confidential material and redact sensitive details before sharing documents or links. <br>
-Risk: Language-based panel selection can apply a China-oriented review frame when the conversation is in Chinese. <br>
-Mitigation: Ask explicitly for the international panel or another review frame when that perspective is preferred. <br>
-Risk: Persona-style expert perspectives may be mistaken for statements by real individuals. <br>
-Mitigation: Keep the mandatory disclaimer visible and treat the output as interpretive decision support rather than endorsement. <br>
-Risk: An opinionated verdict may over-influence product decisions when PRD evidence is incomplete. <br>
-Mitigation: Validate the verdict against user research, business metrics, and the skill's stated failure signals before committing resources. <br>
+## Use Case:
 
+Product managers and product teams use this skill to stress-test written PRDs before committing engineering resources. It is suited for feature, pricing, UX, and product-proposal reviews where the desired output is a structured second opinion with a clear verdict.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/cpsean/product-review-panel-skill) <br>
-- [Skill definition](SKILL.md) <br>
-- [Information gap check workflow](references/workflows/information-gap-check.md) <br>
-- [PRD classification workflow](references/workflows/prd-classification.md) <br>
-- [Verdict logic workflow](references/workflows/verdict-logic.md) <br>
-- [Disclaimer template](references/templates/disclaimer.md) <br>
-- [Output structure template](references/templates/output-structure.md) <br>
-- [Chinese expert personas](references/personas/experts-cn.md) <br>
-- [International expert personas](references/personas/experts-intl.md) <br>
-- [The Closer persona](references/personas/closer.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Structured Markdown review with a disclaimer, intake questions, panel discussion, final verdict, dissent, and failure signals.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Bilingual output selected by conversation language; no numeric scoring; always includes a final verdict and dissent section.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may process confidential PRDs or linked product documents through the agent's existing workspace and connector access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in approved workspaces and with documents the agent is permitted to read.
+
+Risk: The panel verdict may be over-weighted as an authoritative business decision.
+
+Mitigation: Treat the output as decision support and validate recommendations with responsible product, research, business, and engineering owners.
+
+Risk: Named expert perspectives may be mistaken for real statements or endorsements.
+
+Mitigation: Keep the required disclaimer in every run and preserve the distinction between public-framework interpretation and actual individual opinion.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/cpsean/skills/product-review-panel-skill)
+- [Server-Resolved Source Repository](https://github.com/CPsean/Product-Review-Panel-skill)
+- [README](README.md)
+- [Skill Definition](SKILL.md)
+- [Disclaimer Template](references/templates/disclaimer.md)
+- [Output Structure Template](references/templates/output-structure.md)
+- [Information Gap Check Workflow](references/workflows/information-gap-check.md)
+- [PRD Classification Workflow](references/workflows/prd-classification.md)
+- [Verdict Logic Workflow](references/workflows/verdict-logic.md)
+- [Chinese Panel Personas](references/personas/experts-cn.md)
+- [International Panel Personas](references/personas/experts-intl.md)
+- [The Closer Persona](references/personas/closer.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown review transcript with structured intake, panel tendencies, final verdict, dissent, next steps, and failure signals.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill should always include its expert-perspective disclaimer and should treat verdicts as decision support rather than authoritative business decisions.]
+
+## Skill Version(s):
+
+1.0.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

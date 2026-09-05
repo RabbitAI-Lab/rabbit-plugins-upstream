@@ -1,49 +1,68 @@
-## Description: <br>
-Guides agents through Alibaba Cloud CloudMonitor (CMS) management with the aliyun cms2 CLI, including monitoring onboarding, metrics, APM, RUM, event, and alerting workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through Alibaba CloudMonitor (CMS) aliyun cms2 operations for observability onboarding, integrations, APM, RUM, Prometheus, alerting, events, metrics, and dashboard workflows.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers, SREs, and cloud operations teams use this skill to inspect and manage Alibaba Cloud CMS resources, configure observability onboarding, query monitoring data, and manage alerting workflows through the aliyun cms2 CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to create, update, delete, enable, disable, or otherwise mutate Alibaba Cloud CMS resources using configured aliyun credentials. <br>
-Mitigation: Install it only for intended CMS management use, grant least-privilege RAM permissions, and require careful confirmation of every proposed write command before execution. <br>
-Risk: Broad permissions such as cross-account proxy or tag mutation can expand the blast radius of an incorrect command. <br>
-Mitigation: Avoid granting cross-account proxy or tag mutation unless the workflow explicitly requires it, and trim RAM policy resources and actions to the target operational scope. <br>
-Risk: Important prompts and summaries may be presented in Simplified Chinese. <br>
-Mitigation: Use the skill only where operators can review the Chinese-language summaries and exact commands before approving cloud-side changes. <br>
+## Use Case:
 
+Developers and cloud operations teams use this skill to plan and execute Alibaba Cloud CMS observability tasks through the aliyun cms2 CLI, including onboarding resources, managing integrations, querying metrics, and configuring alerts. It is intended for guided operational work where cloud-side and Kubernetes changes are reviewed before execution.
 
-## Reference(s): <br>
-- [Alibaba Cloud CLI install guide](https://help.aliyun.com/document_detail/121541.html) <br>
-- [Alibaba Cloud CLI update guide](https://help.aliyun.com/zh/cli/update-cli) <br>
-- [Integration module reference](references/integration.md) <br>
-- [Alerting module reference](references/alerting.md) <br>
-- [Application Monitoring module reference](references/apm.md) <br>
-- [Real User Monitoring module reference](references/rum.md) <br>
-- [RAM policy reference](references/ram-policies.md) <br>
-- [Related API inventory](assets/related_apis.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [User-facing explanations are expected in Simplified Chinese while CLI commands, flags, IDs, JSON fields, and error text remain verbatim.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can guide persistent Alibaba Cloud or Kubernetes changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege aliyun profile and require human review of the exact command, target resources, expected impact, and risks before any write is executed.
+
+Risk: LicenseKey/authToken values and generated plans or reports may contain sensitive operational data.
+
+Mitigation: Treat credentials, generated plans, and reports as sensitive; avoid logging, sharing, or committing them unless they have been reviewed and sanitized.
+
+Risk: Installer guidance can be risky when it relies on direct shell execution from remote URLs.
+
+Mitigation: Avoid direct curl-to-bash installers; prefer official documentation, explicit commands, and reviewable installation steps.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-cms-manage)
+- [Alibaba Cloud CLI Installation](https://help.aliyun.com/document_detail/121541.html)
+- [Alibaba Cloud CLI Update Guide](https://help.aliyun.com/zh/cli/update-cli)
+- [Integration Common Rules](references/integration-common.md)
+- [Integration Management](references/integration-management.md)
+- [Prometheus Management](references/prometheus-management.md)
+- [Alerting Module](references/alerting.md)
+- [Application Monitoring (APM) Module](references/apm.md)
+- [Real User Monitoring (RUM) Module](references/rum.md)
+- [AI Observability Module](references/ai.md)
+- [RAM Policy Reference](references/ram-policies.md)
+- [Related APIs](assets/related_apis.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON/YAML configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires aliyun CLI 3.3.15 or newer with the cms2 command available; generated commands may operate on Alibaba Cloud and Kubernetes resources.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

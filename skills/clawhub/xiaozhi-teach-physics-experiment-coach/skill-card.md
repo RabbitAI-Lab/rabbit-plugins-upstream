@@ -1,52 +1,74 @@
-## Description: <br>
-Helps physics teachers turn classroom experiments into structured teaching workflows for experiment goals, design, implementation, data handling, conclusions, lab reports, and student experiment profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps middle-school physics teachers organize experiment instruction across goals, design, implementation, data processing, conclusions, lab reports, safety levels, grouping, and equipment planning.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External physics teachers use this skill to plan, scaffold, and review classroom experiments without delegating real-world experiment execution or final grading to the agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Classroom or extracurricular physics experiment suggestions could be used without adequate safety boundaries. <br>
-Mitigation: Require teacher review, safetyLevel labels, adult supervision, and explicit exclusion of hazardous experiments before using any generated plan. <br>
-Risk: Electrical experiment examples could be adapted into unsafe home activities. <br>
-Mitigation: Do not reuse extracurricular electrical examples unless strict safety limits are added and there is no direct interaction with household mains circuits. <br>
-Risk: Rubrics and report examples could be mistaken for automatic grading instructions. <br>
-Mitigation: Use rubrics as teacher-only assessment references and require human review before any student-facing feedback or score is recorded. <br>
-Risk: Student experiment profiles and lab reports may contain personal or classroom-sensitive information. <br>
-Mitigation: Use pseudonyms, remove identifying details from reports, and follow school data-handling rules before storing or sharing outputs. <br>
+## Use Case:
 
+External middle-school physics teachers use this skill to plan, run, and review physics experiment lessons, including experiment type selection, variable control, safety handling, student grouping, data tables, conclusions, and lab-report feedback. The skill is designed for teacher-mediated classroom use rather than autonomous experiment execution or direct grading.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-experiment-coach) <br>
-- [物理实验类型详解](references/experiment-types.md) <br>
-- [物理实验数据处理评分](references/data-processing-rubric.md) <br>
-- [实验报告评分细则](references/lab-report-template.md) <br>
-- [实验设计样板](references/experiment-design-sample.md) <br>
-- [数据处理样板](references/data-record-samples.md) <br>
-- [实验结论样板](references/conclusion-sample.md) <br>
-- [实验报告样板](references/lab-report-sample.md) <br>
-- [学员实验能力档案模板](references/student-lab-profile-template.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; non-China deployments should localize curriculum alignment, privacy-law assumptions, and emergency referral wording.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style teaching guidance, rubrics, checklists, and classroom experiment templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Teacher-facing outputs; no API calls, shell commands, credentials, or live experiment execution are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and release evidence) <br>
+Risk: The skill may handle minor student classroom records, parent-facing outputs, and cross-skill sharing settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, confirm the platform enforces teacher confirmation, consent checks, privacy controls, sharing opt-outs, export, correction, and deletion flows.
+
+Risk: The skill is designed around China mainland K12 curriculum, privacy assumptions, and emergency referral wording.
+
+Mitigation: For non-China deployments, localize curriculum references, applicable privacy-law assumptions, consent requirements, and emergency help wording before use.
+
+Risk: Physics experiments can involve safety-sensitive classroom activity.
+
+Mitigation: Require each experiment to carry a safetyLevel; high-risk experiments should be demonstration-only or replaced with video or simulation, with teacher supervision for medium-risk work.
+
+Risk: AI-generated experiment plans or assessment items could contain inaccurate calculations, unsafe assumptions, or unsuitable grade-level content.
+
+Mitigation: Mark AI-generated items for human verification and require teacher review before classroom use, resource-bank storage, or student-facing distribution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-experiment-coach)
+- [Skill definition](artifact/SKILL.md)
+- [Initial physics experiment types](artifact/references/experiment-types.md)
+- [Experiment design sample](artifact/references/experiment-design-sample.md)
+- [Data record samples](artifact/references/data-record-samples.md)
+- [Data processing rubric](artifact/references/data-processing-rubric.md)
+- [Conclusion sample](artifact/references/conclusion-sample.md)
+- [Lab report template](artifact/references/lab-report-template.md)
+- [Lab report sample](artifact/references/lab-report-sample.md)
+- [Student lab profile template](artifact/references/student-lab-profile-template.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [Shared vocabulary](artifact/shared/vocab.md)
+- [AI item check](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Chinese Markdown guidance with tables, checklists, templates, and structured class-workspace fields.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is expected for saved records, AI-generated items, parent-facing outputs, and safety-sensitive classroom decisions.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

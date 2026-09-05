@@ -15,11 +15,13 @@ The right step-1 provider depends on which filter is primary:
 | Primary filter | Provider | Cost (credits) | Notes |
 |---|---|---|---|
 | Industry / size / geo | `salesNavigator.searchAccounts` | 0.05 | LinkedIn-anchored. Default at-scale. |
+| Industry / size / geo, budget-first | `aiArk.searchCompanies` | 0.01 | **Cheapest per record in the catalog** (5× under salesNavigator). Billed per *returned* row, `limit` max 100 — paginate for large pulls. |
+| "Companies like these customers" | `aiArk.searchCompanies` (with `lookalikeDomains`) | 0.01 | Up to 5 seed domains / LinkedIn URLs. Cheaper than `oceanio` / `companyEnrich` lookalikes. |
 | Funding stage / investor / round size | `peopleDataLabs.queryCompanies` | 3 | PDL **SQL** string. Required for array-membership filters like `summary.investors LIKE %X%`. |
 | Tech stack | `theirStack.searchCompanies` (with techFields) | 0.5 | Tech-stack-driven sourcing. |
 | Hiring for role X | `theirStack.searchJobs` | 0.5 | Hiring-intent signal. |
 | Local SMBs / storefronts | `serper.searchPlaces` | 1 | Google Maps-style. |
-| Already have a domain list | (skip sourcing) | — | Go straight to step 2 (dedup + enrich). |
+| Already have a domain list | (skip sourcing) | — | Go straight to step 2 (dedupe + enrich). |
 
 For combined filters (e.g. fintech in US AND running Snowflake AND hiring data engineers), do parallel queries and intersect client-side.
 
@@ -31,9 +33,10 @@ For combined filters (e.g. fintech in US AND running Snowflake AND hiring data e
 | 500 companies | salesNavigator.searchAccounts | ~25 |
 | 1,000 companies | salesNavigator.searchAccounts | ~50 |
 | 5,000 companies | salesNavigator.searchAccounts (paginate) | ~250 |
+| 5,000 companies, budget-first | aiArk.searchCompanies (paginate, 100/call) | ~50 |
 | 10,000 companies | peopleDataLabs.queryCompanies (high-quality, structured) | ~30,000 (3/company) |
 
-The [pilot → approval → full-run gate](../references/cost-discipline.md) applies at every volume: 1–3 rows first, receipt, approval with the estimate reconciled against the balance. For 5,000+ companies, widen the pilot to **50 rows** — data-quality problems that are invisible at 3 rows show up at 50, and the 50-row cost is still noise next to the full pull. Size the pool free first: search actions bill on *returned* rows, so a `limit: 1` probe reads the provider's total match count for the price of one row.
+The [sample → approval → full-run gate](../references/cost-discipline.md) applies at every volume: **10–20 rows first** (1–3 only proves the filter is syntactically right, not that the list is any good), receipt, then approval stating how many companies the full pull enrolls and what they cost, reconciled against the balance. For 5,000+ companies, widen the sample to **50 rows** — data-quality problems invisible at 3 rows show up at 50, and the 50-row cost is still noise next to the full pull. Size the pool free first: search actions bill on *returned* rows, so a `limit: 1` probe reads the provider's total match count for the price of one row.
 
 ## Inputs you need
 
@@ -48,11 +51,11 @@ If anything is missing, ask the user **once** before sourcing.
 
 ### Step 1 — Source companies
 
-Cheapest at scale (≥ 100 companies): `salesNavigator.searchAccounts` (0.05 cred/company).
+Cheapest at scale (≥ 100 companies): `aiArk.searchCompanies` (0.01 cred/company, `limit` max 100 per call) when price leads, or `salesNavigator.searchAccounts` (0.05 cred/company) when you want LinkedIn-native filters and larger pages. Both bill per *returned* row — size the pool with a `limit: 1` probe first. The salesNavigator form:
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchAccounts","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchAccounts"}' \
   --data '{
     "filters": {
       "industries": ["Financial Services"],
@@ -71,7 +74,7 @@ Filter mismatch? Fall back to peopleDataLabs. Pick the right action by filter sh
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"searchCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"searchCompanies"}' \
   --data '{
     "filter": {
       "conjonction": "and",
@@ -94,7 +97,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies"}' \
   --data '{
     "query": "SELECT * FROM company WHERE industry = '\''financial services'\'' AND employee_count >= 50 AND employee_count <= 500 AND location.country = '\''united states'\''",
     "limit": 500
@@ -102,45 +105,59 @@ cargo-ai orchestration action execute \
   --wait-until-finished > /tmp/companies.json
 ```
 
-### Step 2 — Match against cargo's catalog (dedup + warm)
+### Step 2 — Dedupe against the workspace (free)
+
+Sourcing returns companies you may already hold. Filter them out **before** any
+paid enrichment — this is a storage read, not a paid action:
 
 ```bash
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
-  --records "$(jq -c '[.companies[] | {domain: .website}]' /tmp/companies.json)" \
-  --wait-until-finished > /tmp/matched.json
+cargo-ai storage query execute "SELECT domain FROM default.companies" > /tmp/known.json
+
+# keep only the domains the workspace doesn't already have
+jq -c --slurpfile known /tmp/known.json \
+  '[.companies[]
+    | {domain: .website, linkedinId: .linkedinId}
+    | select(.domain as $d | ($known[0].rows // [] | map(.domain)) | index($d) | not)]' \
+  /tmp/companies.json > /tmp/new-companies.json
 ```
 
-Matched rows now have a stable cargo `businessUuid` for downstream enrichment.
+`domain` is the join key for every enrichment below — no provider-side id is
+needed for those. `linkedinId` is carried through only because the optional
+contact step needs a Sales Navigator `accountId`, and **no enrichment action
+returns one**; it comes from `salesNavigator.searchAccounts` at step 1. Sourcing
+that had no LinkedIn anchor (the `peopleDataLabs` path) has no `linkedinId` to
+carry, so step 4 falls back to a per-domain title search.
 
 ### Step 3 — Enrich firmographics + signals
 
 ```bash
-# Firmographics (cheap, comprehensive)
+# Firmographics — cheapest company enrich in the catalog
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFirmographics","config":{}}' \
-  --records "$(jq -c '[.results[] | {businessUuid: .businessUuid}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichCompany"}' \
+  --records "$(jq -c '[.[] | {domain}]' /tmp/new-companies.json)" \
   --wait-until-finished > /tmp/firmo.json
 
 # Funding signals (only worth running if funding is part of ICP)
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFundingAndAcquisitions","config":{}}' \
-  --records "$(jq -c '[.results[] | {businessUuid: .businessUuid}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"enrichCrm","actionSlug":"getFunding"}' \
+  --records "$(jq -c '[.[] | {domain}]' /tmp/new-companies.json)" \
   --wait-until-finished > /tmp/funding.json
 
 # Tech-stack (only worth running if technographics are part of ICP)
+# getDomainSummary is FREE — run it across the whole list first
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessTechnographics","config":{}}' \
-  --records "$(jq -c '[.results[] | {businessUuid: .businessUuid}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"builtwith","actionSlug":"getDomainSummary"}' \
+  --records "$(jq -c '[.[] | {domain}]' /tmp/new-companies.json)" \
   --wait-until-finished > /tmp/tech.json
 ```
 
-If a company didn't match in step 2, fall back to `waterfall.enrichCompany` (1 cred):
+Rows where `aiArk.enrichCompany` came back thin escalate one rung at a time —
+`companyEnrich.enrichByDomain` (0.25), then `waterfall.enrichCompany` (1):
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichCompany","config":{}}' \
-  --records '<unmatched rows>' \
+  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"enrichByDomain"}' \
+  --records '<rows from /tmp/firmo.json with empty firmographics>' \
   --wait-until-finished > /tmp/firmo-fallback.json
 ```
 
@@ -150,8 +167,8 @@ Only run if the user asked for contacts. Cap at 3-5 per company.
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
-  --records "$(jq -c '[.results[] | {filters:{accountId: .linkedinId, titles:[\"CTO\",\"VP Engineering\"]}, limit: 5}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
+  --records "$(jq -c '[.[] | select(.linkedinId) | {filters:{accountId: .linkedinId, titles:[\"CTO\",\"VP Engineering\"]}, limit: 5}]' /tmp/new-companies.json)" \
   --wait-until-finished > /tmp/contacts.json
 ```
 
@@ -159,7 +176,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
   --records "$(jq -c '[.contacts[] | {firstName:.firstName, lastName:.lastName, companyDomain:.companyDomain}]' /tmp/contacts.json)" \
   --wait-until-finished > /tmp/emails.json
 ```
@@ -168,7 +185,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.results[] | {email: .email}]' /tmp/emails.json)" \
   --wait-until-finished > /tmp/verified.json
 ```
@@ -179,7 +196,7 @@ If a Companies model exists in the workspace, write back via `cargo-ai storage c
 
 For a CSV export, point the user at `cargo-ai segmentation segment download` (see [`../../cargo-analytics/references/examples/exports.md`](../../cargo-analytics/references/examples/exports.md)).
 
-For CRM push, compose ad hoc with `hubspot.upsertRecords` / `salesforce.upsert` — discover the action via `cargo-ai connection integration get hubspot` (or `salesforce`) and run via `orchestration action execute-batch`.
+For CRM push, compose ad hoc with `hubspot.upsertRecords` / `salesforce.upsert` — discover the action via `cargo-ai orchestration action list upsert --integration-slug hubspot`, then read its input schema with `cargo-ai connection integration get hubspot` (or `salesforce`) and run via `orchestration action execute-batch`.
 
 ## Credit budget (rough)
 
@@ -188,15 +205,15 @@ For a 500-company TAM with contacts:
 | Step | Per record | Records | Subtotal |
 |---|---|---|---|
 | 1. Source (salesNavigator.searchAccounts) | 0.05 | 500 | 25 |
-| 2. matchBusiness | 0.5 | 500 | 250 |
-| 3. enrichBusinessFirmographics | 0.5 | 500 | 250 |
-| 3. enrichBusinessFundingAndAcquisitions (optional) | 0.5 | 500 | 250 |
-| 3. enrichBusinessTechnographics (optional) | 1 | 500 | 500 |
+| 2. Dedupe against the Companies model | 0 | 500 | 0 |
+| 3. aiArk.enrichCompany | 0.01 | 500 | 5 |
+| 3. enrichCrm.getFunding (optional) | 1 | 500 | 500 |
+| 3. builtwith.getDomainSummary (optional) | 0 | 500 | 0 |
 | 4. searchLeads (3 contacts each) | 0.02 × 3 | 500 | 30 |
 | 5. FullEnrich.findEmail | 1 | 1500 | 1500 |
 | 6. waterfall.verifyEmail | 0.1 | 1500 | 150 |
 
-**Total: ~2,955 credits for 500 companies + 1,500 contacts** (~6 credits per fully-enriched contact).
+**Total: ~2,210 credits for 500 companies + 1,500 contacts** (~1.5 credits per fully-enriched contact).
 
 Cut steps the user doesn't need (skip step 3 funding/tech if not part of ICP, skip steps 4-6 if no contacts needed) to bring the cost down.
 

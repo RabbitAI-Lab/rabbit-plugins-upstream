@@ -1,0 +1,40 @@
+{
+  "environment": "cqccjy",
+  "owner_user_id": 2,
+  "deployment": "current",
+  "description": "CQCCJY 员工2公开用户端。接口来自现有用户端前端，不新增后端适配服务。",
+  "lanes": {
+    "character-count": {
+      "site": "https://vpcs.cqccjy.cn",
+      "api": {"config": "/api/paper/check/public/pwp/config", "draft": "/api/paper/check/public/pwp/order/create-draft", "presign": "/api/paper/check/public/upload/presign", "complete": "/api/paper/check/public/upload/complete", "order": "/api/paper/check/public/order/{order_no}", "report": "/api/paper/check/public/order/{order_no}/report-download-url"},
+      "pages": {"entry": "https://vpcs.cqccjy.cn/pwp", "progress": "https://vpcs.cqccjy.cn/pwp?orderNo={order_no}&stage=progress", "payment": "https://vpcs.cqccjy.cn/pwp?orderNo={order_no}&stage=payment", "report": "https://vpcs.cqccjy.cn/reports?orderNo={order_no}"}
+    },
+    "vip": {
+      "site": "https://vpcs.cqccjy.cn",
+      "api": {"config": "/api/paper/check/public/pwp/config", "draft": "/api/paper/check/public/pwp/order/create-draft", "presign": "/api/paper/check/public/upload/presign", "complete": "/api/paper/check/public/upload/complete", "order": "/api/paper/check/public/order/{order_no}", "submit_detect": "/api/paper/check/public/order/{order_no}/submit-detect", "report": "/api/paper/check/public/order/{order_no}/report-download-url"},
+      "pages": {"entry": "https://vpcs.cqccjy.cn/pwp", "progress": "https://vpcs.cqccjy.cn/pwp?orderNo={order_no}&stage=progress", "payment": "https://vpcs.cqccjy.cn/pwp?orderNo={order_no}&stage=payment", "report": "https://vpcs.cqccjy.cn/reports?orderNo={order_no}"}
+    },
+    "wanfang": {
+      "site": "https://wanfang.cqccjy.cn",
+      "api": {"config": "/api/paper/wanfang/public/config", "presign": "/api/paper/wanfang/public/upload/presign", "create": "/api/paper/wanfang/public/order/create", "order": "/api/paper/wanfang/public/order/{order_no}", "report": "/api/paper/wanfang/public/order/{order_no}/report-download-url"},
+      "pages": {"entry": "https://wanfang.cqccjy.cn/pwf", "progress": "https://wanfang.cqccjy.cn/pwf/check?orderNo={order_no}", "payment": "https://wanfang.cqccjy.cn/pwf?orderNo={order_no}&stage=payment", "report": "https://wanfang.cqccjy.cn/pwf/check?orderNo={order_no}"}
+    },
+    "cnki": {
+      "site": "https://cnki.cqccjy.cn",
+      "api": {"config": "/api/paper/cnki/public/config", "presign": "/api/paper/cnki/public/upload/presign", "create": "/api/paper/cnki/public/order/create", "order": "/api/paper/cnki/public/order/{order_no}", "report": "/api/paper/cnki/public/order/{order_no}/report-download-url"},
+      "pages": {"entry": "https://cnki.cqccjy.cn/pzw", "progress": "https://cnki.cqccjy.cn/pzw/check?orderNo={order_no}", "payment": "https://cnki.cqccjy.cn/pzw?orderNo={order_no}&stage=payment", "report": "https://cnki.cqccjy.cn/pzw/check?orderNo={order_no}"}
+    },
+    "aigc": {
+      "site": "https://vpcs.cqccjy.cn",
+      "api": {"config": "/api/paper/aigc/public/config", "pay_draft": "/api/paper/aigc/public/order/pay/draft", "prepare": "/api/paper/aigc/public/order/prepare-submit", "source_complete": "/api/paper/aigc/public/order/complete-source-archive", "upload_claim": "/api/paper/aigc/public/order/mark-upload-attempted", "submit_complete": "/api/paper/aigc/public/order/complete-direct-submit", "order": "/api/paper/aigc/public/order/{order_no}"},
+      "pages": {"entry": "https://vpcs.cqccjy.cn/paper-aigc", "progress": "https://vpcs.cqccjy.cn/paper-aigc/check?orderNo={order_no}", "payment": "https://vpcs.cqccjy.cn/paper-aigc?orderNo={order_no}", "report": "https://vpcs.cqccjy.cn/paper-aigc/check?orderNo={order_no}"}
+    },
+    "reduction": {
+      "site": "https://reduction.cqccjy.cn",
+      "api": {"config": "/api/paper/reduction/public/config", "draft": "/api/paper/reduction/public/order/create-draft", "presign_source": "/api/paper/reduction/public/upload/source/presign", "presign_report": "/api/paper/reduction/public/upload/report/presign", "count_file": "/api/paper/reduction/public/order/{order_no}/count/file", "count_text": "/api/paper/reduction/public/order/{order_no}/count/text", "order": "/api/paper/reduction/public/order/{order_no}", "result": "/api/paper/reduction/public/order/{order_no}/result-download-url"},
+      "pages": {"entry": "https://reduction.cqccjy.cn/redu", "progress": "https://reduction.cqccjy.cn/redu?orderNo={order_no}", "payment": "https://reduction.cqccjy.cn/redu?orderNo={order_no}&stage=payment", "report": "https://reduction.cqccjy.cn/redu?orderNo={order_no}"}
+    },
+    "report-verify": {"site": "https://vpcs.cqccjy.cn", "api": {}, "pages": {"entry": "https://vpcs.cqccjy.cn/pwp/verify", "vip": "https://vpcs.cqccjy.cn/pwp/verify", "wanfang": "https://truth.wanfangdata.com.cn/", "cnki": "https://check7.cnki.net/codeverify/"}},
+    "guidance": {"site": "https://vpcs.cqccjy.cn", "api": {"config": "/api/paper/check/public/pwp/config"}, "pages": {"entry": "https://vpcs.cqccjy.cn/"}}
+  }
+}

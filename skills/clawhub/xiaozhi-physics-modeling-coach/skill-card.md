@@ -1,41 +1,55 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+初中物理建模教练，用三步法训练学生先识别物理现象、选择合适模型，再把模型表达成数学关系。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+Students and tutoring agents use this skill to practice junior-high physics modeling: identifying the phenomenon in a problem, choosing among core mechanics, pressure, buoyancy, circuits, and energy models, and forming the matching mathematical expression. It is suited for guided practice and model-transfer coaching rather than full problem solving or experiment design.
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can keep a physics modeling profile and enqueue study reminders when consent controls permit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require receiver-side authorization so writes are limited to subjectExtensions.physics.modelingProfile and reminders are enqueued only when profile sharing, reminder consent, and per-interaction agreement are present.
+
+Risk: Generated practice prompts or modeling guidance may be pedagogically wrong or exceed the declared junior-high scope.
+
+Mitigation: Use the bundled item self-check and scope rules before presenting generated exercises; label high-school-only content and avoid expanding it unless the student explicitly asks.
+
+## Reference(s):
+
+- [Physics Modeling Patterns Reference](references/physics-modeling-patterns.md)
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach)
+- [Publisher Profile](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Conversational Markdown with structured modeling prompts and optional consent-gated handover JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can generate practice prompts, model-selection guidance, profile update handoffs, and reminder enqueue handoffs when consent controls permit.]
+
+## Skill Version(s):
+
+2.1.6 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

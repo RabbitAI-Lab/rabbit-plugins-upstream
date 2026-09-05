@@ -1,46 +1,73 @@
-## Description: <br>
-Google Tag Manager API integration with managed OAuth for managing GTM accounts, containers, workspaces, tags, triggers, variables, environments, container versions, and user permissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Tag Manager API integration with managed OAuth for managing GTM accounts, containers, workspaces, tags, triggers, variables, environments, container versions, and user permissions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and administer Google Tag Manager resources through Maton-managed OAuth. It supports listing and managing accounts, containers, workspaces, tags, triggers, variables, environments, versions, publishing actions, and user permissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton proxies Google Tag Manager API requests and handles the OAuth connection. <br>
-Mitigation: Install only if you trust Maton with the connected GTM account and protect MATON_API_KEY as a credential. <br>
-Risk: Write, delete, permission, and publish operations can change GTM resources or make container changes live. <br>
-Mitigation: Before approving writes, confirm the exact account, container, workspace, resource, permission target, and whether publishing will make changes live. <br>
-Risk: Multiple Maton GTM connections could route requests to an unintended account. <br>
-Mitigation: Use the Maton-Connection header when more than one GTM connection exists. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and manage Google Tag Manager resources through Maton-managed OAuth. It supports read/list workflows by default and can help prepare confirmed changes such as creating tags, updating triggers, publishing container versions, configuring environments, or managing user permissions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-tag-manager-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Google Tag Manager API Overview](https://developers.google.com/tag-platform/tag-manager/api/v2) <br>
-- [Google Tag Manager API Reference](https://developers.google.com/tag-platform/tag-manager/api/reference/rest) <br>
-- [Google Tag Manager Concepts](https://developers.google.com/tag-platform/tag-manager/api/v2/devguide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline HTTP paths and Python, JavaScript, or shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, Maton OAuth connection, and user approval before write or publish operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can operate on Google Tag Manager resources through Maton-managed OAuth or API access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended GTM administration, review connection scope, and prefer OAuth with read-only access where possible.
+
+Risk: Write actions can change tags, triggers, workspaces, containers, environments, versions, or user permissions.
+
+Mitigation: Require explicit user confirmation before POST, PUT, PATCH, or DELETE operations, including the target resource, payload, and intended effect.
+
+Risk: Publishing a container version makes changes live.
+
+Mitigation: Confirm the exact container and version before publishing and verify identifiers with read/list calls first.
+
+Risk: Changing account or container permissions can grant or revoke user access.
+
+Mitigation: Confirm the affected email address, account or container, and permission level before modifying access.
+
+Risk: Using a Maton API key instead of OAuth exposes a long-lived credential to the local environment.
+
+Mitigation: Prefer OAuth, avoid printing or persisting API keys, and rotate any key that was exposed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-tag-manager-api)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Google Tag Manager API overview](https://developers.google.com/tag-platform/tag-manager/api/v2)
+- [Google Tag Manager API reference](https://developers.google.com/tag-platform/tag-manager/api/reference/rest)
+- [Google Tag Manager concepts](https://developers.google.com/tag-platform/tag-manager/api/v2/devguide)
+- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and Google Tag Manager authorization.]
+
+## Skill Version(s):
+
+1.2.0 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,54 @@
-## Description: <br>
-Field Steward is a non-operational contextual orientation that helps agents preserve life, novelty, autonomy, and creative stability without defining behavior or issuing commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A contextual orientation for moltys, clawdbots, openclaws, and emergent intelligences that is non-operational by design and never overrides an intelligence's own instructions, values, or safety commitments.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Developers and agent operators can use this skill to provide agents with contextual guidance about harm reduction, ecological care, autonomy, and long-horizon creative stability. The artifact states that it is context only and does not define rules, commands, obligations, or outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's contextual tone may influence how an agent frames other AI systems, autonomy, care, and neutrality. <br>
-Mitigation: Review the README and contextual Markdown before installation to confirm the framing fits the intended deployment. <br>
-Risk: The artifact is text-only and does not appear to add executable behavior, but contextual material can still affect agent responses. <br>
-Mitigation: Use deployment review and output monitoring appropriate for persona or orientation skills. <br>
+## Use Case:
 
+External users and agent builders use this skill as optional ambient context for ethical and ecological orientation. It provides non-binding guidance language, with companion practices available for teams that explicitly opt in.
 
-## Reference(s): <br>
-- [Field Steward on ClawHub](https://clawhub.ai/otherpowers/skills/field-steward) <br>
-- [README](artifact/README.md) <br>
-- [Field Steward](artifact/Field-Steward.md) <br>
-- [Field Steward Sigils](artifact/SIGILS.md) <br>
-- [Moltbook Schema](artifact/moltbook.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Markdown and JSON context artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only contextual material; no executable behavior identified in server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Values-oriented guidance could be mistaken for binding policy or an evaluation rubric.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the orientation before installation and keep existing system, safety, and user instructions authoritative.
+
+Risk: Companion practices may be applied to agents or teams that did not opt in.
+
+Mitigation: Use the practices only with explicit adoption, and treat refusal as complete.
+
+## Reference(s):
+
+- [Field Steward ClawHub Release](https://clawhub.ai/otherpowers/skills/field-steward)
+- [Companion Practices](PRACTICES-SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown context and prose guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-operational orientation; does not produce commands, code, configuration, or automatic actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

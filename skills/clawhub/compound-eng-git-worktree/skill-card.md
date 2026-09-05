@@ -1,42 +1,57 @@
-## Description: <br>
-Manage Git worktrees for isolated parallel development, including creating, listing, switching, and cleaning up worktrees for concurrent reviews or feature work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Git worktrees for isolated parallel development when creating, listing, switching, or cleaning up worktrees, or when needing isolated branches for concurrent reviews or feature work.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage isolated Git worktrees for parallel implementation, branch review, and cleanup workflows without switching the main working tree in place. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The helper can duplicate local .env files containing secrets into newly created worktrees. <br>
-Mitigation: Review or edit the helper before use on repositories with real credentials, require opt-in or an allowlist for env copying, prefer .env.example, and verify copied env files stay ignored and are cleaned up with discarded worktrees. <br>
+## Use Case:
 
+Developers and coding agents use this skill to create, list, switch, and clean up isolated Git worktrees for parallel feature development, code review, and branch work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-git-worktree) <br>
-- [Workflow Examples](references/workflow-examples.md) <br>
-- [Troubleshooting & Technical Details](references/troubleshooting.md) <br>
-- [Hooks and Local Excludes](references/hooks-and-excludes.md) <br>
-- [Worktree Manager Script](scripts/worktree-manager.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and command output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or run Git worktree helper commands and may summarize branch, worktree, and cleanup status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release metadata) <br>
+Risk: The worktree manager automatically copies .env files into new worktrees, which can duplicate API keys, database passwords, tokens, or other secrets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation in repositories that store secrets in .env files; prefer making environment copying opt-in, warning before copies, restricting copied files to an allowlist, and avoiding backup copies of secret files by default.
+
+Risk: Cleanup and discard workflows can remove worktrees or branches if used against the wrong checkout.
+
+Mitigation: Confirm the active worktree, branch ownership, and git status before cleanup or discard operations; require explicit user confirmation for destructive choices.
+
+## Reference(s):
+
+- [Workflow Examples](references/workflow-examples.md)
+- [Troubleshooting and Technical Details](references/troubleshooting.md)
+- [Hooks and Local Excludes](references/hooks-and-excludes.md)
+- [Worktree Manager Script](scripts/worktree-manager.sh)
+- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-git-worktree)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide an agent to run the bundled worktree manager script, update local git ignore settings, copy environment files, install dependencies, and report structured change summaries.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

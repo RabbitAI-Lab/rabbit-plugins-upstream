@@ -31,7 +31,7 @@ The connector also accepts your own Bouncer API key (`apiKey`) — same action, 
 ```bash
 # Only on rows where waterfall and zeroBounce disagreed, and the contact justifies 0.3
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"bouncer","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"bouncer","actionSlug":"verifyEmail"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob@globex.com"}]' \
   --wait-until-finished
 ```
@@ -54,9 +54,15 @@ The catalog dump documents no output schema for this action — inspect the firs
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"bouncer","actionSlug":"verifyEmail","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"bouncer","actionSlug":"verifyEmail"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
 - [`../recipes/outreach-activation.md`](../recipes/outreach-activation.md) — the verify step before personalization; never sequence unverified emails.
 - [`../recipes/prospecting.md`](../recipes/prospecting.md) — the verify rung of the find → enrich → verify → sync spine.
+
+## Recurring use
+
+- **No scheduled fit — per-record verification only.** Recurring verification inside a play belongs on the default rung `waterfall.verifyEmail` (0.1) or bulk `icypeas.verifyEmail` (0.01); bouncer enters recurring flows only via an own-key connector.
+- **In-play gate:** run only where the bouncer verdict column is still empty **and** `email` is non-empty — an email verifies once; re-evaluation must not re-bill settled rows.
+- **Decay caveat:** deliverability does age, but scheduled re-verification of a whole list goes to the cheap rungs (or the user's Bouncer plan), never through the 0.3-credit price.

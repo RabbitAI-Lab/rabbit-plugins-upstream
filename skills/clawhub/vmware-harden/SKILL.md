@@ -1,12 +1,12 @@
 ---
 name: vmware-harden
 description: >
-  Use this skill whenever the user needs to perform VMware compliance auditing,
+  Use this skill whenever the user needs to perform VMware cyber compliance auditing (aligned with VCF 9 Advanced Cyber Compliance / ACC),
   baseline checking, or drift detection on vSphere/ESXi/NSX environments.
   Directly handles: CIS / vSphere SCG / 等保 2.0 三级 / PCI-DSS / BSI IT-Grundschutz / EU NIS2 scans;
   custom YAML baselines; LLM-driven remediation suggestions; web dashboard.
   Always use this skill for "scan compliance", "check baseline", "audit etcd",
-  "check 等保", "drift detection", "compliance report" when the context is
+  "check 等保", "drift detection", "compliance report", "cyber compliance scan", "ACC posture", "STIG check" when the context is
   explicitly VMware/vSphere/ESXi.
   Do NOT use for general vSphere monitoring (use vmware-monitor or vmware-aiops),
   network changes (use vmware-nsx), or executing remediations directly
@@ -18,34 +18,36 @@ allowed-tools:
   - Bash
   - Read
   - Write
-metadata: {"openclaw":{"requires":{"env":["VMWARE_HARDEN_DB"],"bins":["vmware-harden"],"config":["~/.vmware-harden/twin.duckdb"]},"optional":{"env":["VMWARE_AUDIT_APPROVED_BY","VMWARE_AUDIT_RATIONALE","ANTHROPIC_API_KEY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_HARDEN_DB","homepage":"https://github.com/zw008/VMware-Harden","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"env":["VMWARE_HARDEN_DB"],"bins":["vmware-harden"],"config":["~/.vmware-harden/twin.duckdb"]},"optional":{"env":["VMWARE_AUDIT_APPROVED_BY","VMWARE_AUDIT_RATIONALE","ANTHROPIC_API_KEY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_HARDEN_DB","homepage":"https://github.com/vmware-skills/VMware-Harden","os":["macos","linux"]}}
 ---
 
 # VMware Harden (Compliance & Baseline)
 
-> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/zw008/VMware-Harden](https://github.com/zw008/VMware-Harden) under the MIT license.
+> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/vmware-skills/VMware-Harden](https://github.com/vmware-skills/VMware-Harden) under the MIT license.
 
 AI-native VMware compliance scanner — built-in CIS / vSphere SCG / 等保 2.0 三级 / PCI-DSS / BSI IT-Grundschutz / EU NIS2 baselines, drift detection, LLM-driven remediation advice, and a web dashboard.
 
-> **Companion skills**: [vmware-aiops](https://github.com/zw008/VMware-AIops) (inventory + collectors data source; host/VM remediation target), [vmware-monitor](https://github.com/zw008/VMware-Monitor) (read-only inspection), [vmware-storage](https://github.com/zw008/VMware-Storage) (datastore remediation target), [vmware-nsx](https://github.com/zw008/VMware-NSX) (segment/gateway evidence), [vmware-nsx-security](https://github.com/zw008/VMware-NSX-Security) (DFW evidence + remediation target), [vmware-aria](https://github.com/zw008/VMware-Aria) (metrics correlation), [vmware-avi](https://github.com/zw008/VMware-AVI) (load balancer evidence), [vmware-vks](https://github.com/zw008/VMware-VKS) (Tanzu Kubernetes evidence), [vmware-pilot](https://github.com/zw008/VMware-Pilot) (remediation execution with approval gates), [vmware-policy](https://github.com/zw008/VMware-Policy) (audit log). See [references/cross-skill-workflows.md](./references/cross-skill-workflows.md) for end-to-end remediation flows that span pilot + sibling skills.
+> **Companion skills**: [vmware-aiops](https://github.com/vmware-skills/VMware-AIops) (inventory + collectors data source; host/VM remediation target), [vmware-monitor](https://github.com/vmware-skills/VMware-Monitor) (read-only inspection), [vmware-storage](https://github.com/vmware-skills/VMware-Storage) (datastore remediation target), [vmware-nsx](https://github.com/vmware-skills/VMware-NSX) (segment/gateway evidence), [vmware-nsx-security](https://github.com/vmware-skills/VMware-NSX-Security) (DFW evidence + remediation target), [vmware-aria](https://github.com/vmware-skills/VMware-Aria) (metrics correlation), [vmware-avi](https://github.com/vmware-skills/VMware-AVI) (load balancer evidence), [vmware-vks](https://github.com/vmware-skills/VMware-VKS) (Tanzu Kubernetes evidence), [vmware-pilot](https://github.com/vmware-skills/VMware-Pilot) (remediation execution with approval gates), [vmware-policy](https://github.com/vmware-skills/VMware-Policy) (audit log). See [references/cross-skill-workflows.md](./references/cross-skill-workflows.md) for end-to-end remediation flows that span pilot + sibling skills.
 
 ## What This Skill Does
 
 | Category | Tools | Count | Read or Write |
 |----------|-------|-------|---------------|
-| Baseline Management | 8 built-in baselines (CIS ESXi 8.0/9.0, vSphere SCG v8/v9, 等保 2.0 L3, PCI-DSS 4.0, BSI ITGS, EU NIS2) + custom YAML loader | 8+N | Read |
+| Baseline Management | 9 built-in baselines (CIS ESXi 8.0/9.0, vSphere SCG v8/v9, vSphere 9 STIG, 等保 2.0 L3, PCI-DSS 4.0, BSI ITGS, EU NIS2) + custom YAML loader | 9+N | Read |
 | Scanning | Multi-collector (vCenter, ESXi, NSX, vSAN, K8s) → typed Twin store | 1 pipeline | Read (no target writes) |
 | Drift Detection | Snapshot-to-snapshot configuration diff (per-node added/removed/changed fields) | 1 type | Read |
 | Remediation Advisor | LLM-driven (Anthropic) suggestions per violation; mock fallback when no key | 1 advisor | Read |
 | Web Dashboard | FastAPI + Jinja2 read-only UI for violations / drift / advice | 1 server | Read |
-| MCP Server | Compliance query tools | 6 | All Read |
+| MCP Server | Compliance query tools | 8 | All Read |
 
 ## Quick Install
 
 ```bash
-uv tool install vmware-harden
+uv tool install "vmware-harden[collectors]"
 vmware-harden baseline list
 ```
+
+The `[collectors]` extra is what `scan` needs: inventory is read through vmware-aiops / vmware-storage / vmware-nsx-security, and `uv tool install` isolates each tool's environment — installing those packages on their own leaves harden unable to import them. Plain `uv tool install vmware-harden` is enough to report on an existing twin DB.
 
 For first-time use, ensure a vmware-aiops target is configured (harden uses aiops collectors) and optionally set `ANTHROPIC_API_KEY` for live remediation advice.
 
@@ -53,7 +55,7 @@ For first-time use, ensure a vmware-aiops target is configured (harden uses aiop
 
 Use vmware-harden when the user needs to:
 
-- Run a **compliance scan** against CIS / vSphere SCG / 等保 2.0 三级 / PCI-DSS / BSI IT-Grundschutz / EU NIS2
+- Run a **compliance scan** against CIS / vSphere SCG / **vSphere 9 STIG-aligned** / 等保 2.0 三级 / PCI-DSS / BSI IT-Grundschutz / EU NIS2
 - **Author or import a custom YAML baseline** (e.g., internal corporate baseline)
 - Detect **drift** between two scans of the same target
 - Get **AI-suggested remediation steps** for a violation (advice only — does not execute)
@@ -65,12 +67,15 @@ Use vmware-harden when the user needs to:
 - The task is VM lifecycle, snapshots, or guest operations → use **vmware-aiops**
 - The user wants to actually **execute** a remediation (set advanced setting, change DFW rule, etc.) → use **vmware-pilot** (multi-step approval-gated workflow)
 - The task is purely NSX networking/segments → use **vmware-nsx**
+- The user wants **continuous, fleet-wide compliance enforcement + automated remediation** across the estate → use **VCF Operations SPM/ACC (UI)**. VCF Operations 9.1 Automated Configuration Compliance / Security Posture Management is UI- and schedule-driven (paid Salt engine) and exposes **no public compliance API**. harden is the complementary, **API-scriptable, DuckDB-persisted, cross-target point-in-time scanner** for CI and agent workflows; it does not replace SPM/ACC. See [references/stig-content-sync.md](./references/stig-content-sync.md).
 
 ## Related Skills — Skill Routing
 
 | User Intent | Recommended Skill |
 |-------------|-------------------|
 | "Scan ESXi for CIS compliance" | **vmware-harden** ← this skill |
+| "Scan against the vSphere 9 STIG" | **vmware-harden** (`--baseline vsphere-stig-v9-subset`) |
+| "Continuous fleet-wide enforcement + auto-remediation" | **VCF Operations SPM/ACC (UI)** — no public API; harden is the scriptable point-in-time scanner |
 | "Check 等保 2.0 三级" | **vmware-harden** |
 | "What changed since last week?" (drift) | **vmware-harden** |
 | "Fix this violation now" | **vmware-pilot** (approval-gated execution) |
@@ -83,11 +88,11 @@ Use vmware-harden when the user needs to:
 
 ### 1. First-time scan with 等保 2.0 三级
 
-1. Install: `uv tool install vmware-harden`
+1. Install: `uv tool install "vmware-harden[collectors]"` (the extra carries the inventory collectors `scan` reads through)
 2. Verify aiops is configured: `vmware-aiops doctor` — harden reuses aiops connection for the vCenter collector
 3. List baselines: `vmware-harden baseline list` — confirm `dengbao-2.0-level3-vmware` is present
 4. Scan: `vmware-harden scan --baseline dengbao-2.0-level3-vmware --target prod-vcenter`
-5. Report: `vmware-harden report --format json > violations.json` (or `vmware-harden web` for the rendered dashboard)
+5. Report: `vmware-harden report --format json > violations.json` (or `vmware-harden web` for the rendered dashboard). The JSON is an object — `{"violations": [...], "coverage": {...}}` — read `coverage` before reporting a result; an empty `violations` list only means nothing was found among the checks that could be made.
 
    **Failure branch**: If you see `ConnectError: vmware-aiops target not found`, the aiops side is not configured. Run `vmware-aiops init` first; harden cannot scan without a working collector.
 
@@ -115,24 +120,33 @@ Use vmware-harden when the user needs to:
 | Scenario | Recommended | Why |
 |----------|:-----------:|-----|
 | Local CLI scans by an operator | **CLI** | Direct, scripts well into CI |
-| AI agent integration | **MCP** | 6 read-only tools, structured responses |
+| AI agent integration | **MCP** | 8 read-only tools, structured responses |
 | Reviewing posture interactively | **Web** | `vmware-harden web` — sortable tables, drift timeline |
 | CI/CD pipeline gates | **CLI** | Exit code reflects compliance pass/fail |
 
-## MCP Tools (6 — 6 read, 0 write)
+## MCP Tools (8 — 8 read, 0 write)
 
 | Category | Tool | Description |
 |----------|------|-------------|
 | Baseline | `list_baselines` | All built-in + imported baselines (id, framework, version) |
 | Baseline | `get_baseline_rules` | Rules for a given baseline_id (severity, references) |
+| STIG | `list_stig_controls` | vSphere 9 STIG-aligned controls (id, severity, ESXi advanced setting) |
+| STIG | `describe_stig_content_sync` | How harden syncs STIG content + routing to SPM/ACC (no compliance API) |
 | Violation | `list_violations` | Current violations, filterable by severity |
 | Violation | `get_remediation` | Remediation suggestion for a violation_id (LLM or mock) |
 | Drift | `list_drift_events` | Recent drift events from snapshot diff |
 | Scan | `scan_target` | Trigger a scan against a target (read-only on the target) |
 
-All 6 tools are **read-only** with respect to vSphere/NSX. Writes to the local Twin DuckDB are scan-internal and do not modify any VMware resource. Actual remediation execution is intentionally **deferred to vmware-pilot** (approval-gated).
+All 8 tools are **read-only** with respect to vSphere/NSX. Writes to the local Twin DuckDB are scan-internal and do not modify any VMware resource. Actual remediation execution is intentionally **deferred to vmware-pilot** (approval-gated).
 
 **List results are enveloped.** `list_baselines`, `get_baseline_rules`, and `list_drift_events` return `{items, returned, limit, total, truncated, hint}` rather than a bare list, so completeness is stated rather than inferred — read the rows from `items`, and treat `truncated: true` as "there is more, raise `limit`". Because the twin is a local DuckDB, `total` is a real count, not an estimate: a page that exactly fills `limit` is still reported `truncated: false` when it is genuinely the whole set. `list_violations` keeps its own older `{violations, total, limit, offset, has_more}` envelope with the same guarantee.
+
+**An empty violation list is not a compliance verdict.** A rule can only judge configuration that was actually gathered, and that fails two independent ways — both reported, neither as passing:
+
+- **No collector produces the attribute**, so the rule was never run → `coverage.undetermined` with `undetermined_rules` naming the attribute. Collector work.
+- **The rule ran but found no value on a given node** (host unreachable, account lacks the privilege, setting absent on that build) → `coverage.node_checks_undetermined` with `undetermined_node_checks` naming the rule, node and missing attribute. Access work. A rule that found no node of its type at all is listed in `coverage.rules_without_targets`.
+
+`list_violations` and `scan_target` return the full `coverage` block (`{evaluated, undetermined, total, tracked, complete, undetermined_rules, node_checks_evaluated, node_checks_undetermined, node_checks_total, nodes_affected, node_tracked, undetermined_node_checks, rules_without_targets}`) plus a `note` summarising it. Read it before summarising: when `complete` is false, say what was not checked and never call the estate compliant or clean. `tracked: false` means the snapshot predates coverage tracking; `node_tracked: false` means it predates per-node tracking (pre-v1.10.0) — re-scan rather than assume either.
 
 ## CLI Quick Reference
 
@@ -173,20 +187,20 @@ This avoids `uvx` re-resolving PyPI through the corporate MitM proxy. The legacy
 ### "Twin DB not found" on first MCP call
 Run at least one scan first: `vmware-harden scan --baseline cis-vmware-esxi-8.0-subset --target <t>`. The DuckDB file is created on first scan at `~/.vmware-harden/twin.duckdb` (override with `VMWARE_HARDEN_DB`).
 
-### 等保 baseline rules are not firing (all checks "skipped")
-The 等保 baseline references node types from multiple collectors (vCenter advanced settings + ESXi NTP + NSX DFW). If only the vCenter collector ran, rules referencing `nsx.*` paths skip with status "no evidence". Run a scan with all collectors enabled, or filter the baseline to only the relevant rules.
+### 等保 baseline reports most rules as not evaluated
+Three different causes, and the report distinguishes them. A rule whose attribute no collector produces is recorded `undetermined` with the reason naming that attribute — see `coverage.undetermined_rules`; those are collector work, tracked in RELEASE_NOTES. Separately, the 等保 baseline spans several collectors (vCenter advanced settings + NSX DFW), so if only the vCenter collector ran, the DFW rules have no nodes to match — they appear in `coverage.rules_without_targets`, not as passes. Third, individual hosts missing a value show up in `coverage.undetermined_node_checks`; that one is usually privilege or reachability, not a missing collector. Run a scan with all collectors installed, or pick a baseline whose `applies_to` matches what you have.
 
 ### Web dashboard shows 0 violations even after a scan
 Verify the dashboard is reading the same DuckDB. If `VMWARE_HARDEN_DB` is set in your shell but not in the systemd/launchd unit running `vmware-harden web`, the web server reads the default `~/.vmware-harden/twin.duckdb` while your scans wrote elsewhere.
 
 ## Audit & Safety
 
-1. **Source code**: [github.com/zw008/VMware-Harden](https://github.com/zw008/VMware-Harden) — MIT license, publicly auditable.
+1. **Source code**: [github.com/vmware-skills/VMware-Harden](https://github.com/vmware-skills/VMware-Harden) — MIT license, publicly auditable.
 2. **Config / state files**: custom baselines in `~/.vmware-harden/baselines/*.yaml`; Twin DuckDB at `~/.vmware-harden/twin.duckdb`. No passwords are stored — all credentials live in the upstream skill (`~/.vmware-aiops/.env`).
 3. **Webhook data scope**: none. Harden makes **no outbound network calls** other than (a) optional Anthropic API requests when `ANTHROPIC_API_KEY` is set for advisor suggestions, and (b) the local web dashboard bound to `127.0.0.1` by default.
 4. **TLS verification**: harden does not connect to vCenter/NSX directly — TLS handling is delegated to vmware-aiops. The advisor's HTTPS calls to `api.anthropic.com` use system TLS verification (no opt-out).
 5. **Prompt injection protection**: advisor LLM context is built exclusively from typed Twin queries (rule id, severity, evidence dict) — no free-text user input is forwarded. Evidence text passes through `_sanitize()` (truncate ≤500 chars, strip C0/C1 control characters).
-6. **Least privilege**: all 6 MCP tools are read-only. Remediation execution is intentionally not exposed — agents that need to apply a fix must invoke **vmware-pilot**, which provides approval gates and audit logging.
+6. **Least privilege**: all 8 MCP tools are read-only. Remediation execution is intentionally not exposed — agents that need to apply a fix must invoke **vmware-pilot**, which provides approval gates and audit logging.
 
 All MCP operations are audited via the `@vmware_tool` decorator (vmware-policy dependency) to `~/.vmware/audit.db`. View with `vmware-audit log --last 20`.
 
@@ -196,4 +210,4 @@ All MCP operations are audited via the `@vmware_tool` decorator (vmware-policy d
 
 ## License
 
-MIT — [github.com/zw008/VMware-Harden](https://github.com/zw008/VMware-Harden)
+MIT — [github.com/vmware-skills/VMware-Harden](https://github.com/vmware-skills/VMware-Harden)

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="5kYU4SIOjgvS9KH5BCUQUD">
+<head data-page-node-id="Kmxt35JH76f02bZWmfJQv8">
+<meta charset="UTF-8" data-page-node-id="CwkhymAkfAsoqlzFIutSap">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="0deVNg0lhE91T5YLlFnsvN">
+<title>盘前雷达 · 每日盘前风险速报</title>
+<style>
+  :root {
+    --font-sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-mono: "SF Mono", Menlo, Consolas, monospace;
+    --up: #e64340;
+    --down: #1e9e6b;
+    --nt: #8a8a86;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-sans);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+  .rk {
+    color: #1b1b1b;
+    background: #ffffff;
+    border: 1px solid #ececec;
+    border-radius: 16px;
+    overflow: hidden;
+    width: 380px;
+    position: relative;
+  }
+  .rk-up { color: var(--up); }
+  .rk-dn { color: var(--down); }
+  .rk-nt { color: var(--nt); }
+  .rk-lab { font-size: 11px; color: var(--nt); font-weight: 400; }
+  .rk-val { font-size: 16px; font-weight: 500; line-height: 1.3; }
+  .rk-m { background: #f7f7f5; border-radius: 10px; padding: 10px 12px; }
+  .rk-wm {
+    position: absolute; top: 46%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font-size: 34px; font-weight: 500; color: rgba(27, 27, 27, 0.05);
+    white-space: nowrap; pointer-events: none;
+  }
+  .rk-footer { border-top: 1px solid #ececec; padding: 14px 20px 16px; background: #fafaf8; }
+  .rk-cmd {
+    font-family: var(--font-mono); font-size: 11px; color: #1b1b1b;
+    background: #ffffff; border: 1px solid #ececec; border-radius: 6px;
+    padding: 4px 8px; margin-top: 6px; display: inline-block;
+  }
+  .rk-bar { height: 8px; flex: 1; border-radius: 3px; }
+  .rk-bar.on { background: #ef9f27; }
+  .rk-bar.off { background: #ececec; }
+</style>
+</head>
+<body data-page-node-id="Wyl60BruLZn3sUaA35W2En">
+  <!-- ===== 信号卡版式基线（2026-08-31 定稿 v3：动态方向 class + 动态风险条） =====
+       动态数据占位约定（render_card.py 填充）：
+       {{date}} {{weekday}} {{verdict}} {{reason}}
+       {{verdict_color}} {{verdict_box_bg}} {{verdict_box_border}}  结论区随方向变色（偏多红/偏空绿/中性灰）
+       {{risk_level}} {{risk_text}} {{risk_bars}}  风险条由 render_card 按 risk_level 生成 5 格 HTML
+       {{a50}} {{cny}} {{nasdaq_fut}} {{spx_fut}} {{dxy}} {{vix}} {{ust10y}}  7 指标数值（含涨跌）
+       {{a50_cls}} {{cny_cls}} {{nasdaq_fut_cls}} {{spx_fut_cls}} {{dxy_cls}} {{vix_cls}} {{ust10y_cls}}  方向 class（rk-up/rk-dn/rk-nt）
+       {{geo_risk}} {{geo_note}} {{bull_pct}} {{bull_text}} {{bear_pct}} {{bear_text}}
+       二维码：footer 暂用占位假码 SVG，skill 发布后替换为 skillhub 安装页真实二维码（扫码一键安装） -->
+  <div class="rk" data-page-node-id="gW6lsIzxSG0WZJUWEPtTTA">
+    <div class="rk-wm" data-page-node-id="4griEr0bmJ1T5CcsCydFuc">盘前雷达</div>
+
+    <div style="padding: 18px 20px 0;" data-page-node-id="At0eNxdnCMGBEr3qEJCjZX">
+      <div style="display: flex; align-items: center; justify-content: space-between;" data-page-node-id="U3KVp3g7omNWyZyVcCpxYL">
+        <div style="display: flex; align-items: center; gap: 10px;" data-page-node-id="qQC0MtMcEXwf4wp5zgPelG">
+          <div style="width: 34px; height: 34px; border-radius: 9px; background: #e64340; display: flex; align-items: center; justify-content: center;" data-page-node-id="tcNjHRN3Tjc7JfXYmAcnf0">
+            <div style="width: 14px; height: 14px; border-radius: 50%; background: #ffffff; position: relative;" data-page-node-id="BSkmWguoqUqiTABL0nYI3K">
+              <div style="position: absolute; left: 5px; top: -6px; width: 3px; height: 9px; background: #ffffff; transform: rotate(-35deg);" data-page-node-id="8fF9ZO0UnRdQ9mwTdQNt5a"></div>
+              <div style="position: absolute; right: 5px; top: -6px; width: 3px; height: 9px; background: #ffffff; transform: rotate(35deg);" data-page-node-id="XBCiFYWTnlb18vYFmjnWJY"></div>
+            </div>
+          </div>
+          <div data-page-node-id="lHOFg18ZNCB6oLaySrda9v">
+            <div style="font-size: 15px; font-weight: 500;" data-page-node-id="V8YZHxEingkLj8WwWAoRc8">盘前雷达</div>
+            <div style="font-size: 11px; color: var(--nt);" data-page-node-id="qaPxNdAU12XywaSBPiUz53">每日盘前风险速报</div>
+          </div>
+        </div>
+        <div style="text-align: right;" data-page-node-id="koSqgNhuueWDTjL8KvThnd">
+          <div style="font-size: 12px; font-weight: 500;" data-page-node-id="EDpmtfh1BkudYWB4nbiMNb">{{date}}</div>
+          <div style="font-size: 11px; color: var(--nt);" data-page-node-id="fUxjqIJSlFUGCSjJKLGjWw">{{weekday}} · 盘前</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin: 16px 20px 0; background: {{verdict_box_bg}}; border: 1px solid {{verdict_box_border}}; border-radius: 12px; padding: 14px 16px;" data-page-node-id="DlYBBGBsZjizT2J56BOZC8">
+      <div style="display: flex; align-items: center; gap: 12px;" data-page-node-id="B5nAUwtzC3VMoYM69UfuzH">
+        <div style="width: 52px; height: 52px; border-radius: 12px; background: {{verdict_color}}; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 500;" data-page-node-id="t2QxrjDDaIuoGSsySFOuPU">{{verdict}}</div>
+        <div style="flex: 1; min-width: 0;" data-page-node-id="HPcMDjFbpYMAXo9dKdTajK">
+          <div style="font-size: 14px; font-weight: 500; margin-bottom: 3px;" data-page-node-id="aA3JcoS9BNJhDyVA0B1qet">今日开盘：{{verdict}}</div>
+          <div style="font-size: 12px; color: #5f5e5a; line-height: 1.5;" data-page-node-id="9Iu4llXWxJP164TN7H3oGI">{{reason}}</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 10px; border-top: 1px solid {{verdict_box_border}};" data-page-node-id="eoEYoUjli8iWE9iysF6ExQ">
+        <div style="font-size: 11px; color: var(--nt); flex: none;" data-page-node-id="WwEpZM7DBIiD4CWR73bmeK">风险等级</div>
+        <div style="display: flex; gap: 4px; flex: 1;" data-page-node-id="11QeycPWh6ryzv7F1nHYf3">{{risk_bars}}</div>
+        <div style="font-size: 12px; font-weight: 500; flex: none;" data-page-node-id="BU7X3rvRWWK0jNJgymo6jO">{{risk_level}}/5 · {{risk_text}}</div>
+      </div>
+    </div>
+
+    <div style="padding: 0 20px;" data-page-node-id="wcsmFdGYf68LB6HkAFpRgr">
+      <div style="font-size: 11px; color: var(--nt); margin: 16px 0 8px;" data-page-node-id="UAKiAkHsl89ugPSGR3UQIy">外围三件套（开盘方向领先指标）</div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;" data-page-node-id="6CzELhQKyUhPjtKKuFF7sr">
+        <div class="rk-m" data-page-node-id="VDfyLCNUyUF1Aj7M6hTIwv"><div class="rk-lab" data-page-node-id="Te8SbrJeXP3aolyN6Mtr1a">富时A50期货</div><div class="rk-val {{a50_cls}}" data-page-node-id="GVlyo5vKDCH4eK45Y9bC0U">{{a50}}</div></div>
+        <div class="rk-m" data-page-node-id="X0h1DZKG0bBcg6VwkpCaRS"><div class="rk-lab" data-page-node-id="f2u0GktCPexK41ThswlYF7">离岸人民币</div><div class="rk-val {{cny_cls}}" data-page-node-id="SWgnArc6nuanSA1RObnQjp">{{cny}}</div></div>
+        <div class="rk-m" data-page-node-id="NsCMbiDeNs4nWae3B01PNR"><div class="rk-lab" data-page-node-id="NBGoukdWazaHRJOQcT7Ct0">纳指期货</div><div class="rk-val {{nasdaq_fut_cls}}" data-page-node-id="G911DbDs1t7yxVS5ieBluI">{{nasdaq_fut}}</div></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px;" data-page-node-id="wFOeEhlNMMhMW5ec39uAOu">
+        <div class="rk-m" data-page-node-id="1m9FRue4v8aYKILvuUjpBL"><div class="rk-lab" data-page-node-id="ncEt08jPanybxqRrcB8s6L">标普500期货</div><div class="rk-val {{spx_fut_cls}}" data-page-node-id="V3IpuShx3HNKqdOjH1zUy4">{{spx_fut}}</div></div>
+        <div class="rk-m" data-page-node-id="L0FTXiRgeWx2LFRBAacAL7"><div class="rk-lab" data-page-node-id="A1Z1XEn43P5cIEpCnr0ATy">美元指数</div><div class="rk-val {{dxy_cls}}" data-page-node-id="RYhFQ9RsVx6YIAlQTiDNG9">{{dxy}}</div></div>
+        <div class="rk-m" data-page-node-id="PcAq4CMHMvq4jqy4yRCtVK"><div class="rk-lab" data-page-node-id="8EssUVViSpczeeMVv17jZG">VIX 恐慌指数</div><div class="rk-val {{vix_cls}}" data-page-node-id="lA8fAz9Az5EEwuNeozoGdS">{{vix}}</div></div>
+        <div class="rk-m" data-page-node-id="LVj3iAsHzyi9WKu1WqN8oD"><div class="rk-lab" data-page-node-id="Z3mOBVT4e5EqRIFv0iLqQV">美债10Y</div><div class="rk-val {{ust10y_cls}}" data-page-node-id="XOHtOWufzF9IOXsRkPKPqE">{{ust10y}}</div></div>
+      </div>
+      <div style="font-size: 11px; color: #b4b2a9; margin-top: 8px; text-align: right;" data-page-node-id="9wwAGtXLt2V2v8eaQ1edgo">红 = 利多 · 绿 = 利空（A股习惯）</div>
+
+      <div style="font-size: 11px; color: var(--nt); margin: 16px 0 8px;" data-page-node-id="ij7D7dIeHg7NwnpM6bnWeB">地缘 / 事件风险</div>
+      <div style="background: #f7f7f5; border-radius: 10px; padding: 12px 14px; font-size: 12px; color: #3c3c3a; line-height: 1.6;" data-page-node-id="W1GMQYqEBpVzfUOYqTsUqx">{{geo_risk}} · {{geo_note}}</div>
+
+      <div style="font-size: 11px; color: var(--nt); margin: 16px 0 8px;" data-page-node-id="uvfcdnDolOHZxakt66XqqK">多空情景推演</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" data-page-node-id="muitnVHJmR7n9FRr6wEq1Q">
+        <div style="border: 1px solid #f6d2cf; border-radius: 10px; padding: 10px 12px;" data-page-node-id="JsotEyVt7LbGTK2s4rhcS8">
+          <div class="rk-up" style="font-size: 12px; font-weight: 500; margin-bottom: 4px;" data-page-node-id="Yy5w6yu8jzodwPaoTn7lgs">偏多 {{bull_pct}}</div>
+          <div style="font-size: 11px; color: #5f5e5a; line-height: 1.5;" data-page-node-id="5dhz2wbUvOmvfB7TocmEbc">{{bull_text}}</div>
+        </div>
+        <div style="border: 1px solid #dceadc; border-radius: 10px; padding: 10px 12px;" data-page-node-id="bdA9AKprkTijODeMy8MK0u">
+          <div class="rk-dn" style="font-size: 12px; font-weight: 500; margin-bottom: 4px;" data-page-node-id="oDKPXEtCz9I8FzyIa0gDzb">偏空 {{bear_pct}}</div>
+          <div style="font-size: 11px; color: #5f5e5a; line-height: 1.5;" data-page-node-id="oCWBCeNayFgJvWgUSDkObZ">{{bear_text}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rk-footer" data-page-node-id="u7Ip07SMDWJTgFCVJSCZxE">
+      <div style="display: flex; align-items: center; gap: 12px;" data-page-node-id="gy9Gapj4uevehkk1dglEv3">
+        <div style="flex: none; text-align: center;" data-page-node-id="xR78BdmvHfumqwDVsPyMJW">
+          <svg width="64" height="64" viewBox="0 0 64 64" style="display: block;" data-page-node-id="p6dtEKJ8MR8Gsr9BNWRepI">
+            <rect width="64" height="64" fill="#ffffff" rx="6" data-page-node-id="6a88INeDjntrAghHWbUHWD"/>
+            <g stroke="#1b1b1b" fill="none" stroke-width="4" data-page-node-id="RopvgZbDsc1GuE21Hz8BFf">
+              <rect x="6" y="6" width="18" height="18" data-page-node-id="O2S3O3Zguv63r4lvDB71be"/>
+              <rect x="40" y="6" width="18" height="18" data-page-node-id="Y9XygPZya0CO8aUMicXwET"/>
+              <rect x="6" y="40" width="18" height="18" data-page-node-id="kj94EKVdVwl4s8HfZpuLCl"/>
+            </g>
+            <g fill="#1b1b1b" data-page-node-id="CpeYsXVR1MS1PmeM9Ppb0f">
+              <rect x="11" y="11" width="8" height="8" data-page-node-id="UbJTCWiHhT1t4xWx3JFV63"/>
+              <rect x="45" y="11" width="8" height="8" data-page-node-id="rg2MO3wIfFFzDtcHfmeX3V"/>
+              <rect x="11" y="45" width="8" height="8" data-page-node-id="6XXMGrj9ArmoQyU5i0IngK"/>
+              <rect x="30" y="10" width="4" height="4" data-page-node-id="MUGThdOc9MpxBYRtOzbcyS"/>
+              <rect x="40" y="30" width="4" height="4" data-page-node-id="J4829he5hgb7I7yjqRStOp"/>
+              <rect x="28" y="22" width="4" height="4" data-page-node-id="fJoMdphHz1GHhvxGTLCZW5"/>
+              <rect x="34" y="28" width="4" height="4" data-page-node-id="ZOPe3HJEhiAALCGOtvPk3l"/>
+              <rect x="24" y="34" width="4" height="4" data-page-node-id="4NTnqhnF39BlZMQ7n7rmjP"/>
+              <rect x="44" y="40" width="4" height="4" data-page-node-id="bNlSiYpEmBTsCbBoXN0vYC"/>
+              <rect x="52" y="24" width="4" height="4" data-page-node-id="P8iSCnxa6OrQQKE1zBtkHs"/>
+              <rect x="30" y="46" width="4" height="4" data-page-node-id="XmjS8B7UsGGbecFSzGUxdz"/>
+              <rect x="50" y="48" width="4" height="4" data-page-node-id="Zlov2QXcCmDtKvD2oNokdd"/>
+              <rect x="38" y="50" width="4" height="4" data-page-node-id="CDNFLaKweWNEIle1mHlIBM"/>
+            </g>
+          </svg>
+          <div style="font-size: 10px; color: #1b1b1b; margin-top: 4px; font-weight: 500;" data-page-node-id="vPs83b1hDZj0WhDBC0hs9c">扫码一键安装</div>
+        </div>
+        <div style="min-width: 0;" data-page-node-id="iZ1ancxPXiCMRnRPmbtvLl">
+          <div style="font-size: 12px; font-weight: 500; color: #3c3c3a;" data-page-node-id="Ptj5PKniTa5ZhI3uHwkXf4">本图由「盘前雷达」skill 每日自动生成</div>
+          <div style="font-size: 11px; color: var(--nt); margin-top: 3px;" data-page-node-id="BsYJBOLHyLjz0zuMdbvWj6">微信扫码直达安装 · WorkBuddy 搜 <span style="color: #1b1b1b;" data-page-node-id="xiRxCMaouDkY8YjTnwZVOP">@盘前雷达</span></div>
+          <div class="rk-cmd" data-page-node-id="gBaHprHtB4Qt8qq7YAKlrE">workbuddy install @盘前雷达</div>
+        </div>
+      </div>
+      <div style="font-size: 10px; color: #b4b2a9; margin-top: 10px;" data-page-node-id="ytISoZX90GEo8D7MijoB4J">数据仅供研究参考，不构成投资建议 · 数据源：GDELT / 新浪 / 腾讯 / akshare</div>
+    </div>
+  </div>
+</body>
+</html>

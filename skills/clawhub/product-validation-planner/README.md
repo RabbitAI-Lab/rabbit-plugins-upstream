@@ -14,8 +14,6 @@ Evidence coverage: 12 signals across 3 source families.
 
 ## Evidence
 
-- hacker-news-ask-hn: [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues: [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
 - segmentfault-search: [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search: [javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search: [typescript](https://segmentfault.com/t/typescript)
@@ -23,9 +21,11 @@ Evidence coverage: 12 signals across 3 source families.
 - segmentfault-search: [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
 - segmentfault-search: [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
 - segmentfault-search: [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues: [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues: [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search: [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- hacker-news-search: [Nobody Has Actually Built a Software Factory](https://news.ycombinator.com/item?id=49554042)
+- hacker-news-search: [Ask HN: Who wants to be hired? (September 2026)](https://news.ycombinator.com/item?id=49567593)
+- hacker-news-search: [Product Backlog Problems: Why Your Hierarchy Is Broken](https://news.ycombinator.com/item?id=49545927)
+- hacker-news-search: [RAG Is Simpler Than You Think](https://news.ycombinator.com/item?id=49450687)
+- github-issues: [Factory proposal: Make the Idea Agent validation-first](https://github.com/khiemnd777/daily-utility/issues/51)
 
 ## How This Skill Meets The Requirement
 
