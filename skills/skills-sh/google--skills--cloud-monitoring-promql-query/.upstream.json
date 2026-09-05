@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-monitoring-promql-query",
+  "repo": "google/skills",
+  "skillId": "cloud-monitoring-promql-query",
+  "branch": "main",
+  "pushedAt": "2026-09-04T17:58:48Z",
+  "contentHash": "214f33f0ba3cadc855207cc9a993328b3dbbcd1e190ffcdc08044e08a3524efe",
+  "fetchedAt": "2026-09-05T11:20:42.762Z"
+}

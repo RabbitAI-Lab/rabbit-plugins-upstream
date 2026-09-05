@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prime-skills/runcomfy-agent-skills/controlnet-pose",
+  "repo": "prime-skills/runcomfy-agent-skills",
+  "skillId": "controlnet-pose",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "9504054d00dc1c0d9c8b7cdb6298bdacbc380ad172213e9a8f819dc551a30a75",
+  "fetchedAt": "2026-09-05T11:19:00.330Z"
+}

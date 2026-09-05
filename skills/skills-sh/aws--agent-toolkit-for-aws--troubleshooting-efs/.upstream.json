@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/troubleshooting-efs",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "troubleshooting-efs",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "322f021a26f64d845263398ab174e5ce90a566add24de0f85e1ab1d885f8f9d7",
+  "fetchedAt": "2026-09-05T11:21:32.839Z"
+}

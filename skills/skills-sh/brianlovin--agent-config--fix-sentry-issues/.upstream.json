@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/brianlovin/agent-config/fix-sentry-issues",
+  "repo": "brianlovin/agent-config",
+  "skillId": "fix-sentry-issues",
+  "branch": "main",
+  "pushedAt": "2026-03-25T17:52:51Z",
+  "contentHash": "07d89b8a2c69a6c2411a688d129005e823b457233cacb33b275b62912377ab3b",
+  "fetchedAt": "2026-09-05T11:19:09.926Z"
+}
