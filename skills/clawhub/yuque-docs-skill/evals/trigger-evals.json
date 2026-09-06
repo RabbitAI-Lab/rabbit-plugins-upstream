@@ -1,0 +1,19 @@
+{
+  "skill_name": "yuque-doc-push",
+  "evals": [
+    {"query": "帮我在语雀知识库里创建一篇新文档", "should_trigger": true},
+    {"query": "push this markdown content to my Yuque repo", "should_trigger": true},
+    {"query": "更新语雀上那篇文档的内容", "should_trigger": true},
+    {"query": "删除语雀知识库里的那篇旧文档", "should_trigger": true},
+    {"query": "列出语雀知识库里所有文档", "should_trigger": true},
+    {"query": "查看语雀知识库的目录结构", "should_trigger": true},
+    {"query": "sync my local markdown file to Yuque", "should_trigger": true},
+    {"query": "get the table of contents of my Yuque book", "should_trigger": true},
+    {"query": "帮我把这个文档推送到语雀", "should_trigger": true},
+    {"query": "帮我管理语雀团队的成员权限", "should_trigger": false},
+    {"query": "create a new Notion page with this content", "should_trigger": false},
+    {"query": "帮我写一篇关于项目进展的文档", "should_trigger": false},
+    {"query": "批量迁移多个语雀知识库的文档", "should_trigger": false},
+    {"query": "add a collaborator to my Yuque team", "should_trigger": false}
+  ]
+}

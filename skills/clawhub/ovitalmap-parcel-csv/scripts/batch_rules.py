@@ -33,18 +33,11 @@ def annotate_parcels(parcels):
 
 
 def resolution_for(mapping, parcel):
-    """Read a per-parcel decision by stable ref or legacy zero-based index."""
+    """Read a per-parcel decision by stable parcel reference."""
     if not isinstance(mapping, dict):
         return False, None
-    keys = (
-        parcel["parcel_ref"],
-        str(parcel["input_index"]),
-        parcel["input_index"],
-    )
-    for key in keys:
-        if key in mapping:
-            return True, mapping[key]
-    return False, None
+    key = parcel["parcel_ref"]
+    return (True, mapping[key]) if key in mapping else (False, None)
 
 
 def find_prior_boundary_match(parcel, prior_parcels):

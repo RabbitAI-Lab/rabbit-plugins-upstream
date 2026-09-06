@@ -1,42 +1,67 @@
-## Description: <br>
-A Chinese-language study coach that helps students record learning time, run guided Pomodoro focus sessions, analyze distraction patterns, and build focus-history summaries with user consent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+时间与专注力教练帮助学生记录学习用时、运行番茄钟、分析黄金时段和分心规律，并在明确同意后保存专注档案或加入提醒队列。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students use this skill to understand where study time goes, plan realistic focus windows, and improve concentration through consent-based logs, Pomodoro check-ins, and follow-up summaries. It is also useful for study-planning agents that need user-approved focus-pattern summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Long-term focus logs can reveal study habits, distraction patterns, and productivity routines. <br>
-Mitigation: Enable archives, reminders, or sharing summaries only with user confirmation, and make clear when conclusions rely on lower-confidence self-reported timing data. <br>
-Risk: Users may overread completion metrics as proof of learning quality or as an attention assessment. <br>
-Mitigation: Frame completion rates as behavior indicators, combine time data with learning-quality signals, and recommend professional evaluation when persistent attention problems substantially affect daily learning or social life. <br>
+## Use Case:
 
+External students in Chinese K12 study settings use this skill to plan focused study sessions, record actual learning time, review distractions, and build a lightweight focus history when appropriate consent is present. Operators and guardians should use it only where the platform enforces the consent, localization, and data-boundary rules described by the release evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-time-focus-coach) <br>
-- [Focus archive template](artifact/references/focus-archives-template.md) <br>
-- [Pomodoro state machine](artifact/references/pomodoro-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global, with China Mainland defaults that must be localized before use elsewhere
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown conversation responses with structured study-time logs, focus-session check-ins, and summary templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update user-approved focus archives, Pomodoro session records, and reminder handoffs when platform support exists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and release evidence) <br>
+Risk: The release evidence flags a loose cross-skill handover schema for a child-focused tool that can write long-term profile data and enqueue reminders.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only on runtimes that enforce the SKILL.md consent checks, recipient restrictions, and extensions.focus allowlist before profile writes or reminder handoffs.
+
+Risk: The skill is designed for minors and can process study routines, distractions, and focus history.
+
+Mitigation: Keep long-term memory, reminders, and cross-skill sharing disabled by default; require explicit student consent and guardian consent where the age band requires it.
+
+Risk: Crisis referral content uses China Mainland defaults that may be unsafe or misleading outside that region.
+
+Mitigation: Localize emergency and youth-support channels before non-China deployment, and ask the user for their country or region before giving crisis contact details.
+
+Risk: Focus analytics may overstate conclusions when based on sparse or self-reported data.
+
+Mitigation: Label conclusions with confidence, keep insufficient samples in the current session only, and avoid writing long-term golden-slot conclusions until the evidence threshold is met.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-time-focus-coach)
+- [focus-archives-template.md](references/focus-archives-template.md)
+- [pomodoro-statemachine.md](references/pomodoro-statemachine.md)
+- [dna-profile.schema.json](shared/dna-profile.schema.json)
+- [handover-protocol.schema.json](shared/handover-protocol.schema.json)
+- [crisis-referral-protocol.md](shared/crisis-referral-protocol.md)
+- [platform-conventions.md](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Conversational Markdown with structured study-time summaries, focus-session prompts, profile snippets, and reminder handoff guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce pending profile or reminder records only after explicit consent and user confirmation.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,126 +1,91 @@
 ---
 name: sandbox-selfheal-guard
-version: 1.1.0
-description: >
-  Anti-stuck/anti-snapshot-wipe guard for agentic sandboxes (Arena.ai Agent Mode,
-  OpenClaw, and similar containerized agent environments). Detects missing
-  binaries, GGUF models, apt packages, and npx shims caused by snapshot
-  size-cap eviction and automatically self-repairs before work proceeds.
-  Provides per-call hard timeouts, byte-verified model downloads, native-CPU
-  rebuild, binary fallback chains, and light-swarm mode so the agent never
-  silently hangs. Use in any agent sandbox where build artifacts, model files,
-  or system packages may disappear between turns due to filesystem snapshot
-  limits.
+version: 3.0.8
 author: orionshaowswmw
 license: MIT
-tags:
-  - reliability
-  - agent-safety
-  - sandbox
-  - self-healing
-  - anti-hang
-  - timeout
-  - snapshot-wipe
-  - llama.cpp
-  - cpu-inference
-  - error-recovery
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Bash
-  - Grep
-  - Glob
+description: Keep local GGUF/llama.cpp agent sandboxes from hanging after snapshot eviction. Use when: inference hangs or "thinks forever", binaries/models vanished from ~/llama.cpp or failed byte-checks, npx stalls on closed stdin, or sudo might prompt interactively.
+tags: [reliability, sandbox, self-healing, anti-hang, timeout, llama.cpp, gguf, cpu-inference, error-recovery, prompt-cache]
+metadata: {"openclaw":{"emoji":"🛡️"}}
 ---
 
-# sandbox-selfheal-guard 🛡️⚡
+# sandbox-selfheal-guard 🛡️ v3.0.4
 
-**Problem solved:** Agent sandboxes (Arena.ai Agent Mode, OpenClaw, containerized
-agent runners) often evict large binaries — compiled build dirs, multi-GB model
-files, even apt packages — when the workspace snapshot cap is exceeded (e.g.
-128 MB / 10k-file limit on Arena). The agent's shell scripts still exist (small
-text files survive) but they silently invoke missing binaries → the agent
-appears to "think forever" and the user has to manually stop it.
+Sandboxes (Arena 128 MB/10k-file snapshots, containers) evict binaries and GGUF
+models; small scripts survive and call missing files → agents appear to "think
+forever". This skill's scripts detect and repair that **without ever hanging**.
 
-## Symptoms you are hitting this
-- Agent appears to "think forever" with no output
-- Previously-working scripts suddenly produce "No such file or directory"
-- `cmake`/`g++` disappear between turns
-- `llama.cpp/build/bin/*` vanish (`build/` is commonly on excluded-paths lists)
-- GGUF models > ~100 MB get evicted by snapshot-size cap
-- npx hangs on first run (missing `--yes` shim for non-interactive stdin)
+## Consent model (read first — this skill can change a system, so it asks first)
 
-## Core recipe: pre-flight self-heal + per-call timeout
+Default `SELFHEAL_MODE=check`: fully **read-only — zero persistent writes**;
+probes report to stderr only, and repairs surface as `DRY: would ...` lines.
+In `fix` mode events persist to `~/.selfheal/selfheal.log`. Run
+repairs ONLY after the human consents: prefix commands with
+`SELFHEAL_MODE=fix `. Exact system effects (nothing else is touched):
 
-Build a single sourced shell library (`selfheal_runner.sh`) that every model
-invocation must go through. It performs a pre-flight checklist BEFORE running
-the model:
-
-1. **apt packages** — verify `cmake`, `g++`, `curl` exist; `apt-get install` if missing
-2. **npx shim** — ensure `~/.shim/npx` exists with `--yes` flag (prevents interactive hang)
-3. **llama.cpp binaries** — verify `llama-completion` is executable; if not,
-   reconfigure (with `-DLLAMA_NATIVE=ON -DCMAKE_BUILD_TYPE=Release -DLLAMA_BUILD_SERVER=OFF`)
-   and rebuild all four targets (`llama-simple`, `llama-completion`, `llama-bench`,
-   `llama-simple-chat`) in parallel
-4. **GGUF models** — verify each model file exists AND has exact expected byte size
-   (size manifest below); if missing or truncated, redownload with `curl -sSL`
-5. **Auth tokens** — verify `~/.clawhub/TOKEN` exists; re-login if needed
-
-Then wrap every model call in a **hard `timeout`** scaled to model speed and
-token budget, so even a wedged binary returns control:
-- r1 (1.5B deep, ~13 t/s): budget = 45s + n/10
-- q3/fast/code (0.5–0.6B, ~30 t/s): budget = 30s + n/20
-- Absolute cap: 300s
-
-Add a **binary fallback chain**: try `llama-completion` (full tuning flags) first,
-fall back to `llama-simple` (simple argv interface) if unavailable; exit code
-2 if nothing works so the agent reports failure instead of hallucinating.
-
-## Optimal CPU llama.cpp params (control-variable sweep)
-
-Measured on 2 vCPU Intel Xeon @ 2.60 GHz with AVX-512. Native build gives
-+7–10% prompt processing over generic march.
-
-| Param | Best | Why |
+| Effect | Where | When |
 |---|---|---|
-| `-t` (threads) | **= physical cores (2)** | t=4 oversubscribes; tg drops 42% |
-| `-fa` (flash-attn) | **on** | pp +11%, tg +19% on small models |
-| `-ctk/-ctv` (KV cache type) | **f16 (default)** | q8_0 slows pp by 35–50% on CPU |
-| `-b` (batch) | default 2048 | no-op on CPU (±2.4% noise) |
-| quant choice | newer-arch Q4_K_M > older Q5_K_M | architecture > quant level for speed |
-| build flags | `-DLLAMA_NATIVE=ON` | AVX512/VNNI gives +7-10% pp |
+| writes | none in check mode; `~/.selfheal/` (log, state, cache), `~/.shim/npx`, model dir (`$SELFHEAL_MODELS_DIR`) in fix mode | fix mode only |
+| network | `huggingface.co` only, exact URLs + sha256 pins in `manifest.json` | fix mode, circuit-broken, hash-verified after download |
+| system packages | `sudo -n apt-get` (never interactive, stamp-throttled) | fix mode, only if binary missing |
+| prompt content | processed locally, stored only in local cache (fix mode) | never sent anywhere |
 
-Invocations use: `llama-completion -m model.gguf --prompt "..." -n N -t 2 -fa on --ctx-size 4096`
+## Operating protocol (run top-to-bottom; stop at first success)
 
-## Model byte-size manifest (verification!)
+1. `sh scripts/selfheal_runner.sh preflight` → rc 0 healthy, rc 5 degraded (log has reason), never hangs. Read-only.
+2. Answer with `SELFHEAL_MODE=fix sh scripts/run_guarded.sh "PROMPT" ROLE N` (ROLE = `scout`/`spark`/`forge`/`sage`/`auto`; `auto` + ≤8 words = light-swarm scout path **and N is clamped to ≤96**; words = `wc -w` whitespace tokens). In `check` mode this still runs inference if a model already exists, but downloads/heals only with consent.
+3. Only if the human's question needs deep reasoning: ROLE=sage (slowest model, longest budget).
+4. If output looks stale/wrong: `python3 scripts/prompt_cache.py stats` to inspect; delete `~/.selfheal/cache/` to reset.
+5. After any rebuild/model change: `sh scripts/selfheal_tune.sh` → budgets re-derive from *measured* t/s.
+6. Verify health anytime: `sh scripts/test_selfheal.sh` (hermetic, never touches real $HOME).
 
-| File | Exact bytes | Role |
-|---|---|---|
-| Qwen2.5-0.5B-Instruct-Q5_K_M.gguf | 420,086,080 | SPARK (fast independent take) |
-| Qwen3-0.6B-Q4_K_M.gguf | 484,220,320 | SCOUT (fast draft) |
-| DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf | 1,117,320,800 | SAGE (deep verify) |
-| Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf | 397,808,288 | FORGE (coding spec) |
+## Files (load only what you need — progressive disclosure)
 
-Mismatch = redownload (truncated/corrupted). Always stat+compare, don't just check existence.
+| File | Load when |
+|---|---|
+| `manifest.json` | you need model bytes/URLs/roles/timeouts — it is the single source of truth |
+| `scripts/selfheal_runner.sh` | you call functions directly (`run_with_timeout`, `selfheal_ensure_model`) |
+| `scripts/run_guarded.sh` | one full guarded call: cache → preflight → timeout → fallback |
+| `scripts/prompt_cache.py` | cache hits must skip inference entirely |
+| `scripts/selfheal_tune.sh` | budgets should match *this* host's real speed |
+| `scripts/test_selfheal.sh` | after any edit of this skill |
 
-## Anti-hang rules for agents
+## Model routing (defaults; budgets auto-scale from measured t/s)
 
-1. **Never** run model inference without a `timeout` wrapper
-2. **Always** verify binary exists + exec bit before invoking
-3. **Always** verify model byte size, not just existence (partial downloads are silent)
-4. **Light-swarm mode** (SCOUT only, 80–120 tokens) for casual chat; full swarm for substantive work
-5. **Swarm agents get independent timeouts** so a slow SAGE can't hang the SCOUT/SPARK results
-6. If self-heal triggers (rebuild/redownload), log to `/tmp/selfheal.log` and continue — never silently hang
-7. Always give the user visible progress (a spinner, echo, or phase header) before long operations
+| Role | File | Speed | Use for |
+|---|---|---|---|
+| scout | Qwen_Qwen3-0.6B-Q4_K_M | ~34 t/s | casual/light-swarm |
+| spark | Qwen2.5-0.5B-Instruct-Q5_K_M | ~30 t/s | general instruct |
+| forge | Qwen2.5-Coder-0.5B-Instruct-Q4_K_M | ~31 t/s | code |
+| sage | DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M | ~14 t/s | deep reasoning only |
 
-## Reference implementation
+Timeout budget = base + n × ms/token, scaled by measured t/s, hard-capped
+(150 s light roles, 300 s sage). Inference runs under `timeout --kill-after=5`.
+Fallback chain: primary flags → minimal-flags retry → scout → exit 2.
 
-A 180-line bash library implementing the full recipe lives in
-`selfheal_runner.sh` at this workspace; downstream runners (`run_swarm.sh`,
-`run_thinking_model.sh`, `run_light_swarm.sh`) source it instead of calling
-llama.cpp binaries directly. See benchmark_results.md for full sweep data.
+## Hard rules
 
-Authored in the field (Arena Agent Mode, 2026-07) during diagnosis of
-user-reported "agent stops responding" errors. Root cause was snapshot-size-cap
-eviction of 2.4 GB of GGUF models and compiled binaries between turns, with
-scripts silently calling missing binaries.
+1. MUST run every inference under `timeout(1)`; if `timeout` is unavailable, refuse (do not run unbounded).
+2. MUST verify models by exact bytes **and** leading `GGUF` magic before use (size-only checks accept 15-byte HTML error pages); every **download is additionally sha256-pinned** against `manifest.json` (HF LFS oids — content-addressed, defeats upstream mutation). Deep re-verify of existing files: `SELFHEAL_DEEP_VERIFY=1`.
+3. NEVER loop-download a failing model: circuit breaker = 3 failures → suppress downloads 30 min → degrade to another role and tell the human.
+4. MUST feature-detect optional flags (`-fa`, `--no-warmup`) from `--help`; never assume.
+5. NEVER use interactive `sudo` on stdin-closed sandboxes; use `sudo -n` or skip+warn.
+6. MUST log heal events (rebuilds, downloads, breaker trips, cache only) to `$SELFHEAL_HOME/selfheal.log`; state lives outside the package so upgrades keep it.
+7. Report **measured** numbers only (t/s, sizes). If unmeasured, say "default (unmeasured)" — NEVER invent a number. All remote facts are in `manifest.json.evidence` with verification method + date.
+8. Exit codes are the contract: 0 ok · 2 inference failed · 3 model unavailable · 4 binary unavailable · 5 degraded. Branch on them; do not scrape prose. (`run_guarded.sh` collapses failures after its final fallback to rc 2.)
+9. Default mode is `check` (report-only). MUST obtain explicit human consent before `SELFHEAL_MODE=fix`; NEVER silently enable it.
+10. MUST rebuild llama.cpp only from a trusted git remote (`github.com/ggml-org/llama.cpp`) — building unverified source is a supply-chain hole. Consent override: `SELFHEAL_LLAMA_ANY_REMOTE=1`.
+
+## Self-improvement loop
+
+`run_guarded.sh` appends wall-clock per call to `state/history.jsonl`;
+`selfheal_tune.sh` measures real generation speed per role and EMA-updates
+`state/state.json`; `selfheal_budget()` prefers EMA over manifest defaults →
+timeouts get *tighter and more accurate* with use, and drift is visible in the
+log. Human can reset: delete `~/.selfheal/state/state.json`.
+
+## Compatible agents/models
+
+Any agent runtime with a POSIX shell + coreutils (timeout, curl, wc); python3
+optional (only enables JSON manifest parsing, cache, EMA — scripts degrade to
+compiled-in defaults without it). No model-specific prompting idioms anywhere;
+all commands are copy-paste literal. Works sourced from sh/bash/zsh.

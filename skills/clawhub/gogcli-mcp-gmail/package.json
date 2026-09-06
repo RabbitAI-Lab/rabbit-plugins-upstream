@@ -1,0 +1,42 @@
+{
+  "name": "gogcli-mcp-gmail",
+  "version": "2.29.0",
+  "mcpName": "io.github.chrischall/gogcli-mcp-gmail",
+  "description": "Extended Gmail MCP server via gogcli — auth + full Gmail support (threads, labels, drafts, attachments, forward, autoreply, bulk operations)",
+  "author": "Claude Code (AI) <https://www.anthropic.com/claude>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrischall/gogcli-mcp"
+  },
+  "type": "module",
+  "bin": {
+    "gogcli-mcp-gmail": "dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --noEmit && npm run bundle",
+    "bundle": "node ../../scripts/bundle.js src/index.ts dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@chrischall/mcp-utils": "^0.23.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "ai",
+    "google",
+    "gogcli",
+    "gmail",
+    "email"
+  ]
+}

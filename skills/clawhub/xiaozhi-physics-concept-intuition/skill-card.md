@@ -1,42 +1,63 @@
-## Description: <br>
-用直觉代替死记，让物理概念从“背下来”变成“真正懂了”，并通过生活类比、实验想象、公式推导三种解释模型先建直觉再学公式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+初中物理概念的直觉建立器，用生活类比、头脑实验、公式推导三种模型把概念从“背下来”变成“真的懂了”。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutoring agents use this skill to explain physics concepts by building intuition before formulas through daily-life analogies, thought experiments, formula meaning restoration, and layered understanding checks. It is for conceptual tutoring and validation, not physical experiment operation guidance or problem-solving drill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Physical experiment examples could be mistaken for unsupervised real-world instructions, especially examples involving sunlight, heat, electricity, pressure, or sharp objects. <br>
-Mitigation: Present experiment examples as conceptual unless an appropriate supervisor is involved, and avoid operational safety-sensitive instructions when the goal is concept intuition. <br>
-Risk: The skill describes updates to learning-profile fields and reminder handoffs after repeated concept failures. <br>
-Mitigation: Keep learning-profile updates and reminders visible to the user and under user control. <br>
+## Use Case:
 
+External learners and education agents use this skill to explain Chinese middle-school physics concepts through familiar analogies, mental experiments, and formula meaning checks. It is intended for concept intuition and validation, not step-by-step solving of a specific physics problem.
 
-## Reference(s): <br>
-- [Physics Analogy Bank](artifact/references/physics-analogy-bank.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+China Mainland by default; localize curriculum assumptions, privacy rules, and crisis-contact guidance before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured explanation steps, analogy mappings, formula interpretation, and validation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses draw on the bundled physics analogy bank and should keep experiment examples conceptual unless supervised.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Persistent learning-profile updates for minors may occur without independently enforced consent controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require the hosting platform to keep profiles disabled by default, check age band, require guardian consent where applicable, and enforce cross-skill sharing consent before any profile writeback.
+
+Risk: Default crisis-contact guidance and curriculum assumptions are designed for mainland China.
+
+Mitigation: Localize emergency contacts, privacy requirements, and curriculum mappings before making the skill available outside mainland China.
+
+Risk: Generated concept checks or practice prompts can contain inaccurate physics quantities or unsuitable difficulty.
+
+Mitigation: Apply the bundled AI item self-check before presenting generated questions, including solvability, unit, quantity, and grade-band checks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition)
+- [物理概念生活类比素材库](artifact/references/physics-analogy-bank.md)
+- [平台能力约定与降级路径](artifact/shared/platform-conventions.md)
+- [全库统一词表](artifact/shared/vocab.md)
+- [危机例外](artifact/shared/crisis-exception.md)
+- [危机识别与转介协议](artifact/shared/crisis-referral-protocol.md)
+- [AI 出题自检协议](artifact/shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Conversational Markdown with analogy prompts, concept checks, formula explanations, and optional structured handoff guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May request Learning DNA profile writeback or reminder enqueue only after the required consent checks; otherwise uses current-session context.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

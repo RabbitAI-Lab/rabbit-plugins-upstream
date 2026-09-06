@@ -1,42 +1,58 @@
-## Description: <br>
-Generic test writing discipline: test quality, real assertions, anti-patterns, and rationalization resistance for writing, improving, or fixing tests across languages and frameworks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generic test writing discipline for test quality, real assertions, anti-patterns, and rationalization resistance when writing, adding, or fixing tests across languages and frameworks.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill when writing tests, adding test coverage, improving weak tests, or fixing failing tests. It guides test design toward behavior-focused assertions, realistic dependencies, edge-case coverage, and resistance to common rationalizations for skipping tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recommended test-isolation steps may involve real test databases, temporary files, containers, or manual cleanup commands. <br>
-Mitigation: Review proposed commands and configuration changes before applying them, especially in important local environments or shared test infrastructure. <br>
-Risk: Generic testing guidance may conflict with framework-specific conventions. <br>
-Mitigation: Apply framework-specific testing skills or project documentation first when they provide more precise tooling or patterns. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to plan, write, and review discriminating behavioral tests, especially when adding coverage, fixing failing tests, or avoiding mock-driven and tautological test suites.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests) <br>
-- [Anti-patterns extended notes](artifact/references/anti-patterns-extended.md) <br>
-- [Rationalization table](artifact/references/rationalization-table.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and occasional code or shell command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No generated files by default; recommendations may include test cases, assertions, fixture changes, and local test commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: evidence.json release.version) <br>
+Risk: Generated tests or source changes could be incorrect, brittle, or misaligned with the project contract.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed changes and run the repository's focused and full test commands before accepting them.
+
+Risk: The skill may ask an agent to inspect project files and run test commands as part of normal test-writing work.
+
+Mitigation: Use the repository's checked-in runners and existing sandbox or CI controls, and review command output before treating results as evidence.
+
+## Reference(s):
+
+- [Anti-Patterns: Extended Notes](references/anti-patterns-extended.md)
+- [False-Pass Oracle Traps](references/false-pass-oracle-traps.md)
+- [Isolation and Sandbox Traps](references/isolation-and-sandbox-traps.md)
+- [Rationalization Table](references/rationalization-table.md)
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests)
+- [Publisher profile](https://clawhub.ai/user/iliaal)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with code, command, and configuration examples when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose test files, assertions, focused and full test commands, and review notes tailored to the repository under work.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

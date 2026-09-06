@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/heart-of-light/schemas/audit-v1.json",
+  "title": "Heart of Light deterministic text audit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "tool_version", "checked_at", "input", "status", "decision", "findings", "summary", "next_action", "limitations"],
+  "properties": {
+    "schema": {"const": "heart-of-light.audit.v1"},
+    "tool_version": {"type": "string"},
+    "checked_at": {"type": "string", "format": "date-time"},
+    "input": {"type": "object", "required": ["source", "bytes", "sha256"], "properties": {"source": {"type": "string"}, "bytes": {"type": "integer", "minimum": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}, "additionalProperties": false},
+    "status": {"enum": ["pass", "review"]},
+    "decision": {"enum": ["no_findings", "revise"]},
+    "findings": {"type": "array", "items": {"type": "object", "required": ["id", "severity", "count", "remediation"], "properties": {"id": {"type": "string"}, "severity": {"enum": ["high", "medium"]}, "count": {"type": "integer", "minimum": 1}, "remediation": {"type": "string"}}, "additionalProperties": false}},
+    "summary": {"type": "object", "required": ["total", "high", "medium"], "properties": {"total": {"type": "integer", "minimum": 0}, "high": {"type": "integer", "minimum": 0}, "medium": {"type": "integer", "minimum": 0}}, "additionalProperties": false},
+    "next_action": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,43 +1,53 @@
-## Description: <br>
-Helps independent teachers turn post-class recollections into structured lesson records, learning-track updates, course-unit ledger entries, and follow-up planning notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+课后记录助手帮助独立教师把课后观察整理为结构化教学记录、逐知识点掌握度、待确认课时条目和下节课衔接建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill after lessons to capture what was taught, assess mastery and reactions, update learning trajectories, record course-unit consumption, and prepare next-lesson or parent-summary material. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent lesson records may contain sensitive student information. <br>
-Mitigation: Use aliases, avoid real names and family details, and verify consent settings before creating profiles or sharing data across skills. <br>
-Risk: Course-unit ledger updates can affect lesson balances. <br>
-Mitigation: Treat lesson-unit deductions as pre-deductions, review them within the 24-hour adjustment window, and correct exceptions such as absences, cancellations, trials, or technical disruptions. <br>
-Risk: Parent-summary drafts could be inaccurate, premature, or too negative if sent without review. <br>
-Mitigation: Manually check parent summaries before sending, keep wording behavior-based, and do not let the skill automatically send messages to parents. <br>
+## Use Case:
 
+Independent teachers use this skill after class to turn brief memory notes into lesson logs, mastery observations, next-lesson focus points, and lesson-unit confirmations. It is intended for teacher-controlled workspace use with student aliases and teacher preview before records are written.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log) <br>
-- [Lesson log template](references/lesson-log-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-style structured lesson records, learning-trajectory notes, ledger updates, and planning summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes lesson-log fields, mastery evidence, next-lesson focus, course-unit consumption notes, and optional parent-summary drafts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Student or parent requests to view, delete, or export lesson records may be accepted by alias without a clear authorization check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, confirm that the platform enforces identity and guardian authorization for student or parent access, export, deletion, or sharing requests; limit use to authenticated teacher workspaces until that control is verified.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log)
+- [Lesson log template](references/lesson-log-template.md)
+- [Shared vocabulary](shared/vocab.md)
+- [Grade bands](shared/grade-bands.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown-style lesson log drafts and structured workspace field proposals]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces teacher-previewed lesson records, internal parent-summary drafts, pending lesson-unit confirmations, and next-lesson guidance; does not send parent messages.]
+
+## Skill Version(s):
+
+2.1.10 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

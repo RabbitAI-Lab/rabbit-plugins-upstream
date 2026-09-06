@@ -1,47 +1,58 @@
-## Description: <br>
-Unified audit logging, policy enforcement, and input sanitization for the VMware MCP skill family. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Unified audit logging, policy enforcement, and input sanitization for VMware MCP skill-family tools, including audit queries, policy rules, and the shared @vmware_tool wrapper.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and operators use this skill as shared VMware skill-family infrastructure for audit-log queries, policy-rule management, policy checks, input sanitization, and integrating the vmware_tool decorator into related VMware skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Policy enforcement can fail open or be bypassed if rules are missing, PyYAML is unavailable, or VMWARE_POLICY_DISABLED is set. <br>
-Mitigation: Configure ~/.vmware/rules.yaml immediately, ensure PyYAML is installed, and restrict who can set VMWARE_POLICY_DISABLED. <br>
-Risk: Audit records and exported logs may contain operational details about VMware environments. <br>
-Mitigation: Protect ~/.vmware/audit.db and exported logs with least-privilege filesystem permissions and controlled sharing. <br>
-Risk: Agent detection may depend on environment variables that include secret-shaped names such as OPENAI_API_KEY. <br>
-Mitigation: Consider replacing API-key-based detection with an explicit non-secret marker before production use. <br>
+## Use Case:
 
+Developers and platform operators use VMware Policy to audit VMware skill activity, review denied operations, configure local policy rules, and integrate audit and sanitization controls into related VMware MCP skills.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/zw008/VMware-Policy) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-policy) <br>
-- [VMware Policy capabilities](references/capabilities.md) <br>
-- [VMware Policy CLI reference](references/cli-reference.md) <br>
-- [VMware Policy setup guide](references/setup-guide.md) <br>
-- [VMware Policy agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python snippets, YAML examples, and JSON audit-export examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May refer to local audit data in ~/.vmware/audit.db, policy rules in ~/.vmware/rules.yaml, and vmware-audit CLI output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: Policy enforcement may fail open or be bypassed, so configured controls may not block operations unless the environment is prepared and protected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Create and test ~/.vmware/rules.yaml, install PyYAML where required, and restrict who can set VMWARE_POLICY_DISABLED.
+
+Risk: The local audit database can contain sensitive operational metadata, tool parameters, results, user, agent, and operation details.
+
+Mitigation: Treat ~/.vmware/audit.db as sensitive, keep ~/.vmware owner-restricted, and use sensitive-parameter redaction when integrating tools.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-policy)
+- [Project homepage](https://github.com/vmware-skills/VMware-Policy)
+- [VMware Policy setup guide](references/setup-guide.md)
+- [VMware Policy capabilities](references/capabilities.md)
+- [VMware Policy CLI reference](references/cli-reference.md)
+- [VMware Policy agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, YAML configuration examples, and Python code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference local audit database and policy file paths used by VMware skill-family tooling.]
+
+## Skill Version(s):
+
+1.13.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

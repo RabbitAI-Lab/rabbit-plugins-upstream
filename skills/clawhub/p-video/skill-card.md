@@ -1,40 +1,55 @@
-## Description: <br>
-Use when someone wants one short video clip from text or images: B-roll, start/end frame animation, or a quick motion shot. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants one short video clip from text or images - B-roll, start/end frame animation, or a quick motion shot; not for full multi-scene films or lip-synced hosts.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External developers and creators use this skill to have an agent prepare and submit one short Pruna p-video generation request from text, image anchors, and optional audio. It is intended for single-clip B-roll, image-to-video, frame-pair animation, or a quick motion shot, not multi-scene films or lip-synced avatars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated-video requests can send user prompts, images, and audio to Pruna's external API using PRUNA_API_KEY. <br>
-Mitigation: Avoid submitting sensitive media or private text unless the user intends to send it to Pruna, and confirm the API key is available only for the authorized account. <br>
+## Use Case:
 
+External users and developers use this skill to guide an agent through creating one short Pruna p-video clip from a prompt, optional image anchors, and optional audio. It helps collect inputs, craft a faithful video prompt, and prepare the Pruna API request while redirecting multi-scene, lip-sync, and editing requests to other skills.
 
-## Reference(s): <br>
-- [ClawHub p-video skill page](https://clawhub.ai/pruna-ai/skills/p-video) <br>
-- [Pruna file upload API endpoint](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request bodies and curl command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces one p-video prediction workflow per invocation; image, last-frame image, audio, duration, resolution, fps, aspect ratio, draft, and save-audio settings may shape the request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill metadata) <br>
+Risk: Generated-video requests may upload user prompts, images, and audio to Pruna.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid private or sensitive media unless the user is comfortable sending it to Pruna, and confirm consent before submitting prompts or files.
+
+Risk: The skill may ask the agent to install additional Pruna helper skills from a live remote repository.
+
+Mitigation: Prefer pinned or reviewed dependency versions in stricter environments before installing helper skills.
+
+## Reference(s):
+
+- [p-video Skill Page](https://clawhub.ai/pruna-ai/skills/p-video)
+- [Pruna Files API](https://api.pruna.ai/v1/files)
+- [Pruna Predictions API](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline curl examples and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may guide upload, prediction creation, polling, and download steps for a single short video generation request.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

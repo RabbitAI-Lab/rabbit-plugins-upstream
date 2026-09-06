@@ -1,42 +1,58 @@
-## Description: <br>
-Submit Dataify Walmart Product Information Builder tasks for product URL, category URL, SKU, or keyword collection modes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Walmart product records by URL, category URL, SKU, or keyword. Do not use for Amazon, eBay, or general shopping-search results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to create Dataify Walmart product collection jobs, validate mode-specific parameters, and receive the submitted task ID and status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read DATAIFY_API_TOKEN from the local environment and use it to submit Dataify Builder requests. <br>
-Mitigation: Install only when Dataify task creation is intended, review token use before running, and remove or rotate DATAIFY_API_TOKEN if future automatic use is not desired. <br>
-Risk: Broad invocation could submit Walmart collection jobs when the user intent or collection mode is unclear. <br>
-Mitigation: Confirm the collection mode and mode-specific parameters before submitting a Builder request. <br>
+## Use Case:
 
+External users and developers use this skill to submit Walmart product collection jobs through Dataify Builder, monitor the asynchronous task, and return collected results. It supports product URL, category URL, SKU, and keyword collection modes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-walmart-products) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with optional shell commands and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, selected mode, spider_id, parameters, file name, dashboard URL, and a short success message after submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: evidence release metadata) <br>
+Risk: The skill can use a saved Dataify API TOKEN for third-party Walmart data-collection tasks, which may consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when you intend to send Walmart targets to Dataify, keep DATAIFY_API_TOKEN configured locally outside chat, and confirm multi-page or high-volume scopes before execution.
+
+Risk: Credential exposure is possible if a user pastes a Dataify token into a conversation.
+
+Mitigation: Do not paste the token into chat; configure DATAIFY_API_TOKEN outside the conversation and verify only that it is present, not its value.
+
+Risk: Collection requests send Walmart URLs, SKUs, keywords, and related task parameters to Dataify.
+
+Mitigation: Confirm that the collection targets and any resulting data transfer to Dataify are acceptable before running the task.
+
+## Reference(s):
+
+- [Modes and Parameters](references/modes-and-parameters.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-walmart-products)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task or result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May wait for asynchronous Dataify task completion; large JSON result payloads may be summarized while preserving access to raw results.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

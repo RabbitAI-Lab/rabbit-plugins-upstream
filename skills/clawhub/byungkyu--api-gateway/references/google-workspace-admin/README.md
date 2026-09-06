@@ -2,6 +2,15 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Tenant-wide identity and access administration.** This is not an ordinary app integration. The connection carries Google Workspace *super-admin* authority over the whole organization: creating and deleting users, resetting passwords, suspending accounts, changing group membership, and assigning admin roles. Those are account-takeover and privilege-escalation primitives — a single call can hand someone administrative control of the tenant or lock a real employee out of their work account and mail.
+>
+> - **Confirm the human, not the identifier.** Resolve the user first and show their full name and primary email before any change. `{userKey}` accepts an email, an alias, or an opaque ID, so a near-miss silently targets the wrong employee.
+> - **Role assignment and group membership are privilege changes.** Adding someone to an admin role or a privileged group grants standing access to everyone's data. Never do it as a convenience step, never infer it from a request like "give them access", and state exactly what the role grants before asking for approval.
+> - **Deletion and suspension are disruptive and, for deletion, effectively irreversible** — Google's recovery window is short and does not restore everything. Prefer suspension over deletion, and require the user to name the account explicitly.
+> - **Password resets and 2SV changes are credential operations.** Never generate or set a password and never disable two-step verification unless the user asked for that specific account; deliver any secret to the user directly and never echo it into shared output.
+> - **Never act across users in bulk.** No looping over a list to change settings, no org-unit-wide edits, and no "apply to everyone" — each affected account needs its own approval.
+> - **Reads are sensitive too.** Listing users, groups, org units, and audit logs exposes the organization's staff directory and activity. Retrieve the narrowest scope the task needs rather than enumerating the tenant.
+
 **App name:** `google-workspace-admin`
 **Base URL proxied:** `admin.googleapis.com`
 
@@ -17,26 +26,26 @@
 
 #### List Users
 ```bash
-GET /google-workspace-admin/admin/directory/v1/users?customer=my_customer&maxResults=100
+maton api '/google-workspace-admin/admin/directory/v1/users?customer=my_customer&maxResults=100'
 ```
 
 With search query:
 ```bash
-GET /google-workspace-admin/admin/directory/v1/users?customer=my_customer&query=email:john*
+maton api '/google-workspace-admin/admin/directory/v1/users?customer=my_customer&query=email:john*'
 ```
 
 #### Get User
 ```bash
-GET /google-workspace-admin/admin/directory/v1/users/{userKey}
+maton api '/google-workspace-admin/admin/directory/v1/users/{userKey}'
 ```
 
 `userKey` can be the user's primary email or unique user ID.
 
 #### Create User
 ```bash
-POST /google-workspace-admin/admin/directory/v1/users
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/users' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "primaryEmail": "newuser@example.com",
   "name": {
@@ -47,13 +56,14 @@ Content-Type: application/json
   "changePasswordAtNextLogin": true,
   "orgUnitPath": "/Engineering"
 }
+EOF
 ```
 
 #### Update User
 ```bash
-PUT /google-workspace-admin/admin/directory/v1/users/{userKey}
-Content-Type: application/json
-
+maton api -X PUT '/google-workspace-admin/admin/directory/v1/users/{userKey}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": {
     "givenName": "Jane",
@@ -61,171 +71,180 @@ Content-Type: application/json
   },
   "suspended": false
 }
+EOF
 ```
 
 #### Patch User (partial update)
 ```bash
-PATCH /google-workspace-admin/admin/directory/v1/users/{userKey}
-Content-Type: application/json
-
+maton api -X PATCH '/google-workspace-admin/admin/directory/v1/users/{userKey}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "suspended": true
 }
+EOF
 ```
 
 #### Delete User
 ```bash
-DELETE /google-workspace-admin/admin/directory/v1/users/{userKey}
+maton api '/google-workspace-admin/admin/directory/v1/users/{userKey}' -X DELETE
 ```
 
 #### Make User Admin
 ```bash
-POST /google-workspace-admin/admin/directory/v1/users/{userKey}/makeAdmin
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/users/{userKey}/makeAdmin' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "status": true
 }
+EOF
 ```
 
 ### Groups
 
 #### List Groups
 ```bash
-GET /google-workspace-admin/admin/directory/v1/groups?customer=my_customer
+maton api '/google-workspace-admin/admin/directory/v1/groups?customer=my_customer'
 ```
 
 #### Get Group
 ```bash
-GET /google-workspace-admin/admin/directory/v1/groups/{groupKey}
+maton api '/google-workspace-admin/admin/directory/v1/groups/{groupKey}'
 ```
 
 #### Create Group
 ```bash
-POST /google-workspace-admin/admin/directory/v1/groups
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/groups' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "email": "engineering@example.com",
   "name": "Engineering Team",
   "description": "All engineering staff"
 }
+EOF
 ```
 
 #### Update Group
 ```bash
-PUT /google-workspace-admin/admin/directory/v1/groups/{groupKey}
-Content-Type: application/json
-
+maton api -X PUT '/google-workspace-admin/admin/directory/v1/groups/{groupKey}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "Engineering Department",
   "description": "Updated description"
 }
+EOF
 ```
 
 #### Delete Group
 ```bash
-DELETE /google-workspace-admin/admin/directory/v1/groups/{groupKey}
+maton api '/google-workspace-admin/admin/directory/v1/groups/{groupKey}' -X DELETE
 ```
 
 ### Group Members
 
 #### List Members
 ```bash
-GET /google-workspace-admin/admin/directory/v1/groups/{groupKey}/members
+maton api '/google-workspace-admin/admin/directory/v1/groups/{groupKey}/members'
 ```
 
 #### Add Member
 ```bash
-POST /google-workspace-admin/admin/directory/v1/groups/{groupKey}/members
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/groups/{groupKey}/members' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "email": "user@example.com",
   "role": "MEMBER"
 }
+EOF
 ```
 
 Roles: `OWNER`, `MANAGER`, `MEMBER`
 
 #### Update Member Role
 ```bash
-PATCH /google-workspace-admin/admin/directory/v1/groups/{groupKey}/members/{memberKey}
-Content-Type: application/json
-
+maton api -X PATCH '/google-workspace-admin/admin/directory/v1/groups/{groupKey}/members/{memberKey}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "role": "MANAGER"
 }
+EOF
 ```
 
 #### Remove Member
 ```bash
-DELETE /google-workspace-admin/admin/directory/v1/groups/{groupKey}/members/{memberKey}
+maton api '/google-workspace-admin/admin/directory/v1/groups/{groupKey}/members/{memberKey}' -X DELETE
 ```
 
 ### Organizational Units
 
 #### List Org Units
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits'
 ```
 
 #### Get Org Unit
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits/{orgUnitPath}
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits/{orgUnitPath}'
 ```
 
 #### Create Org Unit
 ```bash
-POST /google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "Engineering",
   "parentOrgUnitPath": "/",
   "description": "Engineering department"
 }
+EOF
 ```
 
 #### Delete Org Unit
 ```bash
-DELETE /google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits/{orgUnitPath}
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/orgunits/{orgUnitPath}' -X DELETE
 ```
 
 ### Domains
 
 #### List Domains
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/domains
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/domains'
 ```
 
 #### Get Domain
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/domains/{domainName}
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/domains/{domainName}'
 ```
 
 ### Roles
 
 #### List Roles
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/roles
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/roles'
 ```
 
 #### List Role Assignments
 ```bash
-GET /google-workspace-admin/admin/directory/v1/customer/my_customer/roleassignments
+maton api '/google-workspace-admin/admin/directory/v1/customer/my_customer/roleassignments'
 ```
 
 #### Create Role Assignment
 ```bash
-POST /google-workspace-admin/admin/directory/v1/customer/my_customer/roleassignments
-Content-Type: application/json
-
+maton api -X POST '/google-workspace-admin/admin/directory/v1/customer/my_customer/roleassignments' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "roleId": "123456789",
   "assignedTo": "user_id",
   "scopeType": "CUSTOMER"
 }
+EOF
 ```
 
 ## Notes

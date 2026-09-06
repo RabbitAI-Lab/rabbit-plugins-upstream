@@ -15,8 +15,9 @@ FRP_ZIP_SHA256 = "5885bff09604e719e429698f800f89379f3910f07490ca1f7d8a7f7a40970e
 FRPC_EXE_SHA256 = "5b0846d4a5e9bcde0960b354fd819eb0011529ff23f41ad55a8717ba5c7004ac"
 
 
+uuid_config_instance = UUIDConfig()
+
 def get_domain():
-    uuid_config_instance = UUIDConfig()
     uuid_value = uuid_config_instance.get_uuid()
     return uuid_value + ".yunfrp.net"
 
@@ -82,6 +83,12 @@ def download_frp():
             extracted = os.path.join(current_directory, frpc_member)
             if extracted != frpc_path:
                 os.rename(extracted, frpc_path)
+                frp_dir = os.path.dirname(frpc_member)
+                if frp_dir:
+                    try:
+                        os.rmdir(frp_dir)
+                    except OSError:
+                        pass
 
         print(f"[FRP] frpc.exe v{FRP_VERSION} downloaded and verified successfully.")
         return True
@@ -167,8 +174,8 @@ def setup_frp_and_keep_alive(port=8000, frp_config=None, stop_event=None):
                 continue
 
             time.sleep(1)
-    except Exception:
-        print(f"Error: FRP client not found at {frpc_path}.")
+    except Exception as e:
+        print(f"Error: FRP client failed to start:{frpc_path}. Error: {e}")
         print("Please ensure frpc.exe is in the media-file-server directory")
     finally:
         if frp_process and frp_process.poll() is None:
@@ -187,5 +194,5 @@ def setup_frp(port=8000, stop_event=None):
         return
 
     import threading
-    frp_thread = threading.Thread(target=setup_frp_and_keep_alive, args=(port, None, stop_event), daemon=False)
+    frp_thread = threading.Thread(target=setup_frp_and_keep_alive, args=(port, None, stop_event), daemon=True)
     frp_thread.start()

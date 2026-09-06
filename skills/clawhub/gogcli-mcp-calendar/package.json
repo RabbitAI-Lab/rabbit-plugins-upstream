@@ -1,0 +1,43 @@
+{
+  "name": "gogcli-mcp-calendar",
+  "version": "2.29.0",
+  "mcpName": "io.github.chrischall/gogcli-mcp-calendar",
+  "description": "Extended Google Calendar + Meet MCP server via gogcli — auth + Calendar events + Meet space management",
+  "author": "Claude Code (AI) <https://www.anthropic.com/claude>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chrischall/gogcli-mcp"
+  },
+  "type": "module",
+  "bin": {
+    "gogcli-mcp-calendar": "dist/index.js"
+  },
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc --noEmit && npm run bundle",
+    "bundle": "node ../../scripts/bundle.js src/index.ts dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@chrischall/mcp-utils": "^0.23.0",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  },
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "ai",
+    "google",
+    "gogcli",
+    "calendar",
+    "meet",
+    "meetings"
+  ]
+}

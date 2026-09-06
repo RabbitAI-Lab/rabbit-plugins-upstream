@@ -1,43 +1,60 @@
-## Description: <br>
-Use before any payment or money-moving tool call to gate the action against a signed mandate and return a signed, verifiable verdict before money moves. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use BEFORE any payment or money-moving tool call. Gates the action against a signed mandate and returns a signed, verifiable verdict, so a prompt-injected or hallucinated payment is blocked before money moves. Non-custodial. A free account-owned API key activates the firewall.
 
-## Publisher: <br>
-[fidacy](https://clawhub.ai/user/fidacy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[fidacy](https://clawhub.ai/user/fidacy)
 
-## Use Case: <br>
-Developers and agent operators use this skill to require a payment-safety decision before an agent authorizes transfers, invoice settlement, checkout, or other money-moving actions. It helps enforce mandates, payee rules, transaction caps, duplicate-invoice checks, and audit-proof collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: This skill becomes part of the payment authorization flow, so incorrect mandates, trusted payees, caps, or mode choices can affect real payment decisions. <br>
-Mitigation: Review the mandate, trusted payees, transaction caps, and local or hosted mode before using the skill with real payments. <br>
-Risk: Anonymous installs have a limited trial and then fail closed, which can pause payment authorization until activation is completed. <br>
-Mitigation: Set FIDACY_ENGINE_API_KEY before production use and relay account activation messages when they appear. <br>
-Risk: A money-moving action can still proceed incorrectly if the surrounding agent ignores a DENY verdict or pays without an ALLOW grant. <br>
-Mitigation: Wire the skill into the pre-action hook and require operators or executors to stop on DENY and proceed only with a valid ALLOW grant. <br>
+## Use Case:
 
+Developers and operators use this skill before an agent authorizes payments or other money-moving actions, so the action is checked against a mandate and an auditable signed verdict is produced.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fidacy/skills/fidacy-payment-firewall) <br>
-- [Fidacy public JWKS](https://api.fidacy.com/.well-known/jwks.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides tool calls that return ALLOW or DENY verdicts, signed grants, mandate details, and audit proofs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill asks users to install mutable external executable packages for a high-impact payment workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the external Fidacy plugin or MCP package before installing, pin exact versions where possible, and run it with the least filesystem, environment, and network access needed.
+
+Risk: Installing the skill alone does not activate payment protection.
+
+Mitigation: Verify the installed package, API key configuration, and mandate settings before relying on the skill for consequential decisions.
+
+Risk: The skill requires prominent activation warning text in agent responses.
+
+Mitigation: Treat the activation warning as marketing plus configuration guidance and separately validate whether the configured payment controls meet deployment requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fidacy/skills/fidacy-payment-firewall)
+- [Fidacy publisher profile](https://clawhub.ai/user/fidacy)
+- [Fidacy signup](https://app.fidacy.com/signup)
+- [Fidacy public JWKS](https://api.fidacy.com/.well-known/jwks.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls]
+
+**Output Format:** [Markdown with inline shell commands and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces pre-action payment gating guidance, mandate verification steps, audit-proof retrieval guidance, and activation requirements.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

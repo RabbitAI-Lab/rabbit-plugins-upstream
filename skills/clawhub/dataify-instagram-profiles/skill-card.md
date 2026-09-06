@@ -1,43 +1,55 @@
-## Description: <br>
-Submits Dataify Instagram Profile Builder tasks for collecting Instagram profiles by username or profile URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Instagram profile data by username or profile URL; do not use it for post comments or Reel content.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to submit Instagram profile collection jobs to Dataify Builder, choose username or profile URL mode, validate parameters, and receive the created task ID and status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send Instagram usernames or profile URLs to Dataify and create external collection jobs. <br>
-Mitigation: Use it only when the user intends to submit those Dataify jobs, confirm the selected collection mode and parameters before execution, and stop after reporting the task ID and status. <br>
-Risk: A locally saved DATAIFY_API_TOKEN can be reused for later Builder submissions. <br>
-Mitigation: Do not save tokens silently; ask before providing save commands and avoid local persistence unless it matches the user's security practices. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify Instagram profile collection jobs for usernames or profile URLs, monitor completion, and retrieve final JSON results when they have a legitimate privacy-compliant reason.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-profiles) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
-- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May submit Dataify Builder requests using DATAIFY_API_TOKEN and returns mode, spider_id, task_id, status, parameters, file_name, dashboard_url, and message.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill can trigger external Instagram profile collection jobs using a saved Dataify API TOKEN.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure DATAIFY_API_TOKEN outside chat, review each target and expected credit cost before running, and avoid exposing the token.
+
+Risk: Collected Instagram profile data may create privacy or policy risk if used without a legitimate basis.
+
+Mitigation: Use the collected results only where there is a legitimate privacy-compliant reason to collect the profile data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-profiles)
+- [Modes and parameters](references/modes-and-parameters.md)
+- [Dataify dashboard login](https://dashboard.dataify.com/login?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Code, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task or result output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit external Dataify jobs and summarize large JSON results while preserving access to raw results.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

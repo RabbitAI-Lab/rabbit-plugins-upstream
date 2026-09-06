@@ -44,6 +44,7 @@ function probeMedia(mediaPath, ffprobePath) {
         "stream=color_space,color_transfer,color_primaries,pix_fmt,duration:format=duration",
         "-of",
         "json",
+        "--",
         mediaPath,
       ],
       { encoding: "utf8", timeout: 5_000, stdio: ["ignore", "pipe", "pipe"] },
@@ -75,7 +76,8 @@ export function parseMediaTreatmentSignalStats(raw) {
   const frames = [];
   let current = null;
   for (const line of String(raw).split(/\r?\n/)) {
-    const frame = line.match(/^frame:\d+.*pts_time:([+-]?(?:\d+(?:\.\d+)?|\.\d+))/);
+    // One digit is enough: .* consumes the rest without overlapping repetitions.
+    const frame = line.match(/^frame:\d.*pts_time:([+-]?(?:\d+(?:\.\d+)?|\.\d+))/);
     if (frame) {
       if (current) frames.push(current);
       current = { ptsTime: Number(frame[1]) };

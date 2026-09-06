@@ -1,14 +1,13 @@
 ---
 name: dlazy-jimeng-omnihuman-1.5
 version: 1.3.4
-description: 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy jimeng-omnihuman-1.5 -h 查看帮助信息。"}}
+description: "使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy jimeng-omnihuman-1.5 -h 查看帮助信息。"}}
 ---
 
-# dlazy-jimeng-omnihuman-1.5
+# 数字人视频 即梦 OmniHuman 1.5
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 使用即梦 (Jimeng) OmniHuman 1.5 模型，通过人像图片和音频/文本生成逼真的数字人播报视频。
@@ -50,7 +49,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
@@ -85,11 +84,12 @@ Options:
   --images [images...]                 参考图 [image: url or local path] (max 1)
   --audio [audio...]                   音频 [audio: url or local path] (max 1)
   --prompt [prompt]                    提示词
-  --resolution [resolution]            分辨率 [default: 1080p] (choices: "720p", "1080p")
+  --resolution [resolution]            分辨率（音频时长上限：1080p≤30秒，720p≤60秒） [default: 1080p] (choices: "720p", "1080p")
   --fast_mode [fast_mode]              快速模式 [default: false]
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -102,7 +102,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "jimeng-omnihuman-1.5",
-    "modelId": "jimeng-omnihuman-1.5",
+    "modelId": "jimeng-omnihuman-1-5",
     "outputs": [
       {
         "type": "image",

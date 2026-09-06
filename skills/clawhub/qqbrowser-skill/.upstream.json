@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/qqbrowser-skill",
   "slug": "qqbrowser-skill",
   "ownerHandle": null,
-  "version": "0.9.0",
-  "updatedAt": 1782271561337,
-  "contentHash": "5ca28057c899dbf866a63eb75cb7da6357d55055bde6ca1fd2c4c7e82f3b52b9",
-  "fetchedAt": "2026-07-26T18:24:27.263Z"
+  "version": "1.0.16",
+  "updatedAt": 1788509627727,
+  "contentHash": "d3c022ed51e617fce7ab8b9e0bb6992ea6cf3ae6fe7c2f2dc8341fea5eb13fd5",
+  "fetchedAt": "2026-09-06T11:51:43.468Z"
 }

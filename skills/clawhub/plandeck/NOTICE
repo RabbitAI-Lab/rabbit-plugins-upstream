@@ -1,0 +1,15 @@
+Plandeck
+Copyright (c) 2026 Ahmad Othman Ammar Adi
+
+Lineage
+-------------------------------------------------------------------------------
+planning-with-files  —  https://github.com/OthmanAdi/planning-with-files
+Copyright (c) 2026 Ahmad Othman Ammar Adi
+Licensed under the MIT License.
+
+Plandeck grows out of planning-with-files' core idea: durable, crash-proof plans
+on disk that survive context loss and /clear, plus a deterministic completion
+gate. Plandeck is the visual, dependency-aware evolution of that idea. The board
+server, the YAML reader, the intelligence layer, and the rendering are Plandeck's
+own.
+-------------------------------------------------------------------------------

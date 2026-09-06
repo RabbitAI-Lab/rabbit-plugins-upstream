@@ -1,40 +1,64 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This Chinese K-12 learning skill guides a student through Feynman-style explanation, questioning, transfer, and critical-verification checks to assess whether a concept is memorized, explainable, or truly mastered.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+External learners, tutors, and education agents use this skill to test concept understanding after study, wrong-answer remediation, exam review, or AI-answer exposure. It produces a mastery judgment, identifies the point where the student got stuck, and only writes back minimal understanding data when explicit consent gates are satisfied.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; localize crisis contacts and minor-data consent rules before non-mainland deployments.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The security evidence flags the release as suspicious because the persistent student-profile writeback schema is broader than the skill's stated scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before deployment, enforce sender-to-path authorization outside the package schema and reject profile patches outside extensions.understanding.
+
+Risk: The skill can request profile writeback and reminder handoff for minor learners.
+
+Mitigation: Require explicit user consent for profile writeback and reminder enqueueing, and apply local guardian-consent rules before enabling long-term records.
+
+Risk: Crisis-support contact details are designed for China mainland and may be inappropriate elsewhere.
+
+Mitigation: For non-mainland deployments, localize emergency contacts, youth-support channels, and minor-data consent rules before release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Feynman 4+1 jump state machine](references/feynman-5jump-statemachine.md)
+- [Feynman dialogue patterns](references/feynman-dialogue-patterns.md)
+- [Learning DNA profile schema](shared/dna-profile.schema.json)
+- [Multi-agent handover protocol schema](shared/handover-protocol.schema.json)
+- [Crisis exception protocol](shared/crisis-exception.md)
+- [Platform conventions and deployment localization](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Chinese conversational guidance and markdown-style assessment summaries, with optional JSON handoff payloads for profile writeback or reminder enqueueing.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Default operation is session-local; profile writeback and reminder handoff require explicit consent.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

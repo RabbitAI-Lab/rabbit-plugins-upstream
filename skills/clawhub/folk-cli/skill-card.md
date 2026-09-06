@@ -1,40 +1,61 @@
-## Description: <br>
-Use the folkctl CLI to inspect and update folk.app CRM data without third-party connectors. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use folkctl to inspect and update folk.app CRM data through its REST API. Covers people, companies, groups, members, custom fields, deals, custom objects, users, notes, tasks, interactions, legacy reminders, webhooks, and official MCP setup.
 
-## Publisher: <br>
-[j-edel](https://clawhub.ai/user/j-edel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-edel](https://clawhub.ai/user/j-edel)
 
-## Use Case: <br>
-Developers and CRM operators use this skill to inspect and update folk.app CRM records through the folkctl CLI and first-party folk API. It supports work with people, companies, groups, deals, users, notes, reminders, interactions, and webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The configured folk API key can read and change CRM records, notes, reminders, interactions, and webhooks. <br>
-Mitigation: Confirm the folkctl package source before installation, keep the API key out of chat and logs, and use least-privilege credentials where available. <br>
-Risk: Create, update, or delete commands can change CRM data. <br>
-Mitigation: Use dry-run previews for changes, summarize the affected resource and request before execution, and require explicit confirmation for deletes. <br>
+## Use Case:
 
+Developers, operators, and CRM administrators use this skill to inspect, create, update, and manage folk.app CRM records through folkctl while preserving dry-run and confirmation workflows for changes.
 
-## Reference(s): <br>
-- [folkctl GitHub project](https://github.com/j-edel/folkctl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-oriented CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires FOLK_API_KEY; recommends dry-run previews and explicit confirmation before destructive changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill uses a pinned third-party CLI that can access Folk CRM data through FOLK_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after verifying trust in the pinned source, keep FOLK_API_KEY narrowly scoped where possible, and rotate the key if exposure is suspected.
+
+Risk: Create, update, delete, and option-removal commands can change or remove CRM records and associated contact data.
+
+Mitigation: Use --dry-run --json before mutations, summarize the exact resource and request, and require explicit user confirmation before destructive actions.
+
+Risk: Changing FOLK_API_BASE_URL can route requests away from the default Folk API endpoint.
+
+Mitigation: Set FOLK_API_BASE_URL only when the user intentionally needs a non-default Folk API endpoint.
+
+## Reference(s):
+
+- [folkctl project homepage](https://github.com/j-edel/folkctl)
+- [folkctl v0.2.0 release](https://github.com/j-edel/folkctl/releases/tag/v0.2.0)
+- [folkctl reviewed PR](https://github.com/j-edel/folkctl/pull/1)
+- [Folk reminders-to-tasks migration guide](https://developer.folk.app/migrations/reminders-to-tasks)
+- [Folk MCP tools reference](https://developer.folk.app/mcp/tools)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON-oriented CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses folkctl --json for machine-readable responses and --dry-run before mutations.]
+
+## Skill Version(s):
+
+0.2.1 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

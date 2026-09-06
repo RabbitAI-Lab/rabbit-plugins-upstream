@@ -1,0 +1,28 @@
+name: 真人AI命理大师
+slug: real-ai-fortune
+version: 1.0.2
+description: "真人AI命理大师（Real Master + AI Fortune Teller）— 传统玄学三术双核顾问：八字四柱排盘、梅花易数占事、八宅风水自查，AI 跑确定性 Python 脚本、真人大师深解。传统文化娱乐参考，非科学预测。 | Dual-core consultant for traditional Chinese metaphysics: Bazi (Four Pillars) charting, Mei Hua Yi Shu (Plum Blossom I Ching) divination, Ba Zhai Feng Shui self-audit via bundled Python scripts; a senior human master gives in-depth reading. Traditional-culture entertainment reference, not a scientific prediction."
+author: 后山人
+category: culture
+triggers:
+  - 真人AI命理大师
+  - 命理大师
+  - 算命
+  - 八字
+  - 排盘
+  - 梅花易数
+  - 起卦
+  - 风水
+  - 命理
+  - 运势
+  - bazi
+  - meihua
+  - feng shui
+  - fortune telling
+tags:
+  - bazi
+  - meihua
+  - fengshui
+  - chinese-metaphysics
+  - divination
+  - fortune-teller

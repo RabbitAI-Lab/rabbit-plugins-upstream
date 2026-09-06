@@ -1,39 +1,62 @@
-## Description: <br>
-Use when reviewing frontend code for design quality: checking design token usage, hardcoded values, dark mode coverage, accessibility compliance, CSS consistency, or semantic HTML. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Argus Design Review audits frontend code for design token usage, hardcoded values, dark mode coverage, accessibility, CSS consistency, semantic HTML, and stack-aware framework API usage.
 
-## Publisher: <br>
-[cgartlab](https://clawhub.ai/user/cgartlab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cgartlab](https://clawhub.ai/user/cgartlab)
 
-## Use Case: <br>
-Developers and frontend engineers use this skill to audit components, pages, and design systems for design-token usage, dark-mode coverage, accessibility, CSS quality, and semantic HTML issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked by broad review-style prompts and apply strict design-token, dark-mode, and accessibility auditing when that was not intended. <br>
-Mitigation: Use explicit wording when invoking it, and disable or avoid the skill when a general code review should not include frontend design auditing. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to review frontend components, pages, and design systems for design quality, accessibility gaps, CSS issues, semantic HTML problems, and framework API mistakes. It returns prioritized findings with copy-ready fixes.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/cgartlab/argus) <br>
-- [ClawHub skill page](https://clawhub.ai/cgartlab/skills/argus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code] <br>
-**Output Format:** [Markdown review findings grouped by severity with file, line, found, expected, and token details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings are organized from P0 through P3 severity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata; artifact frontmatter reports 0.2.0) <br>
+Risk: Generated review fixes may be incorrect, incomplete, or inconsistent with a repository's design system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed fixes before merging and run the repository's lint, type-check, accessibility, and visual regression checks where available.
+
+Risk: Separate GitHub App or composite action usage can read pull request code and post comments.
+
+Mitigation: Review and pin that external automation separately before enabling it in repositories.
+
+## Reference(s):
+
+- [Argus Skill Page](https://clawhub.ai/cgartlab/skills/argus)
+- [React Documentation](https://react.dev)
+- [Vue Guide](https://vuejs.org/guide)
+- [Svelte Documentation](https://svelte.dev/docs)
+- [Angular API](https://angular.dev/api)
+- [Astro Documentation](https://docs.astro.build)
+- [Lit Documentation](https://lit.dev/docs)
+- [UnoCSS Documentation](https://uno.antfu.me/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [MDN CSS Documentation](https://developer.mozilla.org/docs/Web/CSS)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with prioritized issue blocks and copy-ready code fixes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are grouped by P0 through P3 severity and include file:line prefixes when issues are found.]
+
+## Skill Version(s):
+
+0.4.1 (source: frontmatter, manifest.yaml, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,65 @@
-## Description: <br>
-JotForm API integration with managed OAuth for creating forms, managing submissions, accessing form data, and managing webhooks through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+JotForm API integration with managed OAuth for creating forms, managing submissions, accessing form data, and managing webhooks through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to interact with JotForm forms, submissions, webhooks, and account data through Maton's managed OAuth proxy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MATON_API_KEY can grant access to connected JotForm data if exposed. <br>
-Mitigation: Install only when Maton is trusted, store MATON_API_KEY securely, and avoid sharing terminal output that prints the key. <br>
-Risk: Requests may target the wrong JotForm account when multiple connections exist. <br>
-Mitigation: Use the Maton-Connection header when multiple accounts are connected and confirm the intended connection before making requests. <br>
-Risk: Create, update, and delete operations can modify forms, submissions, webhooks, or connections. <br>
-Mitigation: Confirm the exact target resource and intended effect with the user before approving write or delete operations. <br>
+## Use Case:
 
+Developers and agents use this skill to authenticate with Maton, connect a JotForm account, and retrieve or modify JotForm forms, submissions, and webhooks with user confirmation for account connections and writes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/jotform) <br>
-- [JotForm API Overview](https://api.jotform.com/docs/) <br>
-- [JotForm User Forms](https://api.jotform.com/docs/#user-forms) <br>
-- [JotForm Form Submissions](https://api.jotform.com/docs/#form-id-submissions) <br>
-- [JotForm Webhooks](https://api.jotform.com/docs/#form-id-webhooks) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be confirmed with the user before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: JotForm account authorization or the raw API-key fallback can expose account access if credentials are over-scoped or mishandled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, choose the narrowest available JotForm scopes, avoid raw API-key fallback unless the CLI cannot be used, and never print, persist, or transmit credentials outside the intended Maton flow.
+
+Risk: Create, update, delete, and webhook operations can change or remove JotForm data or trigger downstream effects.
+
+Mitigation: Default to read and list calls, verify the target connection and resource identifiers, and require explicit user confirmation before every write, delete, or new connection.
+
+Risk: Forms, submissions, and webhook payloads may contain untrusted external content.
+
+Mitigation: Treat API response content as data, avoid executing or interpolating it into commands or prompts, and pass values as discrete arguments after validation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/jotform)
+- [Maton](https://maton.ai)
+- [JotForm API Overview](https://api.jotform.com/docs/)
+- [JotForm User Forms](https://api.jotform.com/docs/#user-forms)
+- [JotForm Form Submissions](https://api.jotform.com/docs/#form-id-submissions)
+- [JotForm Webhooks](https://api.jotform.com/docs/#form-id-webhooks)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Maton CLI/API calls; mutating JotForm operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

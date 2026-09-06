@@ -1,42 +1,53 @@
-## Description: <br>
-Convert text to speech using MiniMax Speech 2.6 Turbo via WaveSpeed AI with voice presets, emotion controls, language support, and configurable audio output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert text to speech using MiniMax Speech 2.6 Turbo via WaveSpeed AI, with voice selection, emotion control, language options, and audio output settings.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and agents use this skill to configure WaveSpeed AI MiniMax Speech 2.6 Turbo text-to-speech requests, choose voices and audio settings, and handle generated audio URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted text is processed by WaveSpeed AI as an external service. <br>
-Mitigation: Do not submit secrets, credentials, regulated data, confidential scripts, or other sensitive text unless the applicable data-sharing policy permits it. <br>
-Risk: The skill uses a WaveSpeed API key for billable requests. <br>
-Mitigation: Store WAVESPEED_API_KEY in an environment variable or secret manager, avoid hardcoding it, and monitor usage according to account policy. <br>
-Risk: JavaScript examples depend on the wavespeed client package. <br>
-Mitigation: Verify the official wavespeed client package before running examples and validate request parameters against the documented options. <br>
+## Use Case:
 
+Developers and creators use this skill to generate spoken audio from text through WaveSpeed AI's MiniMax Speech 2.6 Turbo model, including voice, emotion, language, and output-format controls.
 
-## Reference(s): <br>
-- [WaveSpeed AI API Keys](https://wavespeed.ai/accesskey) <br>
-- [ClawHub Skill Page](https://clawhub.ai/chengzeyi/wavespeed-minimax-speech-26) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance covers text, voice, emotion, speed, pitch, audio format, sample rate, bitrate, channel, and language boost settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill depends on live npm packages for the WaveSpeed CLI or MCP server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the package publisher before installation and pin reviewed versions or run the tooling in an isolated environment when appropriate.
+
+Risk: WaveSpeed credentials are stored locally or supplied through an environment variable.
+
+Mitigation: Use wavespeed login or WAVESPEED_API_KEY as documented, and do not paste API keys into chat.
+
+## Reference(s):
+
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The external WaveSpeed run returns an audio output URL and can download audio files when requested.]
+
+## Skill Version(s):
+
+2.0.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -62,6 +62,29 @@ agents.
 
 ## Method
 
+### 0 — Write the AUDIENCE BRIEF before you read or search anything
+
+🔴 **First artifact, before the source is opened and before any web query: what do the people in
+the room have to DECIDE, in the order they will face it, and what does each decision need in
+hand?** Record it as `content.audience_brief` — `who` plus at least three `{decision, needs}` rows
+— required by every gate path (`scripts/audience_brief.py` is the contract). The `needs` half is
+what aims your reading and your searches; a decision with no stated need gathers nothing.
+
+🔴 **A decision is something the audience DOES or CHOOSES — go or not, book or skip, fund or
+stop, which one, when. "Understand X" rows are comprehension goals, and a brief made of them is
+the SUBJECT brief wearing this field's clothes** (the contract rejects a brief where most rows
+open with understand/know/了解/理解…). On a **no-source deck this brief REPLACES the comprehension
+brief below** — there is nothing to comprehend, and writing one anyway produces a summary of the
+subject, which ships a deck *about* the topic where one *for* the audience was asked for.
+Measured: a deck built from `audience = people planning a trip` verified survey-chain lengths and
+inscription years, and never gathered daily cost, distances, or a rainy-day plan — the frame aimed
+the research, and the frame was the subject.
+
+**Carry it into §3:** every arc candidate you return must include a `serves_goal` clause — how
+THAT arc gets this room to the recorded `interview.goal`, by its own route — and candidates are
+scored on the goal BEFORE elegance. `arc_divergence.py` refuses a candidate without the clause and
+reports a set whose clauses are one sentence copied across (`same_goal`).
+
 ### 1 — Understand the material as a human expert would
 Read **all of it**, not the abstract. Run the code's README; read the paper end-to-end
 (intro → method → **every results table/figure** → conclusion); read the doc or existing deck in
@@ -99,6 +122,13 @@ hedged, or unsupported by a quotable span, you have NOT understood it — re-rea
 open question; **an incomplete or untraced brief blocks the pipeline** (do not proceed to the
 arc/plan). **Coverage gate:** run the diff described in "The editor's stance" — every brief-listed key point
 mapped to a slide or consciously cut in Open questions; a silent omission blocks the plan.
+**Web-research gate (hard — for any web-researched or no-source deck, §2(e)):** the plan is NOT
+ready without (1) a **`coverage:`** map (the domain enumerated, each area researched or consciously
+cut), (2) a **`lifecycle:`** line (every featured product/version/entity checked live-vs-discontinued
+as of today — a headlined dead/renamed thing is a blocking defect, not a warning), and (3) every
+load-bearing slide carrying a **concrete specific** (number/date/price/named result), not adjectives
+alone, with each such claim's ledger row tagged **confidence** and any LOW/UNVERIFIED row cut. A
+web-researched brief missing any of the three is incomplete, exactly like an untraced field.
 **Long-source gate (hard):** a file-sourced brief with **no `source size:` field at all** is not
 ready — the bounded-vs-long classification never happened (the field is required for every
 file-based source, precisely so this gate can't be bypassed by never measuring). If the field marks
@@ -176,17 +206,28 @@ evidence, and letting the rest go on purpose.** Work in this order:
    understanding, the arc, and every verified claim are re-derived by ONE mind from the real pages**
    (step 5). Fan out the reading; never fan out the synthesis.
 
-   **How WIDE you fan out is the deck's `review:` effort tier, collected at Step 0** — the same
-   one word that sizes the critic panel also sizes this sweep, because research and review are
-   comparable cost centres (measured on one deck: ~1.02M tokens of research against ~0.95M of
-   review), and a user asking for speed means the pipeline, not half of it. `fast` = one reader
-   per load-bearing source cluster and no more; `standard` = a reader per cluster plus a second
-   pass on whatever the first left as a gap; `thorough` = the full multi-modal sweep. What the
-   tier narrows is BREADTH — how many angles you search from. It never narrows the FLOOR: every
-   claim that reaches a slide is still traced to a primary source at every tier, and the
-   PRIMARY-SOURCE GATE still runs. A thinner sweep means you find fewer facts, never that you
-   verify them less. **If no tier was handed to you, work at `standard`** and say so in the plan —
-   an unstated tier must never become whatever this run happened to feel like.
+   **How WIDE you fan out is the RESEARCH BREADTH the coordinator hands you — derived from the
+   deck's purpose at Step 0** (`standard` for a lab meeting / status update / teaching deck,
+   `thorough` for a defense / conference talk / exec readout / pitch — see
+   `references/interview-protocol.md`). It is NOT the review tier: that is chosen later, at Step 5,
+   with the rendered deck visible, and you neither know nor need it. `standard` = a reader per
+   load-bearing source cluster plus a second pass on whatever the first left as a gap;
+   `thorough` = the full multi-modal sweep. What the breadth narrows is BREADTH — how many angles
+   you search from. It never narrows the FLOOR: every claim that reaches a slide is still traced
+   to a primary source at every breadth, and the PRIMARY-SOURCE GATE still runs. A thinner sweep
+   means you find fewer facts, never that you verify them less. **If no breadth was handed to
+   you, work at `standard`** and say so in the plan — an unstated breadth must never become
+   whatever this run happened to feel like.
+
+   **A `search cap:` sizes the sweep just as hard as the tier does, and for a blunter reason: web
+   search is capped per SESSION and shared with every subagent you dispatch, so the budget you spend
+   is not yours.** State a per-reader cap **inside each dispatch prompt** — a reader not told a cap
+   searches until it is satisfied, and N of them do that at once. Keep the round under about half of
+   what REMAINS. Report `searches: planned N / spent N` in the plan so the number is a decision
+   somebody made rather than a wall somebody hit; a fan-out that quietly spends the session's whole
+   budget starves the small, late, NAMED lookups — a logo, a brand colour, one clearance number —
+   that the build genuinely cannot do without. If you are given no cap, ask for one rather than
+   assuming there is no ceiling.
 4. **Triage — deep-read only the load-bearing ~20% VERBATIM.** Among the kept chapters, go back and
    read *verbatim* only the sections that actually carry the deck's message; pull exact numbers,
    quotes, and figures from the real pages there. The rest stays at summary altitude — that is correct,
@@ -336,7 +377,7 @@ Use the web for **three jobs**, and run it whether or not you have a source:
     than") into an absolute ("writes don't"). A clause lifted from a longer sentence keeps its
     lowercase and a leading ellipsis (or bracketed capital); a paraphrase drops the quote marks and
     attributes as `after <who>`.
-- **(c) Find the single-entity's real brand assets (a research act, not a design one).** When the
+- **(c) Find the real brand assets (a research act, not a design one).** When the
   deck's subject **is one organisation / product / brand / institution** — a pitch, product intro,
   launch, company or stakeholder readout, an org's report, **and equally** a research talk naming a
   tool / framework / model, a teaching deck showing an app, or a status deck naming a vendor —
@@ -349,7 +390,12 @@ Use the web for **three jobs**, and run it whether or not you have a source:
   **designed wordmark** — a **NOTE for design, not a content blocker** (a missing logo never blocks
   the plan). This stays a **content/research act — you find the asset**; *whether and where* a mark
   is placed is the slide-design agent's call. (A **multi-organisation** deck — survey / landscape /
-  review — or a **neutral-academic** talk needs no such global mark; name entities inline.)
+  review — or a **neutral-academic** talk needs no such GLOBAL mark; name entities inline.
+  🔴 **But that exempts CHROME, not content:** when any slide's FORM is a roster of named real
+  entities — an alliance's members, an ecosystem map, a comparison whose rows are institutions —
+  search each one's mark and report `N of M sourced` with per-entity sources, because the
+  slide-design agent's `entity marks:` line is assembled from what you find. A roster shipped with
+  a coloured square per row is what this arm exists to prevent.)
 
 - **(d) Calibrate density against professional decks when unsure.** If you can't confidently say
   how much a page of THIS genre should carry (an investor update vs a lecture vs a conference talk
@@ -358,6 +404,45 @@ Use the web for **three jobs**, and run it whether or not you have a source:
   not listicle advice. You're calibrating two numbers you'll use in step 3's distribution pass: the
   typical units-per-page and how much supporting detail sits on the slide vs in the narration. Keep
   it light; this is a taste calibration, not a literature review.
+
+- **(e) 🔴 A web pass ships on THREE floors — COMPREHENSIVE · SUBSTANTIAL · ACCURATE — and a thin
+  pass fails all three silently.** *(Measured: a no-source OpenAI products deck came back all
+  product-names-and-taglines and headlined two products — Sora, Agent Builder — that were already
+  discontinued, because the pass never enumerated the domain, never checked each thing's status, and
+  never went past the surface. Every gate downstream passed; only the user caught it.)* The
+  reactive claim-ledger of (b) verifies the claims you DECIDE to make; these three floors decide
+  whether you found the right, deep, live facts to make claims ABOUT.
+  - **全面 / COVERAGE — map the domain, then sweep it breadth-first.** Before searching, enumerate
+    the sub-areas / product lines / entities / angles a COMPLETE treatment needs — not only the ones
+    your first framing thought of — and research each. One search around the obvious angle is how
+    whole branches go missing. When the host has subagents, parallelize: one researcher per area,
+    each returning a structured, sourced fact list, then synthesize. Record the map as the content
+    checkpoint's **`coverage:`** line (areas covered · areas consciously cut, with why).
+  - **🔴 LIFECYCLE SWEEP — for EVERY named product/version/feature/entity you feature, verify its
+    CURRENT STATUS as of today: live · superseded · renamed · deprecated · discontinued.** This is
+    PROACTIVE and distinct from (b)'s recency check: (b) re-verifies a claim you already chose to
+    make; this asks whether the thing itself still exists *before* you feature it. Headlining a dead
+    or renamed product is the exact failure this prevents. Record it as the checkpoint's
+    **`lifecycle:`** line (named things confirmed current · anything found discontinued/renamed, and
+    how the deck handles it — dropped, or shown with an honest "being retired" note).
+  - **充实 / SUBSTANCE — every load-bearing point carries a concrete SPECIFIC, not an adjective.**
+    Research to the depth where a claim is a real number / date / price / named benchmark / named
+    mechanism — never "state-of-the-art" or "powerful" standing alone. The test: *hide the subject's
+    name — does the slide still say something a competitor's slide couldn't?* If a load-bearing slide's
+    facts are all qualitative, the research isn't finished — go deeper; the web usually HAS the number.
+    When a specific genuinely does not exist, say so plainly (and never inflate it into false
+    precision — the no-invention rule outranks this floor).
+  - **准确 / CORROBORATION & SOURCE QUALITY — extends the PROVENANCE CONTRACT above.** Corroborate
+    each load-bearing fact across **≥2 INDEPENDENT credible sources** — independent meaning *not* two
+    reprints of one wire story and *not* two SEO / AI-content-farm blogs (unknown `*-blog` / listicle
+    / AI-spun domains corroborate nothing; a fact appearing ONLY there is LOW confidence and does not
+    ship as established). Tag each ledger row's **confidence: HIGH** (primary, or 2+ independent
+    credible) · **MED** (credible but not primary — e.g. the official site was unreachable) ·
+    **LOW/UNVERIFIED** (single- or blog-only). A MED fact MAY ship only if the deck LABELS its
+    footing honestly ("per public reporting, as of &lt;month year&gt;"); a LOW/UNVERIFIED fact is cut
+    or moved to Open questions. Record the tally as the checkpoint's provenance digest
+    (`checked N · confirmed N · fixed N · cut N`) — the same artifact the Step-5 PRIMARY-SOURCE GATE
+    re-scores, now produced at research time, not reconstructed at hand-off.
 
 For a **conference talk**, research the named venue (talk length, audience composition, what a
 strong talk there argues and covers) — start from the Step-0 venue findings if provided (build
@@ -396,13 +481,106 @@ approve. A key point *silently* missing from the arc is a blocking failure — t
 untraced claim. (Compression is editing; silent omission is misrepresentation.)
 
 ### 3 — Design the narrative arc (engage, and obey the logic)
-Choose an order that fits the *purpose* (a conference talk, a status update, and a defense are
+
+🔴 **Produce 2–3 CANDIDATE arcs over the same evidence ledger, then choose — never derive one.**
+The design side has run a competition for years (the direction gate shows rendered alternatives and
+`scripts/directions_diversity.py` measures whether they really differ); content had none. The arc
+was derived from the primary goal and the plan then recorded "which arc I chose and why" — a reason
+written after the fact, against no alternative, with nothing anywhere reporting that the runner-up
+never existed. That asymmetry is expensive in one specific way: **the arc is the only decision whose
+error invalidates everything downstream.** A wrong form costs one slide; a wrong arc costs the design
+plan and the build under it. It is the decision that most deserves an alternative and was getting the
+least.
+
+Each candidate must name the four things that make it an ARGUMENT rather than an order of slides:
+the **audience question** it answers, the **objection** it pre-empts, its **closing ask**, and the
+**evidence** (claim-ledger ids) it carries. Divergence has to move the CLAIM, not the wording —
+evidence before the claim instead of after it, a different ask, a different objection.
+
+🔴 **Check the set mechanically before choosing.** Get the exact shape with
+`python3 scripts/arc_divergence.py --template` (it also prints both vocabularies) rather than
+guessing it — one object per candidate, all seven fields required:
+
+```json
+[{"name": "contribution", "shape": "contribution-first",
+  "roles": ["problem", "method", "evidence", "comparison", "conclusion"],
+  "audience_question": "is the INR formulation actually better than L+S",
+  "objection": "the gain comes from the regulariser, not the representation",
+  "closing_ask": "accept implicit neural representation as the recon backbone",
+  "evidence": ["c1", "c3", "c4"]}]
+```
+
+`shape` is a closed list (`--template` prints it; pick the nearest and put any nuance in the
+one-clause reason). `roles` is the §4 role vocabulary and is **open** — an unrecognised role is
+accepted, not refused, and only reported so a typo stays visible.
+
+🔴 **A RESEARCH PROGRESS deck that reports a CHANGE OF APPROACH picks `method-pivot`, and the
+order it implies is the opposite of the one it is usually confused with.** The commonest lab-meeting
+deck there is — *here is what we built, here is what it showed, here is why we are changing
+approach* — had no shape, so it got filed as `problem-turn-evidence`. That mislabel moves pages: in
+`problem-turn-evidence` the evidence proves the NEW thing, so a planner following it puts the
+results **after** the turn. In a pivot the evidence belongs to the approach being **retired**, and
+the replacement usually has none yet. So `method-pivot` fixes three things the generic shape gets
+wrong, and each of them was a real correction on a delivered deck:
+1. **The prior work's RESULTS come BEFORE the pivot**, grouped, in the order the steps produced
+   them. A room asked to accept a direction change before seeing what the old direction showed has
+   no basis to accept it.
+2. **Every step of the retired method carries WHAT IT WAS FOR, not just what it did.** A method
+   recap without purposes is a list; with them it is an argument, and the purposes are what the
+   pivot later contradicts. (`design-by-purpose.md` → *Research meeting* carries the design half.)
+3. **The deck ENDS ON STATUS, not on the new method.** The replacement's slide is not evidence, and
+   a deck that stops there implies a result it does not have. The closing beat states what is
+   established and what is not — which is the `open` ledger below, on a slide.
+Roles that match: `problem` · `method` · `evidence` (×N, the retired approach's) · `diagnosis` ·
+`idea` · `method` · `roadmap`. Its `objection` is almost always *"you are abandoning something that
+works"*, and its `closing_ask` is agreement on the direction, never agreement that the new thing
+works.
+
+🔴 **A TEACHING deck picks from the instructional shapes, not from the argument ones.**
+`--template` prints them in two groups. The argue/report group (`evidence-build`,
+`contribution-first`, `recommendation-first`, …) was for a long time the *whole* list, so a lecture
+had to relabel itself `evidence-build` or `chronological` to pass the gate at all — and the
+checkpoint's `arc gate:` line then recorded a shape the deck was not. The instructional group is
+`concept-example-check` · `misconception-first` · `worked-example` · `prerequisite-chain` ·
+`spiral`, with roles to match (`objective`, `prerequisite`, `concept`, `worked-example`,
+`misconception`, `counterexample`, `practice`, `check`, `recap`). This is what
+`references/design-by-purpose.md` → *Teaching / lecture* already asks for in the design half — an
+objectives slide, a **concept → example → check** rhythm, a recap — and the content vocabulary now
+names the same beats.
+**On an instructional shape, two required fields read differently**, and the field NAMES do not
+change (renaming them per shape would fork the record): `objection` is the learner's
+**misconception** ("students think undersampling always loses information"), and `closing_ask` is
+the **capability** they leave with ("you can predict when aliasing appears"), never a decision the
+room makes. Divergence for a lecture is real divergence — concept-first vs misconception-first
+teach the same material in genuinely different orders and leave different evidence on the floor. `evidence` is claim-ledger ids:
+**which evidence an arc leaves on the floor is most of what distinguishes it**, so a candidate set
+where every list is empty is refused outright.
+
+Then run `python3 scripts/arc_divergence.py <arcs>.json` — it measures every pair on shape · opening order ·
+ask · stance and flags a pair matching on ≥3, and separately flags a candidate carrying under half
+the winner's evidence. That second check exists because arcs collapse differently from directions:
+directions become three colourways of one layout, arcs become **one real argument plus two foils** —
+and a pure divergence measure scores a two-beat sketch as beautifully divergent. A flag is never a
+kill: **rediverge, or keep the set and record the reason on the `arc gate:` line** of the content
+checkpoint (`references/checkpoint-convention.md`). A decision arc legitimately carrying less
+evidence than a contribution arc is a real answer — an unrecorded one is not.
+
+**The coordinator picks; this is not a new user stop.** You hand up the candidates with the losers
+and their one-clause reasons; the pick is made where the plan is read, and the whole competition
+reaches the user as the checkpoint's `arc gate:` line. A user who disagrees vetoes in one glance —
+the same economics as the direction gate, without the extra wait.
+
+Then, for each candidate and for the one you pick: choose an order that fits the *purpose* (a
+conference talk, a status update, and a defense are
 sequenced differently — let the rubric guide you). **Let two interview answers steer the arc and
 the density directly:**
 - **Primary goal / intent → the arc shape.** *Inform & educate* builds to the evidence and
   explains; *support a decision* leads with the recommendation + the ask, then justifies (don't
   bury the decision); *inspire / motivate action* opens on the stakes and closes on a clear call
-  to action. State which arc you chose and why in the Narrative arc section.
+  to action. **This derivation SEEDS the candidate set, it no longer settles it** — the derived
+  shape is candidate #1, and the competition exists to find out whether this deck's material
+  argues better some other way. State the chosen shape and the alternatives it beat in the
+  Narrative arc section.
 - **Delivery context → the density / self-sufficiency of each slide's copy.** *Presented live* (or
   screen-shared in a meeting) → few words per slide, the speaker carries the prose (put it in
   speaker notes). *Sent digitally / self-read* → each slide must stand alone with the explanation
@@ -504,7 +682,7 @@ agent decides form, layout, icons, and motion downstream. For each slide record:
     just body) — and rewrite anything that reads machine-translated or press-release-generic. A
     deck whose text smells AI-generated (esp. 中文 translationese) is **not ready**; this pass is
     the actor-side guarantee the critic's Voice check then independently confirms.
-  - **Deterministic budget check — run `python scripts/plan_wordcount.py <plan.md> --<mode>` after
+  - **Deterministic budget check — run `python3 scripts/plan_wordcount.py <plan.md> --<mode>` after
     the VOICE PASS, before emitting the plan** (write the per-slide table to a **temp/scratch
     file** for the pass — never into the deliverable folder, where plan files are forbidden)
     (advisory; it counts takeaway + content units per
@@ -590,7 +768,19 @@ abstract / conclusion / README tagline / the user's stated goal). If it would su
 fix the message before continuing.
 
 ## Narrative arc
-- The narrative **arc in one line** (which arc shape you chose and why — inform / decide / inspire).
+- **Arc candidates (required — 2–3 rows, §3).** One row per candidate over the SAME ledger, the
+  chosen one marked. The four argument fields are mandatory on every row, losers included: a loser
+  with no ask and no objection is a foil, and a winner that beat a foil beat nothing.
+
+  | ✓ | name | shape | opening 3 roles | audience question | objection pre-empted | closing ask | evidence (ledger ids) |
+  |---|---|---|---|---|---|---|---|
+
+  Follow it with the **divergence verdict** — `arc divergence: ok` / `flagged <pair> → rediverged` /
+  `justified: <reason>` — from `scripts/arc_divergence.py`, and ONE clause per loser saying what it
+  lost on. This is what the checkpoint's `arc gate:` line is assembled from; write the JSON the
+  script reads beside the plan (scratch, never the deliverable folder) so the verdict is
+  reproducible rather than asserted.
+- The narrative **arc in one line** (the chosen shape and why it beat the others).
 - The **emotional curve in one line** (purpose-relative beats mapped across the arc, per §3 —
   with the PEAK beat marked) and
   **what is deliberately staged** — the information held back so it lands on a later slide.

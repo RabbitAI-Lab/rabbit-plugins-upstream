@@ -1,45 +1,67 @@
-## Description: <br>
-Helps independent teachers turn schedules, student records, homework, parent communication, and lesson-package status into a seven-section daily dashboard with risk flags and top priorities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把独立教师分散在课表、学员卡、作业、家长沟通和课时包里的信息，只读聚合成一张可执行的日工作台。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to review daily classes, preparation tasks, homework follow-up, parent communication, lesson-package renewal points, and the three most important actions for the day. It is intended as a planning and triage dashboard, not as an automatic messaging or record-writing system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may route generic planning requests into a dashboard that reads student workspace data. <br>
-Mitigation: Narrow activation to explicit independent-teacher workspace requests or ask a clarification question before reading student, parent, course-package, or schedule data. <br>
-Risk: The dashboard may expose sensitive student or family information if raw workspace fields are copied directly. <br>
-Mitigation: Use aliases, summarize parent and lesson notes within the stated 500-character limits, and omit real names, contact details, family conflict, medical details, and payment information. <br>
-Risk: Suggested follow-up could be mistaken for an authorized external action or record update. <br>
-Mitigation: Keep messages, lesson-unit consumption, parent communication, renewal suggestions, and cross-skill sharing as teacher-confirmed actions only. <br>
+## Use Case:
 
+External independent teachers use this skill to turn lesson schedules, student cards, homework follow-ups, parent communication logs, course-package records, and progress evidence into a daily dashboard. It highlights today's lessons, preparation needs, follow-up work, student risk signals, renewal points, and the three most important actions without writing back to the workspace.
 
-## Reference(s): <br>
-- [Dashboard template](references/dashboard-template.md) <br>
-- [Daily dashboard block templates](references/daily-dashboard-block-templates.md) <br>
-- [Daily dashboard full sample](references/daily-dashboard-full-sample.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard) <br>
+### Deployment Geography for Use:
 
+Global; artifact guidance says the default Chinese K12 safety and curriculum assumptions are for Mainland China and should be localized before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style daily dashboard with structured text sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses student aliases, concise summaries, risk labels with field-based rationale, and teacher-confirmed follow-up actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Dashboards or exported records may expose student workspace information to an unauthorized requester or an untrusted location.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the requester is the teacher or another authorized person, scope outputs to the needed student, date, or record type, use aliases instead of real names, and avoid moving exported text into untrusted chats or files.
+
+Risk: Risk labels can become misleading when records are missing, dates are incomplete, or subjective impressions are mixed with field-based signals.
+
+Mitigation: Base risk flags on documented field values, sort recent lesson evidence by date, say when records are unavailable, and clearly label any teacher-provided subjective judgment.
+
+Risk: A dashboard suggestion could be mistaken for permission to send parent messages, change schedules, or confirm course-package deductions.
+
+Mitigation: Keep the dashboard read-only and route parent communication, scheduling, homework, lesson-log, and renewal actions to the relevant skill for explicit teacher confirmation.
+
+Risk: Student safety or crisis signals may appear while the dashboard is reading learning records.
+
+Mitigation: Stop normal dashboard output for crisis signals, avoid recording sensitive details, direct the user to trusted adults and local emergency resources, and localize emergency contact guidance outside Mainland China.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard)
+- [Daily dashboard template](artifact/references/dashboard-template.md)
+- [Daily dashboard block templates](artifact/references/daily-dashboard-block-templates.md)
+- [Daily dashboard full sample](artifact/references/daily-dashboard-full-sample.md)
+- [Solo teacher workspace schema](artifact/shared/solo-teacher-workspace.schema.json)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown daily dashboard with structured sections and concise action items]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only output; uses student aliases, cites field-based evidence for risk flags, and routes write actions to other skills for teacher confirmation.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

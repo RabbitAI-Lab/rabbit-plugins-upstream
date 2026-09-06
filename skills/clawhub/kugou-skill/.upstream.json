@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/kugou-skill",
   "slug": "kugou-skill",
   "ownerHandle": null,
-  "version": "0.1.4",
-  "updatedAt": 1783680232051,
-  "contentHash": "2f85fb2f9ece044b1ccb9752141f0d271ed48a4c64863276f15cf2eb89e9dbfc",
-  "fetchedAt": "2026-07-26T18:17:04.354Z"
+  "version": "0.1.13",
+  "updatedAt": 1788166063084,
+  "contentHash": "03b49055d50fc5bb82124de1973d8b1576f17a4ad0a963bdbd428d0139992710",
+  "fetchedAt": "2026-09-06T12:04:05.277Z"
 }

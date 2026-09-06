@@ -1,43 +1,65 @@
-## Description: <br>
-Generates weekly learning review reports from authorized learning activity, including progress evidence, weak points, next-week priorities, and optional family-facing summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把一周零散的学习记录整理成有结论、有证据、有下一步的周报，并带学生做一次自我复盘。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn weekly learning records into evidence-based review reports, concrete next-week priorities, and optional family-sharing summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Weekly reviews may summarize learning activity, emotional state, stress, or crisis-related observations that are sensitive if shared too broadly. <br>
-Mitigation: Use the skill only for an explicit review request, collect only the minimum necessary fields, and review family-facing reports before sharing. <br>
-Risk: Crisis signals such as self-harm thoughts, bullying, serious harm, or sustained despair could be softened if treated like normal learning feedback. <br>
-Mitigation: Do not reframe crisis signals as positive progress; alert guardians plainly and seek professional or emergency help when immediate danger is present. <br>
-Risk: Sparse or incomplete weekly data can make conclusions sound more certain than the evidence supports. <br>
-Mitigation: State when data is limited, identify which days or records support the review, and avoid firm judgments when evidence is incomplete. <br>
+## Use Case:
 
+External students and learning-support agents use this skill to turn weekly study activity into a concise self-review, next-week priority, and optional family-facing report. It is designed for Chinese K12 learning contexts and uses consent-gated handoffs for reminders and learning-profile updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review) <br>
-- [Weekly review report template](references/review-report-template.md) <br>
+### Deployment Geography for Use:
 
+China Mainland by default; localize crisis resources, school-system assumptions, and minor-data consent rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown learning review reports with structured sections and concise action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce separate student-facing and family-facing report variants when appropriate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student-data handoffs can validate transfers that should be blocked when consent snapshots are stale, false, or mismatched to the recipient.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only where the platform separately enforces current consent, rejects stale consent snapshots, and binds each handover type to its allowed recipient.
+
+Risk: Family-facing reports may expose student information or emotion-related content without proper authorization.
+
+Mitigation: Confirm the speaker, require current student or guardian authorization as appropriate, honor student refusal for family sharing, and omit emotion content unless emotion-sharing consent is present.
+
+Risk: Crisis-support instructions are written for China Mainland by default and may be unsafe if emergency contacts are reused in other regions.
+
+Mitigation: Localize crisis-referral guidance for the deployment region and ask for the user location before giving region-specific emergency numbers when location is unknown.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review)
+- [Weekly review report template](references/review-report-template.md)
+- [Platform conventions](shared/platform-conventions.md)
+- [Grade bands](shared/grade-bands.md)
+- [Vocabulary and consent fields](shared/vocab.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+- [Published handover schema URL](https://xiaozhi-skills.openclaw.dev/schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance, Configuration]
+
+**Output Format:** [Markdown-style weekly review reports with optional structured handover JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Student-facing and family-facing variants depend on verified identity, consent status, available weekly data, grade band, and crisis-safety checks.]
+
+## Skill Version(s):
+
+2.1.10 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

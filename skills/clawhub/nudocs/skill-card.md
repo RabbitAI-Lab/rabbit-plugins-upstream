@@ -1,43 +1,60 @@
-## Description: <br>
-Upload, edit, and export documents via Nudocs.ai for shareable collaborative editing links, rich document editing, and retrieving edited content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upload, edit, and export documents via Nudocs.ai.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
 
-## Use Case: <br>
-External users, developers, and document authors use this skill to upload documents to Nudocs.ai, share editing links, list documents, pull edited versions back in selected formats, and manage cloud document records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload, share, download, list, and delete cloud documents through Nudocs.ai. <br>
-Mitigation: Use it only for documents intended for Nudocs.ai, treat returned links and document identifiers as sensitive, and confirm document IDs before pull, link, or delete operations. <br>
-Risk: The skill requires Nudocs credentials through NUDOCS_API_KEY or a local config file. <br>
-Mitigation: Store credentials securely, avoid exposing API keys in shared logs or documents, and rotate keys if they may have been disclosed. <br>
+## Use Case:
 
+Developers and other agent users use this skill to upload local documents to Nudocs for hosted editing, retrieve private edit links, list documents, export edited content, and delete specific remote documents.
 
-## Reference(s): <br>
-- [Nudocs](https://nudocs.ai) <br>
-- [Nudocs CLI](https://github.com/PSPDFKit/nudocs-cli) <br>
-- [Nudocs MCP Server](https://github.com/PSPDFKit/nudocs-mcp-server) <br>
-- [Document Design Reference](references/document-design.md) <br>
-- [Nudocs Format Reference](references/formats.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and document/file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or retrieve documents in formats including Markdown, DOCX, PDF, HTML, LaTeX, EPUB, plain text, and related document formats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Uploaded documents leave the local environment for Nudocs processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disclose the data boundary before upload and require explicit action-time confirmation for sensitive documents.
+
+Risk: Nudocs API keys and edit links can expose private documents if printed or shared.
+
+Mitigation: Keep API keys in protected local or CI secret storage, never place secrets in chat or command arguments, and treat returned edit links as private unless the user approves a separate sharing action.
+
+Risk: Deleting a remote document is destructive and recovery is not assumed.
+
+Mitigation: Resolve the exact document ID, show the delete semantics, obtain immediate approval, execute once, and verify the target is gone.
+
+## Reference(s):
+
+- [Nudocs Skill Page](https://clawhub.ai/jdrhyne/skills/nudocs)
+- [Nudocs CLI Source](https://github.com/PSPDFKit-labs/nudocs-cli)
+- [Nudocs](https://nudocs.ai)
+- [Nudocs CLI Formats](references/formats.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return private Nudocs edit links and exported document files through the installed CLI.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

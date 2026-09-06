@@ -1,46 +1,66 @@
-## Description: <br>
-Publishes prepared WeChat Official Account articles to drafts or submits them for release through the WeChat API, with credential checks, cover and image uploads, and pre-publish review steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes prepared WeChat Official Account articles to draft or submission workflows through the WeChat API, with cover upload, pre-publish checks, and draft/published mode controls.
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-Content operations teams, developers, and agents use this skill to move a prepared article directory into a WeChat Official Account draft or publishing workflow. It is intended for controlled release workflows where credentials, article assets, and publication mode are checked before the API call. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles live WeChat credentials and sends article files to an API endpoint. <br>
-Mitigation: Use a dedicated WeChat account, keep aws.env out of version control, and confirm the destination API base before running publishing commands. <br>
-Risk: A configurable API base or proxy could route credentials and content to an untrusted endpoint. <br>
-Mitigation: Allow only the official WeChat API endpoint or a trusted approved proxy, and review any configured API base before execution. <br>
-Risk: Publishing commands can create drafts or submit live content. <br>
-Mitigation: Run draft mode or an explicit dry run first, require confirmation before live publishing, and review the pre-publish checklist before marking the article complete. <br>
+## Use Case:
 
+External operators, automation teams, and developers use this skill to move finalized WeChat Official Account content into the official draft box or submit it for publication. It supports account selection, configuration checks, media upload, and status tracking for prepared article directories.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/aiworkskills/aws-wechat-article-publish) <br>
-- [Usage guide](references/usage.md) <br>
-- [Submit guide](references/submit-guide.md) <br>
-- [WeChat API reference](references/api-reference.md) <br>
-- [Pre-publish checklist](references/pre-publish-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration checks, and status updates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create WeChat drafts or submit live publishing requests when credentials, article assets, and publish mode are confirmed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.22 (source: server release evidence) <br>
+Risk: Configured custom API endpoints can receive WeChat secrets, access tokens, article content, and images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep WECHAT_N_API_BASE and wechat_api_base empty unless intentionally using a trusted HTTPS proxy, and verify the destination before running token, query, upload, full, or publish commands.
+
+Risk: The skill can move content from draft preparation into WeChat publication workflows.
+
+Mitigation: Prefer draft mode first, confirm account and publish_method configuration, and require explicit confirmation before submitting content for publication.
+
+Risk: WeChat credentials are expected in aws.env.
+
+Mitigation: Keep aws.env out of source control and use tightly scoped WeChat credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-publish)
+- [Publisher profile](https://clawhub.ai/user/aiworkskills)
+- [微信公众号 API 参考](references/api-reference.md)
+- [发布脚本用法](references/usage.md)
+- [提交到公众号](references/submit-guide.md)
+- [发布前检查清单](references/pre-publish-checklist.md)
+- [WeChat draft add API](https://developers.weixin.qq.com/doc/subscription/api/draftbox/draftmanage/api_draft_add)
+- [WeChat freepublish submit API](https://developers.weixin.qq.com/doc/subscription/api/public/api_freepublish_submit.html)
+- [WeChat add permanent material API](https://developers.weixin.qq.com/doc/subscription/api/material/permanent/api_addmaterial.html)
+- [WeChat upload article image API](https://developers.weixin.qq.com/doc/subscription/en/api/material/permanent/api_uploadimage)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON/YAML configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May issue WeChat API calls and update article status files when the user proceeds with publishing.]
+
+## Skill Version(s):
+
+1.0.23 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,68 @@
-## Description: <br>
-Helps English teachers design CSE-first, CEFR-referenced assessments across listening, speaking, reading, and writing, with learner profiles and intervention guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps English teachers design listening, speaking, reading, and writing assessments, map student ability with CSE as the primary standard and CEFR as a reference, and produce teaching intervention suggestions.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers and tutoring teams use this skill to plan four-skill assessments, map learner ability against CSE with CEFR as an international reference, draft learner profiles, and prepare teaching interventions for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student assessment profiles or CEFR/CSE levels could be written into downstream systems without clear confirmation or rollback. <br>
-Mitigation: Use read-only or draft-review mode for student records, anonymize learner identifiers, and require teacher approval of the exact level, profile, and intervention fields before any write-back. <br>
-Risk: Draft assessment guidance could be mistaken for final teacher scoring or ranking. <br>
-Mitigation: Keep outputs as teacher-reviewed assessment frameworks and ability profiles; do not use the skill to rank students or replace teacher scoring decisions. <br>
+## Use Case:
 
+External English teachers use this skill to turn class assessment inputs into four-skill assessment plans, student ability profiles, and follow-up teaching recommendations for upper-primary and middle-school learners.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment) <br>
-- [CEFR can-do statements](references/cefr-can-do-statements.md) <br>
-- [CEFR four-skill descriptors](references/cefr-four-skill-descriptors.md) <br>
-- [Four-skill rubric](references/four-skill-rubric.md) <br>
-- [Assessment template](references/assessment-template.md) <br>
-- [Student ability profile template](references/student-ability-profile-template.md) <br>
-- [Intervention suggestion sample](references/intervention-suggestion-sample.md) <br>
-- [English growth archive sample](references/english-growth-archive-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style assessment plans, learner profiles, rubrics, and intervention recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces draft CSE/CEFR mappings, four-skill profiles, and intervention fields for teacher review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may handle student assessment records in teacher-facing workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm platform consent controls before use, especially teacher writeback consent and cross-skill sharing controls.
+
+Risk: Broad trigger phrases could be mistaken for a formal assessment workflow.
+
+Mitigation: Ask a clarifying question before reading or writing class assessment records when the user's intent is ambiguous.
+
+Risk: Assessment outputs could be misleading if scores are treated as direct language-proficiency levels.
+
+Mitigation: Require teacher review against CSE descriptors for level judgments and present CEFR only as an international reference.
+
+Risk: Generated assessment items may be used before quality or authorization checks.
+
+Mitigation: Label AI-generated items and require teacher verification before adding them to a resource bank or test paper.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment)
+- [英语综合测评设计模板](references/assessment-template.md)
+- ["能做什么"语句与定级流程](references/cefr-can-do-statements.md)
+- [CEFR 4 维对照速查](references/cefr-four-skill-descriptors.md)
+- [英语 4 维综合评分细则](references/four-skill-rubric.md)
+- [学员能力画像模板](references/student-ability-profile-template.md)
+- [教学干预建议样板](references/intervention-suggestion-sample.md)
+- [Class teaching workspace schema](https://xiaozhi-skills.openclaw.dev/schemas/class-teaching-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration]
+
+**Output Format:** [Markdown guidance, templates, rubrics, and structured assessment recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference class assessment records when platform consent controls allow it; no executable payloads are disclosed in the release evidence.]
+
+## Skill Version(s):
+
+2.1.10 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

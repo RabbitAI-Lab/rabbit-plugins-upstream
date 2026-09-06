@@ -1,0 +1,23 @@
+# Generated live-board app (rebuilt on every `plandeck board`)
+.plandeck-board/
+**/.plandeck-board/
+
+# Plandeck continuity data (journal, snapshots, last-state cache)
+.plandeck/
+**/.plandeck/
+**/plan.yaml.corrupt
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local build/handoff scratch (never published)
+BUILD_STATE.md
+.plandeck-local/
+
+# Generated re-entry breadcrumb
+**/NEXT.md

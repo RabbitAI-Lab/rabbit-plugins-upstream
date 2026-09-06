@@ -1,20 +1,14 @@
 ---
 name: linux-kernel-crash-debug
-version: 1.3.2
-description: 使用 crash 工具和内存调试工具调试 Linux 内核崩溃。当用户提到 kernel crash、kernel panic、vmcore 分析、内核转储调试、crash utility、内核 oops 调试、分析内核崩溃转储文件、使用 crash 命令、定位内核问题根因、KASAN、Kprobes、Kmemleak、内存损坏、越界访问、释放后使用、内存泄漏检测时，使用此 skill。
+version: 1.4.3
+description: 使用证据优先的 vmcore 分析、crash 工具和内存/并发调试工具定位 Linux 内核崩溃。当用户提到 kernel crash、kernel panic、vmcore、内核转储、oops、pstore/ramoops、soft/hard lockup、hung task、OOM、回归二分、mutex owner、ARM64 锁指针反推、KASAN、KFENCE、KCSAN、Lockdep、drgn、Kprobes、Kmemleak、内存损坏、越界、UAF、数据竞争、死锁或内存泄漏时，使用此 skill。
 metadata:
   openclaw:
     requires:
       bins:
         - crash
-        - gdb
-        - readelf
-        - objdump
-        - makedumpfile
-        - kexec
-        - kdumpctl
-        - systemctl
-        - journalctl
+    os:
+      - linux
     homepage: https://github.com/crazyss/linux-kernel-crash-debug
 ---
 
@@ -56,24 +50,47 @@ crash vmlinux ddr.bin --ram_start=0x80000000
 
 ### 核心调试流程
 
+```console
+0. 保存校验和、vmcore-dmesg、build ID、模块、config 和内核命令行
+1. crash> sys              # 校验 release/build 与 panic 上下文
+2. crash> log              # 找最早异常，而不是只看最后一次 panic
+3. crash> bt / bt -a       # 对比 panic task 与所有活动 CPU
+4. crash> mod              # 确认故障模块符号完整
+5. crash> struct / kmem    # 验证具体的对象生命周期假设
+6. 搜索上游，并验证 good/bad 内核后再判定回归
 ```
-1. crash> sys              # 确认 panic 原因
-2. crash> log              # 查看内核日志
-3. crash> bt               # 分析调用栈
-4. crash> struct <type>    # 检查数据结构
-5. crash> kmem <addr>      # 内存分析
-```
+
+深入分析前先阅读 `references/evidence-first-workflow.md`。其中定义了证据
+质量门控、故障路由、假设账本、工具升级规则和根因报告模板。没有直接证据
+时，不要把 panic task、故障点、破坏点和根因当成同一件事。
+
+## 活系统安全契约
+
+默认只做离线、只读分析。凡是使用 `sudo`、装卸模块、修改启动项或服务、
+写 debugfs 或 `/proc/sys`、开启活系统 tracing、执行 SysRq，均视为修改活系统。
+
+- 只有用户明确授权具体主机与具体动作，并确认处于实验环境或已批准维护窗口
+  时才可执行；环境不明时，只完成只读检查并提供人工 runbook。
+- 经授权开启 tracing 或 detector 前，记录基线，限制目标与持续时间，选择受控
+  输出目录并给出清理/回滚命令；同一会话内完成清理并报告结果。
+- 尽量不采集函数参数和业务 payload。trace 与 vmcore 可能包含凭据、路径、密钥
+  和进程内存；未经明确批准和合规脱敏，不得上传或对外分享。
+- Agent 绝不能主动触发 panic、重启、SysRq crash 或 `kdumpctl test`。只能说明
+  前置条件，并把最终触发交给有授权的人，按已批准演练流程在具备控制台、备份、
+  业务疏散以及恢复/回滚方案的前提下操作。
 
 ## 🤖 Agent Execution Directives (Agent 专用执行戒律)
 如果您是使用本技能的 AI/Agent，**绝对不要尝试开启交互式的 `crash` 会话**（会导致沙盒阻塞和上下文溢出）。
 1. 使用项目内自带的封套工具 `./scripts/agent-crash.sh`，它完美映射了下方的调试流程并自带长输出断路器：
-   - `./scripts/agent-crash.sh -k vmlinux -c vmcore triage` - 三合板基础环境探伤 (`sys`, `log`, `bt`)。
+   - `./scripts/agent-crash.sh -k vmlinux -c vmcore triage` - 输出 `sys`、高信号日志索引、panic/全 CPU 栈和模块清单。
    - `./scripts/agent-crash.sh -k vmlinux -c vmcore flow-oom` - 自动聚合提取内存 OOM Top 占用。
    - `./scripts/agent-crash.sh -k vmlinux -c vmcore flow-deadlock` - 自动清洗空闲 CPU，仅抓取 UN 睡眠任务堆栈。
    - `./scripts/agent-crash.sh -k vmlinux -c vmcore dis-regs <func> <pid>` - 获取崩溃反汇编与现场寄存器值的组合视图。
    - `./scripts/agent-crash.sh -k vmlinux -c vmcore check-poison <addr>` - 特征码探测（检测 UAF、SLUB 等常见特征）。
 2. **底层降级策略 (Fallback Strategy)**：如果上面的宏指令排查不出结果，请通过 wrapper 执行标准内核调试命令：`./scripts/agent-crash.sh -k vmlinux -c vmcore run "rd ffff8800..."`。
 3. 如果您需要更高的专家视角，请查阅 `references/agentic-heuristics.md`（高阶内核黑客视角策略）。
+4. 遵循 `references/evidence-first-workflow.md`：报告符号/转储质量，定位最早
+   异常，保留竞争假设，并为结论给出置信度与证伪方法。
 
 ## 前置要求
 
@@ -83,14 +100,28 @@ crash vmlinux ddr.bin --ram_start=0x80000000
 | **vmcore** | kdump/netdump/diskdump/ELF 格式 |
 | **版本** | vmlinux 必须与 vmcore 内核版本完全匹配 |
 
-获取 debuginfo：
+按发行版安装工具与匹配的 debuginfo：
 ```bash
-# RHEL/CentOS
-yum install kernel-debuginfo
+# RHEL / CentOS / Rocky / AlmaLinux
+sudo dnf install crash gdb binutils makedumpfile kexec-tools
+sudo dnf debuginfo-install kernel-$(uname -r)
+
+# Debian / Ubuntu
+sudo apt install crash kdump-tools kexec-tools gdb binutils makedumpfile
+apt-cache search "linux-image-$(uname -r).*dbg\|linux-image-$(uname -r).*dbgsym"
+
+# SLES / openSUSE
+sudo zypper install crash kexec-tools makedumpfile
+sudo zypper install yast2-kdump
+zypper se -s 'kernel*debug*'
 
 # 自编译内核
 make menuconfig  # 启用 CONFIG_DEBUG_INFO
 ```
+
+ClawHub 元数据只把所有路径都需要的 `crash` 声明为硬依赖。`kdumpctl`
+（RHEL 系）、`kdump-config`（Debian 系）、YaST 和其他分析工具按发行版与任务
+安装，不能作为跨发行版的全局必需命令。
 
 ## 核心命令速查
 
@@ -177,18 +208,18 @@ crash> < commands.txt
 
 | 维度 | x86_64 | ARM64 |
 |------|--------|-------|
-| crash 命令 | `crash vmlinux vmcore` | `crash_arm64 ... -m ... vmlinux vmcore` |
-| KASLR | VMCOREINFO 自动处理 | 必须传 `-m kaslr=<偏移>` |
-| 虚拟地址位宽 | 固定 | 必须传 `-m vabits_actual=<位数>` |
-| 物理基地址 | `phys_base`（VMCOREINFO）| 必须传 `-m phys_offset=<地址>` |
-| VA-PA 偏移 | `__START_KERNEL_map` 固定映射 | 必须传 `-m kimage_voffset=<值>` |
+| crash 命令 | `crash vmlinux vmcore` | 先用 `crash vmlinux vmcore`，恢复场景再加 `-m` |
+| KASLR | 通常由 VMCOREINFO 自动处理 | 通常自动处理；raw/元数据损坏时才推导 `-m kaslr=<偏移>` |
+| 虚拟地址位宽 | 对当前构建固定 | VMCOREINFO 优先；`-m vabits_actual=<位数>` 是回退 |
+| 物理基地址 | `phys_base`（VMCOREINFO）| VMCOREINFO 优先；`-m phys_offset=<地址>` 是回退 |
+| VA-PA 偏移 | `__START_KERNEL_map` 固定映射 | VMCOREINFO 优先；`-m kimage_voffset=<值>` 是回退 |
 | 帧指针 | RBP（常被 `-fomit-frame-pointer` 优化掉）| FP (x29) 显式保存 |
 | 调用约定 | RDI/RSI/RDX/RCX/R8/R9 | X0-X7 |
 
 > **完整的 ARM64 地址参数推导**，见 `references/arm64-crash-params.md`
 > **kdump 端到端配置手册**，见 `references/kdump-setup-guide.md`
 
-### ARM64 Crash 命令模板
+### ARM64 raw/元数据损坏转储的回退模板
 
 ```bash
 crash_arm64 \
@@ -199,7 +230,9 @@ crash_arm64 \
   vmlinux vmcore
 ```
 
-> 默认 `kaslr=0` 表示 KASLR 关闭。可根据 `/proc/kallsyms` 或 VMCOREINFO 调整。
+> 首先尝试 `crash vmlinux vmcore`。仅在 VMCOREINFO 缺失/损坏或输入为 raw
+> RAM 时显式传值；`kaslr=0` 表示 KASLR 确实关闭，不能默认假设，更不能复用
+> 另一次启动的参数。
 
 ## 典型调试场景
 
@@ -240,43 +273,34 @@ crash> bt -r                  # 原始栈数据
 
 ## 高级技巧
 
-### 从栈回溯推导锁指针（ARM64 专用）
+### 从汇编和栈帧恢复锁指针与 mutex owner（ARM64）
 
-> **来源**：[Kernel panic 实验室 - Kernel panic 实战之读写锁推导](https://mp.weixin.qq.com/s/szDQ9wOJDwcWo2AStiikPw)
+> **来源**：[mutex lock 指针定位](https://mp.weixin.qq.com/s/HueZ8rFiOeZ1cwZK1XPHww)与[读写锁推导](https://mp.weixin.qq.com/s/szDQ9wOJDwcWo2AStiikPw)，Kernel Panic Lab。
 
-当任务阻塞在某个锁上时，可以通过读取栈中的 callee-saved 寄存器反推锁地址：
+任务阻塞在 `mutex_lock()` 或 rwsem 慢路径时，先在调用点追踪 ARM64 第一个参数 `x0`：
 
 ```
-# 1. 从 bt 输出中找到 FP（帧指针，方括号中的值）
-crash> bt
-PID: 1234
-#3 [fffffc09c4f3ab0] schedule_preempt_disable
-#4 [fffffc09c4f3b30] rwsem_down_write_slowpath
-#5 [fffffc09c4f3b90] down_write
+# 路径一：直接构造全局锁地址
+    adrp x0, 0xffffffc00ac1e000
+    add  x0, x0, #0x7f0         # lock = 页基址 + 页内偏移
+    bl   mutex_lock
 
-# 2. 反汇编调用者，定位锁指针如何传入
-crash> dis -xl down_write
-    mov  x0, x19                # x0 = x19（锁指针）
-    mov  w1, #0x2
-    bl   rwsem_down_write_slowpath
+# 路径二：调用者通过 callee-saved 寄存器传参
+    mov  x0, x19                # 锁指针就是栈中保存的 x19
+    bl   mutex_lock
+# 从实际反汇编找到 "add x29, sp, #N" 和 "stp/str ..., x19, [sp,#M]"，
+# 由 FP 反推 SP，再用 rd 读取 x19 对应的栈槽。
 
-# 3. 反汇编被调者，定位 x19 在哪里压栈
-crash> dis -xl rwsem_down_write_slowpath
-    stp  x20, x19, [sp, #176]   # x19 存在 sp+176
-
-# 4. 从 FP 推算 SP：SP = FP - 0x60（来自 "add x29, sp, #0x60"）
-#    rwsem_down_write_slowpath FP = 0xfffffc09c4f3b30
-#    SP = 0xfffffc09c4f3b30 - 0x60 = 0xfffffc09c4f3ad0
-
-# 5. 读 x19：SP + 176 = 0xfffffc09c4f3b88
-crash> rd 0xfffffc09c4f3b88
-    fffffc09c4f3b88:  fffff80f78b0b00    ← 这就是锁地址！
-
-# 6. 检查锁
-crash> struct rw_semaphore fffff80f78b0b00 -x
+crash> struct mutex <lock_addr> -x
+# 常见内核的 mutex.owner 低 3 位是状态标志：
+# owner_task = owner.counter & ~0x7
+crash> struct task_struct <owner_task>
+crash> bt <owner_pid>
 ```
 
-**原理**：AArch64 ABI 中 x19-x28 是 callee-saved，被调函数必须先压栈才能使用。从反汇编找到保存位置，就能在栈里读出原值。
+`stp x20, x19, [sp,#32]` 把 `x20` 保存到 `sp+32`，把 `x19` 保存到 `sp+40`。不要照搬示例偏移；必须使用 vmcore 匹配的 `vmlinux` 重新推导，并核对当前内核的 mutex 布局和 owner flag 定义。
+
+> FP/SP 精确计算、`stp` 槽位顺序、owner mask 和失败检查见 `references/arm64-lock-analysis.md`；完整 rwsem 案例见 `references/case-studies.md` Case 11。
 
 > **x86_64 等价方案**：使用 RBP 链 + `bt -f`。注意 `-fomit-frame-pointer` 优化会导致此方法失败，此时改用 `bt -F` 或显式栈帧定位。
 
@@ -285,6 +309,9 @@ crash> struct rw_semaphore fffff80f78b0b00 -x
 > **来源**：[Kernel panic 实验室 - Kernel driver 内存泄露问题排查指南](https://mp.weixin.qq.com/s/RER260p6MN5NmymYdyKn0g)
 
 三条独立诊断路径：
+
+第一条路径只读；启用 `page_owner` 或写 kmemleak 控制接口会改变活内核状态，
+必须遵循上面的安全契约。清空 detector 状态前先保存当前输出。
 
 ```
 # === 第一层：/proc 三件套（读运行系统或捕获信息）===
@@ -302,8 +329,8 @@ cat /sys/kernel/debug/slab/kmalloc-512/free_traces
 # === 第三层：>8K 的大块分配（page_owner）===
 # SUnreclaim 上涨但 slabinfo 平稳 → kmalloc > 8K 走 alloc_pages 路径
 # 启用 CONFIG_PAGE_OWNER + bootargs 加 page_owner=on
-# 然后：
-echo 1 > /sys/kernel/debug/page_owner/enable
+# 如果 page_owner 尚未启用，使用已批准的维护 runbook；
+# 不要在自动分诊过程中临时开启。
 # 周期性抓 snapshot，对比：
 ./page_owner_sort --cull name,ator,stacktrace page_owner_begin.txt > begin.txt
 ./page_owner_sort --cull name,ator,stacktrace page_owner_end.txt   > end.txt
@@ -348,6 +375,8 @@ crash> list -h <addr> -s dentry.d_name.name
 | `references/case-studies.md` | 详细调试案例：kernel BUG、死锁、OOM、NULL指针、栈溢出 |
 | `references/kdump-setup-guide.md` | **新增** kdump 端到端配置（x86_64 + ARM64 双架构、crashkernel 语法、sysrq 触发） |
 | `references/arm64-crash-params.md` | **新增** ARM64 专用 crash 地址参数（vabits_actual、phys_offset、kimage_voffset、kaslr） |
+| `references/arm64-lock-analysis.md` | ARM64 mutex/rwsem 锁指针的汇编与栈恢复，以及 mutex owner 解码 |
+| `references/evidence-first-workflow.md` | **新增** 证据门控、时间线、故障路由、工具升级、回归验证和根因报告模板 |
 | `references/sources.md` | **新增** 完整的参考资料引用列表（含微信公众号、kernel.org、邮件列表） |
 
 使用方式：
@@ -375,6 +404,8 @@ crash: cannot resolve symbol
 2. **调试信息**: 必须使用带 debug symbols 的 vmlinux
 3. **上下文意识**: `bt`, `files`, `vm` 等命令受当前上下文影响
 4. **活系统修改**: `wr` 命令会修改运行中的内核，极其危险
+5. **Tracing 与 detector**: 必须明确授权、限制采集范围和时间，并在同一会话清理
+6. **主动 panic**: 仅限有控制台和恢复方案的人工批准演练，Agent 不得执行
 
 ## 资源
 

@@ -1,45 +1,63 @@
-## Description: <br>
-A physics study aid that classifies mistakes into five error dimensions, tracks recurring weak areas, and produces physics error maps and weak-area reports while coordinating with a general correction notebook. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes middle-school physics mistakes into physics-specific error dimensions, subtype labels, weak-point profiles, and student-facing reports.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-assistant agents use this skill to diagnose physics mistakes, distinguish diagram, concept, formula, process, and math-tool errors, and turn repeated errors into targeted weak-area tracking and review reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill keeps structured physics mistake records and may share summaries with named learning companion skills. <br>
-Mitigation: Use the skill only when users are comfortable with that recordkeeping and summary sharing, and follow the artifact's consent boundaries for long-term archives, reminders, and companion-skill handoffs. <br>
-Risk: Weak-area labels could overstate a student's long-term difficulty if repeated errors are treated as permanent. <br>
-Mitigation: Combine repeated-error signals with verification or student confirmation before marking a persistent weak area, as described in the artifact behavior. <br>
+## Use Case:
 
+External learners, guardians, and education agents use this skill to identify recurring root causes in middle-school physics mistakes, distinguish physics-picture issues from concept, formula, process, and math-tool errors, and produce weak-point summaries or monthly reports.
 
-## Reference(s): <br>
-- [Physics Error Dimension Table](references/physics-error-dimension-table.md) <br>
-- [Physics Concept Confusion Map](references/physics-concept-confusion-map.md) <br>
-- [Physics Math Tools Checklist](references/physics-math-tools-checklist.md) <br>
-- [Physics Diagram Guide](references/physics-diagram-guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include physics error classifications, weak-area summaries, practice guidance, monthly reports, and handoff summaries for companion learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill records and analyzes student learning-profile data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only with clear student and guardian consent requirements, profile deletion/export controls, and cross-skill or parent-sharing controls enabled.
+
+Risk: A student may express self-harm, severe distress, bullying, or other crisis signals while discussing physics anxiety.
+
+Mitigation: Stop the tutoring and profile-analysis flow, state the AI boundary, and route the student to trusted adults and localized crisis-support channels.
+
+Risk: Weak-point conclusions may be misleading when based on too few mistakes or unavailable history.
+
+Mitigation: Mark conclusions as sample-insufficient when data is limited and avoid historical counts unless the platform provides them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna)
+- [Publisher Profile](https://clawhub.ai/user/qizhitang)
+- [物理错因维度表](references/physics-error-dimension-table.md)
+- [物理高频概念混淆对照表](references/physics-concept-confusion-map.md)
+- [物理数学工具自检清单](references/physics-math-tools-checklist.md)
+- [四类物理图景绘制追问手册](shared/physics-diagram-guide.md)
+- [全库统一词表](shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured text, with JSON-compatible profile and handover fields when records are stored by the platform.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable payloads; long-term profiles, reminders, and parent-facing summaries depend on consent and available platform memory.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

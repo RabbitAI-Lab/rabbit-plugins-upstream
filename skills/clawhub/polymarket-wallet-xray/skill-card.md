@@ -1,47 +1,60 @@
-## Description: <br>
-X-ray any Polymarket wallet for skill level, entry quality, bot detection, and edge analysis using public Polymarket market and trade data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+X-ray any Polymarket wallet for skill level, entry quality, bot detection, and edge analysis using public Polymarket trade data.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Polymarket wallet trading behavior, compare wallet profiles, identify bot-like or anomalous activity, and inform their own research without treating the output as trading advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports conflicting guidance about authentication and notes authenticated Simmer account access. <br>
-Mitigation: Do not provide SIMMER_API_KEY unless the user intentionally wants the skill to access Simmer account portfolio and position data. <br>
-Risk: The skill can produce copytrading-oriented recommendations that may be mistaken for financial advice. <br>
-Mitigation: Treat results as unsupported analysis for research and learning; require independent judgment before any trading decision. <br>
-Risk: Documentation mentions live-trading risk while the reviewed analyzer appears mostly read-only, creating ambiguity about operational behavior. <br>
-Mitigation: Review commands and flags before execution, avoid live or automated trading workflows unless the behavior is explicitly understood, and start with dry-run or paper-mode workflows when available. <br>
+## Use Case:
 
+External users and developers use this skill to analyze Polymarket wallet trade history, compare trader behavior, identify bots or anomalies, and study entry quality and risk profile. It supports research and strategy evaluation, not automated copy-trading or financial advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/simmer/polymarket-wallet-xray) <br>
-- [Simmer API reference](https://docs.simmer.markets/api/overview) <br>
-- [Original forensic trading analysis](https://x.com/thejayden/status/2020891572389224878) <br>
-- [Polymarket Gamma API](https://gamma-api.polymarket.com/markets/keyset) <br>
-- [Polymarket CLOB API](https://clob.polymarket.com) <br>
-- [Polymarket Data API](https://data-api.polymarket.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Human-readable console or Markdown summaries, with optional JSON output for scripted use.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include wallet profitability metrics, entry-quality ratings, bot-detection signals, risk profile, comparison results, and recommendation text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata and skill metadata) <br>
+Risk: The package asks for a Simmer API key and includes account-status functionality that can query private account balances and positions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the public wallet analysis without a Simmer API key when account-status checks are not needed; only set SIMMER_API_KEY when intentionally querying a Simmer account, and rotate or remove the key after use.
+
+Risk: Wallet metrics and recommendation text could be mistaken for financial advice or used for blind copy-trading.
+
+Mitigation: Treat results as research signals only; independently validate conclusions, avoid automated copy-trading, and use conservative paper testing before any live strategy.
+
+Risk: Public trade-history APIs may be incomplete, rate-limited, or unavailable, which can produce partial wallet analysis.
+
+Mitigation: Check for warnings in the output, limit analysis size when rate-limited, and avoid making decisions from incomplete or stale data.
+
+## Reference(s):
+
+- [Simmer API Reference](https://docs.simmer.markets/api/overview)
+- [Original Polymarket wallet analysis framework](https://x.com/thejayden/status/2020891572389224878)
+- [Polymarket CLOB API](https://clob.polymarket.com)
+- [Polymarket Data API](https://data-api.polymarket.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Console text or JSON analysis with wallet metrics, plus setup and command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include profitability, entry quality, bot-detection, edge-detection, risk-profile, and recommendation fields.]
+
+## Skill Version(s):
+
+1.1.5 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

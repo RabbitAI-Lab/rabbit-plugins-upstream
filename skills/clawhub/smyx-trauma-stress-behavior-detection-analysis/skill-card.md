@@ -1,44 +1,64 @@
-## Description: <br>
-Analyzes fixed-camera video from emergency shelters or temporary resettlement sites to detect visual acute-stress behavior signals and produce psychological-crisis alerts for authorized response teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera video from emergency shelters or temporary resettlement sites to identify visual behavior signals associated with acute stress, such as stupor, tremor, unresponsiveness, and hypervigilance, and returns crisis alerts for human responder review.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External emergency-command teams and authorized psychological-rescue staff use this skill to analyze shelter video, locate visual behavior signals such as prolonged motionlessness, tremor, unresponsiveness, or hypervigilance, and review crisis alerts before dispatch. The skill is intended to support field triage and reporting, not to provide clinical diagnosis or medication guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China; reviewers should confirm jurisdictional fit before use elsewhere. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive shelter footage and mental-health-adjacent reports. <br>
-Mitigation: Deploy only in an authorized emergency-response environment with a clear legal basis, operator approval, privacy controls, and role-based access to reports. <br>
-Risk: Automatic identity creation, token persistence, and history access may create account-linkage and retention risk. <br>
-Mitigation: Confirm where video and reports are sent, who can access historical reports, how long raw footage and derived records are retained, and whether automatic identity creation is acceptable before deployment. <br>
-Risk: Behavioral alerts could be mistaken for clinical diagnoses or trigger unnecessary escalation. <br>
-Mitigation: Require human review before high-risk dispatch, present results as visual behavior observations only, and keep clinical assessment and medication decisions with qualified responders. <br>
+## Use Case:
 
+Emergency command-center teams and authorized psychological-rescue responders use this skill to review shelter video, locate people showing potential acute stress behaviors, and prioritize follow-up support. Outputs are behavior observations and response guidance, not clinical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-trauma-stress-behavior-detection-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+China; adapt legal, privacy, and emergency-response procedures before use in other jurisdictions.
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, JSON, files, guidance] <br>
-**Output Format:** [Markdown text containing structured JSON-style analysis results, report links, and optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include crisis level, zone or relative location, temporary tracking ID, responder dispatch suggestion, PFA quick reference, referral resources, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Sensitive shelter video and mental-health-related behavior inferences may affect vulnerable disaster survivors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in an authorized emergency-response setting with a documented consent or legal basis, privacy safeguards, face blurring for shared displays, and human review.
+
+Risk: Submitted media, video URLs, and report history queries are sent to configured remote services.
+
+Mitigation: Submit only approved emergency-scene media, document the remote endpoints in deployment review, and avoid embedding secrets or private identifiers in URLs.
+
+Risk: The skill may create or reuse an internal user identity and store service tokens locally.
+
+Mitigation: Run in a controlled workspace, restrict local file access, rotate any service tokens, and clear stored identity or token files after the response workflow when policy requires it.
+
+Risk: False positives or overconfident interpretation could cause inappropriate escalation in an emergency scene.
+
+Mitigation: Treat outputs as visual behavior observations only; require qualified human review before dispatch escalation, diagnosis, or intervention.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-trauma-stress-behavior-detection-analysis)
+- [Publisher profile](https://clawhub.ai/user/18072937735)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON structured report with alert details, response guidance, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save report output to a local file when requested; analysis and report history queries use configured remote services.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

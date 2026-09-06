@@ -1,44 +1,60 @@
-## Description: <br>
-Dida365 (dida365.com) skill for reading, creating, updating, and deleting Dida365 data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dida365 helps an agent read, create, update, move, complete, delete, and filter Dida365 tasks, projects, habits, and habit check-ins through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Dida365 tasks, projects, and habits through an OOMOL-connected account, including read, write, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can change or remove Dida365 tasks, projects, or habit data. <br>
-Mitigation: Confirm the exact payload, target identifiers, and user approval before running actions tagged write or destructive. <br>
-Risk: Using the skill requires installing or signing into the OOMOL oo CLI and connecting a Dida365 account. <br>
-Mitigation: Approve setup only when the user trusts OOMOL and intends to let an agent manage Dida365 data through that connection. <br>
-Risk: Connector inputs may differ by action or change over time. <br>
-Mitigation: Fetch the live action schema with the oo CLI before constructing each payload. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent operate a connected Dida365 account for task, project, and habit workflows. It supports read-only lookups as well as reviewed state-changing actions such as creating tasks, moving tasks, completing tasks, and deleting projects or tasks.
 
-## Reference(s): <br>
-- [Dida365 homepage](https://dida365.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-dida365) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Write actions can change tasks, projects, habits, or scheduling data in the connected Dida365 account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and expected effect with the user before running create, update, move, completion, or habit check-in actions.
+
+Risk: Delete actions can remove task or project data.
+
+Mitigation: Get explicit approval for the target project or task before running delete_project or delete_task.
+
+Risk: Setup, account-connection, and billing commands can start account linking or payment-related flows.
+
+Mitigation: Only run setup, connection, or billing commands after a command fails with the matching auth, connection, scope, expiration, app, or credit error.
+
+## Reference(s):
+
+- [ClawHub Dida365 skill listing](https://clawhub.ai/oomol/skills/oo-dida365)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Dida365 homepage](https://dida365.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action results are JSON responses containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

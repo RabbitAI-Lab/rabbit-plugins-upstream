@@ -1,40 +1,59 @@
-## Description: <br>
-Prepares Dataify builder requests for the github.com scraper family rooted at github_repository_by-repo-url, including tool selection, saved parameter lookup, and a curl request that uses DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured GitHub repository information from one or more known repository URLs; do not use for GitHub code search or arbitrary webpages.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to prepare Dataify builder curl requests for GitHub repository scraping workflows after selecting one supported scraper tool and supplying any required values. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated curl command sends selected scraper parameters to Dataify and uses a bearer token from the local environment. <br>
-Mitigation: Keep DATAIFY_API_TOKEN private, review values.json before generating requests, and run the curl command only when the selected parameters are intended for Dataify. <br>
+## Use Case:
 
+Developers and external users use this skill to prepare and run Dataify Builder requests for collecting structured data from known GitHub repository URLs, then wait for and return the collected result.
 
-## Reference(s): <br>
-- [Dataify skill page](https://clawhub.ai/dataify-server/skills/dataify-github-repository-by-repo-url) <br>
-- [Saved Dataify tool parameter catalog](references/tool-params.json) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with a curl command and setup instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces user-directed requests for Dataify's builder API and relies on DATAIFY_API_TOKEN from the user's environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The security summary says the workflow broadens a repository-URL skill into GitHub URL/search collection using an external API token and paid task submission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use repository URL collection by default and require explicit confirmation before running search URL or generic URL modes or any scope that materially changes credit use.
+
+Risk: The skill sends GitHub targets to Dataify using DATAIFY_API_TOKEN.
+
+Mitigation: Verify only that DATAIFY_API_TOKEN is present, never print or ask users to paste the token, and run only user-approved collection targets.
+
+Risk: Interrupted monitoring can lead to accidental duplicate paid submissions if the original task is resubmitted.
+
+Mitigation: Capture and return the task ID with a resume command whenever monitoring times out or is interrupted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-github-repository-by-repo-url)
+- [Tool parameter catalog](artifact/references/tool-params.json)
+- [Dataify Builder API endpoint](https://scraperapi.dataify.com/builder)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown with shell commands and JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command if monitoring times out or is interrupted.]
+
+## Skill Version(s):
+
+1.3.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

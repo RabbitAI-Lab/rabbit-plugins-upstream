@@ -1,10 +1,10 @@
 ---
 name: image-with-comfyui
-description: 'Call a local ComfyUI instance for text-to-image (T2I), image-to-image/edit (I2I), and image-to-video (I2V) generation. Supports Z-Image, SD3.5 Medium, Qwen Image Edit, and Wan2.2 models with automatic prompt formatting and VRAM purge after run.'
+description: 'Use to generate, edit, or animate images and videos through a local ComfyUI server — trigger with requests like "make a picture of", "replace the background", "turn this into a video", or "edit my photo". Call a local ComfyUI instance for text-to-image (T2I) via Z-Image or SD3.5 Medium, image-to-image edits (I2I) via Qwen Image Edit, and image-to-video (I2V) via Wan2.2. Automatic prompt formatting, missing-node/model detection, VRAM purge after run, and image-first mode (user sends an image, then a text edit request within 2 minutes).'}
 metadata:
   openclaw:
     emoji: "🎨"
-    version: "1.5.0"
+    version: "1.7.0"
     requires:
       anyBins: ["python3"]
     config:

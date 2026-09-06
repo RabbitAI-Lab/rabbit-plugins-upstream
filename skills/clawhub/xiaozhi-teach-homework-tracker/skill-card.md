@@ -1,48 +1,67 @@
-## Description: <br>
-作业跟进管家 helps independent teachers manage the full homework lifecycle from assignment tracking through completion status, error reflow, persistent weakness flags, next-lesson diagnosis, and student homework profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers track assigned homework through submission status, error dimensions, correction follow-up, and next-lesson diagnosis while leaving grading, messaging, and lesson logging to the teacher or related skills.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to track homework status, route errors back into teaching decisions, and prepare next-lesson diagnostic guidance from homework evidence. The skill supports pseudonymous student records and coordinates with related teaching workspace skills for assignment design, student analysis, lesson logs, dashboards, and parent communication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Homework tracking can expose student privacy if real names, contact details, full answers, or family supervision details are entered. <br>
-Mitigation: Use pseudonymous records, avoid unnecessary sensitive details, and confirm workspace consent settings before profile creation or cross-skill sharing. <br>
-Risk: Automated homework chasing or grading could create inappropriate teacher, student, or parent interactions. <br>
-Mitigation: Keep reminder and parent-contact actions teacher-led, and keep scoring decisions with the teacher rather than the skill. <br>
-Risk: Shared workspace records can carry incorrect or overly sensitive status information into other teaching workflows. <br>
-Mitigation: Record only low-sensitivity progress fields and use the documented view, correct, delete, pause-recording, and cross-skill sharing controls when records need adjustment. <br>
+## Use Case:
 
+External independent teachers use this skill to record homework tasks, monitor seven allowed status values, classify homework errors into shared dimensions, and prepare concise next-lesson follow-up. It is designed for Chinese K12 tutoring workflows where student aliases, consent checks, and teacher confirmation are expected.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker) <br>
-- [作业状态追踪模板](references/homework-status-template.md) <br>
-- [作业完成度追踪视图模板](references/completion-tracking-views.md) <br>
-- [错题回流清单模板](references/error-reflow-checklist-template.md) <br>
-- [顽固弱项档案模板](references/persistent-weakness-file-template.md) <br>
-- [下节课预诊断输出模板](references/pre-diagnosis-output-template.md) <br>
-- [学员作业画像模板](references/student-homework-profile-template.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; localize curriculum assumptions, consent requirements, and crisis referral channels before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports and structured workspace update guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses templates for homework status, completion tracking, error reflow, pre-diagnosis, persistent weakness records, and student homework profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill handles minor-student homework records, weakness evidence, consent-sensitive sharing, export, and deletion flows that the bundled artifacts cannot enforce by themselves.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on a platform with separate identity checks, consent controls, and fail-closed permissions for profile creation, parent-facing output, cross-skill sharing, export, and deletion.
+
+Risk: Teacher-facing homework profiles and next-lesson summaries could expose student progress information beyond the intended audience.
+
+Mitigation: Use aliases in views, keep outputs factual, and require verified consent before any parent-facing or cross-skill sharing.
+
+Risk: AI-generated verification or practice items may be incorrect if reused without review.
+
+Mitigation: Apply the bundled AI item self-check protocol and require teacher validation before adding generated items to a resource library or giving them to students.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker)
+- [Completion tracking views](references/completion-tracking-views.md)
+- [Error reflow checklist template](references/error-reflow-checklist-template.md)
+- [Persistent weakness file template](references/persistent-weakness-file-template.md)
+- [Pre-diagnosis output template](references/pre-diagnosis-output-template.md)
+- [Student homework profile template](references/student-homework-profile-template.md)
+- [Unified vocabulary](shared/vocab.md)
+- [Platform conventions](shared/platform-conventions.md)
+- [Solo teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+- [AI item check protocol](shared/ai-item-check.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown or structured text with optional JSON-like field snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is required before persistent weakness updates; the skill does not grade homework, send reminders, or contact parents.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

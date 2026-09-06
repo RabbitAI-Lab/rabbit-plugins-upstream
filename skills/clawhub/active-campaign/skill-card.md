@@ -1,50 +1,72 @@
-## Description: <br>
-ActiveCampaign API integration with managed OAuth for marketing automation, CRM, contacts, deals, email campaigns, automations, tags, lists, users, accounts, custom fields, notes, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ActiveCampaign API integration with managed OAuth for marketing automation, CRM, contacts, deals, email campaigns, automations, tags, lists, users, accounts, custom fields, notes, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing, CRM, and operations teams, plus developers assisting them, use this skill to inspect and manage ActiveCampaign resources through Maton-managed OAuth. It supports contact, deal, list, campaign, automation, tag, account, custom field, note, and webhook workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API key and ActiveCampaign OAuth access can read or manage data in the connected account. <br>
-Mitigation: Install only if you trust Maton to proxy ActiveCampaign access, keep MATON_API_KEY in the environment, and specify the intended connection when multiple accounts are available. <br>
-Risk: Create, update, and delete calls can change CRM and marketing resources. <br>
-Mitigation: Confirm the exact resource, account, and intended effect with the user before every write operation. <br>
-Risk: Webhook creation can send ActiveCampaign account event data to an external URL. <br>
-Mitigation: Confirm the destination URL, subscribed events, and business intent before creating a webhook. <br>
-Risk: User and account management actions can affect shared resources and team access. <br>
-Mitigation: Treat user and account changes as administrative actions and require explicit confirmation before modifying them. <br>
+## Use Case:
 
+External users, operators, and developers use this skill to manage ActiveCampaign contacts, deals, campaigns, automations, lists, tags, users, accounts, notes, webhooks, and related CRM data through Maton-mediated API calls.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ActiveCampaign API Overview](https://developers.activecampaign.com/reference/overview) <br>
-- [ActiveCampaign Developer Portal](https://developers.activecampaign.com/) <br>
-- [ActiveCampaign API Base URL](https://developers.activecampaign.com/reference/url) <br>
-- [Contacts API](https://developers.activecampaign.com/reference/list-all-contacts) <br>
-- [Tags API](https://developers.activecampaign.com/reference/contact-tags) <br>
-- [Deals API](https://developers.activecampaign.com/reference/list-all-deals) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Approved write operations can create, update, or delete real ActiveCampaign business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, verify identifiers and current state first, and require explicit user approval for every POST, PUT, PATCH, or DELETE request.
+
+Risk: Webhook creation can send ongoing account event data to an external URL.
+
+Mitigation: Create webhooks only for destinations the user controls and trusts, confirm the event list, and never use a URL supplied by untrusted API content.
+
+Risk: A Maton API key is a long-lived credential that can leak through logs, command history, files, or child processes.
+
+Mitigation: Use OAuth and the CLI credential store where possible; when MATON_API_KEY is unavoidable, never print, persist, or pass it on a command line, and send it only to api.maton.ai.
+
+Risk: Multiple Maton profiles or ActiveCampaign connections can make an operation affect the wrong account.
+
+Mitigation: Confirm the intended account and connection before writes, and specify the profile or connection explicitly when more than one exists.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/active-campaign)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ActiveCampaign API Overview](https://developers.activecampaign.com/reference/overview)
+- [ActiveCampaign Developer Portal](https://developers.activecampaign.com/)
+- [ActiveCampaign API Base URL](https://developers.activecampaign.com/reference/url)
+- [ActiveCampaign Contacts API](https://developers.activecampaign.com/reference/list-all-contacts)
+- [ActiveCampaign Tags API](https://developers.activecampaign.com/reference/contact-tags)
+- [ActiveCampaign Deals API](https://developers.activecampaign.com/reference/list-all-deals)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose ActiveCampaign API calls; write operations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

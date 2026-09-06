@@ -1,0 +1,170 @@
+{
+  "infographic_id": "fishbone_conversion_drop_demo",
+  "intent": "diagnose",
+  "chart_family": "fishbone",
+  "language": "zh-CN",
+  "audience": "sales ops and growth team",
+  "source_summary": "分析官网试用注册转化率下降的可能原因，并形成鱼骨图。",
+  "message": {
+    "title": "试用转化率下降鱼骨分析",
+    "subtitle": "快速对齐可能原因与优先排查路径",
+    "core_takeaway": "先查流量质量、注册流程和产品首次成功，再看销售跟进与定价沟通。",
+    "cta": "优先验证过去两周的流量结构变化与注册页面漏斗。"
+  },
+  "layout": {
+    "layout_mode": "spine-branch",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "16:9",
+    "reading_order": "left-to-right",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "ops-diagnosis",
+    "palette_mode": "duo",
+    "emphasis_style": "technical",
+    "brand_colors": ["#1F3A5F", "#F97316"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "鱼骨图",
+      "content": "从多个维度拆解转化下滑原因。",
+      "visual_role": "primary",
+      "icon_hint": "bone",
+      "must_include": ["主标题", "水平主骨"],
+      "avoid": ["多余装饰"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_focus",
+      "block_type": "summary",
+      "title": "优先排查",
+      "content": "流量质量、注册流程、首次成功体验。",
+      "visual_role": "primary",
+      "icon_hint": "search",
+      "must_include": ["高亮摘要"],
+      "avoid": ["模糊结论"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "effect_conversion_drop",
+      "block_type": "effect",
+      "title": "结果：试用转化率下降",
+      "content": "近两周从 14% 下降到 8%。",
+      "visual_role": "primary",
+      "icon_hint": "alert-triangle",
+      "must_include": ["鱼头结果节点"],
+      "avoid": ["堆叠多个结果"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "cause_channel_quality",
+      "block_type": "cause",
+      "title": "流量质量",
+      "content": "低意向投放增多，品牌词流量下滑。",
+      "visual_role": "secondary",
+      "group_id": "top_branch",
+      "icon_hint": "target",
+      "must_include": ["渠道类原因"],
+      "avoid": ["堆太多数据"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "cause_signup_flow",
+      "block_type": "cause",
+      "title": "注册流程",
+      "content": "字段变多，手机号验证失败率升高。",
+      "visual_role": "secondary",
+      "group_id": "top_branch",
+      "icon_hint": "form-input",
+      "must_include": ["流程类原因"],
+      "avoid": ["技术细节过深"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "cause_activation_gap",
+      "block_type": "cause",
+      "title": "首次成功",
+      "content": "新用户导入数据与模板引导不顺畅。",
+      "visual_role": "secondary",
+      "group_id": "bottom_branch",
+      "icon_hint": "rocket",
+      "must_include": ["激活体验"],
+      "avoid": ["空泛表达"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "cause_sales_followup",
+      "block_type": "cause",
+      "title": "销售跟进",
+      "content": "MQL 交接慢，未在 24 小时内触达。",
+      "visual_role": "secondary",
+      "group_id": "bottom_branch",
+      "icon_hint": "phone-call",
+      "must_include": ["销售动作"],
+      "avoid": ["分支过多"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "cause_pricing_message",
+      "block_type": "cause",
+      "title": "定价沟通",
+      "content": "套餐差异不清晰，试用价值感不足。",
+      "visual_role": "secondary",
+      "group_id": "bottom_branch",
+      "icon_hint": "badge-dollar-sign",
+      "must_include": ["定价相关"],
+      "avoid": ["多个结论混写"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "note_next_step",
+      "block_type": "note",
+      "title": "下一步",
+      "content": "先用 3 天完成流量、注册、首次成功三条验证。",
+      "visual_role": "supporting",
+      "icon_hint": "clipboard-check",
+      "must_include": ["行动提示"],
+      "avoid": ["长段正文"],
+      "text_budget": 24
+    }
+  ],
+  "relations": [
+    {
+      "from": "cause_channel_quality",
+      "to": "effect_conversion_drop",
+      "relation_type": "cause",
+      "label": "低质量流量拉低转化"
+    },
+    {
+      "from": "cause_signup_flow",
+      "to": "effect_conversion_drop",
+      "relation_type": "cause",
+      "label": "流程阻塞注册"
+    },
+    {
+      "from": "cause_activation_gap",
+      "to": "effect_conversion_drop",
+      "relation_type": "cause",
+      "label": "首次成功不足"
+    },
+    {
+      "from": "cause_sales_followup",
+      "to": "effect_conversion_drop",
+      "relation_type": "cause",
+      "label": "线索流失"
+    },
+    {
+      "from": "cause_pricing_message",
+      "to": "effect_conversion_drop",
+      "relation_type": "cause",
+      "label": "价值感不清"
+    }
+  ],
+  "delivery": {
+    "primary_target": "whiteboard",
+    "secondary_targets": ["svg", "doc"],
+    "doc_mode": "companion-detail"
+  }
+}

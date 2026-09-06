@@ -1,0 +1,188 @@
+{
+  "manifest_kind": "replynodes/social-data-skills/reddit-data-api-package-manifest",
+  "manifest_version": 1,
+  "name": "reddit-data-api",
+  "title": "Reddit Public Data API",
+  "description": "Read-only, normalized public-data reads of Reddit through the ReplyNodes fetcher Reddit public-read service: subreddit post listings, single post lookup with comments, and keyword search via one HTTPS gateway. Two authentication paths are supported \u2014 a Bearer workspace key for prepaid/team usage and an x402 v2 pay-per-call flow in USDC on Base for anonymous single-call usage. Normalized JSON, transparent bounded pages, and an explicit unsupported-capability matrix. Public reads only: no posting, voting, commenting, account, OAuth, or any other write/authenticated capability exists, and no Reddit credential material is involved.",
+  "version": "1.0.9",
+  "contract_version": "v1",
+  "platform": "social",
+  "mode": "readonly",
+  "license": "MIT",
+  "entrypoint": "SKILL.md",
+  "install_doc": "INSTALL.md",
+  "publication_doc": "PUBLICATION.md",
+  "required_agents": [
+    "OpenClaw",
+    "Hermes",
+    "ChatGPT",
+    "Claude",
+    "generic HTTP",
+    "MCP agents"
+  ],
+  "search_terms": [
+    "reddit",
+    "reddit-api",
+    "reddit public data",
+    "subreddit posts",
+    "post comments",
+    "keyword search",
+    "public data",
+    "read-only",
+    "agent api",
+    "social data",
+    "x402",
+    "pay-per-call",
+    "usdc",
+    "base",
+    "wallet"
+  ],
+  "surface_status": [
+    "This package documents seven stable, read-only GET operations with bounded requests and normalized responses.",
+    "The public routes are stable capability identifiers for agent tool bindings.",
+    "No availability, uptime, latency, success-rate, or payment-settlement claim is made; example payloads are illustrative fixtures."
+  ],
+  "source_of_truth": {
+    "repository": "replynodes/replynodes-agent-skills",
+    "path": "skills/reddit-api",
+    "purpose": "Public sanitized provenance for the Reddit read-skill package and its release artifacts."
+  },
+  "distribution": {
+    "registry": "ClawHub",
+    "package": "@replynodes-ai/reddit-api",
+    "version": "1.0.9",
+    "moderation": "pending independent registry verification",
+    "public_discovery": false,
+    "note": "Registry status is verified independently after publication."
+  },
+  "capabilities": [
+    {
+      "capability": "get_capabilities",
+      "mcp_tool": "reddit_get_capabilities",
+      "operation": "capabilities",
+      "method": "GET",
+      "path": "/v1/reddit/capabilities",
+      "auth_required": false,
+      "summary": "Get the Reddit API capabilities catalog"
+    },
+    {
+      "capability": "get_subreddit_posts",
+      "mcp_tool": "reddit_get_subreddit_posts",
+      "operation": "subreddit_posts",
+      "method": "GET",
+      "path": "/v1/reddit/subreddit_posts/{subreddit}",
+      "auth_required": false,
+      "summary": "List a subreddit's posts"
+    },
+    {
+      "capability": "get_post_by_id",
+      "mcp_tool": "reddit_get_post_by_id",
+      "operation": "post_by_id",
+      "method": "GET",
+      "path": "/v1/reddit/post_by_id/{id}",
+      "auth_required": false,
+      "summary": "Get a single post by Reddit post ID"
+    },
+    {
+      "capability": "get_post_by_permalink",
+      "mcp_tool": "reddit_get_post_by_permalink",
+      "operation": "post_by_permalink",
+      "method": "GET",
+      "path": "/v1/reddit/post_by_permalink",
+      "auth_required": false,
+      "summary": "Get a single post by full URL (permalink)"
+    },
+    {
+      "capability": "search_posts",
+      "mcp_tool": "reddit_search_posts",
+      "operation": "search_posts",
+      "method": "GET",
+      "path": "/v1/reddit/search_posts",
+      "auth_required": false,
+      "summary": "Search posts by keyword"
+    },
+    {
+      "capability": "get_user_posts",
+      "mcp_tool": "reddit_get_user_posts",
+      "operation": "user_posts",
+      "method": "GET",
+      "path": "/v1/reddit/user_posts/{username}",
+      "auth_required": false,
+      "summary": "Get a user's submitted posts"
+    },
+    {
+      "capability": "get_user_activity",
+      "mcp_tool": "reddit_get_user_activity",
+      "operation": "user_activity",
+      "method": "GET",
+      "path": "/v1/reddit/user_activity/{username}",
+      "auth_required": false,
+      "summary": "Get a user's full activity (posts + comments)"
+    }
+  ],
+  "unsupported_capabilities": [
+    {
+      "name": "*write_or_authenticated",
+      "status": "unsupported",
+      "reason": "read_only_policy",
+      "notes": "No purchase, review submission, account, login, or authenticated capability exists on this boundary, now or later."
+    }
+  ],
+  "files": [
+    {
+      "path": "INSTALL.md",
+      "bytes": 3406,
+      "sha256": "f9d260c62f1bda7dfe000394861f45e793066de57dbcd039318e9c07e04a2472"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1093,
+      "sha256": "2f47e6dec6bb033a70699c29b76e3abd439de55646a2d5852ea23493a4a06eb0"
+    },
+    {
+      "path": "PROVENANCE.md",
+      "bytes": 1451,
+      "sha256": "c0ab391e28c164fffceb2128a92a263784644968f934a33cbdcd1d072a0a9dec"
+    },
+    {
+      "path": "PUBLICATION.md",
+      "bytes": 1011,
+      "sha256": "2ee28362bda7dfcb72af3808eec755e01fadc1bee268f6b68d7ed3d475d4fe2d"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 13325,
+      "sha256": "da9f7e83af8833c6decb2a69eeeffc7402b5ab88285dda1c5c32fc200a17983e"
+    },
+    {
+      "path": "VERSION",
+      "bytes": 6,
+      "sha256": "326dd5d8641f399990de42def50ac29eb4c9222601c0a0a3fc3c947dd3bec65d"
+    },
+    {
+      "path": "llms.txt",
+      "bytes": 3998,
+      "sha256": "cd24b85375a67c4e372d27c8daf4ab12858904d5f531b6f0ec69450e44091d9b"
+    },
+    {
+      "path": "references/endpoints.md",
+      "bytes": 5105,
+      "sha256": "d8b5640ece8017d9956f52c4f8d38d1f3e87ae73d3d9e6cd67ff787e7fb3c8b1"
+    },
+    {
+      "path": "references/scenarios.md",
+      "bytes": 1928,
+      "sha256": "745c6ccc781b049231209efb147614f3d50703d76eeb06bedc92cc44296f3600"
+    },
+    {
+      "path": "references/reddit-api-mcp.schema.json",
+      "bytes": 10344,
+      "sha256": "401621f3ffe33b7945879a895484274261766c4264d30a96ea2d67f0480552e6"
+    },
+    {
+      "path": "skill-card.md",
+      "bytes": 565,
+      "sha256": "9c47b3546143f7049a5b73916cbe324951c82c2a8b1c9bc6f4ce2614cd0a8069"
+    }
+  ]
+}

@@ -1,45 +1,60 @@
-## Description: <br>
-Captures process bottlenecks, incident patterns, capacity issues, automation gaps, SLA breaches, and toil accumulation so agents can maintain local operational-learning logs and promote recurring patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures process bottlenecks, incident patterns, capacity issues, automation gaps, SLA breaches, and toil accumulation to enable continuous operations improvement.
 
-## Publisher: <br>
-[jose-compu](https://clawhub.ai/user/jose-compu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jose-compu](https://clawhub.ai/user/jose-compu)
 
-## Use Case: <br>
-Developers, SREs, and operations-focused agents use this skill to capture incidents, reliability patterns, capacity issues, automation gaps, and toil in local markdown logs. Recurring or broadly useful learnings can be promoted into runbooks, postmortems, automation backlogs, capacity models, on-call checklists, or SLO definitions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Operational-learning logs can accidentally capture sensitive production details such as secrets, customer data, hostnames, internal IPs, or raw command output. <br>
-Mitigation: Redact sensitive values before logging, prefer summarized excerpts over raw output, and keep learning files in appropriately scoped workspaces. <br>
-Risk: Broad hook activation can add reminders across more projects or prompts than intended. <br>
-Mitigation: Prefer project-level hook setup and narrowed matchers; avoid global activation unless cross-project reminders are explicitly desired. <br>
-Risk: Automation or remediation ideas recorded by the skill may be incomplete for production use. <br>
-Mitigation: Treat remediation examples as design notes until reviewed with explicit approval gates, allowlists, rollback plans, and audit logging. <br>
+## Use Case:
 
+Developers, SREs, and operations teams use this skill to capture recurring incidents, SLO/SLA breaches, capacity issues, manual toil, and automation gaps as structured operational learnings. The captured entries can be promoted into runbooks, postmortems, automation backlog items, capacity models, handoff checklists, SLO definitions, or reusable skills.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jose-compu/self-improving-operations) <br>
-- [OpenClaw Integration](references/openclaw-integration.md) <br>
-- [Hook Setup Guide](references/hooks-setup.md) <br>
-- [Entry Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown notes, reminder text, and shell/configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or prompts local .learnings markdown entries; optional hooks emit reminder text and do not modify files directly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Operations learning logs may contain sensitive operational details if raw incident data, hostnames, account identifiers, credentials, or customer data are copied into entries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep .learnings entries redacted and avoid logging secrets, credentials, internal IP addresses, customer data, or raw command output.
+
+Risk: Persistent hooks can add reminders across future sessions when enabled broadly.
+
+Mitigation: Enable hooks deliberately, prefer project-scoped hook configuration, and avoid user-level hooks unless reminders are intended across OpenClaw sessions.
+
+Risk: Promoting learnings into AGENTS.md, runbooks, SLO definitions, or newly generated skills can change future agent behavior or operational process.
+
+Mitigation: Review proposed changes before applying them, require explicit user approval for promotions, and inspect generated SKILL.md files before trusting them.
+
+## Reference(s):
+
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Hook Setup Guide](references/hooks-setup.md)
+- [Entry Examples](references/examples.md)
+- [ClawHub Skill Page](https://clawhub.ai/jose-compu/skills/self-improving-operations)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown entries, reminder text, setup commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes or guides updates to operations learning logs when used by an agent; optional hooks emit reminder text during configured agent events.]
+
+## Skill Version(s):
+
+1.1.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

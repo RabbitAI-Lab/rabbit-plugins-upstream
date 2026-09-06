@@ -19,6 +19,37 @@ Create PRs with structured body, test plan, and optional visual attachments.
 
 ## Procedure
 
+### Step -1: Overlapping open-PR check (HARD STOP — run before Step 0, every time)
+
+**Before creating a new PR, check whether any file in this change is already touched by an open PR against the same base.** Creating a second PR for a file another open PR is already modifying produces an avoidable merge conflict the moment either one lands — no principled "separate concerns get separate PRs" convention exists anywhere in this skill set that would justify defaulting to a new PR without this check (verified: `merge.md`'s "distinct concerns" language governs whether commits *within one PR* squash cleanly, not whether separate PRs should exist).
+
+```bash
+# List open PRs against the same base, then check each for file overlap
+gh pr list -R <owner/repo> --base <base-branch> --state open --json number,title,headRefName
+gh pr diff <N> -R <owner/repo> --name-only   # per candidate PR
+```
+
+If any target file overlaps an open PR's diff:
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Silently open a new PR because the change is "conceptually different" from the open PR's purpose | `AskUserQuestion`: "add a commit to PR #N" vs "open a separate PR" — state the overlapping file(s) explicitly in the option description |
+| 2 | Assume the open PR will merge first (or won't) without checking its state | Check the open PR's mergeability/CI state (`gh pr view <N> --json mergeable,state`) before presenting options — sequencing affects which choice avoids the conflict |
+| 3 | Rationalize a "separate by concern" convention after the fact to justify a new PR | No such convention is documented in this skill set — don't invent one. The actual decision axis is file overlap risk, not conceptual grouping |
+| 4 | Default the "separate PR" option to Recommended on unrelatedness grounds alone | Weigh **review-cost vs conflict-resolution cost**, not conceptual relatedness — see "Default weighting" below |
+
+**Default weighting: consolidate unless one condition below applies (HARD STOP)**
+
+Opening a new PR is not free — it starts a whole new review cycle. A file-overlap conflict is usually cheap to resolve (a single-line or single-hunk merge conflict via cherry-pick). Default to **adding the commit to the existing open PR**, and mark "open a separate PR" Recommended only when at least one of these holds:
+
+- Consolidating would push either PR's changed-file count near/over a reviewer's hard cap (e.g. CodeRabbit's 50-file review limit) — check `gh pr view <N> --json changedFiles` before deciding
+- The two changes have genuinely independent merge/revert timelines (one may need reverting without affecting the other, or one is blocked on an unrelated approval) — not just "different topic"
+- The conflict resolution itself is non-trivial (deep logic conflict, not a renumbering/relabeling collision)
+
+None of these apply → consolidate is the default, not merely an option alongside "separate PR."
+
+**Self-check (before every `gh pr create`)**: did I run the overlap check above? If any target file matches an open PR's diff, did I `AskUserQuestion` before creating a second PR? Did I check the "Default weighting" conditions before deciding which option gets Recommended?
+
 ### Step 0: Visibility + language decision guard (HARD STOP — run every time, right before PR creation)
 
 **Before writing the PR title and body, always check repository visibility and map the language.**
@@ -227,8 +258,9 @@ Runs at PR creation **and** after any body mutation (sanitize, review-apply, `gh
 
 ### Step 5: Sanitize Internal Paths
 
-Before posting, strip all internal paths per SKILL.md Core Rules:
+Before posting, strip all internal paths and planning jargon per SKILL.md Core Rules:
 - Internal workflow-generated doc paths (e.g., `.ralph/docs/`, `.omc/plans/`) → remove or inline the content
+- Internal planning jargon / temporary naming (e.g., `Option A`, `Option D`, `Phase 1`) → rewrite to clear, descriptive domain terms
 - Session IDs → remove
 - Other internal working directories (`~/.claude/`, `~/.ralph/`, `~/.omc/`, etc.) → remove
 
@@ -277,14 +309,34 @@ EOF
   --draft
 ```
 
-- **`--draft` is included BY DEFAULT (HARD STOP)** — the command above always creates a draft PR. Remove `--draft` **ONLY** when the user explicitly requested a ready PR (`--ready` or "non-draft"/"ready PR"). Autonomous ready-PR creation is forbidden. After CI passes on a draft, transition with `gh pr ready <N>` per the merge topic — but the initial creation stays draft.
+- **`--draft` is included BY DEFAULT (HARD STOP)** — the command above always creates a draft PR. Remove `--draft` **ONLY** when the user explicitly requested a ready PR (`--ready` or "non-draft"/"ready PR"). Autonomous ready-PR creation is forbidden.
 - `--skip-review` option → add `--label coderabbit:ignore` (in addition to classification label)
 - **At least 1 classification label required**: enhancement, bug, documentation, test, chore, etc.
 - **Milestone from Step 6** → add `--milestone "<title>"` flag
 
+**Non-standard creation path — verify via authoritative fields, not `gh pr diff` (HARD STOP)**: if PR creation required a workaround (the standard `gh pr create --head owner:branch` shorthand fails and you fall back to `gh api graphql -f query='mutation { createPullRequest(...) }'`, or any other non-standard path), `gh pr diff --name-only` can print misleading file names even when the PR is registered with 0 commits — it is not proof the PR has real content. Immediately after creation, verify with `gh pr view <N> --json commits,additions,deletions,changedFiles` and confirm `commits` is non-empty before treating creation as successful, marking the PR ready, or reporting the URL to the user as done. A `gh pr ready`/`gh pr merge` guard checks this too as a backstop, but catching it here — right after creation — avoids wasted turns on a broken PR.
+
 Report the PR URL after creation.
 
 **Without gh CLI:** output the body in a code block for manual use.
+
+### Step 7.5: CI Watch → Ready Transition (MANDATORY HARD STOP — same turn, not a follow-up to defer)
+
+**Creating a draft PR is not the terminal action of this step — watching CI and transitioning to ready is part of the same task.** Do not end the turn on "draft PR created" and leave CI-watch as an implicit/future action; either drive it now or explicitly register it as a pending follow-up with its own check-back plan (per `claudify/background-polling.md`).
+
+1. Right after `gh pr create` returns the URL, run `gh pr checks <N> --watch` (blocks until CI resolves) — or, if other pending work exists this turn, poll `gh pr checks <N>` non-blocking per `claudify/background-polling.md`'s user-triggered-CI row instead of a long blocking watch
+1.5. **CI-gate-only base branch pre-check (HARD STOP — run before any ready-transition action or claim, not only at Step 9)**: before executing `gh pr ready <N>`, composing an `AskUserQuestion` about the transition, or stating any consequence of going ready (e.g. "this will trigger CodeRabbit review"), inspect the CodeRabbit line in `gh pr checks <N>`. A reason of `Review skipped: reviews are disabled for this base branch` means this base is CI-gate-only. On a CI-gate-only base, the correct action is to **skip the ready transition entirely, not merely note that review won't fire** — CI (e.g. `adjudicate`) already runs identically on draft PRs, so transitioning to ready adds nothing; the actual review gate happens later, at the staging-branch → main promotion PR (see `merge.md`'s CI-gate-only exception: "CI green + Test Plan + Mergeable is the full gate" — draft state is not part of that gate). A still-draft PR's own `Review skipped: draft pull request` reason does NOT by itself tell you whether the base is also CI-gate-only — it only reports the more immediate blocker. Disambiguate by checking a comparable **non-draft** PR already open on the same base (`gh pr list --base <base> --state open --json isDraft,number` → pick one with `isDraft: false` → `gh pr checks <that-N>`), or by checking the repo's CodeRabbit path/branch config directly. See "CI-gate-only base branch gate" under Step 9 below — this pre-check is the same gate, just triggered one step earlier at the transition-decision point instead of only at the reviewer-matrix point.
+
+   | # | Don't | Do |
+   |---|-------|-----|
+   | 1 | Infer "review will fire once ready" from a still-draft PR's `Review skipped: draft pull request` reason alone | Check a comparable non-draft PR on the same base — a `reviews are disabled for this base branch` reason there means review never fires on this base, regardless of draft state |
+   | 2 | State a review-cost consequence ("going ready triggers CodeRabbit review cost") in an `AskUserQuestion` option description without running this check | Verify first. If verification isn't feasible in the moment, phrase the option without the unverified consequence claim rather than assert it |
+   | 3 | On confirming the base is CI-gate-only, recommend ready-transition anyway on the grounds that "at least there's no review cost" | CI-gate-only means the transition is pointless, not merely cost-free — recommend staying draft; CI + Test Plan + Mergeable already gate the PR without a ready state |
+
+   (See `~/.claude/skills/cleanup/data/failed-attempts.md` "staging-pr-review-gate-confusion" — recurring class; this sub-variant is an unverified prose claim rather than an attempted `gh pr ready` mutation, so the existing `bash-guard.local.py` Bash-command guard does not catch the claim itself, though it does still block the resulting `gh pr ready` call as a backstop.)
+2. CI green → `gh pr ready <N>` immediately, then report the transition
+3. CI red → report the failing check(s); do not auto-ready, do not silently drop it — surface to the user or continue investigating per the failure
+4. If CI is expected to take 5+ minutes and other work is drivable this turn, defer per `claudify/background-polling.md` (ScheduleWakeup / active poll) rather than blocking — but the deferred item must still resolve to a ready-transition or a reported failure, not silence
 
 ### Step 8: Attach Visual Evidence
 

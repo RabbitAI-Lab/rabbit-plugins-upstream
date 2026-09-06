@@ -1,44 +1,59 @@
-## Description: <br>
-Select Super Stock helps analyze and screen stocks for medium- to long-term investment research using trend, technical, fundamental, dividend, industry-cycle, and blacklist criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A single-symbol A-share technical research helper that verifies completed daily trading data, computes basic trend indicators, and reports data gaps without screening stocks or giving trading advice.
 
-## Publisher: <br>
-[georgetao730](https://clawhub.ai/user/georgetao730) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[georgetao730](https://clawhub.ai/user/georgetao730)
 
-## Use Case: <br>
-External users and agents use this skill to request single-stock analysis or screen candidate equities for longer-term investment research. Its reports should be treated as research support, not investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial analysis may be inaccurate, stale, or misleading; the security evidence says the skill overstates market coverage and screening rigor. <br>
-Mitigation: Treat outputs as research support only, verify Hong Kong and U.S. coverage, screening results, financial metrics, news claims, and cached data freshness independently, and do not rely on the skill as investment advice. <br>
-Risk: The skill runs local Python and fetches market data, so results can be affected by dependency availability, network failures, API limits, or stale cache behavior. <br>
-Mitigation: Review the scripts and dependencies before execution, confirm network and data-source assumptions, and check cache timestamps before using any generated report. <br>
+## Use Case:
 
+External users and developers use this skill to inspect one explicitly supplied six-digit A-share symbol against completed daily OHLCV data, moving averages, RSI14, and 52-week range context. It is intended for learning and informational research, not portfolio construction, ranking, price targets, or trade execution.
 
-## Reference(s): <br>
-- [Select Super Stock ClawHub page](https://clawhub.ai/georgetao730/select-super-stock) <br>
-- [Model A long-term uptrend examples](artifact/references/model-a-examples.md) <br>
-- [Model B historical-low rebound examples](artifact/references/model-b-examples.md) <br>
-- [Blacklist stock patterns](artifact/references/blacklist-patterns.md) <br>
-- [Industry cycle guide](artifact/references/industry-cycles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown report or JSON summary, with optional Python command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May fetch AKShare market data and use cached data with a 24-hour freshness window when supporting cache utilities are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata and artifact/_meta.json) <br>
+Risk: Delayed public daily-bar data may be mistaken for real-time market data or investment advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the report labels for trade date, collection time, source, adjustment method, non-real-time status, and learning-only disclaimer visible in downstream use.
+
+Risk: Unavailable, incomplete, stale, or malformed market data could otherwise lead to unsupported conclusions.
+
+Mitigation: Use the skill's unavailable status and missing-field behavior as a hard stop for market conclusions, and verify important financial decisions against independent dated sources.
+
+Risk: Users may overextend a single-stock technical observation into screening, ranking, portfolio sizing, or trade execution.
+
+Mitigation: Limit use to one user-specified A-share symbol and avoid asking the skill for stock selection, scores, target prices, position sizing, order placement, or account actions.
+
+## Reference(s):
+
+- [Data and Research Boundaries](artifact/references/data-policy.md)
+- [Risk Boundaries](artifact/references/risk-boundary.md)
+- [ClawHub Skill Page](https://clawhub.ai/georgetao730/skills/select-super-stock)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Plain text research report or structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports source, trade date, collection time, adjustment method, non-real-time daily-bar status, missing coverage, and a learning-only disclaimer.]
+
+## Skill Version(s):
+
+1.4.0 (source: server release metadata and script VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

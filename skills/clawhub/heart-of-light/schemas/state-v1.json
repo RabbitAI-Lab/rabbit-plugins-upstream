@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/heart-of-light/schemas/state-v1.json",
+  "title": "Heart of Light workspace state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "tool_version", "mode", "updated_at", "scope"],
+  "properties": {
+    "schema": {"const": "heart-of-light.state.v1"},
+    "tool_version": {"type": "string"},
+    "mode": {"enum": ["on", "off"]},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "scope": {"const": "workspace_file_only"},
+    "reason": {"type": "string", "maxLength": 1000}
+  }
+}

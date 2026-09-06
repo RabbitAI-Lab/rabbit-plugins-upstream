@@ -1,45 +1,55 @@
-## Description: <br>
-Helps agents maintain a local WeChat article asset library for product descriptions, product images, and .aws preset bundles, including controlled import of presets and related configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage a local WeChat article business asset library, ingest product images, and import trusted .aws preset bundles into .aws-article resources.
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-Content operators, brand teams, and design support roles use this skill to store product-specific business copy and images, then import .aws theme and preset bundles for WeChat article production. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Importing a .aws preset bundle can add or overwrite repository-level credentials in aws.env. <br>
-Mitigation: Review bundles before import, run --dry-run first, keep aws.env backups, and verify the intended keys and values before relying on imported credentials. <br>
-Risk: Using --allow-any-host weakens the default host restriction for remote .aws bundles. <br>
-Mitigation: Use the default aiworkskills.cn HTTPS allowlist for normal use and reserve --allow-any-host for fully trusted sources. <br>
-Risk: Imported preset bundles can replace local preset directories and affect local article production settings. <br>
-Mitigation: Inspect the bundle source and review diff output before accepting changes; use retained downloads, extraction output, and backups for audit or rollback. <br>
+## Use Case:
 
+Content operators, brand teams, and design support users use this skill to keep reusable product copy, product images, and article preset packages organized for WeChat article workflows. Agents can save business descriptions, copy uploaded product images with matching Markdown descriptions, and run shell commands to import .aws ZIP presets.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/aiworkskills/aws-wechat-article-assets) <br>
-- [Publisher profile](https://clawhub.ai/user/aiworkskills) <br>
-- [Artifact-declared homepage](https://aiworkskills.cn) <br>
-- [Artifact-declared project URL](https://github.com/aiworkskills/wechat-article-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and generated local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes product material, image descriptions, presets, downloads, and temporary extraction files under .aws-article/; .aws imports may update the root aws.env.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.24 (source: server release evidence) <br>
+Risk: The preset importer can automatically change repository credentials and can print secret values in configuration diffs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, run imports with --dry-run first, check aws.env and .aws-article/config.yaml for real secrets before importing, and rotate any credentials that may have been printed or copied into backups.
+
+Risk: Importing untrusted .aws bundles can modify local article assets, preset files, and configuration in the repository.
+
+Mitigation: Import only trusted .aws bundles, keep the default aiworkskills.cn HTTPS host restriction, avoid --allow-any-host in normal use, and review resulting file changes before reuse.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-assets)
+- [Publisher profile](https://clawhub.ai/user/aiworkskills)
+- [aiworkskills.cn preset source domain](https://aiworkskills.cn)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated local files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update .aws-article product assets, image description Markdown files, preset directories, config.yaml, downloads, temporary extraction files, and aws.env entries when the user runs the provided commands.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

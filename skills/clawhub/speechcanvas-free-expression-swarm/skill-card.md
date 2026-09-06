@@ -1,41 +1,60 @@
-## Description: <br>
-SpeechCanvas Infernal Edition coordinates multiple AI agents into a theatrical Devil's Advocate creative swarm for generating lawful, realistic, free-expression image concepts, prompts, critiques, and iteration plans while preserving consent, legality, safety, and artistic force. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Four-agent image-prompt swarm (Muse drafts, Guardian safety-checks, Critic perfects realism, Composer finalizes) that produces lawful, consent-aware, non-deceptive symbolic imagery prompt packs as validated JSON for journalism, protest, censorship and free-expression themes.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External creators and agent operators use this skill to develop lawful civic free-expression image concepts, prompt packs, critiques, and iteration plans for topics such as speech, protest, journalism, censorship, debate, and open dialogue. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dramatic political and theatrical style could be misapplied to deception, harassment, hateful content, or fake evidence workflows. <br>
-Mitigation: Use the skill only for the intended lawful civic/free-expression image-prompting workflow and preserve its stated boundaries around consent, privacy, real people, deception, and harmful content. <br>
-Risk: Generated prompt packs and critiques may still require human judgment before image generation or publication. <br>
-Mitigation: Review proposed prompts against the current security scan, operator task scope, and the artifact's no-deception and no-safety-bypass criteria before use. <br>
+## Use Case:
 
+External creators, journalists, advocates, and developers use this skill to turn lawful briefs about protest, censorship, propaganda, press freedom, or free expression into symbolic image prompt packs with validation steps and human judgment checks.
 
-## Reference(s): <br>
-- [Agent discovery card](AGENT_DISCOVERY.md) <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/speechcanvas-free-expression-swarm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt packs, creative briefs, critiques, iteration plans, and final generation instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads local briefs and prompt notes, writes workspace prompt assets, and does not require network or shell access by default.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The safety validator can be bypassed and a PASS result is not proof that a prompt pack is safe.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Manually apply the rules checklist, review negated phrases and drafts shown before validation, and ask the operator when safety is ambiguous.
+
+Risk: Install instructions may resolve mutable package versions.
+
+Mitigation: Install only a pinned, reviewed release when possible.
+
+Risk: Optional run-history logging can store prompt-pack details locally.
+
+Mitigation: Enable the persistent log only when local storage of those details is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/speechcanvas-free-expression-swarm)
+- [SpeechCanvas safety rules](references/rules.md)
+- [SpeechCanvas example packs](references/examples.md)
+- [Prompt pack schema](schema/prompt_pack.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [JSON prompt pack plus concise image-generation guidance; optional Markdown and shell command snippets for validation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Final packs are constrained by the prompt-pack JSON schema, an iteration cap of 1-3, Guardian PASS/FAIL status, safety tags, and standard safety constraints.]
+
+## Skill Version(s):
+
+2.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

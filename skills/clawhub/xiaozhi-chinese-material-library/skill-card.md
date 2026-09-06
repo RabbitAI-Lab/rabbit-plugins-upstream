@@ -1,41 +1,56 @@
-## Description: <br>
-A Chinese writing-material library skill that helps students save, tag, retrieve, recommend, and review useful quotes, literary examples, and self-written sentences for composition work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+语文素材库 helps Chinese K12 students save writing materials with tags, retrieve 3-5 relevant items by theme, collect useful lines during reading or classical Chinese study after confirmation, and summarize confirmed usage counts.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners, parents, and education agents use this skill to maintain a Chinese composition material library, surface matching examples before writing, capture useful language during reading practice, and summarize material usage over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved quotes, self-written sentences, usage history, and monthly summaries may contain student information or learning history. <br>
-Mitigation: Before using the skill with students, especially minors, define how stored materials are reviewed, retained, deleted, and shared. <br>
-Risk: Automatically recommended writing materials may include inaccurate sources, weak attribution, or generic examples. <br>
-Mitigation: Review recommended materials and prefer items with reliable sources before using them in student writing. <br>
+## Use Case:
 
+External learners and education agents use this skill to maintain a tagged Chinese writing-material library, retrieve suitable quotes or examples for composition topics, and record only user-confirmed material usage when profile sharing is enabled.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+China Mainland
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured storage confirmations, material recommendations, tagging guidance, and monthly summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Chinese-language quote records, tags, suggested writing placements, usage tracking summaries, and review prompts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The bundled profile schema can validate broader persistent profile updates than the skill says it needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit runtime writeback to subjectExtensions.chinese.materialUsage and require the receiving profile service to enforce that field-level allowlist.
+
+Risk: The skill handles student writing materials and usage counts, which can become persistent learning-profile data.
+
+Mitigation: Require profileEnabled, crossSkillSharing, and per-use student confirmation before recording usage, and preserve view, correct, delete, pause, sharing-control, and export controls.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library)
+- [dna-profile.schema.json](shared/dna-profile.schema.json)
+- [handover-protocol.schema.json](shared/handover-protocol.schema.json)
+- [platform-conventions.md](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Chinese conversational Markdown with tagged material lists, retrieval suggestions, monthly summaries, and structured profile writeback guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose subject_profile_writeback updates for subjectExtensions.chinese.materialUsage only after user consent and confirmed material use.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

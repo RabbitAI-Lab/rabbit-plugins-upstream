@@ -9,12 +9,19 @@ description: >
   AI pipeline, autonomous agent, process automation, workflow design, ROI calculator,
   HITL, 工作流设计, 流程自动化, 智能体工作流, 企业自动化, n8n工作流, 流程优化,
   自主代理, RPA替代.
-version: "3.3.3"
+version: "3.3.4"
 ---
 
 # Agentic Workflow Designer
 
 > From messy manual processes to autonomous AI pipelines — design, document, and deploy.
+
+> **⚠️ CAPABILITY NOTICE / 能力说明**
+> - **Type:** Design and advisory framework — produces workflow blueprints, JSON/YAML specs, and ROI estimates as reference material
+> - **No code is executed by this skill**; generated specs are for the user to review and import into their own environment
+> - **No persistent storage, network calls, background execution, or credential collection**
+> - **All outputs require human review before production deployment**
+> - Workflows touching PII or regulated data must include retention, access control, and audit considerations
 
 ## What This Skill Does
 
@@ -47,7 +54,14 @@ Agentic workflow, automate my process, workflow automation, n8n, Make automation
 
 ## Workflow
 
-### 新增内容（2026版）
+### 平台与技术动态（截至 2026-08-31）
+
+**2026-08 更新要点**：
+- **MCP 成为事实标准**：Model Context Protocol 于 2025 年底转入 Linux 基金会中立治理后，2026 年官方与社区服务器数量持续扩张，企业内部 MCP 注册表逐步成为新的基础设施层。
+- **国内合规要求趋严**：涉及个人信息与重要数据的工作流，需满足最小必要采集、境内存储与可审计要求，自托管方案的优先级上升。
+- **长上下文成本下探**：长文档场景（招股书、年报、长合同）的单位 Token 成本持续下降，使得"全文入参 + 结构化抽取"逐步替代早期分段检索方案。
+- **可观测性成为刚需**：生产级 agentic 工作流普遍补齐链路追踪、成本归因与失败重放能力，缺乏可观测性的方案难以通过投产评审。
+
 **Step 2 新增技术评估（2026）**：
 - LangGraph v1.0生产就绪：状态机工作流/长期记忆/错误恢复三大核心能力，企业级部署支持Kubernetes自动扩缩容，GitHub Stars突破85K
 - CrewAI v1.10多智能体协作：支持6种角色类型+并行任务编排，内置20+企业级连接器（Slack/Notion/Airtable/GitHub），2026年Q1新增中文文档
@@ -69,14 +83,19 @@ Ask the user to describe their current workflow:
 
 Score the workflow across 5 dimensions:
 
-| Dimension | Score | Notes |
-|-----------|-------|-------|
-| Repetitiveness | /10 | How often does this run identically? |
-| Rule-based | /10 | Are decisions clear-cut or judgment-based? |
-| Data availability | /10 | Is input data structured and accessible? |
-| Error tolerance | /10 | Can errors be caught and recovered automatically? |
-| Stakes | /10 (inverted) | Low-stakes = easier to automate |
-| **Automation Score** | /50 | >35 = High priority, 20–35 = Medium, <20 = Keep manual |
+| Dimension | Score | 判断依据 | 打分示例（周报自动化） | 打分示例（客户投诉处理） |
+|-----------|-------|---------|---------------------|----------------------|
+| Repetitiveness | /10 | How often does this run identically? | 9（每周一次，步骤固定） | 4（内容差异大） |
+| Rule-based | /10 | Are decisions clear-cut or judgment-based? | 8（汇总规则明确） | 3（需人工判断责任与情绪） |
+| Data availability | /10 | Is input data structured and accessible? | 8（5 张表结构固定） | 5（邮件正文非结构化） |
+| Error tolerance | /10 | Can errors be caught and recovered automatically? | 7（数字错误可在复核环节发现） | 4（误判会直接损害客户关系） |
+| Stakes | /10 (inverted) | Low-stakes = easier to automate | 8（内部参考，出错影响小） | 2（涉及对外承诺与赔偿） |
+| **Automation Score** | /50 | >35 = High priority, 20–35 = Medium, <20 = Keep manual | **40/50 → 高优先级** | **18/50 → 暂不自动化** |
+
+**评分补充说明**
+- **Stakes 为反向计分**：风险越高得分越低。涉及资金、对外承诺、数据删除的流程，即使前四项得分高，总分也会被拉低。
+- **两例对照的意义**：周报自动化 40 分应直接推进；客户投诉处理 18 分不宜整体自动化，但可拆出"分类 + 路由"子环节单独自动化（该子环节约 32 分）。
+- **拆解法**：整体分数偏低时，不要放弃，而是把流程拆到子步骤重新评分——大多数流程都存在可自动化的局部环节。
 
 ### Step 3 — Agentic Pipeline Design
 Generate a detailed pipeline blueprint:
@@ -111,15 +130,36 @@ Generate a detailed pipeline blueprint:
 [Output]: CRM updated + email queued
 ```
 
+**Example — 保险理赔单据预审 Pipeline:**
+```
+[Workflow]: 理赔单据完整性预审
+[Trigger]: 理赔系统上传事件（webhook）
+[Agents]:
+  ├── 分类 Agent [OCR + 规则表] → 单据类型与置信度
+  ├── 校验 Agent [规则引擎] → 缺失项清单
+  ├── 决策门 [规则 + 人工] → 通过 / 退回补件 / 转人工
+  └── 通知 Agent [短信 API + 工单 API] → 补件提醒 + 工单创建
+[Flow]: 先并行分类，后串行校验（Conditional）
+[Memory]: PostgreSQL（单据状态机），不含原始影像
+[Error]: OCR 置信度 < 0.85 → 强制转人工，不自动退回
+[HITL]: 涉及拒赔、金额调整、个人信息变更的一律转人工；仅限"是否缺件"自动判定
+[Output]: 预审结论 + 缺失项清单 + 工单号
+```
+
+**两个示例的设计差异**
+- Lead Qualification 属**低风险、可容忍误判**场景，因此允许 80 分以上自动放行。
+- 理赔预审属**受监管、不可自动决策**场景，自动化边界严格限定在"完整性检查"，任何影响客户权益的结论必须人工确认。
+- 判断依据：自动化可以覆盖**判断过程**，但不应覆盖**责任归属**。
+
 ### Step 4 — Platform Recommendation
 
-| Platform | Best For | Agent Support | Self-host | Price |
-|----------|----------|--------------|-----------|-------|
-| n8n | Technical teams, complex logic | [Yes] via AI nodes | [Yes] | Free/OSS |
-| Make (Integromat) | Non-technical, API integrations | Partial | [No] | ~$9+/mo |
-| Zapier | Simple triggers, non-technical | Partial | [No] | ~$20+/mo |
-| LangGraph (custom) | Complex state machines, production | [Yes] Native | [Yes] | Dev hours |
-| CrewAI | Role-based agent teams | [Yes] Native | [Yes] | Dev hours |
+| Platform | Best For | Agent Support | Self-host | Price | 学习曲线 | 典型用例 | 主要风险 |
+|----------|----------|--------------|-----------|-------|---------|---------|---------|
+| n8n | Technical teams, complex logic | [Yes] via AI nodes | [Yes] | Free/OSS | 较陡 | 内部数据同步、单据预审、带审批的批处理 | 自托管需自行承担运维与升级 |
+| Make (Integromat) | Non-technical, API integrations | Partial | [No] | ~$9+/mo | 平缓 | 跨 SaaS 数据流转、市场活动自动化 | 国内访问海外 SaaS 稳定性差 |
+| Zapier | Simple triggers, non-technical | Partial | [No] | ~$20+/mo | 最平缓 | 表单→通知、 CRM 字段回写 | 任务量上去后成本增长快 |
+| LangGraph (custom) | Complex state machines, production | [Yes] Native | [Yes] | Dev hours | 陡（需开发） | 长时间运行的对话式业务、需要中断恢复的流程 | 需自建可观测与灰度能力 |
+| CrewAI | Role-based agent teams | [Yes] Native | [Yes] | Dev hours | 中等 | 研究分析、多角色报告生成 | 角色编排调试成本较高 |
 
 
 ### Step 4.5 — 2026平台详细对比表（生产选型参考）
@@ -132,6 +172,10 @@ Generate a detailed pipeline blueprint:
 | **企业连接器** | 400+（含国内钉钉/企微）| 1000+（偏海外）| 6000+（全球最多）| 自接 | 自接 |
 | **适合场景** | 技术研发/复杂逻辑/数据敏感 | 非技术/跨部门/快速原型 | 销售/市场/简单自动化 | 复杂状态机/生产级 | 角色协作/研究分析 |
 | **最大短板** | 学习曲线陡峭 | 国内SaaS访问慢 | 国内SaaS访问慢+贵 | 需开发资源 | 需开发资源 |
+| **可观测性** | [Yes] 执行历史与重放 | [!] 仅运行日志 | [!] 仅运行日志 | 需自建（LangSmith 等） | 需自建 |
+| **人工介入（HITL）** | [!] 需手动加等待节点 | [!] 需手动加等待节点 | [!] 需手动加等待节点 | [Yes] 原生 interrupt | [!] 需自行实现 |
+| **失败回滚** | 重跑单节点 | 重跑场景 | 重跑 Zap | 依赖检查点设计 | 依赖任务设计 |
+| **国产化适配** | [Yes] 可接国产 LLM/私有化部署 | [No] | [No] | [Yes] 自行选型 | [Yes] 自行选型 |
 
 **选型建议（2026）**：
 - 国内团队/数据合规要求 → **n8n自托管**（数据不出境，支持国产LLM接入）
@@ -175,14 +219,20 @@ Generate a detailed pipeline blueprint:
 
 ### Step 6 — ROI Calculator
 
-| Metric | Before Automation | After Automation | Savings |
-|--------|------------------|-----------------|---------|
-| Time per run | [X hours] | [Y minutes] | [Z%] |
-| Runs per week | [N] | [N] | — |
-| Total time saved/week | — | — | [hours] |
-| Cost saved/month | — | — | [$$$] |
-| Automation setup cost | — | — | [one-time] |
-| **Payback period** | — | — | [weeks] |
+| Metric | Before Automation | After Automation | Savings | 示例（周一销售周报） |
+|--------|------------------|-----------------|---------|-------------------|
+| Time per run | [X hours] | [Y minutes] | [Z%] | 3 小时 → 15 分钟 = 92% |
+| Runs per week | [N] | [N] | — | 1 次 |
+| Total time saved/week | — | — | [hours] | 2.75 小时 |
+| Cost saved/month | — | — | [$$$] | 11.5 小时 × 50 元 ≈ 575 元 |
+| Automation setup cost | — | — | [one-time] | 约 16 小时搭建 ≈ 800 元 |
+| **Payback period** | — | — | [weeks] | **约 6 周** |
+
+**ROI 计算注意事项**
+- **只计入真实节省的时间**：若节省的时间并未转化为其他产出（例如员工只是多了空闲），不宜直接折算为现金收益，应改为"释放工时"表述。
+- **必须计入运维成本**：工作流会因接口变更、页面改版而失效，建议按初始搭建成本的 15%-25%/年 计入维护。
+- **隐性收益单独列示**：如响应时效提升、差错率下降，可用定性描述补充，不要强行货币化。
+- **示例 2（客服工单分类路由）**：单次从 4 分钟降至 30 秒，日均 300 单 → 每日节省约 17.5 小时；但因需保留人工复核，净节省按 60% 折算更稳妥。
 
 ## Example Interactions
 
@@ -195,6 +245,18 @@ Generate a detailed pipeline blueprint:
 **User:** "I want to build a customer support triage system that reads emails, classifies them, and routes to the right team."
 
 **Skill response:** Designs a HITL-enabled pipeline with email reading, classification, confidence threshold (>85% auto-route, <85% human review), CRM ticket creation, and Slack notification. Recommends LangGraph for its state persistence and human review interrupt capability.
+
+---
+
+**User:** "我们的报销单据要先核对发票真伪、再查预算、最后领导审批，能不能全自动？"
+
+**Skill response:** 先按五维打分——重复性 9、规则明确 7、数据可得 6、错误容忍 4、风险（反向）3，合计 **29/50 属中等**。给出结论：**不宜全自动**。建议拆为两段：发票真伪校验与预算占用查询可自动化（该子流程约 36 分），领导审批必须保留人工节点。技术上推荐 n8n 自托管（涉及财务数据与发票信息，数据不出境），并明确指出自动化边界应止于"为审批人提供核对结论"，不得代替审批签字。
+
+---
+
+**User:** "我有一份 200 页的年报，想自动抽取关键财务指标并生成摘要。"
+
+**Skill response:** 评估后指出这是**长上下文单文档处理**场景，不是典型的多步骤工作流，无需引入 agent 编排。给出两条路径：① 长上下文模型全文入参 + 结构化抽取（实现快、成本可控，适合一次性或低频任务）；② 分段检索 + 抽取（适合高频批量）。提示关键风险：抽取结果必须保留**原文定位**（页码/段落），便于人工复核，避免模型生成的数字无法追溯。若涉及未公开信息，须先确认数据合规与使用授权。
 
 ## Notes & Constraints
 

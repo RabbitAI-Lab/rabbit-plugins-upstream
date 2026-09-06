@@ -1,41 +1,64 @@
-## Description: <br>
-This skill helps students use a 52-week, weekly exploration framework to distinguish shallow preferences from durable interests by recording challenge responses, time perception, external feedback, and staged interest-DNA reflections. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+每周引导学生记录兴趣探索、困难反应、时间感和外部反馈，帮助区分浅层喜好与遇到困难仍想继续的真实兴趣。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill for structured interest exploration, self-understanding, and growth planning. It guides weekly exploration, records interest-DNA signals, and can summarize progress for parents when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger scope may activate during broad self-discovery or growth-planning conversations. <br>
-Mitigation: Narrow activation to explicit interest-exploration, 52-week tracking, or interest-DNA recording requests. <br>
-Risk: Student reflections and parent-facing summaries may contain personal information. <br>
-Mitigation: Share, persist, or transfer these records only with clear consent and appropriate privacy handling. <br>
+## Use Case:
 
+Students in supported K12 grade bands use this skill to run weekly interest explorations, record consent-gated observations, and review whether an interest persists when work becomes difficult. Guardians or educators may receive limited factual summaries only when the student and required consent settings allow sharing.
 
-## Reference(s): <br>
-- [兴趣探索档案与记录模板](references/interest-exploration-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer) <br>
+### Deployment Geography for Use:
 
+China mainland by default; deployment elsewhere requires localized crisis resources, curriculum framing, and minor-data consent review.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Conversational guidance and structured Markdown-style summaries or records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce weekly exploration prompts, interest-DNA records, progress reports, and parent-facing summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Persistent student interest data could be written outside the intended scope if the receiving profile system accepts loose writeback paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Allowlist only the permitted interestDNA fields, reject unknown paths, and recheck profileEnabled plus interestTrackingConsent before every persistent write.
+
+Risk: Interest records involve minors and could be exposed to guardians or other skills without the intended consent controls.
+
+Mitigation: Verify the current speaker, guardian requirements, parentSharingConsent, crossSkillSharing, and one-time user confirmation before sharing, exporting, or summarizing records.
+
+Risk: Crisis or safety signals may arise during student conversations and require region-appropriate escalation.
+
+Mitigation: Stop the interest-exploration flow for crisis signals and localize emergency contacts, trusted-adult referral language, and minor-safety procedures before deployment outside the default region.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer)
+- [Interest exploration record template](artifact/references/interest-exploration-template.md)
+- [Platform capability conventions](artifact/shared/platform-conventions.md)
+- [Shared vocabulary and consent fields](artifact/shared/vocab.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+- [Grade bands](artifact/shared/grade-bands.md)
+- [Learning DNA profile schema](artifact/shared/dna-profile.schema.json)
+- [Handover protocol schema](artifact/shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Conversational Chinese text with structured Markdown-style interest records and consent-gated writeback proposals]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce parent-facing factual summaries, exports, or profile writeback proposals only after the required consent checks.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

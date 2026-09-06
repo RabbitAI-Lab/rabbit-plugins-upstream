@@ -1,6 +1,6 @@
 # 金谷园饺子馆 Skill
 
-![Version](https://img.shields.io/github/v/tag/JinGuYuan/jinguyuan-dumpling-skill?label=version&color=blue&sort=semver) ![License](https://img.shields.io/badge/license-MIT-green) ![MCP](https://img.shields.io/badge/protocol-MCP-purple) ![Transport](https://img.shields.io/badge/transport-Streamable%20HTTP-orange)
+![Version](https://img.shields.io/github/v/tag/JinGuYuan/jinguyuan-dumpling-skill?label=version&color=blue&sort=semver) ![License](https://img.shields.io/badge/license-MIT-green) ![API](https://img.shields.io/badge/api-REST-orange) ![CLI](https://img.shields.io/badge/cli-jgy.cjs%20single--file-purple)
 
 这是一个 AI Skill——安装后，你的 AI 助手就能帮你查金谷园在哪、几点开门、这会儿排不排队、几点去更稳，也能查推荐菜、外卖和生饺子打包怎么煮；需要时，还能帮你在线排队取号。
 
@@ -34,7 +34,7 @@
 
 ## 在线排队取号
 
-本 Skill 内置了基于**美团排队**的真实动作，AI 助手可以帮你取号、查本人订单和取消排队。
+本 Skill 内置了基于**美团排队**的真实动作，AI 助手可以帮你取号、查本人订单和取消排队。美团授权使用随包明文 Passport 实现，用户扫码确认后 Token 仅缓存在本机 `~/.jinguyuan/passport-auth.json`。
 
 **支持的操作：**
 

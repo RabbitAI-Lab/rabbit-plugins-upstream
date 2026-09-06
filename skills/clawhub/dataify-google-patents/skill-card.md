@@ -1,42 +1,53 @@
-## Description: <br>
-This skill turns Google Patents search requests into confirmed Dataify Scraper API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Patents for patent records. Do not use for Google Scholar papers or general web results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to prepare Google Patents searches, review the full request parameter table, and call Dataify's Scraper API after explicit confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent search queries, filters, and request metadata are sent to Dataify's Scraper API during live calls. <br>
-Mitigation: Install and use the skill only when external Dataify API calls are intended, and review the full confirmation table before approving each request. <br>
-Risk: A Dataify API token is required for live requests and could be exposed in an untrusted workspace. <br>
-Mitigation: Provide a token only in trusted workspaces; the skill masks token status in confirmation tables and normalizes Bearer tokens before use. <br>
+## Use Case:
 
+Developers and external users use this skill to convert Google Patents search requests into Dataify Scraper API calls and receive compact patent-search results.
 
-## Reference(s): <br>
-- [Dataify Google Patents API Reference](artifact/references/google_patents_api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-patents) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API Calls, guidance] <br>
-**Output Format:** [Markdown confirmation tables, shell commands, and raw Dataify API response bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user confirmation before live API calls and hides the full Dataify API token in review tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Search queries and the Dataify API token are sent to Dataify for patent searches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, configure the token only in the environment, and avoid submitting sensitive search terms.
+
+Risk: The Google Patents-only description conflicts with code and instructions that can include Google Scholar results.
+
+Mitigation: Remove Scholar support or clearly disclose and control Scholar inclusion before release.
+
+## Reference(s):
+
+- [Dataify Google Patents API Reference](references/google_patents_api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, Markdown, JSON]
+
+**Output Format:** [Markdown with inline bash commands; compact text summaries by default, with raw JSON or HTML only when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN for live Dataify requests; preserves source links and avoids exposing the full token.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

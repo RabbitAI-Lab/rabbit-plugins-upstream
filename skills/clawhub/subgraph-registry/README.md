@@ -6,7 +6,7 @@
 
 Agent-friendly semantic classification of all subgraphs on [The Graph Network](https://thegraph.com).
 
-Pre-computed index of **14,700+ subgraphs** with domain classification, protocol type detection, schema fingerprinting, canonical entity mapping, and composite reliability scoring.
+Pre-computed index of **15,330 subgraphs** with domain classification, protocol type detection, schema fingerprinting, canonical entity mapping, and composite reliability scoring.
 
 > **What's new in 0.8.0** — three agent-discovery upgrades:
 > - **[Semantic search](#semantic-search)** via 384-dim embeddings (`semantic_search_subgraphs`)
@@ -100,14 +100,15 @@ Explore subgraphs by use case — each file lists the top 25 subgraphs ranked by
 
 | Domain | Count | File |
 |--------|-------|------|
-| [DeFi](docs/domains/defi.md) | 11,218 | Swaps, pools, lending, vaults, yield |
-| [NFTs](docs/domains/nfts.md) | 857 | Collections, marketplaces, sales |
-| [Infrastructure](docs/domains/infrastructure.md) | 581 | Indexers, oracles, registries |
-| [DAO](docs/domains/dao.md) | 429 | Governance, proposals, voting |
-| [Identity](docs/domains/identity.md) | 401 | ENS, name services, resolvers |
-| [Analytics](docs/domains/analytics.md) | 327 | Snapshots, metrics, historical data |
-| [Gaming](docs/domains/gaming.md) | 247 | Players, quests, items, worlds |
-| [Social](docs/domains/social.md) | 74 | Profiles, posts, follows |
+| [DeFi](docs/domains/defi.md) | 7,844 | Swaps, pools, lending, vaults, yield |
+| [NFTs](docs/domains/nfts.md) | 1,565 | Collections, marketplaces, sales |
+| Unclassified | 1,333 | Not confidently classified |
+| [Infrastructure](docs/domains/infrastructure.md) | 1,251 | Indexers, oracles, registries |
+| [Identity](docs/domains/identity.md) | 1,061 | ENS, name services, resolvers |
+| [Analytics](docs/domains/analytics.md) | 766 | Snapshots, metrics, historical data |
+| [DAO](docs/domains/dao.md) | 758 | Governance, proposals, voting |
+| [Gaming](docs/domains/gaming.md) | 585 | Players, quests, items, worlds |
+| [Social](docs/domains/social.md) | 167 | Profiles, posts, follows |
 
 Full index: [`docs/DOMAINS.md`](docs/DOMAINS.md)
 
@@ -117,13 +118,13 @@ Explore subgraphs by blockchain — each file lists the top 25 subgraphs on that
 
 | Network | Count | File |
 |---------|-------|------|
-| [Ethereum](docs/networks/mainnet.md) | 2,377 | Largest ecosystem |
-| [Base](docs/networks/base.md) | 1,728 | Fast-growing L2 |
-| [BSC](docs/networks/bsc.md) | 1,582 | BNB Chain |
-| [Arbitrum](docs/networks/arbitrum-one.md) | 1,376 | Leading L2 |
-| [Polygon](docs/networks/matic.md) | 1,266 | Polygon PoS |
-| [Optimism](docs/networks/optimism.md) | 568 | OP Stack L2 |
-| [Avalanche](docs/networks/avalanche.md) | 440 | C-Chain |
+| [Ethereum](docs/networks/mainnet.md) | 2,484 | Largest ecosystem |
+| [Base](docs/networks/base.md) | 1,841 | Fast-growing L2 |
+| [BSC](docs/networks/bsc.md) | 1,670 | BNB Chain |
+| [Arbitrum](docs/networks/arbitrum-one.md) | 1,437 | Leading L2 |
+| [Polygon](docs/networks/matic.md) | 1,304 | Polygon PoS |
+| [Optimism](docs/networks/optimism.md) | 580 | OP Stack L2 |
+| [Avalanche](docs/networks/avalanche.md) | 453 | C-Chain |
 
 Full index: [`docs/NETWORKS.md`](docs/NETWORKS.md)
 
@@ -131,16 +132,16 @@ Full index: [`docs/NETWORKS.md`](docs/NETWORKS.md)
 
 | Type | Count | Description |
 |------|-------|-------------|
-| DEX | 4,176 | Uniswap, Sushi, Curve, Balancer, PancakeSwap |
-| Lending | 1,424 | Aave, Compound, Morpho, Spark, Silo |
-| Staking | 867 | Lido, Rocket Pool, EigenLayer, Graph Network |
-| Bridge | 771 | Hop, Stargate, Across, Wormhole, LayerZero |
-| NFT Marketplace | 436 | OpenSea, Blur, Rarible, Foundation |
-| Governance | 416 | Snapshot, Tally, Compound Governor |
-| Yield Aggregator | 387 | Yearn, Beefy, Harvest, Convex |
-| Perpetuals | 266 | GMX, Gains, dYdX, Hyperliquid |
-| Name Service | 223 | ENS, Space ID, Unstoppable Domains |
-| Options | 179 | Premia, Dopex, Lyra, Hegic |
+| DEX | 4,411 | Uniswap, Sushi, Curve, Balancer, PancakeSwap |
+| Lending | 1,469 | Aave, Compound, Morpho, Spark, Silo |
+| Staking | 898 | Lido, Rocket Pool, EigenLayer, Graph Network |
+| Bridge | 836 | Hop, Stargate, Across, Wormhole, LayerZero |
+| NFT Marketplace | 450 | OpenSea, Blur, Rarible, Foundation |
+| Yield Aggregator | 425 | Yearn, Beefy, Harvest, Convex |
+| Governance | 425 | Snapshot, Tally, Compound Governor |
+| Perpetuals | 273 | GMX, Gains, dYdX, Hyperliquid |
+| Name Service | 227 | ENS, Space ID, Unstoppable Domains |
+| Options | 192 | Premia, Dopex, Lyra, Hegic |
 
 ---
 
@@ -159,21 +160,118 @@ All values are log-scaled and capped at 1.0. A 0.5 penalty is applied if the sub
 
 **Score tiers:** High (0.7+) = strong signal, real usage | Medium (0.3-0.7) = functional, some activity | Low (<0.3) = minimal signal or test deployment
 
+### The score measures traction, so it measures age
+
+All four inputs are cumulative — fees and curation accrue, volume needs 30 days
+to exist at all. A subgraph deployed last month therefore scores near zero no
+matter how good it is. Measured on the current corpus (served, non-denied):
+
+| Age | Count | Avg reliability |
+|-----|-------|-----------------|
+| < 30 days | 64 | 0.107 |
+| 30–90 days | 227 | 0.143 |
+| 90–365 days | 1,100 | 0.225 |
+| > 1 year | 4,034 | 0.313 |
+
+The newest subgraph anywhere in the registry's top 25 is **280 days old** — yet
+59 of those 64 sub-30-day subgraphs are already serving real query volume.
+
+Rather than reweight the score and trade a measurable signal for a guess,
+`search_subgraphs` returns young matches in a **separate `emerging` list**
+alongside an `emerging_caveat` explaining that a low score at that age is
+expected rather than damning. Every result also carries `age_days` and
+`maturity` (`new` < 30d, `emerging` < 90d, `established`). This matters most
+for new chains and new protocols, where no mature deployment *can* exist —
+searching "perpetual futures" surfaces years-old Ethereum and BSC deployments
+in the main list and the 40-day-old Monad perps subgraph under `emerging`.
+
+`semantic_search_subgraphs` ranks by cosine similarity rather than reliability,
+so it is already age-neutral — it carries the `maturity` labels but no
+`emerging` list, because a three-week-old subgraph can top it on merit.
+
+### Ranking
+
+Three tools rank, and each ranks differently on purpose:
+
+- **`search_subgraphs`** — orders by how many of your query terms matched, then
+  by reliability. OR-ing the terms and ordering on reliability alone meant a
+  popular subgraph matching one incidental word beat a precise match on all
+  three, so being *more* specific returned worse answers. Version tokens
+  (`v2`, `v3`, `v4`) are kept rather than dropped as too short.
+- **`semantic_search_subgraphs`** — orders by `semantic_score × (0.5 + 0.5 ×
+  reliability)`. Pure cosine put testnets first, since their text is nearly
+  identical to mainnet's. The 0.5 floor keeps new subgraphs competitive.
+- **`recommend_subgraph`** — infers domain and protocol type from the goal, but
+  as a *ranking bonus*, never a filter. As a filter, one bad keyword collapsed
+  the candidate pool to nothing.
+
+A term matching a subgraph's **name** counts for more than one matching its
+description — `%ens%` also matches "tok**ens**", so equal weighting handed a
+search for `ens` to four Uniswap subgraphs.
+
+Chain names are aliased, so `ethereum`, `arbitrum`, `polygon` and `bnb` resolve
+to the corpus values `mainnet`, `arbitrum-one`, `matic` and `bsc`.
+
+### Testnets
+
+723 of the 5,425 served subgraphs are on testnets, and their text is nearly
+identical to their mainnet twins', so they compete for the top slot. They are
+**excluded by default** and every result carries `testnet: true|false`. Pass
+`include_testnets: true` to see them — and an explicit request for a testnet
+network (`network: "sepolia"`) always wins over the default, so that still
+returns exactly what you asked for.
+
+## Using the registry from payql
+
+[`payql`](https://www.npmjs.com/package/payql) can use this registry as its
+free discovery source instead of paying for a network-subgraph query. Run the
+registry's HTTP transport and point payql at it:
+
+```bash
+npx subgraph-registry-mcp --http-only          # serves :3848
+PAYQL_REGISTRY_URL=http://127.0.0.1:3848/graphql npx -y payql
+```
+
+`POST /graphql` answers in the Graph network subgraph's `subgraphMetadataSearch`
+shape, which is what payql already parses — so this needs no change on payql's
+side, and discovery becomes free and locally-ranked.
+
+### Denied deployments
+
+Curation-denied deployments (`deniedAt > 0` — denied indexing rewards, usually
+spam, duplicates or deprecations) are **excluded by default** from
+`search_subgraphs`, `semantic_search_subgraphs` and `recommend_subgraph`. Pass
+`include_denied: true` to the two search tools to see them; every result then
+carries `denied: true|false` so the choice stays visible.
+
 ---
 
 ## MCP Server
 
 The registry is available as an MCP server with **dual transport** — stdio for local clients and SSE/HTTP for remote agents.
 
+Same abilities as [graphops/subgraph-mcp](https://github.com/graphops/subgraph-mcp) (hosted SSE `https://subgraphs.mcp.thegraph.com/sse`), **better discovery**. Schema, execute, contract-lookup and 30-day counts use the **official tool names** so an agent can swap connectors. Search stays on our names (`search_subgraphs`, `recommend_subgraph`, `semantic_search_subgraphs`) because they already beat official `search_subgraphs_by_keyword` (reliability, real `query_volume_30d`, network).
+
+Official workflow says ALWAYS call `get_deployment_30day_query_counts` before selecting. **Skip that extra round-trip here** — every search/recommend hit already carries `query_volume_30d`. The counts tool still exists under the official name and reads those same registry figures. Official counts have been observed returning 0 for ENS, Lido and Uniswap; we do not copy those zeros.
+
+
 > The shipped server is the Node implementation in [`src/index.js`](src/index.js); that's what `npx subgraph-registry-mcp` runs and what's published to npm. A Python equivalent in [`python/mcp_server.py`](python/mcp_server.py) is kept for local development against the same SQLite database — bug fixes and new tools should land in the Node version first.
 
-**6 tools:**
-- **search_subgraphs** — filter by domain, network, protocol type, entity, or keyword
+**Discovery tools (never execute GraphQL, never introspect live schemas):**
+- **search_subgraphs** — filter by domain, network, protocol type, entity, or keyword. Ranked by matched terms, reliability and real `query_volume_30d`.
 - **recommend_subgraph** — natural language goal to best subgraphs (includes `schema_stable_days`)
-- **get_subgraph_detail** — full classification for a specific subgraph (includes `schema_changed_at`)
-- **list_registry_stats** — registry overview (domains, networks, counts)
 - **semantic_search_subgraphs** — vector-similarity search over precomputed embeddings (sentence-transformers/all-MiniLM-L6-v2, 384-dim). Use for fuzzy/paraphrased goals where literal keyword match would miss.
+- **get_subgraph_detail** — full classification for a specific subgraph (includes `schema_changed_at` and crawled `contract_addresses`)
+- **list_registry_stats** — registry overview (domains, networks, counts)
 - **get_schema_changes** — chronological schema-fingerprint history for a subgraph (one row per detected change). Helps agents prefer mature subgraphs whose data contract has been stable.
+
+**Opt-in query / schema (caller must invoke; search never auto-queries). Official names for connector swap-in:**
+- **execute_query_by_subgraph_id** / **execute_query_by_deployment_id** / **execute_query_by_ipfs_hash** — POST GraphQL to The Graph gateway. Same routing as official (`subgraphs/id` vs `deployments/id`). Requires `THE_GRAPH_STUDIO_API_KEY` (or `GATEWAY_API_KEY`). Without a key, returns `{error: credentials_required, query_url, query_url_x402, hint}` immediately — no hang, no x402 auto-pay. Convenience superset: **execute_query** accepts `id` OR `deployment_id` OR `ipfs_hash`.
+- **get_schema_by_subgraph_id** / **get_schema_by_deployment_id** / **get_schema_by_ipfs_hash** — local `registry_schema` (entities, example_query, fingerprint) with no network when the subgraph is in the corpus; live `__schema` introspection only when a Studio key is set. Convenience superset: **get_schema**.
+- **get_top_subgraph_deployments(contract_address, chain)** — official name. Official `chain` is graph-node ids (`mainnet`, not `ethereum`); we accept both. Top 3 from crawled manifests, ranked by reliability then real 30-day volume (not official query-fees / 0-count oracle). Substreams-powered subgraphs often have no dataSources addresses — that gap is reported, not faked.
+- **get_deployment_30day_query_counts** — official name, `ipfs_hashes` in. Real registry `query_volume_30d`. Unknown hashes return `not_in_registry` rather than a fake 0. Usually unnecessary: the same number is already on every search hit.
+
+Set `THE_GRAPH_STUDIO_API_KEY` in the MCP host env to enable execute/live-schema. No private key is bundled. The keyed gateway often returns HTTP 200 with a GraphQL error body when auth is missing — `execute_query` surfaces `http_status` and `errors` honestly.
 
 ### Install
 
@@ -186,7 +284,10 @@ claude mcp add subgraph-registry -- npx subgraph-registry-mcp
   "mcpServers": {
     "subgraph-registry": {
       "command": "npx",
-      "args": ["subgraph-registry-mcp"]
+      "args": ["subgraph-registry-mcp"],
+      "env": {
+        "THE_GRAPH_STUDIO_API_KEY": "your-studio-key"
+      }
     }
   }
 }

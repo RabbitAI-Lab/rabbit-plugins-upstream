@@ -1,0 +1,7 @@
+{
+  "version": "3.8.0",
+  "bundle_sha256": "9a4fc57d3d8bced606dea6d9511b6fbdba83afba861def542d737c2173b60380",
+  "published_at": "2026-08-31T20:53:55.717Z",
+  "commit": "297500f1a6e3008394cfe63ac13fa6db68b8c277",
+  "changelog": "The browser door, the free desks as a table, and four price corrections. Adds WebMCP browser tools, both origin trials, the conformance desk's annotated form; names spot_check, good_buyer, onpage_audit and certificate_of_patronage, and the corpus rooms /doors, /fresh-set, /defects, /criteria, /inflows. Corrects service_audit ($0.10 to $5), trust_profile ($19 to $21), the shelf range and the entry price — all now guarded."
+}

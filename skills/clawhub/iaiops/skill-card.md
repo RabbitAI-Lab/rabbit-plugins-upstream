@@ -1,39 +1,57 @@
-## Description: <br>
-Iaiops routes industrial and OT troubleshooting tasks to the appropriate edition skill and MCP profile for read-first diagnostics, analytics, and gated writes across PLC, SCADA, machine tool, IIoT, building, and fab protocols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops routes industrial and OT troubleshooting requests to the appropriate edition skill and MCP profile for read-first diagnostics, asset and OEE analysis, and gated control-system writes across common plant protocols.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-External developers and OT engineers use Iaiops to select the right industrial protocol profile, inspect configured endpoints, run diagnostics, and prepare governed dry-run write actions for authorized control systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route users toward high-impact write-capable OT operations. <br>
-Mitigation: Use it only with authorized OT systems, keep credentials narrowly scoped, and require dry-run plus approval controls before any production write. <br>
-Risk: A broad MCP profile can expose more protocol tools than needed for a site. <br>
-Mitigation: Select the narrowest MCP profile that covers the target equipment or protocol before starting diagnostic work. <br>
+## Use Case:
 
+Industrial operations engineers, automation engineers, and site reliability teams use this skill to route OT data, diagnostics, readiness checks, and downtime investigations to the correct industry or protocol edition. It is intended for governed, read-first workflows over PLCs, controllers, machine tools, IIoT brokers, building systems, and related industrial assets.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes users toward narrower MCP profiles and emphasizes read-first, dry-run, and approval-controlled operation for write-capable OT actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: A real write to a production control system could affect industrial equipment or site operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-first workflows, keep dry-run enabled until reviewed, require named approval, and double-confirm any real write before execution.
+
+Risk: Selecting the wrong edition or MCP profile could route the agent toward tools that do not match the site or protocol.
+
+Mitigation: Verify the selected edition/profile and run readiness, doctor, or protocols_supported checks before attempting operational actions.
+
+Risk: Inferring tag roles, process relationships, or root causes without site knowledge can produce misleading OEE or downtime conclusions.
+
+Mitigation: Require human-provided tag roles and declared process relationships, cite observed signals, and return insufficient_evidence when support is missing.
+
+## Reference(s):
+
+- [iaiops skill page](https://clawhub.ai/zw008/skills/iaiops)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and configuration values]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first routing guidance with dry-run and approval notes for high-impact writes.]
+
+## Skill Version(s):
+
+0.27.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

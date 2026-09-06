@@ -1,45 +1,65 @@
-## Description: <br>
-Monitor Reddit, Hacker News, X, and Bluesky for product or website keyword mentions with the RedReplier API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitor Reddit, Hacker News, X, and Bluesky for keyword mentions of a product or website using the RedReplier API.
 
-## Publisher: <br>
-[tarasshyn](https://clawhub.ai/user/tarasshyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tarasshyn](https://clawhub.ai/user/tarasshyn)
 
-## Use Case: <br>
-Users who manage product monitoring use this skill to configure RedReplier websites and keywords, retrieve and filter AI-scored mentions, triage leads, and manage alert settings through the RedReplier API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a RedReplier API token. <br>
-Mitigation: Use a dedicated, revocable API token and keep REDREPLIER_API_KEY scoped to the agent runtime. <br>
-Risk: Activating pending keywords can charge for a plan upgrade. <br>
-Mitigation: Call the activation preview first, show the charge and target plan to the user, and require explicit confirmation before activation. <br>
-Risk: Deleting a monitored website stops monitoring for that website. <br>
-Mitigation: Confirm deletion with the user using the website domain, not only the resource ID. <br>
+## Use Case:
 
+External users and developers use this skill to monitor product or brand mentions, review AI-scored social leads, manage monitored websites and keywords, and triage mentions through RedReplier.
 
-## Reference(s): <br>
-- [RedReplier homepage](https://redreplier.com) <br>
-- [ClawHub skill page](https://clawhub.ai/tarasshyn/redreplier) <br>
-- [RedReplier API Reference](references/api-reference.md) <br>
-- [RedReplier Mention Filtering](references/mention-filtering.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with curl commands and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDREPLIER_API_KEY; paid keyword activation and website deletion require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+Risk: The skill can access RedReplier account data and manage social mention leads through an API token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated, revocable REDREPLIER_API_KEY token and revoke or rotate it when agent access is no longer needed.
+
+Risk: Billing activation and website deletion are high-impact API actions described in the raw documentation.
+
+Mitigation: Require explicit user confirmation before those actions; preview billing activation first and identify websites by domain before deletion.
+
+Risk: AI relevance scores and explanations can be imperfect for lead triage.
+
+Mitigation: Review the source content, relevance score, and relevance reason before approving or rejecting mentions.
+
+Risk: Repeated API calls can hit RedReplier rate limits or consume AI quota for explanation generation.
+
+Mitigation: Respect RateLimit and Retry-After responses, avoid retry loops, and use mention explanations selectively.
+
+## Reference(s):
+
+- [RedReplier API Reference](artifact/references/api-reference.md)
+- [RedReplier Mention Filtering](artifact/references/mention-filtering.md)
+- [RedReplier](https://redreplier.com)
+- [Openclaw Redreplier on ClawHub](https://clawhub.ai/tarasshyn/skills/redreplier)
+- [RedReplier MCP Server](https://github.com/RedReplier/redreplier-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets and curl-style shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a REDREPLIER_API_KEY token; agent workflows should respect rate limits and ask for confirmation before high-impact account changes.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

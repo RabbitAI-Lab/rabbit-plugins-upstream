@@ -62,6 +62,7 @@ siluzan-tso google-analysis -a <id> --start <S> --end <E> --json-out ./snap-p4 \
 
 | 维度              | ❌ 禁止猜                                            | ✅ outline 真实字段                                                                                        |
 | ----------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `overview`        | `currentPeriod.activeDays`、`previousPeriod.activeDays`、`currentPeriod.averageDailyCost` | `record.activeDays`、`record.averageDailyCost`（只在 **record 根**；period 块没有。上期这两字段接口不返回；要环比另拉上期 `daily-metrics` 数 `spend>0` 天数） |
 | `keywords`        | `keywordText`、`status`、`matchType`（单独作展示列） | `keyword`、`userStatus`、`keywordMatchTypeZh`（或 `keywordMatchType`）                                     |
 | `search-terms`    | `query`                                              | `searchTermText`；匹配类型用 `matchTypeZh`；状态用 `queryTargetingStatusZh`                                |
 | `geographic`      | `geoName`、`countryCriterionIdName`                  | `countryOrRegion`、`countryNameZh`、`countryCode`                                                          |
@@ -96,6 +97,7 @@ siluzan-tso google-analysis -a <id> --start <S> --end <E> --json-out ./snap-p4 \
 4. **数值**：金额 2 位小数；`ctr`/`conversionRate` 按上文 0~1 口径；禁止对 JSON 比率再 ÷100。
 5. **所有 ID 列写字符串（文本）**：账户/系列/组/关键词/地域等 id 用 `String(id)` + 文本格式（`exceljs` `numFmt: '@'`）；**禁止**写成数字（防科学计数法/丢精度）。见 `agent-conventions.md`。
 6. 某维度拉数失败：该 Sheet 写 `[ 数据不可用：<原因> ]`，禁止留空或编造。
+7. **样式（必须）**：脚本 `import` `report-templates/excel-style-kit.mjs`，用 `createExcelWorkbook({ accent: "google" })` + `titleBar`/`tableHeader`/`dataRow` 等组件搭版面，**禁止**裸写无样式单元格。规范见 `report-templates/excel-style-guide.md`。
 
 有 OKKI 固定话术时改走 **P6**（`okki-weekly-google-client.md`），**不**用本文。
 
@@ -116,6 +118,6 @@ siluzan-tso google-analysis -a <id> --start <S> --end <E> --json-out ./snap-p4 \
 ## 相关文档
 
 - `google-period-report.md` — 默认维度与可选追加
-- `okki-weekly-google-client.md` — OKKI 固定 5 Sheet（P6）
+- `okki-weekly-google-client.md` — OKKI 固定 5 Sheet（P6，`google-analysis okki-render`）
 - `references/core/tips.md` — 摘要 → outline → 脚本
 - `references/core/playbooks.md` — P4 步骤卡片

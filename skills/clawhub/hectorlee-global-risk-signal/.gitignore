@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# 生成产物（信号卡 / 推送卡片，每日重新生成）
+output/
+
+# 运行时缓存（定时任务在 scripts/ 下生成的 memory）
+.workbuddy/
+
+# 系统文件
+.DS_Store
+
+# IDE
+.idea/
+.vscode/

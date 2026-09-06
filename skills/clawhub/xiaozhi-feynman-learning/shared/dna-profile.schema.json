@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json",
+  "title": "LearningDNAProfile",
+  "x-distributed-to": "xiaozhi-feynman-learning",
+  "x-skill-scope": {
+    "note": "本副本随 xiaozhi-feynman-learning 分发，已按其 SKILL.md 裁剪：只保留正文在非否定语境下提到的字段（共 1 项，删去 12 个顶层字段）。完整定义在归属技能处。读/写权限与授权位以 SKILL.md 为准。",
+    "paths": [
+      "extensions.understanding"
+    ]
+  },
+  "description": "学习DNA —— 小智长期记忆核心引擎的数据结构定义。覆盖六大基础维度（基础信息、学科强弱、学习风格、错误模式、对话摘要、成长轨迹）、成长图谱与兴趣DNA、学习情绪，以及授权主体与学段、学科扩展档案 subjectExtensions、通用扩展档案 extensions、安全处置记录 safetyRecord。所有词表以 shared/vocab.md 为唯一来源。所有字段均为可选，默认只记录完成个性化辅导所必需的最小信息。本 schema 由 xiaozhi-learning-dna 定义并保管，错因、理解深度由对应技能经 handover 在授权后写入；学习情绪维度与成长里程碑由 xiaozhi-learning-dna 自己在各自授权位开启后产出。其他技能随包附带的副本仅供字段名参照：各技能实际可读写的路径以副本顶部的 x-skill-scope 与其 SKILL.md 接口节为准。",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "extensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "通用扩展档案：notes 由康奈尔笔记写入，focus 由时间与专注力教练写入，plans 由 30 天学习计划制定师写入，projects 由跨学科侦探周写入，understanding 由费曼学习法写入。各分支只由对应 SKILL 写入，写入一律经 handover 的 subject_profile_writeback",
+      "properties": {
+        "understanding": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "concept": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "subject": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "depth": {
+                "$ref": "#/$defs/masteryLevel"
+              },
+              "stuckAt": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "费曼卡住的位置，不写原话"
+              },
+              "lastTestedDate": {
+                "type": "string",
+                "format": "date"
+              },
+              "nextSuggestion": {
+                "type": "string",
+                "maxLength": 100
+              }
+            },
+            "required": [
+              "concept",
+              "depth"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [],
+  "$defs": {
+    "masteryLevel": {
+      "type": "string",
+      "enum": [
+        "会复述",
+        "会解释",
+        "真正掌握"
+      ],
+      "description": "掌握度三档（shared/vocab.md §6）"
+    }
+  }
+}
