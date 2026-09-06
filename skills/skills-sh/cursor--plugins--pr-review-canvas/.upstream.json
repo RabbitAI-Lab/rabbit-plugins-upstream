@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/pr-review-canvas",
+  "repo": "cursor/plugins",
+  "skillId": "pr-review-canvas",
+  "branch": "main",
+  "pushedAt": "2026-09-04T21:32:57Z",
+  "contentHash": "4dd61e72fcb87d31e3421fca4aae22cd54c44462adaee9b7f2f5ddb1d3b70d50",
+  "fetchedAt": "2026-09-06T11:42:18.677Z"
+}

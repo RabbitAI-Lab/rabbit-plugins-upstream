@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setting-up-ec2-instance-profiles",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setting-up-ec2-instance-profiles",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "7dbd5645bfa1fc6c4d32f226ea60d585945ec7eb6522816ca956f6201b821368",
+  "fetchedAt": "2026-09-06T11:44:43.443Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/check-compiler-errors",
+  "repo": "cursor/plugins",
+  "skillId": "check-compiler-errors",
+  "branch": "main",
+  "pushedAt": "2026-09-04T21:32:57Z",
+  "contentHash": "c2ad326682a319ac227e30fc5b5f2116d598921ede3e5d5d90019575288739b7",
+  "fetchedAt": "2026-09-06T11:42:18.732Z"
+}

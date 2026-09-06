@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/chatting-with-aws-devops-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "chatting-with-aws-devops-agent",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "2090c26f0ce0a26a5556d4a875f0f022094e12e659ef4f05f8136924deeb9d20",
+  "fetchedAt": "2026-09-06T11:44:44.196Z"
+}

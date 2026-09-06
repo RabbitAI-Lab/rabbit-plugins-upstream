@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/wallet",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "wallet",
+  "branch": "main",
+  "pushedAt": "2026-09-06T02:11:28Z",
+  "contentHash": "e4fb0ef54fd79268d8e760b0ec47c29124163623868245fc8c2ae1c92541d9b8",
+  "fetchedAt": "2026-09-06T11:44:11.190Z"
+}
