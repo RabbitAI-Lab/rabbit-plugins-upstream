@@ -1,40 +1,61 @@
-## Description: <br>
-Anti-stuck guard for agentic sandboxes that checks for missing packages, binaries, GGUF models, and shims, then guides self-repair before long-running model work proceeds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Keep local GGUF/llama.cpp agent sandboxes from hanging after snapshot eviction when inference stalls, binaries or models are missing, npx waits on closed stdin, or sudo might prompt interactively.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-Developers and agent operators use this skill in disposable or explicitly authorized containerized sandboxes where tools, model files, or system packages may disappear between turns. It helps agents add pre-flight checks, hard timeouts, byte-size verification, and fallback paths so missing runtime assets fail visibly instead of causing silent hangs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may lead an agent to make broad system changes such as installing packages, creating local shims, rebuilding binaries, downloading large model files, or prompting account re-login. <br>
-Mitigation: Use it only in disposable or explicitly authorized sandboxes, require user approval for environment changes and authentication steps, and review generated commands before execution. <br>
-Risk: Automatic self-repair can mask missing or evicted runtime assets if it runs without visible boundaries. <br>
-Mitigation: Keep progress output and repair logs visible, verify downloaded model byte sizes, and stop on failed fallback chains instead of continuing silently. <br>
+## Use Case:
 
+Developers and engineers use this skill to preflight and repair local-LLM sandboxes that may lose llama.cpp binaries or GGUF model files after snapshot eviction. It provides guarded shell workflows for timeout-bounded inference, consent-gated repair, prompt caching, model verification, and host-specific tuning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/sandbox-selfheal-guard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with shell-oriented implementation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include commands for package installation, model download verification, timeout wrappers, and local runner scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Fix mode can install system packages, create a persistent npx shim, download large model files, rebuild local llama.cpp code, and cache prompts or outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the default check mode for read-only inspection and enable SELFHEAL_MODE=fix only with explicit consent, especially when sudo privileges are available.
+
+Risk: Local model and llama.cpp trust boundaries remain important because the skill can use existing binaries, models, and source checkouts.
+
+Mitigation: Review the llama.cpp checkout and binaries before repair, keep rebuilds limited to trusted remotes, and use SELFHEAL_DEEP_VERIFY=1 to recheck existing model hashes.
+
+Risk: Prompt content and generated outputs may be retained in a local cache when fix mode is enabled.
+
+Mitigation: Avoid fix mode for sensitive prompts unless local retention is acceptable, and clear ~/.selfheal/cache when cached outputs should no longer be retained.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/orionshaowswmw/skills/sandbox-selfheal-guard)
+- [Qwen3 0.6B GGUF model artifact](https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf)
+- [Qwen2.5 0.5B Instruct GGUF model artifact](https://huggingface.co/second-state/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf)
+- [Qwen2.5 Coder 0.5B GGUF model artifact](https://huggingface.co/bartowski/Qwen2.5-Coder-0.5B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf)
+- [DeepSeek R1 Distill Qwen 1.5B GGUF model artifact](https://huggingface.co/bartowski/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses exit codes and stderr status messages for health and repair outcomes; fix mode may create local logs, state, caches, shims, downloads, and builds after consent.]
+
+## Skill Version(s):
+
+3.0.8 (source: server release metadata, SKILL.md frontmatter, manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/free-tier-ai-router/schema/status.v1.schema.json",
+  "title": "ai_router.status.v1",
+  "description": "Status object emitted by `router.py --status --json`. Live budget per route; reads disk state only, makes no API calls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "routes"],
+  "properties": {
+    "schema": { "const": "ai_router.status.v1" },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["provider", "model", "quality", "rpm", "rpd", "tier", "tags", "used_today", "ready", "status"],
+        "properties": {
+          "provider": { "type": "string" },
+          "model": { "type": "string" },
+          "quality": { "type": "integer", "minimum": 0, "maximum": 5, "description": "Measured quality score (5 objective questions)." },
+          "rpm": { "type": ["integer", "null"], "description": "Published requests-per-minute limit, when known." },
+          "rpd": { "type": ["integer", "null"], "description": "Published requests-per-day limit, when known (e.g. Gemini 20/model/day)." },
+          "tier": { "enum": ["cheap", "mid", "scarce"], "description": "Abundance tier; cheap capacity is spent first." },
+          "tags": { "type": "string", "description": "Space-separated tags (e.g. 'code fast')." },
+          "used_today": { "type": "integer", "minimum": 0 },
+          "ready": { "type": "boolean", "description": "False when in cooldown, over daily budget, or known-dead." },
+          "status": { "type": "string", "description": "'ready' or the human-readable reason it is not." }
+        }
+      }
+    },
+    "spec_config_error": { "type": ["string", "null"], "description": "Present-and-non-null when providers.json is malformed." }
+  }
+}

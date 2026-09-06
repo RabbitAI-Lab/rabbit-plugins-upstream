@@ -67,10 +67,22 @@ def shaped(raw):
 
 
 def sentiment_scalar(series):
-    """Latest polarity in [-1, 1]; the float is nested at metricValue.value.value."""
+    """Latest reading of a metric series, read from the flat top-level `value`.
+
+    Every point carries `value` alongside the nested `metricValue`, and it holds the scalar
+    for every metric type. Prefer it: the nested depth is not uniform, since a value metric
+    nests at metricValue.value.value while a count metric like `mentions` puts the integer
+    at metricValue.value. The nested read stays as a fallback for a point without `value`."""
     if not series:
         return None
-    return float(series[-1]["metricValue"]["value"]["value"])
+    point = series[-1]
+    flat = point.get("value")
+    if flat is not None:
+        return float(flat)
+    nested = (point.get("metricValue") or {}).get("value")
+    if isinstance(nested, dict):
+        nested = nested.get("value")
+    return None if nested is None else float(nested)
 
 
 def out(obj):
@@ -148,6 +160,7 @@ def main():
     ticker_cmd("holders"); ticker_cmd("consensus")
     ticker_cmd("actions", ("--days", "90")); ticker_cmd("estimates")
     aa = simple("analyst-activity"); aa.add_argument("--days", default="7")
+    aa.add_argument("--action-types", default=None)  # CSV, e.g. UPGRADE,DOWNGRADE,INITIATE
     # calendar / news / stories / quotes
     ticker_cmd("earnings")
     ticker_cmd("news", ("--limit", "8"))
@@ -195,7 +208,8 @@ def main():
     elif a.cmd == "estimates":
         out(shaped(get(f"/api/v1/analyst/{TE}/estimates")))
     elif a.cmd == "analyst-activity":
-        out(shaped(get("/api/v1/analyst/activity", lookbackDays=days)))
+        out(shaped(get("/api/v1/analyst/activity", lookbackDays=days,
+                       actionTypes=getattr(a, "action_types", None))))
     elif a.cmd == "earnings":
         out(shaped(get("/api/v1/calendar/earnings", ticker=T)))
     elif a.cmd == "news":

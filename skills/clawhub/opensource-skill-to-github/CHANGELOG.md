@@ -3,6 +3,36 @@
 All notable changes to this skill are documented here.
 Format loosely follows [Keep a Changelog](https://keepachangelog.com/); versions follow [SemVer](https://semver.org/).
 
+### v1.0.18 (2026-09-05)
+- **修复 skillhub.cn 发版丢失 changelog**：`scripts/skillhub_cn_publish.sh` 的 payload 原先只构造 `slug/name/displayName/summary/description/version/claimSlug/joinContest`，**缺 `changelog` 字段**，导致平台上每个版本都显示默认文案 `Initial release`。
+  - **定位**：对比同一 skill 在平台上的两个版本——1.3.3 由另一调用方带 changelog 发布即显示正常，走本脚本发布的 1.3.4 变成 `Initial release`，确认为脚本局限而非发版失败。
+  - **改为自动提取**：独立 `CHANGELOG.md` 首条版本标题优先（正则兼容 `## [1.0.0] - date` / `### v1.0.17 (2026-08-03)` / `## 1.0.3` 三种常见写法）→ 回退 SKILL.md 内嵌变更日志首条（自动剥离列表符、加粗标记、结尾孤立冒号）→ 都没有则留空。
+  - **不用空串覆盖平台默认**：仅当提取到内容时才带 `changelog` 字段；截取 300 字符。
+  - 同时在脚本输出里回显提取结果，提取不到时打 warning，便于发版前自检。
+
+### v1.0.17 (2026-08-03)
+- **新增 mono-repo 安全护栏**：
+  - **背景**：2026-08-02 `better-office-work-flow` 仓库被本流程冲掉——把单个 skill 当 repo 根目录推到 main，force-overwrite 了 `skills/` 下的 4 个 skill（事后从孤立提交 `63ae4858` 恢复）。
+  - **修复**：`github_push.sh` 推送前检测目标 repo 根目录是否含 `skills/` 目录，若是则 **exit 8 拒绝推送**，并给出「子目录模式」手动发布指引（clone → 放进 `skills/<slug>/` → commit → push）。设 `OSG_ALLOW_MONOREPO_OVERWRITE=1` 可显式放行。
+  - **SKILL.md** Step 9 同步加告警。
+- **修正 Repository 地址**：从不存在的 `github.com/Songhonglei/opensource-skill-to-github` 改为正确的 mono-repo 路径 `github.com/Songhonglei/build-better-skills/tree/main/skills/opensource-skill-to-github`。
+
+### v1.0.16 (2026-07-30)
+- **热修复 `skillhub_cn_publish.sh` 的 `set -e` 崩溃（v1.0.15 引入）**：
+  - **根因**：v1.0.15 的两级版本提取里，`grep` 无匹配时返回非零，在 `set -euo pipefail` 下直接中断脚本——对「只有正文 `**Version**`、无 frontmatter `version:`」的 skill（本 skill 自己就是）必崩，无任何报错输出。
+  - **修复**：两处 `grep` 管道补 `|| true`，无匹配时安全返回空串走回退逻辑。四种场景 + set -e 实跑均验证通过。
+
+### v1.0.15 (2026-07-30)
+- **`skillhub_cn_publish.sh` 版本提取修复（优先读 frontmatter）**：
+  - **根因**：v1.0.14 及之前版本提取只匹配正文 `**Version**: x.y.z`，但部分 skill（如 invoice-auto-forward）只在 frontmatter 声明 `version: x.y.z`、正文无 Version 行，导致发布时回退成错误的 `1.0.0`，每次都要手动补正文行。
+  - **修复**：改为两级提取——优先 frontmatter `version:` 字段 → 回退正文 `**Version**: x.y.z` → 最终兜底 `1.0.0`。四种场景（仅 frontmatter / 仅正文 / 两者都有取 frontmatter / 都没有）均验证通过。
+
+### v1.0.14 (2026-07-28)
+- **安全措辞与注释加固（响应 clawhub SkillSpector review，无功能变化）**：
+  - `_lib_profile.sh`：在通过 `sh -c "$OSG_GITHUB_TOKEN_CMD"` 取 token 的分支上方补安全注释，明确该值仅应来自用户可信 profile / 环境变量，等同 shell rc 中的命令，不得赋以外部/不可信输入。
+  - `setup_profile.sh`：收紧明文 token（`OSG_GITHUB_TOKEN="ghp_xxx"`）选项的注释——标注仅限隔离本地环境、用户明确要求时使用，生产禁用，优先命令式取 token。
+  - `SKILL.md`：memory 沉淀章节新增红线声明——复盘笔记严禁写入任何 token/secret/明文凭证及内网路径/域名/平台代号，与 token 绝不落盘的硬规则对齐，消除审查指出的「规则自相矛盾」。
+
 ### v1.0.13 (2026-07-22)
 - **跨平台修复（`clawhub_publish.sh` 发布在 macOS 默认 bash 3.2 下失败）**：
   - **根因**：v1.0.12 为修 `set -u` 空数组 unbound，把发布命令前缀写成 `"${CLAWHUB_ENV[@]:-}"`。但在 macOS 默认 `/bin/bash` 3.2.57 下，`${ARR[@]:-}` 对**空数组**会展开成「1 个空单词」，使命令变成 `"" clawhub ...` → bash 去 exec 一个空命令名 → **exit 126**，被重试 3 次 × 30s 后报「Publish failed」。该路径正是**最常见**的已登录态。

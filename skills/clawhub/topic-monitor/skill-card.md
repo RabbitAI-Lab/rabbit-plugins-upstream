@@ -1,46 +1,62 @@
-## Description: <br>
-Topic Monitor helps agents monitor configured web searches, RSS/Atom feeds, and GitHub releases, then prioritize alerts and digest items with filtering, importance scoring, sentiment labels, and local state. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitor topics of interest and proactively alert when important developments occur. Use when the user wants automated monitoring of specific subjects like product releases, news topics, technology updates, RSS/Atom feeds, or GitHub releases. Supports scheduled web search plus feed polling, boolean topic filters, AI importance scoring with sentiment tracking, smart alerts vs weekly digests, and memory-aware contextual summaries.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Developers and external users use Topic Monitor to configure recurring checks for product releases, news topics, technology updates, RSS/Atom feeds, GitHub releases, and other subjects that need proactive alerting or weekly digests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Configured search queries, feed URLs, and alert contents may be used in external checks or notifications. <br>
-Mitigation: Review config.json before use, avoid sensitive topics in externally delivered alerts, and choose trusted search and notification providers. <br>
-Risk: Recurring monitoring can create local state and findings over time. <br>
-Mitigation: Keep TOPIC_MONITOR_DATA_DIR in a private location and test with dry runs before enabling cron. <br>
-Risk: A configured WEB_SEARCH_PLUS_PATH controls which search script is executed. <br>
-Mitigation: Set WEB_SEARCH_PLUS_PATH only to a trusted web-search-plus script that has been reviewed for the intended environment. <br>
+## Use Case:
 
+Developers and external users use this skill to configure recurring monitoring for topics, feeds, GitHub releases, product updates, news, competitors, prices, and research papers, then receive immediate alerts or weekly digests when relevant developments appear.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/robbyczgw-cla/skills/topic-monitor) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/robbyczgw-cla) <br>
-- [README](README.md) <br>
-- [SKILL](SKILL.md) <br>
-- [DigitalOcean OpenClaw Skills Guide](https://www.digitalocean.com/resources/articles/what-are-openclaw-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples; runtime scripts emit text, JSON alert lines, and digest summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3. Optional environment variables configure Telegram chat ID, local data directory, and a trusted web-search-plus path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.2 (source: frontmatter, package.json, CHANGELOG, server release metadata) <br>
+Risk: Configured topics, queries, feed URLs, and GitHub repositories may be sent to search providers or feed hosts during monitoring.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure only topics and sources you are comfortable sharing with the relevant providers and hosts.
+
+Risk: Imported OPML or feed lists can introduce untrusted external sources into scheduled monitoring.
+
+Mitigation: Review feed and OPML inputs before import, and remove sources that are not trusted for the intended workflow.
+
+Risk: The skill stores findings, alert history, and state locally in the configured data directory.
+
+Mitigation: Set TOPIC_MONITOR_DATA_DIR to a location with access controls appropriate for the monitored content.
+
+Risk: The monitor can invoke a local web-search-plus script through WEB_SEARCH_PLUS_PATH.
+
+Mitigation: Keep WEB_SEARCH_PLUS_PATH pointed at a trusted local script.
+
+## Reference(s):
+
+- [DigitalOcean OpenClaw Skills guide](https://www.digitalocean.com/resources/articles/what-are-openclaw-skills)
+- [feedparser project](https://github.com/kurtmckee/feedparser/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with shell commands and JSON alert, digest, state, and configuration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local state and findings files under the configured data directory and emits structured alert lines for agent-delivered channels.]
+
+## Skill Version(s):
+
+1.6.0 (source: frontmatter, CHANGELOG, skill.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

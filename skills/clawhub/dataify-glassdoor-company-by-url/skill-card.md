@@ -1,43 +1,59 @@
-## Description: <br>
-Prepare Dataify builder requests for the glassdoor.com scraper family rooted at glassdoor_company_by-url, including tool selection, saved parameter options, and an authenticated curl request. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured Glassdoor company information from known Glassdoor company URLs while avoiding job-search results and Indeed company URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to prepare authenticated Dataify builder requests for Glassdoor company and job-listing scraper tools, choosing one tool and supplying or normalizing parameter values before running a curl request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitting scraper parameters and API requests sends user-provided inputs to Dataify. <br>
-Mitigation: Confirm Dataify is trusted for the intended inputs before running generated requests. <br>
-Risk: Persistently storing DATAIFY_API_TOKEN in shell startup files can increase credential exposure. <br>
-Mitigation: Prefer a session-scoped token or credential manager, and review the generated curl command before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to have an agent prepare and run Dataify Builder requests for Glassdoor company collection from provided company URLs, then monitor the asynchronous task and return the final JSON result.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-glassdoor-company-by-url) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify Builder Endpoint](https://scraperapi.dataify.com/builder) <br>
-- [Tool Parameter Catalog](references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with curl command blocks and JSON parameter payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided DATAIFY_API_TOKEN and selected Glassdoor tool parameters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: The release is marked suspicious because runtime instructions expose broader Glassdoor company and job-listing scraper modes than the company-URL description.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Constrain use to glassdoor_company_by-url unless the user explicitly requests and accepts a broader Dataify scraper mode.
+
+Risk: The skill sends requests to external Dataify services and may consume account credits.
+
+Mitigation: Confirm high-volume, multi-page, or scope-changing requests before submission, and verify token presence without displaying the token value.
+
+Risk: Persistent API-token setup can leave long-lived credentials in a user's shell environment.
+
+Mitigation: Prefer session-scoped setup for short-term use and ensure persistent configuration is reviewed by the user before adding it to shell startup files.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/dataify-server/skills/dataify-glassdoor-company-by-url)
+- [Dataify scraper parameter catalog](artifact/references/tool-params.json)
+- [Dataify Builder API endpoint](https://scraperapi.dataify.com/builder)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown text with curl commands, setup guidance, task status, and JSON collection results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command when monitoring times out or when submission-only behavior is requested.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/elevenlabs-voices",
   "slug": "elevenlabs-voices",
   "ownerHandle": null,
-  "version": "2.1.6",
-  "updatedAt": 1778987039577,
-  "contentHash": "08da8a1e9864a56ed1a6578a4e832ce727f5fddce361c351e21fc6f75fca837b",
-  "fetchedAt": "2026-07-26T19:12:24.149Z"
+  "version": "2.2.0",
+  "updatedAt": 1788192840933,
+  "contentHash": "dbef4e0d97eff23a8d4d195db686c73c56cae323f91e9a165e350ac90e036baa",
+  "fetchedAt": "2026-09-06T12:02:46.700Z"
 }

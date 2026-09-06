@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/free-tier-ai-router/schema/providers.config.schema.json",
+  "title": "providers.json configuration",
+  "description": "Schema for ~/.config/ai_router/providers.json — pluggable provider declarations. User entries override built-in routes on (provider, model) conflicts. A malformed file is a WARNING (exit code 4 on --json), never a crash: built-in routes keep working.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["providers"],
+  "properties": {
+    "providers": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/provider" },
+      "minProperties": 1
+    }
+  },
+  "$defs": {
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["base_url"],
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "pattern": "^https?://",
+          "description": "OpenAI-compatible base, e.g. http://127.0.0.1:18321/v1/ (chat/completions and models are appended)."
+        },
+        "auth": {
+          "enum": ["bearer", "x-api-key", "none"],
+          "default": "bearer",
+          "description": "none = local servers with no key. A non-local base_url with auth none triggers a loud warning."
+        },
+        "api_key": { "type": "string", "description": "Inline key. File is chmod 600 when keys are present." },
+        "key_file": { "type": "string", "description": "Path to a file containing the key (alternative to api_key)." },
+        "models": {
+          "type": "array",
+          "items": { "oneOf": [{ "type": "string" }, { "$ref": "#/$defs/model" }] },
+          "description": "Bare id strings get conservative defaults: quality 2, rpm 30, tier mid."
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "quality": { "type": "integer", "minimum": 0, "maximum": 5, "default": 2 },
+        "rpm": { "type": ["integer", "null"], "default": 30 },
+        "rpd": { "type": ["integer", "null"] },
+        "tier": { "enum": ["cheap", "mid", "scarce"], "default": "mid" },
+        "tags": { "type": "string", "default": "" }
+      }
+    }
+  }
+}

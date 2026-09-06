@@ -36,17 +36,17 @@ Web-grounded LLM through a single `instruct` action — **every model has live i
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"perplexity","actionSlug":"instruct","config":{"model":"sonar","advancedSettings":{"searchContextSize":"low","searchRecencyFilter":"month","temperature":0}}}' \
-  --records '[{"prompt":"What is Acme GmbH known for? 2-sentence summary."},{"prompt":"..."}, ...]' \
+  --action '{"kind":"connector","integrationSlug":"perplexity","actionSlug":"instruct"}' \
+  --records '[{"model":"sonar","prompt":"What is Acme GmbH known for? 2-sentence summary.","advancedSettings":{"searchContextSize":"low","searchRecencyFilter":"month","temperature":0}},{"model":"sonar","prompt":"..."}, ...]' \
   --wait-until-finished
 ```
 
-`prompt` goes in each record; `model` and `advancedSettings` in `config`. Pipe the answers into a cheap `anthropic`/`openAi` step for structured extraction if you need parse-ready JSON downstream.
+**`model`, `prompt`, and `advancedSettings` are all *inputs*** — they go in each record, never in the action's `config`, which a top-level action does not carry at all. Settings placed there are rejected on older backends and **silently dropped** on newer ones — and a dropped `searchContextSize` is a real cost difference here. Pipe the answers into a cheap `anthropic`/`openAi` step for structured extraction if you need parse-ready JSON downstream.
 
 ## Input quirks
 
 - **The schema default model is `sonar-deep-research`** — the 5/min, research-grade model. Always set `model` explicitly; an unset model turns a 500-row batch into a ~100-minute crawl at premium depth.
-- **`searchContextSize` is a config cost lever, not just quality** — it moves the token rate up to ~1.8× (defaults to `medium`). Start `low` for one-fact lookups.
+- **`searchContextSize` is a cost lever, not just quality** (an input, alongside `model`/`prompt`) — it moves the token rate up to ~1.8× (defaults to `medium`). Start `low` for one-fact lookups.
 - **Structured output enums differ from openAi/gemini:** `output.responseFormat` is `text` (default) | `jsonSchema` (camelCase, requires sibling `jsonSchema`) | `regex` (requires sibling `regex`). There is no `json_object` mode here.
 - **Temperature is 0–2 (exclusive), default 0** — already deterministic by default, unlike openAi/gemini (default 1).
 - No `withWebSearch` flag — search is always on; that's the product.
@@ -62,9 +62,17 @@ cargo-ai orchestration action execute-batch \
 - **The web-grounded rung** of [`../references/stage-action-map.md`](../references/stage-action-map.md) LLM section; escalation path for facts: model data → `serper.search` (0.05) + cheap extract → `perplexity.instruct` when synthesis/citations are needed.
 - Gate batch research spend through [`../references/cost-discipline.md`](../references/cost-discipline.md) — pilot ~10 rows first.
 
+## Recurring use
+
+Web-grounded answers decay — **re-research is legitimate here**, but only on rows a fresh signal touched, never the whole segment on a timer.
+
+- **Recurring shape:** a `sonar`-low `instruct` node inside a signal-triggered play (funding, job change — see [`../recipes/funding-watch.md`](../recipes/funding-watch.md)), with `searchRecencyFilter` matched to the trigger cadence (weekly funding watch → `week`) so each answer covers only the new window. Cadence defaults: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
+- **In-play gate:** gate on timestamps, not empty-only — run where the signal's detected-at is newer than the row's last-researched column; stale answers *should* refresh, but only when a signal fires.
+- **Cost compounds:** 0.3–1 per row per cycle — keep the "research the account, not the contact list" dedupe from Cost traps: one call per company per signal, fanned out to contacts.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"perplexity","actionSlug":"instruct","config":{"model":"…","advancedSettings":{…}}}`. **No `connectorUuid` in `config`.** Costs above are the Cargo-credits rules; a workspace can instead attach its own Perplexity key (connector config takes a single required `apiKey`) and bill the provider directly.
+`{"kind":"connector","integrationSlug":"perplexity","actionSlug":"instruct"}`, with `model`, `prompt`, and `advancedSettings` per record in `--records` / `--data`. **No `connectorUuid` in `config`** — and no model settings there either; inside a workflow **node** those same fields are the node's `config`. Costs above are the Cargo-credits rules; a workspace can instead attach its own Perplexity key (connector config takes a single required `apiKey`) and bill the provider directly.
 
 ## Pairs with
 

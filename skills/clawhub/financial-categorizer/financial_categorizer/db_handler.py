@@ -4,8 +4,15 @@ Manages tables for transactions, categories, match rules, manual overrides,
 and metadata. Follows a connect/disconnect pattern with date type adapters.
 """
 
+import itertools
 import sqlite3
 from datetime import date, datetime
+
+from financial_categorizer.matching import (
+    aggregate_tolerance,
+    clean_description,
+    inexact_amount_match,
+)
 
 
 def adapt_date(val):
@@ -622,6 +629,244 @@ class DatabaseHandler:
             "orphaned_id_matches": orphaned_id_matches,
             "orphaned_links": orphaned_links
         }
+
+    def cleanup_pending(self, dry_run: bool = False, force_ids: list = None) -> dict:
+        """Find and optionally delete ghost pending transactions.
+
+        A ghost pending is a reservation whose settled counterpart already
+        exists in the database — matched individually, as part of a
+        split-authorization group, or inexactly (same merchant and window,
+        settled amount within the inexact band: merchants like ICA Maxi
+        authorize a buffer and settle a different final amount) — so keeping
+        it would double-count the purchase. Inexact matches fire only when a
+        single settled candidate qualifies. Unresolved pendings are kept and
+        reported for manual review with nearby same-merchant candidates as
+        hints.
+
+        Args:
+            dry_run: Report ghosts without deleting them.
+            force_ids: Optional explicit pending ids to delete regardless of
+                matching confidence (manual override). Raises ValueError if
+                an id does not refer to a pending transaction.
+
+        Returns a dict:
+        {
+            "deleted": int,
+            "ghosts": [ {"id", "date", "amount", "description", "matched_settled"} ],
+            "unresolved": [ {"id", "date", "amount", "description"} ]
+        }
+        """
+        cur = self.get_cursor()
+        cur.execute(
+            "SELECT id, account_id, date, description, amount FROM transactions "
+            "WHERE status = 'pending' ORDER BY date, id"
+        )
+        pendings = cur.fetchall()
+        cur.execute(
+            "SELECT id, account_id, date, description, amount FROM transactions "
+            "WHERE status = 'settled' ORDER BY date, id"
+        )
+        settled = cur.fetchall()
+
+        settled_by_id = {s[0]: s for s in settled}
+        consumed_settled = set()
+        resolved = set()   # pending ids matched to a settled counterpart
+        matches = []       # (pending_id, settled_id)
+
+        def _as_date(val):
+            if isinstance(val, datetime):
+                return val.date()
+            if isinstance(val, date):
+                return val
+            return date.fromisoformat(str(val))
+
+        # Pass 1: individual matches (same rules as the importer: cleaned
+        # description substring, settled 0-10 days after pending, amount
+        # within 1.0 SEK). Each settled row can only justify one pending.
+        for p_id, p_acct, p_date, p_desc, p_amount in pendings:
+            p_clean = clean_description(p_desc)
+            p_dt = _as_date(p_date)
+            for s_id, s_acct, s_date, s_desc, s_amount in settled:
+                if s_acct != p_acct or s_id in consumed_settled:
+                    continue
+                s_clean = clean_description(s_desc)
+                if p_clean not in s_clean and s_clean not in p_clean:
+                    continue
+                if not (0 <= (_as_date(s_date) - p_dt).days <= 10):
+                    continue
+                if (s_amount < 0) != (p_amount < 0):
+                    continue
+                if abs(s_amount - p_amount) > 1.0:
+                    continue
+                matches.append((p_id, s_id, "exact"))
+                consumed_settled.add(s_id)
+                resolved.add(p_id)
+                break
+
+        # Pass 2: split-authorization groups (sum of 2-4 pendings vs one
+        # settled charge, within the importer's aggregate tolerance).
+        for s_id, s_acct, s_date, s_desc, s_amount in settled:
+            if s_id in consumed_settled:
+                continue
+            s_clean = clean_description(s_desc)
+            s_dt = _as_date(s_date)
+            pool = []
+            for p_id, p_acct, p_date, p_desc, p_amount in pendings:
+                if p_acct != s_acct or p_id in resolved:
+                    continue
+                p_clean = clean_description(p_desc)
+                if p_clean not in s_clean and s_clean not in p_clean:
+                    continue
+                if not (0 <= (s_dt - _as_date(p_date)).days <= 10):
+                    continue
+                if (p_amount < 0) != (s_amount < 0):
+                    continue
+                pool.append((p_id, p_amount))
+            if len(pool) < 2 or len(pool) > 8:
+                continue
+            tolerance = aggregate_tolerance(s_amount)
+            matched_group = None
+            for size in range(2, min(4, len(pool)) + 1):
+                for combo in itertools.combinations(pool, size):
+                    if abs(sum(a for _, a in combo) - s_amount) <= tolerance:
+                        matched_group = combo
+                        break
+                if matched_group:
+                    break
+            if matched_group:
+                for p_id, _ in matched_group:
+                    matches.append((p_id, s_id, "split"))
+                    resolved.add(p_id)
+                consumed_settled.add(s_id)
+
+        # Pass 3: inexact settlements (same merchant, settled 0-10 days after
+        # the reservation, settled amount inside the inexact amount band —
+        # merchants like ICA Maxi authorize a buffer and settle a different
+        # final amount). Auto-match only on MUTUAL uniqueness: exactly one
+        # settled candidate for the pending AND no other pending able to
+        # claim that settled row; any ambiguity stays unresolved for manual
+        # review (--force-id).
+        def _inexact_pool(p_row, s_row):
+            """True if pending p_row and settled s_row pass the
+            description/window/inexact-band checks."""
+            p_acct_, p_date_, p_desc_, p_amount_ = p_row[1], p_row[2], p_row[3], p_row[4]
+            s_acct_, s_date_, s_desc_, s_amount_ = s_row[1], s_row[2], s_row[3], s_row[4]
+            if p_acct_ != s_acct_:
+                return False
+            p_clean_ = clean_description(p_desc_)
+            s_clean_ = clean_description(s_desc_)
+            if p_clean_ not in s_clean_ and s_clean_ not in p_clean_:
+                return False
+            if not (0 <= (_as_date(s_date_) - _as_date(p_date_)).days <= 10):
+                return False
+            return inexact_amount_match(p_amount_, s_amount_)
+
+        for p in pendings:
+            p_id = p[0]
+            if p_id in resolved:
+                continue
+            inexact_candidates = [
+                s for s in settled
+                if s[0] not in consumed_settled and _inexact_pool(p, s)
+            ]
+            if len(inexact_candidates) != 1:
+                continue
+            s = inexact_candidates[0]
+            contested = any(
+                q[0] not in resolved and q[0] != p_id and _inexact_pool(q, s)
+                for q in pendings
+            )
+            if contested:
+                continue
+            matches.append((p_id, s[0], "inexact"))
+            consumed_settled.add(s[0])
+            resolved.add(p_id)
+
+        ghosts = []
+        for p_id, s_id, match_type in matches:
+            p = next((x for x in pendings if x[0] == p_id), None)
+            s = settled_by_id.get(s_id)
+            if p is None:
+                continue
+            ghosts.append({
+                "id": p[0],
+                "date": p[2],
+                "amount": p[4],
+                "description": p[3],
+                "match_type": match_type,
+                "matched_settled": (
+                    {"id": s[0], "date": s[2], "amount": s[4]} if s else None
+                ),
+            })
+
+        # Forced deletions (explicit manual override, no counterpart needed).
+        forced_ids_set = set()
+        if force_ids:
+            pending_by_id = {p[0]: p for p in pendings}
+            for fid in force_ids:
+                p = pending_by_id.get(fid)
+                if p is None:
+                    raise ValueError(
+                        f"force-id {fid}: no pending transaction with that id"
+                    )
+                if fid in resolved or fid in forced_ids_set:
+                    continue
+                forced_ids_set.add(fid)
+                ghosts.append({
+                    "id": p[0],
+                    "date": p[2],
+                    "amount": p[4],
+                    "description": p[3],
+                    "match_type": "forced",
+                    "matched_settled": None,
+                })
+
+        unresolved = []
+        for p in pendings:
+            if p[0] in resolved or p[0] in forced_ids_set:
+                continue
+            p_clean = clean_description(p[3])
+            p_dt = _as_date(p[2])
+            candidates = []
+            for s_id, s_acct, s_date, s_desc, s_amount in settled:
+                if s_acct != p[1]:
+                    continue
+                s_clean = clean_description(s_desc)
+                if p_clean not in s_clean and s_clean not in p_clean:
+                    continue
+                if not (0 <= (_as_date(s_date) - p_dt).days <= 10):
+                    continue
+                candidates.append({"id": s_id, "date": s_date, "amount": s_amount})
+            unresolved.append({
+                "id": p[0],
+                "date": p[2],
+                "amount": p[4],
+                "description": p[3],
+                "candidates": candidates[:3],
+                "probable_cancelled": (
+                    (date.today() - p_dt).days > 45 and not candidates
+                ),
+            })
+
+        deleted = 0
+        if not dry_run and ghosts:
+            ids = [g["id"] for g in ghosts]
+            placeholders = ",".join("?" * len(ids))
+            cur.execute(
+                f"SELECT COUNT(*) FROM transaction_links "
+                f"WHERE from_transaction_id IN ({placeholders}) "
+                f"OR to_transaction_id IN ({placeholders})",
+                ids + ids,
+            )
+            affects_links = cur.fetchone()[0] > 0
+            for ghost in ghosts:
+                cur.execute("DELETE FROM transactions WHERE id = ?", (ghost["id"],))
+                deleted += 1
+            self.commit()
+            if affects_links:
+                self.recalculate_adjusted_amounts()
+
+        return {"deleted": deleted, "ghosts": ghosts, "unresolved": unresolved}
 
     def delete_account(self, account_id: int) -> bool:
         """Delete an account. Fails if transactions reference it (ON DELETE RESTRICT).

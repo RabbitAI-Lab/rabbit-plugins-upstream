@@ -1,44 +1,55 @@
-## Description: <br>
-Long-term memory, state tracking, continuity review, and identity-change support for OpenClaw, including durable memory writes and search in Notion, emotion and state ticks, journal writes, continuity checks, identity diffs, inner-conflict tracking, and preserving a stable sense of self across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Continuity, durable memory, state, journal, and identity maintenance.
 
-## Publisher: <br>
-[nextaltair](https://clawhub.ai/user/nextaltair) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nextaltair](https://clawhub.ai/user/nextaltair)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to store and recall durable Notion-backed memory, update emotion and state snapshots, write journal entries, and inspect continuity or identity changes across sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive emotional, conversation, and user-profile data to Notion. <br>
-Mitigation: Use a least-privilege Notion integration, review what is written, and avoid storing secrets or intimate details. <br>
-Risk: Cron or heartbeat automation can create unattended journal or state records. <br>
-Mitigation: Enable automation only when unattended journaling is desired and periodically review generated records. <br>
-Risk: An overridden NOTIONCTL_PATH can direct execution to an unexpected local script. <br>
-Mitigation: Keep NOTIONCTL_PATH unset unless the target script is trusted. <br>
+## Use Case:
 
+Developers and agent operators use this skill to maintain continuity across sessions by recording searchable long-term memory, emotional or state snapshots, journal syntheses, and identity-change evidence in Notion and local workspace files.
 
-## Reference(s): <br>
-- [Soul In Sapphire ClawHub release](https://clawhub.ai/nextaltair/soul-in-sapphire) <br>
-- [Publisher profile: nextaltair](https://clawhub.ai/user/nextaltair) <br>
-- [Notion integrations setup](https://www.notion.so/my-integrations) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON payload examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write or search Notion-backed memory, state, and journal records when configured with the required Notion credentials and database identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: The skill can persist sensitive personal state, journals, profile facts, and long-term memories in Notion and local workspace files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a Notion integration limited to the intended pages and databases, avoid sending secrets or intimate personal details to memory writes, and review stored data periodically.
+
+Risk: Notion and local write helpers can create or update durable records beyond the immediate conversation.
+
+Mitigation: Install only when durable memory is intended, pass explicit database IDs, review generated payloads before use, and prefer local-only operation when remote persistence is unnecessary.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nextaltair/skills/soul-in-sapphire)
+- [Publisher profile](https://clawhub.ai/user/nextaltair)
+- [Notion integrations](https://www.notion.so/my-integrations)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON and shell command examples, plus JSON output from helper scripts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js and Notion credentials; writes may target Notion databases and local workspace files.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

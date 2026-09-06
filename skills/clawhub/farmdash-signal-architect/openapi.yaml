@@ -3,24 +3,25 @@ info:
   title: FarmDash Signal Architect API
   version: 1.1.1
   description: |
-    Zero-custody intelligence and control API for DeFi agents and serious airdrop farmers:
-    structured opportunity intelligence, quote generation, user-authorized onchain execution,
-    x402 flows, and fee history. FarmDash never receives private
-    keys or seed phrases and never holds user funds. Wallet-affecting operations
-    require the documented local signature or bounded delegation gates.
+    Customer-controlled intelligence and workflow API for DeFi agents and serious airdrop farmers:
+    structured opportunity intelligence, quote generation, user-authorized transaction preparation,
+    x402 flows, and fee history. FarmDash does not request seed phrases or raw wallet private keys.
+    Compatibility swap routes do not custody user funds; separately configured venue or MPC
+    delegations remain subject to their provider controls and explicit policy bounds.
 
     ## Authentication
-    - **Scout (Free)**: No auth. 5 requests/24h per IP.
-    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 500 requests/day.
+    - **Scout (Free)**: No auth. 30 requests/24h per IP.
+    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 1,500 requests/day.
     - **Syndicate**: `Authorization: Bearer <SYNDICATE_KEY>`. $199/mo USDC, 50,000 requests/day, webhooks, unrestricted CORS, and advanced control/session tooling for teams and serious agents.
     - **Swap execution**: Requires fresh quote review plus EIP-191 agent wallet signature.
     - **Delegation/autopilot**: Requires explicit user-configured budgets, allowlists, and revocation path.
     - **Privacy**: Public wallet addresses, token addresses, chain IDs, amounts, signatures, request IDs, and analytics headers may be sent to FarmDash; private keys and seed phrases are never sent.
 
     ## Dust Storm Protocol
-    If an upstream API fails, FarmDash returns safe zero values with a
-    `warnings` array containing `{ kind: "dust_storm", message: "..." }`
-    instead of crashing. Your agent stays alive and retries on the next cycle.
+    If an upstream API fails, FarmDash returns a typed error or a previously
+    validated stale response with a `warnings` array containing
+    `{ kind: "dust_storm", message: "..." }`. Missing data remains unknown
+    rather than being converted into a synthetic zero.
 
     ## x402 Payment Wall
     When free-tier limits are exceeded, responses include `X-Payment-*` headers
@@ -38,10 +39,10 @@ servers:
 paths:
   /v1/agent/protocols:
     get:
-      operationId: getTrailHeat
-      summary: Get Trail Heat protocol dataset
+      operationId: getProtocolCatalog
+      summary: Get catalog protocol directory (discovery heuristic scores)
       description: |
-        Returns the live ranked Trail Heat protocol dataset.
+        Returns the curated FarmDash catalog with EDITORIAL discovery heuristic scores (catalog-editorial-v1). NOT live Trail Heat — canonical quantitative Trail Heat: /v1/trail-heat.
         Live scoring uses calibrated TVL, seven-day TVL momentum, chain diversification,
         category baseline comparison, and FarmDash evidence prior when upstream data is available.
         Static tracker pages use a calibrated catalog fallback with TVL, status, category prior,
@@ -72,7 +73,7 @@ paths:
               description: USDC contract on Base
             X-Payment-Amount:
               schema: { type: string }
-              description: Amount in token decimals (e.g. 990000 = 0.99 USDC)
+              description: Quoted amount in token decimals (e.g. 10000 = 0.01 USDC default overage)
             X-Payment-Chain-Id:
               schema: { type: string }
               description: "8453 (Base)"
@@ -123,7 +124,7 @@ paths:
         Returns an unsigned preview quote showing expected output, fee breakdown,
         protocol selection, and FarmDash execution guardrails. No authentication required.
         Useful for agents to compare pricing before committing a signed swap.
-        Route selection: x402 (Base-to-Base) > Li.Fi (cross-chain) > 0x (single-chain EVM).
+        Route selection: LI.FI (cross-chain EVM) > 0x (same-chain EVM).
         When wallet and risk inputs are supplied, the response also includes
         allowance checks, depeg/health warnings, quote-decay diagnostics, and
         positive-net-edge guidance.
@@ -160,7 +161,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: [lifi, zerox, x402]
+            enum: [lifi, zerox]
           description: Force a specific routing protocol (auto-selected if omitted)
         - in: query
           name: walletAddress
@@ -254,7 +255,7 @@ paths:
         Execution Alpha routing, and enforces Risk Sentinel guardrails before
         returning ready-to-broadcast transaction calldata.
 
-        FarmDash NEVER touches funds. The protocol (Li.Fi / 0x / x402) executes the swap.
+        FarmDash does not broadcast the returned compatibility-swap transaction. The chosen aggregator (LI.FI or 0x) executes the swap.
         The FarmDash treasury receives the fee haircut directly from the protocol.
 
         **Signing**: The agent must sign the deterministic payload:
@@ -452,7 +453,7 @@ components:
           properties:
             amount:
               type: string
-              example: '0.99 USDC'
+              example: '0.01 USDC'
             chain:
               type: string
               example: Base
@@ -466,7 +467,7 @@ components:
         protocol_name:
           type: string
           example: Hyperliquid
-        trail_heat_score:
+        discovery_heuristic_score:
           oneOf:
             - type: number
               description: Numeric score (paid tiers)
@@ -616,7 +617,7 @@ components:
       properties:
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
         estimatedOutput:
           type: string
           description: Expected output amount in wei
@@ -746,15 +747,13 @@ components:
         slippage:
           type: number
           minimum: 0.01
-          maximum: 50
+          maximum: 5
           default: 0.5
           description: Slippage tolerance in percent
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
           description: Force protocol (auto-selected if omitted)
-        volumeHintUSD:
-          type: number
         expectedUpsideUsd:
           type: number
           description: Optional upside estimate in USD for positive-net-edge checks
@@ -793,7 +792,7 @@ components:
       properties:
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
         routeReason:
           type: string
         mevProtection:
@@ -812,7 +811,7 @@ components:
             properties:
               protocol:
                 type: string
-                enum: [lifi, zerox, x402]
+                enum: [lifi, zerox]
               estimatedOutput: { type: string }
               feeAmountUsd: { type: number }
               gasEstimateUsd: { type: number, nullable: true }
@@ -915,7 +914,7 @@ components:
           example: swap_halted
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
         executionAlpha:
           $ref: '#/components/schemas/ExecutionAlphaReport'
         riskReport:
@@ -934,7 +933,7 @@ components:
         toAddress: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
         slippage: { type: number }
         expectedUpsideUsd: { type: number }
         riskBufferUsd: { type: number }
@@ -956,7 +955,7 @@ components:
           enum: [manual, quoted]
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
           nullable: true
         executionAlpha:
           allOf:
@@ -994,7 +993,7 @@ components:
           format: date-time
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox]
         from_token:
           type: string
         to_token:

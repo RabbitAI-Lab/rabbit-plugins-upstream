@@ -1,41 +1,58 @@
-## Description: <br>
-Finds free and cheap things to do in supported US cities, including daily event listings with times, prices and venues plus searchable deals, festivals, kids activities and local guides from the On the Cheap network. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find free and cheap things to do in a US city, including daily event listings with times, prices and venues, plus searchable deals, festivals, kids activities and local guides from the On the Cheap network.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and agents use this skill to answer local activity and deal requests for supported US cities by selecting a city site, listing daily events, searching posts, and retrieving full article details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Event availability, prices, and deal terms may change after retrieval. <br>
-Mitigation: Verify details with the listing source before making plans or presenting firm commitments. <br>
-Risk: Using the wrong site key or reusing category and location IDs across sites can return unrelated local results. <br>
-Mitigation: Name the intended city, call otc_list_sites when unsure, and resolve categories or locations for the selected site. <br>
+## Use Case:
 
+External users and agents use this skill to find public local event and deal listings from the On the Cheap network for supported US cities. It is useful for date-specific local activity planning, free-only event discovery, topic searches, and reading public listing details.
 
-## Reference(s): <br>
-- [On the Cheap network](https://livingonthecheap.com) <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/onthecheap-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or concise text with event and deal listings, source details, and follow-up guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only public event and deal results for selected supported sites; event availability and prices should be verified because listings can change.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+Risk: Public event and deal listings can change after lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check important details against the original listing before relying on times, prices, venues, or availability.
+
+Risk: Month overview results are previews rather than complete daily schedules.
+
+Mitigation: Use the reported total to describe event volume and query the specific date before presenting a complete schedule.
+
+Risk: Expired deals may appear when explicitly included.
+
+Mitigation: Only include expired deals when the user asks for historical results, and label them as no longer current.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/onthecheap-mcp)
+- [On the Cheap](https://livingonthecheap.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text summaries of public event, deal, and article results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include event titles, dates, times, prices, venues, URLs, excerpts, category or location identifiers, and guidance on follow-up lookups.]
+
+## Skill Version(s):
+
+0.4.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

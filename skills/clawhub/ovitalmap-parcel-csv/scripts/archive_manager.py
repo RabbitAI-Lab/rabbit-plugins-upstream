@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from archive_store import ArchiveStore, COUNTRY_HEADERS, MASTER_HEADERS
+from archive_store import ArchiveStore, COUNTRY_HEADERS
 from utils import (
     boundaries_equal,
     build_boundary_string,
@@ -21,8 +21,6 @@ from utils import (
 
 
 STORE = ArchiveStore(get_workspace_root())
-# Backward-compatible schema names for callers that imported the old module.
-PER_COUNTRY_HEADERS = COUNTRY_HEADERS
 
 
 def scan_archive(country_code, date_hint=None):
@@ -177,6 +175,7 @@ def extract_single(
     resolved_provider_name=None,
     archive_date=None,
     cadastre_code=None,
+    export_mode="boundary",
 ):
     code = validate_country_code(country_code)
     row = _find_archive_row(code, parcel_code)
@@ -195,7 +194,7 @@ def extract_single(
     return {
         "found": True,
         "parcel_code": parcel_code,
-        **build_single_csvs(parcel, code),
+        **build_single_csvs(parcel, code, export_mode),
     }
 
 
@@ -271,7 +270,12 @@ def backup_archive(country_code):
     return STORE.backup(country_code)
 
 
-def correct_coordinates(country_code, parcel_code, new_vertices):
+def correct_coordinates(
+    country_code,
+    parcel_code,
+    new_vertices,
+    export_mode="boundary",
+):
     code = validate_country_code(country_code)
     errors = validate_coordinates(new_vertices, require_polygon=True)
     if errors:
@@ -305,7 +309,7 @@ def correct_coordinates(country_code, parcel_code, new_vertices):
             row["provider_notes"] = _append_note(row, note)
         STORE.commit(code, country_rows, master_rows)
 
-    export = extract_single(code, parcel_code)
+    export = extract_single(code, parcel_code, export_mode=export_mode)
     return {
         "parcel_code": parcel_code,
         "country_code": code,
@@ -313,14 +317,19 @@ def correct_coordinates(country_code, parcel_code, new_vertices):
         "updated_country": True,
         "updated_master": True,
         "backup_paths": backup["backup_paths"],
-        "vertices_path": export["vertices_path"],
-        "boundary_path": export["boundary_path"],
+        "export_mode": export["export_mode"],
+        "exports": export["exports"],
+        **{
+            key: export[key]
+            for key in ("boundary_path", "vertices_path")
+            if key in export
+        },
     }
 
 
 def dispatch(data):
     action = data.get("action", "")
-    country_code = data.get("country_code", data.get("iso3", ""))
+    country_code = data["country_code"]
     handlers = {
         "scan": lambda: scan_archive(country_code, data.get("date")),
         "append": lambda: append_parcels(country_code, data["rows"]),
@@ -331,6 +340,7 @@ def dispatch(data):
             data.get("resolved_provider_name"),
             data.get("archive_date"),
             data.get("cadastre_code"),
+            data.get("export_mode", "boundary"),
         ),
         "update_cadastre": lambda: update_cadastre(
             country_code,
@@ -343,6 +353,7 @@ def dispatch(data):
             country_code,
             data["parcel_code"],
             data["new_vertices"],
+            data.get("export_mode", "boundary"),
         ),
     }
     if action not in handlers:

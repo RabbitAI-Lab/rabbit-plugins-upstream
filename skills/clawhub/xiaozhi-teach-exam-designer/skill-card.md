@@ -1,44 +1,71 @@
-## Description: <br>
-帮助老师设计科学测评方案，包括确认测评目标、设计双向细目表、控制难度梯度、生成评分标准和提供考后分析建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+测评设计师 helps teachers design standards-aligned assessment blueprints, two-way specification tables, item revisions, difficulty mixes, scoring rubrics, and review-item lists for Chinese K12 classrooms.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education-support agents use this skill to plan classroom assessments, build exam blueprints, align items to knowledge points and cognitive levels, draft scoring rubrics, and prepare aggregate post-exam analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assessment outputs may use classroom context from related teaching skills and write back score-rate or item-quality data. <br>
-Mitigation: Use aggregate score-rate and item-quality data only; avoid publishing named student results, rankings, or individual score records. <br>
-Risk: Exam materials may include copied or insufficiently licensed questions. <br>
-Mitigation: Require each item to include copyrightStatus and use teacher-owned, adapted, publicly citable, or index-only sources rather than unauthorized copied exam questions. <br>
-Risk: Generated scoring or analysis guidance could be treated as final judgment without teacher review. <br>
-Mitigation: Have a teacher review the blueprint, rubric, difficulty targets, and post-exam recommendations before classroom use. <br>
+## Use Case:
 
+Teachers use this skill to plan diagnostic, formative, and summative assessments from a blueprint before selecting or generating items. It supports exam design, rubric drafting, item revision from post-exam statistics, and teacher-facing review lists while leaving post-exam statistical calculation to the student-analysis skill.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Exam blueprint reference](references/exam-blueprint.md) <br>
+### Deployment Geography for Use:
 
+China mainland Chinese K12 context; localize curriculum, consent, privacy, and crisis-response guidance before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, structured tables, templates, and scoring rubric text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assessment blueprints, two-way specification tables, item metadata templates, scoring standards, and aggregate post-exam analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may use class-level teaching records and cross-skill teaching context involving minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm workspace sharing, parent-sharing, and cross-skill consent settings before deployment or use with real class data.
+
+Risk: AI-generated or skill-generated assessment items can be wrong, ambiguous, unsolved, over-level, or misaligned with the blueprint.
+
+Mitigation: Require teacher self-solution and verification before setting verifiedByTeacher=true or including an item in a formal exam.
+
+Risk: Assessment artifacts can expose student identity or sensitive performance information.
+
+Mitigation: Use aliases, seat numbers, or student IDs in outputs and avoid real names, individual rankings, or public low-score callouts.
+
+Risk: Copied textbook, workbook, or prior-exam items can create copyright risk.
+
+Mitigation: Record copyrightStatus for every item, keep restricted sources as indexes only, and document adaptation provenance when using adapted items.
+
+Risk: The bundled safety and curriculum guidance is written for mainland China and may be incorrect elsewhere.
+
+Mitigation: Localize emergency contacts, curriculum standards, consent requirements, and student-data practices before serving users outside that context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer)
+- [Exam blueprint and two-way specification templates](artifact/references/exam-blueprint.md)
+- [AI item self-check protocol](artifact/shared/ai-item-check.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [Platform conventions and localization boundaries](artifact/shared/platform-conventions.md)
+- [Crisis exception and referral protocol](artifact/shared/crisis-exception.md)
+- [Shared vocabulary and consent fields](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured classWorkspace-compatible fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces examBlueprints entries, scoring rubrics, item-revision lists, review-item lists, and teacher-facing verification warnings.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

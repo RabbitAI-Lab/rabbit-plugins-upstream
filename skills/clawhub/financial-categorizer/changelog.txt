@@ -1,3 +1,3 @@
-- Fix Issue #22: Emit warning when matching transaction falls outside amount bounds
-- Fix Issue #24: Use current date as reference in estimate-period
-- fix: identify drifting ~30-day recurring payments as days interval
+- tune: raise inexact floor to 85%, document pending lifecycle intent
+- feat: cleanup-pending inexact matches and --force-id manual override
+- feat: inexact settlement matching and pending disappearance warnings

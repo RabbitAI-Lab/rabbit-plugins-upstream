@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1688 AK 管理器</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f6fa; color: #2d3436; line-height: 1.6; }
+  .container { max-width: 860px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .subtitle { color: #636e72; font-size: 14px; margin-bottom: 28px; }
+  .card { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 16px; border: 1px solid #e9ecef; }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .card-title { font-size: 17px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .badge { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+  .badge-ok { background: #d4edda; color: #155724; }
+  .badge-no { background: #f8d7da; color: #721c24; }
+  .badge-skip { background: #e2e3e5; color: #383d41; }
+  .ak-type { font-size: 13px; color: #636e72; margin-bottom: 12px; }
+  .skills-list { margin-bottom: 14px; }
+  .skills-list span { display: inline-block; background: #f0f2f5; color: #495057; font-size: 12px; padding: 3px 10px; border-radius: 6px; margin: 2px 4px 2px 0; }
+  .info-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; font-size: 14px; }
+  .info-label { color: #636e72; min-width: 70px; flex-shrink: 0; }
+  .info-value { color: #2d3436; }
+  .info-value code { background: #f0f2f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: "SF Mono", Menlo, monospace; }
+  .btn { display: inline-block; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 500; text-decoration: none; transition: all .15s; cursor: pointer; border: none; }
+  .btn-primary { background: #0984e3; color: #fff; }
+  .btn-primary:hover { background: #0773c5; }
+  .btn-outline { background: transparent; color: #0984e3; border: 1px solid #0984e3; }
+  .btn-outline:hover { background: #f0f7ff; }
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .status-detail { font-size: 13px; color: #636e72; margin-top: 4px; }
+  .divider { border: none; border-top: 1px dashed #e9ecef; margin: 16px 0; }
+  .footer { text-align: center; color: #b2bec3; font-size: 12px; margin-top: 32px; padding-bottom: 16px; }
+  .note { background: #fff9e6; border: 1px solid #ffeaa7; border-radius: 8px; padding: 14px 18px; font-size: 13px; color: #6c5b2a; margin-bottom: 16px; line-height: 1.7; }
+  .note strong { color: #5a4e22; }
+  @media (max-width: 600px) {
+    .container { padding: 16px 12px; }
+    .card { padding: 18px; }
+    .info-row { flex-direction: column; gap: 2px; }
+    .info-label { min-width: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🔑 1688 AK 管理器</h1>
+<p class="subtitle">统一管理 1688 生态下所有 Skill 的凭证配置</p>
+
+<div class="note">
+  <strong>💡 提示：</strong>不同 Agent 实例的 AK 存储互相隔离。新建实例后需要重新配置，但只需配你当前要用的功能对应的 AK，其余可以跳过。
+</div>
+
+<!-- ========== 1688 Gateway AK ========== -->
+<div class="card" id="card-1688ak">
+  <div class="card-header">
+    <div class="card-title">
+      <span>🔍</span> 1688 Gateway AK
+    </div>
+    <span class="badge badge-no" id="status-1688ak">检测中…</span>
+  </div>
+
+  <p class="ak-type">用于 1688 平台的商品搜索、供应商查询、同款推荐等核心能力</p>
+
+  <div class="skills-list">
+    <span>1688-product-find（找商品）</span>
+    <span>1688-source-supplier（找供应商）</span>
+    <span>1688-88syt（88生意通）</span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">格式</span>
+    <span class="info-value">Base64 编码字符串，约 60-80 字符，以 <code>=</code> 结尾</span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">存储</span>
+    <span class="info-value">本地加密文件 <code>ak_store.json</code>（持久化，重启不丢失）</span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">共享</span>
+    <span class="info-value">三个 Skill 共用同一份 AK，只需配置一次</span>
+  </div>
+
+  <hr class="divider">
+
+  <div class="actions">
+    <a class="btn btn-primary" href="https://clawhub.1688.com/" target="_blank">获取 AK →</a>
+    <button class="btn btn-outline" onclick="copyAKPrompt('1688')">复制配置提示</button>
+  </div>
+  <p class="status-detail" style="margin-top:10px;">登录后右上角点击 🔑 复制 AK。也可在 Agent 中执行 <code>python3 cli.py get_ak</code> 自动获取。</p>
+</div>
+
+<!-- ========== AlphaShop AK/SK ========== -->
+<div class="card" id="card-alphashop">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📦</span> AlphaShop AK/SK
+    </div>
+    <span class="badge badge-no" id="status-alphashop">检测中…</span>
+  </div>
+
+  <p class="ak-type">用于 1688 跨境商品详情的 API 查询（标题、价格、规格、供应商等结构化数据）</p>
+
+  <div class="skills-list">
+    <span>1688-product-detail-query（商品详情）</span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">Access Key</span>
+    <span class="info-value">32 字符十六进制字符串，如 <code>ac408de1c12d4116...</code></span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">Secret Key</span>
+    <span class="info-value">22 字符 Base64 字符串，如 <code>UlUbuF20IZ0gxf...</code></span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">存储</span>
+    <span class="info-value">环境变量 <code>ALPHASHOP_ACCESS_KEY</code> + <code>ALPHASHOP_SECRET_KEY</code></span>
+  </div>
+
+  <hr class="divider">
+
+  <div class="actions">
+    <a class="btn btn-primary" href="https://www.alphashop.cn/seller-center/apikey-management" target="_blank">申请 AK/SK →</a>
+    <button class="btn btn-outline" onclick="copyAKPrompt('alphashop')">复制配置提示</button>
+  </div>
+  <p class="status-detail" style="margin-top:10px;">支持 1688 / 淘宝 / 支付宝 / 手机号登录。如接口报欠费，需前往 <a href="https://www.alphashop.cn/seller-center/home/api-list" target="_blank" style="color:#0984e3;">积分购买页</a> 充值。</p>
+</div>
+
+<!-- ========== CRM AK/SK ========== -->
+<div class="card" id="card-crm">
+  <div class="card-header">
+    <div class="card-title">
+      <span>📊</span> CRM AK/SK
+    </div>
+    <span class="badge badge-no" id="status-crm">检测中…</span>
+  </div>
+
+  <p class="ak-type">用于 1688 商家经营数据查询，覆盖 30+ 个 CRM 类 Skill</p>
+
+  <div class="skills-list">
+    <span>商家经营诊断</span>
+    <span>经营分析报告</span>
+    <span>生意参谋数据</span>
+    <span>店铺经营日报</span>
+    <span>广告推广分析</span>
+    <span>洽谈助理报告</span>
+    <span>年框智能分析</span>
+    <span>CRM小记</span>
+    <span>平台活动查询</span>
+    <span>…更多</span>
+  </div>
+
+  <div class="info-row">
+    <span class="info-label">AK</span>
+    <span class="info-value">以 <code>AK</code> 开头的字符串，如 <code>AKb81791aed3c5...</code></span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">SK</span>
+    <span class="info-value">Base64 编码字符串</span>
+  </div>
+  <div class="info-row">
+    <span class="info-label">存储</span>
+    <span class="info-value">环境变量 <code>CRM_AK</code> + <code>CRM_SK</code></span>
+  </div>
+
+  <hr class="divider">
+
+  <div class="actions">
+    <a class="btn btn-primary" href="https://qianji.alibaba-inc.com/?_path_=crm/indexChannel/ak-manage" target="_blank">获取 CRM AK →</a>
+  </div>
+</div>
+
+<div class="footer">
+  1688-common-skill-config · AK 管理器 · v1.0.0
+</div>
+
+</div>
+
+<script>
+// 复制配置提示到剪贴板
+function copyAKPrompt(type) {
+  const texts = {
+    '1688': '请帮我配置 1688 Gateway AK。\n\n获取地址：https://clawhub.1688.com/\n登录后右上角点击 🔑 复制 AK，发给我即可。',
+    'alphashop': '请帮我配置 AlphaShop AK/SK。\n\n申请地址：https://www.alphashop.cn/seller-center/apikey-management\n（支持 1688/淘宝/支付宝登录）\n\n需要 Access Key 和 Secret Key，获取后发给我即可。',
+    'crm': '请帮我配置 CRM AK/SK。\n\n获取地址：https://qianji.alibaba-inc.com/?_path_=crm/indexChannel/ak-manage'
+  };
+  navigator.clipboard.writeText(texts[type] || '').then(() => {
+    alert('已复制到剪贴板，粘贴到 Agent 对话框即可');
+  }).catch(() => {
+    prompt('复制以下内容：', texts[type]);
+  });
+}
+
+// 状态检测占位（由 Agent 在运行时注入真实状态）
+// 如果作为独立页面展示，可替换为 API 调用
+function updateStatus(id, configured, detail) {
+  const el = document.getElementById('status-' + id);
+  if (!el) return;
+  if (configured) {
+    el.textContent = '✅ 已配置';
+    el.className = 'badge badge-ok';
+  } else {
+    el.textContent = '❌ 未配置';
+    el.className = 'badge badge-no';
+  }
+  // 可选：在卡片内追加详情
+  const card = document.getElementById('card-' + id);
+  if (card && detail) {
+    let d = card.querySelector('.status-detail');
+    if (!d) { d = document.createElement('p'); d.className = 'status-detail'; card.querySelector('.card-header').after(d); }
+    d.textContent = detail;
+  }
+}
+
+// 默认全部标记为未配置（Agent 渲染时可动态更新）
+updateStatus('1688ak', false);
+updateStatus('alphashop', false);
+updateStatus('crm', false);
+</script>
+</body>
+</html>

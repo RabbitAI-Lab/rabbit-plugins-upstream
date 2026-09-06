@@ -1,0 +1,196 @@
+{
+  "infographic_id": "saas_health_dashboard_dj_demo",
+  "intent": "dashboard",
+  "chart_family": "dashboard",
+  "language": "zh-CN",
+  "audience": "founder, gm, ops lead",
+  "source_summary": "用一页 SaaS 健康看板展示收入、留存、漏斗和客户体验的关键指标。",
+  "message": {
+    "title": "SaaS 运营健康看板",
+    "subtitle": "先看总体健康，再看收入、留存与体验三组指标",
+    "core_takeaway": "收入在增长，但流失率偏高且 NPS 走弱，说明扩张速度快于体验修复速度。",
+    "cta": "下一周优先联动客服与产品，盯住流失与 NPS。"
+  },
+  "layout": {
+    "layout_mode": "dashboard",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "16:9",
+    "reading_order": "left-to-right",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "saas-ops-dashboard-data-journal",
+    "palette_mode": "brand",
+    "emphasis_style": "technical",
+    "brand_colors": [
+      "#0F172A",
+      "#2563EB",
+      "#10B981",
+      "#F97316",
+      "#EF4444"
+    ],
+    "premium_style": "data-journal"
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "运营看板",
+      "content": "把关键指标放在一个可扫描页面上。",
+      "visual_role": "primary",
+      "icon_hint": "layout-dashboard",
+      "must_include": [
+        "大标题",
+        "顶部摘要带"
+      ],
+      "avoid": [
+        "视觉噪音"
+      ],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_exec",
+      "block_type": "summary",
+      "title": "管理层一句话",
+      "content": "收入增长健康，但流失和 NPS 指向体验层面的真实风险。",
+      "visual_role": "primary",
+      "icon_hint": "speech",
+      "must_include": [
+        "总览结论"
+      ],
+      "avoid": [
+        "超过两行"
+      ],
+      "text_budget": 24
+    },
+    {
+      "block_id": "metric_mrr",
+      "block_type": "metric",
+      "title": "MRR",
+      "content": "¥3.2M / +12% MoM",
+      "visual_role": "primary",
+      "group_id": "revenue",
+      "icon_hint": "banknote",
+      "payload": {
+        "trend": "up",
+        "target": "增长稳定"
+      },
+      "must_include": [
+        "大数字卡片"
+      ],
+      "avoid": [
+        "冗长说明"
+      ],
+      "text_budget": 16
+    },
+    {
+      "block_id": "metric_nrr",
+      "block_type": "metric",
+      "title": "NRR",
+      "content": "118% / 扩张健康",
+      "visual_role": "secondary",
+      "group_id": "revenue",
+      "icon_hint": "trending-up",
+      "payload": {
+        "trend": "up",
+        "target": "续费扩张"
+      },
+      "must_include": [
+        "趋势箭头"
+      ],
+      "avoid": [
+        "小字解释"
+      ],
+      "text_budget": 16
+    },
+    {
+      "block_id": "metric_churn",
+      "block_type": "metric",
+      "title": "Logo Churn",
+      "content": "4.8% / 高于目标 1.2pt",
+      "visual_role": "primary",
+      "group_id": "retention",
+      "icon_hint": "arrow-down-right",
+      "payload": {
+        "trend": "down",
+        "target": "需修复"
+      },
+      "must_include": [
+        "风险高亮"
+      ],
+      "avoid": [
+        "说明过长"
+      ],
+      "text_budget": 18
+    },
+    {
+      "block_id": "metric_pipeline",
+      "block_type": "metric",
+      "title": "Pipeline Coverage",
+      "content": "2.7x / 销售储备充足",
+      "visual_role": "secondary",
+      "group_id": "funnel",
+      "icon_hint": "funnel",
+      "payload": {
+        "trend": "flat",
+        "target": "稳定"
+      },
+      "must_include": [
+        "漏斗指标"
+      ],
+      "avoid": [
+        "装饰过重"
+      ],
+      "text_budget": 18
+    },
+    {
+      "block_id": "metric_nps",
+      "block_type": "metric",
+      "title": "NPS",
+      "content": "34 / 连续两周下降",
+      "visual_role": "primary",
+      "group_id": "experience",
+      "icon_hint": "heart-handshake",
+      "payload": {
+        "trend": "down",
+        "target": "体验预警"
+      },
+      "must_include": [
+        "体验指标"
+      ],
+      "avoid": [
+        "小数字过密"
+      ],
+      "text_budget": 18
+    },
+    {
+      "block_id": "note_action",
+      "block_type": "note",
+      "title": "下周动作",
+      "content": "梳理高 churn 客户共性问题，并把 NPS 反馈回写到产品优先级。",
+      "visual_role": "supporting",
+      "icon_hint": "list-todo",
+      "must_include": [
+        "行动区"
+      ],
+      "avoid": [
+        "长篇描述"
+      ],
+      "text_budget": 24
+    }
+  ],
+  "relations": [
+    {
+      "from": "summary_exec",
+      "to": "metric_churn",
+      "relation_type": "highlights",
+      "label": "主要风险"
+    },
+    {
+      "from": "summary_exec",
+      "to": "metric_nps",
+      "relation_type": "highlights",
+      "label": "体验信号"
+    }
+  ]
+}

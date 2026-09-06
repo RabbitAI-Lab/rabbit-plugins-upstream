@@ -101,7 +101,7 @@ When marketing learnings prove broadly applicable, promote them:
 
 ### Optional: Enable Hook
 
-For automatic reminders at session start:
+Opt-in and project-scoped. Enabling a hook persists across future sessions; skip this unless you need reminders:
 
 ```bash
 cp -r hooks/openclaw ~/.openclaw/hooks/self-improving-marketing
@@ -404,7 +404,8 @@ When a learning is broadly applicable (not a one-off campaign fix), promote it t
 
 1. **Distill** the learning into a concise guideline, checklist item, or rule
 2. **Add** to appropriate target (brand doc, playbook, persona profile)
-3. **Update** original entry:
+3. **Show a reviewed diff and apply only after explicit user approval**
+4. **Update** original entry:
    - Change `**Status**: pending` → `**Status**: promoted`
    - Add `**Promoted**: brand guidelines` (or `channel playbook`, `persona doc`, `content calendar`, `attribution model`)
 
@@ -482,6 +483,8 @@ grep -B2 "messaging_miss" .learnings/LEARNINGS.md | grep "^## \["
 
 Enable automatic reminders through agent hooks. This is **opt-in**.
 
+Hooks persist across sessions once installed. Keep them **project-scoped**. Do **not** install user-level or global hooks. Never use an empty `matcher`. `PostToolUse` inspects command output in-process; do not log raw output, secrets, or transcripts.
+
 ### Quick Setup (Claude Code / Codex)
 
 Create `.claude/settings.json` in your project:
@@ -490,7 +493,7 @@ Create `.claude/settings.json` in your project:
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "campaign|CTR|conversion|email|attribution|brand|content|ROAS",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-marketing/scripts/activator.sh"
@@ -500,7 +503,7 @@ Create `.claude/settings.json` in your project:
 }
 ```
 
-This injects a marketing-focused learning evaluation reminder after each prompt (~50-100 tokens overhead).
+This injects a marketing-focused learning evaluation reminder after matching prompts (~50-100 tokens overhead).
 
 ### Advanced Setup (With Error Detection)
 
@@ -508,7 +511,7 @@ This injects a marketing-focused learning evaluation reminder after each prompt 
 {
   "hooks": {
     "UserPromptSubmit": [{
-      "matcher": "",
+      "matcher": "campaign|CTR|conversion|email|attribution|brand|content|ROAS",
       "hooks": [{
         "type": "command",
         "command": "./skills/self-improving-marketing/scripts/activator.sh"
@@ -537,6 +540,8 @@ Enable `PostToolUse` only if you want the hook to inspect command output for cam
 See `references/hooks-setup.md` for detailed configuration and troubleshooting.
 
 ## Automatic Skill Extraction
+
+Extracted skills are untrusted until a human reviews the generated `SKILL.md`. Do not keep or publish an extracted skill without explicit user approval.
 
 When a marketing learning is valuable enough to become a reusable skill, extract it.
 
@@ -585,7 +590,7 @@ Use conversation signals ("This campaign pattern keeps working", "Save this as a
 6. **Track attribution end-to-end** — verify UTMs survive redirects, link shorteners, and cross-domain hops
 7. **Review personas quarterly** — audience needs and behaviors shift; validate with data
 8. **Audit brand consistency monthly** — check all active assets against current brand guidelines
-9. **Promote aggressively** — if a messaging pattern works across 3+ campaigns, codify it
+9. **Promote after review when recurrence appears** — if a messaging pattern works across 3+ campaigns, codify it
 
 ## Gitignore Options
 
@@ -638,3 +643,7 @@ When guidance conflicts, apply:
 ### Ownership Rules
 - This skill writes only to `.learnings/marketing/` in stackable mode.
 - It may read other skill folders for cross-linking, but should not rewrite their entries.
+- Standalone mode writes to this project's `.learnings/*.md` log files only.
+- Stackable mode writes only to the namespaced folder above and must not rewrite other skills' log entries.
+- Promotion into `AGENTS.md`, `SOUL.md`, `TOOLS.md`, `MEMORY.md`, rules, hooks, or generated skills is not a logging write. Show a reviewed diff and apply only after explicit user approval.
+

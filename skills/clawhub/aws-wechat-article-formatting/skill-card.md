@@ -1,43 +1,57 @@
-## Description: <br>
-Formats Markdown articles into WeChat-compatible HTML with inline styling, selectable themes, font-size and color options, and local preset support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts Markdown articles into WeChat-compatible HTML with inline styles, selectable themes, typography controls, and reusable layout components for public-account publishing workflows.
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-External content editors, independent authors, and article production teams use this skill to convert Markdown drafts into WeChat-ready HTML. It helps agents choose or apply formatting themes, run the local formatter, and produce article.html for review before pasting into the WeChat editor. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs a local Python formatting script with filesystem access to article folders and preset directories. <br>
-Mitigation: Run it only on intended article folders and review the generated article.html before pasting it into WeChat. <br>
-Risk: Custom theme files in the shared home preset directory can change generated article styling. <br>
-Mitigation: Keep ~/.aws-article/presets/formatting content trusted, or remove that directory if shared custom themes are not needed. <br>
+## Use Case:
 
+External users, editors, independent authors, and publishing teams use this skill to format Markdown drafts as WeChat public-account HTML. Agents use it to choose a theme, run the local formatter, and produce article.html for review or publication.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/aiworkskills/aws-wechat-article-formatting) <br>
-- [Publisher Profile](https://clawhub.ai/user/aiworkskills) <br>
-- [Project Homepage](https://aiworkskills.cn) <br>
-- [Preset Theme Reference](references/presets/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and a generated WeChat-compatible HTML file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs locally with python3, reads article and preset files, and writes article.html for user review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.24 (source: server release metadata) <br>
+Risk: Generated HTML can preserve attacker-controlled markup or unsafe attributes when the input article is untrusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only on trusted Markdown and trusted theme/component files; sanitize generated HTML before previewing, publishing, or hosting content from untrusted sources.
+
+Risk: The formatter has local filesystem and shell permissions and writes article.html.
+
+Mitigation: Review the target article path and output path before execution, and run the formatter in a controlled workspace with only the necessary project files available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-formatting)
+- [Publisher profile](https://clawhub.ai/user/aiworkskills)
+- [Theme preset documentation](artifact/references/presets/README.md)
+- [WeChat HTML constraints](artifact/references/wechat-html-constraints.md)
+- [Component presets](artifact/references/components/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated inline-style HTML files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs locally with python3, reads article and theme/component configuration files, and writes article.html.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

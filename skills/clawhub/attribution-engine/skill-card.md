@@ -1,40 +1,66 @@
-## Description: <br>
-Helps creators clearly credit collaborators, tools, and partners in a way platforms understand. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use whenever a creator, manager, or label is preparing credits, attribution, disclosures, or AI-content labels before publishing, or asks how to credit collaborators, disclose brand relationships, label AI involvement, or format credits for a specific platform.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Creators and publishing teams use this skill to draft platform-aware attribution, credit, and disclosure language before content goes live. It helps organize collaborator, AI-assistance, and commercial relationship notes without determining legal obligations or compliance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Platform attribution and disclosure requirements may change or vary by publication context. <br>
-Mitigation: Verify current requirements from official platform sources before publishing. <br>
-Risk: Users may mistake drafted attribution or disclosure wording for legal advice or proof of compliance. <br>
-Mitigation: Use the skill as a drafting aid only and seek qualified review for legal, ownership, or compliance decisions. <br>
+## Use Case:
 
+Creators, managers, labels, and their agents use this skill to prepare clear credit blocks, disclosure wording, AI-content labels, and portable attribution records before publishing. It helps organize platform-aware drafts and flags legal or rights questions for official sources or qualified counsel without making compliance or ownership decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/attribution-engine) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and plain-language drafting guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include attribution strings, disclosure wording, platform formatting notes, branded-content reminders, and internal reference IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: Platform disclosure rules, toggle names, and legal guidance can change.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current official platform or regulator sources during use, cite the access date, and avoid naming unverified interface controls or policy details.
+
+Risk: Drafted credits or disclosures could be mistaken for legal advice, ownership validation, or a guarantee of compliance.
+
+Mitigation: State that outputs are drafts and records, not compliance determinations or agreements, and route legal, rights, licensing, or contract questions to qualified counsel.
+
+Risk: Disclosure drafting may require sensitive context about brand relationships, AI involvement, or whether a creator is under 18.
+
+Mitigation: Ask only for details needed for the disclosure task, keep reference IDs free of sensitive facts, and include parent, guardian, or counsel guidance when under-18 commercial relationships are involved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/attribution-engine)
+- [Source registry](artifact/links.md)
+- [YouTube altered or synthetic content disclosure](https://blog.youtube/news-and-events/disclosing-ai-generated-content/)
+- [TikTok AI-generated content policy](https://www.tiktok.com/tns-inapp/pages/ai-generated-content)
+- [TikTok Creator Academy AI-generated content label](https://www.tiktok.com/creator-academy/en/article/ai-generated-content-label)
+- [Meta labeling AI-generated media](https://about.fb.com/news/2024/02/labeling-ai-generated-images-on-facebook-instagram-and-threads/)
+- [Meta Transparency Center labeling AI content](https://transparency.meta.com/governance/tracking-impact/labeling-ai-content/)
+- [FTC Endorsement Guides](https://www.ecfr.gov/current/title-16/chapter-I/subchapter-B/part-255)
+- [FTC Endorsement Guides FAQ](https://www.ftc.gov/business-guidance/resources/ftcs-endorsement-guides-what-people-are-asking)
+- [FTC Disclosures 101 for Social Media Influencers](https://www.ftc.gov/business-guidance/resources/disclosures-101-social-media-influencers)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Plain-language Markdown responses with copy-ready credit and disclosure blocks, plus optional structured credit records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include platform source citations, access dates, native disclosure reminders, internal reference IDs, and a clear note that drafts are not legal or ownership determinations.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence and skill frontmatter status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,65 @@
-## Description: <br>
-Trade Polymarket "Elon Musk # tweets" markets using XTracker post count data by identifying adjacent range buckets whose combined cost is below the configured threshold. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trade Polymarket "Elon Musk # tweets" markets using XTracker post count data, buying adjacent range buckets when combined cost is below the configured threshold.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-External traders and agent operators use this skill to monitor Elon Musk tweet-count markets, review XTracker pace data, configure bucket-trading thresholds, and run dry-run or live Simmer/Polymarket trading workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real market trades when live mode is enabled. <br>
-Mitigation: Start in dry-run mode, review trade proposals and configuration, keep position limits conservative, and enable live mode only after understanding the strategy and venue risks. <br>
-Risk: Self-custody live trading may require highly sensitive wallet access. <br>
-Mitigation: Prefer managed-wallet or safer signing flows; if a private key is required, use a dedicated low-balance wallet rather than a production wallet. <br>
-Risk: Status and portfolio output can reveal sensitive financial account data. <br>
-Mitigation: Treat status output, logs, screenshots, and shared terminal transcripts as sensitive. <br>
-Risk: Automated trading can lose money because market conditions, signal lag, slippage, and configuration errors may invalidate the strategy. <br>
-Mitigation: Run paper or dry-run mode first, review slippage and safeguard settings, and size positions conservatively. <br>
+## Use Case:
 
+External users and trading-tool operators use this skill to inspect XTracker tweet-count signals, configure Polymarket bucket-trading parameters, run dry-run scans, and optionally execute live trades through Simmer.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/simmer/polymarket-elon-tweets) <br>
-- [Simmer dashboard](https://simmer.markets/dashboard) <br>
-- [Simmer API base](https://api.simmer.markets) <br>
-- [Simmer Polymarket V2 migration guide](https://docs.simmer.markets/v2-migration) <br>
-- [Skill disclaimer](DISCLAIMER.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples, terminal output, and JSON-backed configuration.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce dry-run trading summaries, status reports, configuration updates, and live-trading instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can place live trades with real funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start in dry-run or paper mode, verify settings and market behavior, and use a small dedicated wallet before enabling live trading.
+
+Risk: Wallet-key handling is sensitive when an external wallet private key is used.
+
+Mitigation: Prefer managed-wallet flows when suitable; otherwise keep any private key in a dedicated secret store or environment, never paste it into prompts, and limit funds in the wallet.
+
+Risk: Safeguards can be bypassed and managed defaults may allow larger exposure than local documentation examples.
+
+Mitigation: Keep safeguards enabled, do not use --no-safeguards for live trading, and manually set conservative position, sizing, trade-count, exit, and slippage limits.
+
+Risk: Fast market moves, signal lag, or resolution timing can prevent exits before losses occur.
+
+Mitigation: Treat position sizing as the primary control, monitor open positions, and avoid scaling until performance is observed over an extended dry-run period.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/simmer/skills/polymarket-elon-tweets)
+- [Simmer publisher profile](https://clawhub.ai/user/simmer)
+- [Simmer dashboard](https://simmer.markets/dashboard)
+- [Simmer V2 migration guide](https://docs.simmer.markets/v2-migration)
+- [DISCLAIMER.md](DISCLAIMER.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command examples and configuration values]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose dry-run or live trading commands, environment variables, and risk-limit settings for the user's agent session.]
+
+## Skill Version(s):
+
+1.3.6 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

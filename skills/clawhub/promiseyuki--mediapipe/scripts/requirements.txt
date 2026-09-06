@@ -1,0 +1,5 @@
+# MediaPipe Vision Skill - Python dependencies
+# Python 3.9-3.12 recommended (see mediapipe release notes for your platform).
+mediapipe>=0.10.14
+opencv-python>=4.8.0
+numpy>=1.24.0

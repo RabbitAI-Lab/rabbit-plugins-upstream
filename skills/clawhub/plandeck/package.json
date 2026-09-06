@@ -1,0 +1,60 @@
+{
+  "name": "plandeck",
+  "version": "0.3.0",
+  "description": "The visual Kanban for long-running AI agents. Your plan organizes itself: dependencies unlock into Ready, the critical path lights up, the one next move is obvious. Nobody wants to read a markdown plan. Zero dependencies, works with Claude Code, Codex, and any SKILL.md agent.",
+  "type": "module",
+  "bin": {
+    "plandeck": "scripts/cli.mjs"
+  },
+  "scripts": {
+    "board": "node scripts/cli.mjs board",
+    "check": "node scripts/cli.mjs check",
+    "screenshot": "node scripts/screenshot.mjs",
+    "test": "node test/all.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "scripts",
+    "templates",
+    "agents",
+    "SKILL.md",
+    "LICENSE",
+    "NOTICE",
+    "examples/**/plan.yaml",
+    "examples/**/plan.md",
+    "examples/**/README.md",
+    "examples/**/cards/*.md"
+  ],
+  "pi": {
+    "skills": [
+      "SKILL.md"
+    ]
+  },
+  "keywords": [
+    "kanban",
+    "planning",
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "cursor",
+    "agent-skill",
+    "task-board",
+    "critical-path",
+    "estimation",
+    "crash-proof",
+    "skill",
+    "pi-package",
+    "pi-skill"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OthmanAdi/plandeck.git"
+  },
+  "homepage": "https://github.com/OthmanAdi/plandeck#readme",
+  "bugs": "https://github.com/OthmanAdi/plandeck/issues",
+  "author": "Ahmad Othman Ammar Adi",
+  "license": "MIT",
+  "dependencies": {}
+}

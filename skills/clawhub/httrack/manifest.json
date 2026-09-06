@@ -1,0 +1,59 @@
+{
+  "skill": "httrack",
+  "version": "2.0.1",
+  "schema": "httrack.manifest.v1",
+  "runtime": "python3 (>=3.8, stdlib only) + external binary `httrack`",
+  "entrypoints": {
+    "doctor": "scripts/mirror.py doctor",
+    "snapshot": "scripts/mirror.py snapshot URL -o DIR [--sockets N --robots 0..3 --max-time S --resume --allow-private --json]",
+    "mirror": "scripts/mirror.py mirror URL -o DIR [--depth N --sockets N --robots 0..3 --allow GLOB --deny GLOB --max-time S --max-mb N --resume --allow-private --json]",
+    "legacy_wrapper": "./mirror.sh URL [OUTPUT_DIR] [DEPTH]",
+    "selftest": "bash scripts/selftest.sh"
+  },
+  "contracts": [
+    "httrack.doctor.v1",
+    "httrack.report.v1"
+  ],
+  "report_fields": [
+    "exit_code",
+    "duration_s",
+    "files",
+    "bytes",
+    "html_pages",
+    "log_tail",
+    "argv_len"
+  ],
+  "exit_codes": {
+    "0": "ok",
+    "2": "usage/policy rejection",
+    "3": "httrack binary missing",
+    "4": "httrack run failed"
+  },
+  "policy": {
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "shell_used": false,
+    "network": "outbound http/https only to URLs the caller supplies",
+    "default_sockets": 2,
+    "default_robots": 2,
+    "filesystem_writes": "only inside the caller-specified -o output directory",
+    "binary_override_env": "HTTRACK_BIN",
+    "url_refusals": [
+      "non-http(s) schemes",
+      "userinfo (user@host)",
+      "loopback/link-local/private IP literals (unless --allow-private)",
+      "localhost",
+      "whitespace",
+      "relative .. in -o"
+    ],
+    "scan_patterns": "+/- prefixes assigned by the wrapper; spaces rejected"
+  },
+  "docs": {
+    "recipes": "docs/recipes.md",
+    "evidence": "docs/evidence.md",
+    "history": "CHANGELOG.md"
+  },
+  "evidence_verified_utc": "2026-09-06"
+}

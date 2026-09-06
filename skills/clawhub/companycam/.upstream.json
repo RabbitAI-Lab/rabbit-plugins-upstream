@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/companycam",
   "slug": "companycam",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739754641,
-  "contentHash": "7fca9ed8c75c239811412cabf9e2b0514601128ae4abc59e211f26bd4a2d169d",
-  "fetchedAt": "2026-07-26T18:27:33.177Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517560641,
+  "contentHash": "c870aff5f7056bf52aa6be00a53a9115e13cc71cb24d8aa4ae61453de77039cc",
+  "fetchedAt": "2026-09-06T11:51:00.207Z"
 }

@@ -1,45 +1,62 @@
-## Description: <br>
-Helps teachers turn lecture-heavy lessons into thinking-focused interactive classrooms by designing Bloom-layered question chains, Socratic follow-ups, group activities, cold-room recovery moves, feedback scripts, and aggregate post-class observations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+课堂互动教练 helps teachers turn one-way instruction into classroom interaction by suggesting follow-up questions, participation paths, small-group activity timing, cold-call alternatives, and post-class observation notes.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External educators and teaching assistants use this skill to plan classroom interaction for a specific lesson, including question design, group collaboration, quiet-classroom recovery, participation pathways, feedback moves, and aggregate reflection after class. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Teachers may include student names or sensitive individual performance details in classroom observations. <br>
-Mitigation: Use aggregate classroom signals for post-class records unless school policy explicitly permits identifiable details. <br>
-Risk: Very short prompts can omit lesson goals, student distribution, class size, or classroom constraints needed for reliable interaction planning. <br>
-Mitigation: Confirm missing context before tailoring the plan, or clearly mark the output as a generic interaction template. <br>
-Risk: The skill could be mistaken for an automated student-monitoring or student-calling tool. <br>
-Mitigation: Use it as a teacher-facing planning aid only; teachers retain final decisions and the skill should not point-name or require students to speak. <br>
+## Use Case:
 
+External teachers use this skill to plan and run classroom interactions, including differentiated questioning, wait-time prompts, group-work roles and timing, and teacher-confirmed classroom observation records.
 
-## Reference(s): <br>
-- [课堂提问策略与互动话术库](references/questioning-strategies.md) <br>
-- [小组合作任务卡模板与话术模板](references/group-task-card-and-scripts.md) <br>
-- [课后 5 分钟观察记录模板](references/post-class-record-template.md) <br>
-- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson-planning guidance with reusable templates and classroom scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires lesson goals, student distribution, class size, and classroom constraints for tailored output; otherwise it should label the result as a generic interaction template.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill uses class workspace context, including student tiers and weakness rankings that may be sensitive educational records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only where teachers are authorized to process class workspace data, and avoid displaying tier labels or individual performance notes to students or parents unless consent rules allow it.
+
+Risk: Saved classroom logs could contain inaccurate or over-specific observations if recorded without teacher review.
+
+Mitigation: Keep the teacher-confirmation step for any saved classroom log and limit records to teacher-confirmed aggregate classroom notes.
+
+Risk: Classroom interaction suggestions may be mistaken for direct student assignment or automated decision-making.
+
+Mitigation: Treat suggestions as teacher-facing guidance; the teacher decides whom to call on, when to intervene, and what to save.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [课堂提问策略与互动话术库](references/questioning-strategies.md)
+- [小组合作任务卡模板与话术模板](references/group-task-card-and-scripts.md)
+- [课后 5 分钟观察记录模板](references/post-class-record-template.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured classroom interaction plans, scripts, checklists, and observation-note templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces teacher-facing suggestions and records only teacher-confirmed aggregate classroom notes.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

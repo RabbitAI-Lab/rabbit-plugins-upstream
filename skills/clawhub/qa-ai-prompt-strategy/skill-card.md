@@ -1,40 +1,53 @@
-## Description: <br>
-Selects structured prompt patterns that help agents generate deeper, more useful QA test cases from testing goals and context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps QA practitioners choose structured prompt patterns that guide AI systems to generate deeper, formatted test cases from a provided testing context.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and agent operators use this skill to choose prompt templates for functional, exception, boundary, concurrency, security, performance, multi-perspective, and adversarial test-case generation. It is especially useful when prior AI-generated test cases are too generic or shallow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad prompt-improvement requests outside a QA test-case workflow. <br>
-Mitigation: Confirm the user's goal is QA test-case generation before applying these templates. <br>
-Risk: Generated prompts can produce shallow or poorly targeted test cases when the input context is incomplete. <br>
-Mitigation: Return to context engineering and add missing functional, risk, and constraint details before regenerating the prompt. <br>
+## Use Case:
 
+QA engineers and developers use this skill to convert a testing context package into optimized AI prompts with role definitions, output format rules, and constraints for generating test cases. It is most useful when initial AI-generated test cases are too shallow, generic, or poorly structured.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt templates with role definitions, output-format specifications, and constraint lists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces optimized prompts rather than executing tests or modifying files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill is specialized for QA test-case prompting and may be a poor fit for general prompt-writing tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended workflow is QA test generation before using it, and review the suggested broader QA skill-set installation separately.
+
+Risk: Generated prompts can still lead an AI system to produce incomplete or misleading test cases.
+
+Mitigation: Review generated test cases for coverage, assumptions, and executable expected results before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-prompt-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text, markdown]
+
+**Output Format:** [Markdown guidance with reusable prompt templates and structured test-case output specifications]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces optimized prompts and formatting constraints; it does not produce executable code or run external tools.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

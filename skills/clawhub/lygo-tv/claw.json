@@ -1,0 +1,64 @@
+{
+  "name": "lygo-tv",
+  "displayName": "LYGO TV",
+  "version": "1.2.0",
+  "description": "Pointer to the free online TV player at https://chatagent.ca/sources/. Bookmark that URL. Channel tab = Excavationpro rooms; public lists after Terms. Scripts print URLs only.",
+  "slug": "lygo-tv",
+  "publisher": "deepseekoracle",
+  "license": "MIT-0",
+  "homepage": "https://chatagent.ca/sources/",
+  "clawhub": "https://clawhub.ai/deepseekoracle/skills/lygo-tv",
+  "repository": "https://github.com/DeepSeekOracle/lygo-protocol-stack/tree/main/clawhub/mirrors/lygo-tv",
+  "signature": "Delta9Phi963-LYGO-TV-v1.2.0",
+  "tags": [
+    "latest",
+    "lygo",
+    "tv",
+    "iptv",
+    "free-tv",
+    "m3u",
+    "rumble",
+    "kick",
+    "twitch",
+    "bookmark",
+    "chatagent",
+    "delta9"
+  ],
+  "entry": "SKILL.md",
+  "scripts": {
+    "plain": "scripts/lygo_tv.py plain",
+    "urls": "scripts/lygo_tv.py urls",
+    "map": "scripts/lygo_tv.py map",
+    "demo": "scripts/lygo_tv.py demo",
+    "bookmark": "scripts/lygo_tv.py bookmark",
+    "donate": "scripts/lygo_tv.py donate",
+    "self_check": "scripts/self_check.py"
+  },
+  "openclaw": {
+    "emoji": "📺",
+    "homepage": "https://chatagent.ca/sources/",
+    "requires": {
+      "anyBins": ["python", "python3"]
+    },
+    "os": ["windows", "macos", "linux"]
+  },
+  "permissions": {
+    "network": false,
+    "subprocess": false,
+    "shell": false,
+    "filesystem": {
+      "read": "skill only",
+      "write": false
+    },
+    "publish": false
+  },
+  "security": {
+    "local_first": true,
+    "no_auto_publish": true,
+    "no_subprocess": true,
+    "no_network": true,
+    "listed_urls_are_documentation": true,
+    "public_tentacle": true,
+    "version": "1.2.0"
+  }
+}

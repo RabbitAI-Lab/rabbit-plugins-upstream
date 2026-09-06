@@ -1,41 +1,64 @@
-## Description: <br>
-Generates personalized English listening practice materials matched to a learner's vocabulary, interests, and sticking points, with fallback guidance when audio or persistent memory features are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语听力训练：按你的词汇量和兴趣生成一段听力材料，练完帮你定位卡在哪一层。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English-learning assistants use this skill to create level-appropriate listening passages, comprehension checks, vocabulary notes, and follow-up coaching based on learner profiles and interests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read or update learner profiles, vocabulary records, listening history, reminders, and reports without clearly documented opt-in controls. <br>
-Mitigation: Review before installation, require explicit learner or guardian consent, and confirm how stored vocabulary, reminders, and progress history can be viewed, disabled, or deleted. <br>
-Risk: The skill's true listening workflow depends on audio generation, speed control, and persistent memory that may not be available in every agent environment. <br>
-Mitigation: Tell learners when audio or memory features are unavailable and use the documented text-based fallback only as a temporary comprehension exercise. <br>
+## Use Case:
 
+External K12 English learners use this skill to generate level- and interest-matched listening practice, comprehension checks, and coaching on whether listening difficulty comes from vocabulary, sentence structure, or speed. Educators or learning platforms may use it as a guided English listening practice agent for upper primary and junior middle school learners.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer) <br>
-- [Listening topic templates and material generation guide](references/listening-topic-templates.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, consent rules, and crisis-help guidance before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style tutoring responses with listening passages, vocabulary notes, comprehension questions, diagnostics, and progress summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on platform TTS, speed control, learner-profile memory, and reminder capabilities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Use with children can involve profile storage, cross-skill sharing, and parent-facing summaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm profile storage, guardian consent, cross-skill sharing, and parent-sharing settings before deployment or use.
+
+Risk: The skill is designed around mainland China K12 curriculum, consent assumptions, and crisis-help defaults.
+
+Mitigation: Localize curriculum alignment, consent requirements, and crisis-help resources before deploying outside mainland China.
+
+Risk: Learners may disclose crisis signals during a learning session.
+
+Mitigation: Stop the learning flow and follow the bundled crisis exception and referral protocols, using local emergency channels for the learner's region.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer)
+- [听力话题模板与材料生成指南](references/listening-topic-templates.md)
+- [英语错因维度表](shared/english-error-dimension-table.md)
+- [平台能力约定与降级路径](shared/platform-conventions.md)
+- [全库统一词表](shared/vocab.md)
+- [危机例外](shared/crisis-exception.md)
+- [危机识别与转介协议](shared/crisis-referral-protocol.md)
+- [AI 出题自检协议](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown or plain text coaching flow with generated listening passages, vocabulary notes, comprehension questions, diagnostic feedback, and consent-gated profile handoff data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Designed for Chinese K12 English listening practice; profile updates and parent-facing outputs are gated by consent settings.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

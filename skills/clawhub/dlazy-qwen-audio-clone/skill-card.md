@@ -1,47 +1,60 @@
-## Description: <br>
-Alibaba Bailian qwen3-tts voice cloning: upload a clean voice sample to create a custom voice for later text-to-speech use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alibaba Bailian qwen3-tts voice cloning uploads a clean voice sample to clone a custom voice usable in later text-to-speech calls.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke the dLazy CLI for Alibaba Bailian qwen3-tts voice cloning from a clean audio sample. The resulting custom voice can be reused in later text-to-speech workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Voice samples may contain sensitive biometric data and are uploaded to a third-party cloud service. <br>
-Mitigation: Use only recordings the user owns or has explicit permission to clone, and review dLazy retention and deletion terms before upload. <br>
-Risk: The dLazy API key is stored in local CLI configuration when using the login or auth setup flow. <br>
-Mitigation: Protect the local config file, prefer per-invocation environment variables when appropriate, and rotate or revoke organization keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: The examples include a stale prompt-style invocation that does not match the listed qwen-audio-clone options. <br>
-Mitigation: Use `dlazy qwen-audio-clone -h` or tool description output as the source of truth before running the command. <br>
-Risk: A persistent global CLI install increases local supply-chain and maintenance exposure. <br>
-Mitigation: Prefer `npx @dlazy/cli@1.2.3` when a temporary pinned invocation is sufficient. <br>
+## Use Case:
 
+External users and developers use this skill to call dLazy's Qwen audio clone workflow from an agent, supplying an authorized clean voice sample and metadata to create a reusable custom voice for later TTS use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [CLI command guidance and JSON responses with generated output or task status URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and access to dLazy API and file-hosting endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: The server security review marked the release suspicious because the documentation does not match the advertised command and the pinned CLI's live registry did not list that command during review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm dLazy currently supports `qwen-audio-clone` in the installed CLI before use; stop if help output or registry contents differ from the card.
+
+Risk: Voice-cloning inputs may include biometric or personal audio data, and the skill sends selected audio and parameters to dLazy cloud services.
+
+Mitigation: Only upload voice samples the user has rights and consent to use, and review dLazy service terms and data handling before submitting audio.
+
+Risk: Authentication stores a dLazy API key locally.
+
+Mitigation: Use `dlazy login` or `dlazy auth set` only on trusted machines, keep config permissions restricted to the OS user, and rotate or revoke keys from the dLazy dashboard if exposed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-audio-clone)
+- [dLazy CLI repository](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires npm or npx, dLazy authentication, and a user-provided audio URL or local audio path.]
+
+## Skill Version(s):
+
+1.3.11 (source: server release metadata; artifact frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

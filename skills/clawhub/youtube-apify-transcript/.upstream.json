@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/youtube-apify-transcript",
   "slug": "youtube-apify-transcript",
   "ownerHandle": null,
-  "version": "1.3.3",
-  "updatedAt": 1778486000320,
-  "contentHash": "a3a66860c14cb1fb0fc3d782465cdfc7bef62efcff80290aa676032bb07fcfac",
-  "fetchedAt": "2026-07-26T20:28:35.004Z"
+  "version": "1.4.0",
+  "updatedAt": 1788193359422,
+  "contentHash": "bc73b68c0ecb202672cf344cd5ccd38f1ae0b3c21e0e3f4368e63d15a3e0e9ed",
+  "fetchedAt": "2026-09-06T12:02:42.085Z"
 }

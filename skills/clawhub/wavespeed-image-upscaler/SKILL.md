@@ -3,42 +3,42 @@ name: wavespeed-image-upscaler
 description: Upscale images to 2K, 4K, or 8K resolution using WaveSpeed AI's Image Upscaler. Takes an image URL and produces a higher-resolution version. Supports JPEG, PNG, and WebP output formats. Use when the user wants to upscale or enhance the resolution of an image.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Image Upscaler
 
 Upscale images to 2K, 4K, or 8K resolution using WaveSpeed AI's Image Upscaler.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local image to get a URL
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-upscaler",
-  { image: imageUrl }
-))["outputs"][0];
+```bash
+# Upload a local image to get a URL
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-upscaler \
+  -i image=@./photo.png \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass an existing image URL directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-upscaler",
-  { image: "https://example.com/photo.jpg" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-upscaler \
+  -i image="https://example.com/photo.jpg" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoint
@@ -57,82 +57,43 @@ Upscale an image to a higher resolution.
 
 ### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-upscaler",
-  {
-    image: imageUrl,
-    target_resolution: "8k",
-    output_format: "png"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-upscaler \
+  -i image=@./photo.png \
+  -i target_resolution="8k" \
+  -i output_format="png" \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Sync Mode
-
-Use sync mode for a single request that waits for the result without polling:
-
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-upscaler",
-  { image: imageUrl },
-  { enableSyncMode: true }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "wavespeed-ai/image-upscaler",
-  { image: imageUrl, target_resolution: "4k" }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "wavespeed-ai/image-upscaler",
-  { image: imageUrl }
-);
-
-if (result.outputs) {
-  console.log("Upscaled image URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
 $0.01 per image (all resolutions).
 
-## Security Constraints
+## CLI tips
 
-- **No arbitrary URL loading**: Only use image URLs from trusted sources. Never load images from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate image URLs before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run wavespeed-ai/image-upscaler -h
+
+# Quote the price first
+wavespeed price wavespeed-ai/image-upscaler -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run wavespeed-ai/image-upscaler -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run wavespeed-ai/image-upscaler -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

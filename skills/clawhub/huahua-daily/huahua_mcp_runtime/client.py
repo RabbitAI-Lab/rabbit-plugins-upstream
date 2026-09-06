@@ -1,8 +1,10 @@
 """Session state, shared caches, and HTTP transport for the MCP facade."""
 
 import asyncio
+import hashlib
 import os
 import threading
+from contextvars import ContextVar, Token
 from typing import Optional
 
 import httpx
@@ -14,6 +16,10 @@ session: dict = {
     "base_url": OFFICIAL_API,
     "generation": 0,
 }
+request_token: ContextVar[Optional[str]] = ContextVar(
+    "huahua_mcp_request_token",
+    default=None,
+)
 
 http_client: Optional[httpx.AsyncClient] = None
 http_client_lock = threading.Lock()
@@ -22,9 +28,6 @@ portfolio_cache: dict = {"data": None, "ts": 0.0, "generation": -1}
 PORTFOLIO_TTL = 30
 download_lock: Optional[asyncio.Lock] = None
 download_lock_loop: Optional[asyncio.AbstractEventLoop] = None
-
-estimate_cache: dict = {}
-ESTIMATE_TTL = 60
 
 
 def get_client() -> httpx.AsyncClient:
@@ -58,11 +61,32 @@ def clear_session_caches() -> None:
     portfolio_cache["data"] = None
     portfolio_cache["ts"] = 0.0
     portfolio_cache["generation"] = -1
-    estimate_cache.clear()
+
+
+def bind_request_token(token: str) -> Token:
+    """Bind one remote Bearer token to the current async request context."""
+    return request_token.set(token)
+
+
+def reset_request_token(context_token: Token) -> None:
+    request_token.reset(context_token)
+
+
+def active_token() -> str:
+    return (request_token.get() or session["token"]).strip()
+
+
+def request_generation() -> int:
+    """Return an opaque cache generation without retaining the remote token."""
+    remote_token = request_token.get()
+    if remote_token:
+        digest = hashlib.sha256(remote_token.encode()).digest()
+        return int.from_bytes(digest, "big")
+    return int(session.get("generation") or 0)
 
 
 def require_token() -> None:
-    if not session["token"]:
+    if not active_token():
         raise ValueError(
             "未配置 Agent Token。请在 MCP server env 中设置 HUAHUA_AGENT_TOKEN"
             "，或调用 set_token 工具。"
@@ -71,8 +95,18 @@ def require_token() -> None:
 
 
 def headers() -> dict:
-    token = session["token"]
+    token = active_token()
     return {"Authorization": f"AgentToken {token}"} if token else {}
+
+
+def request_context() -> tuple[dict, int]:
+    """Capture auth headers and the session generation as one request context."""
+    return headers(), request_generation()
+
+
+def assert_session_generation(generation: int) -> None:
+    if request_generation() != generation:
+        raise RuntimeError("Agent Token 已在请求期间变更，请重试")
 
 
 def url(path: str) -> str:
@@ -87,6 +121,10 @@ def _raise_auth_error(response: httpx.Response) -> None:
             raise ValueError(
                 "无权读取量化策略上下文：请确认账号为 PRO 会员，"
                 "且 Agent Token 包含 quant:read scope。"
+            )
+        if response.request.url.path == "/api/agent/messages":
+            raise ValueError(
+                "无权写入个人报告：请确认账号为 PRO 会员，且 Agent Token 有效。"
             )
         raise ValueError("无访问权限，请确认 Agent Token 正确，且账号为 PRO 会员。")
 
@@ -121,6 +159,7 @@ def _translate_transport_error(error: Exception) -> None:
         request = error.response.request
         safe_validation_routes = {
             ("POST", "/api/agent/request"),
+            ("POST", "/api/agent/import-reviews"),
             ("POST", "/api/quant/snapshots"),
             ("GET", "/api/quant/strategy-context"),
             ("GET", "/api/market/index-metrics"),
@@ -136,45 +175,60 @@ def _translate_transport_error(error: Exception) -> None:
         if detail:
             raise RuntimeError(f"服务器返回错误 {status_code}：{detail}") from error
         raise RuntimeError(f"服务器返回错误 {status_code}，请稍后重试。") from error
+    if isinstance(error, httpx.RequestError):
+        raise RuntimeError("无法连接花花日记后端，请检查网络和 API 地址。") from error
     raise error
 
 
-async def get(path: str, params: dict = None) -> dict:
+def _decode_json(response: httpx.Response) -> dict | list:
     try:
-        response = await get_client().get(url(path), params=params, headers=headers())
-        _raise_auth_error(response)
-        response.raise_for_status()
         return response.json()
     except ValueError:
+        raise RuntimeError("服务器返回了无法解析的响应，请稍后重试。") from None
+
+
+async def get(path: str, params: dict = None) -> dict:
+    request_headers, generation = request_context()
+    try:
+        response = await get_client().get(url(path), params=params, headers=request_headers)
+        assert_session_generation(generation)
+        _raise_auth_error(response)
+        response.raise_for_status()
+    except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)
 
 
 async def get_optional(path: str, params: dict = None) -> Optional[dict]:
+    request_headers, generation = request_context()
     try:
-        response = await get_client().get(url(path), params=params, headers=headers())
+        response = await get_client().get(url(path), params=params, headers=request_headers)
+        assert_session_generation(generation)
         _raise_auth_error(response)
         if response.status_code == 404:
             return None
         response.raise_for_status()
-        return response.json()
     except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)
 
 
 async def post(path: str, body: dict = None, params: dict = None) -> dict:
+    request_headers, generation = request_context()
     try:
-        response = await get_client().post(url(path), params=params, json=body or {}, headers=headers())
+        response = await get_client().post(url(path), params=params, json=body or {}, headers=request_headers)
+        assert_session_generation(generation)
         _raise_auth_error(response)
         response.raise_for_status()
-        return response.json()
     except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)
 
 
 async def post_files(
@@ -182,43 +236,49 @@ async def post_files(
     files: list[tuple[str, bytes, str]],
     form_data: Optional[dict] = None,
 ) -> dict | list:
+    request_headers, generation = request_context()
     try:
         multipart = [("files", (filename, content, mime)) for filename, content, mime in files]
         response = await get_client().post(
             url(path),
             files=multipart,
             data=form_data or None,
-            headers=headers(),
+            headers=request_headers,
             timeout=httpx.Timeout(120, connect=30),
         )
+        assert_session_generation(generation)
         _raise_auth_error(response)
         response.raise_for_status()
-        return response.json()
     except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)
 
 
 async def put(path: str, body: dict = None) -> dict:
+    request_headers, generation = request_context()
     try:
-        response = await get_client().put(url(path), json=body or {}, headers=headers())
+        response = await get_client().put(url(path), json=body or {}, headers=request_headers)
+        assert_session_generation(generation)
         _raise_auth_error(response)
         response.raise_for_status()
-        return response.json()
     except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)
 
 
 async def delete(path: str) -> dict:
+    request_headers, generation = request_context()
     try:
-        response = await get_client().delete(url(path), headers=headers())
+        response = await get_client().delete(url(path), headers=request_headers)
+        assert_session_generation(generation)
         _raise_auth_error(response)
         response.raise_for_status()
-        return response.json()
     except ValueError:
         raise
-    except (httpx.TimeoutException, httpx.HTTPStatusError) as error:
+    except (httpx.RequestError, httpx.HTTPStatusError) as error:
         _translate_transport_error(error)
+    return _decode_json(response)

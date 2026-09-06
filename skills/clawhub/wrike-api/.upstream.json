@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/wrike-api",
   "slug": "wrike-api",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739753410,
-  "contentHash": "1a53165242fcd60c2caa69ebd9451faa26c175292c1211c0ad9169784ea42996",
-  "fetchedAt": "2026-07-26T18:27:34.594Z"
+  "version": "1.2.0",
+  "updatedAt": 1788519419818,
+  "contentHash": "5ecfcb3094ebf02d2f349df31319f6d65d001a811a223c893c5e0de66481076b",
+  "fetchedAt": "2026-09-06T11:50:24.657Z"
 }

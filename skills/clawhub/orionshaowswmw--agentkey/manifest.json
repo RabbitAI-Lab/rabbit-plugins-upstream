@@ -1,0 +1,38 @@
+{
+  "skill": "agentkey",
+  "version": "2.0.0",
+  "schema": "agentkey.manifest.v1",
+  "runtime": "python3 (>=3.8, stdlib) + system openssl binary",
+  "entrypoints": {
+    "init": "scripts/agentkey.py init",
+    "add": "stdin-key | scripts/agentkey.py add NAME --provider P [--expires ISO] [--key-file 0600-PATH]",
+    "get": "scripts/agentkey.py get NAME [--fingerprint]",
+    "rotate": "stdin-key | scripts/agentkey.py rotate NAME [--expires ISO]",
+    "list": "scripts/agentkey.py list [--json]",
+    "status": "scripts/agentkey.py status",
+    "audit": "scripts/agentkey.py audit [--json] [--verify]",
+    "report": "scripts/agentkey.py report",
+    "selftest": "bash scripts/selftest.sh"
+  },
+  "contracts": ["agentkey.status.v1", "agentkey.list.v1", "agentkey.audit.v1", "agentkey.report.v1"],
+  "exit_codes": {
+    "0": "ok",
+    "2": "usage error",
+    "3": "cipher/passphrase unavailable (openssl missing or no pass)",
+    "4": "integrity failure (wrong passphrase or tampered vault/audit)",
+    "5": "entry/vault not found",
+    "6": "refused unsafe operation"
+  },
+  "policy": {
+    "network": false,
+    "telemetry": false,
+    "update_beacon": false,
+    "key_input": "stdin or --key-file (mode 600 enforced) only — argv refused by design",
+    "pass_input": "AGENTKEY_PASS, --pass-file (mode 600 enforced), or tty getpass; empty refused",
+    "state": "${AGENTKEY_HOME:-~/.agentkey} (dirs 0700, files 0600)",
+    "crypto": "AES-256-CBC PBKDF2-SHA256 600k iters (openssl enc), HMAC-SHA256 Encrypt-then-MAC, tag verified before decrypt",
+    "redaction": "list/audit/report/fingerprint never contain key material"
+  },
+  "docs": {"operations": "docs/operations.md", "evidence": "docs/evidence.md", "integration": "docs/integration.md", "history": "CHANGELOG.md"},
+  "evidence_verified_utc": "2026-09-06"
+}

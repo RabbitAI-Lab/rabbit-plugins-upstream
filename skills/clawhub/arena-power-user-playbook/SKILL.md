@@ -1,88 +1,106 @@
 ---
 name: arena-power-user-playbook
-version: 1.1.0
-description: >
-  Power-user guide to always getting top-tier frontier models on Arena.ai
-  (LMArena/Chatbot Arena) without paying. Covers the Max multimodal router
-  (proven to outperform every individual model), Direct vs Agent vs Battle vs
-  Code mode selection, model rotation caveats, conversation-reset tricks,
-  how to avoid weak "Pineapple" model responses, and a current list of which
-  models lead each arena (text, code, vision, agent). Use when working with
-  Arena.ai, choosing a chat mode, or optimizing for GPT-5 / Claude Opus /
-  Gemini Pro tier responses.
+version: 2.0.0
 author: orionshaowswmw
-license: MIT
+license: MIT-0
+description: >
+  Executable power-user playbook for arena.ai. Use when choosing an arena.ai
+  mode (Direct / Agent / Side-by-Side / Battle) for a task, reading or checking
+  the Agent Arena leaderboard, screening a response with measurable
+  weak-response flags, chunking long Agent work with SESSION-STATE.md carry,
+  or falling back to cloud providers when arena.ai throttles or is down.
+  Bundles a dated, sourced model snapshot (2026-09-05) plus offline
+  python3-stdlib scripts: mode advisor, weak-response screener, leaderboard
+  rotation checker, state manager, local feedback log.
 tags:
   - arena
-  - lmarena
+  - arena-ai
   - model-selection
-  - router
-  - max-router
-  - prompt-engineering
+  - agent-mode
+  - leaderboard
+  - fallback
   - power-user
-  - gpt-5
-  - claude
-  - gemini
-  - free-models
-allowed-tools:
-  - Read
-  - WebFetch
-  - Bash
+metadata: {"openclaw": {"emoji": "🏆"}}
 ---
 
-# arena-power-user-playbook 🏆
+# arena-power-user-playbook 🏆 v2.0.0
 
-**Always get GPT-5 / Claude Opus / Gemini Pro tier responses on Arena.ai without paying a dime.**
+Executable companion to arena.ai power usage. Every claim here is either
+**sourced** (dated, in `references/`), **measured** (script output), or
+**labeled as a heuristic**. No unverifiable numbers, no phantom scripts.
 
-## The one-sentence playbook
-Use **Direct Chat → Max** for most things, **Code Arena → Max** for coding, and **Agent Mode (fresh chat each big task)** for multi-step work. Arena is 100% free; the Max router beats any single model it routes to.
+## Hard rules (anti-hallucination contract)
 
-## Decision tree
-1. **Simple, quick question** → Direct Chat → **Max** (default; multimodal router trained on 5M+ votes)
-2. **Multi-step / research / build something** → **Agent Mode** at `/agent` (fresh chat per big task; T1 orchestrators)
-3. **Coding** → **Code Arena → Max** (heavy Claude-Opus routing; Kimi K3 for front-end)
-4. **Vision / image gen** → Direct → Max (multimodal; beats best single model by +3 Elo, 20+s faster)
-5. **Compare two specific models** → Side-by-Side Mode (manual pick)
-6. **Blind test / help the leaderboard** → Battle Mode (vote honestly)
+1. Model names are **rotating data**, not facts. Never copy a name from this
+   skill into a live decision; use the live picker or
+   arena.ai/leaderboard/agent, then `model-check` against the snapshot.
+2. The dated snapshot in `data/` is a **comparison baseline only**.
+3. `weak` reports **screening flags**, never quality judgments.
+4. Fallback is **cloud-only** — no local GGUF/llama.cpp, ever.
+5. Every script prints one machine-readable summary line; full JSON via `--out`.
+   Exit codes: 0 ok · 1 findings/changes · 2 usage or no data · 3 internal error.
 
-## Why Max wins
-Max is NOT a model — it's a latency-controlled router trained on 5M+ pairwise community votes. Per Arena's May 2026 Multimodal Max announcement:
-- Vision: +3 Elo over the best individual model, 20+ seconds faster
-- Frontend code: heavy reliance on claude-opus-4.5 variants (best latency/quality tradeoff)
-- Text-to-image: beats top individual models on strength AND latency
-- Text: routes ~62% to gpt-5.2-chat-latest, 38% diversified → +12 Elo over any single model
+## Command contract
 
-## Critical caveats (2026-07)
-- GPT-5.4-High was removed from the Direct manual picker in April 2026, but Max still routes to the strongest available models.
-- Agent Mode randomly assigns a fresh orchestrator per chat (all are T1+ per the Agent Arena leaderboard).
-- Agent Mode has a ~5-message soft limit per thread (community observation); start a new chat for new tasks.
-- Arena rotates models in/out; don't rely on one specific model name always being available.
-- The community-named weak model "Pineapple" still occasionally appears in rotation. If you get a useless response, start a new chat or switch to Max.
-- Battle Mode is for evaluation/voting, NOT real work (your votes improve Max for everyone).
+| Command | Purpose | Key flags |
+|---|---|---|
+| `mode` | recommend Direct / Agent / Side-by-Side / Battle | `--task` `--files` `--steps` `--coding` `--compare` `--blind` `--budget-conscious` `--tasks file.json` |
+| `weak` | screen one response with weighted heuristic flags (bands weak/medium/strong) | `--response` \| `--file` `--min-words 35` `--expect-short` |
+| `model-check` | fresh leaderboard dump vs dated snapshot: drift, rotated-out, new | `--dump file.json` `--date` |
+| `snapshot` | write a new dated snapshot from a dump | `--dump` `--date YYYY-MM-DD` `--out` |
+| `state` | SESSION-STATE.md for chunked multi-chat work | `--file` `--action init\|add\|summary\|next\|validate` `--goal` `--phase` `--done ...` `--next ...` `--force` |
+| `stats` | local feedback log + report (self-improvement loop) | `--action log\|report` `--event` `--model` `--mode` `--log` |
+| `selftest` | run the skill self-test | — |
 
-## If you get a weak/bad response
-- Direct chat: switch manual selection to **Max**
-- Agent Mode: **start a new chat** (re-rolls the orchestrator)
-- Battle Mode: vote honestly (this pushes bad models down the rankings)
-- Clear the conversation and resubmit (Max re-routes per-prompt)
+All commands: `python3 scripts/arena_playbook.py <cmd> ...` (python3 stdlib,
+zero network, works on any agent runtime).
 
-## Current frontier tier (mid-2026, per public leaderboards)
-- **Claude Opus 4.7/4.8 / Fable 5** — deep reasoning, coding (note: Fable 5 currently suspended per US export control June 2026; returns when restored)
-- **GPT-5.2/5.4/5.5/5.6-Sol** — general flagship, multimodal
-- **Gemini 3.1 Pro** — long context (2M), vision, price-efficiency
-- **Claude Sonnet 4.6/5** — best quality-per-dollar for ~80% of tasks
-- **Kimi K3** — #1 on Arena Frontend Code Arena (July 2026)
-- **DeepSeek V4 Pro/R1** — math/reasoning, ultra-cheap open-weight fallback
+## Mode decision (quick)
 
-Smart move: let Max decide for you. It is provably better than picking any one model.
+- Compare two known models → **Side-by-Side** · Blind A/B vote → **Battle**
+- Multi-step / tools / files + build / coding with iteration → **Agent**
+  (official Agent Mode task mix: coding 29%, research 11%, planning 11%)
+- Single-shot Q&A, including one-file questions → **Direct**
+- "Max/High/xHigh" are **per-model compute tiers on the leaderboard**, not a
+  router. Pick model, then a tier the task can afford (see Cost/Task P50).
 
-## URLs
-- Direct Chat: https://arena.ai/ (select "Direct" top-left)
-- Agent Mode: https://arena.ai/agent
-- Agent leaderboard: https://arena.ai/leaderboard/agent
-- Max router direct: https://arena.ai/max
-- Blog post on Agent Mode: https://arena.ai/blog/agent-mode/
-- Help center: https://help.arena.ai/articles/5432423882-how-to-use-agent-mode
+Details + official sources: `references/modes.md`.
 
-## Background
-Arena (formerly LMArena / Chatbot Arena) is run by the LMSYS team, backed by $250M+ funding, serves 10M+ monthly users who have contributed 700M+ conversations and 82M+ votes. They have publicly stated (Reddit, team comments, blog) they will not introduce a paid plan — their mission is that "everyone can use good models for free."
+## Leaderboard (how to read it)
+
+Headline = **Net Improvement (τ̂)** from causal tracing over in-the-wild
+Agent sessions (95% CIs). Signals: confirmed success, praise-vs-complaint,
+steerability, bash recovery, tool hallucination (lower = better). Small
+session counts = wide CIs; adjacent ranks within CIs are not distinguishable.
+Rotation protocol: `model-check` → `snapshot`. Details:
+`references/leaderboard.md`.
+
+## Weak response (3-strike escalation)
+
+`weak` bands: weak ≥50, medium ≥25, strong <25 (screening only). On a real
+task: strike 1 = new chat, same task · strike 2 = rephrase + fresh chat with
+`state next` carry · strike 3 = higher tier or different family from the live
+board · persistent = switch provider (cloud-only table) or split the task.
+Log each strike via `stats log --event weak_response`. Details:
+`references/fallback.md`.
+
+## Load map (progressive disclosure)
+
+| File | Load when |
+|---|---|
+| `references/modes.md` | deciding a mode beyond the quick table; auditing mode claims |
+| `references/leaderboard.md` | reading ranks/CIs, running rotation protocol |
+| `references/fallback.md` | arena.ai degraded, weak-response escalation, chunking |
+| `data/model_snapshot_2026-09-05.json` | baseline for `model-check` — sourced from arena.ai/leaderboard/agent, board date 2026-09-05, fetched 2026-09-06 (verify before relying) |
+| `tools/playbook_selftest.py` | verifying the install (10 groups, all offline) |
+
+## Verification
+
+`python3 scripts/arena_playbook.py selftest` → `ALL CHECKS PASSED`.
+README.md carries the artifact tree hash with the recompute script.
+
+## Privacy
+
+Local scripts read only files you pass them; `stats` writes only to a local
+log you name. Nothing leaves the machine. arena.ai itself processes your
+prompts server-side — share only data appropriate for it.

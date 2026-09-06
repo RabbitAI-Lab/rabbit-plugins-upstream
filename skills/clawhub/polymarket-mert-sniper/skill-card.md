@@ -1,50 +1,62 @@
-## Description: <br>
-Near-expiry conviction trading on Polymarket that scans markets in their final minutes, filters for strongly skewed splits, and places bounded trades against the under-priced side. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Near-expiry conviction trading on Polymarket. The skill scans markets in their final minutes, filters for strongly-skewed splits (60/40+), and places bounded trades against the under-priced side. Defaults — $10 max per trade, 5 trades/run, 8-minute expiry window, dry-run unless `--live`.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is for demonstration purposes and not for production usage.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-External users and trading agents use this skill to scan near-expiry Polymarket markets, apply configurable split, expiry, sizing, and safeguard rules, and run paper-mode or live bounded trades. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live mode can place real-money Polymarket trades and on-chain trades cannot be recalled. <br>
-Mitigation: Run paper mode first, use --live only deliberately, and keep max bet and max trades limits conservative. <br>
-Risk: WALLET_PRIVATE_KEY can authorize trades from the connected wallet. <br>
-Mitigation: Avoid providing WALLET_PRIVATE_KEY unless self-custody live trading is required and the operator understands the signing risk. <br>
-Risk: The scanner may also redeem existing winning positions before starting a cycle. <br>
-Mitigation: Review account-changing behavior before connecting real funds and monitor positions with scripts/status.py. <br>
-Risk: Smart sizing and platform-level limits may not match the user's intended exposure. <br>
-Mitigation: Verify the effective configured limits, avoid broad smart sizing until tested, and keep platform controls aligned with config values. <br>
-Risk: Default strategy parameters are not validated as profitable and fast-resolving markets can outpace monitoring. <br>
-Mitigation: Treat defaults as a starting point, test in dry run over time, and size positions conservatively. <br>
+## Use Case:
 
+External developers and traders use this skill to scan near-expiry Polymarket markets, configure bounded strategy parameters, inspect account status, and optionally execute live trades through the Simmer SDK.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/simmer/polymarket-mert-sniper) <br>
-- [Strategy attribution thread](https://x.com/mert/status/2020216613279060433) <br>
-- [Simmer dashboard](https://simmer.markets/dashboard) <br>
-- [Simmer V2 migration guide](https://docs.simmer.markets/v2-migration) <br>
-- [Polymarket CLOB API](https://clob.polymarket.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and CLI text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May place live trades when run with --live and valid credentials; defaults to paper mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Managed defaults and strategy wording conflict in ways that could cause unintended real-money trades.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep dry-run enabled first, manually confirm the effective $10 max trade, 8-minute expiry, and 0.60 split settings, and enable live trading only after reviewing the resolved configuration.
+
+Risk: Live mode can place irreversible on-chain Polymarket orders when wallet credentials are available.
+
+Mitigation: Do not provide a wallet private key unless live trading is intended, keep position sizing conservative, and rely on preflight checks before order placement.
+
+Risk: The default strategy is a template and has not been validated to produce profitable results.
+
+Mitigation: Run paper or dry-run mode for an extended period, review market selection and fees, and treat the strategy as user-owned trading automation rather than financial advice.
+
+## Reference(s):
+
+- [Strategy attribution thread](https://x.com/mert/status/2020216613279060433)
+- [Simmer API](https://api.simmer.markets)
+- [Simmer dashboard](https://simmer.markets/dashboard)
+- [Simmer V2 migration guide](https://docs.simmer.markets/v2-migration)
+- [Polymarket CLOB API](https://clob.polymarket.com)
+- [Polymarket fee documentation](https://docs.polymarket.com/trading/fees)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration values, and trading-status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Simmer API key; live trading requires explicit `--live` use and may require wallet credentials.]
+
+## Skill Version(s):
+
+1.3.6 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

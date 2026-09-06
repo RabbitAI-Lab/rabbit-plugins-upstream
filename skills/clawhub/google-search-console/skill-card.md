@@ -1,48 +1,62 @@
-## Description: <br>
-Google Search Console API integration with managed OAuth for querying search analytics, managing sitemaps, and monitoring site performance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Search Console API integration through Maton-managed OAuth for querying search analytics, managing sitemaps, and monitoring site performance.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to access Google Search Console data through Maton-managed OAuth, including search analytics, site listings, URL inspection-oriented workflows, and sitemap management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key can grant access through the managed Google Search Console OAuth proxy if exposed. <br>
-Mitigation: Keep MATON_API_KEY private, avoid sharing logs or command output that contain it, and rotate the key if exposure is suspected. <br>
-Risk: Requests may target the wrong Google Search Console connection when multiple active connections exist. <br>
-Mitigation: Set the Maton-Connection header to the intended connection ID before querying or changing account data. <br>
-Risk: Sitemap create, update, or delete calls can change Search Console state. <br>
-Mitigation: Review the target site URL, sitemap path, and intended effect before approving any write operation. <br>
+## Use Case:
 
+Developers and operators use this skill to access Google Search Console data through Maton, inspect search performance, list verified sites, and manage sitemaps with explicit approval for write actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-search-console) <br>
-- [Google Search Console API Reference](https://developers.google.com/webmaster-tools/v1/api_reference_index) <br>
-- [Sites: list](https://developers.google.com/webmaster-tools/v1/sites/list) <br>
-- [Search Analytics: query](https://developers.google.com/webmaster-tools/v1/searchanalytics/query) <br>
-- [Sitemaps](https://developers.google.com/webmaster-tools/v1/sitemaps) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Google Search Console OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Google Search Console actions are routed through Maton and require the user to trust that service with API access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable using Maton as the gateway, prefer OAuth, and grant the narrowest available Google Search Console scopes.
+
+Risk: Sitemap changes or deletes can affect site indexing behavior.
+
+Mitigation: Confirm the exact site URL, sitemap path, request payload, and intended effect before any PUT, POST, PATCH, or DELETE operation.
+
+Risk: Using MATON_API_KEY exposes a long-lived credential more broadly than OAuth-backed CLI storage.
+
+Mitigation: Use OAuth through the Maton CLI whenever possible and reserve MATON_API_KEY for environments where the CLI cannot be used.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-search-console)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Google Search Console API Reference](https://developers.google.com/webmaster-tools/v1/api_reference_index)
+- [Search Analytics](https://developers.google.com/webmaster-tools/v1/searchanalytics/query)
+- [Sitemaps](https://developers.google.com/webmaster-tools/v1/sitemaps)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and optional Python or JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should default to read/list Google Search Console calls and require explicit user approval for connection creation or write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

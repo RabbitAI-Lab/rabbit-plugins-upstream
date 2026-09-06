@@ -1,47 +1,72 @@
-## Description: <br>
-CloudBase guides agents through developing, deploying, debugging, and reviewing CloudBase projects across web, WeChat Mini Program, backend, database, storage, auth, AI model, and operations workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CloudBase helps agents build, deploy, debug, and troubleshoot CloudBase web, WeChat mini program, mobile, backend, database, storage, authentication, AI, and operations workflows.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers use this skill to select CloudBase-specific workflows, configure resources, implement app features, and review code for common CloudBase pitfalls before deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer agents toward high-impact CloudBase actions such as environment changes, permission updates, deployments, API key creation, public endpoint exposure, or local directory deletion. <br>
-Mitigation: Install it only for intentional CloudBase work and require explicit approval before MCP or cloud actions that change resources or expose services. <br>
-Risk: Auth, JWT, CORS, public-access, service-role, logging, telemetry, and external LLM examples may be unsafe or under-scoped if copied directly into production. <br>
-Mitigation: Treat these examples as drafts and complete production security review before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill to select the right CloudBase guidance, prepare cloud resources, implement app features, deploy services, and troubleshoot CloudBase projects across web, mini program, mobile, serverless, CloudRun, database, storage, authentication, AI, and operations scenarios.
 
-## Reference(s): <br>
-- [ClawHub Cloudbase Skill Page](https://clawhub.ai/binggg/skills/cloudbase) <br>
-- [CloudBase Development Guidelines](artifact/SKILL.md) <br>
-- [CloudBase MCP Setup](artifact/references/mcp-setup.md) <br>
-- [CloudBase Deployment Workflow](artifact/references/deployment-workflow.md) <br>
-- [CloudBase Code Review Rules Index](artifact/references/cloudbase-code-review/references/RULES_INDEX.md) <br>
-- [CloudBase Change Safety Protocol](artifact/references/cloudbase-platform/references/protocols/change-safety-protocol.md) <br>
-- [CloudBase Deployment Gate](artifact/references/cloudbase-platform/references/protocols/deployment-gate.md) <br>
-- [CloudBase HTTP API Guide](artifact/references/http-api/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, command examples, configuration steps, and review checklists.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes to topic-specific reference skills and includes approval gates for high-impact cloud actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.92.27 (source: server release metadata; artifact frontmatter version: 2.25.0) <br>
+Risk: The skill can guide broad CloudBase management and deployment actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for agents that should manage CloudBase resources, and review proposed cloud operations before execution.
+
+Risk: Commands or generated configuration may target the wrong CloudBase environment.
+
+Mitigation: Confirm the exact EnvId before cloud operations and avoid relying on implicit or selected environment state.
+
+Risk: Persistent user-level tooling setup can change future agent capabilities.
+
+Mitigation: Prefer scoped plugin targets and pinned package versions where possible.
+
+Risk: Secrets or privileged keys could be exposed through chat, browser code, or generated configuration.
+
+Mitigation: Do not paste long-lived secrets into chat, and do not expose service-role or API keys to browser code.
+
+Risk: Force or auto-confirm flags can bypass interactive review.
+
+Mitigation: Reserve `--yes` and `--force` for controlled CI contexts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binggg/skills/cloudbase)
+- [CloudBase scenarios](references/scenarios.md)
+- [Deployment workflow](references/deployment-workflow.md)
+- [MCP setup](references/mcp-setup.md)
+- [MCP vs CLI tooling fallback](references/tooling-fallback.md)
+- [CloudBase console entry points](references/console-links.md)
+- [Activation map](references/activation-map.yaml)
+- [CloudBase Pricing](https://cloud.tencent.com/document/product/876/75213)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with code, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide cloud-management actions; users should confirm EnvId values, credentials, and production changes before execution.]
+
+## Skill Version(s):
+
+1.92.81 (source: server release metadata; artifact frontmatter version is 2.33.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

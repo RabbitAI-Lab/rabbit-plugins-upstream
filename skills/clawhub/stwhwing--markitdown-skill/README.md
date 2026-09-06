@@ -1,0 +1,92 @@
+# markitdown-skill
+
+A reusable agent skill that converts **documents and web pages** to Markdown using
+[Microsoft's MarkItDown](https://github.com/microsoft/markitdown), with two practical
+additions:
+
+1. **Web page → Markdown pipeline** (`scripts/url_to_markdown.py` orchestrating five
+   focused modules) — defeats JS-rendered SPA shells and anti-bot challenges (notably
+   WeChat / `mp.weixin.qq.com`) that otherwise return empty pages. It fetches with a
+   full browser User-Agent, falls back to headless Chrome/Edge `--dump-dom` rendering,
+   then to embedded-JSON extraction, so you reliably get clean Markdown instead of a
+   blank `<div id="root">`.
+2. **`token_saver.py`** — a local estimator that shows how many tokens you *actually* pay
+   when you feed the AI the cleaned Markdown instead of the raw file (and an honest
+   saving % only when a real baseline exists).
+
+The core idea: **convert first, then analyse.** Richly-formatted docs (PDF/PPTX/DOCX,
+scanned images) carry huge layout/noise overhead; converting to plain Markdown typically
+cuts AI token cost by 80%+.
+
+> Version note: the skill version lives **only** in the `SKILL.md` frontmatter
+> (`version:`); this README intentionally carries no version number so it cannot go
+> stale. Since v1.7.0 the web converter is split into the modules listed below —
+> `url_to_markdown.py` itself is a thin CLI orchestrator.
+
+## What's inside
+
+| File | Purpose |
+|------|---------|
+| `SKILL.md` | Skill manifest + usage instructions (used by WorkBuddy / ClawBot-style agents) |
+| `scripts/url_to_markdown.py` | Web URL → Markdown — CLI orchestrator wiring the modules below |
+| `scripts/url_security.py` | SSRF guard: target validation, internal/private address blocking |
+| `scripts/url_fetch.py` | HTTP fetching with full browser User-Agent |
+| `scripts/content_detect.py` | Content-type / SPA-shell / anti-bot page detection |
+| `scripts/spa_extract.py` | Headless-browser rendering fallback + embedded-JSON extraction |
+| `scripts/media_detect.py` | Media/link handling within pages |
+| `scripts/token_saver.py` | Local token-cost / saving estimator |
+| `scripts/measure_tokens.py` | Token counter / cost measurement for any text |
+| `scripts/batch_convert.py` | Batch file → Markdown helper |
+| `references/reference.md` | MarkItDown API reference |
+| `references/USAGE-GUIDE.md` | Detailed CLI / API examples |
+| `references/TOKEN-SAVER.md` | Token-saving methodology & honesty notes |
+| `references/TOKEN-AUDIT.md` | Token audit methodology (optional component) |
+
+## Requirements
+
+- Python 3.10+
+- `markitdown` (install with `pip install 'markitdown[all]'`)
+- *(Optional, for SPA fallback)* a headless browser — Chrome/Edge on Windows, or
+  `chromium` / `playwright install chromium` on Linux/macOS.
+
+## Quick start
+
+```bash
+# Install the engine
+pip install 'markitdown[all]'
+
+# Web page → Markdown (handles SPA + WeChat anti-bot)
+python scripts/url_to_markdown.py "https://example.com/article" -o page.md
+
+# File → Markdown
+markitdown document.pdf -o document.md
+
+# Estimate the token saving of converting a PDF
+python scripts/token_saver.py document.pdf --pages 40
+```
+
+## Using it as an agent skill
+
+Drop this folder into your agent's skill directory (e.g. `~/.workbuddy/skills/markitdown-skill/`
+for WorkBuddy, or your platform's equivalent). The agent will then proactively convert
+files and links to Markdown before analysing them, and will route every web link through
+`url_to_markdown.py` rather than hand-rolled `curl` + regex parsing.
+
+## Security
+
+- **SSRF guard (on by default).** `scripts/url_to_markdown.py` only fetches `http`/`https`
+  URLs. By default it refuses targets that resolve to loopback, private, link-local,
+  reserved, or CGNAT (`100.64.0.0/10`) addresses, the cloud instance-metadata endpoint
+  (`169.254.169.254`), or internal hostnames (`*.local`, `*.internal`, `*.corp`, `*.lan`,
+  `*.home`, `*.intranet`). Pass `--allow-internal` only on a trusted machine when you
+  deliberately need to fetch a local/intranet page.
+- **Optional external capabilities are off by default.** The skill can optionally use
+  OpenAI image descriptions, Azure Document Intelligence, or third-party plugins, but these
+  are disabled unless you explicitly enable them and they require your consent. Never feed
+  private documents to an external service; local `markitdown` conversion does not phone
+  home.
+
+## License
+
+MIT — see [LICENSE](LICENSE). This skill wraps Microsoft's MarkItDown (also MIT); the
+wrappers and documentation here are released independently under MIT.

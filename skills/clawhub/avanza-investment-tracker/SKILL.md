@@ -1,11 +1,31 @@
 ---
 name: avanza-investment-tracker
-description: "Process Avanza CSV exports, calculate TWRR/Modified Dietz returns, and track portfolio performance. Use when importing stock transactions, calculating investment returns, or managing portfolio data."
+description: "Process Avanza CSV exports, calculate TWRR/Modified Dietz returns, and track portfolio performance. Use when importing stock transactions, calculating investment returns, or managing portfolio data. Reads/writes a local SQLite database, and (for live prices and risk metrics) makes outbound HTTPS requests to Avanza, Riksbanken, and Yahoo Finance. Includes irreversible deletion commands (reset --hard, delete-tx, account delete) — see Security and Data Access in SKILL.md/README."
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - python3
+    permissions:
+      filesystem:
+        - "read/write: user-specified local SQLite database (--database path); no other files accessed"
+      network:
+        - "https://www.avanza.se (price/FX/chart data for held assets; optional, disable with --update-prices never)"
+        - "https://api.riksbank.se (reference rates for risk metrics; optional)"
+        - "https://query1.finance.yahoo.com (benchmark index prices for beta/correlation; optional)"
 ---
 
 # Avanza Investment Tracker
 
 Parse transaction CSVs and compute portfolio performance metrics.
+
+## Security and Data Access
+
+Be aware of what this skill does before running it:
+
+- **Local database writes:** imports, price updates, and portfolio management read and write a local SQLite database.
+- **Network access (optional but on by default):** live price/FX lookups contact Avanza's public API with the asset names in your portfolio; risk metrics (`--risk`, `--beta`) may also contact the Riksbanken API and Yahoo Finance (benchmark ticker + date range). Use `--update-prices never` to stay fully offline.
+- **Irreversible deletions:** `reset --hard`, `delete-tx`, `account allocate --undo`, and `account delete` permanently remove transactions and rebuild derived tables. There is no built-in undo. Back up your database first (e.g. `cp` or git), and prefer `delete-tx --dry-run` to preview. Avoid broad selectors like `delete-tx --since` unless you are certain of the blast radius.
 
 ## Quick Start
 
@@ -48,12 +68,16 @@ workspace-finance/
 | `python scripts/cli.py portfolio [OPTIONS]` | Show portfolio holdings, market value, allocation %, and APY (alias to `stats --positions --summary`) |
 | `python scripts/cli.py status` | Display system status (transaction counts, price dates, date range) |
 | `python scripts/cli.py settings SUBCOMMAND` | Configure defaults and account nicknames |
-| `python scripts/cli.py reset [--hard]` | Reset database state (`--hard` deletes data; default only marks unprocessed) |
-| `python scripts/cli.py delete-tx [OPTIONS]` | Delete individual transaction(s) by `--tx-id`, `--date`+`--asset`, or `--since`, then rebuild derived tables (see below) |
+| `python scripts/cli.py reset [--hard] [--yes]` | Reset database state (`--hard` deletes data; default only marks unprocessed). `--hard` prompts for confirmation (or requires `--yes` non-interactively) and writes an automatic timestamped `.bak` backup first |
+| `python scripts/cli.py delete-tx [OPTIONS]` | Delete individual transaction(s) by `--tx-id`, `--date`+`--asset`, or `--since`, then rebuild derived tables (see below). Prompts for confirmation unless `--dry-run` or `--yes` is used; writes an automatic timestamped `.bak` backup first |
 | `python scripts/cli.py account SUBCOMMAND` | Manage accounts — virtual sub-portfolios (create/allocate/transfer/list/close/delete) and nicknames (see below) |
 | `python scripts/cli.py report [OPTIONS]` | Investment report with a virtual-portfolio section and a virtual-vs-parent-vs-benchmark comparison |
 
 ### Deleting transactions
+
+> **Irreversible.** `delete-tx` permanently removes the matched transactions and rebuilds
+> derived tables — there is no undo. Back up the database first and use `--dry-run` to
+> preview, especially with broad selectors like `--since`.
 
 `delete-tx` removes specific real transactions and rebuilds the derived `assets` / cohort tables, so there is no need to `reset` the whole database after a bad import (e.g. a duplicate, or a row that slipped in before an unsettled trade was deferred). Targeting is mutually exclusive:
 
@@ -61,7 +85,7 @@ workspace-finance/
 - `delete-tx --date YYYY-MM-DD --asset "Name" [--account ACCOUNT]` — the common surgical case.
 - `delete-tx --since YYYY-MM-DD [--account ACCOUNT]` — remove everything from a date onward (e.g. undo today's import).
 
-`--cascade` widens a `--date`+`--asset` match across the account family (parent + its virtuals) so a trade and its allocated split are removed together; `--dry-run` previews the deletion. When an allocated buy on a virtual is deleted, its orphaned funding `Intern överföring` transfer is removed automatically (mirroring `account allocate --undo`). After every deletion all transactions are reprocessed, so the `assets`/cohort tables always reflect the remaining transactions — never a half-deleted state.
+`--cascade` widens a `--date`+`--asset` match across the account family (parent + its virtuals) so a trade and its allocated split are removed together; `--dry-run` previews the deletion; `--yes` skips the confirmation prompt (required when running non-interactively, e.g. from an agent or script — the command refuses with exit code 1 otherwise). A timestamped `<db>.pre-delete-tx.<YYYYMMDD-HHMMSS>.bak` backup is written before any rows are deleted. When an allocated buy on a virtual is deleted, its orphaned funding `Intern överföring` transfer is removed automatically (mirroring `account allocate --undo`). After every deletion all transactions are reprocessed, so the `assets`/cohort tables always reflect the remaining transactions — never a half-deleted state.
 
 ### Global Options
 - `--database PATH` (default: `data/asset_data.db`)

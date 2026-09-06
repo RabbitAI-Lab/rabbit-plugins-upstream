@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/todoist-api",
   "slug": "todoist-api",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781739757511,
-  "contentHash": "96a935170e32c346d645554fc5b0348fed69789f832a968be2196a9bd4e41ec0",
-  "fetchedAt": "2026-07-26T18:27:28.484Z"
+  "version": "1.2.2",
+  "updatedAt": 1788550993337,
+  "contentHash": "3f332fa02fc073172a9400ef38bad8fa96fc9c67714cf5f02cbed3e96084e07c",
+  "fetchedAt": "2026-09-06T11:49:34.200Z"
 }

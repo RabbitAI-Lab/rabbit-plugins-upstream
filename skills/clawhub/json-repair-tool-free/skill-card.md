@@ -1,41 +1,53 @@
-## Description: <br>
-JSON修复工具免费版 helps agents repair common JSON syntax problems such as trailing commas, single quotes, unquoted keys, JavaScript-style comments, and hexadecimal numbers while backing up and validating repaired files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+JSON修复工具免费版 helps agents repair common JSON syntax errors such as trailing commas, single quotes, unquoted keys, comments, and hexadecimal numbers.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, operators, data analysts, and other technical users use this skill to repair malformed JSON files or snippets and receive a structured repair report. It is suited to configuration repair, log cleanup, hand-written JSON correction, third-party data cleanup, teaching examples, and migration data fixes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify JSON files in a workspace through agent command execution. <br>
-Mitigation: Use explicit input and output paths, keep backups enabled, and review repaired files before relying on them. <br>
-Risk: The security summary notes broad automatic triggers and unclear callback or network language. <br>
-Mitigation: Install only if file-changing command access is acceptable, and avoid callback URLs unless the publisher clearly documents what will be sent and where. <br>
+## Use Case:
 
+Developers, operations engineers, and data practitioners use this skill to have an agent repair malformed JSON files or produce a repair report before reuse.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/json-repair-tool-free) <br>
-- [Source skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown instructions with JSON repair reports and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create repaired JSON files and .bak backups; repair reports include status, file paths, size changes, repair counts, validity, and success state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can overwrite local JSON files while repairing them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review target file paths before execution and keep the default .bak backup behavior.
+
+Risk: The security evidence says the instructions are broad and inconsistent enough to require review before installation.
+
+Mitigation: Use the skill only for explicit, user-directed JSON repair tasks and avoid unrelated API, networking, deployment, or general agent-orchestration work unless the publisher narrows the instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/json-repair-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, files]
+
+**Output Format:** [Markdown repair guidance with JSON snippets and shell command examples; repair output may include JSON files and .bak backups.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill is intended for explicit local JSON repair tasks and should validate repaired JSON before reuse.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

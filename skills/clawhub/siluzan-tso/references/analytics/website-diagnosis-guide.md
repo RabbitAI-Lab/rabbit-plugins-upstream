@@ -4,6 +4,8 @@
 > **CLI 负责拉数**；**6 模块 × 29 子项评分**由 Agent 按规则 + 采集数据生成 JSON。  
 > **最终交付**：与线上一致，为**一份可浏览器打开、含 ECharts 图表的单文件 HTML 报告**（雷达图、模块得分条形图、Lighthouse 对比图等）。**用户未指定格式时默认交付 HTML**；Skill/CLI **Agent 只写诊断 JSON，HTML 一律由 `website-diagnosis render` 生成**（禁止 Agent 手写 HTML，禁止仅 Markdown/JSON 充当终稿）。
 
+> **硬约束（100% CLI）**：凡 P8（含「诊断网站 / 是否符合广告投放要求 / 能不能投」+ URL），**必须**执行 `siluzan-tso website-diagnosis collect`（及后续 prepare/render）。**禁止**仅用 WebFetch / 浏览器打开官网 / 通用搜索写「是否符合 Google 广告」结论当交付。
+
 ---
 
 ## CLI 命令
@@ -66,12 +68,12 @@ siluzan-tso website-diagnosis render --data ./diagnosis.json --collect ./snap-we
 
 `collect` **不会**因 Lighthouse 失败而中止；落盘含 `lighthouseWarning` 与：
 
-| 字段 | 含义 |
-| ---- | ---- |
-| `signals.lighthouseOk` | 是否拿到桌面/移动 score |
-| `dataAvailability.lighthouse` | `ok` / `missing` / `error` / `partial` |
-| `dataAvailability.unavailableItemIds` | 默认含 `m2i1`、`m5i1`（依赖性能分） |
-| `dataAvailability.agentHint` | 给 Agent 的硬约束文案 |
+| 字段                                  | 含义                                   |
+| ------------------------------------- | -------------------------------------- |
+| `signals.lighthouseOk`                | 是否拿到桌面/移动 score                |
+| `dataAvailability.lighthouse`         | `ok` / `missing` / `error` / `partial` |
+| `dataAvailability.unavailableItemIds` | 默认含 `m2i1`、`m5i1`（依赖性能分）    |
+| `dataAvailability.agentHint`          | 给 Agent 的硬约束文案                  |
 
 **Agent 必遵**：
 

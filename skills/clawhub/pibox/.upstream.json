@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pibox",
   "slug": "pibox",
   "ownerHandle": null,
-  "version": "0.15.3",
-  "updatedAt": 1785071557005,
-  "contentHash": "e109c3dfaf19eb722a2d94191fbc2fd0e198fbf1774dbe8bcd3fbb84f837df56",
-  "fetchedAt": "2026-07-26T18:03:23.485Z"
+  "version": "0.15.12",
+  "updatedAt": 1788531661022,
+  "contentHash": "e2fa3fc9deaa03138680129574a5f7cfb2ab929360a5194dde3893b5aae84bbc",
+  "fetchedAt": "2026-09-06T11:50:11.999Z"
 }

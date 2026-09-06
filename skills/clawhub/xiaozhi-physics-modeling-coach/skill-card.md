@@ -1,41 +1,61 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language middle-school physics coaching skill that guides students through identifying physical phenomena, selecting an appropriate model, and expressing the model mathematically.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+External learners, guardians, and education agents use this skill to coach Chinese middle-school students on physics model selection rather than rote formula matching. It supports phenomenon identification, model-choice checks, equation framing, and model-transfer practice while deferring full problem solving, experiment design, and error-log counting to companion skills.
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize crisis-referral channels, school-context assumptions, and minor-data consent practices before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can participate in optional learner profile, cross-skill sharing, parent-sharing, and reminder workflows for minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm learner and guardian understanding of the long-term profile, sharing controls, parent visibility, and reminders before installation or use.
+
+Risk: Crisis-referral and school-context guidance is designed for a mainland China K12 setting.
+
+Mitigation: Localize emergency resources, school-context assumptions, and minor-data consent rules before deploying in another region.
+
+Risk: Generated practice items or advanced physics explanations could mislead students if they are ill-posed or outside middle-school scope.
+
+Mitigation: Apply the bundled AI item self-check before presenting generated questions and keep high-school-only models to brief boundary notes.
+
+## Reference(s):
+
+- [Physics Modeling Patterns](artifact/references/physics-modeling-patterns.md)
+- [Platform Conventions](artifact/shared/platform-conventions.md)
+- [AI Item Check Protocol](artifact/shared/ai-item-check.md)
+- [Handover Protocol Schema](artifact/shared/handover-protocol.schema.json)
+- [Crisis Referral Protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Chinese-language Markdown conversational guidance with JSON-compatible handoff records when profile writeback or reminder queueing is authorized.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses current-session tutoring by default and only relies on persistent memory, OCR, cross-skill sharing, parent sharing, or reminders when the host platform provides those capabilities and the relevant consent is present.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

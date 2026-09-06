@@ -1,39 +1,54 @@
-## Description: <br>
-Gong helps an agent search Gong calls, transcripts, users, meeting data, and conversation analytics through the Gong API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gong API for searching calls, transcripts, and conversation intelligence.
 
-## Publisher: <br>
-[jdrhyne](https://clawhub.ai/user/jdrhyne) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jdrhyne](https://clawhub.ai/user/jdrhyne)
 
-## Use Case: <br>
-Developers and sales or revenue operations teams use this skill to let an agent retrieve Gong users, calls, transcripts, call details, and activity statistics with user-supplied Gong credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Gong call recordings, transcripts, users, and activity data when credentials are supplied. <br>
-Mitigation: Use a dedicated least-privilege Gong API key and avoid sharing raw transcripts or activity data in insecure channels. <br>
-Risk: Misconfigured credentials or base URL could expose requests to the wrong endpoint or broaden access beyond the intended Gong account. <br>
-Mitigation: Restrict permissions on ~/.config/gong/credentials.json and confirm the configured base_url is the official Gong API domain for the account. <br>
+## Use Case:
 
+Developers, sales operations teams, and authorized agents use this skill to query Gong call metadata, bounded transcript excerpts, user lists, and activity statistics without granting write access.
 
-## Reference(s): <br>
-- [ClawHub Gong skill listing](https://clawhub.ai/jdrhyne/skills/gong) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash and JSON examples; helper commands return JSON or text from Gong API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Gong credentials JSON file and may return sensitive call, transcript, user, and activity data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Gong queries can expose customer names, email addresses, recordings, and sensitive sales conversations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Retrieve only the requested fields and time range, start with call metadata before transcripts, and avoid transcript or participant exports unless explicitly scoped by the user.
+
+Risk: Local Gong credentials could be leaked or overused if handled casually.
+
+Mitigation: Use the narrowest available Gong API key, keep credentials in the protected local file documented by the skill, avoid placing secrets in chat or shell arguments, and rotate keys through Gong settings.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jdrhyne/skills/gong)
+- [Publisher profile](https://clawhub.ai/user/jdrhyne)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured JSON results from bounded Gong API queries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only helper with bounded pagination, transcript excerpt limits, credential permission checks, tenant URL validation, and explicit partial-result indicators.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

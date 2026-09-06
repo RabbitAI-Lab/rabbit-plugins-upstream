@@ -1,46 +1,66 @@
-## Description: <br>
-权威采招政策与标讯指南-元博网，当用户查询大型基础设施项目、重点政企采购或需要基于标讯进行宏观趋势盘点时调用，需调用聚合与分析接口，输出格式严谨、数据翔实的市场简报。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides authoritative Yuanbowang/Zhiliaobiaoxun procurement, bid notice, company, account, and market-data lookup guidance for structured bid intelligence and market briefs.
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search bid notices, analyze companies, identify market trends, and produce structured procurement market briefs from Yuanbowang/Zhiliaobiaoxun data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a ZLBX_API_KEY and sends company names, bid terms, filters, and related research queries to Yuanbowang/Zhiliaobiaoxun. <br>
-Mitigation: Install only when third-party API use is acceptable, keep the API key in the configured environment variable, and avoid submitting sensitive queries unless authorized. <br>
-Risk: Automatic company expansion can include related headquarters, branches, or subsidiaries in downstream analysis. <br>
-Mitigation: For sensitive work, ask the agent to confirm matched legal entities before deep analysis or reporting. <br>
-Risk: Company-contact and project-contact data may be returned during procurement analysis. <br>
-Mitigation: Request or redistribute contact details only when there is a legitimate business reason. <br>
+## Use Case:
 
+External users and developers use this skill to query Chinese procurement notices, project timelines, enterprise profiles, competitors, purchasers, suppliers, brands, pricing trends, and account status. It helps agents produce concise bid search results, market summaries, and procurement intelligence with links and data-backed tables.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/authoritative-bid-policy-guide-yuanbowang) <br>
-- [Yuanbowang API access](https://ai.zhiliaobiaoxun.com/?ch=s31) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown market briefs with structured API request examples and tabular procurement analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for read-only requests to the Yuanbowang/Zhiliaobiaoxun API; responses may include company contacts, bid details, market aggregates, and matched legal entities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The provider handles procurement queries and account-related requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user is comfortable with the provider processing those queries; prefer using a preconfigured ZLBX_API_KEY.
+
+Risk: If no API key is configured, the skill can use an opt-in free-trial registration flow that sends device-derived metadata and stores the returned API key locally.
+
+Mitigation: Obtain explicit user consent before auto-registration, collect only the documented minimized device fields, and save the key under ~/.zlbx/config.json.
+
+Risk: The skill can generate an auto-login billing link when an auto-registered account exhausts its quota.
+
+Mitigation: Generate that link only for auto-registered keys and have the user review the recharge link before using it.
+
+Risk: Contact lookups may return masked or full phone numbers depending on account status.
+
+Mitigation: Display contact data exactly as returned, do not try to fill in masked numbers, and avoid bulk contact export.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pkuycl/skills/authoritative-bid-policy-guide-yuanbowang)
+- [API search reference](artifact/references/api-search.md)
+- [API company reference](artifact/references/api-company.md)
+- [API market reference](artifact/references/api-market.md)
+- [API account reference](artifact/references/api-account.md)
+- [Auto-registration reference](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with tables, links, JSON request examples, and concise prose]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or a consent-based free-trial registration flow; account and contact outputs should preserve returned data and avoid exposing API keys.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,64 @@
-## Description: <br>
-Trade Polymarket BTC 5-minute and 15-minute fast markets using CEX price momentum signals via Simmer API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trade Polymarket BTC 5-minute and 15-minute fast markets using CEX price momentum signals via Simmer API.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-External developers and trading agents use this skill to discover Polymarket crypto fast markets, evaluate short-term CEX momentum signals, and run dry-run or live order flows through Simmer. It is intended for users who understand automated prediction-market trading, wallet custody, and position-size controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real-money Polymarket trades when run live. <br>
-Mitigation: Start in dry-run mode, use live mode only after reviewing budget, position size, order behavior, and stop conditions. <br>
-Risk: Live trading may require sensitive wallet credentials. <br>
-Mitigation: Use a managed wallet or a tightly funded dedicated wallet, and do not paste a main-wallet private key into chat or plaintext configuration. <br>
-Risk: Fast markets may resolve before scheduled stop-loss or take-profit monitoring can act. <br>
-Mitigation: Treat conservative position sizing and daily budgets as primary controls for 5-minute and 15-minute markets. <br>
-Risk: Automated loop or cron execution can repeatedly trade before an operator reviews outcomes. <br>
-Mitigation: Avoid unattended live loops until budget limits, max position size, and expected skip conditions have been tested in dry-run mode. <br>
+## Use Case:
 
+External users and developers use this skill to configure and run an agent-assisted Polymarket fast-market trading loop based on crypto momentum signals. It supports dry-run review, live execution, position checks, and strategy configuration for BTC, ETH, or SOL fast markets.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/simmer/polymarket-fast-loop) <br>
-- [Skill documentation](artifact/SKILL.md) <br>
-- [Risk disclaimer](artifact/DISCLAIMER.md) <br>
-- [Simmer dashboard](https://simmer.markets/dashboard) <br>
-- [Simmer V2 migration guide](https://docs.simmer.markets/v2-migration) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration examples, and Python execution output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Dry-run is the default; live trading requires explicit command flags and credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Live mode places real Polymarket orders and may use sensitive trading credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start in dry-run or paper mode, use separate credentials for this strategy, and avoid exposing a raw wallet private key unless the runtime and dependency chain are trusted.
+
+Risk: Unattended cron or heartbeat execution can continue trading after misconfiguration or market-condition changes.
+
+Mitigation: Set conservative position and daily-budget limits, enable live scheduling only with a clear stop or removal plan, and monitor early runs closely.
+
+Risk: Stop-loss and take-profit monitoring may not fire before 5-minute or 15-minute markets resolve.
+
+Mitigation: Size positions conservatively and do not rely on automated stop-losses for fast-market exits.
+
+Risk: The default momentum strategy and parameters are not represented as a validated profitable edge.
+
+Mitigation: Run paper mode for an extended period and tune thresholds before increasing live position sizes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/simmer/skills/polymarket-fast-loop)
+- [Simmer dashboard](https://simmer.markets/dashboard?ref=sdk-skill&utm_campaign=sdk-skill)
+- [Simmer Polymarket V2 migration guide](https://docs.simmer.markets/v2-migration)
+- [Skill disclaimer](DISCLAIMER.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, configuration examples, and text status output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The agent may emit dry-run summaries, live-trading commands, configuration changes, and risk guidance for operator review.]
+
+## Skill Version(s):
+
+1.7.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

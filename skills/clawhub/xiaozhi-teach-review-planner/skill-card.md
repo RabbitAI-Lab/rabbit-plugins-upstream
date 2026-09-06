@@ -1,44 +1,69 @@
-## Description: <br>
-帮助老师将复习课从重复讲解升级为基于学情数据、知识图谱、间隔复习和提取练习的结构化复习规划。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+复习规划师 helps teachers turn broad review requests into knowledge maps, prioritized review scope, spaced-recall schedules, interleaved practice groups, review activities, and exam-eve state guidance.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers use this skill to plan unit, midterm, final, and exam-prep review sessions. It helps structure knowledge maps, identify priority topics from class performance, sequence review stages, design review activities, and prepare study-strategy-focused pre-exam messaging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review planning can involve student-analysis and exam-design context that may include sensitive student performance information. <br>
-Mitigation: Use aggregated or de-identified class data, avoid individual rankings and sensitive student records, and keep write-back data focused on aggregate weakness patterns. <br>
-Risk: Generated review guidance could be misread as a promise of score, ranking, admission, or mental-health outcomes. <br>
-Mitigation: Keep outputs limited to study strategy, review pacing, and objective evidence from available data; do not promise outcomes or provide psychological diagnosis or treatment advice. <br>
+## Use Case:
 
+External teachers use this skill to plan unit, midterm, final, or pre-exam review around classroom weaknesses, knowledge maps, spacing, interleaving, and classroom-safe exam preparation. It produces review plans rather than full assignments, exams, or lesson plans.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-review-planner) <br>
-- [复习策略与考前规划模板](references/review-strategy.md) <br>
-- [知识图谱可视化范例](references/knowledge-map-example.md) <br>
-- [重难点清单模板](references/key-points-checklist-template.md) <br>
-- [复习活动设计样例库](references/review-activity-library.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localization of crisis resources, curriculum assumptions, and minor-data consent requirements.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured plans, tables, templates, and classroom-ready review activity suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may reference upstream student-analyzer, lesson-planner, and exam-designer context; users should review plans before classroom use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Review plans could be saved with incorrect scope or stale classroom assumptions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Show the full schedule to the teacher and require explicit confirmation before writing to classWorkspace.reviewPlans.
+
+Risk: Classroom review artifacts could expose student identities or sensitive achievement data.
+
+Mitigation: Write only knowledge-point level aggregate signals, use pseudonyms or seat numbers when a student reference is necessary, and exclude individual scores, rankings, and score-band positions.
+
+Risk: Crisis or severe distress signals could be mistaken for ordinary exam stress.
+
+Mitigation: Stop review planning when crisis signals appear, use the bundled crisis referral protocol, and localize emergency resources before deployment outside mainland China.
+
+Risk: AI-generated example or variant questions may contain mistakes.
+
+Mitigation: Run the bundled AI item self-check, label teacher-facing generated items for human verification, and route full assignment or exam generation to the dedicated downstream skills.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-review-planner)
+- [Review strategy](references/review-strategy.md)
+- [Knowledge map example](references/knowledge-map-example.md)
+- [Key points checklist template](references/key-points-checklist-template.md)
+- [Review activity library](references/review-activity-library.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+- [Platform conventions](shared/platform-conventions.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+- [AI item check protocol](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown tables and structured classWorkspace.reviewPlans fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher confirmation is required before persistent writeback; student identifiers are pseudonymized and individual scores or rankings are excluded.]
+
+## Skill Version(s):
+
+2.1.10 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

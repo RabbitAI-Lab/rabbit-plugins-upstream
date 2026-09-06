@@ -1,43 +1,59 @@
-## Description: <br>
-Fetch blocked and dynamic web content through the Dataify Web Unlocker API, with optional JavaScript rendering and responses returned as raw HTML or PNG screenshots. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch HTML or a screenshot from a known blocked or JavaScript-rendered webpage with Dataify Web Unlocker.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and agents use this skill to fetch blocked or JavaScript-heavy web pages through Dataify's Web Unlocker API and return the API response directly as HTML or screenshot output. It is suited for authorized crawling and page retrieval workflows where the target URL is explicit or confirmed before the request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Target URLs and request metadata are sent to Dataify when the wrapper calls the Web Unlocker API. <br>
-Mitigation: Use only authorized targets, and do not send internal-only URLs or regulated/private page targets unless intentionally approved. <br>
-Risk: User-supplied headers or cookies could expose browser sessions, authorization headers, or other secrets to Dataify. <br>
-Mitigation: Do not pass real browser cookies, Authorization headers, session tokens, or other credentials unless explicitly authorized and intended. <br>
-Risk: The skill can unlock blocked or CAPTCHA-protected pages, which may conflict with site rules or access expectations. <br>
-Mitigation: Confirm the target URL and authorization to retrieve the page before making a live request. <br>
+## Use Case:
 
+Developers and agents use this skill to fetch content from a specific public webpage when ordinary browsing is blocked by JavaScript rendering, CAPTCHA defenses, or SPA behavior. It is intended for known URLs, not search discovery or platform-specific structured records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-web-unlocker) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; API response bodies may be HTML, JSON, or PNG screenshot data depending on request settings.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and sends the target URL plus any supplied request metadata to Dataify.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Target URLs and fetched page content are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for public or intentionally disclosed targets, and avoid internal URLs or personal data unless disclosure to Dataify is intended.
+
+Risk: Custom headers or cookies can disclose session credentials or authorization material.
+
+Mitigation: Do not pass session cookies, authorization headers, or other sensitive request metadata unless that disclosure is explicitly intended.
+
+Risk: Persistent shell-profile token setup leaves DATAIFY_API_TOKEN available to future shells.
+
+Mitigation: Prefer session-scoped token setup for testing and review persistent shell changes before deploying the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-web-unlocker)
+- [Dataify Web Unlocker API endpoint](https://webunlocker.dataify.com/request)
+- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and direct API response content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return HTML or screenshot-oriented page content depending on the request type; dry-run mode returns JSON request previews.]
+
+## Skill Version(s):
+
+1.3.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

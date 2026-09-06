@@ -1,44 +1,69 @@
-## Description: <br>
-Session state and control-loop skill for OpenClaw. Manages sessions, FarmingContext, autopilot OODA control loops, circuit breakers, and Forensic receipts in zero-custody. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrate policy-bounded DeFi sessions, OODA plans, intent state, circuit breakers, and recovery; execution stays status-gated and separately authorized.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-Developers and external DeFi agent operators use this skill to coordinate persistent FarmDash sessions, shared context, bounded autopilot control loops, policy checks, approvals, and forensic receipts. It is intended for zero-custody session and state coordination, not direct private-key custody or direct on-chain execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DeFi autopilot coordination can create financial risk if budgets, allowlists, or execution approvals are too broad. <br>
-Mitigation: Keep budgets and allowlists tight, require explicit wallet approval for transactions, and halt workflows when risk limits or circuit breakers are reached. <br>
-Risk: FARMDASH_API_KEY and sessionToken values are sensitive credentials. <br>
-Mitigation: Store credentials only in the agent runtime or secret manager, avoid displaying session tokens in user-facing prose, and rotate credentials if exposed. <br>
-Risk: The skill coordinates intent routing and approval records but does not itself provide private-key custody or direct on-chain execution. <br>
-Mitigation: Use separate signing or execution skills for state-changing actions and verify that policy, simulation, and approval gates pass before execution. <br>
+## Use Case:
 
+External DeFi operators and agent builders use this skill to coordinate supervised or policy-bounded autonomous sessions, maintain intent state, check delegation and grants, apply circuit breakers, and recover from interrupted control loops without giving the agent key custody.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-autonomous-operator) <br>
-- [FarmDash Agents](https://www.farmdash.one/agents) <br>
-- [FarmDash Autonomous Operator Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured session or intent guidance for agent workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference session tokens, API keys, approval payloads, receipt IDs, and risk-state data that should be handled as sensitive operational context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release metadata; artifact frontmatter reports 2.0.0) <br>
+Risk: Delegated DeFi automation can create high-impact financial loss if authority is too broad or left active too long.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrow, time-limited, revocable grants; verify grant scope and status before autonomous execution; revoke or narrow grants after the objective is complete.
+
+Risk: A user may mistake configuration, a session token, or a chat instruction for execution authority.
+
+Mitigation: Require separate user signing or an active scoped grant for wallet-changing actions, and verify every approval payload before signing.
+
+Risk: Autonomous decisions can become unsafe when session state, event data, approvals, receipts, or grant status are stale or incomplete.
+
+Mitigation: Refresh context and event snapshots before decisions, use heartbeat and recovery checks, halt on stale or unknown settlement states, and require manual review after interrupted sessions.
+
+Risk: Secrets exposure would undermine the skill's zero-custody boundary.
+
+Mitigation: Never provide seed phrases, private keys, mnemonics, or RPC credentials; treat session tokens as sensitive runtime capabilities.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-autonomous-operator)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical FarmDash Autonomous Operator Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md)
+- [Agent Integration Documentation](https://www.farmdash.one/docs)
+- [Live Agent Capability Status](https://www.farmdash.one/api/v1/agent/status)
+- [OpenAPI Contract](https://www.farmdash.one/agents/openapi.yaml)
+- [MCP Discovery Manifest](https://www.farmdash.one/.well-known/mcp.json)
+- [Security and Authority Boundaries](https://www.farmdash.one/security)
+- [Fees and Commercial Terms](https://www.farmdash.one/fees)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured tool-call responses and JSON status data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live status, freshness, policy, approval, and grant checks before state-changing actions.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

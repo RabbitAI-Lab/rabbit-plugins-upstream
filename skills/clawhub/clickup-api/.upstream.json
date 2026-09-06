@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/clickup-api",
   "slug": "clickup-api",
   "ownerHandle": null,
-  "version": "1.0.5",
-  "updatedAt": 1781739759130,
-  "contentHash": "9e4744d462042671ff1883adfbd9550e19f56f06bf295c1fd33c902b9ab23c41",
-  "fetchedAt": "2026-07-26T18:27:27.137Z"
+  "version": "1.2.0",
+  "updatedAt": 1788517500956,
+  "contentHash": "40785a23f3da99b890237798a2440d26d5887449620dd8772db9a08fd55c37da",
+  "fetchedAt": "2026-09-06T11:51:00.835Z"
 }

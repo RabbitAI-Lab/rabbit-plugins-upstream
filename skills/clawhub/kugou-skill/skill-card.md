@@ -1,46 +1,68 @@
-## Description: <br>
-酷狗 is a Kugou Music assistant skill for searching songs, generating recommendations, viewing charts and account music data, and creating playlists through the `kugou-cli` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kugou helps agents use kugou-cli to search Kugou Music, get recommendations, view favorites and listening stats, create playlists, and control the local Kugou desktop client.
 
-## Publisher: <br>
-[shamo88](https://clawhub.ai/user/shamo88) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shamo88](https://clawhub.ai/user/shamo88)
 
-## Use Case: <br>
-Developers and agent users use this skill to let an agent operate Kugou Music workflows, including song search, personalized recommendations, favorites, recent plays, listening statistics, charts, QR or secret-based login, and user-confirmed playlist creation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles a Kugou session secret and can access private account data such as favorites, recent plays, listening statistics, and playlist creation. <br>
-Mitigation: Install only if the user trusts the `@kg-ai/kugou-skill` package, avoid exposing secrets in shared terminals or logs, and run account-data commands only after the user explicitly requests them. <br>
-Risk: The CLI can check for and apply global npm package updates during normal use. <br>
-Mitigation: Review update behavior before installation, disable automatic update checks where appropriate with `--no-update-check` or `KUGOU_CLI_NO_UPDATE_CHECK=1`, and confirm updates before running global installs. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent perform Kugou Music searches, recommendations, playlist operations, account-aware library queries, and optional desktop-client playback control through documented shell commands.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/shamo88/skills/kugou-skill) <br>
-- [Authentication commands](artifact/references/auth.md) <br>
-- [Music commands](artifact/references/music.md) <br>
-- [Installation commands](artifact/references/install.md) <br>
-- [Update commands](artifact/references/update.md) <br>
-- [Output format](artifact/references/output-format.md) <br>
-- [Error handling](artifact/references/error-handling.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses derived from JSON CLI output, with shell commands for setup and authentication workflows.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands write JSON to stdout and errors to stderr; music results should be presented as Markdown links when play URLs are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.4 (source: server release evidence) <br>
+Risk: The skill asks agents to handle reusable Kugou account session secrets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer QR login, avoid pasting base64 secrets into chat or shell history unless necessary, and confirm login state before running account-backed music commands.
+
+Risk: The npm installation flow can modify multiple agent skill folders during postinstall or install commands.
+
+Mitigation: Review the package and installation target before installing, and run installation in a controlled environment when agent skill directories are sensitive.
+
+Risk: Automatic update checks can contact the npm registry from environments where outbound package-registry access is sensitive.
+
+Mitigation: Review or disable automatic update checks using the documented environment variable or command flag in restricted networks.
+
+Risk: Desktop control operations depend on a logged-in Kugou client and are unsupported outside Windows and macOS.
+
+Mitigation: Detect client availability before presenting playback links and fall back to query-only or cloud playlist workflows when local control is unavailable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/shamo88/skills/kugou-skill)
+- [Authentication Commands](references/auth.md)
+- [Music Commands](references/music.md)
+- [Desktop Client Control](references/control.md)
+- [Installation Commands](references/install.md)
+- [Update Behavior](references/update.md)
+- [Output Format](references/output-format.md)
+- [Error Handling](references/error-handling.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-aware response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include song or playlist tables, QR-code presentation guidance, and follow-up prompts for login or playback confirmation.]
+
+## Skill Version(s):
+
+0.1.13 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

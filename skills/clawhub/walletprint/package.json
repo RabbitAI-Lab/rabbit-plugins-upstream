@@ -1,0 +1,86 @@
+{
+  "name": "@walletprint/sdk",
+  "version": "0.2.0",
+  "description": "Behavioral transaction risk SDK for crypto wallets and AI agent wallets",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "crypto",
+    "wallet",
+    "fraud",
+    "risk",
+    "agent-wallet",
+    "zerodev",
+    "langchain",
+    "ai-agent",
+    "transaction-security",
+    "web3-security",
+    "coinbase-agentkit",
+    "x402",
+    "behavioral-analysis",
+    "wallet-security",
+    "defi-security",
+    "solana",
+    "ethereum",
+    "base"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Loai17/walletprint-sdk.git"
+  },
+  "homepage": "https://github.com/Loai17/walletprint-sdk",
+  "bugs": {
+    "url": "https://github.com/Loai17/walletprint-sdk/issues"
+  },
+  "dependencies": {
+    "zod": "^3.25.67"
+  },
+  "peerDependencies": {
+    "@langchain/core": "^0.3.0",
+    "@solana/web3.js": "^1.98.0"
+  },
+  "peerDependenciesMeta": {
+    "@langchain/core": {
+      "optional": true
+    },
+    "@solana/web3.js": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@langchain/core": "^0.3.62",
+    "@solana/web3.js": "^1.98.2",
+    "@types/node": "^22.15.32",
+    "typescript": "^5.8.3",
+    "uuid": "11.1.1",
+    "vitest": "^3.2.4"
+  },
+  "overrides": {
+    "esbuild": "^0.28.1",
+    "langsmith": "0.7.10",
+    "@langchain/core": {
+      "uuid": "11.1.1"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

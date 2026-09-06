@@ -1,43 +1,60 @@
-## Description: <br>
-A media file server that serves multimedia files with FRP support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MediaSync-Claw helps an OpenClaw agent list, search, and stream local MP4 files through WhatsApp using a local Flask media server, FRP tunneling, and WebRTC signaling.
 
-## Publisher: <br>
-[yu-libin](https://clawhub.ai/user/yu-libin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yu-libin](https://clawhub.ai/user/yu-libin)
 
-## Use Case: <br>
-OpenClaw users use this skill to list local MP4 files and return playback links through a WhatsApp-triggered media workflow. It is intended for users who intentionally want a local media server exposed through an FRP domain. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose a local unauthenticated media service through a public FRP domain. <br>
-Mitigation: Run it only when public sharing is intended, restrict the media directory to files that may be public, and prefer a version with authentication and explicit tunnel opt-in. <br>
-Risk: The skill downloads and executes a native FRP client. <br>
-Mitigation: Review the pinned FRP version and hashes before installation and use environments where executing the downloaded binary is acceptable. <br>
-Risk: Traffic depends on a third-party relay and public playback links. <br>
-Mitigation: Avoid sensitive media, monitor the generated domain, and prefer deployments with restricted CORS, local-only default mode, and safe path handling. <br>
+## Use Case:
 
+External users and OpenClaw developers use this skill to make a local personal media folder searchable from an OpenClaw-connected WhatsApp channel and return playback links for matching MP4 files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yu-libin/skills/mediasync-claw) <br>
-- [FRP v0.65.0 release](https://github.com/fatedier/frp/releases/tag/v0.65.0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with media playlist links and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns playlist text containing media filenames and playback URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: The skill exposes a local media server to the public internet without authentication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when public remote media access is intended, run it in an isolated VM or spare machine, and avoid placing sensitive media in the videos folder.
+
+Risk: The skill downloads and executes a third-party FRP tunneling binary.
+
+Mitigation: Do not whitelist or run frpc.exe unless you accept the supply-chain risk, and keep execution isolated from primary workstations and sensitive data.
+
+Risk: Anyone who discovers the yunfrp.net subdomain may try to list or fetch media.
+
+Mitigation: Assume the generated public endpoint can be discovered and stop the skill or tunnel when remote streaming is not needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/yu-libin/skills/mediasync-claw)
+- [MediaSync-Claw README](artifact/README.md)
+- [MediaSync-Claw Product Page](https://poly-ai.chat/mediasync-claw)
+- [FRP v0.65.0 Release](https://github.com/fatedier/frp/releases/tag/v0.65.0)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [JSON responses containing human-readable media lists and playback links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include public playback URLs for discovered local MP4 files.]
+
+## Skill Version(s):
+
+0.1.10 (source: server release metadata; artifact frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

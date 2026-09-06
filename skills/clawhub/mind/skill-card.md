@@ -1,39 +1,54 @@
-## Description: <br>
-Write and generate statically typed, tensor-oriented MIND language source files with autodiff support and Rust-like syntax for machine learning and scientific computing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Write MIND source for deterministic agentic systems, with canonical MIC@3 artifacts, supported native ELF compilation, and feature-aware guidance for MIND v0.10.2.
 
-## Publisher: <br>
-[star-ga](https://clawhub.ai/user/star-ga) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[star-ga](https://clawhub.ai/user/star-ga)
 
-## Use Case: <br>
-Developers and engineers use this skill to create, port, and explain `.mind` source files for numerical computing, machine learning, and scientific computing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated MIND code or explanations may be incomplete or incorrect for the user's compiler version or project constraints. <br>
-Mitigation: Review generated source, compile it with the intended MIND toolchain, and run project tests before deployment. <br>
-Risk: As a third-party skill, installation or use may expose credentials or elevated capabilities if the agent is over-permissioned. <br>
-Mitigation: Review the publisher and grant only the API keys, auth tokens, or administrative access needed for the intended workflow. <br>
+## Use Case:
 
+Developers and engineers use this skill to draft, port, and explain MIND v0.10.2 source for deterministic agentic and numerical systems. It helps keep generated examples aligned with documented compiler capabilities, feature flags, MIC@3 output, and signing boundaries.
 
-## Reference(s): <br>
-- [MIND Language on ClawHub](https://clawhub.ai/star-ga/mind) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Markdown, Guidance] <br>
-**Output Format:** [Markdown with MIND code blocks and concise prose] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include `.mind` source snippets, syntax explanations, examples, and porting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Generated MIND code can be incorrect for a user's exact compiler version, feature flags, or deployment target.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Compile and test generated code with the intended MIND compiler and enabled features before deployment.
+
+Risk: The skill discusses experimental or feature-gated compiler paths, including native ELF, MLIR, autodiff, tensor, float, GPU, and signing workflows.
+
+Mitigation: State the required compiler release and cargo features, and avoid presenting unsupported or feature-gated behavior as generally available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/star-ga/skills/mind)
+- [Publisher profile](https://clawhub.ai/user/star-ga)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown with MIND code fences and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated MIND code should be compiled and tested with the intended compiler version before deployment.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter, metadata.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

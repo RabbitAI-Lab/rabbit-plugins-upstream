@@ -4,7 +4,7 @@ For the full parameter list and syntax, run `noxinfluencer schema creator.search
 
 This reference covers **when to use which filters** — the decision logic, not the syntax.
 
-For SaaS hide/deduplication after a page is already returned, use `creator search-filter-options` and `creator search-filter` instead of adding more `creator search` filters.
+For a new search, apply topic exclusions and SaaS hide/deduplication directly through `creator search`. Use standalone `creator search-filter` only when a page has already been returned.
 
 ## Filter Priority by User Intent
 
@@ -15,7 +15,7 @@ For SaaS hide/deduplication after a page is already returned, use `creator searc
 | Every topic must match | `--keywords`, `--keyword_match all` | Require all supplied topic keywords instead of the default any-keyword union |
 | Regional targeting | `--country`, `--follower_countries` | Match campaign geography |
 | Budget-constrained | `--follower_min`, `--follower_max` | Size correlates with cost |
-| Platform email outreach | `--has_email true` | Only creators with known email signal; platform email can still add results by `creator_id` without retrieving visible email |
+| Platform email outreach | `--has_email true` | Only creators with known email signal; platform email can add search `data.items[].id` values as recipient `creator_id` without retrieving visible email |
 | Audience fit | `--follower_ages`, `--follower_female_pct_min`, `--follower_language` | Match audience demographics |
 | Active creators | `--published_within_days` | Exclude dormant channels |
 | Performance floor | `--engagement_rate_min`, `--avg_view_min` | Filter out low-engagement creators |
@@ -38,9 +38,10 @@ The `id` is an encrypted token — use it directly as the positional `<creator_i
 
 ## Search Result Deduplication
 
-- Run `creator search-filter-options` to list SaaS hide/deduplication choices and their JSON body patches.
-- Run `creator search-filter --body-file` with the current page `data.items[].id` values plus one selected filter condition.
-- This is page-level filtering for already returned candidates; it does not fetch another search page and does not replace the normal `creator search` filters above.
+- Use `exclude_keywords` for unwanted topic/tag matches; do not emulate exclusions by dropping rows after billing.
+- Run `creator search-filter-options` to inspect SaaS hide choices. Apply its `search_body_patch` in the same `creator search` request whenever possible.
+- Use its standalone `body_patch` with `creator search-filter` only for already returned `data.items[].id` values.
+- Use `creator not-interested add` only after explicit approval to mark selected creators as Not interested. `list` audits those marks, and `remove` cancels them so the creators can appear in future searches again.
 
 ## Pagination Rules
 
