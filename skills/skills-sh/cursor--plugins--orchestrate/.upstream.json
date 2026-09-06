@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/orchestrate",
+  "repo": "cursor/plugins",
+  "skillId": "orchestrate",
+  "branch": "main",
+  "pushedAt": "2026-09-04T21:32:57Z",
+  "contentHash": "2e686a410c89eaf38284caca643169f75fb79314983aea1ed2c30dd33648d160",
+  "fetchedAt": "2026-09-06T11:42:18.897Z"
+}

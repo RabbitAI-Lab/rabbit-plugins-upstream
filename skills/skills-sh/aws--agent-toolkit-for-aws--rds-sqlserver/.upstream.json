@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/rds-sqlserver",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "rds-sqlserver",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "4d81bb565068a07ee5ecacdebc3a2f854d084327f8929b85bcb566385cf5a16d",
+  "fetchedAt": "2026-09-06T11:44:43.849Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-ai-ml",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-ai-ml",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "d59aac6c184afedcf105d4919fa626c1266260d6cd8056e66d83a3294f473f16",
+  "fetchedAt": "2026-09-06T11:44:44.052Z"
+}

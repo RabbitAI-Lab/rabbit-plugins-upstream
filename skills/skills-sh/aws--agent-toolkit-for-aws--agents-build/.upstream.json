@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-build",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-build",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "b370afa2a9da619af0d630119e172b0031858bcedd9f50bb4603473f2886e8cb",
+  "fetchedAt": "2026-09-06T11:44:44.062Z"
+}

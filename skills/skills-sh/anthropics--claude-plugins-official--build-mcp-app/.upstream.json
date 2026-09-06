@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/build-mcp-app",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "build-mcp-app",
+  "branch": "main",
+  "pushedAt": "2026-09-05T07:33:07Z",
+  "contentHash": "c0172bc88eeeda9f973ea10b7406fa4cdca21138f425dc67cdf0d75051ecd8eb",
+  "fetchedAt": "2026-09-06T11:43:47.896Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-ses",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-ses",
+  "branch": "main",
+  "pushedAt": "2026-09-04T23:11:19Z",
+  "contentHash": "95552cafc29dc637ef0516724be45bff9efb830f4de16c8746891730be58bd94",
+  "fetchedAt": "2026-09-06T11:44:44.135Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/unslop",
+  "repo": "cursor/plugins",
+  "skillId": "unslop",
+  "branch": "main",
+  "pushedAt": "2026-09-04T21:32:57Z",
+  "contentHash": "00978a706b9c06b35d5705ef36aa243858fac1a8556a25c631c523eb8aecca7c",
+  "fetchedAt": "2026-09-06T11:42:18.535Z"
+}
