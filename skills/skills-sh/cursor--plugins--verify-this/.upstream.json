@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/verify-this",
+  "repo": "cursor/plugins",
+  "skillId": "verify-this",
+  "branch": "main",
+  "pushedAt": "2026-09-04T21:32:57Z",
+  "contentHash": "cd53e98076a62ab24b5575704e99be5004fac1d51c481d4dbf5c6d15752d1b7d",
+  "fetchedAt": "2026-09-07T13:35:03.936Z"
+}

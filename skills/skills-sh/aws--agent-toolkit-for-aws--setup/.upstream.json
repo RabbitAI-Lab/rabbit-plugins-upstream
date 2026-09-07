@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setup",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setup",
+  "branch": "main",
+  "pushedAt": "2026-09-07T13:33:40Z",
+  "contentHash": "b90b3fb7b3fd91366663db9f3f8dda362824345629537928321f367c55ce6a6c",
+  "fetchedAt": "2026-09-07T13:35:59.199Z"
+}

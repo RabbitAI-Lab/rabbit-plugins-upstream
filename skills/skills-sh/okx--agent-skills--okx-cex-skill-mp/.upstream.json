@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-skill-mp",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-skill-mp",
+  "branch": "github-main",
+  "pushedAt": "2026-09-07T09:00:01Z",
+  "contentHash": "0966f54c6244ceeb152b155292e15c28aed33f0ddc38c26390e2b12d49a91fa5",
+  "fetchedAt": "2026-09-07T13:35:36.246Z"
+}

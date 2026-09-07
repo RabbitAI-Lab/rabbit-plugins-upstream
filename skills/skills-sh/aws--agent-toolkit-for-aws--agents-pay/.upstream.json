@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-pay",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-pay",
+  "branch": "main",
+  "pushedAt": "2026-09-07T13:33:40Z",
+  "contentHash": "1229e3ae1b36822122227a7b51c60d79456e3e54496fb7670424ec5402a0d90f",
+  "fetchedAt": "2026-09-07T13:35:59.301Z"
+}

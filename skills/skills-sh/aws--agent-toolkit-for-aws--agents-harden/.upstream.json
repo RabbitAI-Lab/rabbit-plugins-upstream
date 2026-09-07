@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-harden",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-harden",
+  "branch": "main",
+  "pushedAt": "2026-09-07T13:33:40Z",
+  "contentHash": "89740b755f3b559406c237fce059c0af9969abfc973e3ae4fa340a6cd5cb1f8e",
+  "fetchedAt": "2026-09-07T13:35:59.160Z"
+}

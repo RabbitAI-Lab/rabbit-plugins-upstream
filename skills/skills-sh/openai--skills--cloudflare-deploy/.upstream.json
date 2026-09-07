@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/cloudflare-deploy",
+  "repo": "openai/skills",
+  "skillId": "cloudflare-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "17f60031b4e15153401ce26eb635b4be51cb05fd0a114e601ae835aec2080756",
+  "fetchedAt": "2026-09-07T13:35:21.883Z"
+}
