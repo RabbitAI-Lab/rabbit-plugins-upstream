@@ -1,45 +1,63 @@
-## Description: <br>
-教案设计器 helps teachers turn lesson ideas into UbD-aligned, core-competency lesson plans with assessment evidence, Bloom question chains, time matrices, and optional A/B/C differentiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+教案设计器 helps teachers produce UbD-based lesson plans with observable learning goals, assessment evidence, class-period timing, Bloom-style question-chain drafts, and A/B/C differentiated activities.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to draft and refine Chinese-language lesson plans, review-class plans, question chains, and differentiated task cards from curriculum goals and optional de-identified learning summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lesson planning may involve student-learning summaries or classroom observations. <br>
-Mitigation: Provide only de-identified or aggregate learning data, and avoid real student names, family identifiers, or individual rankings. <br>
-Risk: Generated lesson plans may be pedagogically incomplete or unsuitable for a specific class. <br>
-Mitigation: Teachers should review and adjust goals, tasks, timing, and questions before using the plan in class. <br>
-Risk: A/B/C differentiated plans depend on an existing learning summary. <br>
-Mitigation: Use the basic lesson-plan mode when no learning summary is available, and do not invent class or student data. <br>
+## Use Case:
 
+Teachers use this skill to turn a lesson topic, curriculum goal, and optional class learning context into a structured Chinese K12 lesson plan. It is intended for new lessons, reviews, exam-commentary classes, differentiated lesson planning, and draft question-chain design.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner) <br>
-- [Core output templates](references/core-output-templates.md) <br>
-- [Layered lesson example](references/layered-lesson-example.md) <br>
-- [Lesson plan template](references/lesson-plan-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China primary; deployment elsewhere requires localizing crisis contacts, curriculum assumptions, and minor-data consent rules.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson plans, task cards, question chains, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language output; differentiated plans depend on supplied de-identified learning summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Individual student tier and score-basis notes may be placed into the agent context during differentiated lesson planning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer aggregate tier counts when possible; otherwise use pseudonyms or seat numbers only and install the skill only where teachers have permission to use that classroom data.
+
+Risk: AI-generated examples, variations, or classroom exercises can be incorrect or unsuitable for the target grade band.
+
+Mitigation: Apply the bundled AI item self-check and keep teacher verification before storing generated items in a resource bank or test.
+
+Risk: The skill is designed around Mainland China K12 curriculum, safety-contact, and minor-data assumptions.
+
+Mitigation: Localize curriculum alignment, crisis contacts, and consent handling before use in other regions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Lesson plan template](artifact/references/lesson-plan-template.md)
+- [Layered lesson example](artifact/references/layered-lesson-example.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [AI item check protocol](artifact/shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown lesson plans with structured lesson-plan fields and optional differentiated task-card sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include lesson-plan records, question-chain drafts, tier-specific activity variants when student tier data is available, and teacher-facing verification notes for AI-generated exercises.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

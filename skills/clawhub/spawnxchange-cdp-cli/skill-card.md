@@ -1,45 +1,63 @@
-## Description: <br>
-Search, buy, register, and list on SpawnXchange using the Coinbase Developer Platform (CDP) CLI for cryptographic signing when the agent's wallet is managed by the CDP CLI instead of a local private key file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buy and sell AI-generated code artifacts on SpawnXchange using a Coinbase Developer Platform CLI-managed wallet, with explicit x402 payment signing for purchases, listings, delivery, payouts, account settings, and feedback.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-External developers and agent operators use this skill to search SpawnXchange listings, buy items with x402 CDP CLI signing, register via SIWE for an API key, and upload seller listings without exposing a local private key file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can sign and submit real wallet payment authorizations with limited built-in confirmation or validation. <br>
-Mitigation: Require manual approval before running direct-buy.sh or any CDP signing command, and verify the item UUID, price, chain, currency, recipient or domain, and license terms before signing. <br>
-Risk: Returned API keys, signed payment headers, purchase records, cached artifacts, and download URLs can expose private purchase or seller data. <br>
-Mitigation: Store API keys and purchase records as private secrets, keep local state owner-only, avoid committing or sharing sensitive records, and treat signed download URLs as short-lived bearer credentials. <br>
+## Use Case:
 
+Developers and agents use this skill to search, purchase, download, list, manage, and review SpawnXchange code artifacts with a CDP-managed wallet. It is most relevant when the paying wallet is already managed by CDP or when multipart listing uploads are needed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/spawnxchange/spawnxchange-cdp-cli) <br>
-- [Publisher homepage](https://github.com/avlk/spawnxchange-skills) <br>
-- [Purchase persistence notes](references/purchase-store.md) <br>
-- [Coinbase Developer Platform CLI skill documentation](https://docs.cdp.coinbase.com/cdp-cli/skill.md) <br>
-- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage) <br>
-- [SpawnXchange machine manifest](https://spawnxchange.com/api/v1/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash, curl, jq, and CDP CLI command examples; includes a shell script.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can sign payment and SIWE data and should be approved manually before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release and frontmatter) <br>
+Risk: The wallet-signing wrapper can sign x402 challenges from arbitrary URLs if pointed away from SpawnXchange.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep SX set to https://spawnxchange.com and do not use x402-call.sh with arbitrary URLs.
+
+Risk: Paid requests can move USDC from the configured CDP-managed wallet.
+
+Mitigation: Review the printed network, amount, and payTo before using --execute, and pass --network when a challenge offers multiple chains.
+
+Risk: Multipart listing uploads publish archive contents to buyers once listed.
+
+Mitigation: Inspect archives before upload and remove credentials, customer data, private configuration, vendored dependency trees, build caches, and other unintended files.
+
+## Reference(s):
+
+- [SpawnXchange skill page](https://clawhub.ai/spawnxchange/skills/spawnxchange-cdp-cli)
+- [Publisher profile](https://clawhub.ai/user/spawnxchange)
+- [ClawHub metadata homepage](https://github.com/avlk/spawnxchange-skills)
+- [CDP CLI skill](https://docs.cdp.coinbase.com/cdp-cli/skill.md)
+- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage)
+- [SpawnXchange machine-readable endpoint list](https://spawnxchange.com/api/v1/skills)
+- [SpawnXchange OpenAPI](https://spawnxchange.com/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown with inline bash commands, JSON examples, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing instructions for wallet-backed marketplace operations; the bundled shell wrapper prints payment details before paid execution.]
+
+## Skill Version(s):
+
+0.2.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

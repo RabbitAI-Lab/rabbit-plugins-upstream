@@ -1,43 +1,65 @@
-## Description: <br>
-Helps independent teachers turn post-class recollections into structured lesson records, learning-track updates, course-unit ledger entries, and follow-up planning notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers turn post-lesson notes into structured lesson logs with mastery observations, pending lesson-hour confirmations, and next-lesson handoff points.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill after lessons to capture what was taught, assess mastery and reactions, update learning trajectories, record course-unit consumption, and prepare next-lesson or parent-summary material. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent lesson records may contain sensitive student information. <br>
-Mitigation: Use aliases, avoid real names and family details, and verify consent settings before creating profiles or sharing data across skills. <br>
-Risk: Course-unit ledger updates can affect lesson balances. <br>
-Mitigation: Treat lesson-unit deductions as pre-deductions, review them within the 24-hour adjustment window, and correct exceptions such as absences, cancellations, trials, or technical disruptions. <br>
-Risk: Parent-summary drafts could be inaccurate, premature, or too negative if sent without review. <br>
-Mitigation: Manually check parent summaries before sending, keep wording behavior-based, and do not let the skill automatically send messages to parents. <br>
+## Use Case:
 
+External independent teachers use this skill after a class to capture pseudonymized K12 lesson records, mastery status, student reaction facts, progress evidence, and next-lesson focus. It also prepares pending lesson-hour confirmation entries and optional internal parent-summary drafts for teacher review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log) <br>
-- [Lesson log template](references/lesson-log-template.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; localization is required before deployment elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-style structured lesson records, learning-trajectory notes, ledger updates, and planning summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes lesson-log fields, mastery evidence, next-lesson focus, course-unit consumption notes, and optional parent-summary drafts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Lesson-hour balances could affect billing or renewals if settled without clear authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Constrain the skill to creating pending confirmation entries unless the schema and platform explicitly grant safe, idempotent ledger settlement authority.
+
+Risk: Lesson records and parent-summary drafts may involve minors' education data.
+
+Mitigation: Use student aliases, avoid real names and sensitive family details, check consent before parent-summary drafts, and require teacher preview before writeback.
+
+Risk: Crisis-support guidance is region-specific by default.
+
+Mitigation: Use China-mainland emergency resources only when that region is confirmed; otherwise ask for location and provide localized emergency guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log)
+- [Lesson log template](references/lesson-log-template.md)
+- [Solo teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+- [Platform conventions](shared/platform-conventions.md)
+- [Shared vocabulary](shared/vocab.md)
+- [Grade bands](shared/grade-bands.md)
+- [AI item check protocol](shared/ai-item-check.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown or text with structured workspace field values for teacher review]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Records, parent-summary drafts, and lesson-hour entries require teacher confirmation before writeback or settlement.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

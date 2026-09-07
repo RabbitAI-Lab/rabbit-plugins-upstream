@@ -1,44 +1,64 @@
-## Description: <br>
-Legacy compatibility alias for the Atoll skill that provides Atoll project management API and CLI guidance for tasks, projects, goals, KPIs, initiatives, milestones, comments, members, teams, labels, dependencies, automation, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Atoll for project, issue, goal, KPI, initiative, milestone, comment, dependency, and workflow operations.
 
-## Publisher: <br>
-[doubledipcode](https://clawhub.ai/user/doubledipcode) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[doubledipcode](https://clawhub.ai/user/doubledipcode)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Atoll project-management workflows through CLI commands, REST API examples, and configuration guidance. It is intended for managing Atoll work items, strategy objects, comments, dependencies, automation, and related operational context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Atoll API keys grant access according to the key's Atoll role and project scope. <br>
-Mitigation: Treat keys as sensitive, prefer skill-scoped configuration or auth profiles, and grant only the Atoll role and project access needed. <br>
-Risk: The documented workflows can create, update, archive, delete, comment on, and otherwise manage Atoll work items. <br>
-Mitigation: Review proposed write actions before execution, use dry-run or archive paths where available, and avoid broad owner/admin credentials unless required. <br>
-Risk: KPI sync and integration examples may involve third-party endpoints and secrets. <br>
-Mitigation: Use allowlisted HTTPS JSON endpoints, secret references instead of inline secret values, and human-admin review for sync drafts. <br>
+## Use Case:
 
+Developers and operational agents use this skill to manage Atoll project work through MCP, CLI, or API while preserving strategy-to-execution relationships. It guides profile selection, read-before-write sequencing, safe state changes, and readback verification.
 
-## Reference(s): <br>
-- [Atoll API Endpoint Reference](references/api-endpoints.md) <br>
-- [Atoll API Field Reference](references/api-fields.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/doubledipcode/skills/atoll-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON/JSON5 configuration examples, and REST API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only skill; no runtime scripts are included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: The skill can guide credentialed Atoll actions across project-management resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrowly scoped Atoll agent profiles and verify authorization scope before state-changing operations.
+
+Risk: Secrets or API keys could be exposed if users paste them into chat or shell history.
+
+Mitigation: Store credentials in appropriate configuration or environment variables and rotate any secret that was shared in chat.
+
+Risk: Billing, key management, hard deletes, webhook changes, and inbox handling can have high operational impact.
+
+Mitigation: Require explicit human intent before these operations and perform readback verification after any accepted change.
+
+Risk: Referenced npm packages may change after release.
+
+Mitigation: Pin or verify npm package versions before installation in sensitive environments.
+
+## Reference(s):
+
+- [Atoll](https://atollhq.com)
+- [Atoll ClawHub Skill](https://clawhub.ai/doubledipcode/skills/atoll-api)
+- [Atoll API Endpoint Reference](references/api-endpoints.md)
+- [Atoll API Field Reference](references/api-fields.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration, Markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and API references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should use live Atoll tool, CLI, or API responses for project-specific facts and verify state-changing results with readback.]
+
+## Skill Version(s):
+
+1.0.18 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

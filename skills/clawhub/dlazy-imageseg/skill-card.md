@@ -1,45 +1,60 @@
-## Description: <br>
-Image matting tool that separates foreground from background and returns a transparent-background image URL for product image processing, character cutout, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill uses the dLazy image matting CLI/API to separate foregrounds from image backgrounds and return transparent PNG result URLs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to call the dLazy image segmentation CLI for background removal and receive hosted transparent PNG output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected local media may be uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Use the skill only with media that is approved for remote processing, and avoid passing private files unless that upload is intended. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary use when appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: The skill depends on the external dLazy CLI and hosted API availability. <br>
-Mitigation: Review the pinned CLI package before installation and use dry-run or async polling options where they fit the workflow. <br>
+## Use Case:
 
+Developers, designers, and content teams use this skill to run dLazy image segmentation for product photos, character cutouts, and compositing workflows.
 
-## Reference(s): <br>
-- [Dlazy Imageseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-imageseg) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The CLI returns hosted image URLs, and async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill uses the dLazy npm CLI and hosted API, so image inputs may be uploaded to dLazy services for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user accepts dLazy CLI and cloud-service trust requirements, and only process images suitable for upload to dLazy.
+
+Risk: Authentication can store a dLazy API key in the local CLI configuration.
+
+Mitigation: Prefer revocable organization API keys, protect the local config file, and rotate or revoke the key if the machine or CLI environment is no longer trusted.
+
+Risk: A persistent global npm install expands the trusted local toolchain.
+
+Mitigation: Use the pinned on-demand command npx @dlazy/cli@1.2.3 for non-persistent use, and avoid running npm with administrator privileges.
+
+## Reference(s):
+
+- [dLazy Homepage](https://dlazy.com)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-imageseg)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The dLazy CLI returns hosted PNG image URLs, or an asynchronous task identifier when --no-wait is used.]
+
+## Skill Version(s):
+
+1.3.13 (source: server release evidence; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -10,7 +10,7 @@ allowed-tools: Bash Read Write Edit
 metadata:
   dcc-mcp:
     dcc: python
-    version: "0.19.79"  # x-release-please-version
+    version: "0.19.100"
     layer: infrastructure
     compatibility: "Python 3.7+, dcc-mcp-core 0.17+"
     search-hint: "create dcc mcp skill, validate skill, scaffold skill, SKILL.md, tools.yaml, scripts, groups, prompts, skill taxonomy, long-running main-thread tools"
@@ -19,7 +19,7 @@ metadata:
     skill-reference-docs:
       - "references/*.md"
   openclaw:
-    homepage: https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp-skills-creator/SKILL.md
+    homepage: https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp-skills-creator/SKILL.md
 ---
 
 # DCC-MCP Skills Creator
@@ -34,44 +34,60 @@ a host such as Nuke, Blender, 3ds Max, Unreal, ZBrush, Houdini, or Maya. Use
 this skill when the task is to create or improve the skill packages loaded by
 those adapters.
 
-## Installation
+## Install and Route
 
-This skill ships with dcc-mcp-core. Add it to your skill path:
+Install the published
+[`@loonghao/dcc-mcp-skills-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator)
+package, then start a new agent turn:
 
 ```bash
-# Linux/macOS
-export DCC_MCP_SKILL_PATHS="${DCC_MCP_SKILL_PATHS}:$(python -c 'import dcc_mcp_core; print(dcc_mcp_core.__file__)')/../skills"
-
-# Windows
-set DCC_MCP_SKILL_PATHS=%DCC_MCP_SKILL_PATHS%;C:\path\to\dcc-mcp-core\skills
+openclaw skills install @loonghao/dcc-mcp-skills-creator
+npx --yes clawhub@0.23.1 install @loonghao/dcc-mcp-skills-creator
 ```
 
-Or reference it directly when starting your MCP server:
+## Distribution Boundary
 
-```python
-from dcc_mcp_core import create_skill_server, McpHttpConfig
+A Skill remains the runtime and authoring unit. Use an Agent Plugin only as a
+distribution unit when several Skills share release, compatibility, trust, and
+uninstall boundaries:
 
-server = create_skill_server(
-    "maya",
-    McpHttpConfig(),
-    extra_paths=["/path/to/dcc-mcp-core/skills"],
-)
-handle = server.start()
-print(handle.mcp_url())
+```text
+my-plugin/
+|-- plugin.json
+`-- skills/
+    |-- inspect/SKILL.md
+    `-- act/SKILL.md
 ```
 
-The local instance port is OS-assigned by default. The CLI and gateway discover
-the resolved URL through the shared registry; pass an explicit port only when
-an external integration requires a fixed listener.
+The root manifest targets
+`https://agent-plugins.org/schemas/1.0.0/plugin.schema.json`. Do not move
+independently versioned or optional Skills into one plugin merely because they
+share a repository. Existing DCC-MCP packages with multiple explicit
+`source.skillRoots` remain valid `skill-bundle` packages.
+
+Use [`dcc-mcp`](https://clawhub.ai/loonghao/skills/dcc-mcp) to operate an
+existing DCC and
+[`dcc-mcp-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-creator) to build
+a complete adapter. A repository checkout may load this directory directly;
+`DCC_MCP_SKILL_PATHS` and `extra_paths` are runtime paths for DCC adapters, not
+installation instructions for an agent host.
 
 ## CLI-First Control Path
 
 Use the `dcc-mcp` skill and `dcc-mcp-cli` for skill discovery, loading,
-validation, and live calls whenever the agent can run shell commands. If the
-CLI is missing, follow the consent-gated official installation instructions in
-`dcc-mcp`. Keep it current with `dcc-mcp-cli update check`, then
-`dcc-mcp-cli update apply`; the apply step stages the next CLI launch and does
-not replace a running server binary.
+validation, and live calls whenever the agent can run shell commands. Start a
+live validation with `dcc-mcp-cli list`: if the process launches, the CLI is
+installed and the result checks the gateway plus DCC/MCP inventory. Diagnose a
+failed health/inventory result with `dcc-mcp-cli doctor`; do not reinstall the
+CLI, probe `import dcc_mcp_core`, or read server internals to infer readiness.
+
+Only a shell-level command-not-found result means the CLI is missing. Ask for
+consent; after explicit approval, immediately run the verified `dcc-mcp` helper
+`python scripts/check_cli.py --ensure-cli --pretty` from that Skill's directory.
+It installs the official CLI and rechecks health/inventory in the same attempt,
+without a second confirmation. Keep it current with `dcc-mcp-cli update check`,
+then `dcc-mcp-cli update apply`; apply stages the next CLI launch and does not
+replace a running server binary.
 
 ## Quick Start
 
@@ -90,16 +106,14 @@ not replace a running server binary.
 
 ### Validate an existing skill
 
-```python
-from dcc_mcp_core import validate_skill
-
-report = validate_skill("/path/to/my-skill")
-if report.has_errors:
-    for issue in report.issues:
-        print(f"[{issue.severity}] {issue.category}: {issue.message}")
-else:
-    print("Skill is valid!")
+```bash
+dcc-mcp-cli lint /path/to/my-skill
 ```
+
+The CLI loads the sibling `tools.yaml` table and invokes every declaration
+through Core's real router with deterministic mock handlers. CI fails if a
+sync declaration produces a job envelope or an async declaration produces a
+direct result. Adapter/DCC code is never imported or executed by this probe.
 
 ### Get a SKILL.md template
 
@@ -129,10 +143,15 @@ Generated `tools.yaml` entries follow the modern contract:
 - Loaded tools are published as `<skill-name>__<tool_name>` when namespacing is needed.
 - Skill package version metadata lives at `metadata.dcc-mcp.version` in
   `SKILL.md`; a top-level `version` key is rejected by the strict loader.
+- Set `metadata.dcc-mcp.dcc` to the concrete host. Use `dcc: any` only when the
+  same implementation is safe in every host; concrete-host tools override a
+  same-named `any` tool during scoped lookup.
 - Inter-skill dependencies live at `metadata.dcc-mcp.depends` as skill names,
   not repo names or prose-only instructions. Use it when one skill must be
   discovered or loaded before another, for example `depends: ["qt-ui-inspector"]`.
 - `input_schema` and `output_schema` are declared explicitly.
+- A zero-argument tool still declares a closed schema:
+  `{"type":"object","properties":{},"additionalProperties":false}`.
 - Runtime discovery never imports or executes tool scripts to infer missing
   schemas by default. Treat Python-derived schemas as an authoring-time helper:
   generate them before publishing, then commit the JSON Schema to `tools.yaml`.
@@ -140,13 +159,37 @@ Generated `tools.yaml` entries follow the modern contract:
   `properties`, `required`, primitive `type`, bounds, and descriptions. Put
   mutually exclusive forms, conditional requirements, and cross-field rules in
   the tool script or handler validation instead of `anyOf`, `oneOf`, `allOf`,
-  `not`, `if`/`then`/`else`, or dependent-schema keywords.
+  `not`, `if`/`then`/`else`, or dependent-schema keywords. When a complex
+  schema is unavoidable, discovery must route through `describe` before call.
+- Published recipe `inputs_schema` references stay within one schema resource:
+  use `#`, a local JSON Pointer such as `#/$defs/name`, or a local `$anchor`
+  such as `#name`. Recipe admission rejects `$id`, `$dynamicRef`, and
+  `$dynamicAnchor`; external and resource-relative `$ref` values are not
+  supported by the dependency-free validator.
+- A recipe `inputs_schema` may declare `$schema` only at the schema resource
+  root, and its value must be the absolute canonical Draft 2020-12 URI
+  `https://json-schema.org/draft/2020-12/schema`. Null, relative, unsupported,
+  and nested dialect declarations fail closed during recipe admission.
+- Recipe `pattern` and `patternProperties` expressions must use syntax shared
+  by Python 3.7-3.14. Version-specific constructs such as atomic groups
+  `(?>...)` fail closed; use portable constructs such as `(?:...)` only when
+  they preserve the intended matching semantics. Global inline flags such as
+  `(?i)` are portable only at the absolute start; use scoped flags such as
+  `(?i:...)` when flags must appear after a prefix or inside another group.
+  The `\B` non-boundary assertion is not portable because its empty-string
+  behavior changes in Python 3.14; express the intended boundary explicitly.
 - `execution` is `sync` or `async`; use `async` for deferred/long-running work.
 - `job_strategy` is `monolithic` (default), `chunked`, or `isolated`. Agents
   use it to select a safe execution and recovery workflow.
 - `affinity` is explicit. Use `main` for host API or scene mutation work and `any` for pure work.
 - `enforce_thread_affinity: true` is emitted so adapter dispatch stays honest.
-- `annotations` use MCP hints: read-only, destructive, idempotent, open-world, and deferred.
+- `annotations` explicitly declare boolean `read_only_hint`,
+  `destructive_hint`, `idempotent_hint`, and `open_world_hint`. Missing safety
+  fields force `describe`, even for a zero-argument tool; `deferred_hint` stays
+  optional.
+- Keep tool groups independently usable. A correlated load carrying
+  `target_tool_slug` activates only that tool's group; do not rely on a sibling
+  default-active group being activated with it.
 - `call_examples`: optional list of ready-to-copy argument payloads. Each entry has `arguments` (JSON object matching `input_schema.properties`) and an optional `note`. Surfaced in describe responses at `metadata.dcc.call_examples` so agents can construct correct arguments on the first attempt.
 
 ### Long-Running Main-Affinity Tools
@@ -190,46 +233,81 @@ service-owned operation and returns a durable job id immediately. Declare the
 poll and cancel tools in `next-tools` and in the result recovery context.
 Status must remain readable after a transport disconnect or adapter restart;
 state cancellation ownership honestly when it cannot be reconstructed.
+The launch result must include the same durable `job_id` plus one canonical
+status. To make CLI `--wait` follow the adapter operation, declare the status
+tool in `next-tools.on-success` with `execution: sync`, a string `job_id` as its
+only required input, and both `read_only_hint: true` and `idempotent_hint: true`.
+Every other input must be optional and safe when omitted. Core rejects async,
+mutating, optional-id, multi-required-input, and untyped pollers. The status tool must
+return the queried ID or an explicit unknown-ID error; it must never create a
+new operation while polling.
+
+Render and cook status tools should reuse the Core progress vocabulary:
+`status`, `progress.current`, `progress.total`, and `progress.message`.
+`current` and `total` are monotonic work-unit counts such as completed/total
+frames; clients derive the percentage and render one progress bar. Prefer the
+renderer or cook service's native counters. If files are the only source, keep
+that counting inside the typed status tool instead of making the agent run
+repeated directory scans.
+
+During an active turn, agents should start once and use CLI `--wait`, REST job
+events, or the declared status tool. Do not create an OS or DCC-MCP scheduled
+workflow merely to poll one running operation. Only after the user explicitly
+requests cross-session monitoring may an agent create a one-shot follow-up that
+stores the existing job/operation id, performs read-only status checks, and
+self-stops at a terminal state; it must never relaunch the render or cook.
+Mirror this contract in `agents/openai.yaml`: tell the Agent to start once,
+follow typed progress to a terminal state, and query the same job id after a
+timeout instead of relaunching work.
 
 For one indivisible DCC-native call, keep `job_strategy: monolithic`. Prefer
 `execution: async` so the initial transport returns a core job id, then poll
 the instance-routable `jobs_get_status`. A transport timeout is not completion
 or cancellation: rediscover the instance and query the job before retrying.
+Declare potentially long tools as `execution: async` with a realistic positive
+`timeout_hint_secs`. The timeout hint describes a budget, not an execution mode;
+do not rely on it to obtain a job envelope. Some older REST runtimes promoted
+hinted synchronous tools differently from MCP, so validate both routes on the
+exact target Core artifact and keep the execution declaration explicit.
+The creator scaffold deliberately emits `monolithic` for async tools; change it
+only with the matching chunked runner or isolated status/cancel implementation.
 
 ### Computer Use Fallback Contract
 
 - Reuse the bundled `ui-control` skill instead of creating another screenshot,
   pointer, keyboard, or Windows `SendInput` tool set. Declare
   `metadata.dcc-mcp.depends: ["ui-control"]` only when it is a hard workflow
-  dependency.
+  dependency. Native UI Control requires standalone `dcc-cua` 0.4.0 or newer;
+  do not preserve or add a legacy Core Host fallback.
 - Keep the visual loop as `ui_control__snapshot` -> `ui_control__act` ->
   `ui_control__snapshot`, and pass the latest `snapshot_id` unchanged. End every
   path with `ui_control__stop_computer_use`. Screenshot coordinates belong to that
   observation only.
-- Preserve `capture_provenance` with saved evidence. Only
-  `backend=windows-ui-control-host` plus `pixels_captured=true` proves native
-  Windows screenshot capture; keep the logical UI Control `session_id`
+- Preserve `capture_provenance` with saved evidence. A live
+  `backend=dcc-cua` snapshot plus `pixels_captured=true` proves native
+  application capture; keep the logical UI Control `session_id`
   distinct from the gateway agent session used for stats attribution.
-- When the exact HWND is minimized or hidden before the first snapshot, use
-  only `get_window_state` followed by the necessary `restore_window`,
-  `show_window`, and `activate_window` host actions, then take a fresh
-  snapshot. Never substitute desktop enumeration or open-ended input.
 - Stateful UI tools must declare `requires_in_process: true` independently of
   `affinity`; keep UI Control at `affinity: any` so it does not block the DCC
-  UI thread while preserving one named-pipe client. On Windows, the isolated
-  per-logon-session host owns observations, Esc interruption, confirmation, and the
-  cross-adapter input owner; skill scripts must not instantiate an in-process
-  `ComputerUseSession` fallback.
+  UI thread while preserving one persistent CUA bridge. The shared standalone
+  Host owns observations, Esc interruption, markers, and cross-session input
+  serialization; skill scripts must not instantiate another automation stack.
 - Prefer a `control_id` and semantic UI Automation action. Use raw coordinates
   only when the UI does not expose a stable semantic control.
+- For native application menu bars, use the negotiated `invoke_menu` action
+  with an explicit `menu_path` when a semantic menu click or Alt mnemonic
+  cannot prove that a popup opened. Never guess pixels or report native
+  delivery as completion; take a fresh snapshot and honor
+  `verification_required` before another mutation.
 - For custom-drawn canvases, viewport manipulators, or face controls, use one
   `drag` path from the latest snapshot. `keys` may hold Ctrl, Shift, or Alt for
   pointer-modified drags; snapshot again immediately before deriving another
   path.
-- Never set `DCC_MCP_COMPUTER_USE_ALLOW_RAW_INPUT` from a skill script. It is an
-  operator-owned environment ceiling. Native input also requires the
-  adapter/operator to bind its DCC with `DCC_MCP_UI_CONTROL_UIA_PROCESS_ID` or
-  `DCC_MCP_UI_CONTROL_UIA_WINDOW_HANDLE`; a skill request may only narrow that
+- Never set `DCC_MCP_CUA_ALLOW_RAW_INPUT` from a skill script. Native input is
+  enabled by default, and the operator-owned `false` setting disables it.
+  Native input also requires the
+  adapter/operator to bind its DCC with `DCC_MCP_UI_CONTROL_PROCESS_ID` or
+  `DCC_MCP_UI_CONTROL_WINDOW_HANDLE`; a skill request may only narrow that
   trusted scope. Propagate `user_interrupted` immediately;
   do not retry the action or fall back to another input path after Esc interrupts a session.
 - Never enter or retry another UI/input path after a policy, authorization,
@@ -267,7 +345,10 @@ or cancellation: rediscover the instance and query the job before retrying.
 5. Import dependency-light runtime helpers from `dcc_mcp_core.skills_helper` first: JSON/YAML codecs, bounded HTTP helpers, safe file/path helpers, validation, cancellation checks, and result helpers.
 6. Declare `metadata.dcc-mcp.depends` for prerequisite skills, then declare `execution`, `affinity`, `timeout_hint_secs`, schemas, annotations, and failure recovery chains in `tools.yaml`. Do not rely on runtime Python introspection for missing schemas. For high-frequency tools, add `call_examples` so agents can copy argument payloads without trial-and-error.
 7. Put long examples, recipes, and host-specific notes under `references/`.
-8. Validate with `validate_skill_dir` or `dcc_mcp_core.validate_skill()` before loading it in an adapter.
+8. Validate with `validate_skill_dir` or `dcc_mcp_core.validate_skill()` before
+   loading it in an adapter. For discovery/load performance regressions, assert
+   deterministic backend operation counts; use elapsed-time thresholds only as
+   supplemental evidence.
 9. If the desired behavior requires parsing core internals or adapter-private YAML at runtime, stop and request a core API instead.
 
 ## Improve Skills From Completed Tasks
@@ -285,11 +366,40 @@ JSON plus bounded task and validation summaries. Treat `total_calls == 0` as
 missing evidence, not success. Never include hidden reasoning, raw prompts,
 credentials, or unredacted payloads.
 
+The Core `ObservabilityQuery.get_repeated_scripts()` helper is an internal,
+read-only evidence query. It is not an agent/gateway/CLI promotion entry point.
+Its `candidate_id` is a stable identity for the canonical tuple
+`sha256 + reuse_key + dcc_type + tool_name`; the result is always
+`decision=manual_review` and `recommended_action=human_review_only`. Candidate
+data must be reviewed and explicitly authorized by the task owner before any
+skill is edited, published, or otherwise promoted. Never infer authorization
+from a candidate or automate that transition.
+
 Prefer `no_change`, then improving an existing skill, and create a new skill
 only for a repeated, reusable workflow that no current skill owns. Validate any
 accepted change with `validate_skill_dir` or `dcc-mcp-cli lint` before loading
 it. Statistics inform a proposal; they never authorize editing or publishing a
 skill without the task owner's requested scope.
+
+For a failed task, first use the `dcc-mcp` recovery flow: retain the
+`request_id`, run `doctor` for runtime/readiness faults, query
+`stats --status failure --session-id <session-id>`, and record structured
+feedback through the gateway-owned `dcc-mcp-cli feedback` command. A live
+adapter's `dcc_feedback__report` is only a shared Core forwarder to that same
+gateway contract. The public-safe
+`/v1/debug/issue-reports/<request_id>` payload is suitable for a reviewed issue;
+never publish `?mode=raw` automatically.
+
+Published Skills should declare `metadata.dcc-mcp.links.repo` and
+`metadata.dcc-mcp.links.issues`. Copy those exact values into Finding v1
+`evidence.routing` before using `dcc-mcp-cli feedback route`; never infer a
+tracker from a package name. Missing, non-canonical, or conflicting ownership
+must fail closed, and resolving a route never authorizes issue creation.
+
+Fix this Skill only when the evidence identifies its schema, script,
+description, next-tool, or workflow contract. Route adapter/runtime failures to
+`dcc-mcp-creator` and shared CLI/gateway/core failures to `dcc-mcp-core`. A
+one-off tool bug is not evidence for creating another Skill.
 
 When reviewing existing skills, reject top-level DCC-MCP extension keys such
 as `dcc`, `version`, `tags`, `tools`, `groups`, `depends`, `search-hint`,

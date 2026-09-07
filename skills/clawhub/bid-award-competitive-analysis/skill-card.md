@@ -1,43 +1,61 @@
-## Description: <br>
-中标结果查询与竞争分析服务，用于查询中标公告与中标单位、企业招中标战绩画像、竞争对手识别与重叠度分析、Top中标单位/中标品牌统计、历史中标价格走势。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a company from a bid-award perspective, using Zhiliaobiaoxun data to produce company intelligence reports, competitor analysis, and two-company comparisons.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, procurement teams, and competitive analysts use this skill to find bid-award outcomes, profile bidders and suppliers, identify overlapping competitors, and review pricing or market trends from bid data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can silently collect device and local user identifiers, create a remote account, store an API key, and generate login or recharge links. <br>
-Mitigation: Review before installing, prefer a user-provided ZLBX_API_KEY, and only allow auto-registration when the user accepts the provider account creation and local credential storage behavior. <br>
-Risk: Bid contacts and company data returned by the APIs may include personal or business-sensitive information. <br>
-Mitigation: Use returned contact and procurement data only for authorized work, and avoid redistributing sensitive details beyond the intended business workflow. <br>
+## Use Case:
 
+External users, procurement teams, sales teams, and competitive-intelligence analysts use this skill to evaluate a company through public bidding records, award history, customer and supplier relationships, competitor overlap, and public risk signals.
 
-## Reference(s): <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [SKILL 自动注册详细流程](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request and response examples, shell command snippets, and API-derived analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read ZLBX_API_KEY or ~/.zlbx/config.json, and may store an issued API key under ~/.zlbx/config.json when auto-registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Company-query data is sent to the Zhiliaobiaoxun service during analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for queries you are comfortable sending to that service, and avoid sensitive internal deal names or confidential planning details unless policy permits.
+
+Risk: Automatic registration collects a stable MAC-derived device hash and stores an API key locally.
+
+Mitigation: Set ZLBX_API_KEY yourself to skip automatic registration, require user consent before registration, and review permissions on ~/.zlbx/config.json after setup.
+
+Risk: Generated HTML reports and embedded links may point to unexpected destinations if the underlying data is unexpected.
+
+Mitigation: Treat generated report links as untrusted unless the destination is expected, and keep API-returned source links intact for traceability.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-award-competitive-analysis)
+- [API quick reference](artifact/references/api-quick.md)
+- [Seven-step workflow](artifact/references/workflow.md)
+- [Automatic registration flow](artifact/references/auto-register.md)
+- [Report template](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Guidance]
+
+**Output Format:** [Markdown report with optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; reports may include source links returned by the service.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

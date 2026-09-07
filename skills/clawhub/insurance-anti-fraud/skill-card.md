@@ -1,43 +1,57 @@
-## Description: <br>
-AI-powered insurance anti-fraud analysis skill that provides an advisory framework for claim fraud detection, underwriting risk control, investigation workflows, and insurance risk review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Insurance Anti Fraud provides an educational insurance anti-fraud analysis framework for claim fraud detection, underwriting risk control, investigation workflows, and China-focused regulatory compliance.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance claims, risk control, compliance, and underwriting teams use this skill to structure fraud-risk review, identify common claim and underwriting red flags, and prepare investigation or review guidance. Outputs are advisory and require authorized human professional review before use in real claim, underwriting, or compliance decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fraud indicators, scoring thresholds, and underwriting examples could be mistaken for final legal, financial, medical, or insurance advice. <br>
-Mitigation: Use the skill only as an advisory reference and require authorized human professional review before applying outputs to claim, underwriting, compliance, or customer decisions. <br>
-Risk: The workflow discusses personal data checks, medical records, claim histories, and fraud flags that may involve sensitive or regulated information. <br>
-Mitigation: Apply the guidance only with proper authorization, privacy controls, data-minimization practices, and organization-approved investigation procedures. <br>
+## Use Case:
 
+Insurance claims, risk control, compliance, and underwriting teams use this skill as reference guidance for identifying fraud indicators, scoring claim risk, structuring investigations, and reviewing anti-fraud controls. Real-world use requires qualified human review and jurisdiction-specific legal, privacy, and insurance compliance checks.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/gechengling/insurance-anti-fraud) <br>
-- [Insurance Anti-Fraud Expert README](README.md) <br>
-- [Anti-Fraud Guide](references/anti_fraud_guide.md) <br>
-- [Underwriting Risk Assessment](references/underwriting_risk_assessment.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown advisory analysis with tables, scoring guidance, checklists, and review workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, network access, persistent storage, or credential collection is included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.2 (source: server release evidence; artifact frontmatter says 2.0.0) <br>
+Risk: Users may mistake the reference framework for a ready-to-run anti-fraud system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as advisory reference material and require qualified human review before operational use.
+
+Risk: Real investigations may involve sensitive medical, police, court, device, claims, or cross-company data.
+
+Mitigation: Confirm lawful authority, consent, access controls, audit logging, and jurisdiction-specific insurance and privacy compliance before using such data.
+
+Risk: Illustrative scoring logic or model guidance could be applied as a sole basis for claim denial or escalation.
+
+Mitigation: Use scoring outputs only as triage signals and document evidence-based human decisions for adverse actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-anti-fraud)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown with reference tables, workflows, illustrative code snippets, and advisory guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational reference only; no executable files, network calls, persistent storage, or credential collection are bundled.]
+
+## Skill Version(s):
+
+5.0.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

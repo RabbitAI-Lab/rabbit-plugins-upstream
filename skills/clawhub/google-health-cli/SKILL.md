@@ -259,6 +259,6 @@ google-health-cli api get /v4/users/me/settings
 - **Secrets:** `config.json` and the token cache are gitignored — never commit them.
 - **Time-filter formats** are handled for you per data type (civil wall-clock, RFC3339
   instant, or date-only); a `--date`/`--days` window always covers your **local** calendar
-  days. If a type rejects server-side filtering, re-run with `--all`.
+  days. If a type rejects server-side filtering, diagnose the filter first. Use `--all` only when the requested scope authorizes an unbounded read.
 
 See the repo's **AGENTS.md** for the exact `--json` shapes and exit-code contract.

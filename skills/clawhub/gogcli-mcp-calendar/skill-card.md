@@ -1,40 +1,64 @@
-## Description: <br>
-Configures an agent to manage Google Calendar events and Google Meet spaces through the gogcli Calendar MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user asks to manage Google Calendar events or Google Meet spaces, including scheduling, listing events, creating, updating, deleting, responding to invitations, creating Meet spaces, ending conferences, and listing meeting participants or call history.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect a Google account to a Calendar MCP server so an agent can schedule, list, create, update, delete, and respond to calendar events, and create or manage Google Meet spaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The configured MCP server can modify calendar and meeting data, including deleting events, responding to invitations, updating Meet settings, and ending conferences. <br>
-Mitigation: Install it only for a Google account the agent is intended to manage and require clear user confirmation before destructive or externally visible calendar and Meet actions. <br>
+## Use Case:
 
+Developers and external users use this MCP skill to let an agent interact with Google Calendar and Google Meet through gogcli. It supports account authorization, event management, invitation responses, Meet space operations, and optional Zoom meeting attachment workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-calendar) <br>
-- [gogcli](https://github.com/openclaw/gogcli) <br>
-- [gogcli-mcp](https://github.com/chrischall/gogcli-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration snippets and command-line setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated gogcli installation, Node.js 18 or later, and a selected Google account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: The skill can give an agent access to read and change Google Calendar and Google Meet data for the configured account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for accounts where this access is acceptable, review the full manifest tool list before use, and set GOG_READONLY=1 for read-only deployments when possible.
+
+Risk: The tool set includes destructive calendar and meeting actions, including deleting events, deleting owned secondary calendars, updating Meet spaces, and ending active conferences.
+
+Mitigation: Require human review or agent approval gates before destructive actions and limit installation to trusted workspaces.
+
+Risk: Broad command escape hatches and optional remote runner configuration can expand what the agent can execute through gogcli.
+
+Mitigation: Avoid configuring GOG_RUNNER_URL unless the runner is trusted, and restrict agent policies around generic auth or calendar run tools.
+
+Risk: Google OAuth tokens and Zoom Server-to-Server OAuth credentials represent sensitive persistent account access.
+
+Mitigation: Store credentials only in trusted environments, treat them as secrets, and revoke or rotate credentials if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-calendar)
+- [gogcli project](https://github.com/openclaw/gogcli)
+- [gogcli-mcp repository](https://github.com/chrischall/gogcli-mcp)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [MCP tool responses as text or JSON-like command output, with setup guidance in Markdown or shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Calendar, Meet, and Zoom-related results depend on the configured gogcli account, OAuth credentials, and selected tool permissions.]
+
+## Skill Version(s):
+
+2.29.0 (source: server release metadata, manifest.json, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

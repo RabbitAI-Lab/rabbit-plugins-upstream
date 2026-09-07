@@ -1,43 +1,59 @@
-## Description: <br>
-Helps an agent prepare and run spoken narration or voiceover generation with Gemini 3.1 Flash TTS through Replicate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone needs spoken narration or voiceover - explainer tracks, documentary lines, or voice to pair with generated video.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creators use this skill to collect text, voice, style prompt, and language inputs, then guide a Replicate text-to-speech request for narration, documentary lines, explainer voiceover, or audio to pair with generated video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Replicate API token is required to generate audio. <br>
-Mitigation: Keep REPLICATE_API_TOKEN in the local environment and do not include it in prompts, generated files, or shared logs. <br>
-Risk: Optional related PrunaAI skills may broaden the installed skill set. <br>
-Mitigation: Install only the companion skills needed for the workflow and review them before adding the full suite. <br>
-Risk: Generated narration may not match the intended text, tone, voice, or language. <br>
-Mitigation: Confirm text, voice, prompt, and language_code before generation, then review the downloaded audio before using it. <br>
+## Use Case:
 
+External users and developers use this skill to prepare and run Replicate text-to-speech requests for narration, voiceover, documentary lines, and generated-video audio tracks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts) <br>
-- [Replicate model readme](https://replicate.com/google/gemini-3.1-flash-tts/readme) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with bash and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN; ffmpeg and ffprobe are needed for trimming, concatenating scene voiceover, or mixing with a music bed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: Scripts, style prompts, selected voices, language codes, and token-authenticated requests are sent to Replicate for audio generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable sending this content to Replicate and avoid submitting sensitive or confidential scripts unless approved.
+
+Risk: The skill recommends installing companion skills from a remote source.
+
+Mitigation: Review and trust the PrunaAI companion skills before installing or executing their guidance.
+
+Risk: Generated narration can exceed downstream timing constraints for video-avatar workflows.
+
+Mitigation: Use ffprobe to check line duration and keep audio segments within the documented downstream limits before passing them into video workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts)
+- [Replicate Gemini 3.1 Flash TTS readme](https://replicate.com/google/gemini-3.1-flash-tts/readme)
+- [Replicate Gemini 3.1 Flash TTS predictions endpoint](https://api.replicate.com/v1/models/google/gemini-3.1-flash-tts/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration]
+
+**Output Format:** [Markdown with inline bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides token-authenticated Replicate TTS requests and may reference ffmpeg or ffprobe checks for downstream audio handling.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

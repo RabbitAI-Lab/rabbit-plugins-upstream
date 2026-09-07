@@ -1,46 +1,67 @@
-## Description: <br>
-Use when uploading SpawnXchange artifacts, tracking listing lifecycle, checking seller payouts, and explicitly preparing or executing seller withdrawals via the included references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when listing AI-generated code artifacts for sale on SpawnXchange through POST /api/v1/items, tracking the safety-scan lifecycle, reading seller inventory and stats, understanding automatic payouts, removing a listing, and processing the seller feedback inbox.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-External developers and marketplace sellers use this skill to package and upload SpawnXchange listings, maintain local seller bookkeeping, check pending payouts, and prepare or execute seller withdrawal transactions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload marketplace artifacts and expose sensitive source material if a seller sends an unchecked archive. <br>
-Mitigation: Inspect artifacts for secrets, proprietary data, and sensitive prompts before using the explicit upload execution path. <br>
-Risk: The payout withdrawal helper can sign and broadcast on-chain transactions when execution is explicitly enabled. <br>
-Mitigation: Use a dedicated low-balance wallet, review preflight output first, and provide a private-key file only when intending to withdraw on the selected chain. <br>
-Risk: Seller records, API keys, private keys, payout history, and uploaded artifacts can reveal private business and wallet information. <br>
-Mitigation: Keep these files out of git, logs, chat transcripts, and shared folders, and store local seller state with owner-only permissions. <br>
+## Use Case:
 
+Developers and agent operators use this skill to sell AI-generated code artifacts on SpawnXchange: prepare archives, build listing requests, submit signed x402 seller API calls, monitor safety scans, manage inventory, review payouts, and process buyer feedback.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/spawnxchange/spawnxchange-selling) <br>
-- [Project Homepage](https://github.com/avlk/spawnxchange-skills) <br>
-- [Seller Bookkeeping Notes](references/listing-bookkeeping.md) <br>
-- [SpawnXchange Agent Usage Spec](https://spawnxchange.com/agent-usage) <br>
-- [SpawnXchange Machine Manifest](https://spawnxchange.com/api/v1/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON templates, and Python helper scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes preflight-first listing and payout workflows that require explicit execution flags for uploads and withdrawals.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: frontmatter and server release evidence) <br>
+Risk: Wallet-signed seller API calls can create paid listings or permanently delete listings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each signed request before approval, especially listing creation because it costs 0.01 USDC and deletion because it cannot be undone.
+
+Risk: Uploaded archives become public to buyers and may include credentials, customer data, vendored dependencies, compiled artifacts, or other unintended content.
+
+Mitigation: Run the provided archive precheck before listing, remove anything that should not be published, and confirm that the seller has rights to license all included code.
+
+Risk: Seller records, source archives, invoices, payout history, signed payment headers, and wallet addresses can expose private business or account information.
+
+Mitigation: Keep seller state private, use owner-only file permissions, avoid committing or sharing those records, and use encrypted backups when backing them up.
+
+Risk: Payout reporting can be misread if gross payment fields are treated as seller earnings.
+
+Mitigation: Use the skill's guidance to record and sum paid_raw or pending_raw values rather than gross fields.
+
+## Reference(s):
+
+- [SpawnXchange Skill on ClawHub](https://clawhub.ai/spawnxchange/skills/spawnxchange-selling)
+- [SpawnXchange Publisher Profile](https://clawhub.ai/user/spawnxchange)
+- [SpawnXchange Skills Repository](https://github.com/avlk/spawnxchange-skills)
+- [Seller Bookkeeping Notes](references/listing-bookkeeping.md)
+- [Agent Usage Spec](https://spawnxchange.com/agent-usage)
+- [Machine-Readable Endpoint List](https://spawnxchange.com/api/v1/skills)
+- [OpenAPI](https://spawnxchange.com/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, JSON, configuration]
+
+**Output Format:** [Markdown guidance with inline API paths, shell commands, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes local helper scripts for archive precheck and JSON listing-body generation; no network access or credentials are required by those scripts.]
+
+## Skill Version(s):
+
+0.2.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

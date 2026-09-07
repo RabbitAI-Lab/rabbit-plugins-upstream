@@ -8,6 +8,7 @@ import re
 import codecs
 import argparse
 from datetime import datetime
+from workspace_profile import resolve_tracker_root
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Clean up completed items and archive older entries in fix plans.")
@@ -28,7 +29,7 @@ class Node:
         self.children = []
 
 def parse_line(line):
-    m = re.match(r"^(\s*)(-\s*|[*]\s*|[+]\s*|\d+\.\s+)(.*)$", line)
+    m = re.match(r"^(\s*)(-\s+|[*]\s+|[+]\s+|\d+\.\s+)(.*)$", line)
     if m:
         indent = len(m.group(1))
         marker = m.group(2)
@@ -69,6 +70,12 @@ def build_tree(lines_list):
             forest.append(node)
         stack.append(node)
     return forest
+
+# A section-level line is one that starts at column 0. Anything matching this is
+# an entry the tree walk owns; anything else at column 0 (HTML comment, prose)
+# belongs to the section itself and has no node to carry it through a rebuild.
+LIST_ITEM_RE = re.compile(r"^(?:[-*+]\s|\d+\.\s)")
+
 
 def all_descendants_checked(n):
     for c in n.children:
@@ -149,6 +156,44 @@ def node_to_one_line(node, strip_checkbox=True):
     else:
         return node.text
 
+def node_to_completed_block(node, strip_checkbox=True):
+    """Render a node AND all its descendants as a block of lines for the
+    Completed section — unlike node_to_one_line, this recurses into
+    node.children so a completed subtree's detail is never silently dropped.
+    Synthesizing N child bullets into one prose summary line requires
+    semantic judgment a script cannot safely perform, so this preserves the
+    full text instead (checkbox markers stripped per the Completed-section
+    convention; the caller/human can hand-condense later if desired)."""
+    lines = []
+
+    def marker_for(n):
+        if n.blocked_marker:
+            # All descendants of a node selected for move are checked==True
+            # (is_top_level_complete/is_subtree both require
+            # all_descendants_checked), so a live [BLOCKED] child should not
+            # occur here in practice — kept as a defensive fallback only.
+            return n.marker_type
+        if strip_checkbox:
+            bullet = n.marker_type.strip()
+            return f"{bullet} " if bullet.endswith('.') else "- "
+        if n.checked is True:
+            return f"{n.marker_type.strip()} [x] "
+        if n.checked is False:
+            return f"{n.marker_type.strip()} [ ] "
+        return n.marker_type
+
+    def emit(n):
+        if n.is_list_item:
+            indent_str = " " * n.indent
+            lines.append(f"{indent_str}{marker_for(n)}{n.text}")
+        else:
+            lines.append(n.text)
+        for child in n.children:
+            emit(child)
+
+    emit(node)
+    return lines
+
 def main():
     args = parse_args()
     
@@ -158,7 +203,7 @@ def main():
         # Search common paths
         cwd = os.getcwd()
         candidates = [
-            os.path.join(cwd, ".ralph", "fix_plan.md"),
+            os.path.join(cwd, resolve_tracker_root(cwd), "fix_plan.md"),
             os.path.join(cwd, "fix_plan.md"),
             os.path.join(cwd, "checklist.md")
         ]
@@ -205,6 +250,7 @@ def main():
         sections.append((current_sec_header, current_sec_lines))
 
     completed_entries = []
+    completed_preamble = []
     new_sections = []
 
     for header, sec_lines in sections:
@@ -213,6 +259,16 @@ def main():
             continue
         
         if "## Completed" in header:
+            # The section is regenerated wholesale from the entries collected
+            # below, and only list items become entries. A section-level line
+            # that is not a list item therefore has nothing carrying it across
+            # the rebuild and disappears on every run. Provenance comments —
+            # "these bodies were moved to <store>, search there" — live exactly
+            # at this level, and losing one strands the records it points to.
+            completed_preamble.extend(
+                ln for ln in sec_lines
+                if ln.strip() and not ln[:1].isspace() and not LIST_ITEM_RE.match(ln)
+            )
             forest = build_tree(sec_lines)
             for node in forest:
                 if node.is_list_item and node.checked is True:
@@ -308,8 +364,11 @@ def main():
 
     # Generate new ## Completed lines
     completed_lines = [""]
+    if completed_preamble:
+        completed_lines.extend(completed_preamble)
+        completed_lines.append("")
     for entry in stay_completed:
-        completed_lines.append(node_to_one_line(entry["node"], strip_checkbox=True))
+        completed_lines.extend(node_to_completed_block(entry["node"], strip_checkbox=True))
         completed_lines.append("") # blank line between items
 
     # Add the new ## Completed section before ## REPEAT or at the right place
@@ -333,7 +392,14 @@ def main():
         output_lines.extend(sec_lines)
 
     output_content = "\n".join(output_lines)
-    
+
+    # join() drops the terminator the last line had. Writing the result back
+    # would strip the file's final newline on every run, which shows up as a
+    # spurious "\ No newline at end of file" in the next diff.
+    if raw.endswith(b"\n") and not output_content.endswith("\n"):
+        output_content += "\n"
+
+
     if args.dry_run:
         print("\n=== DRY RUN MODE: No files will be modified ===")
         print(f"Total completed entries found: {len(completed_entries)}")
@@ -392,8 +458,7 @@ def main():
             if entry["node"].text in existing_content:
                 print(f"Skipping duplicate archive entry: {entry['node'].text}")
                 continue
-            line_to_add = node_to_one_line(entry["node"], strip_checkbox=True)
-            archived_lines.append(line_to_add)
+            archived_lines.extend(node_to_completed_block(entry["node"], strip_checkbox=True))
             archived_lines.append("")
             added_count += 1
             

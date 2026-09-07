@@ -1,41 +1,58 @@
-## Description: <br>
-Searches DuckDuckGo through Dataify with parameter preview and user confirmation before API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run a DuckDuckGo web search. Do not use when the user explicitly requests Google, Bing, or Yandex.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and agents use this skill to run DuckDuckGo searches through the Dataify API after previewing request parameters and obtaining user confirmation. It is useful when a task needs DuckDuckGo results with explicit control over region, safe-search, date filtering, result count, cache use, and response format. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and Dataify API tokens are third-party data when the confirmed API call runs. <br>
-Mitigation: Review the preview before confirming the call, keep DATAIFY_API_TOKEN in the environment, and avoid pasting tokens into chat or command arguments. <br>
-Risk: The skill returns API stdout directly to the user. <br>
-Mitigation: Review returned content before relying on it or passing it into downstream workflows. <br>
+## Use Case:
 
+External users and developers use this skill to run DuckDuckGo searches through Dataify, with optional region, safe-search, date, result-count, cache, and output-format controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-duckduckgo-search) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Text] <br>
-**Output Format:** [Markdown parameter preview table and raw API response stdout] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a DuckDuckGo query and a Dataify API token for confirmed network calls; explicit command flags can override parsed request fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Search queries and selected parameters are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include secrets, credentials, or private data in search requests.
+
+Risk: Live API calls require a Dataify API token.
+
+Mitigation: Install and use the skill only when use of a Dataify API token is acceptable for the workspace.
+
+Risk: Raw JSON or HTML output may expose more response detail than a compact result view.
+
+Mitigation: Prefer compact text results by default and request raw JSON or HTML only when explicitly needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-duckduckgo-search)
+- [Dataify API endpoint](https://scraperapi.dataify.com/request)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, HTML, shell commands, guidance]
+
+**Output Format:** [Markdown guidance and command output; search responses may be compact text, raw JSON, or raw HTML when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API token for live API calls; result count is clamped to 1..50.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

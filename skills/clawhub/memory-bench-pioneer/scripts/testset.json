@@ -1,7 +1,7 @@
 [
   {
     "id": "T01",
-    "query": "What preferences does the user have for their home setup?",
+    "query": "What preferences are recorded for the development environment setup?",
     "category": "semantic",
     "difficulty": "easy",
     "notes": "Tests basic semantic recall of preference-type memories"
@@ -22,10 +22,10 @@
   },
   {
     "id": "T04",
-    "query": "recurring patterns in project planning failures",
+    "query": "recurring patterns in recorded project planning failures",
     "category": "strategic",
     "difficulty": "hard",
-    "notes": "Tests abstract/strategic memory retrieval with no lexical overlap"
+    "notes": "Tests abstract/strategic retrieval; phrased to avoid keyword matching"
   },
   {
     "id": "T05",
@@ -36,10 +36,10 @@
   },
   {
     "id": "T06",
-    "query": "emotional context of recent family discussions",
+    "query": "what happened, and in what order, during the most recent incident",
     "category": "episodic",
     "difficulty": "hard",
-    "notes": "Tests retrieval requiring semantic understanding, no keyword match"
+    "notes": "Tests ordered event reconstruction without keyword match"
   },
   {
     "id": "T07",
@@ -50,10 +50,10 @@
   },
   {
     "id": "T08",
-    "query": "Which contacts are in the professional network?",
+    "query": "Which external services or integrations are configured?",
     "category": "semantic",
     "difficulty": "easy",
-    "notes": "Tests entity-type memory retrieval"
+    "notes": "Tests entity-type memory retrieval over configured services"
   },
   {
     "id": "T09",
@@ -64,7 +64,7 @@
   },
   {
     "id": "T10",
-    "query": "What was discussed about budget and spending limits?",
+    "query": "What was decided about rate limits or usage quotas?",
     "category": "episodic",
     "difficulty": "medium",
     "notes": "Tests topical episodic recall"
@@ -85,10 +85,10 @@
   },
   {
     "id": "T13",
-    "query": "morning routine and daily schedule patterns",
+    "query": "which scheduled or recurring jobs have run recently",
     "category": "episodic",
     "difficulty": "medium",
-    "notes": "Tests habitual pattern retrieval"
+    "notes": "Tests recurring-job pattern retrieval"
   },
   {
     "id": "T14",
@@ -99,7 +99,7 @@
   },
   {
     "id": "T15",
-    "query": "What creative ideas have been proposed recently?",
+    "query": "which design proposals were recorded for the retrieval pipeline",
     "category": "episodic",
     "difficulty": "medium",
     "notes": "Tests recent episodic recall with abstract query"
@@ -113,10 +113,10 @@
   },
   {
     "id": "T17",
-    "query": "who are the family members and their roles",
+    "query": "which components make up the system and what each one does",
     "category": "semantic",
     "difficulty": "easy",
-    "notes": "Tests entity relationship recall"
+    "notes": "Tests component/architecture relationship recall"
   },
   {
     "id": "T18",
@@ -134,24 +134,24 @@
   },
   {
     "id": "T20",
-    "query": "long-term goals and their current progress",
+    "query": "long-term technical objectives recorded for the memory system",
     "category": "strategic",
     "difficulty": "hard",
     "notes": "Tests goal-tracking retrieval across time"
   },
   {
     "id": "T21",
-    "query": "dietary preferences and health considerations",
+    "query": "formatting and output conventions that are preferred",
     "category": "semantic",
     "difficulty": "easy",
-    "notes": "Tests personal preference recall"
+    "notes": "Tests convention/preference recall"
   },
   {
     "id": "T22",
-    "query": "What security incidents or vulnerabilities were found?",
+    "query": "What did the last test or verification run report as failing?",
     "category": "episodic",
     "difficulty": "medium",
-    "notes": "Tests security-related episodic recall"
+    "notes": "Tests failure-report episodic recall"
   },
   {
     "id": "T23",
@@ -169,17 +169,17 @@
   },
   {
     "id": "T25",
-    "query": "meetings and appointments scheduled this month",
+    "query": "the most recent benchmark runs and when they happened",
     "category": "episodic",
     "difficulty": "easy",
-    "notes": "Tests calendar/temporal recall"
+    "notes": "Tests temporal recall of recent runs"
   },
   {
     "id": "T26",
-    "query": "What music or media does the user enjoy?",
+    "query": "Which file formats or codecs are documented as supported?",
     "category": "semantic",
     "difficulty": "easy",
-    "notes": "Tests lifestyle preference recall"
+    "notes": "Tests documented-capability recall"
   },
   {
     "id": "T27",
@@ -190,10 +190,10 @@
   },
   {
     "id": "T28",
-    "query": "relationship dynamics between team members",
+    "query": "how tradeoffs between retrieval accuracy and latency were weighed over time",
     "category": "strategic",
     "difficulty": "hard",
-    "notes": "Tests interpersonal/social graph retrieval"
+    "notes": "Tests longitudinal tradeoff-reasoning retrieval"
   },
   {
     "id": "T29",

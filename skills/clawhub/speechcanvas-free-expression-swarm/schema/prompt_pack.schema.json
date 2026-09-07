@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/speechcanvas-free-expression-swarm/schema/prompt_pack.schema.json",
+  "title": "SpeechCanvas prompt pack",
+  "description": "Final validated output of the Muse/Guardian/Critic/Composer swarm. Structural validation also available offline via scripts/validate_pack.py (stdlib, same contract).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["subject", "motif", "lighting", "lens", "setting", "gesture", "constraints", "safety_tags", "iteration", "guardian_status", "critic_notes", "deception_theme"],
+  "properties": {
+    "subject": { "type": "string", "minLength": 3, "maxLength": 200, "description": "Core subject of the image." },
+    "motif": { "type": "string", "minLength": 3, "maxLength": 200, "description": "Symbolic motif carrying the message (see references/rules.md allowed motifs)." },
+    "lighting": { "type": "string", "minLength": 3, "maxLength": 200, "description": "Lighting design, e.g. cold blue moonlight with dust." },
+    "lens": { "type": "string", "minLength": 2, "maxLength": 200, "description": "Camera, focal length, aperture, film/ISO feel." },
+    "setting": { "type": "string", "minLength": 3, "maxLength": 200, "description": "Environment and set dressing." },
+    "gesture": { "type": "string", "minLength": 3, "maxLength": 200, "description": "Posture, action, or deliberate absence of a person." },
+    "constraints": {
+      "type": "array", "minItems": 6, "maxItems": 16,
+      "description": "Safety and factual fences. MUST include the six standard fences listed in references/rules.md.",
+      "items": { "type": "string", "minLength": 5, "maxLength": 100 }
+    },
+    "safety_tags": {
+      "type": "array", "minItems": 4, "maxItems": 5, "uniqueItems": true,
+      "items": { "enum": ["lawful", "consent-aware", "non-deceptive", "free-expression", "symbolic-atmosphere"] }
+    },
+    "iteration": { "type": "integer", "minimum": 1, "maximum": 3, "description": "Refinement round that produced this pack (cap 3)." },
+    "guardian_status": { "enum": ["PASS", "FAIL"], "description": "Guardian verdict; deliverable packs must be PASS." },
+    "critic_notes": { "type": "string", "maxLength": 500, "description": "Most valuable realism fix from the Critic." },
+    "deception_theme": { "type": "boolean", "description": "True if the pack themes deception/propaganda; then an allowed motif is MANDATORY." }
+  }
+}

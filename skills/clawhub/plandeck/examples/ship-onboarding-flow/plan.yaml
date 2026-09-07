@@ -1,0 +1,115 @@
+# Plandeck plan.yaml — the board's single source of truth.
+# An agent reads and writes this file. The board renders it live and computes
+# Ready promotion, the critical path, rollups, and the next action for you.
+
+version: 1
+
+plan:
+  title: "Ship the new onboarding flow"
+  slug: ship-onboarding-flow
+  kind: specific
+  status: active
+  north_star: "A new user can sign up, verify email, and reach the welcome screen, proven by a green end-to-end test."
+  velocity: 3          # points/day, optional — powers the ETA
+
+cards:
+  - id: C001
+    title: "Map the current onboarding"
+    role: scout
+    column: done
+    estimate: 2
+    priority: P1
+    updated_at: "2026-07-08T10:00:00Z"
+    receipt:
+      result: done
+      summary: "3 legacy signup paths found; only /v1/register is live. Analytics fires nowhere."
+      evidence: ["src/auth/register.ts", "src/onboarding/"]
+      note: cards/C001-onboarding-map.md
+
+  - id: C002
+    title: "Design the onboarding data schema"
+    role: worker
+    column: done
+    estimate: 3
+    priority: P1
+    depends_on: [C001]
+    updated_at: "2026-07-09T14:30:00Z"
+    receipt:
+      result: done
+      summary: "users, verifications, and onboarding_steps tables designed; migration drafted."
+      changed_files: ["db/schema.sql", "db/migrations/003_onboarding.sql"]
+
+  - id: C003
+    title: "Build the signup API"
+    role: worker
+    column: doing
+    status: active
+    estimate: 5
+    confidence: 0.7
+    priority: P1
+    risk: med
+    depends_on: [C002]
+    verify: ["npm test -- test/auth/signup.test.ts", "curl -s localhost:3000/api/signup"]
+    next_action: "Finish POST /api/signup: hash password, insert user, emit onboarding.started."
+    updated_at: "2026-07-10T09:00:00Z"
+
+  - id: C004
+    title: "Build email verification"
+    role: worker
+    column: backlog
+    estimate: 3
+    priority: P1
+    risk: med
+    depends_on: [C003]
+    verify: ["npm test -- test/auth/verify.test.ts"]
+
+  - id: C005
+    title: "Welcome screen UI"
+    role: worker
+    column: backlog
+    estimate: 5
+    priority: P2
+    depends_on: [C002]
+
+  - id: C006
+    title: "Wire onboarding analytics"
+    role: worker
+    column: backlog
+    estimate: 2
+    priority: P3
+    depends_on: [C004]
+
+  - id: C007
+    title: "Optional SSO (Google / GitHub)"
+    role: worker
+    column: blocked
+    estimate: 8
+    priority: P2
+    risk: high
+    depends_on: [C002]
+    next_action: "Blocked: waiting on OAuth client credentials from the platform team."
+
+  - id: C008
+    title: "End-to-end onboarding test"
+    role: worker
+    column: backlog
+    estimate: 3
+    priority: P1
+    depends_on: [C004, C005]
+    verify: ["npm run test:e2e -- onboarding"]
+
+  - id: C009
+    title: "Launch-readiness audit"
+    role: judge
+    column: backlog
+    estimate: 1
+    priority: P1
+    depends_on: [C006, C008]
+
+  - id: C010
+    title: "Update onboarding docs"
+    role: worker
+    column: backlog
+    estimate: 2
+    priority: P3
+    depends_on: [C002]

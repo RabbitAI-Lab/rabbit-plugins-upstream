@@ -1,40 +1,57 @@
-## Description: <br>
-12306-specific knowledge for booking train tickets via the Android app, including UC WebView virtual list behavior, a proven booking flow, and common automation pitfalls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through booking train tickets in the 12306 Android app using a user-connected Android phone, OCR-based verification, and USB ADB interactions.
 
-## Publisher: <br>
-[openlittlebear](https://clawhub.ai/user/openlittlebear) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[openlittlebear](https://clawhub.ai/user/openlittlebear)
 
-## Use Case: <br>
-Developers and automation operators use this skill to guide Android-based 12306 train ticket booking through ADB or uiautomator2, including train search, booking-button selection, passenger selection, order submission, and manual handoff for payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a real Android phone and submit ticket orders. <br>
-Mitigation: Use a test or dedicated Android device and account where possible, and require the user to confirm every booking step before order submission. <br>
-Risk: Screenshot and OCR fallback can capture payment details, messages, one-time codes, or other private data. <br>
-Mitigation: Avoid sensitive screens when using screenshot or OCR fallback, and delete local /tmp screenshots and on-device temporary files after use. <br>
+## Use Case:
 
+Developers and operators use this skill to guide an agent through supervised 12306 train-ticket booking on an Android phone that is already installed and logged in. It covers station and date entry, train-list navigation, passenger selection, submit-order confirmation, and recovery from stale ticket data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/openlittlebear/12306-android-adb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Android UI automation steps, ADB commands, uiautomator2 snippets, and manual payment handoff guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: ADB automation can control the connected Android phone and may expose personal travel or passenger information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only after an explicit booking request, watch the phone during automation, and clean temporary screenshots or clipboard contents that may contain personal data.
+
+Risk: Submitting an order can reserve a real ticket and move the user into a payment flow.
+
+Mitigation: Require user confirmation of train, date, route, seat, price, and passenger before submit-order actions, and leave payment to the user on the phone.
+
+Risk: OCR, WebView behavior, or stale ticket data can lead to wrong selections or expired-order errors.
+
+Mitigation: Verify each critical screen with OCR before proceeding and re-query ticket data before rebooking after stale-data errors.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/openlittlebear/skills/12306-android-adb)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline bash and Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires human supervision for login, submit-order confirmation, and payment.]
+
+## Skill Version(s):
+
+2.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

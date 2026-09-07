@@ -1,41 +1,58 @@
-## Description: <br>
-Pre-trade readiness check for autonomous agents. One call returns wallet identity, venue status, spendable balance, open exposure, and a structured ok_to_trade verdict. Run before every real-money trade to prevent cap overruns and catch config issues before they become P&L issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Simmer Preflight runs a read-only pre-trade readiness check that returns wallet identity, venue status, balance, exposure, and an ok_to_trade verdict for autonomous trading agents.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-Developers and autonomous trading agents use this skill before trade execution to check wallet identity, venue status, spendable balance, open exposure, and risk blockers. It is intended to prevent cap overruns and configuration mistakes before real-money orders are submitted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Simmer API key and can expose wallet identity, balances, positions, and risk alerts in local agent output. <br>
-Mitigation: Install only when connecting a Simmer account is intended, keep SIMMER_API_KEY scoped and secret, and avoid sharing logs or JSON output that contain trading readiness data. <br>
-Risk: The preflight verdict is read-only but is designed to inform real-money trading decisions. <br>
-Mitigation: Run it once per trade intent, review blockers and warnings before order submission, and keep exposure caps configured for the account's risk limits. <br>
+## Use Case:
 
+Developers and agent operators use Simmer Preflight before automated trades to check wallet identity, venue readiness, spendable balance, open exposure, and whether a planned trade should proceed.
 
-## Reference(s): <br>
-- [Simmer API and preflight documentation](https://docs.simmer.markets) <br>
-- [Simmer skill page](https://clawhub.ai/simmer/simmer-preflight) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Human-readable CLI summary or structured JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SIMMER_API_KEY and may include wallet identity, balances, positions, blockers, warnings, and risk alerts in local agent output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The skill requires SIMMER_API_KEY and uses it to access Simmer SDK/API account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when the Simmer publisher is trusted, and provide the API key only in environments intended for this skill.
+
+Risk: Preflight output can reveal wallet, balance, and position information.
+
+Mitigation: Treat logs and JSON output as sensitive trading data and redact them before sharing.
+
+Risk: The skill is used in real-money trading workflows even though it is read-only.
+
+Mitigation: Use the ok_to_trade verdict as a pre-trade safety signal, review blockers and warnings, and keep independent controls around actual order submission.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/simmer/skills/simmer-preflight)
+- [Simmer Documentation](https://docs.simmer.markets)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Human-readable terminal summary or structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SIMMER_API_KEY; output may include wallet, balance, exposure, blocker, warning, and alert data.]
+
+## Skill Version(s):
+
+0.3.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

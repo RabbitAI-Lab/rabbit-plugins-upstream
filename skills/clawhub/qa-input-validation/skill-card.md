@@ -1,42 +1,53 @@
-## Description: <br>
-Checks whether a QA testing request includes a clear requirement, enough context, and usable supporting inputs before downstream test design begins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validates whether a QA testing request includes clear requirements and enough context before starting the test design workflow, returning missing information and clarification questions when input is insufficient.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and test designers use this skill at the start of a testing workflow to assess whether a user's request has enough requirement detail, context, and readable attachments or URLs. When information is missing, it returns the gaps and clarification questions needed before continuing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive customer, payment, identity, financial, or production data may be disclosed if submitted in prompts, files, screenshots, or requirement links. <br>
-Mitigation: Sanitize or mask sensitive data before use, and avoid providing real production records unless they have been reviewed for sharing. <br>
-Risk: Incomplete or ambiguous requests can still produce minimal test ideas or misleading downstream assumptions. <br>
-Mitigation: Review the validation result, missing information list, and clarification questions before using the output to drive test design. <br>
-Risk: The skill may read provided workspace files or fetch user-supplied requirement links as part of validation. <br>
-Mitigation: Provide only files and URLs intended for review, and confirm access requirements before relying on URL-based content. <br>
+## Use Case:
 
+QA engineers and test-design agents use this skill as the first workflow step to evaluate input quality, identify missing requirement context, and ask focused clarification questions before generating test cases.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-input-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured validation fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes validation_result, input_quality_score, missing_info, clarification_questions, and recommendation; the skill states that it does not generate a unique traceability ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Users may provide real customer, payment, identity, phone, financial, or production data while asking for QA validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or redact sensitive data before using the skill, and avoid supplying real production records unless properly de-identified.
+
+Risk: Incomplete or vague requirements can lead to limited or misleading downstream test-case guidance.
+
+Mitigation: Review generated validation results and require clarification for missing business goals, user roles, constraints, boundaries, or context before relying on test cases.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-input-validation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or JSON-like validation results with missing-information lists, clarification questions, recommendations, and optional test-case guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include validation_result, input_quality_score, missing_info, clarification_questions, and recommendation fields.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

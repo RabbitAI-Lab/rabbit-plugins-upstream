@@ -1,0 +1,4 @@
+interface:
+  display_name: "AliExpress 店铺查询"
+  short_description: "查询和分析 AliExpress 店铺详情、销量、销售额与商品结构"
+  default_prompt: "使用极鲸云真实数据查询并分析 AliExpress 店铺。"

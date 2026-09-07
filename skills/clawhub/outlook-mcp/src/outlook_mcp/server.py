@@ -1,4 +1,4 @@
-"""FastMCP server for Microsoft Outlook."""
+"""MCP server for Microsoft Outlook."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.mcpserver import Context, MCPServer
 
 from outlook_mcp import __version__, toolsets
 from outlook_mcp.auth import AuthManager
@@ -49,14 +49,12 @@ async def lifespan(server):
     yield {"config": config, "auth": auth}
 
 
-mcp = FastMCP(
+mcp = MCPServer(
     "outlook-mcp",
     instructions="MCP server for Microsoft Outlook via Microsoft Graph API",
     lifespan=lifespan,
+    version=__version__,
 )
-# FastMCP doesn't expose a `version` kwarg, so set it on the underlying server
-# directly. Otherwise serverInfo.version reports the MCP SDK's version.
-mcp._mcp_server.version = __version__
 
 
 # ── Helpers ─────────────────────────────────────────────
@@ -155,8 +153,9 @@ async def outlook_list_inbox(
     cursor: str | None = None,
     classification: str | None = None,
     concise: bool = False,
+    uncategorized_only: bool = False,
 ) -> dict:
-    """List messages in one folder with structured filters (read, sender, date, Focused class).
+    """List messages in one folder with structured filters (read, sender, date, category, Focused).
 
     Use this for folder-scoped browsing; use outlook_search_mail for KQL full-text search across
     all folders. For polling/recurring agents use outlook_list_inbox_delta (typically 10x cheaper
@@ -165,6 +164,7 @@ async def outlook_list_inbox(
     Example: outlook_list_inbox(folder="Junk Email", unread_only=True, count=5)
     `folder` accepts display names, well-known names ("inbox", "junkemail"), or Graph IDs — prefer
     names. Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
+    Pass uncategorized_only=True to return only messages with no categories assigned.
     """
     client = _get_graph_client(ctx)
     return await mail_read.list_inbox(
@@ -179,6 +179,7 @@ async def outlook_list_inbox(
         cursor=cursor,
         classification=classification,
         concise=concise,
+        uncategorized_only=uncategorized_only,
     )
 
 
@@ -254,6 +255,8 @@ async def outlook_search_mail(
 
     Example: outlook_search_mail(query="from:sarah@acme.com received>=2026-01-01", count=10)
     `query` is Microsoft KQL (from:, subject:, received>=, hasattachment:true, AND/OR/NOT).
+    Operators must be UPPERCASE — lowercase `and` is matched as a literal term. Two terms
+    with no operator between them broaden the search; use AND explicitly to narrow.
     Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
     """
     client = _get_graph_client(ctx)

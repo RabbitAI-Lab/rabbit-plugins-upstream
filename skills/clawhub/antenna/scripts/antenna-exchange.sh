@@ -3,7 +3,7 @@
 #
 # Preferred encrypted flow:
 #   antenna peers exchange keygen [--force]
-#   antenna peers exchange pubkey [--bare] [--email <addr> [--account <name>] --send-email] [--email <addr> --send-email]
+#   antenna peers exchange pubkey [--bare] [--email <addr> [--account <name>] [--subject <text>] [--message <text>] [--cc-self] --send-email]
 #   antenna peers exchange initiate <peer-id> [options]
 #   antenna peers exchange import [file|-] [--yes] [--force-expired]
 #   antenna peers exchange reply <peer-id> [options]
@@ -24,12 +24,16 @@ SECRETS_DIR="$SKILL_DIR/secrets"
 
 # shellcheck source=../lib/peers.sh
 source "$SKILL_DIR/lib/peers.sh"
+# shellcheck source=../lib/secret-file.sh
+source "$SKILL_DIR/lib/secret-file.sh"
 # shellcheck source=../lib/config.sh
 source "$SKILL_DIR/lib/config.sh"
 # REF-2000: shape/freshness validators live in lib/bundles.sh so this script
 # and antenna-bundle.sh stay in lockstep.
 # shellcheck source=../lib/bundles.sh
 source "$SKILL_DIR/lib/bundles.sh"
+# shellcheck source=../lib/antenna-signature.sh
+source "$SKILL_DIR/lib/antenna-signature.sh"
 EXCHANGE_KEY_FILE="$SECRETS_DIR/antenna-exchange.agekey"
 EXCHANGE_PUB_FILE="$SECRETS_DIR/antenna-exchange.agepub"
 FALLBACK_LEGACY=false
@@ -55,7 +59,7 @@ antenna peers exchange — Antenna Layer A bootstrap exchange
 
 Encrypted flow (preferred):
   antenna peers exchange keygen [--force]
-  antenna peers exchange pubkey [--bare] [--email <addr> [--account <name>] --send-email]
+  antenna peers exchange pubkey [--bare] [--email <addr> [--account <name>] [--subject <text>] [--message <text>] [--cc-self] --send-email]
   antenna peers exchange initiate <peer-id> [options]
   antenna peers exchange import [file|-] [--yes] [--force-expired]
   antenna peers exchange reply <peer-id> [options]
@@ -64,12 +68,16 @@ Options for initiate / reply:
   --pubkey <age-recipient>      Recipient exchange public key
   --pubkey-file <path>          Read recipient exchange public key from file
   --email <addr>                Recipient email address (for optional direct send)
-  --account <name>              Himalaya account to use with --send-email
+  --account <name>              Mail account to use with --send-email
+  --subject <text>              Custom email subject for --send-email (<50 chars)
+  --message <text>              Short custom email message for --send-email (<100 chars)
+  --cc-self                     CC the resolved sender address for confirmation
   --output <path>               Output armored bundle path
   --print                       Print armored bundle after writing it
-  --send-email                  Send bundle inline by email (requires himalaya)
+  --send-email                  Send bundle by email (requires gog or himalaya)
   --notes <text>                Optional operator note stored in bundle metadata
   --yes                         Accept defaults / confirmations non-interactively
+  --auth-mode <mode>            ed25519-v1 (default) or plaintext-legacy
   --legacy                      Use the weaker raw-secret fallback instead
 
 Options for import:
@@ -83,7 +91,7 @@ Legacy/manual compatibility:
 
 Notes:
 - Encrypted Layer A requires: age + age-keygen
-- Direct email sending is optional and requires: himalaya
+- Direct email sending is optional and requires: gog or himalaya
 - The encrypted bundle includes the sender's exchange public key
 - Import shows a preview and asks before applying allowlist changes
 EOF
@@ -92,6 +100,18 @@ EOF
 have_cmd() { command -v "$1" >/dev/null 2>&1; }
 require_cmd() { have_cmd "$1" || die "$1 not found"; }
 is_tty() { [[ -t 0 && -t 1 ]]; }
+
+# REF-1700: ensure linuxbrew age binaries are on PATH before any age availability
+# check. This handles cases where this script is called from a context that stripped
+# linuxbrew from PATH (e.g. certain cron/SSH environments, modified PATH in wrapper
+# scripts, or non-interactive sessions without linuxbrew inherited).
+_ensure_age_path() {
+  local brew_prefix="/home/linuxbrew/.linuxbrew"
+  if [[ -d "${brew_prefix}/bin" ]] && [[ ":$PATH:" != *":${brew_prefix}/bin:"* ]]; then
+    export PATH="${brew_prefix}/bin:$PATH"
+  fi
+}
+_ensure_age_path
 
 prompt() {
   local __var_name="$1" prompt_text="$2" default="${3:-}"
@@ -253,6 +273,29 @@ validate_age_pubkey() {
   [[ "$key" =~ ^age1[0-9a-z]+$ ]] || die "Invalid age public key: $key"
 }
 
+validate_email_subject() {
+  local subject="$1"
+  if (( ${#subject} >= 50 )); then
+    die "Email subject must be fewer than 50 characters (got ${#subject})."
+  fi
+}
+
+validate_email_message() {
+  local message="$1"
+  if (( ${#message} >= 100 )); then
+    die "Email message must be fewer than 100 characters (got ${#message})."
+  fi
+}
+
+prepend_optional_message() {
+  local custom_message="$1" body_text="$2"
+  if [[ -n "$custom_message" ]]; then
+    printf '%s\n\n%s\n' "$custom_message" "$body_text"
+  else
+    printf '%s\n' "$body_text"
+  fi
+}
+
 self_identity_secret_ref() {
   local sid ref
   sid="$(self_id)"
@@ -268,16 +311,27 @@ ensure_self_identity_secret() {
   sid="$(self_id)"
   ref="$(self_identity_secret_ref)"
   abs="$(resolve_path "$ref")"
-  mkdir -p "$(dirname "$abs")"
   if [[ ! -f "$abs" ]]; then
-    openssl rand -hex 32 > "$abs"
-    chmod 600 "$abs"
-    ok "Generated local runtime identity secret: $abs"
+    antenna_secret_generate_hex_file "$abs" || die "Could not generate protected runtime identity secret"
+    ok "Generated local runtime identity secret: $abs" >&2
   fi
   validate_runtime_secret "$(tr -d '[:space:]' < "$abs")"
   tmp=$(mktemp)
   jq --arg sid "$sid" --arg ref "$ref" '.[$sid].peer_secret_file = $ref' "$PEERS_FILE" > "$tmp" && mv "$tmp" "$PEERS_FILE"
   printf '%s\n' "$abs"
+}
+
+ensure_self_signing_identity() {
+  local sid private_ref="secrets/antenna-signing-private.pem" public_ref="secrets/antenna-signing-public.pem" tmp
+  sid="$(self_id)"; [[ -n "$sid" ]] || die "No self peer found in peers file."
+  if [[ ! -e "$(resolve_path "$private_ref")" && ! -e "$(resolve_path "$public_ref")" ]]; then
+    signature_keygen "$(resolve_path "$private_ref")" "$(resolve_path "$public_ref")" || die "Could not generate Ed25519 identity"
+  fi
+  signature_private_key_ok "$(resolve_path "$private_ref")" || die "Self Ed25519 private key is missing or unsafe"
+  tmp=$(mktemp)
+  jq --arg sid "$sid" --arg private "$private_ref" --arg public "$public_ref" \
+    '.[$sid].signing_private_key_file=$private | .[$sid].signing_public_key_file=$public' "$PEERS_FILE" >"$tmp" && mv "$tmp" "$PEERS_FILE"
+  printf '%s\n' "$(resolve_path "$public_ref")"
 }
 
 self_hooks_token_ref() {
@@ -555,16 +609,18 @@ confirm_from_account() {
 }
 
 send_bundle_email() {
-  local email_to="$1" bundle_file="$2" peer_id="$3" account="${4:-}"
+  local email_to="$1" bundle_file="$2" peer_id="$3" account="${4:-}" custom_subject="${5:-}" custom_message="${6:-}" cc_self="${7:-false}"
   [[ -f "$bundle_file" ]] || die "Bundle file not found: $bundle_file"
 
   local sid subject bundle_basename
   sid="$(self_id)"
-  subject="Antenna bootstrap bundle from ${sid} for ${peer_id}"
+  subject="${custom_subject:-Antenna bootstrap bundle from ${sid} for ${peer_id}}"
+  [[ -z "$custom_subject" ]] || validate_email_subject "$subject"
+  validate_email_message "$custom_message"
   bundle_basename="$(basename "$bundle_file")"
 
-  local body_text
-  body_text="Encrypted Antenna Layer A bootstrap bundle from ${sid}.
+  local body_text default_body_text
+  default_body_text="Encrypted Antenna Layer A bootstrap bundle from ${sid}.
 
 To import it:
 1. Save the attached .age.txt file
@@ -573,6 +629,7 @@ To import it:
 
 Important: Import the attached FILE directly — do not copy-paste the
 bundle text, as email formatting may corrupt the base64 encoding."
+  body_text="$(prepend_optional_message "$custom_message" "$default_body_text")"
 
   # Method 1: gog (Gmail API — handles attachments natively)
   if have_cmd gog; then
@@ -581,11 +638,23 @@ bundle text, as email formatting may corrupt the base64 encoding."
     if [[ -n "$gog_account" ]] && ! [[ "$gog_account" == *@* ]]; then
       gog_account=""  # let gog use its default
     fi
-    local gog_args=(gmail send --to "$email_to" --subject "$subject" --body "$body_text" --attach "$bundle_file" --force)
-    [[ -n "$gog_account" ]] && gog_args=(gmail send --account "$gog_account" --to "$email_to" --subject "$subject" --body "$body_text" --attach "$bundle_file" --force)
-    if gog "${gog_args[@]}" >/dev/null 2>&1; then
-      ok "Sent encrypted bundle email to $email_to via gog (Gmail API)"
-      return 0
+    local gog_cc=""
+    if [[ "$cc_self" == "true" ]]; then
+      if [[ -n "$gog_account" && "$gog_account" == *@* ]]; then
+        gog_cc="$gog_account"
+      else
+        warn "Cannot resolve gog sender address for CC-to-self; trying himalaya fallback..."
+        gog_account="__skip_gog_for_cc_self__"
+      fi
+    fi
+    if [[ "$gog_account" != "__skip_gog_for_cc_self__" ]]; then
+      local gog_args=(gmail send --to "$email_to" --subject "$subject" --body "$body_text" --attach "$bundle_file" --force)
+      [[ -n "$gog_account" ]] && gog_args=(gmail send --account "$gog_account" --to "$email_to" --subject "$subject" --body "$body_text" --attach "$bundle_file" --force)
+      [[ -n "$gog_cc" ]] && gog_args+=(--cc "$gog_cc")
+      if gog "${gog_args[@]}" >/dev/null 2>&1; then
+        ok "Sent encrypted bundle email to $email_to via gog (Gmail API)"
+        return 0
+      fi
     fi
     warn "gog send failed; trying himalaya fallback..."
   fi
@@ -613,9 +682,13 @@ bundle text, as email formatting may corrupt the base64 encoding."
     bundle_b64=$(base64 "$bundle_file")
 
     raw_file=$(mktemp)
-    cat > "$raw_file" <<EOF
-From: ${sid} <${from_addr}>
-To: ${email_to}
+    {
+      printf 'From: %s <%s>\n' "$sid" "$from_addr"
+      printf 'To: %s\n' "$email_to"
+      if [[ "$cc_self" == "true" ]]; then
+        printf 'Cc: %s\n' "$from_addr"
+      fi
+      cat <<EOF
 Subject: ${subject}
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="ANTENNABUNDLE"
@@ -634,6 +707,7 @@ ${bundle_b64}
 
 --ANTENNABUNDLE--
 EOF
+    } > "$raw_file"
     himalaya message send -a "$account" < "$raw_file" >/dev/null
     rm -f "$raw_file"
     ok "Sent encrypted bundle email to $email_to via himalaya ($from_addr)"
@@ -644,7 +718,7 @@ EOF
 }
 
 ensure_peer_entry_updated() {
-  local peer_id="$1" url="$2" token_ref="$3" secret_ref="$4" agent_id="$5" display_name="$6" exchange_pubkey="$7"
+  local peer_id="$1" url="$2" token_ref="$3" secret_ref="$4" agent_id="$5" display_name="$6" exchange_pubkey="$7" auth_mode="${8:-}" signing_ref="${9:-}"
   local tmp preserve_self
   # REF-600 defense-in-depth: if the existing entry is flagged as self, keep it that way.
   preserve_self=$(jq -r --arg p "$peer_id" '.[$p].self // false | tostring' "$PEERS_FILE" 2>/dev/null || echo "false")
@@ -658,6 +732,7 @@ ensure_peer_entry_updated() {
     --arg display_name "$display_name" \
     --arg exchange_pubkey "$exchange_pubkey" \
     --arg preserve_self "$preserve_self" \
+    --arg auth_mode "$auth_mode" --arg signing_ref "$signing_ref" \
     '
     # Merge the provided fields into the existing entry, keeping existing
     # values for any empty-string inputs. Use `*` to preserve unmentioned keys.
@@ -675,6 +750,11 @@ ensure_peer_entry_updated() {
     # should prevent ever reaching this path for the self-peer, but this keeps
     # the invariant local to the writer.
     | if ($preserve_self == "true") then .[$peer].self = true else . end
+    | if $auth_mode == "ed25519-v1" then
+        .[$peer].auth_mode=$auth_mode | .[$peer].signing_public_key_file=$signing_ref | del(.[$peer].peer_secret_file)
+      elif $auth_mode == "plaintext-legacy" then
+        .[$peer].auth_mode=$auth_mode | del(.[$peer].signing_public_key_file)
+      else . end
     ' \
     "$PEERS_FILE" > "$tmp" && mv "$tmp" "$PEERS_FILE"
 }
@@ -728,7 +808,7 @@ legacy_import_runtime_secret() {
   existing_name="$(peer_field "$peer_id" 'display_name')"
   existing_pub="$(peer_field "$peer_id" 'exchange_public_key')"
 
-  ensure_peer_entry_updated "$peer_id" "$existing_url" "$existing_token_ref" "$secret_ref" "$existing_agent" "$existing_name" "$existing_pub"
+  ensure_peer_entry_updated "$peer_id" "$existing_url" "$existing_token_ref" "$secret_ref" "$existing_agent" "$existing_name" "$existing_pub" plaintext-legacy ""
   update_allowlists "$peer_id" true true
 
   ok "Imported legacy raw runtime identity secret for $peer_id"
@@ -742,8 +822,8 @@ legacy_import_runtime_secret() {
 # old temp-file variant had no cleanup trap, so a mid-flow `die` (bad pubkey,
 # disk full) or SIGINT would leave `/tmp/tmp.XXXXXXXX` behind with full secrets.
 build_plaintext_bundle_stdout() {
-  local target_peer_id="$1" notes="$2"
-  local sid display_name endpoint agent_id token_file token secret_file secret exchange_pubkey
+  local target_peer_id="$1" notes="$2" auth_mode="${3:-ed25519-v1}"
+  local sid display_name endpoint agent_id token_file token secret="" signing_public="" exchange_pubkey
   sid="$(self_id)"
   [[ -n "$sid" ]] || die "No self peer found in peers file. Run 'antenna setup' first."
 
@@ -754,26 +834,25 @@ build_plaintext_bundle_stdout() {
   # REF-1313: refuse to emit a bundle whose self endpoint is not a real URL.
   # Defense against a locally-corrupted self-peer propagating to every peer
   # that imports bundles from us (the "url: main" incident, 2026-04-21).
-  if ! validate_peer_url "$endpoint" false 2>/tmp/antenna-urlcheck.$$; then
-    local _reason
-    _reason="$(cat /tmp/antenna-urlcheck.$$ 2>/dev/null || true)"
-    rm -f /tmp/antenna-urlcheck.$$
+  local _reason=""
+  if ! _reason="$(validate_peer_url_capture "$endpoint" false)"; then
     die "Self peer URL is not valid: ${_reason:-unknown}
 
 Refusing to emit a bootstrap bundle with a malformed endpoint. Fix your self
 peer in antenna-peers.json (or re-run 'antenna setup') so .url is a real
 https:// URL that peers can reach, then try again."
   fi
-  rm -f /tmp/antenna-urlcheck.$$
   [[ -n "$agent_id" ]] || agent_id="$(config_relay_agent_id)"
 
   token_file="$(self_hooks_token_file)"
   token="$(read_token_file "$token_file")"
   [[ -n "$token" ]] || die "Self token file is empty: $token_file"
 
-  secret_file="$(ensure_self_identity_secret)"
-  secret="$(read_secret_file "$secret_file")"
-  validate_runtime_secret "$secret"
+  if [[ "$auth_mode" == "ed25519-v1" ]]; then
+    signing_public="$(cat "$(ensure_self_signing_identity)")"
+  elif [[ "$auth_mode" == "plaintext-legacy" ]]; then
+    secret="$(read_secret_file "$(ensure_self_identity_secret)")"; validate_runtime_secret "$secret"
+  else die "Unsupported bundle auth mode: $auth_mode"; fi
 
   ensure_exchange_keypair false >/dev/null
   exchange_pubkey="$(current_exchange_pubkey)"
@@ -789,11 +868,12 @@ https:// URL that peers can reach, then try again."
     --arg from_agent_id "$agent_id" \
     --arg from_hooks_token "$token" \
     --arg from_identity_secret "$secret" \
+    --arg from_auth_mode "$auth_mode" --arg from_signing_public_key "$signing_public" \
     --arg from_exchange_pubkey "$exchange_pubkey" \
     --arg expected_peer_id "$target_peer_id" \
     --arg notes "$notes" \
     '{
-      schema_version: 1,
+      schema_version: 2,
       bundle_type: "antenna-bootstrap",
       generated_at: $generated_at,
       expires_at: $expires_at,
@@ -803,7 +883,9 @@ https:// URL that peers can reach, then try again."
       from_endpoint_url: $from_endpoint_url,
       from_agent_id: (if $from_agent_id == "" then "antenna" else $from_agent_id end),
       from_hooks_token: $from_hooks_token,
-      from_identity_secret: $from_identity_secret,
+      from_auth_mode: $from_auth_mode,
+      from_identity_secret: (if $from_auth_mode == "plaintext-legacy" then $from_identity_secret else null end),
+      from_signing_public_key: (if $from_auth_mode == "ed25519-v1" then $from_signing_public_key else null end),
       from_exchange_pubkey: $from_exchange_pubkey,
       expected_peer_id: (if $expected_peer_id == "" then null else $expected_peer_id end),
       notes: (if $notes == "" then null else $notes end)
@@ -819,8 +901,8 @@ encrypt_bundle_from_stdin() {
 }
 
 run_bundle_command() {
-  local mode="$1" peer_id="$2" pubkey_arg="$3" pubkey_file_arg="$4" email="$5" account="$6" output_path="$7" print_bundle="$8" send_email="$9" notes="${10}" assume_yes="${11}" legacy_mode="${12}"
-  local recipient_pubkey self_peer output_file existing_pubkey display_name
+  local mode="$1" peer_id="$2" pubkey_arg="$3" pubkey_file_arg="$4" email="$5" account="$6" output_path="$7" print_bundle="$8" send_email="$9" notes="${10}" assume_yes="${11}" legacy_mode="${12}" email_subject="${13:-}" email_message="${14:-}" cc_self="${15:-false}"
+  local recipient_pubkey self_peer output_file existing_pubkey display_name auth_mode="${16:-ed25519-v1}"
 
   self_peer="$(self_id)"
   [[ -n "$self_peer" ]] || die "No self peer found in peers file. Run 'antenna setup' first."
@@ -856,7 +938,7 @@ run_bundle_command() {
   # exists only in the pipe between processes and is never written to disk.
   # If age fails, the pipe fails loudly via set -o pipefail and no output file
   # is created; there is nothing on disk to leak or clean up.
-  build_plaintext_bundle_stdout "$peer_id" "$notes" | encrypt_bundle_from_stdin "$recipient_pubkey" "$output_file"
+  build_plaintext_bundle_stdout "$peer_id" "$notes" "$auth_mode" | encrypt_bundle_from_stdin "$recipient_pubkey" "$output_file"
 
   display_name="$(peer_field "$peer_id" 'display_name')"
   ok "Created encrypted bootstrap bundle for $peer_id${display_name:+ ($display_name)}"
@@ -872,7 +954,7 @@ run_bundle_command() {
 
   if [[ "$send_email" == "true" ]]; then
     [[ -n "$email" ]] || die "--send-email requires --email <addr>"
-    send_bundle_email "$email" "$output_file" "$peer_id" "$account"
+    send_bundle_email "$email" "$output_file" "$peer_id" "$account" "$email_subject" "$email_message" "$cc_self"
     log_entry "OUTBOUND-BOOTSTRAP | mode:${mode} | to:${peer_id} | status:emailed | email:${email}"
   elif [[ -n "$email" ]]; then
     info "Email not sent automatically. Re-run with --send-email, or send the bundle file manually to: $email"
@@ -899,7 +981,7 @@ run_bundle_command() {
             fi
           fi
         fi
-        send_bundle_email "$interactive_email" "$output_file" "$peer_id" "$interactive_account"
+        send_bundle_email "$interactive_email" "$output_file" "$peer_id" "$interactive_account" "$email_subject" "$email_message" "$cc_self"
         log_entry "OUTBOUND-BOOTSTRAP | mode:${mode} | to:${peer_id} | status:emailed | email:${interactive_email}"
       fi
     fi
@@ -975,6 +1057,8 @@ print_import_preview() {
   echo "  Expires at:     $(jq -r '.expires_at // "—"' "$bundle_json")"
   echo "  Bundle ID:      $(jq -r '.bundle_id // "—"' "$bundle_json")"
   echo "  Exchange pubkey:$(jq -r '.from_exchange_pubkey' "$bundle_json")"
+  echo "  Authentication: $(jq -r 'if .schema_version == 1 then "plaintext-legacy" else .from_auth_mode end' "$bundle_json")"
+  [[ "$(jq -r 'if .schema_version == 1 then "plaintext-legacy" else .from_auth_mode end' "$bundle_json")" == plaintext-legacy ]] && warn "Legacy mode sends a reusable identity secret in every message. Re-pair to ed25519-v1 when both hosts are upgraded."
   echo "  Notes:          $(jq -r '.notes // "—"' "$bundle_json")"
   local expected_peer
   expected_peer=$(jq -r '.expected_peer_id // empty' "$bundle_json")
@@ -999,7 +1083,7 @@ import_bundle() {
   local bundle_json peer_id display_name endpoint agent_id exchange_pubkey expected_peer self_peer
   local existing_url existing_name existing_token_ref existing_secret_ref existing_agent
   local token_ref token_abs secret_ref secret_abs add_inbound add_outbound
-  local hooks_token identity_secret
+  local hooks_token identity_secret auth_mode signing_public signing_ref="" signing_abs=""
 
   bundle_json="$(decrypt_bundle_to_json "$input_path")"
   # REF-603: the decrypted bundle contains from_identity_secret + from_hooks_token
@@ -1030,9 +1114,16 @@ import_bundle() {
   expected_peer=$(jq -r '.expected_peer_id // empty' "$bundle_json")
   hooks_token=$(jq -r '.from_hooks_token' "$bundle_json")
   identity_secret=$(jq -r '.from_identity_secret' "$bundle_json")
+  auth_mode=$(jq -r 'if .schema_version == 1 then "plaintext-legacy" else .from_auth_mode end' "$bundle_json")
+  signing_public=$(jq -r '.from_signing_public_key // empty' "$bundle_json")
 
   validate_age_pubkey "$exchange_pubkey"
-  validate_runtime_secret "$identity_secret"
+  if [[ "$auth_mode" == "plaintext-legacy" ]]; then validate_runtime_secret "$identity_secret"
+  elif [[ "$auth_mode" == "ed25519-v1" ]]; then
+    if [[ ! -e "$SKILL_DIR/keys" ]]; then (umask 077; mkdir -m 0700 "$SKILL_DIR/keys") || true; fi
+    [[ -d "$SKILL_DIR/keys" && ! -L "$SKILL_DIR/keys" ]] || die "Pinned-key directory is missing or unsafe: $SKILL_DIR/keys"
+    _signature_path_component_safe "$SKILL_DIR/keys" || die "Pinned-key directory is not owner-controlled"
+  else die "Unsupported bundle auth mode"; fi
 
   # REF-600: primary guard against self-identity hijack.
   # A bundle must never be allowed to overwrite the local self-peer entry.
@@ -1087,8 +1178,15 @@ them re-run 'antenna setup' with a distinct peer_id and issue a new bundle."
   mkdir -p "$(dirname "$token_abs")" "$(dirname "$secret_abs")"
 
   printf '%s' "$hooks_token" > "$token_abs"
-  printf '%s' "$identity_secret" > "$secret_abs"
-  chmod 600 "$token_abs" "$secret_abs"
+  chmod 600 "$token_abs"
+  if [[ "$auth_mode" == "plaintext-legacy" ]]; then
+    printf '%s' "$identity_secret" >"$secret_abs"; chmod 600 "$secret_abs"
+  else
+    signing_ref="keys/$(printf '%s' "$peer_id" | sha256sum | awk '{print $1}').ed25519.pem"
+    signing_abs="$(resolve_path "$signing_ref")"; printf '%s\n' "$signing_public" >"$signing_abs"; chmod 0644 "$signing_abs"
+    signature_public_key_ok "$signing_abs" "$SKILL_DIR/keys" || die "Bundle Ed25519 public key is invalid"
+    secret_ref=""
+  fi
 
   ensure_peer_entry_updated \
     "$peer_id" \
@@ -1097,13 +1195,13 @@ them re-run 'antenna setup' with a distinct peer_id and issue a new bundle."
     "$secret_ref" \
     "${agent_id:-$existing_agent}" \
     "${display_name:-$existing_name}" \
-    "$exchange_pubkey"
+    "$exchange_pubkey" "$auth_mode" "$signing_ref"
 
   update_allowlists "$peer_id" "$add_inbound" "$add_outbound"
 
   ok "Imported encrypted bootstrap bundle for $peer_id"
   info "Token file:  $token_abs"
-  info "Secret file: $secret_abs"
+  info "Authentication: $auth_mode"
   info "Allowlists: inbound=$add_inbound outbound=$add_outbound"
   log_entry "INBOUND-BOOTSTRAP | from:${peer_id} | status:imported | inbound:${add_inbound} | outbound:${add_outbound}"
 
@@ -1126,14 +1224,17 @@ cmd_keygen() {
 }
 
 send_pubkey_email() {
-  local email_to="$1" account="${2:-}"
+  local email_to="$1" account="${2:-}" custom_subject="${3:-}" custom_message="${4:-}" cc_self="${5:-false}"
   local sid pubkey subject
 
   sid="$(self_id)"
   pubkey="$(current_exchange_pubkey)"
-  subject="Antenna exchange public key from ${sid}"
+  subject="${custom_subject:-Antenna exchange public key from ${sid}}"
+  [[ -z "$custom_subject" ]] || validate_email_subject "$subject"
+  validate_email_message "$custom_message"
 
-  local body_text="Antenna exchange public key from ${sid}:
+  local default_body_text body_text
+  default_body_text="Antenna exchange public key from ${sid}:
 
 ${pubkey}
 
@@ -1142,6 +1243,7 @@ To use this key when creating a bootstrap bundle for ${sid}:
 
 Or save the attached .agepub file and use:
   antenna peers exchange initiate ${sid} --pubkey-file <saved-file>"
+  body_text="$(prepend_optional_message "$custom_message" "$default_body_text")"
 
   local pubkey_file
   pubkey_file=$(mktemp --suffix="-${sid}.agepub")
@@ -1151,12 +1253,24 @@ Or save the attached .agepub file and use:
   if have_cmd gog; then
     local gog_account="${account:-}"
     [[ -n "$gog_account" ]] && ! [[ "$gog_account" == *@* ]] && gog_account=""
-    local gog_args=(gmail send --to "$email_to" --subject "$subject" --body "$body_text" --attach "$pubkey_file" --force)
-    [[ -n "$gog_account" ]] && gog_args=(gmail send --account "$gog_account" --to "$email_to" --subject "$subject" --body "$body_text" --attach "$pubkey_file" --force)
-    if gog "${gog_args[@]}" >/dev/null 2>&1; then
-      rm -f "$pubkey_file"
-      ok "Sent exchange public key to $email_to via gog (Gmail API)"
-      return 0
+    local gog_cc=""
+    if [[ "$cc_self" == "true" ]]; then
+      if [[ -n "$gog_account" && "$gog_account" == *@* ]]; then
+        gog_cc="$gog_account"
+      else
+        warn "Cannot resolve gog sender address for CC-to-self; trying himalaya fallback..."
+        gog_account="__skip_gog_for_cc_self__"
+      fi
+    fi
+    if [[ "$gog_account" != "__skip_gog_for_cc_self__" ]]; then
+      local gog_args=(gmail send --to "$email_to" --subject "$subject" --body "$body_text" --attach "$pubkey_file" --force)
+      [[ -n "$gog_account" ]] && gog_args=(gmail send --account "$gog_account" --to "$email_to" --subject "$subject" --body "$body_text" --attach "$pubkey_file" --force)
+      [[ -n "$gog_cc" ]] && gog_args+=(--cc "$gog_cc")
+      if gog "${gog_args[@]}" >/dev/null 2>&1; then
+        rm -f "$pubkey_file"
+        ok "Sent exchange public key to $email_to via gog (Gmail API)"
+        return 0
+      fi
     fi
     warn "gog send failed; trying himalaya fallback..."
   fi
@@ -1180,9 +1294,13 @@ Or save the attached .agepub file and use:
     fi
 
     raw_file=$(mktemp)
-    cat > "$raw_file" <<EOF
-From: ${sid} <${from_addr}>
-To: ${email_to}
+    {
+      printf 'From: %s <%s>\n' "$sid" "$from_addr"
+      printf 'To: %s\n' "$email_to"
+      if [[ "$cc_self" == "true" ]]; then
+        printf 'Cc: %s\n' "$from_addr"
+      fi
+      cat <<EOF
 Subject: ${subject}
 MIME-Version: 1.0
 Content-Type: multipart/mixed; boundary="ANTENNAPUBKEY"
@@ -1200,6 +1318,7 @@ ${pubkey}
 
 --ANTENNAPUBKEY--
 EOF
+    } > "$raw_file"
     himalaya message send -a "$account" < "$raw_file" >/dev/null
     rm -f "$raw_file" "$pubkey_file"
     ok "Sent exchange public key to $email_to via himalaya ($from_addr)"
@@ -1211,12 +1330,15 @@ EOF
 }
 
 cmd_pubkey() {
-  local bare=false email="" account="" send_email=false
+  local bare=false email="" account="" send_email=false email_subject="" email_message="" cc_self=false
   while [[ $# -gt 0 ]]; do
     case "$1" in
       --bare) bare=true; shift ;;
       --email) email="$2"; shift 2 ;;
       --account) account="$2"; shift 2 ;;
+      --subject) email_subject="$2"; shift 2 ;;
+      --message) email_message="$2"; shift 2 ;;
+      --cc-self) cc_self=true; shift ;;
       --send-email) send_email=true; shift ;;
       -h|--help) usage; exit 0 ;;
       *) die "Unknown option for pubkey: $1" ;;
@@ -1236,7 +1358,7 @@ cmd_pubkey() {
     # Send by email if requested
     if [[ "$send_email" == "true" ]]; then
       [[ -n "$email" ]] || die "--send-email requires --email <addr>"
-      send_pubkey_email "$email" "$account"
+      send_pubkey_email "$email" "$account" "$email_subject" "$email_message" "$cc_self"
     elif [[ "$send_email" != "true" ]] && is_tty && (have_cmd gog || have_cmd himalaya); then
       # Interactive: offer to email
       echo
@@ -1257,7 +1379,7 @@ cmd_pubkey() {
               fi
             fi
           fi
-          send_pubkey_email "$interactive_email" "$interactive_account"
+          send_pubkey_email "$interactive_email" "$interactive_account" "$email_subject" "$email_message" "$cc_self"
         fi
       fi
     fi
@@ -1272,7 +1394,8 @@ cmd_initiate_or_reply() {
   shift || true
 
   local pubkey_arg="" pubkey_file_arg="" email="" account="" output_path=""
-  local print_bundle=false send_email=false notes="" assume_yes=false legacy_mode=false
+  local print_bundle=false send_email=false notes="" assume_yes=false legacy_mode=false auth_mode=ed25519-v1
+  local email_subject="" email_message="" cc_self=false
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -1280,18 +1403,23 @@ cmd_initiate_or_reply() {
       --pubkey-file) pubkey_file_arg="$2"; shift 2 ;;
       --email) email="$2"; shift 2 ;;
       --account) account="$2"; shift 2 ;;
+      --subject) email_subject="$2"; shift 2 ;;
+      --message) email_message="$2"; shift 2 ;;
+      --cc-self) cc_self=true; shift ;;
       --output) output_path="$2"; shift 2 ;;
       --print) print_bundle=true; shift ;;
       --send-email) send_email=true; shift ;;
       --notes) notes="$2"; shift 2 ;;
       --yes) assume_yes=true; shift ;;
+      --auth-mode) auth_mode="$2"; shift 2 ;;
       --legacy) legacy_mode=true; shift ;;
       -h|--help) usage; exit 0 ;;
       *) die "Unknown option for ${mode}: $1" ;;
     esac
   done
 
-  run_bundle_command "$mode" "$peer_id" "$pubkey_arg" "$pubkey_file_arg" "$email" "$account" "$output_path" "$print_bundle" "$send_email" "$notes" "$assume_yes" "$legacy_mode"
+  [[ "$auth_mode" == "ed25519-v1" || "$auth_mode" == "plaintext-legacy" ]] || die "--auth-mode must be ed25519-v1 or plaintext-legacy"
+  run_bundle_command "$mode" "$peer_id" "$pubkey_arg" "$pubkey_file_arg" "$email" "$account" "$output_path" "$print_bundle" "$send_email" "$notes" "$assume_yes" "$legacy_mode" "$email_subject" "$email_message" "$cc_self" "$auth_mode"
 }
 
 cmd_import() {

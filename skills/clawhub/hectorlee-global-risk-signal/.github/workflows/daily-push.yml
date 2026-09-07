@@ -1,0 +1,33 @@
+name: 盘前雷达每日推送
+
+# 「盘前雷达」订阅推送的云端主轨：GitHub Actions 每天 8:30（北京时间）跑一次，
+# 电脑关机/出差也照常推送到飞书群。本机 automation 作为辅助（双轨并行）。
+
+on:
+  schedule:
+    # UTC 00:30 = 北京时间 08:30，周一至周五
+    - cron: "30 0 * * 1-5"
+  workflow_dispatch: {}  # 支持手动触发
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 运行盘前雷达并推送到飞书
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+        run: |
+          cd scripts
+          python3 push_webhook.py

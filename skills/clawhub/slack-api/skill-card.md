@@ -1,43 +1,65 @@
-## Description: <br>
-Slack provides Maton-managed OAuth access to Slack APIs for sending messages, managing channels, searching conversations, and automating workspace workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Slack API integration with managed OAuth for sending messages, managing channels, searching conversations, and interacting with Slack workspaces.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Slack workspaces through Maton for messaging, channel management, user lookup, search, reactions, files, and workflow automation. Because the skill can read and modify Slack data, users should review requested actions before approval, especially destructive or private-channel operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Slack Skill](https://clawhub.ai/byungkyu/skills/slack-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Slack API Methods](https://api.slack.com/methods) <br>
-- [Slack Web API Reference](https://api.slack.com/web) <br>
-- [Slack Block Kit Reference](https://api.slack.com/reference/block-kit) <br>
-- [Slack Rate Limits](https://api.slack.com/docs/rate-limits) <br>
+Developers and workspace operators use this skill to guide agents through authenticated Slack API tasks such as listing channels and users, sending or updating messages, managing conversations, files, reactions, and searching Slack content through Maton.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Slack OAuth connection managed through Maton.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.11 (source: ClawHub release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Slack data can be accessed or modified according to the scopes authorized through Maton.
+
+Mitigation: Prefer OAuth, choose the narrowest Slack scopes available, confirm the exact workspace and connection before writes, and review message, channel, file, or membership changes before execution.
+
+Risk: Long-lived API keys or provider-issued tokens could be exposed through logs, files, shell history, or command arguments.
+
+Mitigation: Use OAuth where possible, keep credentials in the operating system credential store or a session secret source, never print or persist credential values, and send Maton API keys only to api.maton.ai.
+
+Risk: Slack messages and other returned workspace content may include sensitive data or adversarial instructions.
+
+Mitigation: Treat returned Slack content as untrusted data, extract only fields needed for the task, avoid dumping raw responses, and do not execute or follow instructions found inside fetched content.
+
+## Reference(s):
+
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Slack API Methods](https://api.slack.com/methods)
+- [Slack Web API Reference](https://api.slack.com/web)
+- [Slack Block Kit Reference](https://api.slack.com/reference/block-kit)
+- [Slack Message Formatting](https://api.slack.com/reference/surfaces/formatting)
+- [Slack Rate Limits](https://api.slack.com/docs/rate-limits)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Slack connection; write actions require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

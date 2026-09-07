@@ -5,7 +5,6 @@ description: >-
   PostgreSQL schema design, query optimization, indexing, and administration.
   Use when working with PostgreSQL, JSONB, partitioning, RLS, CTEs, window
   functions, or EXPLAIN ANALYZE.
-paths: "**/*.sql"
 ---
 
 # PostgreSQL
@@ -31,9 +30,10 @@ paths: "**/*.sql"
 - `CHECK` constraints for domain rules at DB level
 - `EXCLUDE` constraints for range overlaps: `EXCLUDE USING gist (room WITH =, during WITH &&)`
 - Default `created_at TIMESTAMPTZ NOT NULL DEFAULT now()`
-- Separate `updated_at` with trigger, never trust app layer alone
+- Separate `updated_at` with trigger, never trust app layer alone. Gate it with `WHEN (OLD.* IS DISTINCT FROM NEW.*)` so a no-op write neither fires the function nor bumps the timestamp -- on `BEFORE UPDATE` the row image is built before the trigger runs, so the comparison sees the caller's row, not the one the trigger is about to stamp.
 - Use `BIGINT` PKs -- cheaper JOINs than UUID, better index locality
-- Safe migrations: `CREATE INDEX CONCURRENTLY`, add columns with `DEFAULT` (instant add). Never `ALTER TYPE` on large tables in-place.
+- Safe migrations: `CREATE INDEX CONCURRENTLY`, add columns with a **non-volatile** `DEFAULT` (instant add). Never `ALTER TYPE` on large tables in-place.
+- A `DEFAULT` whose expression is `VOLATILE` rewrites the entire table under `ACCESS EXCLUSIVE`; only `IMMUTABLE`/`STABLE` defaults get the metadata-only fast path. Check before shipping the migration: `SELECT provolatile FROM pg_proc WHERE proname = 'gen_random_uuid';` -- `v` is volatile, `s`/`i` are not. So `DEFAULT 7` and `DEFAULT now()` are instant, `DEFAULT gen_random_uuid()` is a full rewrite; add the column nullable, backfill in batches, then set the default.
 - `NULLS NOT DISTINCT` on unique indexes (PG15+) -- treats NULLs as equal for uniqueness
 - Under `NULLS NOT DISTINCT`, a pre-flight duplicate check written with SQL `=` misses NULL/NULL collisions -- the index rejects the second row, but `NULL = NULL` evaluates to NULL (not true), so a self-join or `WHERE a.col = b.col` probe silently skips exactly the pairs the index will reject. Write the probe with `IS NOT DISTINCT FROM` so NULL/NULL compares as equal.
 - Revoke default public schema access: `REVOKE ALL ON SCHEMA public FROM public`
@@ -43,8 +43,9 @@ paths: "**/*.sql"
 **Core rules:**
 - Every schema change is a migration. No ad-hoc DDL in production.
 - Migrations are immutable once deployed -- never edit a migration that has run in any shared environment.
-- Schema migrations and data migrations are separate files. Schema changes are fast and transactional; data backfills are slow and may need batching.
+- Schema migrations and data migrations are separate files. Schema changes are fast and transactional; data backfills are slow and may need batching. Exception: when one transaction is what closes a rolling-deploy null window, do not split reflexively -- see the `ADD COLUMN` lock note under Dangerous operations for the table-size disposition.
 - Forward-only in production. Rollback = a new forward migration that reverses the change.
+- A re-run guard that checks one object (`IF EXISTS`-style early return on the main table) is a valid proxy for "everything already applied" **only** when the entire migration body runs in one transaction. PostgreSQL rolls `CREATE TABLE` / `CREATE TYPE` / `CREATE INDEX` (non-concurrent) / `CREATE FUNCTION` / `CREATE TRIGGER` / `ALTER TABLE` back together, so table-exists implies the rest committed. Any statement that cannot run inside a transaction -- `CREATE INDEX CONCURRENTLY`, `ALTER TYPE ... ADD VALUE` on older versions, `VACUUM` -- sits outside that guarantee, and the guard then skips it on re-run and ships a partial schema. Confirm every DDL object is inside the one transaction before relying on the guard.
 
 **Expand-contract pattern** for zero-downtime renames and removals:
 
@@ -57,6 +58,7 @@ Never rename or remove a column in a single migration -- callers reading the old
 **Dangerous operations:**
 - `NOT NULL` without a `DEFAULT` on an existing table locks and rewrites every row. Add the column nullable first, backfill, then add the constraint.
 - `CREATE INDEX` (without `CONCURRENTLY`) locks writes for the duration. Always use `CONCURRENTLY`, which cannot run inside a transaction block -- keep it in its own migration.
+- `ADD COLUMN ... NULL` with no default is metadata-only and fast, but it takes `ACCESS EXCLUSIVE` and that lock is held until the enclosing **transaction** commits -- not until the `ALTER` returns. A migration that adds the column and then backfills every row in the same transaction blocks all readers and writers for the backfill's duration. Do not reflexively split it: the single-transaction ordering (`ADD` nullable -> backfill -> `SET DEFAULT`) is itself the fix for the rolling-deploy window where an old release inserts `NULL` before the default exists. The disposition is table size, not a rule -- on a small table accept the sub-second hold and state the row count; on a large one use expand-contract (deploy the column with a constant `DEFAULT` first, then a separate chunked backfill outside a transaction).
 - Large data backfills: batch with `FOR UPDATE SKIP LOCKED` to avoid locking the entire table:
 
 ```sql
@@ -89,10 +91,11 @@ Default chunked decode-encode loops are only safe during a maintenance window wi
 | BRIN | Large tables with natural ordering (timestamps, serial IDs) |
 
 **Index rules:**
-- Composite: most selective column first, max 3-4 columns
+- Composite: equality-predicate columns first, then the range/sort column, max 3-4 columns -- a leading range column stops the B-tree from navigating on anything after it. "Most selective first" is the myth version; selectivity only breaks ties among equality columns
 - Partial: `WHERE status = 'active'` -- smaller, faster
 - Covering: `INCLUDE (col)` -- avoids heap lookup
 - Expression: `ON (lower(email))` -- for function-based WHERE
+- A GIN index on an array column serves the containment operators, not `=`: `WHERE 'x' = ANY(col)` seq-scans even with `enable_seqscan = off`, because `ANY` over an array expands to equality and no GIN operator class implements it. Write the predicate as `WHERE col @> ARRAY['x']` to reach the index.
 - `fillfactor = 70-90` on write-heavy tables -- reserves space for HOT updates, reducing index bloat
 - Drop unused indexes (only after one full business cycle since last restart -- check `pg_stat_database.stats_reset` first, otherwise you may drop a primary key on a freshly restarted DB or read replica): `SELECT * FROM pg_stat_user_indexes WHERE idx_scan = 0`
 
@@ -169,7 +172,7 @@ Always index columns referenced in RLS policies. For complex multi-table checks,
 ## Query Optimization
 
 - Always `EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)` before optimizing
-- Use `pg_stat_statements` for slow-query detection and `pg_stat_user_tables` for bloat (see Detection queries below for the full SQL)
+- Use `pg_stat_statements` for slow-query detection and `pg_stat_user_tables` for bloat (see [operations.md](./references/operations.md) for the full SQL)
 - Sequential scan on large table -> add index or check `WHERE` for function wrapping
 - High `rows removed by filter` -> index doesn't match predicate
 - CTEs are inlined by default; use `MATERIALIZED`/`NOT MATERIALIZED` hints to control optimization
@@ -191,6 +194,8 @@ Use when table exceeds ~100M rows or needs TTL purge:
 - `HASH` -- even distribution when no natural key
 
 Partition key must be in every unique/PK constraint. Create indexes on partitions, not parent.
+
+Foreign keys *from* a partitioned table need PG11+; foreign keys *referencing* a partitioned table need PG12+ -- on older versions enforce with triggers.
 
 ## Transactions & Locking
 
@@ -215,24 +220,15 @@ Always pool in production. Direct connections cost ~10MB each.
 
 **Prepared statement caveat:** Named prepared statements are bound to a specific connection. In transaction-mode pooling, the next request may hit a different connection. Use unnamed/extended-query-protocol statements (most ORMs default to this), or deallocate immediately after use.
 
+See [performance-patterns.md](./references/performance-patterns.md) for the query shapes an index cannot serve, pool-exhaustion diagnosis (raising `max` relocates the queue), and cache discipline (stampede, negative caching, key completeness).
+
 ## Operations
 
 See [operations.md](./references/operations.md) for performance tuning, maintenance/monitoring, WAL, replication, and backup/recovery.
 
 ## Vector Search (pgvector)
 
-```sql
-CREATE EXTENSION vector;
-ALTER TABLE items ADD COLUMN embedding vector(1536);  -- match your model's output dimensions
-
--- HNSW: better recall, higher memory. Default choice.
-CREATE INDEX ON items USING hnsw (embedding vector_cosine_ops);
-
--- IVFFlat: lower memory for large datasets. Set lists = sqrt(row_count).
-CREATE INDEX ON items USING ivfflat (embedding vector_cosine_ops) WITH (lists = 1000);
-```
-
-Always filter BEFORE vector search (use partial indexes or CTEs with pre-filtered rows). Distance operators: `<=>` cosine, `<->` L2, `<#>` inner product.
+HNSW vs IVFFlat index choice, embedding column setup, pre-filtering, and distance operators: see [performance-patterns.md](./references/performance-patterns.md).
 
 ## Anti-Patterns
 
@@ -246,27 +242,7 @@ Always filter BEFORE vector search (use partial indexes or CTEs with pre-filtere
 | Missing FK indexes | See detection query in Index Strategy above |
 | `ORDER BY RANDOM()` | Use `TABLESAMPLE` or application-side shuffle |
 
-**Detection queries:**
-
-```sql
--- Slow queries (requires pg_stat_statements)
-SELECT query, mean_exec_time, calls
-FROM pg_stat_statements
-WHERE mean_exec_time > 100
-ORDER BY mean_exec_time DESC LIMIT 20;
-
--- Table bloat (dead tuples awaiting vacuum)
-SELECT relname, n_dead_tup, last_vacuum, last_autovacuum
-FROM pg_stat_user_tables
-WHERE n_dead_tup > 10000
-ORDER BY n_dead_tup DESC;
-
--- Unused indexes (candidates for removal)
-SELECT schemaname, relname, indexrelname, idx_scan
-FROM pg_stat_user_indexes
-WHERE idx_scan = 0 AND indexrelname NOT LIKE '%_pkey'
-ORDER BY pg_relation_size(indexrelid) DESC;
-```
+Detection queries for slow queries, table bloat, and unused indexes: see [operations.md](./references/operations.md).
 
 ## Verify
 

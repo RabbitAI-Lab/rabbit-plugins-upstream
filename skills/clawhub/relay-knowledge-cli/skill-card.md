@@ -1,43 +1,59 @@
-## Description: <br>
-Relay Knowledge CLI guides agents in using the local relay-knowledge CLI for repository indexing, knowledge graph queries, GraphRAG retrieval, code graph navigation, impact analysis, diagnostics, and upgrade checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use relay-knowledge local CLI for repository CodeSpec/Knowledge map governance and GraphRAG: initialize, validate, route, and update codespec/codespec-map.yaml and knowledge/knowledge-map.yaml; read snapshot-bound repo business/software/view/context models for specs and coding; run durable update/status/impact loops after commits.
 
-## Publisher: <br>
-[stevetdp](https://clawhub.ai/user/stevetdp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[stevetdp](https://clawhub.ai/user/stevetdp)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to index local repositories, query code and software graphs, inspect feature flags, run diagnostics, and manage knowledge-map workflows through the relay-knowledge CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to index and query local repositories and maintain local runtime state. <br>
-Mitigation: Use scoped repository paths or a temporary RELAY_KNOWLEDGE_HOME for tests, and review install, service, write, and knowledge-map mutation commands before execution. <br>
-Risk: Large repository indexing and service workflows can run as durable background tasks. <br>
-Mitigation: Inspect status before retrying, let managed services drain active tasks when present, and use bounded worker attempts for queued or retrying tasks. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to operate the relay-knowledge CLI for repository indexing, graph-backed code search, knowledge map governance, business glossary queries, software relationship queries, diagnostics, and commit-driven update loops.
 
-## Reference(s): <br>
-- [Relay Knowledge homepage](https://github.com/coolplayagent/relay-knowledge) <br>
-- [ClawHub skill page](https://clawhub.ai/stevetdp/relay-knowledge-cli) <br>
-- [CLI workflows](references/cli-workflows.md) <br>
-- [Knowledge map workflows](references/knowledge-map-workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers machine-readable JSON command output, scoped repository paths, and temporary RELAY_KNOWLEDGE_HOME for isolated tests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata and skill metadata) <br>
+Risk: The release commonly relies on installing a mutable external CLI before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, verified release or previously audited binary, and review the version, source, destination, and permissions before allowing installation or upgrade.
+
+Risk: The CLI can index local repository contents and maintain durable local knowledge state.
+
+Mitigation: Run it only on trusted repositories and scopes, review commands before execution, and use an explicit temporary RELAY_KNOWLEDGE_HOME for smoke checks that should not touch existing state.
+
+## Reference(s):
+
+- [Relay Knowledge CLI Skill README](artifact/README.md)
+- [Relay Knowledge CLI Workflows](artifact/references/cli-workflows.md)
+- [Knowledge Map and Code Map Workflows](artifact/references/knowledge-map-workflows.md)
+- [Relay Knowledge Map v4 artifacts schema](artifact/references/knowledge-map.schema.json)
+- [Relay CodeSpec Map v4 root schema](artifact/references/codespec-map.schema.json)
+- [Relay Knowledge Business Glossary v1 schema](artifact/references/business-glossary.schema.json)
+- [Project homepage](https://github.com/coolplayagent/relay-knowledge)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI handling]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct an agent to run a local CLI that indexes repository contents and maintains durable local knowledge state.]
+
+## Skill Version(s):
+
+1.1.17 (source: SKILL.md frontmatter metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

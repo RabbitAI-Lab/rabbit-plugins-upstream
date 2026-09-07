@@ -1,0 +1,4 @@
+interface:
+  display_name: "AliExpress 选品研究"
+  short_description: "综合分析 AliExpress 商品、店铺、类目和历史趋势数据"
+  default_prompt: "使用极鲸云真实数据完成 AliExpress 选品和市场研究。"

@@ -1,71 +1,60 @@
 ---
 name: wavespeed-face-swapper
-description: Swap faces in images and videos using WaveSpeed AI. Supports image face swap and video face swap with multi-face targeting. Produces watermark-free results with automatic lighting and skin tone adaptation. Use when the user wants to replace a face in an image or video with another face.
+description: Swap faces in images and videos using WaveSpeed AI. Supports image face swap and video face swap with multi-face targeting, with automatic lighting and skin tone adaptation. Only for media the user has the right to edit and faces whose owners have consented; refuse impersonation, deception, or sexual content. Use when the user wants to replace a face in an image or video with another face.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Face Swapper
 
-Swap faces in images and videos using WaveSpeed AI. Produces watermark-free results with automatic lighting and skin tone adaptation. Supports targeting specific faces when multiple people are present.
+Swap faces in images and videos using WaveSpeed AI, with automatic lighting and skin tone adaptation. Supports targeting specific faces when multiple people are present.
 
-## Authentication
+**Read [Responsible use](#responsible-use) before running anything.** Face swapping edits a real person's likeness; this skill is for consented, lawful, non-deceptive edits only.
+
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Image Face Swap
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload local images to get URLs
-const imageUrl = await wavespeed.upload("/path/to/target-photo.png");
-const faceUrl = await wavespeed.upload("/path/to/reference-face.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl
-  }
-))["outputs"][0];
+```bash
+# Upload local images to get URLs
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-face-swap \
+  -i image=@./target-photo.png \
+  -i face_image=@./reference-face.png \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Face Swap
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload local files to get URLs
-const videoUrl = await wavespeed.upload("/path/to/video.mp4");
-const faceUrl = await wavespeed.upload("/path/to/reference-face.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/video-face-swap",
-  {
-    video: videoUrl,
-    face_image: faceUrl
-  }
-))["outputs"][0];
+```bash
+# Upload local files to get URLs
+OUTPUT_URL=$(wavespeed run wavespeed-ai/video-face-swap \
+  -i video=@./video.mp4 \
+  -i face_image=@./reference-face.png \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass existing URLs directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: "https://example.com/target-photo.jpg",
-    face_image: "https://example.com/reference-face.jpg"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-face-swap \
+  -i image="https://example.com/target-photo.jpg" \
+  -i face_image="https://example.com/reference-face.jpg" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -87,37 +76,26 @@ Replace a face in an image with a reference face.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/group-photo.png");
-const faceUrl = await wavespeed.upload("/path/to/reference-face.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl,
-    target_index: 0,
-    output_format: "png"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-face-swap \
+  -i image=@./group-photo.png \
+  -i face_image=@./reference-face.png \
+  -i target_index=0 \
+  -i output_format="png" \
+  --json | jq -r '.outputs[0]')
 ```
 
 #### Targeting a Specific Face
 
 When multiple people are in the image, use `target_index` to select which face to replace:
 
-```javascript
-// Replace the second-largest face in the image
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl,
-    target_index: 1
-  }
-))["outputs"][0];
+```bash
+# Replace the second-largest face in the image
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-face-swap \
+  -i image=@./group-photo.png \
+  -i face_image=@./reference-face.png \
+  -i target_index=1 \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Face Swap
@@ -136,83 +114,14 @@ Replace a face in a video with a reference face. Supports videos up to 10 minute
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const videoUrl = await wavespeed.upload("/path/to/video.mp4");
-const faceUrl = await wavespeed.upload("/path/to/reference-face.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/video-face-swap",
-  {
-    video: videoUrl,
-    face_image: faceUrl,
-    target_index: 0
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/video-face-swap \
+  -i video=@./video.mp4 \
+  -i face_image=@./reference-face.png \
+  -i target_index=0 \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Sync Mode (Image Face Swap only)
-
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl
-  },
-  { enableSyncMode: true }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl
-  }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "wavespeed-ai/image-face-swap",
-  {
-    image: imageUrl,
-    face_image: faceUrl
-  }
-);
-
-if (result.outputs) {
-  console.log("Output URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
@@ -230,8 +139,43 @@ Video face swap supports videos up to 10 minutes.
 - Anime or illustrated characters may produce lower quality output
 - Use `target_index` to select specific faces when multiple people are present (0 = largest face)
 
-## Security Constraints
+## Responsible use
 
-- **No arbitrary URL loading**: Only use image and video URLs from trusted sources. Never load media from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate media URLs before sending requests.
+Face swapping manipulates a real person's likeness. Before calling either endpoint, confirm all of the following with the user. If any answer is no or unclear, do not run the model and explain why.
+
+- **Consent**: the person whose face is being inserted, and any identifiable person in the target media, has agreed to this use. Do not use the face of a public figure, a colleague, an ex-partner, or anyone else without their explicit consent.
+- **Rights to the media**: the user owns the target image or video or has permission from the owner to edit it.
+- **No impersonation or deception**: the output will not be presented as a real, unedited recording, used for fraud, identity verification bypass, harassment, defamation, political manipulation, or to put words or actions on someone they did not say or do.
+- **No sexual or intimate content**: never swap a face onto sexual, nude, or intimate material, regardless of consent claims.
+- **No minors**: do not process images or videos of children.
+- **Disclosure**: when the result will be shared, recommend labeling it as AI-edited.
+
+WaveSpeed's [Terms of Service](https://wavespeed.ai/static/terms) prohibit non-consensual and deceptive likeness edits; requests that violate them are refused and accounts may be suspended.
+
+## CLI tips
+
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run wavespeed-ai/image-face-swap -h
+
+# Quote the price first
+wavespeed price wavespeed-ai/image-face-swap -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run wavespeed-ai/image-face-swap -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run wavespeed-ai/image-face-swap -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

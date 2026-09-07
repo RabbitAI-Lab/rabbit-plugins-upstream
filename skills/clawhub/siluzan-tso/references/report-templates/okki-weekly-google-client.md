@@ -5,21 +5,25 @@
 > 同义：`OKKI 周报`、`okki 周报模板`、`运营 OKKI 周报`。  
 > **媒体**：当前模板仅规范 **Google**（`mediaCustomerId`）。其他媒体用各自 `*-period-report.md`。  
 > **Excel 版式基准**：与运营样表《**数据复盘分析**》类 xlsx 对齐（如 `2025.12数据复盘分析.xlsx`）；工作簿 5 个 Sheet、顺序与表头以下文规范为准。
-
+>
+> **默认交付（硬性，缺文件 = 任务未完成）**：磁盘上的 **5 Sheet `.xlsx`**（由 `google-analysis okki-render` 生成）+ 对话内客户话术。  
+> 「表格形式 / 表格 / 各维度表格 / 表 / 做成表」= **Excel `.xlsx`**，**不是**对话 Markdown 表，**不是**手写 HTML/PDF。  
+> 仅当用户明确「只要话术 / 不要文件 / 不要 Excel」时才省略 xlsx。  
+> **禁止**：用对话 Markdown 表、手写 HTML、PDF 代替 `.xlsx`；**禁止** Agent 手写 / 脚本写 xlsx。
 
 ## Contents
 
 - 须先确认
-- 架构约定 · Excel 由谁生成
+- 标准四步流程（拉数 → 写 JSON → okki-render）
 - 拉数（一次目录）
-- xlsx 版式规范
+- xlsx 版式规范（由 CLI 锁死）
 - 对外客户话术（默认结构，填数来自 JSON）
 - 复盘小结（Excel「数据复盘」区块 / 对内补充）
 - 与 `google-period-report.md` 的差异
 
 ---
 
-识别到上述意图时：**不要**再走 `google-period-report.md` 的「默认 8 维 + 追问追加」流程；按本文**固定维度 + 默认客户话术（可用户自定义）**交付（数据全部来自 CLI 落盘 JSON，见 `references/analytics/account-analytics.md`）。
+识别到上述意图时：**不要**再走 `google-period-report.md` 的「默认 8 维 + 追问追加」流程；按本文**固定维度 + 默认客户话术（可用户自定义）+ `okki-render` 出 5 Sheet `.xlsx`** 交付。**先 `okki-render` 再发话术**；没有 `.xlsx` 路径不得收口。
 
 ---
 
@@ -29,16 +33,36 @@
 2. **统计区间**：`--start` / `--end`（用户未给齐时按 SKILL 反问；授权默认时可用「上一完整自然周」白名单并写明）。
 3. **询盘口径**：默认使用区间内 `conversions`（转化次数，来自 `stats` 或 `overview`）。若运营定义为某类转化，须在首段脚注说明（必要时补拉 `google-analysis --sections conversion-actions` 仅作说明）。
 4. **日期写法**：`2026.4.1`、`2026/4/1` 等先规范为 `YYYY-MM-DD`（如 `2026-04-01`）再传 `--start` / `--end`。
-5. **交付**：用户要可复制话术 → 优先纯文本；否则默认话术 + Excel。
+5. **交付**：默认 **客户话术 + 5 Sheet `.xlsx`（必产，由 `okki-render` 写出）**。「表格形式」一律当 Excel。仅用户明确只要可复制话术、不要文件时，才省略 xlsx。
 
 ---
 
-## 架构约定 · Excel 由谁生成
+## 标准四步流程（拉数 → 写 JSON → okki-render）
 
-- **`siluzan-tso` 不提供**「一键生成 OKKI Excel」的子命令，**也不要**在 CLI 里新增。
-- 需交付 Excel 时：由 **Agent（含 WorkBuddy 编排）** 在下列 CLI **`--json-out` 落盘后**，自行编写 **Node.js / Python** 脚本（如 `exceljs`、`xlsx`、`openpyxl`）读取 JSON → 写 `.xlsx`。
-- **数值一律来自落盘 JSON，禁止在脚本里写死业务数字。**
-- **所有 ID 列写字符串（文本）**，禁止 Excel 数字类型（防科学计数法）；见 `references/core/agent-conventions.md`。
+| 步骤 | 执行者 | 动作 |
+| --- | --- | --- |
+| **1. 拉数** | Agent 调 CLI | 下方固定命令组合，同一 `--json-out` 目录 |
+| **2. 分析** | Agent | 用 **node/python 脚本**读落盘 JSON（先 outline 再 JSON），完成筛选/聚合/洞察 |
+| **3. 写 JSON** | Agent | 按 `assets/okki-weekly-report.schema.json` 撰写 `okki-weekly-report.json`：**只写 `meta` + `narrative`**；表格留给步骤 4 合并 |
+| **4. 渲染 xlsx** | CLI | `google-analysis okki-render` — **校验 5 Sheet 表末分析 + 账户 Sheet 固定 5 维数据复盘**，缺项报错不生成文件；**禁止** Agent 手写 xlsx |
+
+```bash
+siluzan-tso google-analysis okki-render \
+  --data ./okki-weekly-report.json \
+  --snapshot-dir ./snap-okki \
+  --out ./okki-weekly-report.xlsx
+```
+
+`okki-weekly-report.json` 顶层结构：
+
+- `meta`：`accountId`（必填）/ `accountName` / `currency` / `startDate` / `endDate`；日期可由 `--snapshot-dir` 补空。
+- `narrative`（**Agent 必填，唯一由 Agent 撰写的内容**）：
+  - `sheetAnalysis.{campaigns,keywords,searchTerms,devices,geo}`：每个 Sheet 各 `{summary[]（≥1）, suggestions[]（≥1）}`。**表为空也必须写**（例如「本周期无搜索词，暂无加词/否词建议」）。
+  - `review.{account,keywords,searchTerms,devices,geo}`：账户 Sheet「数据复盘」固定 5 维，每维 `{overview, summary, suggestion}` 均非空。
+- `tables` / `kpis`：Agent 可省略；**render 以快照覆盖**。设备/国家只认 `campaign-device` / `campaign-geo-matched`。
+- `facts.devices`：render 合并后写入（桌面/移动/平板**费用合计**与占比）。写设备分析必须抄这组数；桌面费用 ≥ 移动却写「移动端为主要消耗 / 占比高」会**拒绝出 xlsx**。
+
+**禁止**：自己写 Node/Python 出 xlsx、用 Markdown 表代替、跳过 `okki-render`。`okki-render` 失败时按 stderr 缺项补 JSON 后重跑，不得改用手写表。
 
 ---
 
@@ -65,12 +89,13 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 - `balance`：**当前**余额（非历史快照），话术写「截至查询时点」。
 - 「设备」「国家」两 Sheet **必须**用 **`campaign-device` / `campaign-geo-matched`**（按系列/组拆行），**不要**用账户级 `devices` / `geographic`，也**不要**用 `campaign-geo`（定向地理位置，与 OKKI「地理位置报告」口径不一致）。落盘文件名为 `campaign-device-<id>.json`、`campaign-geo-matched-<id>.json`。跨系列汇总在脚本中做。
 - 可选：`campaign-geo-matched` 支持 `--cost-greater` / `--click-greater` / `--conversions-greater`（见 `references/analytics/account-analytics.md`）。
-- TopN、排序、汇总均在脚本内对 JSON 完成，禁止心算。
-- 写脚本前先读各 `<section>-<id>.outline.txt` 再读 `.json`。
+- TopN、占比、洞察在写 `narrative` 前由脚本对 JSON 完成，禁止心算。
+- 写 JSON 前先读各 `<section>-<id>.outline.txt` 再读 `.json`。
+- 合计行、CTR/CPA、日期标题、Sheet 列顺序由 `okki-render` 计算，Agent 不要往 JSON 里填表格行。
 
 ---
 
-## xlsx 版式规范
+## xlsx 版式规范（由 CLI 锁死，Agent 不必重写）
 
 工作簿 → Sheet 名（须完全一致）→ 版式。**不**单独建「广告系列」Sheet（系列表在 `账户报告` 内）。状态枚举若为英文须转中文。
 
@@ -94,7 +119,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 
 | 顺序 | Sheet 名   | 数据来源                                                                             |
 | ---: | ---------- | ------------------------------------------------------------------------------------ |
-|    1 | `账户报告` | `campaigns` + 复盘文案（stats/overview 汇总后 Agent 撰写）                           |
+|    1 | `账户报告` | `campaigns` + `narrative.review`（5 维复盘，`okki-render` 写入）                     |
 |    2 | `关键词`   | `keywords`                                                                           |
 |    3 | `搜索词`   | `search-terms`                                                                       |
 |    4 | `设备`     | **`campaign-device-*.json`**（按系列/组拆行）                                        |
@@ -143,7 +168,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
      总结：
      建议：
 
-文案由 Agent 据 JSON 撰写，**不得编造**表中不存在的数字。
+文案写入 `narrative.review`（每维 `overview` / `summary` / `suggestion`），由 `okki-render` 画到账户 Sheet 底部；缺任一维会拒绝出文件。**不得编造**表中不存在的数字。
 
 ---
 
@@ -154,7 +179,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | R1               | `搜索关键字报告`                                                                                                                                                              |
 | R2               | 统计区间                                                                                                                                                                      |
 | R3（A→L，12 列） | `关键字` \| `匹配类型` \| `广告系列` \| `广告组` \| `费用` \| `展示次数` \| `点击次数` \| `点击率` \| `平均每次点击费用` \| `转化次数` \| `每次转化费用` \| `转化率`          |
-| R4…              | `keywords-*.json`：`keywordMatchType`→匹配类型；`campaignName` / `adGroupName` 等按 outline；`ctr` / `conversionRate` 已归一，直接写入                                        |
+| R4…              | `keywords-*.json`：`keywordMatchType`→匹配类型；**关键字列由 render 按匹配类型包符号**（精确/`NEAR_EXACT`→`[词]`，词组/`NEAR_PHRASE`→`"词"`，广泛→裸词；先剥已有 `[]`/`""` 再重包，避免词组却带着 `[]`）；`campaignName` / `adGroupName` 等按 outline；`ctr` / `conversionRate` 已归一，直接写入 |
 | 表末「分析」     | **总结**：Top 消耗/转化关键词、高消耗低转化或零转化词、匹配类型（广泛/词组/完全）分布。**建议**：暂停/降价、提价扩量、改匹配或拓词（须写关键词 + 表中费用/转化/CPC），1～3 条 |
 
 ---
@@ -166,7 +191,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | R1               | `搜索字词报告`                                                                                                                                                                                              |
 | R2               | 统计区间                                                                                                                                                                                                    |
 | R3（A→N，14 列） | `搜索字词` \| `匹配类型` \| `已添加/已排除` \| `广告系列` \| `广告组` \| `关键字` \| `展示次数` \| `点击次数` \| `点击率` \| `平均每次点击费用` \| `费用` \| `转化次数` \| `每次转化费用` \| `转化率`       |
-| R4…              | `search-terms-*.json`：`queryTargetingStatusZh`（`Added`→已添加、`Excluded`→已排除、`None`→都没有）；无该字段时读 `queryTargetingStatus` 按上表映射，仍无则「—」；`ctr` / `conversionRate` 已归一，直接写入 |
+| R4…              | `search-terms-*.json`：`queryTargetingStatusZh`（`Added`→已添加、`Excluded`→已排除、`None`→都没有）；无该字段时读 `queryTargetingStatus` 按上表映射，仍无则「—」；**「搜索字词」不包符号**；**「关键字」列按匹配类型包符号**（同关键词 Sheet）；`ctr` / `conversionRate` 已归一，直接写入 |
 | 表末「分析」     | **总结**：高意向/高转化搜索词、高消耗但未加为关键词的词、应否定的无关词（对比「已添加/已排除」列）。**建议**：加词、否词、落地页或系列调整（须写搜索词 + 表中数据），1～3 条                                |
 
 ---
@@ -178,8 +203,8 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | R1               | `设备报告`                                                                                                                                                                                                                                                                                                                                                           |
 | R2               | 统计区间                                                                                                                                                                                                                                                                                                                                                             |
 | R3（A→M，13 列） | `设备` \| `级别` \| `广告系列` \| `出价调整` \| `展示次数` \| `点击次数` \| `点击率` \| `平均每次点击费用` \| `费用` \| `所有转化次数` \| `转化次数` \| `每次转化费用` \| `转化率`                                                                                                                                                                                   |
-| R4…              | `campaign-device-*.json`（`devices[]`）：`deviceType`→设备；`campaignName` / `adGroupName`→「广告系列」等；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；`ctr` / `conversionRate` 直接写入；**出价调整**：bidModifier（0.5 表示降低 50%，1.1 表示提高 10%，在表格中分别为 -50%、+10%）；**级别**列按运营约定（如填 `广告系列` 或 `账户`，全文一致） |
-| 表末「分析」     | **总结**：各设备（Mobile/Desktop/Tablet 等）消耗与转化占比、系列×设备高消耗组合、移动端 vs 桌面 CPA/CPC 差异。**建议**：设备出价系数调整或系列预算倾斜（须引用设备类型与表中费用/转化），1～3 条                                                                                                                                                                     |
+| R4…              | `campaign-device-*.json`（`items[]`）：`deviceType`→设备；`campaignName` / `adGroupName`→「广告系列」等；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；`ctr` / `conversionRate` 直接写入；**出价调整**：写 `bidModifierDisplay`（与 Google 后台一致：未设置=`—`，`0.6`=`-40%`）。禁止把倍率当正百分比，禁止把未设置的 `0` 写成 `-100%`；**级别**列按运营约定（如填 `广告系列` 或 `账户`，全文一致） |
+| 表末「分析」     | **总结**：各设备（Mobile/Desktop/Tablet 等）消耗与转化占比、系列×设备高消耗组合、移动端 vs 桌面 CPA/CPC 差异。**占比必须抄 `facts.devices`（按费用合计，不是行数/展示）**；桌面费用 ≥ 移动时禁止写「移动端为主要消耗 / 移动端占比高」。**建议**：设备出价系数调整或系列预算倾斜（须引用设备类型与表中费用/转化），1～3 条 |
 
 ---
 
@@ -190,7 +215,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | R1               | `地理位置报告`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | R2               | 统计区间                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | R3（A→M，13 列） | `地理位置` \| `广告系列` \| `展示次数` \| `互动次数` \| `互动率` \| `费用` \| `平均费用` \| `点击次数` \| `点击率` \| `所有转化次数` \| `转化次数` \| `每次转化费用` \| `转化率`                                                                                                                                                                                                                                                                                                                      |
-| R4…              | `campaign-geo-matched-*.json` 的 `items[]`（`schemaVersion 3` 行统一在 `items`）：`countryOrRegion`→地理位置；`campaignName`→「广告系列」；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；**互动次数**→`interactions`；**互动率**→`interactionRate`（字符串须解析）或 `interactions/impressions`，`interactions` 为 0 时填 `—`；**平均费用 必须** = `spend / interactions`，`interactions` 为 0 / null / undefined 时填 `—`；`ctr` / `conversionRate` 直接写入；其余列按 outline 映射 |
+| R4…              | `campaign-geo-matched-*.json` 的 `items[]`（`schemaVersion 3` 行统一在 `items`）：`countryOrRegion`→地理位置；`campaignName`→「广告系列」；`allConversions`→「所有转化次数」；`conversions`→「转化次数」；**互动次数**→`interactions`，缺省/为 0 时回退 `clicks`（搜索系列接口常不回 interactions）；**互动率**→`interactionRate`（字符串须解析）或 `互动次数/impressions`，回退后仍为 0 才填 `—`；**平均费用** = `spend / 互动次数`（同样先 interactions 再 clicks），分母为 0 时填 `—`；`ctr` / `conversionRate` 直接写入；其余列按 outline 映射 |
 | 表末「分析」     | **总结**：Top 国家/地区消耗与转化、高消耗低转化地域、系列×地域组合。**建议**：地域加价/降价、排除或单独系列（须写国家/地区名 + 表中费用/转化/CPA），1～3 条                                                                                                                                                                                                                                                                                                                                           |
 
 ---
@@ -260,5 +285,5 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 | 项       | `google-period-report.md` | 本文 OKKI 周报                                                                                                 |
 | -------- | ------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | 默认维度 | 8 维 + 主动追问追加       | **固定** `overview,campaigns,keywords,search-terms,campaign-device,campaign-geo-matched` + `stats` + `balance` |
-| 输出形态 | 长文分析报告              | **默认客户话术（可自定义）** + Excel 数据复盘 + **多 Sheet Excel（Agent 脚本写）**                             |
+| 输出形态 | 长文分析报告（默认 HTML，`google-analysis render`） | **必产** 5 Sheet `.xlsx`（`google-analysis okki-render`）+ 客户话术；「表格形式」= Excel；**禁止**对话 Markdown 表 / 手写 HTML / Agent 手写 xlsx |
 | 典型用户 | 内部分析                  | **发客户**的同步简报                                                                                           |

@@ -32,18 +32,18 @@ Scoring rationale:
 
 ## Evidence
 
-- hacker-news-ask-hn (2026-07-25T07:19:48+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues (2026-07-19T07:13:07+00:00): [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T12:06:25.434914+00:00): [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues (2026-07-17T18:34:14+00:00): [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues (2026-07-26T12:01:45+00:00): [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search (2026-07-20T05:18:14+00:00): [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- segmentfault-search (2026-09-07T04:05:24.256563+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-09-07T04:05:24.256563+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-09-07T04:05:24.257563+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-09-07T04:05:24.257563+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-09-07T04:05:24.257563+00:00): [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
+- segmentfault-search (2026-09-07T04:05:24.257563+00:00): [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
+- segmentfault-search (2026-09-07T04:05:24.257563+00:00): [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
+- hacker-news-search (2026-09-03T18:01:24+00:00): [Nobody Has Actually Built a Software Factory](https://news.ycombinator.com/item?id=49554042)
+- hacker-news-search (2026-09-04T17:29:19+00:00): [Ask HN: Who wants to be hired? (September 2026)](https://news.ycombinator.com/item?id=49567593)
+- hacker-news-search (2026-09-03T04:27:20+00:00): [Product Backlog Problems: Why Your Hierarchy Is Broken](https://news.ycombinator.com/item?id=49545927)
+- hacker-news-search (2026-08-26T15:17:56+00:00): [RAG Is Simpler Than You Think](https://news.ycombinator.com/item?id=49450687)
+- github-issues (2026-09-01T02:14:21+00:00): [Factory proposal: Make the Idea Agent validation-first](https://github.com/khiemnd777/daily-utility/issues/51)
 
 ## How The Skill Meets The Requirement
 

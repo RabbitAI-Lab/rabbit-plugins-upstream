@@ -130,7 +130,7 @@ A JSON object keyed by ISO date → nutrition object (empty selection → `{}`):
 ```
 
 `loseit_budget` / `loseit_under` / `exercise_adjustment` appear only when the daily summary provides
-them, after `meals`. Numbers are integers (banker's rounding). See **AGENTS.md** for the full
+them, after `meals`. Numbers are integers (banker's rounding). See [docs/MACHINE_CONTRACT.md](docs/MACHINE_CONTRACT.md) for the full
 contract and exit codes.
 
 ## Security & secrets
@@ -158,3 +158,5 @@ login/export endpoints, and no secret reaches stdout, stderr, or logs at any ver
 - **Secrets:** the token file and `config.json` (which holds your email/password in plaintext) are
   gitignored — never commit them and keep them owner-only; on shared machines prefer env vars. The
   password and the cookie/token value are never printed.
+
+On Windows, token permissions inherit the directory ACLs; POSIX modes are advisory. Protect the containing directory. For unattended use, select a trusted explicit --config path.

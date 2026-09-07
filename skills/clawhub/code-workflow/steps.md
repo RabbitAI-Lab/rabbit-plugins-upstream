@@ -2,20 +2,17 @@
 
 The core 4-stage procedure (Steps 0-3). Step 4 (Implement) is in [implement.md](./implement.md).
 
-> **`output-dir`**: All research/plan files are written to the configured `output-dir` (default: `docs/generated/`). Examples below use `{output-dir}` as placeholder.
+> **`output-dir`**: All research/plan files are written to the configured `output-dir` (resolved via `WSCFG_ARTIFACTS_PATH`, default: `.agents/docs/generated`; authoritative domain knowledge may be promoted to LLM Wiki via `raw-ingest`). Examples below use `{output-dir}` as placeholder.
 
-## Step 0: Resume Check (Always First)
-
-**Must be executed first when entering code-workflow (whether new or re-entry):**
-
-1. Check if **research/plan files** already exist in `{output-dir}` for the target task
+0. **Task Checklist Registration (Tool Call #1 MANDATORY HARD STOP)**: The very first tool call upon entering `/code-workflow` MUST be creating or updating `task.md` (or `TodoWrite`) with the 4 workflow steps (Research, Plan, Review, Implement). No research commands (`run_command`), file viewing (`view_file`), or search (`grep_search`) are allowed before `task.md` is initialized.
+1. Check if **research/plan files** already exist in `{output-dir}` for the target task. **If the project-local `{output-dir}` has nothing for the task, also check the workspace-root Ralph directory** (e.g. `<workspace-root>/.ralph/docs/generated/`, one level above any individual project repo) before concluding no governing plan exists — cross-cutting or organization-level plans (e.g. a release-branch-strategy decision spanning multiple repos) are often written there instead of inside a single project's `docs/generated/`
 2. **Read** the corresponding file to understand the current progress
 3. If the plan has a Phase order, check **up to which Phase has been completed currently**
 4. If there is an incomplete Phase, **proceed from that Phase** — do not skip to subsequent Phases (merge, deploy, etc.)
 
-4.5. **Resume RAG re-dispatch (optional, abstract contract)**: When the caller supplied a `--rag=<skill>:<topic>` flag (see "Research/plan artifact dispatch" below), re-invoke the receiver on every existing `research-*.md` / `plan-*.md` found in Step 0 (item 1). This refreshes any indexed content that may have drifted out of sync with the file. Idempotency is the receiver's responsibility.
+4.5. **Resume RAG re-dispatch (optional, abstract contract)**: When an explicit `--rag=<skill>:<topic>` receiver is supplied, dispatch to that receiver first. Otherwise, when the workspace config resolves a RAG receiver (see "Research/plan artifact dispatch" below), re-invoke the receiver on every existing `research-*.md` / `plan-*.md` found in Step 0 (item 1). This refreshes any indexed content that may have drifted out of sync with the file. Idempotency is the receiver's responsibility.
 
-   When no `--rag` flag is supplied — or no compatible receiver is available in the caller's environment — skip this step. Research/plan files in `{output-dir}` remain the primary deliverable; recall is via direct `Read` / `Grep`.
+   When no override is provided and the config resolves no receiver (`kind: none`) — or the resolved receiver is unreachable — skip this step quietly. Research/plan files in `{output-dir}` remain the primary deliverable; recall is via direct `Read` / `Grep`.
 
    Failure policy: receiver unreachable → warning + Step 0 continues. The file artifact preservation is primary.
 
@@ -60,6 +57,19 @@ The core 4-stage procedure (Steps 0-3). Step 4 (Implement) is in [implement.md](
 
 **Prohibited**: Deciding the next action by only looking at task checklist items without reading the research/plan files. A task list is a summary; the plan file contains detailed sequences and constraints.
 
+## Milestone Checklist Sync Discipline (HARD STOP)
+ 
+When executing multi-phase workflows (`/code-workflow`, `/fix-plan add --deep`), 3 checklist surfaces exist:
+1. `task.md` (active in-session real-time tracker in `brain/<conversation-id>/task.md`): Used by IDE/CLI to show real-time progress steps.
+2. `plan-*.md` (the permanent plan artifact's Layered Roadmap / Progress Checklist): Section 3 of the plan document.
+3. `fix_plan.md` / `checklist.md` (the workspace global backlog under `.agents/fix_plan.md`): Global task tracker.
+ 
+**Compromise Rule (Milestone-Boundary Sync)**:
+- **Micro-steps**: Sub-step execution (tool calls, individual file edits) is tracked solely in `task.md` to prevent tool call churn and token budget waste.
+- **Phase & Milestone Boundaries**: At major boundaries (Phase 2 Plan authoring complete, Phase 3 User Review approved, Phase 4 TDD implementation complete, Phase 5 verification complete), the agent MUST synchronize the progress across `plan-*.md` (marking completed phases/items as `[x]`) and `fix_plan.md` (updating task status and audit/completion metadata).
+- **Phase-Completion Mandatory Commit Gate (HARD STOP)**: At the completion of each implementation Phase (e.g. Phase 1-B) or independent logical unit, the agent MUST review modified files, analyze commit split discipline via `commit-tidy`, and execute the Pre-Commit Verification Ask (`AskUserQuestion`) to secure user approval and commit changes before moving to the next Phase or suggesting `/next`.
+- **Session Wrap-up (`/cleanup`)**: Final reconciliation ensures all 3 surfaces are 100% consistent.
+ 
 **Examples**:
 - Even if `[ ] PR #278 merge` is in the task list, if the plan states "Phase 1 Unit Test → Phase 2 Proxy Test → ... → PR merge", start from Phase 1
 - Simple items with no plan file can be proceeded immediately
@@ -71,6 +81,10 @@ The core 4-stage procedure (Steps 0-3). Step 4 (Implement) is in [implement.md](
 Read and understand the relevant code **deeply**, then write findings to `{output-dir}/research-<issue-number>-<task-slug>.md`.
 
 - **Naming Rule**: Always include the GitHub issue number (e.g., `research-176-login-lock.md`). If no issue exists, use `research-<task-slug>.md`.
+- **Mandatory Corpus & RAG Pre-Lookup (HARD STOP)**: Before writing the research document, check existing project knowledge stores and memory backends (LLM Wiki, Qdrant vector memory, Serena RAG, KI summaries) to prevent duplicate analysis and ground findings in established patterns.
+  - **Grounded command (optional, abstract contract — same shape as "Research artifact dispatch" below)**: when the caller supplies `--pre-lookup=<skill>:<topic>`, invoke that skill's topic with the task subject before writing, and embed its output as a `## Prior Knowledge & Context` section at the top of `research-*.md` — the embedded section is the auditable evidence that the pre-lookup actually ran. This generic skill does not name a vendor; the caller wires `<skill>:<topic>` to whichever project skill owns pre-lookup (e.g., a backlog-lifecycle skill's own pre-lookup topic).
+  - When no `--pre-lookup` flag is supplied — or the specified receiver is unavailable in the caller's environment — the mandate still applies via direct store queries (RAG semantic find / wiki `index.md` read); fail-non-blocking (warning + continue), same policy as "Research artifact dispatch" below.
+  - **Available-skills domain scan**: also grep the current session's available-skills list for the task's domain keywords (e.g., a task touching hook registration/monitoring should check for skills whose description mentions "trigger", "hook auto-register", etc.), not just recalled-from-memory candidates — a skill that already manages this domain may exist under a name that doesn't obviously match the task.
 - Do not skim a file and move on at the signature level
 - Understand existing layers, ORM relationships, and duplicate API presence
 - **Mandatory exploration of existing test files**: Find related `*.test.*`, `*.spec.*` files and understand what cases are already covered
@@ -79,18 +93,19 @@ Read and understand the relevant code **deeply**, then write findings to `{outpu
 
 ### Research artifact dispatch (optional, abstract contract)
 
-The `research-*.md` file is the **primary deliverable**. After every Write/Edit, the caller may optionally dispatch the artifact to a registered receiver (any RAG index, semantic store, memory service, doc cache, etc.) for cross-session discoverability — but this generic skill does not name a vendor.
+The `research-*.md` file is the **primary deliverable**. After every Write/Edit, the caller may optionally dispatch the artifact to a registered receiver (any RAG index, semantic store, memory service, doc cache, etc.) for cross-session discoverability.
 
-#### Flag
-
+#### Receiver resolution
+ 
 ```text
-/code-workflow ... --rag=<skill>:<topic>
+bash <hook-kit-skill>/resources/workspace-config.sh --json   # read .roles.rag fields
 ```
 
-- `<skill>` — name of a registered skill that owns a research-dispatch topic
-- `<topic>` — topic within that skill responsible for accepting the artifact
-- When the flag is omitted, the file write is the only deliverable. No vendor is assumed
-- When the flag is supplied, dispatch fires **after every Write/Edit** completion (not at Step 1 end). Receiver handles idempotency
+- Explicit `--rag=<skill>:<topic>` override always takes precedence when provided
+- When no override is given:
+  - `roles.rag.kind` unset / `"none"` / resolver unavailable — the file write is the only deliverable. No vendor is assumed, and nothing warns or blocks
+  - `roles.rag.kind` set — dispatch fires **after each Write/Edit** completion, using `roles.rag.endpoint` plus the matching `roles.rag.collections.*`. Receiver handles idempotency
+- `--rag=<skill>:<topic>` stays available as an explicit per-call override. It is never required, and its absence is never an error
 
 #### Contract for receivers (vendor skills implement this)
 
@@ -105,15 +120,15 @@ Receivers consult vendor-side documentation for accepted metadata keys, chunking
 
 #### Skip conditions
 
-- No `--rag` flag supplied by caller
-- Caller-specified `<skill>:<topic>` not available in the current environment — fail-non-blocking: warning + Step 1 continues
+- The workspace config resolves no receiver (`kind: none`)
+- The resolved receiver is unreachable in the current environment — fail-non-blocking: warning + Step 1 continues
 - File content unchanged (receiver decides via its own idempotency)
 
 | # | Don't | Do |
 |---|-------|-----|
-| 1 | Hardcode a specific RAG vendor (URL, skill name, MCP tool name) in this generic skill | Use `--rag=<skill>:<topic>` flag at the call site; vendor skill implements the receiver protocol |
+| 1 | Hardcode a specific RAG vendor (URL, skill name, MCP tool name) in this generic skill | Resolve the receiver from the workspace config; the vendor skill implements the receiver protocol |
 | 2 | Block Step 1 on dispatch failure | Warning + continue. Artifact preservation is primary |
-| 3 | Defer dispatch to Step 1 completion when the flag is supplied | When `--rag` is set, dispatch after every Write/Edit. Receiver's idempotency keeps it cheap |
+| 3 | Defer dispatch to Step 1 completion when a receiver is configured | When a receiver resolves, dispatch after every Write/Edit. Receiver's idempotency keeps it cheap |
 | 4 | Enumerate compatible receivers inside this skill | Caller knows which receivers are available; this skill declares only the abstract surface |
 
 **Why abstract**: research recall paths vary by environment (different RAG vendors, context7 cache, project memory, etc.). Hardcoding a vendor in this generic skill couples it to one stack. The flag keeps coupling at the call site — the caller specifies the receiver vendor at invocation time, and the receiver skill implements the actual storage / index protocol.
@@ -169,6 +184,8 @@ chain: []                  # optional: issue dependency chain (see github-flow/d
 
 The plan body starts after the frontmatter with `# Plan: [Title]` heading. The heading title should match the frontmatter `title` field.
 
+**Backlog & Workspace Registration (MANDATORY HARD STOP)**: Upon writing or updating any `plan-*.md` file in `{output-dir}`, **registering the plan entry in the active workspace's backlog (`fix_plan.md`) is MANDATORY**. Never leave a newly created plan un-indexed in the backlog. If the plan represents curated domain knowledge intended for team sharing, ask the user via `AskUserQuestion` whether it should be ingested to LLM Wiki via the `raw-ingest` skill (never write directly to `llm-wiki/outputs/` or index un-curated notes into `index.md`). **If the plan was promoted from a Plan Draft, the entry MUST be moved from `## Plan Drafts` to `## Fable Target Tasks` (with `audit_status: pending_opus_fable_audit` / `[BLOCKED:P*:selfable]`) for Fable/Opus+ model deep audit before implementation.** Leaving `[PROMOTED]` items in `## Plan Drafts` is strictly prohibited.
+
 **Mandatory sections** (Plan is incomplete if any are missing):
 1. **Approach** — Detailed explanation of the chosen approach
 2. **Code snippets** — Code showing actual changes
@@ -218,23 +235,23 @@ The plan body starts after the frontmatter with `# Plan: [Title]` heading. The h
 
 ### Plan artifact dispatch (optional, abstract contract)
 
-The `plan-*.md` file is the **primary deliverable**. Same abstract contract as research dispatch above — caller supplies `--rag=<skill>:<topic>` flag, this skill stays vendor-agnostic. Receiver consumes via `CODEWORKFLOW_RAG_FILE` / `CODEWORKFLOW_RAG_METADATA_JSON` env vars or `CODEWORKFLOW_RAG_INPUT_JSON` file mode.
+The `plan-*.md` file is the **primary deliverable**. Same abstract contract as research dispatch above — the receiver is resolved from the workspace config, so this skill stays vendor-agnostic. Receiver consumes via `CODEWORKFLOW_RAG_FILE` / `CODEWORKFLOW_RAG_METADATA_JSON` env vars or `CODEWORKFLOW_RAG_INPUT_JSON` file mode.
 
 **Order relative to "Plan post-write ask"**: **ask first → dispatch**.
 
 1. Plan Write/Edit complete (initial `plan-*.md` write OR revision update)
 2. Run Plan post-write ask (below) — resolve undecided items
 3. After ask answers received, apply decisions → Edit `plan-*.md`
-4. If `--rag` flag is supplied, dispatch the post-ask plan version to the receiver
+4. If the config resolves a receiver, dispatch the post-ask plan version to it
 5. (If subsequent Edits occur, repeat from step 2 — receiver handles idempotency)
 
 Rationale: ask-driven Edits typically resolve the largest unresolved decisions. Dispatching after ask captures the "settled" plan rather than an in-flight state.
 
 | # | Don't | Do |
 |---|-------|-----|
-| 1 | Skip dispatch for in-flight plan revisions (only dispatch "final") | When `--rag` is supplied, every Write/Edit dispatches. Receiver's idempotency handles unchanged sections |
+| 1 | Dispatch in-flight plan drafts before the user post-write ask | Dispatch after the ask decisions are applied (and on subsequent post-ask Edits). Receiver's idempotency handles unchanged sections |
 | 2 | Block the ask on dispatch success | Dispatch happens after ask. ask is the synchronous user-blocking step; dispatch is async-safe |
-| 3 | Pick a default vendor when `--rag` is omitted | Omitted flag = file write only. No vendor is assumed |
+| 3 | Pick a default vendor when the config resolves none | `kind: none` = file write only. No vendor is assumed |
 
 ### Plan post-write ask (HARD STOP — required immediately after writing/updating the plan file)
 
@@ -272,6 +289,9 @@ After writing or updating `plan-*.md`, **AI must actively scan the plan for unde
 | 4 | Single question with 5+ mixed-axis options | Split into multiple questions (max 4) using `questions` array. Each question = one decision axis |
 | 5 | Ask "Plan OK? proceed?" without enumerating undecided items | Enumerate each undecided item as its own question option |
 | 6 | Use "save plan as file vs print in chat" as one of the options | Forbidden by the always-on rule "target-unspecified document artifacts = file save default". Medium is decided by default rule |
+| 7 | Call this skill's `steps` topic **and** `vibe-coding`'s `plan-guard` on the same plan edit because both PostToolUse triggers fired | The two triggers are redundant on this axis — both demand the same undecided-item scan. **Satisfying either satisfies the axis**; invoking both doubles the skill load per document edit for no extra check. Honour one and state which |
+
+**Redundant-trigger note**: editing a `plan-*.md` / `research-*.md` fires two PostToolUse skill-triggers at once — `code-workflow` (pointing here) and `vibe-coding` (pointing at `plan-guard`). Their undecided-item obligations overlap almost entirely: scan the plan body for unresolved markers, convert each into an `AskUserQuestion` axis, write the answers back. Treat them as one obligation with two entry points. Consolidating the triggers themselves is separate work; until then, honouring one and naming it is correct behaviour, not a skipped step.
 
 #### Self-check (every time after writing/updating plan file)
 
@@ -328,6 +348,8 @@ grep -l '^- \[ \]' {output-dir}/plan-*.md
 ```
 
 ## Step 3: User Review & Branch Creation
+
+**Mandatory User Review Gate (HARD STOP)**: Skipping Step 3 User Review or immediately proceeding to implementation/completion without obtaining explicit user review and approval via `AskUserQuestion` is STRICTLY FORBIDDEN. After Research → Plan (Step 2), the agent MUST always pause and present the plan summary, trade-offs, and open questions, and obtain explicit user disposition (`AskUserQuestion`) before modifying target code or marking the workflow complete.
 
 1. **Report BLOCKED or Open Questions**: If there are any ambiguities, report them and wait for user feedback.
 2. **Obtain Approval — via a structured entry ask, not a prose wait (HARD STOP)**: Once ALL plan decision axes are resolved (post-write ask answered + reflected), collect the approval decision with an **AskUserQuestion at turn wrap-up** whose options are next-actions (e.g., "Start implementation (Phase 1)", "Hold — plan stays at status: review", other pending candidates). Ending the turn with prose like "implementation starts on your approval" / "awaiting your go-ahead" and no ask forces the user to type a free-form prompt to proceed — that is a wrap-up violation, not a sanctioned wait state. The "Plan ask scope" rule (trade-offs/open-decisions only) forbids **plan-body-review** options ("Plan review", "annotation cycle"), NOT the implementation-entry next-action ask.

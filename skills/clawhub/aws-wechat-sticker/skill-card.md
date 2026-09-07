@@ -1,46 +1,58 @@
-## Description: <br>
-Plans WeChat sticker, nine-grid, and multi-image posts, guiding an agent from topic and visual sequence design through AI image generation and optional WeChat publishing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps WeChat Official Account operators plan, generate, review, package, and optionally publish sticker-style or multi-image posts, including nine-grid layouts.
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-External WeChat operators, self-media teams, and IP account owners use this skill to create image-first public-account posts with a consistent theme, ordered image plan, review checklist, and optional publish path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow requires sensitive image-model and WeChat credentials. <br>
-Mitigation: Protect aws.env, install only when the aiworkskills WeChat publishing suite is intended, and verify companion image and publish skills before using credentials. <br>
-Risk: Image prompts and generated image files may be sent to external image-model and WeChat APIs. <br>
-Mitigation: Review generated images, draft settings, and upload targets before allowing any upload or WeChat publication. <br>
-Risk: Publishing can affect a live WeChat account when the publish path is used. <br>
-Mitigation: Require explicit user confirmation before uploading materials or publishing drafts to WeChat. <br>
+## Use Case:
 
+External WeChat Official Account operators, self-media teams, and IP account maintainers use this skill to turn a topic or source material into a consistent set of image-led posts with captions, prompts, generated images, review checks, and optional WeChat publication.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/aiworkskills/aws-wechat-sticker) <br>
-- [Publisher profile](https://clawhub.ai/user/aiworkskills) <br>
-- [贴图图序规划](references/workflow.md) <br>
-- [贴图审稿清单](references/checklist.md) <br>
-- [AIWorkSkills homepage](https://aiworkskills.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated workflow files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces image outlines, prompt files, generated image assets, and review or publish guidance for a single WeChat post workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.23 (source: server release evidence) <br>
+Risk: The workflow can send image prompts to an external image model API and upload generated image files to WeChat when publication is used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated plan, prompts, and images before publication, and only run the publishing path when the intended WeChat account and content are confirmed.
+
+Risk: The workflow requires image-model and WeChat app credentials.
+
+Mitigation: Keep aws.env limited to the required API keys and WeChat application credentials, and scope those credentials to the accounts needed for this workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-sticker)
+- [Publisher profile](https://clawhub.ai/user/aiworkskills)
+- [Declared project homepage](https://aiworkskills.cn)
+- [Declared source repository](https://github.com/aiworkskills/wechat-article-skills)
+- [Sticker workflow reference](references/workflow.md)
+- [Sticker review checklist](references/checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples, configuration checks, generated prompt files, image files, and review checklists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update imgs/ assets, imgs/outline.md, prompt markdown files, and article status metadata during the workflow.]
+
+## Skill Version(s):
+
+1.0.24 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

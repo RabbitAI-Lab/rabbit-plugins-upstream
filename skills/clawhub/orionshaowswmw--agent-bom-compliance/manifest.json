@@ -1,0 +1,51 @@
+{
+  "skill": "agent-bom-compliance",
+  "version": "2.0.1",
+  "schema": "agent_bom.manifest.v1",
+  "runtime": "python3 (>=3.8, stdlib only) — no pip installs, no network",
+  "entrypoints": {
+    "doctor": "scripts/bomscan.py doctor",
+    "sbom": "scripts/bomscan.py sbom DIR [-o OUT.json] [--name N --version V]",
+    "scan": "scripts/bomscan.py scan DIR [--fail-severity INFO|LOW|MEDIUM|HIGH|CRITICAL]",
+    "report": "scripts/bomscan.py report DIR [-o OUT.json] [--fail-severity SEV]",
+    "trend": "scripts/bomscan.py trend DIR",
+    "audit": "scripts/bomscan.py audit DIR [--verify]",
+    "selftest": "bash scripts/selftest.sh"
+  },
+  "contracts": ["agent_bom.doctor.v1", "agent_bom.sbom.v1", "agent_bom.scan.v1",
+                "agent_bom.report.v1", "agent_bom.trend.v1", "agent_bom.audit.v1"],
+  "exit_codes": {
+    "0": "ok / policy pass (or WARN — no findings at/above fail-severity)",
+    "1": "trend REGRESSED (trend subcommand only)",
+    "2": "usage error (bad flags; ruleset registry self-check trip)",
+    "3": "target/environment error (DIR missing etc.)",
+    "4": "policy FAIL: verdict FAIL at --fail-severity, or audit chain broken"
+  },
+  "ruleset": {
+    "version": "2.0.0",
+    "rules": ["SEC-01 committed-secret patterns (ZERO-character redaction: [REDACTED len=N sha256:TAG])",
+              "DEP-01 unpinned dependencies: npm exact-x.y.z only; pip without ==; pyproject (PEP-621 arrays + Poetry tables) via the SBOM parser",
+              "NET-01 egress drift: http[s]/ftp[s]/sftp/ssh/git/ws/wss URLs + IP literals vs SKILL.md metadata.network.outbound; boundary-safe host match (u==h or u.endswith('.'+h)); 'outbound:[*]' collapses to none-declared",
+              "MODEL-01 un-provenanced model artifacts (.gguf/.safetensors/.bin/.pt/...)",
+              "LIC-01 LICENSE/licence/COPYING file presence",
+              "GO-01 go.mod replace/retract directives (local-path fork risk, LOW)"],
+    "control_registry": ["OWASP-LLM-2025:LLM01, LLM02, LLM03, LLM06",
+                          "OWASP-AGENTIC:AG04, AG07",
+                          "NIST-SSDF:PW.4, PS.3 (SP 800-218)",
+                          "CISA-MIN-ELEMENTS"],
+    "anti_hallucination": "engine hard-fails (rc2) if any emitted control ref is absent from the static CONTROL_REGISTRY; selftest asserts every finding ref resolves"
+  },
+  "policy": {
+    "network": false,
+    "telemetry": false,
+    "secret_redaction": "zero characters of a matched value leave the engine; findings carry kind/length/sha256-tag only",
+    "audit": "hash-chained JSONL (O_NOFOLLOW, fchmod 0600 at create, seq per record), ${AGENT_BOM_AUDIT:-DIR/.agent_bom_audit.jsonl}; keyless-chain limits documented",
+    "sbom_spec": "CycloneDX 1.5 JSON (ECMA-424); bom-refs deduped/unique; satisfies NTIA/CISA minimum SBOM elements for the manifest ecosystems parsed"
+  },
+  "supported_manifests": ["package.json", "package-lock.json", "requirements.txt",
+                          "pyproject.toml", "go.mod"],
+  "docs": {"operations": "docs/operations.md", "evidence": "docs/evidence.md",
+           "integration": "docs/integration.md", "history": "CHANGELOG.md"},
+  "honest_scope": "verifiable-compliance SIGNAL generator. Not a SOC2/ISO27001/CMMC certification engine; those require accredited auditors. Cited OWASP LLM refs are the 2025 edition (stable numbering).",
+  "evidence_verified_utc": "2026-09-06"
+}

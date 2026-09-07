@@ -1,44 +1,68 @@
-## Description: <br>
-Tencent News helps agents retrieve and present 24/7 news, rankings, briefings, real-time updates, domain news, and weather information from Tencent News. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent News integrated information service for news, fact-checking, weather and weather alerts, and Gaokao admission-data queries and application planning.
 
-## Publisher: <br>
-[tencentnewsteam](https://clawhub.ai/user/tencentnewsteam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tencentnewsteam](https://clawhub.ai/user/tencentnewsteam)
 
-## Use Case: <br>
-External users and agents use this skill to search Tencent News content, check hot topics, retrieve morning or evening briefings, follow domain-specific news, and query weather-related information. It is intended for environments where the Tencent News CLI is installed and a Tencent News API key is configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation and fallback update paths can run hosted scripts that execute with the user's privileges. <br>
-Mitigation: Only install from the TencentNews publisher if trusted; download and inspect the installer first, and verify a publisher-provided checksum or signature when available. <br>
-Risk: The skill requires managing a Tencent News API key on the local machine. <br>
-Mitigation: Use the provided API key commands for setup and clearing, avoid sharing the key in prompts or logs, and remove it when it is no longer needed. <br>
+## Use Case:
 
+External users and agents use this skill to query Tencent News services for current news, fact-checking, China weather and weather alerts, and ordinary Gaokao admission data or application-planning guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tencentnewsteam/tencent-news) <br>
-- [API Key Configuration Guide](references/env-setup-guide.md) <br>
-- [Manual Installation Guide](references/installation-guide.md) <br>
-- [Manual Update Guide](references/update-guide.md) <br>
-- [Tencent News API Key Page](https://news.qq.com/exchange?scene=appkey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown news summaries with links and inline shell commands for setup or troubleshooting] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require a configured Tencent News API key and local Tencent News CLI before news retrieval succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter and server release evidence) <br>
+Risk: Install and update instructions include commands that execute remote scripts from a Tencent CDN.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Download and inspect the installer first, verify it through trusted Tencent News channels, and run it only in an environment where executing that code is acceptable.
+
+Risk: The skill depends on a local Tencent News CLI and API key, so credentials may be exposed if users paste real keys into chats or logs.
+
+Mitigation: Keep API key entry local, use placeholders in agent conversations, and avoid echoing or storing real keys in prompts, reports, or diagnostic output.
+
+Risk: CLI diagnostics and wrapper scripts inspect local installation state and execute the resolved Tencent News CLI.
+
+Mitigation: Review the resolved CLI path and wrapper behavior before deployment, and run the skill with least-privilege local account permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tencentnewsteam/skills/tencent-news)
+- [Publisher profile](https://clawhub.ai/user/tencentnewsteam)
+- [Fact-checking guide](references/factcheck.md)
+- [Weather query guide](references/weather.md)
+- [Weather alert guide](references/weather-alert.md)
+- [Gaokao volunteer planning guide](references/gaokao-volunteer.md)
+- [Gaokao HTML interaction reference](references/gaokao-html-interaction-reference.html)
+- [Installation guide](references/installation-guide.md)
+- [Update guide](references/update-guide.md)
+- [API key setup guide](references/env-setup-guide.md)
+- [Tencent News API key page](https://news.qq.com/exchange?scene=appkey)
+- [Tencent JiaoZhen AI fact-checking page](https://view.inews.qq.com/ai/agent/UTR2025041800262600?no-redirect=1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and occasional HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on Tencent News CLI responses and local API key configuration.]
+
+## Skill Version(s):
+
+1.2.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

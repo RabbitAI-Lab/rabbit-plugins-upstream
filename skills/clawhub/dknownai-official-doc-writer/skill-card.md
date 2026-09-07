@@ -1,49 +1,69 @@
-## Description: <br>
-深知写作助手 helps agents draft, revise, review, and generate Word-formatted Chinese official documents and formal workplace materials, using DKnowC outline and search services when policy, data, or case support is needed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+深知公文写作 helps office, administrative, secretarial, and enterprise users draft, revise, review, and deliver formal Chinese workplace documents, with optional trusted search for traceable policy, data, standards, and case references.
 
-## Publisher: <br>
-[dknownai](https://clawhub.ai/user/dknownai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dknownai](https://clawhub.ai/user/dknownai)
 
-## Use Case: <br>
-External users, employees, and document-drafting agents use this skill to prepare Chinese government-style and enterprise formal documents, including notices, reports, requests, replies, meeting minutes, speeches, plans, summaries, and management measures. It can route tasks through drafting, review, DKnowC search, source-note generation, and Word or red-head Word delivery depending on the request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send drafting and search content to DKnowC cloud services. <br>
-Mitigation: Use it only for content your organization permits for third-party cloud processing; avoid confidential, classified, personnel, legal, or unreleased internal material unless authorized. <br>
-Risk: The skill can register a third-party account and persist an API key in local config.ini. <br>
-Mitigation: Run registration only after explicit user consent, keep config.ini out of shared or packaged artifacts, and remove or protect it when the key should no longer be available. <br>
-Risk: Generated official documents may include policy, data, or case claims that require review before use. <br>
-Mitigation: Review generated documents and source-note HTML before delivery, and verify high-risk factual claims against approved sources. <br>
+## Use Case:
 
+Employees and external users in office, administrative, secretarial, materials, government, and enterprise roles use this skill to turn notes, meeting records, source materials, research, and rough drafts into structured formal Chinese documents. It supports common official-document and workplace-writing tasks such as notices, requests, reports, letters, replies, approvals, meeting minutes, summaries, plans, speeches, research reports, Word delivery, and optional red-head document formatting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dknownai/skills/dknownai-official-doc-writer) <br>
-- [README.md](artifact/README.md) <br>
-- [Task router](artifact/reference/task_router.md) <br>
-- [Search policy](artifact/reference/search_policy.md) <br>
-- [Material usage guidance](artifact/reference/material_usage_guidance.md) <br>
-- [Output guide](artifact/reference/output_guide.md) <br>
-- [Review checklist](artifact/reference/review_checklist.md) <br>
-- [DKnowC dependable search endpoint](https://open.dknowc.cn/dependable/search/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses, shell commands, configuration updates, .docx files, and optional HTML source-note files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local Word documents, red-head Word documents, source-note HTML, search result JSON, and local config.ini when the user consents to DKnowC API-key setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.1 (source: server release evidence, artifact _meta.json, README.md, and CHANGE_log.md released 2026-07-24) <br>
+Risk: The skill may ask users for a phone number and one-time code when trusted search is needed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the search setup flow only when the task requires policy, data, standard, or case retrieval, and make sure users are comfortable sharing those verification details with the provider.
+
+Risk: The skill can provision an account/API key and save the key in ~/.zshrc.
+
+Mitigation: Review the provider relationship before installation, avoid exposing the full key in conversation, and remove the saved key if the service is no longer used.
+
+Risk: Sensitive internal material could be placed into trusted-search queries.
+
+Mitigation: Avoid sending confidential or regulated material to search unless provider handling is acceptable for the user's organization.
+
+Risk: Generated documents may be copied automatically to a detected workspace.
+
+Mitigation: Confirm the destination workspace is appropriate before treating delivered Word or HTML files as final outputs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dknownai/skills/dknownai-official-doc-writer)
+- [README](README.md)
+- [Task Router](reference/task_router.md)
+- [Search Policy](reference/search_policy.md)
+- [Output Guide](reference/output_guide.md)
+- [Review Checklist](reference/review_checklist.md)
+- [Writing Standards Index](reference/standards/00_index.md)
+- [dknowc Service](https://open.dknowc.cn/)
+- [dknowc Platform](https://platform.dknowc.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or text drafts rendered to Word .docx files, with optional HTML source-verification reports and shell commands for initialization, search, formatting, review, and delivery.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can generate ordinary Word documents, red-head Word documents when explicitly requested, and separate HTML verification reports after trusted search; PDF export is not generated by the skill.]
+
+## Skill Version(s):
+
+3.5.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

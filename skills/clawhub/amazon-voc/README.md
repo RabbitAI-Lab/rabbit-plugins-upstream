@@ -1,102 +1,64 @@
-# Amazon-VOC —VOC洞察 亚马逊 Amazon
+# Amazon-VOC
 
-Official ARI (Amazon Review Intelligence) Skill for collecting and analyzing Amazon
-reviews into actionable Voice-of-Customer insights: pain points, purchase drivers, user
-personas, use cases, competitor gaps, and Listing optimization ideas.
+亚马逊买家之声：评论采集 + VOC 洞察报告
 
-> ARI 官方 Amazon 评论采集与消费者洞察 Skill。用中文直接描述需求即可，无需理解 API
-> 或编写代码；所有付费操作都会先报价，只有你明确确认后才会扣除积点。
+## 一句话开始
 
----
+安装授权后，把下面这句话发到 AI 客户端对话框，替换示例 ASIN 即可：
 
-## What it does / 能做什么
+~~~text
+分析评论，简要说明主要问题和趋势。商品 B0XXXXXXXX（美国站）。
+~~~
 
-- 订阅 ASIN、采集评论，查看星级 / 关键词 / 趋势等免费图表数据。
-- 生成 **VOC**、**深度洞察**、**趋势**、**变体**、**竞品对比** 等 AI 分析报告。
-- 输出痛点、购买动因、用户画像、使用场景、改进机会与 Listing 建议。
+示例 ASIN 是占位符。AI 会识别商品、站点和目标，无需填写接口参数。
+客户端未选中时，在问题前加“使用 $amazon-voc”。
+缺少必要资料或目标不唯一时，AI 会说明需要补充什么；专用 Skill 只处理本页对应场景。
 
-Works in any Skill-capable AI client (e.g. Claude). Just ask in natural language:
+## 第一次使用：安装并授权
 
-```text
-使用 amazon-review-intelligence-extractor 分析 ASIN B0XXXXXXXX，站点 amz_us，
-先告诉我需要多少积点，不要直接扣点。
-```
+1. 通过市场安装本 Skill，或使用 ARI 用户中心的安装指令交给 AI 客户端安装。
+2. 对 AI 说：“帮我完成 ARI 授权并检查是否可用。”
+3. 打开 AI 返回的链接，自己登录或注册并授权；无需在聊天中粘贴 API Key。
+4. AI 确认连接、余额和扣点规则后，直接发送你的问题。
 
-## Requirements / 前置条件
+需要支持 Skill 和本地 Python 3 的 AI 客户端。安装检查不采集评论、不生成付费报告、不开启监控。
 
-- **Python 3** (standard library only — no third-party packages).
-- An **ARI API key** starting with `ari_live_`.
-  Get one at <https://ari.funewa.com/zh/account?ui=d47626f#api-keys> (verify your email
-  first). Top up credits at <https://ari.funewa.com/zh/billing>.
+## 会得到什么
 
-## Install / 安装
+- 先回答你提出的问题，附样本范围和评论依据；你说“简短”时先给摘要。
+- 评论分析可提炼痛点、购买动机、场景和改进建议，支持竞品对比及趋势分析。
+- 生成报告后附在线查看链接；已采集评论可导出 CSV，报告可导出 Markdown / HTML，受套餐权益限制。
+- 样本或时间跨度不足时会说明无法判断趋势，不把缺失数据补成结论。
 
-1. Copy this folder into your client's skills directory (e.g. a `skills/` dir), keeping
-   the folder name `amazon-review-intelligence-extractor`.
-2. Configure your API key (stored only under your local user profile):
+## 费用与数据范围
 
-   ```powershell
-   python scripts/ari.py configure
-   ```
+采集和 AI 分析消耗积点。VOC 等支持免确认的流程命中账户规则时可能直接执行并扣点；
+其余情况先报价、等你同意。免确认不是免费，具体规则与余额可让 AI 查询。
 
-3. Verify account + credit balance:
+可以直接说“以后每次扣点前先问我”，或“只报价，不执行”。
+持续监控需要单独确认周期和后续采集成本。非美国站采集不能使用赠送积点。
 
-   ```powershell
-   python scripts/ari.py check
-   ```
+分析与导出基于 ARI 已采集的数据，不保证覆盖 Amazon 上全部评论或全部变体。
+免费读取已有评论、图表和历史报告不扣分析积点。
+执行中断时先查询已有任务或报告，避免重复生成和扣点。
 
-The key is read from `ARI_API_KEY` or `~/.ari/config.json` at runtime — it is **never**
-committed to this repository. 请勿把 Key 发给他人或放进公开文档。
+## 高级：手动安装、授权与命令
 
-## CLI commands / 命令
+找到解压后同时包含 SKILL.md 和 scripts/ari.py 的目录，以 SKILL.md 顶部的 name
+作为安装目录名。当前包的 name 是 amazon-voc，WorkBuddy 用户级目录为
+~/.workbuddy/skills/amazon-voc/。版本压缩包的外层目录名不是固定 Skill 名。
+更新已有同名安装时保留本地配置。
 
-| Command | API | Consumes credits? |
-|---|---|---|
-| `configure` | save key locally | No |
-| `check` | user + balance | No |
-| `products` | list subscribed ASINs | No |
-| `collect` | submit a collection task | **Yes — requires `--confirm`** |
-| `status` | collection task status | No |
-| `reviews` | read collected reviews | No |
-| `charts` | stars / trend / keywords / flow | No |
-| `quote` | analysis price quote | No |
-| `analyze` | voc / insight / trend / variant / compare | **Yes — requires `--confirm`** |
-| `deepdive` | product + charts + reviews + reports + VOC quote | No by default; `--confirm` to analyze |
-| `reports` / `report` | list / read archived reports | No |
+在安装目录执行：
 
-Run `python scripts/ari.py <command> --help` for full arguments.
-Default site is `amz_us`; also supports `amz_uk / amz_de / amz_jp / amz_ca / amz_fr /
-amz_es / amz_it`.
+~~~bash
+python scripts/ari.py setup
+python scripts/ari.py check
+~~~
 
-### Typical flow / 标准流程
+日常使用只需自然语言。完整命令、计费规则和故障处理见
+[使用说明](使用说明.md)；集成参数见 [API 参考](references/reference.md)。
 
-```powershell
-python scripts/ari.py products
-python scripts/ari.py collect --asin B0XXXXXXXX --site amz_us --pages 3            # quote only
-python scripts/ari.py collect --asin B0XXXXXXXX --site amz_us --pages 3 --confirm --wait
-python scripts/ari.py deepdive --asin B0XXXXXXXX --site amz_us                     # preview + quote
-python scripts/ari.py deepdive --asin B0XXXXXXXX --site amz_us --confirm           # generate VOC
-```
-
-## Billing safety / 扣费保护
-
-采集和 AI 分析都会消耗积点。付费命令（`collect`、`analyze`、付费 `deepdive`）**必须**
-显式追加 `--confirm` 才会真正执行 —— 不带 `--confirm` 时只返回报价。请在明确告知并得到
-用户确认后再扣点，禁止替用户默认确认。
-
-## Repository layout / 目录结构
-
-```
-SKILL.md              # Skill manifest + operating instructions (skill 指令)
-使用说明.md            # End-user guide in Chinese (中文使用指南)
-scripts/ari.py        # Standard-library CLI (采集与分析命令行)
-references/reference.md# CLI & API reference (命令 / 字段 / 错误码)
-agents/openai.yaml    # Agent interface metadata
-```
-
-## Links / 常用入口
-
-- API Key: <https://ari.funewa.com/zh/account?ui=d47626f#api-keys>
-- Billing / 充值套餐: <https://ari.funewa.com/zh/billing>
-- Products / 产品管理: <https://ari.funewa.com/zh/products>
-- Reports / 报告中心: <https://ari.funewa.com/zh/reports>
+- [账号与授权管理](https://ari.funewa.com/zh/account?ui=d47626f#api-keys)
+- [积点与套餐](https://ari.funewa.com/zh/billing)
+- [在线报告](https://ari.funewa.com/zh/reports)

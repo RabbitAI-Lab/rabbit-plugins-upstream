@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/research-gap-finder/schemas/gaps.schema.json",
+  "title": "Research Gap Finder candidate gaps file",
+  "type": "object",
+  "required": ["schema_version", "gaps", "computed_at"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "2.1"},
+    "computed_at": {"type": ["string", "null"]},
+    "gaps": {"type": "array", "items": {"$ref": "#/$defs/gap"}}
+  },
+  "$defs": {
+    "gap": {
+      "type": "object",
+      "required": ["id", "statement", "sources", "importance", "confidence", "verification"],
+      "properties": {
+        "id": {"type": "string"},
+        "statement": {"type": "string"},
+        "type": {"type": "string"},
+        "secondary_type": {"type": "array", "items": {"type": "string"}},
+        "sources": {"type": "array", "items": {"type": "string"}},
+        "invalid_sources": {"type": "array", "items": {"type": "string"}},
+        "verified_sources": {"type": "array", "items": {"type": "string"}},
+        "confidence": {"enum": ["Low", "Medium", "High", ""]},
+        "verification": {"type": "string"},
+        "exploratory": {"type": "boolean"},
+        "importance": {
+          "type": "object",
+          "properties": {
+            "theoretical": {"type": "integer", "minimum": 0, "maximum": 3},
+            "practical": {"type": "integer", "minimum": 0, "maximum": 3},
+            "feasibility": {"type": "integer", "minimum": 0, "maximum": 3},
+            "novelty": {"type": "integer", "minimum": 0, "maximum": 3},
+            "coherence": {"type": "integer", "minimum": 0, "maximum": 3},
+            "total": {"type": "integer", "minimum": 0, "maximum": 15},
+            "estimated": {"type": "boolean"}
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

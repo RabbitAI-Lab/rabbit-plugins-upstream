@@ -52,7 +52,7 @@ For merged merge requests:
 * Agent (autonomous): author username matches `GITLAB_AGENT_PROFILE_AGENT_USERNAME` and the owner is neither reviewer nor merge user.
 * Merged total: sum of the three MR categories.
 * Direct owner commits: commits on `main` authored or committed by the owner that are not known MR merge/squash commits and do not start with `skip:`, `skip(...)`, `chore:`, `chore(...)`, `docs:`, `docs(...)`, or `revert`.
-* MRs with `type::fix` or `type::feature` labels count toward MR totals and contribution score.
+* MRs with `type::bug` or `type::feature` labels count toward MR totals and contribution score.
 * If a merged MR has no type label, a Conventional Commit title beginning with `fix:`/`fix(...)` or `feat:`/`feat(...)` is used as a fallback type.
 * MRs beginning with `skip:`, `skip(...)`, `chore:`, `chore(...)`, `docs:`, or `docs(...)` are never counted, even if they have a counted type label.
 * MR contribution score: each counted MR starts at `1` point and is multiplied by its size factor.
@@ -81,7 +81,7 @@ The script ignores merge requests authored by other users.
     "message": "Read skill `gitlab-agent-profile` and run.",
     "thinking": "high",
     "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
+    "model": "openai/gpt-5.6-sol"
   },
   "delivery": {
     "mode": "none",

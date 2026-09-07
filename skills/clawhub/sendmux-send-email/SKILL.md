@@ -1,7 +1,7 @@
 ---
 name: "sendmux-send-email"
 description: "Send one or many emails through Sendmux using approved mailbox or agent credentials, idempotency keys, attachments, MCP, CLI, SDKs, or HTTP."
-version: "1.3.0"
+version: "1.4.2"
 metadata:
   openclaw:
     skillKey: "sendmux-send-email"
@@ -31,8 +31,9 @@ Use this skill when the user is ready to send outbound email through Sendmux or 
 - Send only after the user supplies or confirms every recipient and message.
 - For batch sends, confirm the full recipient/message set before calling a send tool.
 - Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for the Sending API.
-- Do not use a pre-claim `smx_agent_` token for sending. Pre-claim self-registered agent tokens have `mailbox.read` and `email.receive`, not `email.send`.
-- If using a self-registered agent, obtain the Sending-resource `smx_agent_` token by exchanging the saved `claim_token` after owner approval with `resource=https://smtp.sendmux.ai/api/v1`.
+- A durable agent profile is read/receive-only. Do not treat its stored credential as send-capable.
+- Before owner acceptance and sending approval, agent-profile sends fail closed. After approval, the CLI exchanges and caches a one-hour delegated `email.send` token automatically.
+- The self-registered inbox is capped at 500 MiB before approval. Sending approval raises it to at least 5 GiB first. Revoking sending does not itself change the current inbox storage allocation.
 
 ## Choose the send path
 
@@ -115,6 +116,18 @@ Use MCP when the user's agent already has the Sending server connected:
 Include an idempotency key when the client exposes the header parameter. If the MCP client does not expose headers clearly, use CLI, SDK, or direct HTTP for retry-sensitive sends. For attachments through MCP, use `sendmux-attachments` so the agent chooses `file_path`, presigned upload, or tiny inline base64 correctly.
 
 ## CLI
+
+For a self-registered agent, use its profile instead of copying credentials:
+
+```bash
+sendmux sending:send \
+  --profile my-agent \
+  --idempotency-key "$IDEMPOTENCY_KEY" \
+  --body-file ./sendmux-email.json \
+  --json
+```
+
+The owner must already have accepted the invitation and approved sending. The CLI obtains and caches the short-lived delegated token; the durable read credential is not used directly by the Sending API.
 
 One email:
 

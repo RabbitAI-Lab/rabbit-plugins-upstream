@@ -1,0 +1,22 @@
+{
+ "rmsd_top_pose_A": 2.39,
+ "rmsd_best_of_modes_A": 2.15,
+ "n_modes_returned": 8,
+ "matched_atoms": 15,
+ "ref_atoms": 15,
+ "docked_score": -5.482,
+ "box_center": [
+  8.859,
+  23.377,
+  53.603
+ ],
+ "box_size": 22.0,
+ "ligand_prep": "native_MUP_ob.pdbqt",
+ "precision": "balanced",
+ "exhaustiveness": 24,
+ "seed": 42,
+ "receptor_model": "complex",
+ "receptor_prep": "meeko",
+ "verdict": "WARN",
+ "gate": "PASS<=2.0A WARN<=3.0A FAIL>3.0A (re-docking validation)"
+}

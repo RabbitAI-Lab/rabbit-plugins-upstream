@@ -1,0 +1,4 @@
+interface:
+  display_name: "AliExpress 商品搜索"
+  short_description: "查询和分析 AliExpress 商品、详情、筛选条件与历史趋势数据"
+  default_prompt: "使用极鲸云真实数据查询并分析 AliExpress 商品。"

@@ -1,41 +1,64 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese K12 learning skill that guides students through a one-week cross-subject inquiry project, helping them choose a real-world theme, explore it from multiple disciplines, identify connections, and record project outcomes without doing single-subject homework or writing reports for them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+External students in upper primary, middle school, and high school use this skill to run a guided cross-disciplinary project around a real theme such as the Silk Road, climate change, or urbanization. Educators and learning platforms can use it to support inquiry prompts, hinting, project notes, and concept-graph writeback with student confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize crisis contacts, curriculum assumptions, and minor-consent requirements before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can rely on long-term learning records and cross-skill sharing for project continuity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable persistent records and cross-skill sharing only with appropriate student or guardian consent, and honor the built-in view, correct, delete, pause, sharing-control, and export commands.
+
+Risk: The packaged safety and referral wording is written for mainland China and may include region-specific crisis contacts, curriculum assumptions, and consent defaults.
+
+Mitigation: Before deployment outside mainland China, localize emergency contacts, curriculum alignment, and minor-consent handling; when the user's region is unknown, ask for it before giving region-specific help channels.
+
+Risk: Ad hoc practice questions or project prompts could be incorrect or exceed the student's grade band.
+
+Mitigation: Apply the included AI item self-check protocol and grade-band guidance before presenting generated questions or writing them into learning records.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Detective project template](references/detective-project-template.md)
+- [Cross-subject connections template library](shared/cross-subject-connections.md)
+- [Hint ladder](shared/hint-ladder.md)
+- [Grade bands](shared/grade-bands.md)
+- [AI item self-check protocol](shared/ai-item-check.md)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Conversational text and Markdown project records with structured concept-graph and project writeback fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce student-confirmed project records, concept-graph nodes and edges, hint prompts, and handoff payloads; no executable code is shipped.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

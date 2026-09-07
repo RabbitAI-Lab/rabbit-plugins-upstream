@@ -1,43 +1,56 @@
-## Description: <br>
-Clone voice and generate new text reading audio with one click using Vidu Audio Clone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clone a voice from reference audio and generate new text reading audio using Vidu Audio Clone.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call dLazy's hosted Vidu Audio Clone service to clone a voice from reference audio and generate spoken audio for new text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist a dLazy API key locally, and the scan did not substantiate the claim that the saved key is restricted to only the current OS user. <br>
-Mitigation: Review the dLazy CLI before installing; prefer per-invocation DLAZY_API_KEY or npx when persistent credentials are not needed; check ~/.dlazy/config.json permissions and rotate or revoke any exposed key. <br>
-Risk: Voice cloning requests can upload reference audio and prompts to dLazy-hosted endpoints. <br>
-Mitigation: Use only audio the user is allowed to upload for voice cloning, and disclose that inputs and generated outputs are handled by dLazy hosted services. <br>
+## Use Case:
 
+External users and developers use this skill to invoke the dLazy CLI for Vidu voice cloning, providing reference audio and prompt text to generate cloned-voice speech through dLazy's hosted service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON result containing generated output URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload referenced audio to dLazy media storage and return hosted files.dlazy.com URLs; --no-wait returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: Prompts, reference audio, and local media paths provided to the CLI are sent to dLazy's hosted API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only pass audio and prompt content that is appropriate for dLazy's hosted service, and confirm the user intends to use dLazy/Vidu before invoking the skill.
+
+Risk: Global CLI installation and persistent local API-key configuration can increase supply-chain and credential persistence exposure.
+
+Mitigation: Prefer npx or an isolated environment when appropriate, review the linked CLI source or package for supply-chain concerns, and use a revocable key or DLAZY_API_KEY for non-persistent authentication.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI may return synchronous JSON with hosted output URLs or asynchronous task identifiers for later polling.]
+
+## Skill Version(s):
+
+1.3.13 (source: server release metadata; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

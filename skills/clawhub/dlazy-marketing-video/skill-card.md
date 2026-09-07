@@ -1,47 +1,60 @@
-## Description: <br>
-Creates marketing, promotional, advertising, and ecommerce product videos from a product, brand, listing, or brief through the dLazy hosted service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates marketing, promotional, advertising, and brand videos from a product, brand, or brief for social media or campaign use.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to start or continue dLazy product-to-ecommerce-video projects that turn product details, storefront listings, briefs, and optional reference files into marketing videos for social, ecommerce, or campaign use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, product details, and attached files may be sent to dLazy's hosted API and file storage. <br>
-Mitigation: Use the skill only with data appropriate for the dLazy service, avoid confidential attachments unless approved, and review service terms before use. <br>
-Risk: API keys are required and may be stored in the local dLazy CLI config. <br>
-Mitigation: Prefer per-invocation credentials when needed, protect the local config, and rotate or revoke organization-scoped keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Continuing the wrong project id may send prompts into an unintended existing project session. <br>
-Mitigation: List and verify project ids before continuing prior work, and clear or compact sessions when needed. <br>
-Risk: A global CLI install persists the dLazy binary on the machine. <br>
-Mitigation: Use the pinned npx command for on-demand execution when a persistent global install is not desired. <br>
+## Use Case:
 
+External users and developers use this skill to drive dLazy's hosted video agent for conversion-focused ecommerce, product, brand, and campaign videos. It supports product specifications, manuals, catalogs, or marketplace listings as inputs and can include multilingual voiceover and an optional virtual host.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-marketing-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and streamed CLI text from the hosted service.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference generated video project state and uploaded-file URLs managed by the dLazy service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: SKILL.md frontmatter and server release evidence, created 2026-07-21T02:25:12Z) <br>
+Risk: Prompts and attached files are sent to dLazy's hosted service and uploaded files may be stored by dLazy media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid uploading secrets, confidential unreleased assets, or regulated data unless the organization accepts dLazy's service and retention model.
+
+Risk: The CLI stores an API key locally and can also receive credentials through an environment variable.
+
+Mitigation: Use scoped organization API keys, rotate or revoke keys when needed, and protect the local configuration file.
+
+Risk: A global npm install persists the dLazy CLI on the host.
+
+Mitigation: Use the pinned npx invocation or a sandboxed environment when a persistent global CLI is not desired.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-marketing-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and service responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May stream responses from dLazy and may reference uploaded files by URL within project-scoped chat sessions.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

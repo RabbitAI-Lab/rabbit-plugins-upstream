@@ -1,41 +1,62 @@
-## Description: <br>
-Submits Reddit post collection jobs through Dataify Builder by post URL, keyword, or subreddit URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Reddit posts by post URL, keyword, or subreddit URL; do not use when only comments from a known post are required.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to configure and submit Dataify Reddit post collection tasks, then receive a task ID, status, and Dataify dashboard guidance for viewing results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends selected Reddit URLs, keywords, subreddit inputs, task settings, and authentication to Dataify. <br>
-Mitigation: Install and run it only when submitting Reddit collection tasks to Dataify is intended, and review task settings before submission. <br>
-Risk: DATAIFY_API_TOKEN is a credential. <br>
-Mitigation: Handle it as a secret and avoid exposing it in prompts, logs, or shared command history. <br>
+## Use Case:
 
+Developers and operators use this skill to submit Dataify collection jobs for Reddit posts by post URL, keyword, or subreddit URL, then monitor the asynchronous task and return the collected result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-reddit-posts) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with optional shell commands and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May submit Reddit URLs, keywords, subreddit inputs, task settings, and a Dataify API token to Dataify when run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill requires DATAIFY_API_TOKEN and sends authenticated requests to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated token, store it only as DATAIFY_API_TOKEN when needed, and never print or paste the token into chat.
+
+Risk: Reddit URLs, subreddit URLs, or keywords are sent to Dataify for collection.
+
+Mitigation: Review collection targets before execution and avoid high-volume or sensitive searches unless that scope is intentional.
+
+Risk: Dataify collection jobs may consume account credits.
+
+Mitigation: Confirm mode, targets, and num_of_posts before large or multi-input runs.
+
+Risk: Asynchronous collection can time out or be interrupted after a paid task is submitted.
+
+Mitigation: Keep the returned task_id and resume monitoring rather than submitting the same job again.
+
+## Reference(s):
+
+- [Mode and parameter reference](references/modes-and-parameters.md)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-reddit-posts)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, json, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON task or collection results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task_id/status summary or the final collected JSON result; default task monitoring waits up to 600 seconds.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -26,7 +26,7 @@ metadata:
 - **文件读（仓库内）**：`.aws-article/config.yaml`、本篇 `article.yaml`、`article.md`、可选 `closing.md`、`.aws-article/presets/formatting/<名>.yaml`
 - **文件读（仓库外）**：`format.py` 还会检查用户家目录 `~/.aws-article/presets/formatting/`（跨项目共享的自定义排版主题；**只读预设文件，不读凭证**）。不需要这个能力可清空 / 不创建该目录
 - **文件写**：本篇 `article.html`
-- **shell**：仅 `python3 {baseDir}/scripts/format.py`
+- **shell**：仅 `{python} {baseDir}/scripts/format.py`（`{python}` = 本机 Python 3 解释器，见 [main SKILL 第 0 步](../aws-wechat-article-main/SKILL.md)：Windows 用 `py -3 -X utf8`，macOS / Linux 用 `python3`）
 
 ## 配套 skill（informational）
 
@@ -53,8 +53,7 @@ metadata:
 
 ## 配置检查 ⛔
 
-任何操作执行前，**必须**按 **[首次引导](../aws-wechat-article-main/references/first-time-setup.md)** 执行其中的 **「检测顺序」**。**单独启用本 skill** 时同上。检测通过后才能进行以下操作（或用户明确书面确认「本次不检查」）：
-
+任何操作执行前，**必须**按 **[首次引导](../aws-wechat-article-main/references/first-time-setup.md)** 执行其中的 **「检测顺序」**。**单独启用本 skill** 时同上。检测通过后才能进行以下操作（或用户明确书面确认「本次不检查」）。
 
 ## 内置主题
 
@@ -66,6 +65,51 @@ metadata:
 | `simple` | 极简黑 — 极度克制，大量留白 | 思想深度、学术 |
 
 每个主题包含：标题样式（h1-h4）、段落、引用块、列表、分割线、图片、代码块、链接、强调色等完整规则。
+
+## 图注只认显式写的 title ⛔
+
+```
+![信息图：画面指令给生图模型看](imgs/x.png "图注给读者看")
+```
+
+括号里路径之后引号中的才是图注。**alt 冒号后那段是画面指令，不会显示给读者。**
+
+早先的实现拿画面指令兼任图注，产出过这种东西：图上画着一个人站在 99.9 的牌子前
+望向远方，图注写「开发者站在巨型 99.9 分数牌前，视线越过分数望向复杂而开放的城市与
+工作现场」——把读者眼睛已经看见的复述一遍，零信息；图没生成出来时更会同一句话出现
+两次（破图 alt 一次、图注一次）。
+
+**没写 title 就不出图注**，这是有意的：绝大多数图不需要图注，错的图注比没有更糟。
+图注该补充画面之外的东西——数据出处、一句判断、反常识的细节。
+
+## 版式组件（:::块）
+
+主题只能给标签配内联样式，表达不了结构——而微信没有伪元素，「标题前的角标」
+「引用块的大引号」必须**真的插元素**。组件补的就是这一层：
+
+```
+:::section-title[01]
+同一个模型，两个分数
+:::
+
+:::quote-card[AWS 团队]
+基准分数衡量的是你缺哪个 harness，不是模型的能力上限。
+:::
+```
+
+内置组件在 [references/components/](references/components/)，用户自定义放
+`.aws-article/presets/components/<名>.yaml`，同名覆盖内置。每个组件的 YAML 里带
+`when_to_use` / `when_not_to_use` / `anti_pattern`——**选组件前先读这三项**，
+它们和配图方法里的判据是同一个作用：拦住「因为好看所以用」。
+
+组件模板里的 `{primary-color}` `{text-color}` 等占位符从当前主题取值，所以组件
+与任何主题组合都不会脱节。未知组件名或缺少结尾 `:::` 时按原文输出并告警，不吞内容。
+
+## 设计新版式前必读 ⛔
+
+微信正文只认**内联样式**，没有伪元素、没有伪类、`position` 与 `id` 会被整条删掉。
+这决定了「装饰必须作为真实元素插进 HTML」，而不能靠 CSS 变出来。
+能用什么、什么会被剥离，见 [wechat-html-constraints.md](references/wechat-html-constraints.md)。
 
 ## 工作流
 
@@ -93,17 +137,17 @@ metadata:
 
 ```bash
 # 不传 --theme：使用合并配置中的 default_format_preset，否则 default
-python {baseDir}/scripts/format.py drafts/YYYYMMDD-slug/article.md -o drafts/YYYYMMDD-slug/article.html
+{python} {baseDir}/scripts/format.py drafts/YYYYMMDD-slug/article.md -o drafts/YYYYMMDD-slug/article.html
 
 # 显式指定主题（覆盖配置）
-python {baseDir}/scripts/format.py drafts/YYYYMMDD-slug/article.md --theme grace -o drafts/YYYYMMDD-slug/article.html
+{python} {baseDir}/scripts/format.py drafts/YYYYMMDD-slug/article.md --theme grace -o drafts/YYYYMMDD-slug/article.html
 
 # 自定义主色 / 字号
-python {baseDir}/scripts/format.py article.md --theme modern --color "#A93226"
-python {baseDir}/scripts/format.py article.md --font-size 15px
+{python} {baseDir}/scripts/format.py article.md --theme modern --color "#A93226"
+{python} {baseDir}/scripts/format.py article.md --font-size 15px
 
 # 列出可用主题
-python {baseDir}/scripts/format.py --list-themes
+{python} {baseDir}/scripts/format.py --list-themes
 ```
 
 ### 嵌入元素 `{embed:...}`
@@ -118,7 +162,9 @@ python {baseDir}/scripts/format.py --list-themes
 - **正文不含文章标题**：Markdown 中第一个 `#`（h1）在转换时被跳过，标题在公众号后台单独填写，正文不重复
 - 配图标记 `![类型：描述](placeholder)` 保留为 `<img>` 标签，待 images skill 替换
 - 图注自动从标记描述中提取
-- 同目录存在 **`closing.md`** 时，`format.py` 会追加到文末（脚本既有行为）
+- 同目录存在 **`closing.md`** 时，`format.py` 会追加到文末（脚本既有行为）；`closing.md` 自己的首个 `#` 标题会保留，只有 `article.md` 的首个 `#` 被视为文章标题跳过
+- 预格式化（中英文加空格、ASCII 引号转「」、合并空行）只作用于正文文字：围栏代码块、行内代码、链接/图片目标、`{embed:…}`、原生 HTML 标签与裸 URL 原样保留，行内代码内容做 HTML 转义。不需要预格式化时加 `--no-preformat`
+- 表格支持 `|:---:|` 这类对齐行
 
 ## 选项
 
@@ -126,13 +172,19 @@ python {baseDir}/scripts/format.py --list-themes
 |------|------|--------|
 | `--theme <名称>` | 主题；**省略则按合并配置 → default** | 见上文 |
 | `--color <hex>` | 自定义主色 | 主题默认 |
-| `--font-size <px>` | 字号 | 16px |
+| `--font-size <px>` | 正文字号（同时覆盖主题 p / li 里的字号） | 16px |
 | `-o <路径>` | 输出路径 | 同名 .html |
 | `--list-themes` | 列出可用主题 | |
+| `--export-theme <名称>` | 以 YAML 导出主题（合并默认变量与样式），重定向到文件即可作为自定义主题起点 | |
+| `--no-preformat` | 跳过 Markdown 预格式化 | |
 
 ## 自定义主题
 
-在 `.aws-article/presets/formatting/` 下新建主题文件即可。
+在 `.aws-article/presets/formatting/` 下新建主题文件即可。快速起步：
+
+```bash
+{python} {baseDir}/scripts/format.py --export-theme default > .aws-article/presets/formatting/my-brand.yaml
+```
 
 主题文件格式和扩展方式详见：[references/presets/README.md](references/presets/README.md)
 

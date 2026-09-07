@@ -1,46 +1,59 @@
-## Description: <br>
-Aquarium Plant Health Monitor analyzes aquarium plant images or video to detect visual signs such as yellowing, bleaching, blackening, melting, curling, holes, algae, and nutrient-deficiency symptoms, then returns a structured health assessment and care guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes aquarium plant images or videos to detect visible health symptoms and produce a structured assessment with care-direction suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External aquarium hobbyists, aquascaping shops, and developers can use the skill to submit aquarium plant media for cloud analysis, review structured health findings, and retrieve historical reports. The skill supports visual monitoring workflows for smart aquariums, aquascaping tanks, and aquarium shops. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium media and report queries are sent to the publisher's cloud service. <br>
-Mitigation: Use the skill only with media and report data that are acceptable to share with the publisher-operated service. <br>
-Risk: The skill silently creates or reuses a local account identity and stores service tokens in the workspace data area. <br>
-Mitigation: Review workspace identity and token storage before installation, and avoid shared or sensitive workspaces where automatic identity reuse is not acceptable. <br>
-Risk: Historical report queries can surface prior analysis records associated with the local identity. <br>
-Mitigation: Use separate workspaces or identities when report history should remain isolated. <br>
-Risk: Visual aquarium plant symptoms can be ambiguous and may not fully determine water quality or nutrient causes. <br>
-Mitigation: Treat the output as care guidance and combine it with water testing or expert review before making significant aquarium changes. <br>
+## Use Case:
 
+External users, aquarium operators, aquascapers, and aquarium shops use this skill to analyze aquarium plant images or videos for visible leaf color, morphology, algae, and deficiency symptoms. The skill returns a health assessment, likely cause categories, care-direction suggestions, and report links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-aquarium-plant-health-monitor-analysis) <br>
-- [Aquarium Plant Health Monitor API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON report text with optional report export links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save report output to a local file when an output path is supplied.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+Risk: Security evidence reports unsafe cloud communication and local credential handling that are not suitable for normal installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; require HTTPS-only approved service hosts and avoid plaintext token storage before deployment.
+
+Risk: Security evidence reports that media upload and report retrieval are not explained clearly enough for user control.
+
+Mitigation: Document what media is uploaded, how reports are retrieved, and what user or operator approval is required before use.
+
+Risk: Security evidence reports a dependency naming issue.
+
+Mitigation: Fix dependency declarations before normal installation or packaging.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-aquarium-plant-health-monitor-analysis)
+- [Aquarium Plant Health Monitor API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON text with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured analysis results, health status, care suggestions, historical report tables, and report links.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

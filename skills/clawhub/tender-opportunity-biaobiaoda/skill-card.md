@@ -1,45 +1,71 @@
-## Description: <br>
-Monitors Chinese tender opportunities through the 标标达/知了标讯 API and helps agents search bid notices, analyze companies and competitors, estimate pricing, and surface expiring projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search Chinese tender data, assess bid opportunities, identify incumbent-control risks, analyze suppliers and competitors, and summarize market and pricing signals.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Procurement, sales, and bid strategy teams use this skill to find relevant tender opportunities, inspect tender details, analyze suppliers and competitors, and review market pricing signals from 标标达/知了标讯 data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement research terms, company names, and contact-related queries are sent to an external tender-data provider. <br>
-Mitigation: Use the skill only when the 标标达/知了标讯 service is approved for the data being queried, and avoid submitting non-public bid strategy or private customer lists. <br>
-Risk: A shared or broadly scoped API key could expose tender research usage or quota to unintended users. <br>
-Mitigation: Configure a dedicated ZLBX_API_KEY for agent use and rotate or revoke it according to the organization's credential policy. <br>
-Risk: Ambiguous company shorthand can broaden analysis to unintended legal entities. <br>
-Mitigation: Ask the agent to show matched companies before broad analyses of shorthand or ambiguous company names. <br>
+## Use Case:
 
+External business development, procurement, and bid teams use this skill to find Chinese tender opportunities, investigate buyer and supplier relationships, compare competitors, estimate pricing from historical awards, and prepare concise bid/no-bid guidance from tender-data API results.
 
-## Reference(s): <br>
-- [招投标商机监控雷达-标标达 on ClawHub](https://clawhub.ai/liu-jiapeng/tender-opportunity-biaobiaoda) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or concise text summaries with structured tender, company, competitor, and pricing analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement, company, and contact-related queries to an external 标标达/知了标讯 service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: A third-party tender-data service receives tender, company, competitor, and pricing queries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review organizational data-sharing rules before use and avoid submitting confidential project details unless that service is approved.
+
+Risk: Automatic account creation can collect limited device features after user consent when no API key is configured.
+
+Mitigation: Prefer a preconfigured ZLBX_API_KEY from a secure mechanism; if auto-registration is used, confirm consent before any collection.
+
+Risk: The auto-registration flow can persist an API key in ~/.zlbx/config.json.
+
+Mitigation: Restrict local file permissions and rotate or remove the key when it is no longer needed.
+
+Risk: Paid accounts may receive full project contact phone numbers.
+
+Mitigation: Display returned contact data only as needed, preserve masked values, and do not enrich or bulk export contact information.
+
+Risk: Responses may include publisher referral or recharge links.
+
+Mitigation: Review user-facing output for promotional content and make service links clear when they are operationally required.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/liu-jiapeng/skills/tender-opportunity-biaobiaoda)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Tender search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries with JSON REST payload examples and links to source tender records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tabular tender results, company analysis, market aggregates, account status, and setup guidance for ZLBX_API_KEY or local API-key configuration.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

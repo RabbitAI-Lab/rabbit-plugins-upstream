@@ -1,44 +1,59 @@
-## Description: <br>
-Modern PHP 8.4 and Laravel patterns: architecture, Eloquent, migrations, queues, testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Modern PHP 8.4 and Laravel guidance for architecture, Eloquent, migrations, queues, testing, and framework-based PHP application work.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for opinionated PHP 8.4 and Laravel guidance covering application architecture, Eloquent, migrations, queues, Blade, artisan, PHPUnit, PHPStan, and framework-based PHP application work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Laravel or PHP recommendations may include migrations, database updates, scheduled jobs, deploy cache commands, or other project-level actions that can affect real application data when a user chooses to run them. <br>
-Mitigation: Review generated code and commands before execution, especially before running migrations, database updates, scheduled jobs, deploy/cache commands, or production deployment steps. <br>
+## Use Case:
 
+Developers and engineers use this skill for Laravel and framework-level PHP implementation, review, testing, and production-readiness guidance.
 
-## Reference(s): <br>
-- [Laravel Ecosystem Patterns](references/laravel-ecosystem.md) <br>
-- [Testing Laravel (PHPUnit)](references/testing.md) <br>
-- [Feature Testing Patterns](references/feature-testing.md) <br>
-- [Mocking and Faking](references/mocking-and-faking.md) <br>
-- [Factory Patterns](references/factories.md) <br>
-- [Production Performance](references/production-performance.md) <br>
-- [Laravel Pitfalls - Deep Reference](references/pitfalls-deep.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with PHP code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory coding and testing guidance; the skill itself has no executable payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill may suggest migrations, scheduled tasks, queue jobs, deploy commands, or storage changes that can affect live Laravel applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated changes before applying them, especially database and storage changes, and validate them with Laravel tests and static analysis.
+
+Risk: Generated shell or artisan commands may have environment-specific effects.
+
+Mitigation: Treat commands as proposed steps and run them only in the intended environment after confirming configuration, data, and rollback expectations.
+
+## Reference(s):
+
+- [Laravel Ecosystem Patterns](references/laravel-ecosystem.md)
+- [Testing Laravel (PHPUnit)](references/testing.md)
+- [Feature Testing Patterns](references/feature-testing.md)
+- [Mocking and Faking](references/mocking-and-faking.md)
+- [Factory Patterns](references/factories.md)
+- [Production Performance](references/production-performance.md)
+- [Laravel Pitfalls - Deep Reference](references/pitfalls-deep.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose with code snippets and shell commands when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces advisory Laravel/PHP implementation guidance; commands and code should be reviewed before use.]
+
+## Skill Version(s):
+
+4.5.1 (source: server release evidence and user changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

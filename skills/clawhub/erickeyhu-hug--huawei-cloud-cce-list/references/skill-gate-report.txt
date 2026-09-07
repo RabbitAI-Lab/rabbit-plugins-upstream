@@ -1,0 +1,31 @@
+Skill Security Audit Report — huawei-cloud-cce-list
+Timestamp: 2026-08-05T03:42:48Z
+
+=== 1. skillcheck (agentskills.io SKILL.md spec) ===
+  Status: SKIP (package 'skillcheck' not available in pip index; validated via validate-skill.sh 23 checks + markdownlint)
+
+=== 2. markdownlint-cli2 ===
+  Result: 0 issues in 6 files (PASS)
+
+=== 3. hwcloud-spec (validate-skill.sh) ===  
+  Result: PASS 23 / FAIL 0 / WARN 0 (PASS)
+
+=== 4. gitleaks (secret leak detection) ===
+  Result: 0 findings in isolated skill scan (PASS)
+  Note: repo-wide scan shows 4 pre-existing findings in OTHER skills (terraform-generator, sac-new-api) — not in this skill.
+
+=== 5. Credential hardcoding scan ===
+  Result: PASS — only placeholder values (<your-ak>/<your-sk>) and env-var checks; no real credentials.
+
+=== 6. Dangerous patterns scan ===
+  Result: PASS — no eval/exec/system shell=True, reverse shell, or pipe-to-sh patterns.
+
+=== 7. Insecure config scan ===
+  Result: PASS — no ignore_ssl/verify=false/insecure patterns.
+
+=== 8. Dependency security (pip-audit) ===
+  Result: WARNING — skill declares no dependency manifest; documents official huaweicloudsdkcce.
+  pip-audit on test-machine transitive packages found: pyasn1 0.6.3 (PYSEC-2026-3455/3456/3457), requests 2.32.5 (PYSEC-2026-2275), urllib3 2.6.3 (PYSEC-2026-141/142).
+  These are runtime environment packages on the test machine, not pinned by this skill. Recommend upgrading test environment: pip install -U pyasn1 requests urllib3. No action required in the skill package.
+
+VERDICT: PASS (all Critical/High checks green; WARNING-only findings on test-machine transitive deps noted for user acceptance)

@@ -1,6 +1,6 @@
 # Recipe — Detect job changes in a contact segment
 
-Use this recipe when the user wants to detect job changes among a list of contacts. **The only provider in cargo's 120-integration catalog with a credits-based job-change action is `waterfall.detectJobChange`** — this recipe exists to make that capability discoverable and reusable.
+Use this recipe when the user wants to detect job changes among a list of contacts. **The only provider in cargo's 136-integration catalog with a credits-based job-change action is `waterfall.detectJobChange`** — this recipe exists to make that capability discoverable and reusable.
 
 **Trigger phrases:**
 - *"Has anyone in our customer list changed jobs?"*
@@ -38,7 +38,7 @@ Adjust the filter to match the segment the user wants to monitor.
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange"}' \
   --records "$(jq -c '[.records[] | {
     professional_email: .email,
     contact_linkedin: .linkedin_url,
@@ -95,7 +95,7 @@ For weekly monitoring on a 1,000-contact segment: ~12,000 credits/month. Filter 
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"waterfall","actionSlug":"detectJobChange"}`. **No `connectorUuid` in `config`.**
 
 Per-record inputs (any combination):
 - `professional_email` — work email.

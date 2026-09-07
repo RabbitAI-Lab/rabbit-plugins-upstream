@@ -1,46 +1,66 @@
-## Description: <br>
-Connect to personal Microsoft accounts via Microsoft Graph API to manage email, calendar events, and tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect to personal Microsoft accounts via Microsoft Graph API to manage email, calendar events, and tasks.
 
-## Publisher: <br>
-[danielithomas](https://clawhub.ai/user/danielithomas) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[danielithomas](https://clawhub.ai/user/danielithomas)
 
-## Use Case: <br>
-External users and agents use OfficeClaw to read and manage Outlook mail, calendar events, and Microsoft To Do tasks through Microsoft Graph after one-time OAuth setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill connects an agent to a personal Microsoft account and can expose mail, calendar, and task data through Microsoft Graph. <br>
-Mitigation: Install only when that account access is intended, prefer read-only mail and calendar scopes where possible, and review the PyPI package before authenticating. <br>
-Risk: Email sending and delete operations can modify external account state if enabled. <br>
-Mitigation: Keep send and delete disabled unless needed, confirm destructive actions, and configure OFFICECLAW_ALLOWED_RECIPIENTS before enabling email sending. <br>
-Risk: Outbound email without an allowlist may send to unintended recipients. <br>
-Mitigation: Use OFFICECLAW_ALLOWED_RECIPIENTS to restrict recipients; blocked sends are logged and alert files are written for monitoring. <br>
+## Use Case:
 
+Developers and agent users use OfficeClaw to let an agent work with a personal Microsoft account for Outlook mail, calendar scheduling, and Microsoft To Do task management through Microsoft Graph.
 
-## Reference(s): <br>
-- [OfficeClaw on PyPI](https://pypi.org/project/officeclaw/) <br>
-- [Microsoft Graph API](https://docs.microsoft.com/graph/) <br>
-- [Microsoft Entra app registration guide](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app) <br>
-- [OpenClaw documentation](https://docs.openclaw.ai) <br>
-- [OfficeClaw on ClawHub](https://clawhub.ai/danielithomas/officeclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports JSON output from officeclaw commands when the --json flag is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can access Microsoft account email, calendar, task, and attachment data through Microsoft Graph.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install in a dedicated environment, grant only the Microsoft Graph scopes required for the intended workflow, and keep account access scoped to the user's needs.
+
+Risk: Send and delete operations can disclose information, contact unintended recipients, or change mailbox, calendar, and task state.
+
+Mitigation: Keep send and delete disabled unless required, require user confirmation for destructive or outbound actions, and configure recipient allowlists before enabling outbound mail or calendar invitations.
+
+Risk: Attachment handling can read local files for outbound mail or write downloaded files to disk.
+
+Mitigation: Configure allowed attachment directories, safe sender checks, file size and type controls, and destination restrictions before allowing an agent to send or download attachments.
+
+Risk: OAuth tokens provide ongoing account access if mishandled.
+
+Mitigation: Protect the token cache, run the skill under a dedicated user environment, refresh or revoke access when needed, and avoid logging private message or calendar content.
+
+## Reference(s):
+
+- [OfficeClaw ClawHub page](https://clawhub.ai/danielithomas/skills/officeclaw)
+- [OfficeClaw project homepage](https://github.com/danielithomas/officeclaw)
+- [OfficeClaw on PyPI](https://pypi.org/project/officeclaw/)
+- [Microsoft Graph API](https://docs.microsoft.com/graph/)
+- [Microsoft app registration guide](https://learn.microsoft.com/en-us/entra/identity-platform/quickstart-register-app)
+- [OpenClaw documentation](https://docs.openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration examples, and JSON output examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to use the officeclaw CLI, JSON mode, OAuth setup, allowlists, and safety gates.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

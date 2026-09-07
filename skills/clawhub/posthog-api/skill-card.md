@@ -1,50 +1,74 @@
-## Description: <br>
-PostHog API integration with managed authentication for product analytics, feature flags, session recordings, experiments, and more. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostHog API integration with managed authentication for querying product analytics, managing feature flags, analyzing user behavior, viewing session recordings, and running experiments through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and analytics teams use this skill to query PostHog data through Maton-managed authentication, manage feature flags, inspect user behavior, view session recordings, and run experiments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton proxies requests to the connected PostHog account and requires a sensitive MATON_API_KEY. <br>
-Mitigation: Install only if you trust Maton to handle the account data path, and keep MATON_API_KEY private. <br>
-Risk: PostHog persons and session recordings can expose emails, identifiers, replay details, and other sensitive analytics data. <br>
-Mitigation: Minimize retrieval of persons and session recordings, and avoid exposing raw emails or replay details unless necessary. <br>
-Risk: If multiple PostHog accounts are linked, requests may affect or disclose data from the wrong connection. <br>
-Mitigation: Choose the intended connection explicitly when multiple accounts are linked. <br>
-Risk: Create, update, and delete-style API calls can change dashboards, insights, feature flags, cohorts, annotations, surveys, experiments, and related resources. <br>
-Mitigation: Approve write operations only after checking the exact project, target resource, and intended effect. <br>
+## Use Case:
 
+Developers and analytics operators use this skill to query PostHog product analytics, inspect persons and session recordings, and manage dashboards, feature flags, cohorts, surveys, and experiments through authenticated Maton API calls.
 
-## Reference(s): <br>
-- [ClawHub PostHog Skill](https://clawhub.ai/byungkyu/posthog-api) <br>
-- [Maton](https://maton.ai) <br>
-- [PostHog API Overview](https://posthog.com/docs/api) <br>
-- [HogQL Documentation](https://posthog.com/docs/hogql) <br>
-- [Feature Flags](https://posthog.com/docs/feature-flags) <br>
-- [Session Replay](https://posthog.com/docs/session-replay) <br>
-- [Experiments](https://posthog.com/docs/experiments) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API paths and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are returned by the Maton-proxied PostHog service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: PostHog analytics data, person profiles, and session recordings can contain personal or sensitive user information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest project, person, event, and time range needed; prefer aggregate results; retrieve session recordings only when explicitly requested; and avoid copying identifiers or recording contents outside the immediate answer.
+
+Risk: Write operations can change dashboards, feature flags, cohorts, annotations, surveys, experiments, or other PostHog resources.
+
+Mitigation: Default to read and list calls, then obtain explicit user confirmation for the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: A Maton API key is a long-lived credential that can leak through logs, shell history, process listings, or persisted environment files.
+
+Mitigation: Prefer OAuth through the Maton CLI; if raw HTTP is required, read the key from the environment inside the process, never print or persist it, and rotate it if exposure occurs.
+
+Risk: Multiple Maton accounts or PostHog connections can cause requests to run against the wrong account.
+
+Mitigation: Specify the intended connection or profile when more than one exists, especially before write operations.
+
+Risk: Deleting a Maton connection revokes stored authorization and may break automation using that connection.
+
+Mitigation: List connections first, match the exact connection identifier with the user, and avoid bypassing confirmation unless the user already confirmed the specific deletion.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/posthog-api)
+- [Maton](https://maton.ai)
+- [PostHog API Overview](https://posthog.com/docs/api)
+- [HogQL Documentation](https://posthog.com/docs/hogql)
+- [PostHog Feature Flags](https://posthog.com/docs/feature-flags)
+- [PostHog Session Replay](https://posthog.com/docs/session-replay)
+- [PostHog Experiments](https://posthog.com/docs/experiments)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include PostHog API paths, Maton CLI commands, request bodies, jq filters, and minimized API response excerpts.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

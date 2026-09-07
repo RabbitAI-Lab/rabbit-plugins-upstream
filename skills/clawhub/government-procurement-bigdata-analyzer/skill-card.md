@@ -1,44 +1,67 @@
-## Description: <br>
-政府采购招标大数据查询与分析助手，用于搜索政府、事业单位和央国企采购公告，分析中标、供应商、价格趋势和政采商机。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Chinese government procurement, tender, award, supplier, competitor, price, and market data through the Zhiliaobiaoxun API platform.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users and business development teams use this skill to query and analyze Chinese government procurement, bidding, award, contract, supplier, competitor, and pricing data. It helps identify sales opportunities, monitor expiring projects, evaluate procurement trends, and profile government buyers or winning suppliers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device, send host identifiers to the provider, and store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Review before installing; prefer supplying a manually created ZLBX_API_KEY unless the user explicitly accepts automatic registration and local key storage. <br>
-Risk: Recharge or login links, returned contact data, and stored API keys may be sensitive. <br>
-Mitigation: Treat generated links, contact results, and local credentials as sensitive, and avoid sharing them in public logs or transcripts. <br>
+## Use Case:
 
+External business-development, sales, procurement, and market-analysis users use this skill to search public procurement notices, identify upcoming opportunities, analyze buyers and suppliers, compare competitors, and summarize award and pricing trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer) <br>
-- [API search reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration reference](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global, with data coverage and practical use cases focused on China government procurement and state-owned enterprise purchasing.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown responses with JSON API request examples and analytical summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use the ZLBX_API_KEY environment variable or a local ~/.zlbx/config.json API key; automatic registration may create and store an API key when no key is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Automatic trial signup can send a persistent MAC-derived device identifier to the provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the automatic registration flow before installation and prefer a manually created account or a preconfigured ZLBX_API_KEY if device fingerprinting is not acceptable.
+
+Risk: The provider API key may be stored in a local plaintext configuration file.
+
+Mitigation: Use environment-based secret management where possible and restrict local config file permissions when provider-managed key storage is used.
+
+Risk: The skill may include promotional referrals for affiliated provider services.
+
+Mitigation: Treat provider links as vendor referrals and review whether they are appropriate for the deployment context.
+
+Risk: Procurement contact data can include sensitive business contact details, sometimes returned only in masked form.
+
+Mitigation: Preserve provider-side masking, avoid trying to reconstruct hidden contact information, and avoid bulk exporting contacts unless approved for the use case.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration flow](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with API request guidance, result summaries, tables, and occasional shell commands or configuration steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a ZLBX_API_KEY or provider-managed local API key configuration for live API access.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

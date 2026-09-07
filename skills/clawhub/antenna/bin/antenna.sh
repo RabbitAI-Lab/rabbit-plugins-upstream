@@ -40,6 +40,10 @@ source "$SKILL_DIR/lib/config.sh"
 # available to cmd_peers add/update mutation paths.
 # shellcheck source=../lib/peers.sh
 source "$SKILL_DIR/lib/peers.sh"
+# shellcheck source=../lib/secret-file.sh
+source "$SKILL_DIR/lib/secret-file.sh"
+# shellcheck source=../lib/antenna-signature.sh
+source "$SKILL_DIR/lib/antenna-signature.sh"
 
 # ── Peer-shape validation helpers ────────────────────────────────────────────
 # Only iterate entries that look like real peers (object with a .url string).
@@ -72,7 +76,7 @@ invalid_peer_keys() {
 _peek_command="${1:-}"
 if [[ ! -f "$CONFIG_FILE" ]]; then
   case "$_peek_command" in
-    setup|help|-h|--help) ;; # allow through
+    setup|upgrade|uninstall|help|-h|--help) ;; # allow through
     *)
       echo ""
       echo "  Antenna is not configured yet."
@@ -93,7 +97,8 @@ Antenna — Inter-Host OpenClaw Messaging
 
 Usage:
   antenna setup                              First-run setup wizard
-  antenna setup --host-id <id> ...           Non-interactive setup (see --help)
+  antenna setup --host-id <id> ... --yes     Authorized non-interactive setup
+  antenna upgrade --from <old-skill-dir>     Preview and preserve state into this side-by-side release
   antenna pair [--peer-id <id>]              Interactive peer pairing wizard
   antenna uninstall [options]                Remove Antenna runtime state / optional gateway config
 
@@ -101,16 +106,20 @@ Usage:
   antenna doctor --backup                    Back up gateway config before changes
   antenna doctor --fix-hints                 Show copy-paste fix suggestions
   antenna doctor --gateway <path>            Override gateway config path
+  antenna doctor --restore-policy [--yes]    Restore agent/AGENTS.md from the local package (backup-first)
 
   antenna send <peer> [options] <message>    Send a message to a peer
   antenna send <peer> [options] --stdin      Send message from stdin
+  antenna send @alias [options] <message>    Send to a Private Group (direct peer fan-out)
+  antenna send @alias --show-recipients ... Add signed visible-list metadata
   antenna msg <peer> [message]               Quick send (plain host mode by default)
 
   antenna peers list                         List known peers
-  antenna peers add <id> --url <url> --token-file <path> [--peer-secret-file <path>] [--exchange-public-key <age-pub>] [--display-name <name>]
+  antenna peers add <id> --url <url> --token-file <path> [--auth-mode <mode>] [--signing-public-key-file <path>] [--peer-secret-file <path>] [--exchange-public-key <age-pub>] [--display-name <name>]
   antenna peers remove <id>
   antenna peers test <id>                    Test connectivity to a peer
-  antenna peers generate-secret <id>         Generate a per-peer auth secret
+  antenna peers generate-secret <id>         Generate a protected per-peer auth secret file
+    --show-secret                            Explicit interactive display for manual transfer
   antenna peers exchange keygen [--force]    Generate local age exchange keypair
   antenna peers exchange pubkey [--bare] [--email ...] Show/email local age exchange public key
   antenna peers exchange initiate <id> ...   Create encrypted bootstrap bundle
@@ -125,6 +134,7 @@ Usage:
     --force-expired                           Don't fail on expired bundles
     --no-decrypt                              Treat <file> as already-decrypted JSON
 
+  Inbox is an optional global review queue; autonomous delivery is the default.
   antenna inbox list                         Show pending queued messages
   antenna inbox count                        Count pending messages
   antenna inbox show <ref>                   Show full message for a ref
@@ -132,6 +142,13 @@ Usage:
   antenna inbox deny all|<refs>              Deny/reject messages
   antenna inbox drain [--execute]            Deliver approved, remove denied
   antenna inbox clear                        Remove all processed messages
+
+  antenna groups list                        List local Public Group routes
+  antenna groups install <file>              Install one downloaded ClawReef route
+    --alias <name>                           Choose a stable local alias
+  antenna groups refresh <file>              Refresh installed routes by group ID
+  antenna groups remove <alias>              Remove one local Public Group route
+  antenna groups send <alias> <message>      Send to a Public Group through ClawReef
 
   antenna sessions list                      Show allowed inbound session targets
   antenna sessions add <name> [<name>...]    Add session target(s) to the allowlist
@@ -153,14 +170,11 @@ Usage:
     --timeout <sec>                          Per-run relay timeout (default: 15s)
     --keep-model                             Leave candidate model active after test
 
-  antenna test-suite [options]               Three-tier model/script test suite
-    --model <model>                          Single provider/model ID for B/C tiers
+  antenna test-suite [options]               Check model compatibility with Antenna
+    --model <model>                          Test one provider/model ID (repeatable)
     --models <m1,m2,...>                     Comma-separated models for comparison (max 6)
-    --tier A|B|C|all                         Run specific tier (default: all)
-    --verbose                                Show full request/response payloads inline
-    --report [dir]                           Save structured report (default: test-results/)
-    --format terminal|markdown|json          Output format (default: terminal)
-    --compare                                Enable comparison table (implied by --models)
+    --format terminal|json                   Output format (default: terminal)
+    --compare                                Accepted for compatibility; automatic for multiple models
 
 Send options:
   --session <key>     Target session on recipient (default: main)
@@ -171,6 +185,7 @@ Send options:
 
 Examples:
   antenna msg <peer> "What's the weather like over there?"
+  antenna send @operations "Server maintenance tonight"
   antenna msg <peer>                      # prompts for message interactively
   echo "long message" | antenna send <peer> --stdin --user "Your Name"
 EOF
@@ -183,6 +198,10 @@ cmd_setup() {
   bash "$SCRIPTS_DIR/antenna-setup.sh" "$@"
 }
 
+cmd_upgrade() {
+  bash "$SCRIPTS_DIR/antenna-upgrade.sh" "$@"
+}
+
 cmd_pair() {
   bash "$SCRIPTS_DIR/antenna-pair.sh" "$@"
 }
@@ -192,7 +211,11 @@ cmd_uninstall() {
 }
 
 cmd_send() {
-  bash "$SCRIPTS_DIR/antenna-send.sh" "$@"
+  if [[ "${1:-}" == @* ]]; then
+    bash "$SCRIPTS_DIR/antenna-list-send.sh" "$@"
+  else
+    bash "$SCRIPTS_DIR/antenna-send.sh" "$@"
+  fi
 }
 
 cmd_msg() {
@@ -308,20 +331,22 @@ cmd_peers() {
       ;;
 
     add)
-      local id="" url="" token_file="" display_name="" peer_secret_file="" exchange_public_key=""
+      local id="" url="" token_file="" display_name="" peer_secret_file="" exchange_public_key="" auth_mode="" signing_public_key_file=""
       local force="false" allow_insecure="false"
       # REF-300: track which fields were explicitly supplied on this invocation so
       # merge semantics only overwrite keys the user actually passed. Unspecified
       # fields preserve prior values; unknown top-level fields (e.g. .self set by
       # peer-exchange) are preserved automatically by the jq merge below.
-      local set_url="false" set_tf="false" set_dn="false" set_psf="false" set_xpk="false"
-      id="${1:?Usage: antenna peers add <id> --url <url> --token-file <path> [--peer-secret-file <path>] [--exchange-public-key <age-pub>] [--display-name <name>] [--force] [--allow-insecure]}"
+      local set_url="false" set_tf="false" set_dn="false" set_psf="false" set_xpk="false" set_am="false" set_spkf="false"
+      id="${1:?Usage: antenna peers add <id> --url <url> --token-file <path> [--auth-mode <mode>] [--signing-public-key-file <path>] [--peer-secret-file <path>] [--exchange-public-key <age-pub>] [--display-name <name>] [--force] [--allow-insecure]}"
       shift
       while [[ $# -gt 0 ]]; do
         case "$1" in
           --url)              url="$2"; set_url="true"; shift 2 ;;
           --token-file)       token_file="$2"; set_tf="true"; shift 2 ;;
           --peer-secret-file) peer_secret_file="$2"; set_psf="true"; shift 2 ;;
+          --auth-mode)        auth_mode="$2"; set_am="true"; shift 2 ;;
+          --signing-public-key-file) signing_public_key_file="$2"; set_spkf="true"; shift 2 ;;
           --exchange-public-key) exchange_public_key="$2"; set_xpk="true"; shift 2 ;;
           --display-name)     display_name="$2"; set_dn="true"; shift 2 ;;
           --force)            force="true"; shift ;;
@@ -330,6 +355,17 @@ cmd_peers() {
         esac
       done
 
+      if [[ "$set_am" == "true" ]]; then
+        case "$auth_mode" in ed25519-v1|plaintext-legacy) ;; *) echo "Error: unsupported --auth-mode" >&2; exit 1 ;; esac
+      fi
+      if [[ "$auth_mode" == "ed25519-v1" && "$set_psf" == "true" && -n "$peer_secret_file" ]]; then
+        echo "Error: ed25519-v1 cannot be combined with --peer-secret-file" >&2; exit 1
+      fi
+      if [[ "$set_spkf" == "true" && -n "$signing_public_key_file" ]]; then
+        local resolved_signing_key="$signing_public_key_file"
+        [[ "$resolved_signing_key" != /* ]] && resolved_signing_key="$SKILL_DIR/$resolved_signing_key"
+        signature_public_key_ok "$resolved_signing_key" || { echo "Error: invalid Ed25519 signing public key file" >&2; exit 1; }
+      fi
       # REF-300: detect existing entry and require explicit --force to update.
       local peer_exists
       peer_exists=$(jq -r --arg id "$id" 'has($id)' "$PEERS_FILE" 2>/dev/null || echo "false")
@@ -342,6 +378,9 @@ cmd_peers() {
       if [[ "$peer_exists" != "true" ]]; then
         if [[ -z "$url" || -z "$token_file" ]]; then
           echo "Error: --url and --token-file are required when adding a new peer" >&2; exit 1
+        fi
+        if [[ "$auth_mode" == "ed25519-v1" && -z "$signing_public_key_file" ]]; then
+          echo "Error: ed25519-v1 requires --signing-public-key-file" >&2; exit 1
         fi
       fi
 
@@ -370,11 +409,15 @@ cmd_peers() {
         --arg dn "$display_name" \
         --arg psf "$peer_secret_file" \
         --arg xpk "$exchange_public_key" \
+        --arg am "$auth_mode" \
+        --arg spkf "$signing_public_key_file" \
         --arg set_url "$set_url" \
         --arg set_tf "$set_tf" \
         --arg set_dn "$set_dn" \
         --arg set_psf "$set_psf" \
         --arg set_xpk "$set_xpk" \
+        --arg set_am "$set_am" \
+        --arg set_spkf "$set_spkf" \
         '
           .[$id] = (
             (.[$id] // {agentId: "antenna"})
@@ -383,6 +426,8 @@ cmd_peers() {
             | (if $set_dn  == "true" then .display_name = (if $dn == "" then null else $dn end) else . end)
             | (if $set_psf == "true" then .peer_secret_file = (if $psf == "" then null else $psf end) else . end)
             | (if $set_xpk == "true" then .exchange_public_key = (if $xpk == "" then null else $xpk end) else . end)
+            | (if $set_am == "true" then .auth_mode = $am else . end)
+            | (if $set_spkf == "true" then .signing_public_key_file = (if $spkf == "" then null else $spkf end) else . end)
             | .agentId = (.agentId // "antenna")
           )
         ' \
@@ -431,30 +476,58 @@ cmd_peers() {
       ;;
 
     generate-secret)
-      local target_id="${1:-}"
+      local target_id="" show_secret=false
+      while [[ $# -gt 0 ]]; do
+        case "$1" in
+          --show-secret) show_secret=true; shift ;;
+          -*) echo "Unknown option: $1" >&2; exit 1 ;;
+          *)
+            [[ -z "$target_id" ]] || {
+              echo "Usage: antenna peers generate-secret <peer-id> [--show-secret]" >&2
+              exit 1
+            }
+            target_id="$1"
+            shift
+            ;;
+        esac
+      done
+
+      [[ -n "$target_id" ]] || {
+        echo "Usage: antenna peers generate-secret <peer-id> [--show-secret]" >&2
+        exit 1
+      }
+      antenna_secret_peer_id_ok "$target_id" || {
+        echo "Error: peer ID must be 1-64 letters, numbers, dots, underscores, or hyphens, beginning with a letter or number" >&2
+        exit 1
+      }
+      if [[ "$show_secret" == "true" && ( ! -t 0 || ! -t 1 ) ]]; then
+        echo "Error: --show-secret requires an interactive terminal; refusing to expose a reusable credential to captured output." >&2
+        exit 1
+      fi
+
       local secret_dir="$SKILL_DIR/secrets"
-      mkdir -p "$secret_dir"
+      local secret_path="$secret_dir/antenna-peer-${target_id}.secret"
+      antenna_secret_generate_hex_file "$secret_path" || {
+        echo "Error: could not generate protected peer secret file" >&2
+        exit 1
+      }
 
-      local secret
-      secret=$(openssl rand -hex 32)
+      echo "Generated protected per-peer secret for: $target_id"
+      echo "  File: $secret_path (mode 600)"
+      echo "  Value: hidden"
+      echo ""
+      echo "Next steps:"
+      echo "  1. Transfer the protected file over a trusted channel"
+      echo "  2. On THIS host: ensure antenna-peers.json has peer_secret_file for $target_id"
+      echo "  3. On PEER host: add YOUR peer entry with peer_secret_file pointing to this secret"
 
-      if [[ -n "$target_id" ]]; then
-        local secret_path="$secret_dir/antenna-peer-${target_id}.secret"
-        echo -n "$secret" > "$secret_path"
-        chmod 600 "$secret_path"
-        echo "Generated per-peer secret for: $target_id"
-        echo "  File: $secret_path"
-        echo "  Secret: $secret"
-        echo ""
-        echo "Next steps:"
-        echo "  1. Copy this secret file to the peer host"
-        echo "  2. On THIS host: ensure antenna-peers.json has peer_secret_file for $target_id"
-        echo "  3. On PEER host: add YOUR peer entry with peer_secret_file pointing to this secret"
-      else
-        echo "Generated secret: $secret"
-        echo ""
-        echo "Usage: antenna peers generate-secret <peer-id>"
-        echo "  This creates secrets/antenna-peer-<id>.secret and prints setup instructions."
+      if [[ "$show_secret" == "true" ]]; then
+        echo "" >&2
+        echo "WARNING: displaying a reusable peer credential. Keep it out of chat, logs, screenshots, and shell history." >&2
+        echo "Prefer the encrypted 'antenna peers exchange initiate' flow whenever possible." >&2
+        echo "" >&2
+        tr -d '[:space:]' <"$secret_path"
+        echo
       fi
       ;;
 
@@ -463,8 +536,8 @@ cmd_peers() {
       # entry. Orphaned references in allowed_inbound_peers /
       # allowed_outbound_peers / inbox_auto_approve_peers stayed behind, which
       # looked fine but meant a future peer with the same id would inherit
-      # stale trust the operator thought they had cleared. The live 'nexus'
-      # cleanup on 2026-04-21 surfaced this. Fix: remove the peer AND prune
+      # stale trust the operator thought they had cleared. Fix: remove the peer
+      # AND prune
       # every peer-scoped allowlist in one coordinated mutation. Session
       # allowlists (allowed_inbound_sessions) are NOT pruned because they hold
       # session strings, not peer ids.
@@ -565,7 +638,7 @@ cmd_peers() {
 
     *)
       echo "Unknown peers subcommand: $subcmd" >&2
-      echo "Usage: antenna peers list|add|remove|test|exchange|generate-secret" >&2
+      echo "Usage: antenna peers list|add|remove|test|exchange|generate-secret [<id> [--show-secret]]" >&2
       exit 1
       ;;
   esac
@@ -579,6 +652,10 @@ cmd_peers() {
 _write_relay_model_to_gateway_config() {
   local new_model="$1"
   local gateway_cfg=""
+  # Load the roster writer only for the one CLI path that mutates the gateway.
+  # Keeping this lazy lets read/send-only packaged subsets remain usable.
+  # shellcheck source=../lib/gateway-roster.sh
+  source "$SKILL_DIR/lib/gateway-roster.sh"
   for candidate in "$HOME/.openclaw/openclaw.json" "/home/$USER/.openclaw/openclaw.json"; do
     if [[ -f "$candidate" ]]; then
       gateway_cfg="$candidate"
@@ -591,19 +668,30 @@ _write_relay_model_to_gateway_config() {
     return 0
   fi
 
-  local has_antenna
-  has_antenna=$(jq '[.agents.list // [] | .[] | select(.id == "antenna")] | length' "$gateway_cfg" 2>/dev/null || echo "0")
-  if [[ "$has_antenna" -eq 0 ]]; then
+  if ! gateway_roster_prepare_mutation "$gateway_cfg"; then
+    echo "✗  Gateway roster is not safe for automatic model synchronization." >&2
+    return 1
+  fi
+  if ! gateway_roster_has_agent "$gateway_cfg" antenna "$GATEWAY_ROSTER_KIND"; then
     echo "⚠  Antenna agent not registered in gateway config ($gateway_cfg) — skipping gateway sync."
     return 0
   fi
 
-  local tmp
-  tmp=$(mktemp)
-  jq --arg model "$new_model" '
-    .agents.list = [.agents.list[] | if .id == "antenna" then .model = $model else . end]
-  ' "$gateway_cfg" > "$tmp" && mv "$tmp" "$gateway_cfg"
+  local gateway_dir tmp
+  gateway_dir="$(dirname "$gateway_cfg")"
+  tmp="$(mktemp "$gateway_dir/.openclaw.antenna-model.XXXXXX")"
+  if ! gateway_roster_write_model_candidate "$gateway_cfg" "$tmp" "$new_model"; then
+    rm -f -- "$tmp"
+    echo "✗  Could not construct the gateway model update." >&2
+    return 1
+  fi
+  if ! gateway_config_commit_candidate "$gateway_cfg" "$tmp" "antenna-model-backup"; then
+    rm -f -- "$tmp"
+    echo "✗  Gateway model candidate failed validation; original config unchanged." >&2
+    return 1
+  fi
   echo "✓  Updated gateway config: antenna agent model → $new_model"
+  echo "ℹ  Gateway rollback backup: $GATEWAY_CONFIG_LAST_BACKUP"
 }
 
 # _restart_gateway
@@ -993,11 +1081,26 @@ cmd_status() {
       warnings=$((warnings + 1))
     fi
 
-    # Check per-peer secret file
-    local psf
+    # Check the credential selected by this peer's explicit authentication
+    # mode. Ed25519 peers intentionally have no reusable peer secret.
+    local auth_mode is_self psf signing_key
+    auth_mode=$(jq -r --arg p "$peer_id" '.[$p].auth_mode // empty' "$PEERS_FILE" 2>/dev/null)
+    is_self=$(jq -r --arg p "$peer_id" '.[$p].self == true' "$PEERS_FILE" 2>/dev/null)
     psf=$(jq -r --arg p "$peer_id" '.[$p].peer_secret_file // empty' "$PEERS_FILE" 2>/dev/null)
-    if [[ -z "$psf" ]]; then
-      echo "  ⚠  $peer_id: no per-peer secret configured (sender identity unverified)"
+
+    if [[ "$auth_mode" == "ed25519-v1" && "$is_self" != "true" ]]; then
+      signing_key=$(jq -r --arg p "$peer_id" '.[$p].signing_public_key_file // empty' "$PEERS_FILE" 2>/dev/null)
+      if [[ -n "$signing_key" && "$signing_key" != /* ]]; then
+        signing_key="$SKILL_DIR/$signing_key"
+      fi
+      if [[ -n "$signing_key" ]] && signature_public_key_ok "$signing_key" "$SKILL_DIR/keys"; then
+        echo "  ✓  $peer_id: pinned Ed25519 public key OK"
+      else
+        echo "  ⚠  $peer_id: pinned Ed25519 public key missing or unsafe (${signing_key:-not configured})"
+        warnings=$((warnings + 1))
+      fi
+    elif [[ -z "$psf" ]]; then
+      echo "  ⚠  $peer_id: no plaintext-legacy peer secret configured"
       warnings=$((warnings + 1))
     else
       # Resolve relative paths
@@ -1079,6 +1182,7 @@ shift || true
 
 case "$COMMAND" in
   setup)    cmd_setup "$@" ;;
+  upgrade)  cmd_upgrade "$@" ;;
   pair)     cmd_pair "$@" ;;
   uninstall) cmd_uninstall "$@" ;;
   doctor)   cmd_doctor "$@" ;;
@@ -1087,6 +1191,7 @@ case "$COMMAND" in
   peers)    cmd_peers "$@" ;;
   bundle)   cmd_bundle "$@" ;;
   inbox)    cmd_inbox "$@" ;;
+  groups)   exec "$SKILL_DIR/scripts/antenna-public-group.sh" "$@" ;;
   sessions) cmd_sessions "$@" ;;
   config)   cmd_config "$@" ;;
   model)    cmd_model "$@" ;;

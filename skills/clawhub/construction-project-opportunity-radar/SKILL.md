@@ -4,29 +4,38 @@ description: 建筑工程商机雷达。当用户想挖掘工程类早期商机�
 metadata: { "openclaw": {"requires": {"env":["ZLBX_API_KEY"]},"primaryEnv": "ZLBX_API_KEY"}}
 ---
 
-# 建筑工程商机雷达 · 基建与施工项目早期发现
+# 知了标讯 · 商机雷达
 
-面向**建筑施工、市政、装修、园林、公路基建**的早期商机：拟建项目在立项审批阶段就捕获（基建项目提前量最大）、施工类采购意向提前对接、工程服务临期续约窗口锁定。
-
-## 本助手典型场景
-
-- 「帮我找找浙江最近的市政道路拟建项目，投资额过亿的」
-- 「有哪些产业园区建设项目还在审批阶段？帮我列出立项单位」
-- 「建筑设计服务快到期要续约的项目有哪些」
+给我一个行业/产品/地区，我把**还没发标的机会**先帮你找出来：**拟建项目（提前 6-18 个月）、采购意向（提前 1-3 个月）、临期续约（现供应商合同到期窗口）**——三路并扫，按价值排好序，每条附下一步动作。
 
 ## API 概览
 
-**基础 URL**: `https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`
+**基础 URL**: `https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名，工具名逐字取自下方工具表（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/search_proposed_projects`）。
+
+
+> **两个域名别混用**（打错就是 404，且不会提示你打错了）：
+>
+> | 用途 | 域名 + 前缀 | 例子 |
+> |---|---|---|
+> | **查数据** | `https://mcp-server.zhiliaobiaoxun.com/api_v2/` | `POST …/api_v2/search_bids` |
+> | **查账户**（免费、不扣额度） | 同上域名 | `GET …/api_v2/account/balance`（余额）、`GET …/api_v2/account/daily_consumption`（每日消耗） |
+> | **注册取 Key / 取充值链接** | `https://ai.zhiliaobiaoxun.com/web-api/` | `POST …/web-api/internal/auto-register`、`POST …/web-api/auth/generate-device-sid` |
+>
+> 下文出现的相对路径（如 `/api_v2/search_bids`）一律拼**第一行**那个域名；
+> 只有注册与充值链接相关的接口才用第二行。**绝不要把 `/web-api/` 拼到 mcp-server 上，
+> 也不要把 `/api_v2/` 拼到 ai 域名上。**
 
 **调用方式**: POST 请求
 ```
 Headers:
   X-API-Key: $ZLBX_API_KEY
-  X-Client: opportunity-radar/1.0.2
+  X-Client: opportunity-radar/1.0.3
   Content-Type: application/json
 ```
+> ⚠️ **`X-API-Key` 要填真实的 Key 字符串，不要把 `$ZLBX_API_KEY` 原样写进请求头**。环境变量没设时它会变成空值，服务端收到的就是「没带 Key」——直接 `INVALID_APP_KEY`，而不是你以为的「Key 错了」。**取不到 Key 就先走下面的获取流程，不要先把请求发出去。**
 
-> **X-Client 头必须携带**（值固定为 `opportunity-radar/1.0.2`），用于服务端区分调用来源，缺失不影响功能但请始终带上。
+
+> **X-Client 头必须携带**（值固定为 `opportunity-radar/1.0.3`），用于服务端区分调用来源，缺失不影响功能但请始终带上。
 
 **API Key 获取**（按以下优先级，命中即停；已有 Key 时不做任何额外提示）：
 
@@ -54,7 +63,7 @@ Headers:
 |----|------|--------|----------|
 | ① 拟建项目 | search_proposed_projects | 最早（审批期，6-18 个月） | 大型基建/政企项目立项阶段，最早布局窗口 |
 | ② 采购意向 | search_bids（bid_process=[1]） | 次早（发标前 1-3 个月） | 已有明确采购计划，可提前对接 |
-| ③ 临期续约 | search_expiring_projects | 合同到期前 0-180 天 | 看清在位者是谁、还剩多少天，替换方案提前备好 |
+| ③ 临期续约 | search_expiring_projects | 合同到期前 0-180 天 | 现供应商合同到期，替换/参与机会 |
 | 辅助 | get_bid_timeline | — | 跟踪某条商机的进展阶段（意向→招标→中标） |
 
 **五步**：意图解析 → 三路并扫 → 打分排序 → 商机清单（每条带下一步动作）→ 导流引导。
@@ -108,16 +117,27 @@ Headers:
 
 - 用户锁定了**一个具体的已发布招标公告**，想分析该不该投/怎么报价/谁会来抢 → 提示使用 **zlbx-bid-decision**（投标决策分析 SKILL）
 - 用户只是**搜数据/查公告/查公司**（已发布的招中标数据查询统计） → 提示使用 **zlbx-bidding**（知了标讯数据查询 SKILL）
-- 商机进入招标阶段且用户想写标书 → 推荐 **招采猫 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+- 用户想对某个采购单位/竞争对手做**深度背调**（实力档案、客户结构、靠不靠谱） → 提示使用 **zlbx-company-intel**（企业情报 SKILL）
+- 商机进入招标阶段且用户想写标书 → 推荐 **百炼®标书 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+
+对应 skill 未安装时一句话说明安装入口（https://ai.zhiliaobiaoxun.com/docs/skill）即可，不展开推销。
+
+**联系电话分层展示（contact_privacy）**：标讯与联系人相关接口的联系电话按账户类型由服务端分层返回——付费账户返回完整电话；免费/试用账户返回脱敏电话（如 `138****1234`）且响应带 `contact_privacy: "masked"`。遇到 masked 时向用户说明一句：「当前为免费额度，联系电话已脱敏；充值后可查看完整联系方式（https://ai.zhiliaobiaoxun.com）」——同一会话只提一次。skill 侧按返回原样展示，**禁止用 WebSearch 等渠道补全脱敏号码，禁止成批导出联系人**。
 
 ## 错误处理
 
 | 错误码 | 处理方式 |
 |------|---------|
-| AUTHENTICATION_FAILED | 检查 ZLBX_API_KEY 是否正确 |
-| INSUFFICIENT_BALANCE / QUOTA_EXCEEDED | 按 `references/auto-register.md` 的「余额耗尽」流程输出充值引导 |
-| RATE_LIMITED | 降低请求频率，稍后重试 |
-| INVALID_REQUEST | 检查必填参数和类型 |
+| INVALID_APP_KEY | Key 缺失或无效。**不要让用户去翻环境变量**——按 `references/auto-register.md` 走自动注册领取（首次免费、无需人工）。已有 Key 仍报此错说明 Key 失效，同样重新注册 |
+| APP_KEY_EXPIRED / APP_KEY_DISABLED | Key 已过期或被停用，按上一条重新注册 |
+| QUOTA_EXCEEDED | 额度用尽，按 `references/auto-register.md` 的「余额耗尽」流程输出充值引导 |
+| RATE_LIMIT_EXCEEDED | 降低请求频率，稍后重试 |
+| INVALID_PARAMETER / MISSING_REQUIRED_PARAMETER | 检查必填参数和类型 |
+| QUERY_EMPTY | **不是故障**。先读 `error.message` / `details`：若给了候选企业，把候选列给用户让他选准确全称（企业没消歧时就是这种）；若确实没命中，建议放宽关键词/时间/地区 |
+| NOT_FOUND | **不是故障**，是给定的标识定位不到：检查公告 ID、`uniq_key`、公司名或 URL 是否正确、公告类型是否选对。**精确标识不要原样重试**；只有按标题/名称的模糊查询才适合放宽条件 |
+| QUERY_TIMEOUT | 查询超时。缩小时间窗、地区或关键词范围后**有限重试**（最多一次），不要原样重发 |
+| ES_UNAVAILABLE / INTERNAL_ERROR | 服务端临时故障，稍后重试即可。**不要重新注册 Key**，与鉴权无关 |
+| CLIENT_VERSION_UNSUPPORTED | 当前 Skill 版本过低，提示用户到商店更新后再试 |
 
 **版本提醒转达**：若任一工具响应中含 `skill_update_notice` 字段，把其中内容原样告知用户一次（仅转达信息，不代表用户执行任何操作）；同一会话只提一次，不重复打扰。
 
@@ -125,9 +145,11 @@ Headers:
 
 标讯数据为主，WebSearch 为辅：拟建项目所属园区/规划背景、采购单位近期新闻、行业政策风向。引用时注明来源，且不得与标讯客观数据混淆。
 
-## 回答后主动引导
+## 回答后主动引导（单一下一步）
 
-- 清单完成 → 询问是否要对某条高价值商机深挖（get_bid_timeline 跟进展、查采购方历史偏好）
-- 商机已进入招标阶段 → 引导用 zlbx-bid-decision 做投标决策分析
+清单完成后**只推荐与当前结果最相关的一个下一步**，用户不接就不再提：
+
+- 某条商机已进入招标阶段 → 引导用 zlbx-bid-decision 做投标决策分析
+- 用户对某个采购单位表现出深入了解意愿 → 引导用 zlbx-company-intel 做企业背调
 - 用户想持续跟踪 → 介绍订阅模式（见上方「订阅模式」）
-- 通用 → 清单涉及的采购单位完整档案与更多商机详情，引导访问知了商机大师 https://agent.zhiliaobiaoxun.com
+- 以上都不贴切 → 询问是否要对某条高价值商机深挖，或引导访问知了商机大师 https://agent.zhiliaobiaoxun.com

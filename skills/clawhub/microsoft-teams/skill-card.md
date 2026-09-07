@@ -1,45 +1,66 @@
-## Description: <br>
-Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts via Microsoft Graph API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts through Microsoft Graph API.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to make Microsoft Teams requests through Maton's managed OAuth proxy, including listing teams and channels, sending channel or chat messages, scheduling meetings, and retrieving meeting recordings or transcripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Teams messages, chats, meetings, recordings, transcripts, and metadata are routed through Maton's OAuth proxy. <br>
-Mitigation: Install only when Maton is trusted for the connected Teams account and the organization allows this data path. <br>
-Risk: A leaked MATON_API_KEY or unintended OAuth connection selection could expose or change Teams resources in the connected account. <br>
-Mitigation: Keep MATON_API_KEY private, specify the Maton-Connection header when multiple accounts exist, and revoke unused connections. <br>
-Risk: Write-capable API calls can create, update, or delete Teams channels, messages, meetings, or connections. <br>
-Mitigation: Require explicit user approval after checking the exact team, channel, message, meeting, or connection and the intended effect. <br>
+## Use Case:
 
+Developers and operators use this skill to access Microsoft Teams data and perform Teams actions through managed OAuth, including listing teams and channels, sending messages, scheduling meetings, and retrieving meeting artifacts.
 
-## Reference(s): <br>
-- [Microsoft Teams API Overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview) <br>
-- [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/byungkyu/microsoft-teams) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP routes, shell commands, and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include requests that read or modify Microsoft Teams resources; write actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: Maton acts as the OAuth and API gateway for the connected Microsoft Teams account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in Maton before installation and grant only the Microsoft scopes needed for the task.
+
+Risk: Write actions can send messages, change meetings, delete channels, or revoke connections.
+
+Mitigation: Review the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Raw API passthrough can reach authorized Microsoft Graph endpoints beyond the documented examples.
+
+Mitigation: Restrict passthrough calls to the current task and review sensitive endpoints before execution.
+
+Risk: Teams responses may include personal data, messages, recordings, transcripts, or meeting details.
+
+Mitigation: Extract only the fields needed for the task and avoid logging or storing raw responses unless explicitly required.
+
+## Reference(s):
+
+- [Microsoft Teams skill page](https://clawhub.ai/byungkyu/skills/microsoft-teams)
+- [Maton homepage](https://maton.ai)
+- [Microsoft Teams API overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview)
+- [Microsoft Graph API reference](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Maton docs](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, API calls, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and API request guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Microsoft Teams connection.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

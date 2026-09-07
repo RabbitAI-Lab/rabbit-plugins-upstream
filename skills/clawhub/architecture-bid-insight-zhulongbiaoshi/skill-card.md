@@ -1,49 +1,70 @@
-## Description: <br>
-建筑工程标讯洞察-筑龙标事，当针对基建、大型工程进行追踪查询或寻找潜在参标单位时调用，优先使用潜在供应商推荐和临期项目接口，为建筑行业用户提供前瞻性建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+建筑工程标讯洞察-筑龙标事，当针对基建、大型工程进行追踪查询或寻找潜在参标单位时调用，优先使用潜在供应商推荐和临期项目接口，为建筑行业用户提供前瞻性建议。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External construction, procurement, and business-development users use this skill to search bids, inspect bid details, analyze companies and competitors, identify expiring projects, and summarize market opportunities through the Zhiliaobiaoxun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bid keywords, company names, bid URLs, and related search parameters are sent to the third-party Zhiliaobiaoxun API. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, keep query scope narrow, and avoid submitting confidential or unauthorized business information. <br>
-Risk: Company matching can broaden analysis across headquarters, subsidiaries, and branch entities. <br>
-Mitigation: Ask the agent to confirm matched companies before broad headquarters or subsidiary analysis when precision matters. <br>
-Risk: Project contact details may be retrieved or shared during company and bid analysis. <br>
-Mitigation: Retrieve or disclose contact details only for legitimate, authorized business purposes. <br>
-Risk: The skill requires the sensitive ZLBX_API_KEY credential. <br>
-Mitigation: Provide the key through the configured environment variable and avoid pasting or exposing it in prompts, logs, or shared outputs. <br>
+## Use Case:
 
+External construction, infrastructure, and business-development users can use this skill to search Chinese bid notices, analyze companies and markets, track project timelines, and identify expiring projects or potential suppliers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/architecture-bid-insight-zhulongbiaoshi) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun API key registration](https://ai.zhiliaobiaoxun.com/?ch=s34) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Markdown] <br>
-**Output Format:** [Markdown narrative with JSON request examples and API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends bid keywords, company names, bid URLs, and related search parameters to the Zhiliaobiaoxun API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill sends bid queries to a third-party bid-data service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user is comfortable using that vendor service for the relevant bid searches.
+
+Risk: Trial registration may send a stable hashed MAC-derived device identifier to the vendor.
+
+Mitigation: Avoid automatic registration when that identifier should not be shared; provide an existing ZLBX_API_KEY instead.
+
+Risk: Generated API keys may be stored locally in ~/.zlbx/config.json.
+
+Mitigation: Protect or delete the local config file when the key should not persist on the machine.
+
+Risk: Returned bid or company data may include contact details.
+
+Mitigation: Treat contact details as sensitive, do not attempt to recover masked phone numbers, and avoid bulk contact export.
+
+Risk: The skill may append vendor referral links after answers.
+
+Mitigation: Review user-facing output for unwanted promotional or referral links before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pkuycl/skills/architecture-bid-insight-zhulongbiaoshi)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with summaries, tables, links, JSON request examples, and inline shell commands when setup is required]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bid-data filters, API request examples, result links, account-status summaries, and setup guidance for ZLBX_API_KEY.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

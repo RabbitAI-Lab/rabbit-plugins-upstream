@@ -1,0 +1,191 @@
+[
+ {
+  "id": "TRAP-01",
+  "title": "conda OpenMM 8.6 + P100 (sm_60) = nvrtc failure",
+  "symptom": "nvrtc: invalid value for --gpu-architecture at kernel start",
+  "root_cause": "conda OpenMM 8.6 links cuda-nvrtc 13.3 which rejects sm_60/sm_70; Kaggle sessions get Tesla P100-PCIE-16GB (sm_60)",
+  "fix": "pin openmm=8.3.1 (CUDA 12, libnvrtc.so.12) in the micromamba env; export CUDA_ARCH parsed from nvidia-smi --query-gpu=compute_cap before constructing the CUDA platform",
+  "evidence": "runbook v38-v40",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-02",
+  "title": "--accelerator does not select the GPU",
+  "symptom": "kernel-metadata accelerator='GPU T4 x2' but P100 still assigned",
+  "root_cause": "GPU type/count/memory are platform-assigned by Kaggle; no kernel metadata override exists",
+  "fix": "stop trying to force hardware; design around the assigned GPU (sm_60 path, TRAP-01)",
+  "evidence": "runbook v38-v40",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-03",
+  "title": "RECELL: coordinates outside [0,box)^3 (PBC wrap)",
+  "symptom": "NaN at step ~251; max|F| constant (~3.7e9 kJ/mol/nm) across steps 50-250; restraint force = 2*k*box on EVERY restrained C-alpha (v52: 2*4184*11.9097=99642)",
+  "root_cause": "custom OPC solvator built the grid centroid-centered on the raw PDB frame and never re-centered the complex; CUDA wraps particle coords into [0,box)^3 while restraint refs stayed in the raw frame, so |x_wrapped - x_ref| = box for out-of-cell atoms",
+  "fix": "shift = box/2 - center applied to protein+grid+ligand+ion logic inside solvate_opc, return shift, and apply the SAME shift when merging the ligand and writing positions back into modeller.positions; validate n_Pmin_outside_box drops 137036 -> ~0",
+  "evidence": "runbook v44-v53, fix at v53",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-04",
+  "title": "bare /kaggle/input/<slug> mount 404s",
+  "symptom": "FileNotFoundError / 'Bad input file' for dataset files",
+  "root_cause": "Kaggle mounts datasets at /kaggle/input/datasets/<owner>/<slug>",
+  "fix": "use the datasets/<owner>/<slug> convention or a find_input_dir() that tries both + walks /kaggle/input",
+  "evidence": "runbook v34-v37",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-05",
+  "title": "dataset re-upload propagation lag",
+  "symptom": "old mounts and 'Bad input file' errors persist minutes after kaggle datasets version",
+  "root_cause": "registry-to-mount propagation is asynchronous",
+  "fix": "poll/re-push; never 'fix' code that is actually correct",
+  "evidence": "runbook 3.3",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-06",
+  "title": "edits went to the file Kaggle does not execute",
+  "symptom": "diagnostics added to code never appear in the kernel log",
+  "root_cause": "Kaggle executes code_file from kernel-metadata.json (= run.py); run_md.py is only the supervisor's template",
+  "fix": "edit run.py, keep identical: cp run.py run_md.py before every push",
+  "evidence": "runbook v47",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-07",
+  "title": "kaggle CLI missing in fresh sandbox",
+  "symptom": "kaggle: command not found after sandbox reset",
+  "root_cause": "pip installs do not persist across sessions; the key file does",
+  "fix": "pip install -q kaggle each fresh session; keep the user-provided key file chmod 600",
+  "evidence": "runbook 2.1, gotcha 2",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-08",
+  "title": "setParticleParameters/getParticleParameters API drift (8.3 vs 8.6)",
+  "symptom": "ValueError: not enough values to unpack (expected 4, got 2)",
+  "root_cause": "8.3 getParticleParameters returns (idx, params) and setParticleParameters takes (i, idx, params); 8.6 differs",
+  "fix": "rebuild the CustomExternalForce per stage (v53+ design) instead of mutating parameters",
+  "evidence": "runbook v41",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-09",
+  "title": "getState(getKineticEnergy=...) not in 8.3",
+  "symptom": "TypeError: Context.getState() got an unexpected keyword argument 'getKineticEnergy'",
+  "root_cause": "energy kwargs are 8.6-only",
+  "fix": "getState(..., getEnergy=True) then .getKineticEnergy()/.getPotentialEnergy() on the returned State (v56 fix)",
+  "evidence": "runbook v55",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-10",
+  "title": "XmlSerializer.serialize stream arg not in 8.3",
+  "symptom": "TypeError: XmlSerializer.serialize() takes 1 positional argument but 2 were given",
+  "root_cause": "8.3 serialize(obj) returns str with no stream parameter",
+  "fix": "open(path,'w').write(XmlSerializer.serialize(obj)) (v54 fix)",
+  "evidence": "runbook v53-v54",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-11",
+  "title": "stacked restraint forces across stages",
+  "symptom": "restraints keep accumulating; FORCE MAP shows more than one restraint force per stage",
+  "root_cause": "previous stage CustomExternalForce never removed",
+  "fix": "system.removeForce(prev_fc_idx) before adding the next stage's force; at B5 remove entirely",
+  "evidence": "runbook v53-v54",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-12",
+  "title": "restraint references taken from raw input coords",
+  "symptom": "same 2*k*box signature as TRAP-03 even with re-centered positions",
+  "root_cause": "restraint x0 refs must come from MINIMIZED coordinates (_Pmin), not raw input frames",
+  "fix": "feed restraint refs from minimized_state positions",
+  "evidence": "runbook v49-v52",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-13",
+  "title": "ligand rebuilt by re-embedding/alignment",
+  "symptom": "bond/coordinate mismatch; forces ~65000 kJ/mol/nm from the ligand; garbage trajectories",
+  "root_cause": "EmbedMolecule+AlignMol gave 1.56 Å RMSD and wrong H placement",
+  "fix": "VF2 heavy-atom graph isomorphism (element-matched, bond-length validated 1.10-1.75 Å) then AddHs(addCoords=True); verify identity by InChIKey vs PubChem (MBZ: OPXLLQIJSORQAM-UHFFFAOYSA-N, CID 4030)",
+  "evidence": "runbook 3.2/5",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-14",
+  "title": "OPC O-M 0.0159 nm reported as a clash",
+  "symptom": "clash report flags ('O',HOH)-('M',HOH) d=0.0159 nm",
+  "root_cause": "4-site OPC water keeps virtual site M on the bisector at 0.0159 nm inside the SAME residue",
+  "fix": "exclude same-residue (and bonded) pairs in clash reports; this pair is healthy",
+  "evidence": "runbook 6.3",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-15",
+  "title": "DCD writer 'dt/AKMA' and 'firstStep' false-positive fixes",
+  "symptom": "an external review suggests 'fixing' dt/AKMA or firstStep constants",
+  "root_cause": "the hand-rolled SelDCD header (struct.pack '<i4c9if', 84, C,O,R,D; dt_ps/0.04888821) is byte-compatible with openmm/app/dcdfile.py",
+  "fix": "do not change them; changing breaks CHARMM/OpenMM compatibility",
+  "evidence": "runbook 7.2, gotcha 10",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-16",
+  "title": "chasing post-min |F|max ~3700 to zero",
+  "symptom": "agent restarts/retunes because post-minimization max force stays ~3,700-3,950 kJ/mol/nm",
+  "root_cause": "normal for 2000-iteration steep descent on ~187k particles (waters)",
+  "fix": "proceed to equilibration; the B1-B5 ladder absorbs it",
+  "evidence": "runbook 6.4",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-17",
+  "title": "removing the per-session micromamba bootstrap",
+  "symptom": "'optimization' that skips env rebuild breaks on the next session",
+  "root_cause": "Kaggle does not persist conda envs or /opt/conda between sessions",
+  "fix": "keep the ~90s bootstrap; it is not the bottleneck",
+  "evidence": "runbook 4.2, gotcha 14",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-18",
+  "title": "two supervisor loops running",
+  "symptom": "double kernel launches, wasted GPU quota",
+  "root_cause": "a second polling loop started after a sandbox reset without checking status",
+  "fix": "after every reset check 'kaggle kernels status' first; start exactly one loop",
+  "evidence": "runbook 9, gotcha 15",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-19",
+  "title": "PDBQT element-from-type-column parsing",
+  "symptom": "wrong elements in the built ligand",
+  "root_cause": "PDBQT atom-type column is unreliable for element inference",
+  "fix": "use the docking SMILES graph (RDKit) as the chemical truth, coordinates from the pose (TRAP-13)",
+  "evidence": "runbook gotcha 12",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-20",
+  "title": "hammering the Kaggle API on 429",
+  "symptom": "429 Too Many Requests persists",
+  "root_cause": "tight polling/push loop",
+  "fix": "increase INTERVAL (e.g. 900->1800); the supervisor loop is backoff-tolerant",
+  "evidence": "runbook 13.5",
+  "confidence": "verified"
+ },
+ {
+  "id": "TRAP-21",
+  "title": "missing residue renames: CYS->CYX (11 disulfides) and chain terminal renames",
+  "symptom": "forcefield templating/parameterization fails or silently produces a wrong system (v44-v46 NaN forensics all trace to terminal residues, e.g. first NaN = N NLYS B1)",
+  "root_cause": "PDB residue names do not match the forcefield template: 11 SSB/SSA disulfides need CYX; chains need N/C terminal variants (terminals: B: NLYS..CCYX; A: NGLY..CVAL; Z: CA..CA)",
+  "fix": "rename CYS->CYX for the 11 disulfides and apply per-chain terminal renames BEFORE ForceField/SystemGenerator parameterization; audit the first-minimized-NaN atom name against the rename map",
+  "evidence": "runbook refs §5 prep step 5; NaN forensics v44/v45/v46",
+  "confidence": "verified"
+ }
+]

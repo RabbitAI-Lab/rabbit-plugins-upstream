@@ -1,42 +1,58 @@
-## Description: <br>
-Helps API developers, backend teams, developer-experience teams, and maintainers generate, improve, and validate OpenAPI or Swagger documentation for REST APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps API developers and platform teams generate, improve, and validate OpenAPI or Swagger documentation for REST APIs.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-API developers, backend teams, developer-experience teams, and maintainers use this skill to create practical OpenAPI or Swagger documentation workflows, artifacts, checklists, code changes, and validation notes for REST APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad routing text may activate the skill on general API or developer-experience requests where OpenAPI documentation help is not intended. <br>
-Mitigation: Use explicit invocation or narrow trigger phrasing when routing matters, and confirm the user's API documentation goal before producing artifacts. <br>
+## Use Case:
 
+Developers, backend teams, developer-experience teams, and maintainers use this skill to create, improve, and review API documentation so REST services are easier for other engineers to understand and consume.
 
-## Reference(s): <br>
-- [Openapi Docs Generator on ClawHub](https://clawhub.ai/kyro-ma/skills/openapi-docs-generator) <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [OpenAPI RESTful API Design Signal](https://blog.csdn.net/2501_94476825/article/details/159013081) <br>
-- [Dynamic OpenAPI 3.1 Documentation Request](https://github.com/PRODHOSH/ossfolio/issues/577) <br>
-- [OpenAPI Interface Specification Signal](https://segmentfault.com/a/1190000043968971) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with optional code blocks, shell commands, checklists, and validation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are tailored to the user's API documentation task and should include assumptions, limits, and verification steps when relevant.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.70315 (source: server evidence release.version) <br>
+Risk: Broad activation wording could route vague API documentation requests to this skill when another workflow would fit better.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's desired API documentation outcome, available inputs, constraints, and success criteria before producing artifacts.
+
+Risk: Generated OpenAPI or Swagger guidance may be incomplete, stale, or inconsistent with the user's service behavior.
+
+Mitigation: Validate outputs against the source API implementation, examples, and stated review criteria before adoption.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [OpenAPI specification: RESTful API design](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=764f1d2eb6bf44bb8e721571b9551f1c&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base4&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- [Contract IR and downstream API documentation issue](https://github.com/ORESoftware/typespec-json-schema-validator/issues/20)
+- [Swagger Bearer token discussion](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
+- [OpenAPI interface specification article](https://segmentfault.com/a/1190000043968971)
+- [Swagger base URL discussion](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, with code blocks or command snippets when implementation support is requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include checklists, workflow steps, assumptions, validation notes, and follow-up risks.]
+
+## Skill Version(s):
+
+0.20260907.40414 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

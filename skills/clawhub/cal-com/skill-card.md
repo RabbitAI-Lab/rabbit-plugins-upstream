@@ -1,50 +1,63 @@
-## Description: <br>
-Cal.com API integration with managed OAuth for managing event types, bookings, schedules, availability, calendars, conferencing, webhooks, teams, verified resources, and user profile. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cal.com API integration with managed OAuth for managing event types, bookings, schedules, availability, calendars, conferencing, webhooks, teams, verified resources, and user profile.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and manage Cal.com scheduling resources through Maton's managed OAuth integration. It supports booking workflows, event type configuration, availability checks, calendar and conferencing lookup, webhook management, team lookup, verified email lookup, and profile updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and managed OAuth access to a connected Cal.com account. <br>
-Mitigation: Install it only when the operator trusts Maton for the connected account, set MATON_API_KEY deliberately, and remove or rotate credentials when access is no longer needed. <br>
-Risk: Write operations can create, update, or delete scheduling resources, bookings, schedules, webhooks, and profile data. <br>
-Mitigation: Require explicit user approval before every create, update, delete, cancel, or reserve action, including the target resource and expected effect. <br>
-Risk: Webhooks can transmit attendee names, email addresses, and scheduling details to external subscriber URLs. <br>
-Mitigation: Confirm the subscriber URL, triggers, active state, and purpose with the user before creating or updating any webhook. <br>
-Risk: Booking and profile reads can expose personal data such as attendee identities, emails, and schedule details. <br>
-Mitigation: Retrieve personal data only when the user requests it and limit queries to the needed booking, date range, or account context. <br>
-Risk: Booking creation may fail or create an unintended appointment if the slot is unavailable or the wrong connection is used. <br>
-Mitigation: Check available slots first and specify the Maton-Connection header when more than one Cal.com connection exists. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an agent to Cal.com through Maton OAuth and perform scheduling workflows such as checking availability, creating bookings, configuring event types, and managing webhooks.
 
-## Reference(s): <br>
-- [Cal.com skill page on ClawHub](https://clawhub.ai/byungkyu/cal-com) <br>
-- [byungkyu publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Cal.com API documentation](https://cal.com/docs/api-reference/v2/introduction) <br>
-- [Cal.com API reference](https://cal.com/docs/api-reference/v2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, API Calls] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell commands, HTTP request examples, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Maton OAuth connection to Cal.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Credential exposure from package installation, OAuth/API-key handling, or raw HTTP fallback.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in the Maton packages and account connection, prefer OAuth, keep credentials in the approved credential store or secret environment, and never print or persist tokens or API keys.
+
+Risk: Broad API passthrough may reach Cal.com endpoints beyond the documented examples.
+
+Mitigation: Default to read/list operations, use the narrowest Cal.com scopes available, specify the intended connection when multiple accounts exist, and review every write request before execution.
+
+Risk: Webhook subscriptions can send booking and event data, including attendee details, to external URLs.
+
+Mitigation: Confirm the subscriber URL, host ownership, triggers, and intent with the user before creating or updating any webhook.
+
+## Reference(s):
+
+- [Cal.com API Documentation](https://cal.com/docs/api-reference/v2/introduction)
+- [Cal.com API Reference](https://cal.com/docs/api-reference/v2)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/cal-com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Cal.com connection.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

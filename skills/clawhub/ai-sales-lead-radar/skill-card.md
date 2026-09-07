@@ -1,46 +1,61 @@
-## Description: <br>
-AI销售线索雷达 helps government and enterprise sales teams find and rank proposed projects, purchase intentions, and expiring-contract opportunities from an industry, product, or region query. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI销售线索雷达 helps government and enterprise sales, BD, and channel teams find and rank early sales opportunities from proposed projects, procurement intents, and expiring contracts.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External sales, BD, and channel teams use this skill to scan public procurement-related data for early customer opportunities, prioritize leads by value and urgency, and produce a shareable opportunity report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sales-search queries to the vendor API. <br>
-Mitigation: Use only if the user is comfortable sharing those search terms with the vendor; avoid entering confidential account strategy or sensitive customer information. <br>
-Risk: Auto-registration can create persistent local credentials and uses a hashed device identifier. <br>
-Mitigation: Prefer a manually configured ZLBX_API_KEY when available, and require user consent before any auto-registration flow. <br>
-Risk: Generated reports may preserve login-signed sk links or auto-login links. <br>
-Mitigation: Review reports before sharing and treat signed links as sensitive access links. <br>
+## Use Case:
 
+External sales, BD, and channel users use this skill to scan for potential customers and prioritize opportunities by value, timing, maturity, and product fit. It produces concise opportunity lists and optional HTML reports from vendor procurement data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/ai-sales-lead-radar) <br>
-- [商机雷达 workflow](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, files, API calls, guidance] <br>
-**Output Format:** [Markdown lead list with optional generated HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Ranks proposed projects, purchase intentions, and expiring contracts; full scans are described as using about 8-15 vendor API queries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill sends sales search terms to a third-party procurement API and may create accounts or store returned API keys locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer configuring a user-provided ZLBX_API_KEY, review ~/.zlbx/config.json permissions after use, and approve automatic registration only when the vendor data flow is acceptable.
+
+Risk: Optional auto-registration transmits a stable MAC-derived device hash for free-trial deduplication.
+
+Mitigation: Skip auto-registration by preconfiguring ZLBX_API_KEY or a local config file, and disclose the device-feature collection before registration.
+
+Risk: Generated reports and source links may contain login-bearing or signed links that should not be broadly shared.
+
+Mitigation: Share reports only with intended recipients and avoid reposting sk or SID links in public channels.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/ai-sales-lead-radar)
+- [API Quick Reference](references/api-quick.md)
+- [Workflow Guide](references/workflow.md)
+- [Report Template](references/report-template.md)
+- [Auto Registration Flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown opportunity reports, optional self-contained HTML report files, and concise configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a local ~/.zlbx/config.json API key; full scans disclose expected credit use before querying.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,63 @@
-## Description: <br>
-Analyzes fixed-camera video of an elder's water-cup area to count cup pickups, estimate drinking frequency, and surface dehydration-risk reminders for caregivers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes fixed-camera video of an elderly person's water-cup area to count cup pickup events and report non-diagnostic dehydration-risk indicators for caregivers.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, family members, and elder-care operators use this skill to analyze home or care-facility video of a water-cup area, review cup-pickup frequency, and receive directional reminders when the pattern suggests possible dehydration risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Home video or video URLs may be sent to external services, and cloud report history may be queried. <br>
-Mitigation: Require explicit consent from monitored people, avoid unrelated household footage, and confirm cloud processing is acceptable before use. <br>
-Risk: The skill may create or reuse local and remote identity records and tokens. <br>
-Mitigation: Review or clear the workspace data directory if identity or token reuse is not desired. <br>
-Risk: Cup-pickup counts are only an indirect proxy for water intake and may be inaccurate in shared or unstable scenes. <br>
-Mitigation: Treat alerts as caregiver prompts rather than medical diagnosis, verify with the elder or caregiver, and seek medical care if symptoms are present. <br>
+## Use Case:
 
+Caregivers, family members, nursing-home staff, and home-care platform operators use this skill to review camera footage for water-cup pickup frequency, long gaps without detected cup use, and trend-based reminders. The output is a visual behavior summary and directional alert, not a medical diagnosis or direct measurement of water intake.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-drinking-frequency-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with optional report links and local file output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured drinking-frequency metrics, dehydration-risk alerts, recommended caregiver actions, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: The skill sends elderly-care camera footage and report requests to a configured service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with informed consent from the monitored person or guardian, and confirm the service endpoint, retention expectations, and access controls before deployment.
+
+Risk: The security review reports persisted identity credentials and a local SQLite user/token database.
+
+Mitigation: Review where the local database is stored, restrict file access, and rotate or remove credentials used during testing or installation.
+
+Risk: The security review flags insecure default network settings and shipped development HTTP endpoints.
+
+Mitigation: Require production HTTPS endpoints before real use and remove or override development endpoint configuration.
+
+Risk: Cup pickup counts are only an indirect proxy for drinking and can be wrong when the cup is empty, handled by someone else, or outside the camera's stable view.
+
+Mitigation: Treat alerts as prompts for caregiver follow-up and combine them with drinking gestures, personal baselines, and direct welfare checks.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Analysis API error-code reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON]
+
+**Output Format:** [Markdown text with structured JSON-style analysis, risk labels, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the same textual result to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter says 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

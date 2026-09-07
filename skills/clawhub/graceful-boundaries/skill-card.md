@@ -1,44 +1,58 @@
-## Description: <br>
-Assess API or website conformance with the Graceful Boundaries specification and provide concrete guidance or implementation changes for clearer rate-limit and error communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses a URL's Graceful Boundaries conformance level through direct HTTP inspection and provides a concrete implementation plan for reaching the next level.
 
-## Publisher: <br>
-[snapsynapse](https://clawhub.ai/user/snapsynapse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapsynapse](https://clawhub.ai/user/snapsynapse)
 
-## Use Case: <br>
-Developers, engineers, and agent operators use this skill to audit HTTP services for Graceful Boundaries conformance, identify gaps in structured refusals and proactive limit discovery, and implement response patterns that help agents avoid blind retries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Auditing a service can send HTTP requests to the target and may be inappropriate for systems the user does not own or have permission to test. <br>
-Mitigation: Run audits only against owned or authorized services, and avoid internal or sensitive network targets unless that is the intended scope. <br>
-Risk: Builder-mode guidance can modify application error handling, rate-limit disclosure, and response headers. <br>
-Mitigation: Review generated code changes before committing or deploying, and verify behavior against the service's actual security and operational requirements. <br>
+## Use Case:
 
+Developers and API operators use this skill to evaluate how a public API or website communicates rate limits, refusal details, and recovery guidance. It produces an evidence-based assessment and practical steps for improving Graceful Boundaries conformance.
 
-## Reference(s): <br>
-- [Graceful Boundaries ClawHub release](https://clawhub.ai/snapsynapse/graceful-boundaries) <br>
-- [Graceful Boundaries specification site](https://gracefulboundaries.dev) <br>
-- [Specification](artifact/spec.md) <br>
-- [Implementation guide](artifact/docs/implementation-guide.md) <br>
-- [curl examples](artifact/docs/curl-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline JSON, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include conformance findings, gap analysis, implementation snippets, and verification commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: The skill can direct broad HTTP requests at user-provided URLs, which could unintentionally probe localhost, private networks, cloud metadata services, or authenticated systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intentionally selected targets, preferably public HTTPS services, and avoid localhost, private network hosts, cloud metadata addresses, and authenticated services unless access is deliberate and contained.
+
+Risk: HTTP inspection may expose ambient credentials if the execution environment automatically attaches cookies, authorization headers, proxy credentials, or client certificates.
+
+Mitigation: Run audits from an isolated environment that does not attach credentials to outbound requests.
+
+Risk: Trying to verify refusal behavior by forcing 429 responses could place unnecessary load on the target service.
+
+Mitigation: Do not intentionally trigger rate limits; report Level 1 and Level 3 refusal behavior as unverifiable unless a natural refusal response is already available.
+
+## Reference(s):
+
+- [Graceful Boundaries Documentation](https://gracefulboundaries.dev)
+- [ClawHub Skill Listing](https://clawhub.ai/snapsynapse/skills/graceful-boundaries)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown assessment with HTTP findings, gap analysis, implementation examples, and security notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON examples, HTTP header examples, and curl or equivalent shell commands.]
+
+## Skill Version(s):
+
+1.5.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

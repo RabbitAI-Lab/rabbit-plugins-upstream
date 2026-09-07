@@ -1,40 +1,55 @@
-## Description: <br>
-Dataify Google Shopping converts a user's shopping search or price-comparison request into a confirmed Dataify Scraper API call for Google Shopping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Shopping for product discovery, offers, and price comparison.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to run Google Shopping product searches, price comparisons, and filter queries through Dataify after reviewing and confirming the request parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed shopping queries, filters, and the Dataify API token are sent to Dataify when an API call is made. <br>
-Mitigation: Review the confirmation table before approving each call and use a token scoped to the Dataify service. <br>
-Risk: Credentials can be exposed if the API token is pasted into unrelated chats or echoed in responses. <br>
-Mitigation: Provide the token only for this service, prefer the DATAIFY_API_TOKEN environment variable, and keep token values masked in previews and final responses. <br>
+## Use Case:
 
+External users and developers use this skill to run focused Google Shopping searches through Dataify, compare products and offers, and receive concise shopping results or raw API output when requested.
 
-## Reference(s): <br>
-- [Dataify Google Shopping API Reference](references/google_shopping_api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API Calls, Text] <br>
-**Output Format:** [Markdown confirmation table followed by the raw API response body, which may be JSON, JSON+HTML, HTML, or Light JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify API token; token values are masked in previews and the API response is returned without reshaping.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill uses a Dataify API token and may spend Dataify credits for Google Shopping lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure DATAIFY_API_TOKEN in the shell instead of passing it as a command argument, and review high-volume or multi-page searches before execution.
+
+Risk: User-selected search parameters are sent to Dataify for Google Shopping lookup.
+
+Mitigation: Keep requests scoped to product discovery data and avoid including unnecessary sensitive information in shopping queries or filters.
+
+## Reference(s):
+
+- [Google Shopping API Reference](references/google_shopping_api.md)
+- [Dataify Dashboard Login](https://dashboard.dataify.com/login?utm_source=skill)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-shopping)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, parameter previews, shell commands, and raw JSON or HTML when explicitly requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN; Google Shopping lookups may spend Dataify credits.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

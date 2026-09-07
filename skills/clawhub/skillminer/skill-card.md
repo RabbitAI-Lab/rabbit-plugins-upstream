@@ -1,48 +1,56 @@
-## Description: <br>
-Suggest reusable skills from recurring patterns in local memory files. Human review gate, drafts only to skills/_pending/, local-first runner with optional external fallback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+skillminer suggests reusable skills from recurring patterns in local OpenClaw memory files, drafting review-only candidates with a local-first runner and an optional external fallback.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Developers and agent users use Skillminer to scan local OpenClaw memory files for recurring work patterns, review candidate skills, and draft accepted candidates into a pending skills directory for human review before promotion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads recent local memory files, which may contain private or sensitive user content. <br>
-Mitigation: Install only in workspaces where local memory scanning is acceptable, and review generated candidates before accepting or promoting them. <br>
-Risk: Setting FORGE_RUNNER=claude sends prompt data to Anthropic's API. <br>
-Mitigation: Leave FORGE_RUNNER unset to use the default local OpenClaw runner unless external processing has been explicitly approved. <br>
-Risk: Server security evidence reports that documented token redaction should not be relied on until missing pattern data and output-scrubbing gaps are fixed. <br>
-Mitigation: Treat redaction as defense in depth, avoid storing secrets in memory files, and inspect local state, review, and draft outputs before sharing or promoting them. <br>
-Risk: Generated skill drafts could encode incorrect, misleading, or over-broad guidance. <br>
-Mitigation: Keep the human review gate: accept, reject, defer, or silence candidates manually, and scan drafts before moving them from skills/_pending/ into live skills. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to identify repeated work patterns in local memory files and turn approved candidates into draft skills for later review and promotion.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/robbyczgw-cla/skillminer) <br>
-- [Publisher Profile](https://clawhub.ai/user/robbyczgw-cla) <br>
-- [README](README.md) <br>
-- [User Guide](USER_GUIDE.md) <br>
-- [Changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown files, SKILL.md drafts, JSON state, shell command output, and local configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft skills are written under skills/_pending/ for human review; local state and review artifacts are written under state/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.3 (source: server evidence, frontmatter, skill.json, and changelog) <br>
+Risk: The scheduled local agent reads OpenClaw memory files and writes local review state and pending skill drafts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that local access is acceptable, and review generated drafts before promoting them.
+
+Risk: Setting FORGE_RUNNER=claude can send prompt data off host to Anthropic.
+
+Mitigation: Keep FORGE_RUNNER unset unless the off-host data flow is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/robbyczgw-cla/skills/skillminer)
+- [README.md](README.md)
+- [USER_GUIDE.md](USER_GUIDE.md)
+- [CHANGELOG.md](CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, local review files, and draft SKILL.md content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts are review-only and written under skills/_pending/ before any manual promotion.]
+
+## Skill Version(s):
+
+0.6.0 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

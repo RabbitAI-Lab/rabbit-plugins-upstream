@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dingtalk-docs-skill",
   "slug": "dingtalk-docs-skill",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1780892743066,
-  "contentHash": "f308a044c40670094c8f4a628bb87cc15d82704df44f4276c47a483747e12864",
-  "fetchedAt": "2026-07-26T18:32:47.903Z"
+  "version": "1.0.2",
+  "updatedAt": 1788162785322,
+  "contentHash": "ec10b50cf6c3f33c32582cefb5853c62e3092c20fc71f71a9b61b522c785ce5f",
+  "fetchedAt": "2026-09-07T14:24:35.679Z"
 }

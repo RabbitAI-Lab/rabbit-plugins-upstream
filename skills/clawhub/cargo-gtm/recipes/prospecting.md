@@ -14,12 +14,16 @@ For sourcing-only / TAM list builds, see [`build-tam.md`](build-tam.md). For inv
 
 ```
 1. SOURCE    → salesNavigator.searchLeads / searchAccounts            (0.02–0.05/record)
-2. DEDUPE    → cargo.matchProspect / cargo.matchBusiness              (0.5/record)
-3. ENRICH    → cargo.enrichProspectDetails + …Firmographics
-               + waterfall.enrichContact / enrichCompany              (0.5–2/record)
-4. SIGNAL    → cargo.enrichBusinessFundingAndAcquisitions
+2. DEDUPE    → match against the workspace's own Contacts / Companies models
+               on linkedin_url / domain (storage SQL or a segment filter)  (free)
+3. ENRICH    → LinkedIn URL in hand? aiArk.enrichPerson (0.1) FIRST — profile + verified email
+               aiArk.enrichCompany (0.01) for firmographics
+               + waterfall.enrichContact / enrichCompany              (1–2/record)
+               + apolloio.enrichPerson / enrichOrganization on the residue (1/record)
+4. SIGNAL    → enrichCrm.getFunding                                   (1/record)
                + theirStack.searchJobs                                (0.5/record)
-5. CONTACT   → FullEnrich.findEmail (fallback peopleDataLabs)         (1–3/record)
+5. CONTACT   → FullEnrich.findEmail on rows step 3 left without an email
+               (fallback peopleDataLabs)                              (1–3/record)
 6. VERIFY    → waterfall.verifyEmail                                  (0.1/record)
 7. WRITEBACK → segment write / CRM upsert / CSV export                (free)
 ```
@@ -35,12 +39,16 @@ Adapt by phase: drop steps that aren't relevant. Pure sourcing → step 1 only. 
 cargo-ai whoami
 
 # 2. Confirm priority providers are connected
-for slug in salesNavigator FullEnrich waterfall theirStack cargo peopleDataLabs; do
+for slug in salesNavigator FullEnrich waterfall theirStack enrichCrm peopleDataLabs; do
   cargo-ai connection connector list --integration-slug "$slug" \
     | jq -e '.connectors | length > 0' > /dev/null \
     && echo "✓ $slug" \
     || echo "✗ $slug (NOT CONNECTED — recipe will fall back)"
 done
+# aiArk and apolloio (the other two priority providers) are deliberately not in
+# this loop: their credits-based actions run on cargo's managed connection, so an
+# empty `connector list` doesn't mean unavailable. apolloio's other nine actions
+# (searches, contact CRUD, sequences) DO need your own Apollo API key connector.
 
 # 3. Find the target model (Companies / Contacts) for write-back
 cargo-ai storage model list
@@ -60,7 +68,7 @@ cargo-ai segmentation segment list
 ```bash
 # Step 1 — SOURCE: cheapest at-scale lead search
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
   --data '{
     "keywords": "CTO",
     "company": {"industries": [43]},
@@ -69,38 +77,39 @@ cargo-ai orchestration action execute \
   }' \
   --wait-until-finished > /tmp/p1-leads.json
 
-# Step 2 — DEDUPE: resolve each lead to a cargo prospect_id
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchProspect","config":{}}' \
-  --records "$(jq -c '[.results[] | {full_name, company_name, linkedin: .linkedinUrl}]' /tmp/p1-leads.json)" \
-  --wait-until-finished > /tmp/p1-matched.json
+# Step 2 — DEDUPE: drop leads the workspace already holds (free, no paid action)
+cargo-ai storage query execute \
+  "SELECT linkedin_url FROM default.contacts WHERE linkedin_url IS NOT NULL" \
+  > /tmp/p1-known.json
 
-# Step 3a — ENRICH (prospect details)
+jq -c --slurpfile known /tmp/p1-known.json \
+  '[.results[] | select(.linkedinUrl as $u
+      | ($known[0].rows // [] | map(.linkedin_url)) | index($u) | not)]' \
+  /tmp/p1-leads.json > /tmp/p1-new.json
+
+# Step 3a — ENRICH (person): searchLeads returns a LinkedIn URL, so this is the
+# cheapest rung — full profile plus a verified email, billing 0 on no-email
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichProspectDetails","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.prospect_id) | {prospect_id}]' /tmp/p1-matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichPerson"}' \
+  --records "$(jq -c '[.[] | {linkedinUrl}]' /tmp/p1-new.json)" \
   --wait-until-finished > /tmp/p1-prospect-enriched.json
 
 # Step 3b — ENRICH (firmographics on each contact's company)
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
-  --records "$(jq -c '[.results[] | {domain: .companyDomain}]' /tmp/p1-leads.json)" \
-  --wait-until-finished > /tmp/p1-business-matched.json
-
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFirmographics","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.business_id) | {business_id}]' /tmp/p1-business-matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichCompany"}' \
+  --records "$(jq -c '[.[] | {domain: .companyDomain}]' /tmp/p1-new.json)" \
   --wait-until-finished > /tmp/p1-firmo.json
 
-# Step 5 — CONTACT: find email for each prospect
+# Step 5 — CONTACT: find email ONLY for the rows step 3a left without one
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
-  --records "$(jq -c '[.results[] | {firstName: .firstName, lastName: .lastName, domainName: .companyDomain}]' /tmp/p1-leads.json)" \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
+  --records "$(jq -c '[.results[] | select((.email // "") == "")
+                       | {firstName, lastName, domainName: .companyDomain}]' /tmp/p1-prospect-enriched.json)" \
   --wait-until-finished > /tmp/p1-emails.json
 
 # Step 6 — VERIFY each found email
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.results[] | select(.email) | {email}]' /tmp/p1-emails.json)" \
   --wait-until-finished > /tmp/p1-verified.json
 
@@ -112,7 +121,7 @@ jq -s '[.[0].results, .[1].results, .[2].results, .[3].results]
   /tmp/p1-leads.json /tmp/p1-prospect-enriched.json /tmp/p1-emails.json /tmp/p1-verified.json
 ```
 
-**Credit budget**: ~10 leads × (0.02 + 0.5 + 2 + 0.5 + 1 + 0.1) = ~41 credits.
+**Credit budget**: ~10 leads × (0.02 + 0 + 0.1 + 0.01 + 1 + 0.1) = ~12 credits. Step 5 (`FullEnrich.findEmail`, 1/record) only runs on the rows step 3a left without an email — `aiArk.enrichPerson` usually returns one, so the real figure lands under this.
 
 ---
 
@@ -126,7 +135,7 @@ jq -s '[.[0].results, .[1].results, .[2].results, .[3].results]
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs"}' \
   --data '{
     "fields": {"job_titles": ["Data Engineer"], "posted_at_max_age_days": 60},
     "companyFields": {"industries": ["software", "saas"], "employeeCounts": ["50-200","200-500"]},
@@ -138,14 +147,19 @@ cargo-ai orchestration action execute \
 ### Step 2 — Dedup + enrich firmographics on the source companies
 
 ```bash
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
-  --records "$(jq -c '[.results[].company | {domain}]' /tmp/p2-companies.json)" \
-  --wait-until-finished > /tmp/p2-business-matched.json
+# Dedupe is a free storage read — companies the workspace already holds don't
+# need re-enriching
+cargo-ai storage query execute \
+  "SELECT domain FROM default.companies" > /tmp/p2-known.json
+
+jq -c --slurpfile known /tmp/p2-known.json \
+  '[.results[].company | select(.domain as $d
+      | ($known[0].rows // [] | map(.domain)) | index($d) | not)]' \
+  /tmp/p2-companies.json > /tmp/p2-new-companies.json
 
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFirmographics","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.business_id) | {business_id}]' /tmp/p2-business-matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichCompany"}' \
+  --records "$(jq -c '[.[] | {domain}]' /tmp/p2-new-companies.json)" \
   --wait-until-finished > /tmp/p2-firmo.json
 ```
 
@@ -153,31 +167,32 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
   --records "$(jq -c '[.results[].company | {keywords: "Head of RevOps", company: {linkedinIds: [.linkedinId]}, limit: 3}]' /tmp/p2-companies.json)" \
   --wait-until-finished > /tmp/p2-leads.json
 ```
 
-### Step 4 — Match each lead, enrich prospect details
+### Step 4 — Enrich each lead from its LinkedIn URL
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchProspect","config":{}}' \
-  --records "$(jq -c '[.results[].leads[] | {full_name, company_name, linkedin: .linkedinUrl}]' /tmp/p2-leads.json)" \
-  --wait-until-finished > /tmp/p2-prospect-matched.json
-
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichProspectDetails","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.prospect_id) | {prospect_id}]' /tmp/p2-prospect-matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichPerson"}' \
+  --records "$(jq -c '[.results[].leads[] | {linkedinUrl}]' /tmp/p2-leads.json)" \
   --wait-until-finished > /tmp/p2-prospect-enriched.json
 ```
 
-### Step 5 — Find emails (FullEnrich)
+`enrichPerson` returns the verified email alongside the profile and bills 0 when
+it finds none, so step 5 below only pays for the residue it left empty.
+
+### Step 5 — Find emails (FullEnrich) on the residue only
 
 ```bash
+# ONLY the rows step 4 left without an email — this gate is what makes the
+# budget below 60 credits instead of 200.
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
-  --records "$(jq -c '[.results[].leads[] | {firstName, lastName, domainName: .companyDomain}]' /tmp/p2-leads.json)" \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
+  --records "$(jq -c '[.results[] | select((.email // \"\") == \"\")
+                       | {firstName, lastName, domainName: .companyDomain}]' /tmp/p2-prospect-enriched.json)" \
   --wait-until-finished > /tmp/p2-emails.json
 ```
 
@@ -193,7 +208,7 @@ node <skill-dir>/scripts/validate-emails.ts --input /tmp/p2-emails.json --json >
 #     credits, so the verify batch must be built from its output, never from
 #     the original list
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.[] | select(.recommendation != "skip") | {email}]' /tmp/p2-culled.json)" \
   --wait-until-finished > /tmp/p2-verified.json
 ```
@@ -225,14 +240,13 @@ If a Contacts model exists, upsert via `cargo-ai storage` patterns — see [`../
 
 **Credit budget** (200 leads, ~95 unique companies):
 - theirStack searchJobs: 0.5
-- cargo.matchBusiness × 95: 47.5
-- cargo.enrichBusinessFirmographics × 95: 47.5
+- dedupe against the Companies model: 0
+- aiArk.enrichCompany × 95: ~1
 - salesNavigator.searchLeads × 95: ~5.7 (≈ 0.02 × 3 × 95)
-- cargo.matchProspect × 200: 100
-- cargo.enrichProspectDetails × 200: 400
-- FullEnrich.findEmail × 200: 200
+- aiArk.enrichPerson × 200: 20
+- FullEnrich.findEmail × 60 (the rows aiArk left without an email): 60
 - waterfall.verifyEmail × 200: 20
-- **Total: ~821 credits for 200 fully-enriched + verified prospects** (~4 cred/prospect).
+- **Total: ~107 credits for 200 fully-enriched + verified prospects** (~0.5 cred/prospect).
 
 ---
 
@@ -256,23 +270,18 @@ cargo-ai segmentation segment fetch \
 # 2. Filter to rows MISSING email
 jq -c '[.records[] | select(.email == null or .email == "")]' /tmp/p3-segment.json > /tmp/p3-missing-email.json
 
-# 3. Try cargo first (cheapest; works on already-known prospects)
+# 3. Try aiArk first on the rows that carry a LinkedIn URL (0.1, bills 0 on no-email)
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchProspect","config":{}}' \
-  --records "$(jq -c '[.[] | {full_name, company_name, linkedin}]' /tmp/p3-missing-email.json)" \
-  --wait-until-finished > /tmp/p3-cargo-matched.json
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichPerson"}' \
+  --records "$(jq -c '[.[] | select(.linkedin) | {linkedinUrl: .linkedin}]' /tmp/p3-missing-email.json)" \
+  --wait-until-finished > /tmp/p3-aiark-enriched.json
 
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichProspectDetails","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.prospect_id) | {prospect_id}]' /tmp/p3-cargo-matched.json)" \
-  --wait-until-finished > /tmp/p3-cargo-enriched.json
-
-# 4. For rows still missing email after cargo, escalate to FullEnrich
+# 4. For rows still missing email, escalate to FullEnrich
 jq -s '[.[0][], .[1].results[]] | group_by(.full_name) | map(reduce .[] as $r ({}; . * $r)) | map(select(.email == null or .email == ""))' \
-  /tmp/p3-missing-email.json /tmp/p3-cargo-enriched.json > /tmp/p3-still-missing.json
+  /tmp/p3-missing-email.json /tmp/p3-aiark-enriched.json > /tmp/p3-still-missing.json
 
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
   --records "$(jq -c '[.[] | {firstName, lastName, domainName}]' /tmp/p3-still-missing.json)" \
   --wait-until-finished > /tmp/p3-fullenrich.json
 
@@ -281,7 +290,7 @@ jq -s '[.[0][], .[1].results[]] | group_by(.firstName + .lastName) | map(reduce 
   /tmp/p3-still-missing.json /tmp/p3-fullenrich.json > /tmp/p3-final-missing.json
 
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"enrichPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"enrichPerson"}' \
   --records "$(jq -c '[.[] | {parameters: {first_name: .firstName, last_name: .lastName, company: .companyName}}]' /tmp/p3-final-missing.json)" \
   --wait-until-finished > /tmp/p3-pdl.json
 
@@ -289,18 +298,17 @@ cargo-ai orchestration action execute-batch \
 jq -s '[.[].results[] | select(.email)] | unique_by(.email)' /tmp/p3-fullenrich.json /tmp/p3-pdl.json > /tmp/p3-emails-to-verify.json
 
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.[] | {email}]' /tmp/p3-emails-to-verify.json)" \
   --wait-until-finished > /tmp/p3-verified.json
 ```
 
-**Credit budget** (200 contacts missing email; assumes 60% hit on cargo, 25% on FullEnrich, 10% on PDL, 5% unresolvable):
-- cargo.matchProspect × 200: 100
-- cargo.enrichProspectDetails × 200: 400
+**Credit budget** (200 contacts missing email; assumes 60% hit on aiArk, 25% on FullEnrich, 10% on PDL, 5% unresolvable):
+- aiArk.enrichPerson × 200: 20 (and 0 on the 40% that return no email)
 - FullEnrich.findEmail × 80: 80
 - peopleDataLabs.enrichPerson × 30: 90
 - waterfall.verifyEmail × 190: 19
-- **Total: ~689 credits for 190 verified emails** (~3.6 cred/email).
+- **Total: ~209 credits for 190 verified emails** (~1.1 cred/email).
 
 The waterfall pattern saves ~50% vs running peopleDataLabs on everyone (which would be 600 credits just for enrich).
 
@@ -330,7 +338,7 @@ When the priority stack misses the user's criteria, see [`../references/alternat
 
 ## Action shape rules
 
-`{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation: `{{nodes.<slug>.<field>}}`.
+`{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation: `{{nodes.<slug>.<field>}}`.
 
 ## When stuck — file a workspace report
 

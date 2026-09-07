@@ -1,46 +1,62 @@
-## Description: <br>
-Weather information lookup tool covering Chinese cities and counties for current weather and forecast requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weather information lookup tool covering Chinese cities and counties for current weather, forecasts, and weather alerts.
 
-## Publisher: <br>
-[tencentnewsteam](https://clawhub.ai/user/tencentnewsteam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tencentnewsteam](https://clawhub.ai/user/tencentnewsteam)
 
-## Use Case: <br>
-External users and agents use this skill to answer current-weather and forecast questions for Chinese city, district, and county locations through Tencent weather data. It helps choose the appropriate CLI weather command, request missing location details when needed, and format returned weather fields for the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs and runs a persistent external Tencent News CLI from Tencent-hosted installer scripts. <br>
-Mitigation: Install only when the publisher and installer are trusted, and prefer downloading and verifying installer scripts before execution. <br>
-Risk: The skill may use or change a locally stored Tencent News API key. <br>
-Mitigation: Let users provide and manage the API key explicitly, avoid exposing the key in responses, and clear it only when the user asks. <br>
-Risk: The installed CLI has broader persistent capabilities than weather lookup alone. <br>
-Mitigation: Route weather work through the bundled state and run scripts, review the CLI state before use, and stop on CLI failures instead of falling back to another data source. <br>
+## Use Case:
 
+Developers and external users use this skill to query Tencent weather data for Chinese city and county-level administrative regions. It checks CLI and API-key readiness, then guides or runs weather CLI commands for current conditions, forecasts, alerts, and related returned sections.
 
-## Reference(s): <br>
-- [tencent-weather ClawHub listing](https://clawhub.ai/tencentnewsteam/tencent-weather) <br>
-- [tencent-news-cli manual installation guide](references/installation-guide.md) <br>
-- [tencent-news-cli manual update guide](references/update-guide.md) <br>
-- [tencent-news-cli API Key configuration guide](references/env-setup-guide.md) <br>
-- [Tencent News API Key page](https://news.qq.com/exchange?scene=appkey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown or readable text, with shell commands for setup and CLI execution when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Weather answers preserve Tencent weather as the source and omit fields not returned by the CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The skill can guide installation or update of a local Tencent News CLI from remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify installer sources before installation; prefer downloading and verifying installers manually instead of piping remote scripts directly into a shell.
+
+Risk: The skill executes local CLI commands to retrieve weather data and inspect CLI state.
+
+Mitigation: Review commands before running them, use the bundled wrapper scripts, and stop on CLI errors rather than substituting another data source.
+
+Risk: The skill requires API-key configuration for the Tencent News CLI.
+
+Mitigation: Enter API keys locally only, do not share real keys with the agent, and rotate or clear keys if exposure is suspected.
+
+## Reference(s):
+
+- [tencent-weather ClawHub skill page](https://clawhub.ai/tencentnewsteam/skills/tencent-weather)
+- [TencentNewsTeam publisher profile](https://clawhub.ai/user/tencentnewsteam)
+- [Manual installation guide](references/installation-guide.md)
+- [Manual update guide](references/update-guide.md)
+- [API key setup guide](references/env-setup-guide.md)
+- [Tencent News API key page](https://news.qq.com/exchange?scene=appkey)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text, often preserving the CLI's returned weather sections; may include shell commands for setup and troubleshooting.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are limited to CLI-returned weather data or directly mapped fields; API keys are user-provided locally and should not be collected or echoed.]
+
+## Skill Version(s):
+
+1.0.5 (source: artifact/SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

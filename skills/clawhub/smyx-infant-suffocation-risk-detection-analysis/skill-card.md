@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes infant crib video or image inputs to classify sleep posture, detect mouth/nose occlusion, and return structured suffocation-risk alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes crib-camera images or video to identify infant sleep posture, mouth/nose occlusion, risk level, alerts, structured results, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, childcare operators, and developers use this skill to process crib-monitor media, identify prone sleeping or face occlusion, and produce risk-level alerts for infant sleep monitoring. Outputs are visual risk assessments and should not be treated as medical diagnosis or a replacement for adult supervision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive infant bedroom videos or video URLs may be uploaded to a cloud service and associated with a silently managed local identity. <br>
-Mitigation: Use only with guardian consent and after confirming backend account ownership, token storage, report storage, retention, deletion, and access controls. <br>
-Risk: History and export links may expose child-monitoring reports if link access, expiration, or sharing controls are unclear. <br>
-Mitigation: Confirm report link expiration and access policy before deployment, and restrict use to environments where exported reports can be protected. <br>
-Risk: Visual risk alerts can be incorrect or delayed and are not medical diagnosis. <br>
-Mitigation: Use the skill as an auxiliary monitoring signal only, keep adult supervision in place, and verify high-risk alerts directly. <br>
+## Use Case:
 
+External users and developers can use this skill to analyze infant crib-monitor footage for visual sleep-posture and mouth/nose-occlusion signals, then return risk levels and report links. It is an auxiliary monitoring aid and should not be treated as a medical diagnosis or a replacement for adult supervision.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-suffocation-risk-detection-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown tables and narrative text, with JSON available through the detail option.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include risk levels, sleep posture, face occlusion status, event timing, snapshots, alert text, recommendations, and report or export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server-resolved release metadata) <br>
+Risk: Sensitive infant video, report history, internal identifiers, and account tokens may be sent to and stored by the backend service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only after confirming trust in the publisher and backend service, obtaining appropriate guardian consent, and understanding how uploaded footage and report history are handled.
+
+Risk: Plaintext HTTP configuration and local plaintext token storage may expose credentials or child-monitoring data.
+
+Mitigation: Require HTTPS-only production endpoints and protected token storage before using the skill with real child-monitoring footage.
+
+Risk: Risk-level outputs are visual monitoring signals and may be mistaken for medical or emergency guidance.
+
+Mitigation: Present results as auxiliary monitoring information only, keep adult supervision in place, and review urgent alerts directly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-suffocation-risk-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown text with structured JSON-style analysis results, risk levels, alert text, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save the textual result to a caller-provided output file.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

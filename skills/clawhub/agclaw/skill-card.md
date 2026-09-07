@@ -1,44 +1,57 @@
-## Description: <br>
-AppGrowing advertising-material analysis assistant for strategy exploration and creative inspiration workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AppGrowing ad creative analysis assistant that helps users explore ad strategies and generate creative inspiration through AppGrowing's YouCloud API.
 
-## Publisher: <br>
-[youcloud](https://clawhub.ai/user/youcloud) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youcloud](https://clawhub.ai/user/youcloud)
 
-## Use Case: <br>
-Developers, marketers, and advertising teams use this skill to send campaign-analysis prompts to AppGrowing/YouCloud, select the appropriate analysis mode, and receive advertising-material insights or creative direction as Markdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and advertising-analysis requests are sent to the AppGrowing/YouCloud service. <br>
-Mitigation: Install only when that service use matches the organization's data-sharing policy, and avoid submitting confidential campaign or business data unless approved. <br>
-Risk: The skill requires an AppGrowing/YouCloud API key and can accept a pasted key for a single request. <br>
-Mitigation: Prefer configuring YOUCLOUD_API_KEY as an environment variable and avoid pasting credentials into chat unless the environment is trusted. <br>
-Risk: The skill is available only to AppGrowing plans with API access. <br>
-Mitigation: Confirm account entitlement and quota before relying on the workflow for production advertising analysis. <br>
+## Use Case:
 
+External users and marketing teams use this skill to analyze AppGrowing ad creative data, explore campaign strategies, and generate creative concepts or scripts. It requires an AppGrowing/YouCloud API key with appropriate product access.
 
-## Reference(s): <br>
-- [agclaw on ClawHub](https://clawhub.ai/youcloud/skills/agclaw) <br>
-- [AppGrowing](https://appgrowing.cn/) <br>
-- [Usage Examples](references/example.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown responses with API-call guidance and returned analysis content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an AppGrowing/YouCloud API key and may wait up to 600 seconds for the external analysis response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server-resolved release metadata and openclaw metadata) <br>
+Risk: Users may expose an API key by pasting it into chat.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer configuring YOUCLOUD_API_KEY as an environment variable; rotate the key if it is pasted into chat.
+
+Risk: User prompts and analysis requests are sent to the AppGrowing/YouCloud service.
+
+Mitigation: Install and use the skill only if the publisher and service are trusted, and avoid sending sensitive or confidential campaign data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/youcloud/skills/agclaw)
+- [AppGrowing homepage](https://appgrowing.cn/)
+- [AppGrowing YouCloud API endpoint](https://aichat-appgrowing-cn.youcloud.com/aichat/ag/claw)
+- [Usage examples](references/example.md)
+- [Material detail URL template](https://appgrowing-cn.youcloud.com/material/{{ID}})
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown analysis with optional command snippets and material links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires YOUCLOUD_API_KEY and relays AppGrowing API responses to the user.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release metadata; artifact frontmatter is 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

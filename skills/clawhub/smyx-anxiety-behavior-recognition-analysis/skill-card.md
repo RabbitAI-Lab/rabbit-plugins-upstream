@@ -1,45 +1,64 @@
-## Description: <br>
-Analyzes fixed-camera home or office videos to identify anxiety-related hand rubbing, nail biting, and pacing behaviors, then reports behavior counts, durations, trends, and non-diagnostic self-care guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera home, office, counseling-room, or school video to detect hand rubbing, nail biting, and pacing, then reports behavior counts, durations, trends, and a non-diagnostic anxiety-behavior index.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, counselors, and health-application developers use this skill to turn fixed-camera video into structured behavior statistics and trend reports for anxiety self-awareness support. It should not be used to diagnose anxiety disorders, score clinical scales, or provide treatment instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive home or office video and anxiety-behavior results may be sent to the publisher's cloud service. <br>
-Mitigation: Use only with clear informed consent, verify the publisher's retention and deletion terms, and avoid inputs that include people who have not agreed to analysis. <br>
-Risk: Persistent identity, token caching, and report history can link behavioral results to an account over time. <br>
-Mitigation: Confirm how accounts, tokens, and stored reports can be inspected or removed before deployment, especially on shared systems. <br>
-Risk: Behavior indicators can be mistaken for a mental-health diagnosis or clinical score. <br>
-Mitigation: Present outputs as visual behavior statistics and self-awareness guidance only, and route clinical concerns to qualified professionals. <br>
-Risk: Normal activities such as warming hands, eating, or walking around a room may be misclassified as anxiety-related behavior. <br>
-Mitigation: Review results in context, prefer longer observation windows and baseline comparisons, and avoid automated high-severity alerts from brief events. <br>
+## Use Case:
 
+Users, caregivers, and counselors can use this skill to turn consented fixed-camera video into structured behavior statistics and self-care prompts. It is positioned as visual behavior monitoring support, not as medical diagnosis, clinical scoring, or treatment advice.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-anxiety-behavior-recognition-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and JSON report data from command-line analysis workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include event counts, durations, anxiety-behavior index values, baseline comparisons, self-care suggestions, and report links; outputs are behavioral indicators, not medical diagnoses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill processes sensitive camera and mental-health-related video.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with clear consent from every recorded person, avoid workplace, school, private, or health-related footage without appropriate authorization, and retain only the minimum necessary derived metrics.
+
+Risk: Server evidence reports unsafe default transport for sensitive uploads and report retrieval.
+
+Mitigation: Do not use shipped defaults until endpoints are HTTPS-only, allowlisted, and reviewed for secure upload, token, identity, and report-link handling.
+
+Risk: Persistent identity, token, upload, report-link, and history handling may expose sensitive behavioral data.
+
+Mitigation: Require a documented data-retention and deletion process, protect credentials, and confirm who can access generated reports before deployment.
+
+Risk: Behavior recognition can confuse ordinary movements with anxiety-related behavior or be misread as a diagnosis.
+
+Mitigation: Present results as visual behavior indicators only, combine short events with context and trends, and avoid diagnostic, medication, or treatment claims.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-anxiety-behavior-recognition-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Structured text or Markdown report, with JSON available through the command-line detail setting]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include behavior event counts, durations, an anxiety-behavior index, trend comparison, self-care suggestions, and report links.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

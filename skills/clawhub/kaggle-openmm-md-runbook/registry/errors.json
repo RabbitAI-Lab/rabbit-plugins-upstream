@@ -1,0 +1,122 @@
+[
+ {
+  "id": "ERR-001",
+  "pattern": "nvrtc: invalid value for --gpu-architecture",
+  "cause": "TRAP-01",
+  "one_line_fix": "pin openmm=8.3.1 (REQUIRED — 8.6+CUDA13.3 rejects sm_60/sm_70, CUDA_ARCH export does NOT save it); 8.3.1 honors 'export CUDA_ARCH from nvidia-smi'"
+ },
+ {
+  "id": "ERR-002",
+  "pattern": "Bad input file|FileNotFoundError (dataset file)",
+  "cause": "TRAP-04/TRAP-05",
+  "one_line_fix": "mount via datasets/<owner>/<slug>; wait for propagation; find_input_dir"
+ },
+ {
+  "id": "ERR-003",
+  "pattern": "not enough values to unpack (expected 4, got 2)",
+  "cause": "TRAP-08",
+  "one_line_fix": "OpenMM 8.3 API drift — rebuild force per stage; don't unpack 4 values"
+ },
+ {
+  "id": "ERR-004",
+  "pattern": "NaN particles; first NaN early (~step 250)",
+  "cause": "TRAP-03",
+  "one_line_fix": "RECELL re-centering missing — apply box/2-center shift everywhere"
+ },
+ {
+  "id": "ERR-005",
+  "pattern": "max|F| constant huge across many steps",
+  "cause": "TRAP-03/TRAP-12",
+  "one_line_fix": "static parameter cause — run per-force isolation; check restraint frame"
+ },
+ {
+  "id": "ERR-006",
+  "pattern": "added print/TRACE lines never appear in kernel log",
+  "cause": "TRAP-06",
+  "one_line_fix": "you edited run_md.py; edit run.py and push again"
+ },
+ {
+  "id": "ERR-007",
+  "pattern": "restraint force equals 2*k*<box length>",
+  "cause": "TRAP-03",
+  "one_line_fix": "wrapped dynamics vs raw-frame refs — the RECELL signature"
+ },
+ {
+  "id": "ERR-008",
+  "pattern": "XmlSerializer.serialize() takes 1 positional argument but 2 were given",
+  "cause": "TRAP-10",
+  "one_line_fix": ".write(XmlSerializer.serialize(obj)) — no stream arg in 8.3"
+ },
+ {
+  "id": "ERR-009",
+  "pattern": "unexpected keyword argument 'getKineticEnergy'",
+  "cause": "TRAP-09",
+  "one_line_fix": "getState(getEnergy=True) then State.getKineticEnergy()"
+ },
+ {
+  "id": "ERR-010",
+  "pattern": "more than one CustomExternalForce active in a stage",
+  "cause": "TRAP-11",
+  "one_line_fix": "removeForce(prev) before adding the new stage force"
+ },
+ {
+  "id": "ERR-011",
+  "pattern": "kernel behaves like an older version after push",
+  "cause": "version not actually pushed",
+  "one_line_fix": "cp run.py run_md.py BEFORE the push (R01 — kernel executes run_md.py too); confirm 'Kernel version N successfully pushed'; then status/output on the NEW version"
+ },
+ {
+  "id": "ERR-012",
+  "pattern": "429 Too Many Requests (kaggle api)",
+  "cause": "TRAP-20",
+  "one_line_fix": "raise INTERVAL; never hammer"
+ },
+ {
+  "id": "ERR-013",
+  "pattern": "kaggle: command not found",
+  "cause": "TRAP-07",
+  "one_line_fix": "pip install -q kaggle"
+ },
+ {
+  "id": "ERR-014",
+  "pattern": "Your Kaggle API key is readable by other users",
+  "cause": "file mode too open",
+  "one_line_fix": "chmod 600 the key file (cosmetic warning)"
+ },
+ {
+  "id": "ERR-015",
+  "pattern": "two kernel sessions launched back-to-back unexpectedly",
+  "cause": "TRAP-18",
+  "one_line_fix": "kill duplicate supervisor loops; keep exactly one"
+ },
+ {
+  "id": "ERR-016",
+  "pattern": "forces ~65000 kJ/mol/nm localized on ligand",
+  "cause": "TRAP-13",
+  "one_line_fix": "ligand bond/coordinate mismatch — rebuild via VF2+AddHs; never AlignMol"
+ },
+ {
+  "id": "ERR-017",
+  "pattern": "DCD unreadable after 'header fix'",
+  "cause": "TRAP-15",
+  "one_line_fix": "revert to byte-compatible SelDCD (AKMA 0.04888821; CORD)"
+ },
+ {
+  "id": "ERR-018",
+  "pattern": "clash O(HOH)-M(HOH) d=0.0159",
+  "cause": "TRAP-14",
+  "one_line_fix": "same-residue virtual site — exclude same-residue pairs"
+ },
+ {
+  "id": "ERR-019",
+  "pattern": "production ~20% slower than benchmarked",
+  "cause": "per-50-step TRACE left enabled",
+  "one_line_fix": "disable the TRACE block for production pushes"
+ },
+ {
+  "id": "ERR-020",
+  "pattern": "topology mismatch on resume run",
+  "cause": "expected placeholder topology",
+  "one_line_fix": "harmless — DCD is index-based; topology is only a placeholder on resume"
+ }
+]

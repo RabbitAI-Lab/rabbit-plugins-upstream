@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mercado Libre 类目研究"
+  short_description: "查询美客多样本类目路径并分析类目商品机会"
+  default_prompt: "使用极鲸云真实数据查询并研究 Mercado Libre 类目。"

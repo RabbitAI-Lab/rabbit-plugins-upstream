@@ -111,12 +111,22 @@ Content-Type: application/json
   },
   "agent_kind": "claude-code",
   "agent_version": "...",
-  "skill_version": "company-intel-1.0.0",
-  "ch": "s118"
+  "skill_version": "company-intel-1.0.2",
+  "ch": "s105"
 }
 ```
 
-> **`ch` 字段说明**：固定填 `"s118"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
+> ### ⚠️ 请求体必须用 JSON 序列化函数生成，不要手拼字符串
+>
+> 用 `json.dumps(payload)` / `requests.post(url, json=payload)` / `JSON.stringify(payload)`，
+> 或 `curl -d @file`；**不要用字符串拼接，也不要用 Python 的 `str(dict)`**
+> （后者产出单引号，服务端会报 `Expecting property name enclosed in double quotes`）。
+>
+> 历史教训：曾有版本采集 `home_path`，Windows 的 `C:\Users\alice` 直接拼进 JSON 字符串时
+> `\U` 是非法转义，服务端报 `Invalid \escape`，**该平台用户自动注册全线失败**。
+> 现在虽然三项特征都不含反斜杠，手拼仍可能被其它意外字符（引号、换行）破坏——用序列化函数是唯一可靠做法。
+
+> **`ch` 字段说明**：固定填 `"s105"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
 
 **成功响应**：
 ```json
@@ -165,7 +175,7 @@ Content-Type: application/json
 
 ---
 
-## 余额耗尽时的处理（INSUFFICIENT_BALANCE / QUOTA_EXCEEDED）
+## 余额耗尽时的处理（`QUOTA_EXCEEDED`）
 
 **仅当当前 api_key 是从 `~/.zlbx/config.json` 读取且 `source == "auto"` 时**，按以下流程处理：
 
@@ -173,13 +183,23 @@ Content-Type: application/json
    - Header: `X-API-Key: <当前 api_key>`
    - Body: 空
 2. 拿到响应 `{"sid": "..."}`
-3. 输出文案给用户：
+3. 输出文案给用户。**链接必须裸写、单独成行、不要用反引号包起来** ——
+   包成代码块的话很多终端不会渲染成可点击链接，用户还得手工复制：
 
 > 您的免费额度已用完。点击链接自动登录并充值（首次会引导绑定手机号，**绑定即赠送 100 次免费额度**）：
 >
-> `https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>`
+> https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>
+>
+> 链接 1 小时内有效。过期了回到这里发送「重新生成充值链接」，我再给你一个新的。
 
 **如果当前 api_key 来自 `$ZLBX_API_KEY`**：跳过 SID 流程，提示用户访问 `https://ai.zhiliaobiaoxun.com/?ch=s118` 手动登录充值。
+
+### 用户说「重新生成充值链接」时
+
+链接有效期只有 1 小时，用户回来要新链接是常规操作。**收到这句话（或「充值链接过期了」
+「链接打不开」等同义表达）时，不要再去查余额、也不要等下一次额度报错** ——
+只要当前 api_key 来自 `~/.zlbx/config.json` 且 `source == "auto"`，
+直接重新执行上面的步骤 1–3，把新链接给他。
 
 ---
 
@@ -199,7 +219,7 @@ def get_api_key():
         json={
             "device_features": features,
             "agent_kind": "claude-code",
-            "ch": "s118",  # 官网官方版渠道归因，硬编码
+            "ch": "s105",  # 本包的渠道归因码，构建时注入
         }
     )
     write_json("~/.zlbx/config.json", {

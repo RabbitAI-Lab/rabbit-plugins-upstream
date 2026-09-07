@@ -1,45 +1,54 @@
-## Description: <br>
-Submits Dataify Builder jobs that collect YouTube audio files from one or more YouTube URLs and returns the task ID and status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Download or collect a YouTube audio file from a known video URL. Do not use for video files, metadata, comments, transcripts, or video discovery.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to create Dataify YouTube audio collection tasks by URL, configure allowed audio settings, and receive task submission status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit credentialed external requests to Dataify using DATAIFY_API_TOKEN. <br>
-Mitigation: Install only when Dataify YouTube audio task submission is expected, keep DATAIFY_API_TOKEN scoped to Dataify, and confirm token use before submission. <br>
-Risk: Implicit invocation could submit an unintended YouTube URL or consume Dataify quota. <br>
-Mitigation: Prefer explicit invocation and confirm the target URL, shared audio settings, and whether multiple URLs are intended before calling the Builder endpoint. <br>
-Risk: Submitted tasks may involve external YouTube content and Dataify processing outside the local agent environment. <br>
-Mitigation: Review the URL and Dataify account context before submission, and monitor Dataify quota and usage after task creation. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify Builder jobs that collect YouTube audio from known video URLs, monitor the asynchronous task, and return final collected results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-audio-by-url) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
-- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with parameter tables, shell command examples, and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, submitted parameters, dashboard URL, and user-facing next steps after successful submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The security scan notes a mismatch between the advertised audio-only scope and subtitle-related options.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested task options before execution and treat subtitle settings as outside the advertised audio-only scope unless the publisher clarifies or removes them.
+
+Risk: The skill sends YouTube URLs and task options to Dataify under the user's API TOKEN.
+
+Mitigation: Use the skill only when sharing those URLs and options with Dataify is acceptable, and keep DATAIFY_API_TOKEN out of chat and logs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-audio-by-url)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task or result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include task_id, status, normalized request parameters, and summarized final results.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

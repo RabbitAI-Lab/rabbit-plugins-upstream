@@ -1,41 +1,60 @@
-## Description: <br>
-Submit Dataify YouTube video file collection jobs by URL and return the created task ID, status, parameters, dashboard URL, and completion message. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Download or collect a YouTube video media file from a known video URL.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to submit Dataify Builder tasks that collect YouTube video files from one or more YouTube URLs. It helps configure allowed media settings, validate inputs, submit the Builder request with a Dataify API TOKEN, and report the resulting task metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Dataify API TOKEN and may submit jobs under the user's Dataify account. <br>
-Mitigation: Confirm the token source before submission, do not persist tokens without user confirmation, and avoid calling the Builder endpoint when no token is available. <br>
-Risk: YouTube URLs and selected collection settings are sent to Dataify. <br>
-Mitigation: Review the parameter confirmation table before running the task and avoid submitting sensitive or unintended URLs. <br>
+## Use Case:
 
+Developers and external users use this skill to submit Dataify YouTube video collection jobs for known YouTube video URLs, monitor the resulting task, and return the final collected result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-video-by-url) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown parameter tables and instructions, with JSON task summaries from the helper script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, submitted parameters, shared video settings, file_name, dashboard_url, and message after successful submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill can submit token-authenticated remote Dataify collection jobs for YouTube media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when you are comfortable sending the target YouTube URLs to Dataify under your account, and confirm each media collection job before submission.
+
+Risk: Waiting for media collection can consume credits, bandwidth, and time.
+
+Mitigation: Review expected cost and scope before running; use no-wait behavior when only a task ID is needed.
+
+Risk: A saved API TOKEN enables future submissions from the local environment.
+
+Mitigation: Store the token only with user confirmation and never print or expose its value.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-youtube-video-by-url)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify account login](https://dashboard.dataify.com/login?utm_source=skill)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder?platform=1)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task/result output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API TOKEN and may submit token-authenticated remote collection jobs.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

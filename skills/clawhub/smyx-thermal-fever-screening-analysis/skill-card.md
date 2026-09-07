@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes multi-person thermal-imaging photos or video to compare each visible person's skin-surface temperature against the group average and report relative temperature anomalies with a recommendation to recheck using a calibrated thermometer. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using fixed thermal-imaging camera footage, this skill analyzes multiple people in a shared scene, compares each person's skin-surface temperature with the group average, and reports relative temperature anomalies with a recommendation to recheck using a calibrated thermometer.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to submit thermal-imaging footage from gatherings, generate structured relative-temperature screening reports, and retrieve prior cloud reports. It is a screening aid only and should not be used as a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Thermal or household video may contain sensitive health-adjacent personal data and may be uploaded to the publisher's cloud service. <br>
-Mitigation: Use only with informed participant consent, appropriate authorization, and an acceptable cloud-data handling arrangement. <br>
-Risk: The skill can create or reuse hidden user identities, store tokens locally, and query cloud report history with limited user control. <br>
-Mitigation: Review account-handling, token storage, report-history access, retention, and deletion behavior before routine deployment. <br>
-Risk: Relative temperature anomalies can be affected by camera quality, calibration, occlusion, recent exercise, hot drinks, sunlight, or nearby heating/cooling sources. <br>
-Mitigation: Treat results as screening guidance only and confirm any concern with a calibrated medical thermometer and qualified medical advice. <br>
+## Use Case:
 
+External users and developers can use this skill to analyze thermal camera images or videos from family, meeting-room, kindergarten, or care-facility gathering spaces for relative body-temperature anomalies. It supports structured screening reports, historical report lookup, and directional alerts, but it is not a medical diagnosis tool.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-thermal-fever-screening-analysis) <br>
-- [Skill API documentation](artifact/references/api_doc.md) <br>
-- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON reports with status text, anomaly details, recommendations, report links, and optional history tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload media to a cloud API and retrieve cloud-hosted report history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact SKILL.md frontmatter states 1.0.5) <br>
+Risk: Thermal health media and report history may be processed through cloud services and include sensitive personal or health-related information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit participant consent, appropriate privacy review, encrypted storage, and environments approved for sensitive media.
+
+Risk: The security review reports silent identity-state persistence and under-scoped, partly plaintext network paths.
+
+Mitigation: Do not deploy as-is in sensitive environments; require HTTPS-only endpoints, scoped identity handling, and secure credential storage before production use.
+
+Risk: Relative temperature anomalies can be affected by masks, hats, recent exercise, hot drinks, sunlight, air conditioning, heaters, or poor thermal-camera setup.
+
+Mitigation: Treat outputs as screening signals only and confirm any anomaly with a calibrated medical thermometer or qualified clinical process.
+
+## Reference(s):
+
+- [Thermal Fever Screening API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-thermal-fever-screening-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports with command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include detected-person counts, group temperature statistics, per-person deltas, anomaly labels, recommended actions, and report links.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release metadata; artifact frontmatter reports 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

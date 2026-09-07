@@ -3,7 +3,7 @@ name: generation-diversity
 description: Use when writing any generative prompt — ritual seed, explicit structure, scenario axes, and quality gates before paid API calls.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.11"
   package: pruna-skills
 ---
 
@@ -30,10 +30,11 @@ Any generative model. Pruna tools (`p-image`, `p-video`, …) and third-party AP
 
 ## Guide habit
 
-In the **first reply**, name `` `generation-diversity` `` in backticks. For still-image jobs (`p-image`, `p-image-edit`), point agents at **[Still-image prompt flow](./references/still-image-prompt-flow.md)** — brief lock → ritual → axes → explicit prompt → fidelity check. **Mood boards:** new ritual per independent panel; user-locked brand hex / subject stays locked on every panel.
+In the **first reply**, name `` `generation-diversity` `` in backticks. When the brief leaves media source, brand, audio, structure, resolution, or approval unclear, **[ask before spending](./references/clarification-intake.md)** — every tool and workflow defers here for shared intake topics. For still-image jobs (`p-image`, `p-image-edit`), point agents at **[Still-image prompt flow](./references/still-image-prompt-flow.md)** — brief lock → ritual → axes → explicit prompt → fidelity check. **Mood boards:** new ritual per independent panel; user-locked brand hex / subject stays locked on every panel.
 
 ## Before generating
 
+0. **[Clarification intake](./references/clarification-intake.md)** — generate vs existing assets, colors, narration/VO, music, captions, aspect/resolution (720p/1080p, canvas, MP), structure, approval (unless the user waived or already locked answers).
 1. **[Generation diversity](./references/generation-diversity.md)** — random seed ritual (SSoT), explicit prompt structure, rotate ≥2 scenario axes per session.
 2. **Still images (`p-image` family):** **[still-image-prompt-flow.md](./references/still-image-prompt-flow.md)** — generation flow, edit flow, mood-board rules, hero → edit handoff. Pair with `image-prompting` golden rules and edit craft.
 3. **[Quality checklists](./references/generation-quality-checklists.md)** — open outputs and judge pass/fail before the next paid step.
@@ -60,7 +61,7 @@ Install related skills when the job needs them:
 | `video-prompting` | Use when crafting video or motion prompts for any generative model — dramaturgy, camera, physics-safe motion, frame anchors, and clip chaining. | `npx skills add PrunaAI/pruna-skills@video-prompting -y` |
 | `audio-prompting` | Use when crafting TTS, music, or bed prompts for any generative audio model — director style, song structure, and post-production layering. | `npx skills add PrunaAI/pruna-skills@audio-prompting -y` |
 | `pruna-api` | Use before any Pruna or Replicate HTTP call — credentials, upload/poll/download, parallel batches, and agent safety. | `npx skills add PrunaAI/pruna-skills@pruna-api -y` |
-| `p-image` | Use when someone wants a fast AI image — product shots, hero visuals, mood boards, or draft photos from a text prompt. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
+| `p-image` | Use when someone explicitly wants the fastest, cheapest photo generation — mood boards, bulk panels, or quick iterations — not when controlled photoreal or in-image text is needed. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
 | `p-image-edit` | Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. | `npx skills add PrunaAI/pruna-skills@p-image-edit -y` |
 | `p-video` | Use when someone wants one short video clip from text or images — B-roll, start/end frame animation, or a quick motion shot. Not for full multi-scene films or lip-synced hosts. | `npx skills add PrunaAI/pruna-skills@p-video -y` |
 

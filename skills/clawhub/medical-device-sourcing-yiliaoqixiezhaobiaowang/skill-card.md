@@ -1,44 +1,63 @@
-## Description: <br>
-医疗器械与耗材寻源-医疗器械招标网用于查询医疗器械品牌、设备型号或耗材的招中标价格趋势、品牌分析、采购单位和供应商明细。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query Zhiliaobiaoxun procurement APIs for medical-device and consumables sourcing, including bid search, company intelligence, purchaser and supplier rankings, brand analysis, and price trends.
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-Procurement, sourcing, and market-analysis users can use this skill to query Chinese bidding data for medical devices and consumables, compare historical unit prices, review brands and models, and inspect purchaser or supplier activity. It is most useful when an agent needs structured bid-search, company-analysis, and market-aggregation guidance backed by the ZhiLiaoBiaoXun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; data and workflows are centered on Chinese procurement and bidding sources. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The API surface is broader than the medical-device sourcing description and includes business intelligence and contact lookup workflows. <br>
-Mitigation: Keep the agent focused on the user's stated sourcing task and require confirmation before expanding company scope or retrieving contact information. <br>
-Risk: The skill requires a sensitive third-party API key and may send sourcing queries or business plans to the provider. <br>
-Mitigation: Use a dedicated ZLBX_API_KEY, avoid confidential sourcing plans unless the provider is trusted, and monitor quota and usage. <br>
+## Use Case:
 
+External users and procurement analysts use the skill to source medical devices and related supplies, compare historical winning bid prices, identify purchasing units and suppliers, and analyze company or market activity in Chinese procurement data.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thuanlynham-stack/medical-device-sourcing-yiliaoqixiezhaobiaowang) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [ZhiLiaoBiaoXun API key signup](https://ai.zhiliaobiaoxun.com/?ch=s37) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request examples and structured procurement analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY; outputs may include price trends, brand and model comparisons, purchaser and supplier details, and suggested follow-up analyses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The published medical-device sourcing description under-discloses a broader procurement, company-intelligence, contact lookup, account registration, and referral workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation, disclose the broader connector scope to users, and restrict use to intended procurement-intelligence tasks.
+
+Risk: Auto-registration can collect device-derived features and store a vendor API key in ~/.zlbx/config.json.
+
+Mitigation: Prefer a user-managed ZLBX_API_KEY, require explicit consent before auto-registration, and check local config file permissions if auto-registration is used.
+
+Risk: The skill can query contact and procurement data that may be sensitive or account-tier restricted.
+
+Mitigation: Use returned contact fields as provided, respect masking and account limits, and avoid enriching masked contact data from other channels.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/skills/medical-device-sourcing-yiliaoqixiezhaobiaowang)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Market API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Auto-registration reference](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, JSON, guidance]
+
+**Output Format:** [Markdown summaries with JSON request and response details when useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bid tables, company and market analysis, account status, and concrete API request examples.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

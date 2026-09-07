@@ -1,45 +1,63 @@
-## Description: <br>
-Tender Search helps agents search and analyze tender notices, award results, company procurement activity, competitor overlap, supplier opportunities, market rankings, and price trends using the ZhiLiao BiaoXun tender data APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+tender-search helps agents search and analyze Chinese tender, bid award, procurement, supplier, competitor, market, and pricing data through the ZhiLiao BiaoXun API.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business analysts use this skill to find tender and award notices, analyze buyers and suppliers, research competitors, identify expiring projects, and summarize market or pricing trends for procurement and bidding decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First use may send device and user-environment identifiers to the vendor for automatic account creation. <br>
-Mitigation: Set ZLBX_API_KEY manually before use or review the auto-registration behavior with the user before allowing network calls. <br>
-Risk: The skill can persist an API key under ~/.zlbx/config.json. <br>
-Mitigation: Review the local config file after use and delete or rotate the stored key when persistent credentials are not desired. <br>
+## Use Case:
 
+Developers and external agent users use this skill to retrieve procurement notices, company bid history, supplier and competitor intelligence, market aggregates, expiring projects, proposed projects, and account status from the ZhiLiao BiaoXun service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-search) <br>
-- [Search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Auto-registration reference](references/auto-register.md) <br>
-- [ZhiLiao BiaoXun API base URL](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool_name}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Markdown, Configuration instructions, Shell commands] <br>
-**Output Format:** [Markdown summaries with JSON request examples and API-derived analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read an API key from ZLBX_API_KEY or ~/.zlbx/config.json; if neither exists, the artifact describes automatic registration and local API-key persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.2 (source: server release evidence) <br>
+Risk: Tender queries, company names, and related procurement search terms are sent to the vendor's external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where that data sharing is acceptable, and avoid submitting sensitive procurement plans or confidential identifiers.
+
+Risk: If no API key is configured, the skill can request consent for device-based trial registration and store a reusable API key in ~/.zlbx/config.json.
+
+Mitigation: Prefer manually configuring ZLBX_API_KEY; if auto-registration is used, confirm user consent first and protect the local config file.
+
+Risk: The skill may display vendor recharge, referral, promotional, or update links during account and quota flows.
+
+Mitigation: Review the skill before deployment and make external vendor links clear to users.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/tender-search)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Market API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Auto-registration flow](references/auto-register.md)
+- [ZhiLiao BiaoXun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with REST request guidance, JSON examples, shell commands, and concise result tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based vendor auto-registration before data calls.]
+
+## Skill Version(s):
+
+2.1.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

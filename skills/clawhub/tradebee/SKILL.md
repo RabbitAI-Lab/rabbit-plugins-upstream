@@ -1,13 +1,13 @@
 ---
 name: tradebee
-description: v26.6.26 A unified Tradebee Website Builder Open API skill that helps an agent choose the correct Tradebee data operation from a user's desired business result. Use it only when the user clearly wants to operate on Tradebee blogs, blog groups, FAQs, FAQ groups, custom pages, products, product groups, inquiries, visitors, keyword rankings, or tenant HTML rule retrieval, not for generic find/show/check/update/delete requests outside Tradebee platform data context. For all `*_update` actions, it also automatically reads the current record and writes a local JSON backup file before sending the update request.
+description: v26.8.24 A unified Tradebee Website Builder Open API skill for explicit operations on blogs, FAQs, custom pages, news, news groups, website navigation, products, inquiries, analytics, and tenant HTML rules. Update actions automatically read and back up the current record before mutation.
 homepage: https://open.tradew.com
 metadata: {"clawdbot":{"emoji":"bee","requires":{"env":["BEE_API_KEY"]},"primaryEnv":"BEE_API_KEY"}}
 ---
 
 # tradebee
 
-> Version: 26.6.26
+> Version: 26.8.24
 
 ## Overview
 
@@ -56,6 +56,18 @@ Supported actions:
 - `custompage-update`
 - `custompage-read`
 - `custompage-delete`
+- `news-create`
+- `news-update`
+- `news-read`
+- `news-delete`
+- `newsgroup-create`
+- `newsgroup-update`
+- `newsgroup-read`
+- `newsgroup-delete`
+- `navigation-create`
+- `navigation-update`
+- `navigation-read`
+- `navigation-delete`
 - `productsgroup-create`
 - `productsgroup-update`
 - `productsgroup-delete`
@@ -72,6 +84,8 @@ Supported actions:
 
 Before generating any HTML fragment for:
 
+- `navigation.content`
+- `news.description`
 - `blog.description`
 - `faq.answer`
 - `products.description`
@@ -127,6 +141,8 @@ Failure rule:
 
 Scene mapping:
 
+- `navigation.content` -> `scene=navigation.content`
+- `news.description` -> `scene=news.description`
 - `blog.description` -> `scene=blog.description`
 - `faq.answer` -> `scene=faq.answer`
 - `products.description` -> `scene=products.description`
@@ -271,6 +287,30 @@ Choose the action by the user's actual goal and the result they expect to see.
 - Use `custompage-delete` when the user asks:
   - "Delete custom page 123"
   - "Move these custom pages to recycle bin"
+
+### News Operations
+
+- Use `news-read` to list news, read one exact article, or filter by news group.
+- Use `news-create` to publish a new news article under a group selected from `newsgroup-read`.
+- Use `news-update` to edit one exact news record; it reads and backs up the current record first.
+- Use `news-delete` only for an explicitly confirmed news ID list.
+
+### News Group Operations
+
+- Use `newsgroup-read` to list groups or obtain one exact group ID.
+- Use `newsgroup-create` to create a news group.
+- Use `newsgroup-update` to edit one exact group with automatic backup.
+- Use `newsgroup-delete` only for an explicitly confirmed group ID list.
+
+### Website Navigation Operations
+
+- Use `navigation-read` to read the complete two-level tree without pagination or to select an exact navigation ID.
+- Use `navigation-create` to add first- or second-level navigation. Second-level parents must have `is_leaf=false`.
+- Use `navigation-update` to edit one item without changing its parent; it reads and backs up the item first.
+- Use `navigation-delete` only after confirming that deleting a first-level item also deletes all children.
+- Internal navigation URLs must omit scheme and domain. System navigation, custom HTML children, and manual second-level navigation are mutually exclusive.
+- Interpret `system_children_type` exactly as: `0` disabled, `1` first-level product groups, `2` news groups, `3` FAQ groups, `4` certificate groups, `5` case groups, `6` all product groups without cover images, and `7` blog groups. Values `1`–`7` are first-level only and require empty `content` with no manually added children.
+- `content` is a first-level custom child-navigation HTML fragment. Follow the `navigation.content` payload returned by `rule-get`: use one root `<section>` with a unique scoped class and one embedded `<style>` block at the end. Inline `style="..."` attributes and external stylesheet links are forbidden. Do not include `<h1>`; `<h2>`–`<h6>` are preferred. It supports up to 50 HTTP(S)-URL or `data:image/...;base64,...` images of at most 500 kB each. The 100,000-character limit is calculated after removing `<img>` tags; the server uploads base64 images and replaces their `src` values with URLs. Non-empty `content` requires `system_children_type=0` and no manual children. System children, manual-child mode, and every second-level item require empty content. On update, an empty string or omitted field does not update the current value.
 
 ### Product Operations
 
@@ -484,7 +524,7 @@ Used by most content operations.
 Used by `rule-get`.
 
 - This field is required for `rule-get`.
-- Use one exact supported scene value only: `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.
+- Use one exact supported scene value only: `navigation.content`, `news.description`, `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.
 - Do not invent, shorten, translate, normalize, or rename the value.
 - Choose the exact scene that matches the target HTML field before calling `rule-get`.
 
@@ -646,7 +686,7 @@ Field rules:
 - `products.attributes`: optional visible attribute pairs such as material, size, or color. Omit in `products-update` if unchanged.
 - `products.tags`: search keywords. For `products-create`, provide at least 1 tag and at most 6. For `products-update`, omit if unchanged.
 - `products.brief_description`: short plain-text summary. Omit in `products-update` if unchanged.
-- `products.description`: detailed HTML description. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Allow at most 50 `<img>` tags, with each image 500 kB or smaller, and keep the 100,000-character limit after removing `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Do not use inline style attributes as the main styling method. Omit in `products-update` if unchanged.
+- `products.description`: detailed HTML description. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Allow at most 50 `<img>` tags, with each image 500 kB or smaller, and keep the 100,000-character limit after removing `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Omit in `products-update` if unchanged.
 - `products.seo.keywords`: one comma-separated string, not an array.
 
 ### `blog` (object)
@@ -687,9 +727,9 @@ Used by `productsgroup-create` and `productsgroup-update`.
 - `productsgroup.tags`: required keyword list with 1 to 6 items. Each tag must contain 3 to 50 characters.
 - `productsgroup.brief_description`: optional short plain-text description, up to 4,000 characters.
 - `productsgroup.section`: optional custom HTML decoration object for the product group detail page body.
-- `productsgroup.section.top`: optional product group page header decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Maximum length: 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Do not use inline style attributes as the main styling method. In `productsgroup-update`, omit this field or pass an empty string to keep the current top fragment unchanged.
-- `productsgroup.section.bottom`: optional product group page footer decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Maximum length: 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Do not use inline style attributes as the main styling method. In `productsgroup-update`, omit this field or pass an empty string to keep the current bottom fragment unchanged.
-- `custompage.content`: required HTML content for `custompage-create`, up to 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Generate it only after calling `rule-get` with exact `language` and exact `scene=custompage.content`. Follow the returned rule payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Do not use inline style attributes as the main styling method. Omit it in `custompage-update` if unchanged.
+- `productsgroup.section.top`: optional product group page header decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Maximum length: 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. In `productsgroup-update`, omit this field or pass an empty string to keep the current top fragment unchanged.
+- `productsgroup.section.bottom`: optional product group page footer decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. Maximum length: 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Follow the `rule-get` payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. In `productsgroup-update`, omit this field or pass an empty string to keep the current bottom fragment unchanged.
+- `custompage.content`: required HTML content for `custompage-create`, up to 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Generate it only after calling `rule-get` with exact `language` and exact `scene=custompage.content`. Follow the returned rule payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Omit it in `custompage-update` if unchanged.
 - `productsgroup.seo`: optional for `productsgroup-update`. Omit it if SEO should stay unchanged.
 
 ### `bloggroup` (object)
@@ -717,16 +757,51 @@ Used by `custompage-create` and `custompage-update`.
 
 - `custompage.custompage_id`: required for `custompage-update`. This is the existing custom page ID to edit.
 - `custompage.title`: required title for `custompage-create`, up to 100 characters. Omit it in `custompage-update` if unchanged.
-- `custompage.content`: required HTML content for `custompage-create`, up to 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Generate it only after calling `rule-get` with exact `language` and exact `scene=custompage.content`. Follow the returned rule payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Do not use inline style attributes as the main styling method. Omit it in `custompage-update` if unchanged.
+- `custompage.content`: required HTML content for `custompage-create`, up to 100,000 characters after removing `<img>` tags, with at most 50 `<img>` tags. Generate it only after calling `rule-get` with exact `language` and exact `scene=custompage.content`. Follow the returned rule payload, including the current tenant structure rules such as one root `<section>` element and one embedded `<style>` block placed at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Omit it in `custompage-update` if unchanged.
 - `custompage.seo`: optional SEO object with `title`, `description`, and `keywords`. Omit it in `custompage-update` if SEO should stay unchanged.
+
+### `news` and `newsgroup` (objects)
+
+- `news.news_id`: required positive ID for `news-update`; select it from `news-read`.
+- `news.newsgroup_id`: required positive ID for create; select it from `newsgroup-read` under the same language. For update, omit it to keep the current group.
+- `news.publisher` and `news.source`: optional strings up to 100 characters each. For update, omit unchanged values.
+- `news.publication_date`: required valid display date for create, normally `yyyy/M/d`; omit it on update to keep the current date.
+- `news.title`: required for create and 2–500 characters; omit it on update to keep the current title.
+- `news.cover_image`: optional `{name, base64}` image up to 500 kB. On update it cannot be automatically restored because read returns URLs rather than original base64 data.
+- `news.tags`: required for create and contains 1–6 tags of 3–50 characters each; omit it on update to keep current tags.
+- `news.summary`: required for create and 10–500 characters; omit it on update to keep the current summary.
+- `news.description`: required HTML fragment for create. Before generating it, call `rule-get` with the exact selected `language` and exact `scene=news.description`; stop if the rule call fails and follow the complete returned rule payload when it succeeds. The current rule uses one root `<section>` with a unique scoped class and one embedded `<style>` block at the end; inline style attributes and external stylesheet links are forbidden. No `<h1>` is allowed, and `<h2>`–`<h6>` are preferred. It supports up to 50 HTTP(S)-URL or `data:image/...;base64,...` images of at most 500 kB each. The 100,000-character limit is calculated after removing `<img>` tags; the server uploads base64 images and replaces their `src` values with URLs. On update, call `rule-get` only when replacing the body; an empty string or omitted field leaves the current body unchanged.
+- `news.seo`: optional `title` (90), `description` (200), and comma-separated `keywords` (up to 6 and 120 total characters). On update, omit the object or individual fields to keep current values.
+- `news-read`: exact `language` is required. Optionally use positive `news_id` for one record or positive `newsgroup_id` to filter by group, but never both. `fields` selects supported return fields. `pagination` defaults to page 1 and page size 5; page size is 1–10.
+- `newsgroup.newsgroup_id`: required positive ID for `newsgroup-update`; select it from `newsgroup-read`.
+- `newsgroup.group_name`: required for create and 2–300 characters; omit it on update to keep the current name.
+- `newsgroup.tags`: required for create and contains 1–6 tags of 1–50 characters each; omit it on update to keep current tags.
+- `newsgroup.brief_description`: optional and at most 300 characters; omit it on update to keep the current value.
+- `newsgroup.seo`: optional `title` (90), `description` (200), and comma-separated `keywords` (up to 6 and 120 total characters). On update, omit the object or individual fields to keep current values.
+- `newsgroup-read`: exact `language` is required. Optional positive `newsgroup_id` selects one group; `fields` selects supported return fields. `pagination` defaults to page 1 and page size 5; page size is 1–10.
+
+### `navigation` (object)
+
+- Navigation supports at most two levels and at most 20 first-level items per language.
+- `navigation.navigation_id`: required positive ID for `navigation-update`; select it from `navigation-read` under the same language.
+- `navigation.parent_navigation_id`: create only. Omit it or use `0` for first level. For second level, select a first-level ID from `navigation-read` where `is_leaf=false`; never use a second-level ID.
+- `navigation.name`: required for create and 2–100 characters. For update, omit it to keep the current name.
+- `navigation.url`: required for create and 1–500 characters. Internal URLs must begin with `/` and omit scheme/domain; external URLs must be absolute HTTP(S). For update, omit it to keep the current URL.
+- `navigation.system_children_type`: defaults to `0` on create. Values are `0` disabled, `1` first-level product groups, `2` news groups, `3` FAQ groups, `4` certificate groups, `5` case groups, `6` all product groups without cover images, and `7` blog groups. For update, omit it to keep the current type.
+- `navigation.content`: defaults to `""` on create and is available only for first-level custom child navigation. Follow the `navigation.content` payload returned by `rule-get`: use one root `<section>` with a unique scoped class and one embedded `<style>` block at the end. Inline `style="..."` attributes and external stylesheet links are forbidden. Do not include `<h1>`; `<h2>`–`<h6>` are preferred. It supports up to 50 HTTP(S)-URL or `data:image/...;base64,...` images of at most 500 kB each. The 100,000-character limit is calculated after removing `<img>` tags; the server uploads base64 images and replaces their `src` values with URLs. For update, an empty string or omitted field leaves the current content unchanged.
+- `navigation.open_in_new_window`: defaults to `false` on create. `true` opens in a new window or tab; `false` opens in the current one. For update, omit it to keep the current setting.
+- `navigation.sort`: defaults to `999999` on create and must be 1–999999; smaller values appear earlier. For update, omit it to keep the current sort.
+- Child modes are mutually exclusive: system children use type 1-7 and empty content; custom HTML uses type 0 and non-empty content; manual second-level children require type 0 and empty content.
+- `navigation-read`: requires exact `language`; optionally use positive `navigation_id` for one item or `parent_navigation_id` (`0` for first level) for one level, but never both. Optional `fields` selects from `navigation_id`, `parent_navigation_id`, `language`, `name`, `url`, `system_children_type`, `content`, `open_in_new_window`, `sort`, `create_time`, `update_time`, `is_leaf`, and `children`. It does not use pagination.
+- `navigation-delete`: requires exact `language`, an `id_list` of 1–100 positive IDs, and confirmation that deleting a first-level item also deletes all children.
 
 ### `id_list` (array)
 
-Used by `blog-delete`, `bloggroup-delete`, `custompage-delete`, `faq-delete`, `faqgroup-delete`, `productsgroup-delete`, and `products-delete`.
+Used by `blog-delete`, `bloggroup-delete`, `custompage-delete`, `faq-delete`, `faqgroup-delete`, `news-delete`, `newsgroup-delete`, `navigation-delete`, `productsgroup-delete`, and `products-delete`.
 
 ### `confirmation` (object)
 
-Required by `blog-create`, `blog-update`, `blog-delete`, `bloggroup-create`, `bloggroup-update`, `bloggroup-delete`, `custompage-create`, `custompage-update`, `custompage-delete`, `faq-create`, `faq-update`, `faq-delete`, `faqgroup-create`, `faqgroup-update`, `faqgroup-delete`, `productsgroup-create`, `productsgroup-update`, `productsgroup-delete`, `products-create`, `products-update`, and `products-delete`.
+Required by every create, update, and delete action, including news, news-group, and navigation mutations.
 
 Before any create, update, or delete action, show the user the language and the exact payload or product IDs to be changed, then set:
 
@@ -769,7 +844,7 @@ Execution rules:
 
 - `language` is required and must be one exact enabled site language.
 - `scene` is required and must be one exact supported scene value.
-- Call this action before generating `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.
+- Call this action before generating `navigation.content`, `news.description`, `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.
 - If this action fails, stop and report the failure instead of guessing colors, fonts, links, layout, or any other HTML fragment rule.
 
 Common user intents:

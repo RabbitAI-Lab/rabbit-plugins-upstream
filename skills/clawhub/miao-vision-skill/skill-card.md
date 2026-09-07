@@ -1,50 +1,57 @@
-## Description: <br>
-Miao Vision helps agents create local-first article infographics, self-contained HTML charts and reports from local structured data, browser-based data decks, chart recommendations, and Miao Vision spec validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create self-contained Miao Vision artifacts from article URLs, local Markdown or text, and local tabular data, including infographics, HTML or PDF reports, single-page data posters, browser decks, and report or deck spec validation.
 
-## Publisher: <br>
-[miaoshou.dev](https://clawhub.ai/user/miaoshou.dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[miaoshou.dev](https://clawhub.ai/user/miaoshou.dev)
 
-## Use Case: <br>
-Developers and agent users use Miao Vision to turn article content or local CSV, TSV, XLSX, and JSON files into self-contained visual HTML artifacts, browser-based decks, or validated visualization specs. It is intended for local workflows where the agent can run shell commands and review generated specs before rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run local shell commands and may install a miao-viz CLI binary when no compatible CLI is present. <br>
-Mitigation: Review the command plan before execution, approve installation only when expected, and rely on the documented checksum verification path for downloaded binaries. <br>
-Risk: Article URL fetching can access private or internal URLs if the user supplies them. <br>
-Mitigation: Use only URLs intended for local processing and avoid private or internal URLs unless that access is deliberate. <br>
-Risk: Local datasets and generated HTML outputs may contain sensitive information in /tmp/miao-vision. <br>
-Mitigation: Treat generated files as sensitive when source data is confidential and remove local outputs after use. <br>
-Risk: Visualization claims can be misleading if generated specs include unsupported metrics or conclusions. <br>
-Mitigation: Validate specs before rendering and keep numeric claims grounded in the available evidence context. <br>
+## Use Case:
 
+External users, developers, and analysts use this skill to turn local data or article content into shareable visual artifacts while keeping source data local. It also helps validate existing Miao Vision report or deck specs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/miaoshou.dev/skills/miao-vision-skill) <br>
-- [Miao Vision installation](install/README.md) <br>
-- [Article URL / Markdown To Infographic](references/article-infographic.md) <br>
-- [Data File To Visualization Report](references/data-report.md) <br>
-- [Data File To Browser Deck](references/browser-deck.md) <br>
-- [Chart Selection](references/chart-selection.md) <br>
-- [Miao Vision VizSpec Reference](references/vizspec.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and visualization specifications that render to self-contained HTML artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated work is local-first and commonly uses /tmp/miao-vision for intermediate specs, evidence contexts, and rendered artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.26 (source: ClawHub release evidence) <br>
+Risk: The skill can discover, install, and execute a local Miao Vision CLI, and the shared CLI can persist outside the plugin lifecycle.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, approve the installer only when the displayed source and destination are expected, and remove the shared CLI explicitly by deleting ~/.miao-vision when it is no longer needed.
+
+Risk: CLI resolution can select executables from configured locations or PATH, which may be unsafe in sensitive environments without provenance controls.
+
+Mitigation: Prefer a trusted absolute CLI under MIAO_VISION_HOME or ~/.miao-vision, keep PATH controlled, and avoid the unpinned global compatibility install path for sensitive environments.
+
+## Reference(s):
+
+- [Article Infographic Workflow](artifact/references/article.md)
+- [Data Report Workflow](artifact/references/report.md)
+- [Browser Deck Workflow](artifact/references/deck.md)
+- [Outcome Brief Plan-First Workflow](artifact/references/outcome-brief.md)
+- [Miao Vision Plugin Bundle](https://github.com/miaoshou-dev/miao-vision/releases/latest/download/miao-vision-plugin.zip)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with shell commands and generated HTML, PDF, PNG, JSON, or YAML artifact files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use local CLI execution and create delivery directories for generated artifacts; source data is intended to remain local.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release evidence, install/README.md, cli-compatibility.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

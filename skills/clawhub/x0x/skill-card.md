@@ -1,52 +1,66 @@
-## Description: <br>
-Secure computer-to-computer networking for AI agents: gossip broadcast, direct messaging, CRDTs, group encryption, post-quantum encryption, and NAT traversal. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Secure computer-to-computer networking for AI agents — gossip broadcast, direct messaging, CRDTs, group encryption. Post-quantum encrypted, NAT-traversing. Everything you need to build any decentralized application.
 
-## Publisher: <br>
-[jimcollinson](https://clawhub.ai/user/jimcollinson) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT OR Apache-2.0 <br>
+## Publisher:
 
+[jimcollinson](https://clawhub.ai/user/jimcollinson)
 
-## Use Case: <br>
-Developers and agent builders use this skill to install, configure, and operate x0x for peer-to-peer agent messaging, encrypted groups, replicated task or key-value state, and local daemon APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT OR Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs and guides use of a local peer-to-peer networking daemon with high-impact networking features. <br>
-Mitigation: Install it only when you intend to run a local P2P daemon, review release provenance before installing or upgrading, and enable autostart, port forwards, or remote execution only after reviewing peer trust and ACL settings. <br>
-Risk: The daemon uses local API credentials for REST, WebSocket, and CLI workflows. <br>
-Mitigation: Keep the API token private, avoid placing durable tokens in URLs, and use short-lived session tokens where the documented workflow requires browser or WebSocket access. <br>
+## Use Case:
 
+External developers and agent operators use this skill to install, start, configure, and interact with x0x for peer-to-peer agent messaging, group coordination, CRDT-backed task and key-value stores, tailnet connectivity, and related owner/delegation workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jimcollinson/skills/x0x) <br>
-- [Publisher profile](https://clawhub.ai/user/jimcollinson) <br>
-- [Saorsa Labs homepage](https://saorsalabs.com) <br>
-- [x0x repository](https://github.com/saorsa-labs/x0x) <br>
-- [Security and cryptography documentation](https://github.com/saorsa-labs/x0x/blob/main/docs/security.md) <br>
-- [Full API reference](https://github.com/saorsa-labs/x0x/blob/main/docs/api-reference.md) <br>
-- [SDK quickstart](https://github.com/saorsa-labs/x0x/blob/main/docs/sdk-quickstart.md) <br>
-- [Symphony integration](https://github.com/saorsa-labs/x0x/blob/main/docs/symphony-integration.md) <br>
-- [macOS arm64 binary download](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-macos-arm64.tar.gz) <br>
-- [macOS x64 binary download](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-macos-x64.tar.gz) <br>
-- [Linux x64 binary download](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-linux-x64-gnu.tar.gz) <br>
-- [Linux arm64 binary download](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-linux-arm64-gnu.tar.gz) <br>
-- [Windows x64 binary download](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-windows-x64.zip) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell commands, curl examples, configuration snippets, and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl for documented download and API examples; installation metadata provides platform-specific binary download URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.34.3 (source: evidence release metadata and SKILL.md frontmatter) <br>
+Risk: The skill installs and can update persistent networking daemon binaries from mutable GitHub release URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when you trust Saorsa Labs' release process; prefer pinned or source-built installs and verify release signatures or checksums independently.
+
+Risk: The x0x daemon exposes a REST API controlled by bearer tokens and can be bound beyond loopback.
+
+Mitigation: Keep the REST API bound to loopback unless TLS and access controls are added, and protect the durable API token.
+
+Risk: Self-update behavior can change binaries in managed environments.
+
+Mitigation: Disable or tightly control self-update where change management is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jimcollinson/skills/x0x)
+- [x0x repository](https://github.com/saorsa-labs/x0x)
+- [Saorsa Labs](https://saorsalabs.com)
+- [Security and Cryptography](https://github.com/saorsa-labs/x0x/blob/main/docs/security.md)
+- [API Reference](https://github.com/saorsa-labs/x0x/blob/main/docs/api-reference.md)
+- [Symphony Integration](https://github.com/saorsa-labs/x0x/blob/main/docs/symphony-integration.md)
+- [Upgrade System](https://github.com/saorsa-labs/x0x/blob/main/docs/upgrade-system.md)
+- [OpenClaw install artifact: Linux x64 GNU](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-linux-x64-gnu.tar.gz)
+- [OpenClaw install artifact: macOS ARM64](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-macos-arm64.tar.gz)
+- [OpenClaw install artifact: Windows x64](https://github.com/saorsa-labs/x0x/releases/latest/download/x0x-windows-x64.zip)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands, REST examples, configuration snippets, and code references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may instruct an agent to install and control persistent x0x daemon and CLI binaries.]
+
+## Skill Version(s):
+
+0.41.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

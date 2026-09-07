@@ -163,13 +163,13 @@ Options:
 
 ### `vmware-aria alert cancel`
 
-Cancel (dismiss) an alert.
+Cancel (dismiss) an alert. **Asks twice** unless `--yes` is given.
 
 ```
 vmware-aria alert cancel <alert-id> [OPTIONS]
 
 Options:
-  --yes -y          Skip confirmation prompt
+  --yes -y          Skip both confirmation prompts
   --target -t TEXT  Target name
 ```
 
@@ -237,7 +237,7 @@ Options:
   --target -t TEXT     Target name
 ```
 
-**Output**: Table with VM name, recommended CPU, and recommended memory (from the `OnlineCapacityAnalytics|{cpu,mem}|recommendedSize` metrics).
+**Output**: Table with VM name, sizing status, and recommended CPU / memory / disk (from the `OnlineCapacityAnalytics|{cpu,mem,diskspace}|recommendedSize` metrics). Status `reclaimable` means the engine publishes 0 for the VM — that is not a recommendation of zero; `none published` means the VM either needs no resizing or was never scored, which the appliance does not distinguish.
 
 ---
 
@@ -352,16 +352,96 @@ vmware-aria report get <report-id> [OPTIONS]
 ### `vmware-aria report delete`
 
 Delete a generated report (the definition and schedules remain intact).
+**Irreversible — asks twice** unless `--yes` is given.
 
 ```
 vmware-aria report delete <report-id> [OPTIONS]
 
 Options:
-  --yes -y          Skip confirmation prompt
+  --yes -y          Skip both confirmation prompts
   --target -t TEXT  Target name
 ```
 
 **Audit logged**: yes.
+
+---
+
+## Fleet Commands (VCF Operations 9.1)
+
+Read-only fleet / diagnostics queries added for VCF Operations 9.1. The suite-api
+*paths* are verified against the VCF 9.1 OpenAPI; the response *schemas* are read
+defensively, and an unrecognised shape returns an empty result carrying a `note`
+that the empty result is unconfirmed (never a silent "none"). The `promql`
+sub-command reaches the real-time metrics (VODAP) service on a separate base
+(`/data-query-service`) whose prefix is **INFERRED and not yet confirmed on real
+hardware** — every result carries `base_path_confirmed: false`.
+
+### `vmware-aria fleet certificates`
+
+List certificate status/expiry across the VCF fleet.
+
+```
+vmware-aria fleet certificates [OPTIONS]
+
+Options:
+  --limit -n INT    Max rows (default 50)
+  --target -t TEXT  Target name
+```
+
+### `vmware-aria fleet passwords`
+
+List managed password-account status across the VCF fleet (read-only; does not rotate).
+
+```
+vmware-aria fleet passwords [OPTIONS]
+
+Options:
+  --limit -n INT    Max rows (default 50)
+  --target -t TEXT  Target name
+```
+
+### `vmware-aria fleet domains`
+
+List SDDC/workload domains behind one registered VCF integration. The integration
+UUID comes from the Operations Integrations page.
+
+```
+vmware-aria fleet domains <integration-id> [OPTIONS]
+
+Options:
+  --limit -n INT    Max rows (default 50)
+  --target -t TEXT  Target name
+```
+
+### `vmware-aria fleet findings`
+
+List Operations diagnostic findings (not compliance — use vmware-harden for that).
+
+```
+vmware-aria fleet findings [OPTIONS]
+
+Options:
+  --severities TEXT  Comma-separated, e.g. CRITICAL,WARNING
+  --categories TEXT  Comma-separated category filter
+  --types TEXT       Comma-separated findingType filter
+  --limit -n INT     Max rows (default 50)
+  --target -t TEXT   Target name
+```
+
+### `vmware-aria fleet promql`
+
+Run a real-time PromQL instant query against the VCF 9.1 VODAP service. Base path
+INFERRED — confirm against a live appliance (`base_path_confirmed: false`).
+
+```
+vmware-aria fleet promql <query> [OPTIONS]
+
+Options:
+  --time TEXT       Evaluation timestamp (RFC3339 or Unix seconds)
+  --source TEXT     Data-source id to scope the query
+  --limit -n INT    Max result series (default 50)
+  --target -t TEXT  Target name
+```
 
 ---
 
