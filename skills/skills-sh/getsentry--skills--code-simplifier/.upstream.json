@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/code-simplifier",
+  "repo": "getsentry/skills",
+  "skillId": "code-simplifier",
+  "branch": "main",
+  "pushedAt": "2026-08-25T14:33:51Z",
+  "contentHash": "5bea1f77cd2f6c178a6cd8fd128b5cd5bef905f61197d98eaf2915f5d8f8aa71",
+  "fetchedAt": "2026-09-07T13:34:10.407Z"
+}

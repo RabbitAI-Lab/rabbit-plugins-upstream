@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-otel-exporter-setup",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-otel-exporter-setup",
+  "branch": "main",
+  "pushedAt": "2026-09-04T12:44:33Z",
+  "contentHash": "88cf2f9ab4afb237b559a3b7fcdaeb652e0908311b1163cf475eaeb5532e08c7",
+  "fetchedAt": "2026-09-07T13:35:56.759Z"
+}

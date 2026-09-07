@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/worldcup",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "worldcup",
+  "branch": "main",
+  "pushedAt": "2026-09-06T02:11:28Z",
+  "contentHash": "a28c3924ff2dee5763d2864508286f32b09f47d1a8b3c213468b326ab94d058b",
+  "fetchedAt": "2026-09-07T13:35:32.355Z"
+}

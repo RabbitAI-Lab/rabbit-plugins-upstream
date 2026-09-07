@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-dotnet-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-dotnet-sdk",
+  "branch": "main",
+  "pushedAt": "2026-09-04T12:44:33Z",
+  "contentHash": "3999d1785b3f64d50d5d2e114988c4b926eb0a232e8c0f2fc0f9f740436f4f98",
+  "fetchedAt": "2026-09-07T13:35:56.763Z"
+}

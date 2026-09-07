@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-social-messaging",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-social-messaging",
+  "branch": "main",
+  "pushedAt": "2026-09-07T13:33:40Z",
+  "contentHash": "714d18ba33f78598fd356e3b64c7f2fa7e9618e7fdc17f33847f67a438fb5cc2",
+  "fetchedAt": "2026-09-07T13:35:59.173Z"
+}

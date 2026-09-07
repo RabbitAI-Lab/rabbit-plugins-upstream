@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-secrets-manager",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-secrets-manager",
+  "branch": "main",
+  "pushedAt": "2026-09-07T13:33:40Z",
+  "contentHash": "e4fbbf6ee906901716a4358d8ca691abb340c78144c1302498fdf5f627f03ac3",
+  "fetchedAt": "2026-09-07T13:35:59.180Z"
+}

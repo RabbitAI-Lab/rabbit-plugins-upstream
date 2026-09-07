@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-alert-configuration",
+  "repo": "google/skills",
+  "skillId": "gke-alert-configuration",
+  "branch": "main",
+  "pushedAt": "2026-09-06T18:52:16Z",
+  "contentHash": "e97a4eeff33958c6541e7492bc1fe42700f688310dfb37952398edfd8f627c98",
+  "fetchedAt": "2026-09-07T13:35:13.758Z"
+}
