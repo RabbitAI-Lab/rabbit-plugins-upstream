@@ -1,52 +1,64 @@
-## Description: <br>
-Enterprise Service Assistant helps park operations teams manage customer records, fee collection, contract renewals, work orders, inventory, service matching, visit planning, move-outs, operational reports, and complaints from Excel-based ledgers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enterprise Service Assistant helps campus operations teams manage daily work, tenant service, and follow-up items using local SQLite queries, local cache files, and scheduled Tencent Docs synchronization.
 
-## Publisher: <br>
-[perrykono-debug](https://clawhub.ai/user/perrykono-debug) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[perrykono-debug](https://clawhub.ai/user/perrykono-debug)
 
-## Use Case: <br>
-Employees responsible for park or enterprise-service operations use this agent to read configured Excel or Tencent Docs data, identify operational risks, prepare follow-up messages, and generate daily or periodic service-work summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The artifact includes WeCom webhook behavior and a hard-coded webhook URL. <br>
-Mitigation: Rotate or remove embedded webhook credentials, require administrator-approved outbound recipients, and keep external messaging disabled until reviewed. <br>
-Risk: Broad scheduled automation can send operational reminders and reports without an operator present. <br>
-Mitigation: Disable scheduled tasks by default and enable only reviewed schedules with clear owners, recipients, and run windows. <br>
-Risk: The artifact contains high-impact legal-proceeding automation and collection workflows. <br>
-Mitigation: Require human review and approval before generating, sending, filing, or acting on legal or collection-related outputs. <br>
-Risk: The skill processes enterprise ledger data from Excel files and Tencent Docs templates. <br>
-Mitigation: Use redacted test data until file paths, retention, cloud document access, and per-feature permissions are approved by an administrator. <br>
+## Use Case:
 
+Campus operations employees use this skill to triage daily service work, review tenant records, follow fees, renewals, repairs, inventory, and service requests, and prepare reminders or reports from configured business data.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/perrykono-debug/enterprise-service-assistant) <br>
-- [Installation Guide](artifact/references/安装指引.md) <br>
-- [Knowledge Base Configuration](artifact/references/知识库配置.md) <br>
-- [Enterprise Service Product Catalog](artifact/references/企业赋能_服务产品清单.md) <br>
-- [Customer Management Data Source Mapping](artifact/references/数据源_客户管理表.md) <br>
-- [Fee Collection Data Source Mapping](artifact/references/数据源_费用收缴表.md) <br>
-- [Value-Added Service Data Source Mapping](artifact/references/数据源_增值服务记录.md) <br>
-- [Tencent Docs data-source template](https://docs.qq.com/smartsheet/DTGJwZUJTZU1tc3dk) <br>
-- [Tencent Docs service catalog template](https://docs.qq.com/aio/DTHJ2Q0Jick5vV2RH) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with optional Python examples, configuration snippets, and outbound message templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce operational reminders, risk labels, reports, message drafts, Excel update guidance, and WeCom notification payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.0 (source: server release metadata) <br>
+Risk: Broad business-record access and local persistence could expose tenant, financial, and operational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and narrow enabled features before installation, protect Tencent Docs credentials, and restrict access to local SQLite, cache, and tracking files.
+
+Risk: Outbound WeCom notifications and scheduled pushes may send sensitive or incorrect content.
+
+Mitigation: Disable scheduled pushes until recipients and message contents are approved, and require human confirmation for customer-facing financial or legal messages.
+
+Risk: Financial, equity-warrant, and legal-escalation workflows could be mistaken for autonomous decisions.
+
+Mitigation: Use the skill as an operational aid only and require human approval for fee, legal, compensation, equity, or customer-notice decisions.
+
+Risk: Contradictory source-write and privacy statements may create uncertainty about whether Tencent Docs data is read-only or writable.
+
+Mitigation: Confirm intended Tencent Docs permissions before connecting production records, and test synchronization behavior with non-production data first.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/perrykono-debug/skills/enterprise-service-assistant)
+- [README](artifact/README.md)
+- [Installation guide](artifact/knowledge/INSTALL.md)
+- [Onboarding guide](artifact/knowledge/ONBOARDING.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with tables, task lists, code snippets, shell commands, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local SQLite, cache, and tracking-file updates, plus WeCom webhook message content when configured.]
+
+## Skill Version(s):
+
+3.6.0 (source: SKILL.md frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

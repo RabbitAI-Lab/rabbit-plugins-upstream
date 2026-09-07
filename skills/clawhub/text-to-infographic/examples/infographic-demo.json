@@ -1,0 +1,115 @@
+{
+  "infographic_id": "ai_meeting_assistant_overview_demo",
+  "intent": "summarize",
+  "chart_family": "process",
+  "language": "zh-CN",
+  "audience": "knowledge workers",
+  "source_summary": "解释 AI 会议助手如何在会前、会中、会后三个阶段提升协作效率。",
+  "message": {
+    "title": "AI 会议助手总览图",
+    "subtitle": "把会前准备、会中记录、会后跟进压缩到一张 overview 图",
+    "core_takeaway": "AI 会议助手通过准备、记录、总结和回写形成协作闭环。",
+    "cta": "图里只放关键动作与收益点，详细功能说明放到 companion doc。"
+  },
+  "layout": {
+    "layout_mode": "flow",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "4:5",
+    "reading_order": "top-to-bottom",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "ai-assistant-overview",
+    "palette_mode": "duo",
+    "emphasis_style": "clean",
+    "brand_colors": ["#3B82F6", "#10B981", "#F3F4F6"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "AI 会议助手",
+      "content": "让会前、会中、会后形成可追溯的协作闭环。",
+      "visual_role": "primary",
+      "icon_hint": "sparkles",
+      "must_include": ["标题区", "三段式结构"],
+      "avoid": ["长段落"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_loop",
+      "block_type": "summary",
+      "title": "核心价值",
+      "content": "减少准备成本、提升记录质量、缩短会后跟进时间。",
+      "visual_role": "primary",
+      "icon_hint": "target",
+      "must_include": ["总览摘要"],
+      "avoid": ["重复文案"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "stage_before",
+      "block_type": "stage",
+      "title": "会前准备",
+      "content": "自动整理议程、历史材料和参会背景。",
+      "visual_role": "secondary",
+      "group_id": "meeting_phases",
+      "icon_hint": "calendar-clock",
+      "payload": {"phase": "before", "benefit": "减少准备时间"},
+      "must_include": ["准备动作"],
+      "avoid": ["堆太多字段"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "stage_during",
+      "block_type": "stage",
+      "title": "会中记录",
+      "content": "自动转写、提炼重点、标记待办和决策。",
+      "visual_role": "secondary",
+      "group_id": "meeting_phases",
+      "icon_hint": "mic",
+      "payload": {"phase": "during", "benefit": "提升信息完整度"},
+      "must_include": ["转写与摘要"],
+      "avoid": ["密集说明"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "stage_after",
+      "block_type": "stage",
+      "title": "会后跟进",
+      "content": "自动回写任务、输出总结并推送负责人。",
+      "visual_role": "secondary",
+      "group_id": "meeting_phases",
+      "icon_hint": "send",
+      "payload": {"phase": "after", "benefit": "缩短跟进链路"},
+      "must_include": ["回写与提醒"],
+      "avoid": ["细节过深"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "cta_next",
+      "block_type": "cta",
+      "title": "落地建议",
+      "content": "先把图放进文档页首，再在正文展开每个阶段的输入输出。",
+      "visual_role": "supporting",
+      "icon_hint": "arrow-right",
+      "must_include": ["下一步动作"],
+      "avoid": ["空泛口号"],
+      "text_budget": 24
+    }
+  ],
+  "relations": [
+    {
+      "from": "stage_before",
+      "to": "stage_during",
+      "relation_type": "flow",
+      "label": "准备信息进入会议现场"
+    },
+    {
+      "from": "stage_during",
+      "to": "stage_after",
+      "relation_type": "flow",
+      "label": "记录沉淀为可执行事项"
+    }
+  ]
+}

@@ -1,41 +1,55 @@
-## Description: <br>
-Use when an agent needs to install or configure RapidX CLI/MCP access, set production LTP credentials, locate the agent workspace MCP config, review integration, discover tools, or run read-only self-checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when an agent needs to install or configure RapidX CLI/MCP access, set production LTP credentials, locate the agent workspace MCP config, review integration, discover tools, or run read-only self-checks.
 
-## Publisher: <br>
-[liquiditytech](https://clawhub.ai/user/liquiditytech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liquiditytech](https://clawhub.ai/user/liquiditytech)
 
-## Use Case: <br>
-Developers and agent operators use this skill to configure RapidX CLI or MCP access, set required LTP credentials, verify runtime readiness, and produce setup reviews before using separate trading workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing the skill can give an agent environment configured with production RapidX credentials access to live trading actions. <br>
-Mitigation: Install only in intended agent environments, prefer least-privileged or read-only credentials where possible, and require explicit preview plus confirmation before live trade, cancel, position, leverage, algo, or automation actions. <br>
-Risk: Production credentials may be persisted in agent or MCP configuration. <br>
-Mitigation: Use a host secret manager, chat-secret mechanism, or environment references instead of writing real keys into shared configuration, and avoid shared workspaces for production keys. <br>
+## Use Case:
 
+Developers and agent operators use this skill to install or upgrade RapidX CLI, configure CLI or MCP access, handle RapidX credentials, verify runtime readiness, and produce masked integration reviews before trading workflows.
 
-## Reference(s): <br>
-- [RapidX Capability Overview](references/capability-overview.md) <br>
-- [RapidX Skills / CLI / MCP Best Practices](references/best-practices.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON or YAML configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include masked credential references, runtime readiness classifications, and integration review tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: frontmatter and server release evidence) <br>
+Risk: The skill can install mutable npm code through the RapidX CLI package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the npm publisher is trusted; prefer a workspace-local, pinned CLI version where operationally feasible.
+
+Risk: MCP configuration can persist live production LTP credentials.
+
+Mitigation: Use host-native secret references or an OS/enterprise secret manager; if literals are unavoidable, use least-privilege credentials, owner-only file permissions, keep configs out of repositories and sync systems, and rotate keys after exposure concerns.
+
+## Reference(s):
+
+- [RapidX Capability Overview](artifact/references/capability-overview.md)
+- [RapidX Skills / CLI / MCP Best Practices](artifact/references/best-practices.md)
+- [ClawHub Skill Page](https://clawhub.ai/liquiditytech/skills/ltp-rapidx-config)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON/YAML configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Masks credentials in reviews and classifies runtime readiness from observed CLI or MCP evidence.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

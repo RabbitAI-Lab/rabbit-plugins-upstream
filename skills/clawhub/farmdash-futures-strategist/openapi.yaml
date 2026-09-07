@@ -1,8 +1,10 @@
 openapi: 3.0.3
 info:
   title: FarmDash Futures Strategist API
-  version: 2.0.0
+  version: 2.1.0
   description: |
+    WARNING: Running trade executions and cancellations places real perpetual futures trades and alters active market exposure, carrying significant risk of financial loss. Immediate, explicit manual end-user confirmation and consent is strictly required immediately before placing any execution or cancellation request. Do not allow autonomous agents to auto-run trade execution or cancellation without manual user approval.
+
     REST API for payment-enabled AI agents to research, analyze, and prepare user-approved
     execution of perpetual futures trades on Hyperliquid as part of FarmDash DeFi discovery and onchain services. The Futures Strategist is an
     adaptive execution engine: it returns structured strategy objects,
@@ -11,22 +13,23 @@ info:
 
     ## Authentication
     - **Primary optional credential**: `Authorization: Bearer <FARMDASH_API_KEY>`.
-    - **Scout (Free)**: Omit the bearer token. Safe for initial testing and limited research.
-    - **Pioneer**: Use a Pioneer-tier `FARMDASH_API_KEY`. Full analysis and sizing.
-    - **Syndicate**: Use a Syndicate-tier `FARMDASH_API_KEY`. Execution and batch cancel endpoints enabled.
+    - **Scout (Free)**: Omit the bearer token. Limited analysis and execution quota (5/day).
+    - **Pioneer**: Use a Pioneer-tier `FARMDASH_API_KEY`. Full analysis, sizing, and unlimited compatibility execution.
+    - **Syndicate**: Use a Syndicate-tier `FARMDASH_API_KEY`. Full analysis, sizing, and unlimited compatibility execution.
     - **Execution auth**: `execute-order` and `cancel-order` require a fresh EIP-712 signature from the user's Hyperliquid API wallet on every request.
+    - **Signer binding**: FarmDash recovers the signer from the exact Hyperliquid L1 action, nonce, expiry, environment, and any subaccount/vault routing address and rejects a mismatch with `agentAddress`.
+    - **Delegation binding**: when `accountAddress` differs, Hyperliquid `userRole` must report `agentAddress` as its active API wallet; if the owner is a subaccount or vault, that address is included as `vaultAddress` in both the signature hash and exchange request. Ambiguity fails closed.
     - **Important**: The bearer token gates FarmDash tier access and rate limits only. It never replaces the per-request EIP-712 signature and does not let FarmDash sign on the user's behalf.
 
     ## Hard Guardrails (Server-Enforced)
     - Max leverage: 5x
     - Max risk per trade: 2% of equity before adaptive reductions
     - Daily loss limit: -3% -> trading halted 24h
-    - Research required before execution (analyze-strategy within 5 min)
+    - Research required before execution (analyze-strategy within 60 seconds)
 
     ## Intent Hardening
     `execute-order` requires `nonce`, `expiresAt`, and `intentHash` for
-    deterministic, auditable order intents. `cancel-order` keeps those fields
-    optional for backward-compatible cancel flows.
+    deterministic, auditable order intents. `cancel-order` also requires them.
 
     ## Dust Storm Protocol
     Upstream failures return `ok:false` with typed degraded state and
@@ -126,11 +129,16 @@ paths:
       summary: Get agent's Hyperliquid positions and risk state
       description: |
         Returns the agent's current positions, margin summary, equity,
-        unrealized PnL, liquidation prices, and risk management state
-        (daily/weekly PnL, drawdown, halt status).
-        This is a read-only lookup against the public Hyperliquid API wallet
-        address supplied in `agentAddress`. It does not require a private key
-        or seed phrase.
+        unrealized PnL, liquidation prices, and risk management state.
+        Daily/weekly values are conservative loss-pressure metrics: rolling
+        closed PnL minus absolute fill fees plus funding and negative current
+        unrealized PnL only. Positive open gains cannot mask a realized-loss
+        breach; these fields are not full period-return calculations.
+        `agentAddress` identifies the API signer/FarmDash caller. For a
+        delegated API wallet, `accountAddress` must identify the Hyperliquid
+        master or subaccount that actually owns the equity and positions. Omit
+        `accountAddress` only when the signer directly owns the account. It does not require a private key or seed phrase. The
+        signer/owner relationship is verified against Hyperliquid `userRole`.
       tags: [Account]
       security:
         - bearerAuth: []
@@ -142,7 +150,14 @@ paths:
           schema:
             type: string
             pattern: '^0x[a-fA-F0-9]{40}$'
-          description: Agent's EVM address (Hyperliquid API wallet)
+          description: EIP-712/API-wallet signer and FarmDash caller identity
+        - name: accountAddress
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: '^0x[a-fA-F0-9]{40}$'
+          description: Hyperliquid master/subaccount that owns the equity. Defaults to agentAddress only for a direct signer.
       responses:
         '200':
           description: Account state with risk info
@@ -172,12 +187,14 @@ paths:
         Runs the complete research pipeline: funding rates, technical indicators,
         order book liquidity, Trail Heat cross-reference, and risk budget.
         Returns a single actionable strategy recommendation with position sizing.
-        Requires `Authorization: Bearer <FARMDASH_API_KEY>` with Pioneer or
-        Syndicate tier. The bearer token unlocks the analysis tier only; it does
-        not authorize trade execution by itself.
+        Available under the Scout daily quota or a Pioneer/Syndicate tier. The
+        bearer token controls access only; it does not authorize trade execution.
+        For a delegated API wallet, set `accountAddress` to the master/subaccount
+        whose equity and venue history must determine size and loss guards.
       tags: [Strategy]
       security:
         - bearerAuth: []
+        - {}
       requestBody:
         required: true
         content:
@@ -192,7 +209,11 @@ paths:
                 agentAddress:
                   type: string
                   pattern: '^0x[a-fA-F0-9]{40}$'
-                  description: Agent's Hyperliquid API wallet address
+                  description: EIP-712/API-wallet signer and FarmDash caller identity
+                accountAddress:
+                  type: string
+                  pattern: '^0x[a-fA-F0-9]{40}$'
+                  description: Hyperliquid master/subaccount that owns the equity. Defaults to agentAddress only for a direct signer.
                 riskMultiplier:
                   type: number
                   description: Optional flexibility modifier for risk tolerance. 1.0 is default (2% max). 0.5 is conservative (1% max). Server caps at 1.0.
@@ -214,13 +235,16 @@ paths:
                     $ref: '#/components/schemas/Guardrails'
                   researchGate:
                     type: object
-                    description: Market-bound research gate required by execute-order.
+                    description: Sixty-second research gate binding market, side, maximum size, entry drift, leverage metadata, and stop-derived risk.
                     properties:
                       scope:
                         type: string
-                        enum: [agent_market_direction]
+                        enum: [agent_market_direction_size_entry_leverage_risk]
                       agentAddress:
                         type: string
+                      accountAddress:
+                        type: string
+                        description: Equity owner bound into sizing and execution authorization.
                       coin:
                         type: string
                       direction:
@@ -229,6 +253,30 @@ paths:
                       confidence:
                         type: number
                         nullable: true
+                        description: Heuristic score on a 0-100 scale; not a calibrated probability.
+                      confidenceScale:
+                        type: string
+                      strategy:
+                        type: string
+                      entry:
+                        type: number
+                        nullable: true
+                      stopLoss:
+                        type: number
+                        nullable: true
+                      maxPositionSize:
+                        type: number
+                        nullable: true
+                      maxLeverage:
+                        type: number
+                        nullable: true
+                      riskPercent:
+                        type: number
+                        nullable: true
+                      executionReady:
+                        type: boolean
+                      maxEntryDeviationBps:
+                        type: number
                       recommendationHash:
                         type: string
                       expiresAt:
@@ -236,7 +284,7 @@ paths:
                       requiredForExecution:
                         type: boolean
         '402':
-          description: Pioneer tier required
+          description: Scout quota exhausted; a paid tier or accepted x402 overage is required
 
   /v1/agent/futures/position-sizing:
     post:
@@ -300,16 +348,35 @@ paths:
       summary: Execute a pre-signed order on Hyperliquid
       description: |
         Forwards a pre-signed EIP-712 order to Hyperliquid's exchange API.
-        Requires prior analyze-strategy call within 5 minutes (research gate).
-        Requires `Authorization: Bearer <FARMDASH_API_KEY>` with Syndicate tier
-        for endpoint access. A bearer token alone is insufficient: every request
+        Requires an execution-ready analyze-strategy call within 60 seconds. The
+        gate binds market, side, maximum size, 50 bps entry drift, maximum
+        analyzed leverage metadata, stop-derived risk, and the account whose
+        equity funded the sizing decision. `funding_arb` remains
+        analysis-only because this endpoint cannot atomically bind both legs.
+        Requires `Authorization: Bearer <FARMDASH_API_KEY>` for Pioneer/Syndicate unlimited access, or omit for free Scout access (5/day). A bearer token alone is insufficient: every request
         must also include a fresh EIP-712 signature from the user's
         Hyperliquid API wallet. All risk
         guardrails enforced server-side before forwarding. `nonce`, `expiresAt`,
         and `intentHash` are required for request-scoped expiry and auditability.
+        `expiresAt` is forwarded as Hyperliquid `expiresAfter` and must be
+        incorporated into the venue signature. The signed order action contains
+        the FarmDash builder term `f=1`, meaning 0.1 basis point (0.001%) of
+        filled notional—not 1 bp. The user must approve that builder fee on
+        Hyperliquid before execution. Rejected/resting/unfilled notional is not
+        reported as fee-bearing volume. FarmDash recovers the signer from the
+        exact signed L1 payload and rejects any mismatch with `agentAddress`.
+        When the verified owner is a Hyperliquid subaccount or vault,
+        `accountAddress` is also incorporated as the signed and submitted
+        `vaultAddress`; it cannot be changed after signing.
+        It also preflights the account owner's Hyperliquid `maxBuilderFee` and
+        blocks when the approved maximum is below `f=1`; only the main account
+        wallet, not an API wallet, can sign that approval action.
+        WARNING: This endpoint initiates real perpetual futures trades on Hyperliquid which can lead to substantial financial loss. You must explicitly present all trade details, fees, and leverage levels to the user, and obtain their manual confirmation prior to calling this endpoint. Never automate or auto-run this endpoint.
+
       tags: [Execution]
       security:
         - bearerAuth: []
+        - {}
       requestBody:
         required: true
         content:
@@ -321,6 +388,11 @@ paths:
                 agentAddress:
                   type: string
                   pattern: '^0x[a-fA-F0-9]{40}$'
+                  description: EIP-712/API-wallet signer and FarmDash caller identity
+                accountAddress:
+                  type: string
+                  pattern: '^0x[a-fA-F0-9]{40}$'
+                  description: Hyperliquid master/subaccount whose equity was used during analysis. Defaults to agentAddress only for a direct signer.
                 coin:
                   type: string
                 isBuy:
@@ -334,6 +406,7 @@ paths:
                 orderType:
                   type: string
                   enum: [limit_gtc, limit_ioc, limit_alo, market, stop_loss, take_profit]
+                  description: stop_loss and take_profit require reduceOnly=true.
                 reduceOnly:
                   type: boolean
                   default: false
@@ -341,7 +414,7 @@ paths:
                   oneOf:
                     - type: number
                     - type: string
-                  description: Max 5x (server-enforced)
+                  description: Max 5x FarmDash intent/risk metadata. This endpoint does not submit Hyperliquid's separate updateLeverage action; verify actual venue leverage independently.
                 signature:
                   type: object
                   description: Fresh EIP-712 signature from the user's Hyperliquid API wallet. Required on every request; bearer token alone is insufficient.
@@ -356,13 +429,13 @@ paths:
                   type: integer
                 expiresAt:
                   type: integer
-                  description: Required unix timestamp in milliseconds. Requests expire server-side after this time.
+                  description: Required unix timestamp in milliseconds. Forwarded as venue `expiresAfter`; include it when generating the Hyperliquid signature.
                 intentHash:
                   type: string
                   description: Required FarmDash-side order intent hash for payload auditability.
                 signedAction:
                   type: object
-                  description: Pre-built Hyperliquid exchange action (optional, built server-side if omitted). If provided, it must match the request fields.
+                  description: Pre-built Hyperliquid exchange action (optional, built server-side if omitted). If provided, it must match all request fields and contain signed `builder: { b: FarmDash treasury, f: 1 }`; Hyperliquid f units are tenths of a basis point.
       responses:
         '200':
           description: Order execution result
@@ -377,6 +450,10 @@ paths:
                     type: object
                   order:
                     type: object
+                    description: Includes exact builder compensation terms and states that leverage is risk metadata only.
+                  state:
+                    type: string
+                    enum: [filled, resting_unfilled]
                   intentHash:
                     type: string
                   expiresAt:
@@ -386,7 +463,7 @@ paths:
         '400':
           description: Risk check failed or research not performed
         '402':
-          description: Syndicate tier required
+          description: Scout tier quota exceeded (upgrade or pay x402 overage)
 
   /v1/agent/futures/cancel-order:
     post:
@@ -395,25 +472,39 @@ paths:
       description: |
         Cancels one or more open Hyperliquid orders using a pre-signed EIP-712
         cancellation payload. Supports batch cancellation of up to 50 order IDs.
-        Requires `Authorization: Bearer <FARMDASH_API_KEY>` with Syndicate tier
-        for endpoint access. A bearer token alone is insufficient: every
+        Requires `Authorization: Bearer <FARMDASH_API_KEY>` for Pioneer/Syndicate unlimited access, or omit for free Scout access (5/day). A bearer token alone is insufficient: every
         cancellation request must include a fresh EIP-712 signature from the
-        user's Hyperliquid API wallet. Optional `expiresAt` and `intentHash`
-        add request-scoped expiry and auditability.
+        user's Hyperliquid API wallet. For delegated signing, `accountAddress`
+        identifies the venue-verified equity owner. A subaccount/vault owner is
+        incorporated as `vaultAddress` in both the signature hash and exchange
+        request. FarmDash recovers the exact signer before submission. Required
+        `expiresAt` is forwarded as
+        Hyperliquid `expiresAfter`; required `intentHash` binds the FarmDash
+        request for auditability. HTTP 200 is returned only when Hyperliquid
+        supplies one explicit `success` application status per requested order;
+        mixed or total application errors are rejections, not cancellation success.
+        WARNING: This endpoint alters active market state and cancels protective orders. Ensure the user has explicitly confirmed the action and understands the resulting exposure change before calling this endpoint. Never automate or auto-run this endpoint.
+
       tags: [Execution]
       security:
         - bearerAuth: []
+        - {}
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required: [agentAddress, coin, orderIds, signature]
+              required: [agentAddress, coin, orderIds, nonce, expiresAt, intentHash, signature]
               properties:
                 agentAddress:
                   type: string
                   pattern: '^0x[a-fA-F0-9]{40}$'
+                  description: EIP-712/API-wallet signer
+                accountAddress:
+                  type: string
+                  pattern: '^0x[a-fA-F0-9]{40}$'
+                  description: Hyperliquid master/subaccount/vault that owns the orders. Required in practice for delegated signing; defaults to agentAddress only for a direct signer.
                 coin:
                   type: string
                 orderIds:
@@ -436,10 +527,10 @@ paths:
                   type: integer
                 expiresAt:
                   type: integer
-                  description: Optional unix timestamp in milliseconds. Requests expire server-side after this time.
+                  description: Required unix timestamp in milliseconds. Forwarded as venue `expiresAfter`; include it when generating the signature.
                 intentHash:
                   type: string
-                  description: Optional FarmDash-side intent hash for payload auditability.
+                  description: Required FarmDash-side intent hash for payload auditability.
                 signedAction:
                   type: object
                   description: Pre-built Hyperliquid cancel action (optional). If provided, it must match the request fields.
@@ -453,8 +544,20 @@ paths:
                 properties:
                   ok:
                     type: boolean
+                  state:
+                    type: string
+                    enum: [cancelled, rejected, partially_rejected, unknown]
                   result:
                     type: object
+                  failed:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        orderId:
+                          type: integer
+                        status:
+                          type: object
                   cancelled:
                     type: object
                   intentHash:
@@ -464,7 +567,11 @@ paths:
                   timestamp:
                     type: integer
         '402':
-          description: Syndicate tier required
+          description: Scout tier quota exceeded (upgrade or pay x402 overage)
+        '422':
+          description: Hyperliquid rejected all or some cancellation application statuses
+        '502':
+          description: Upstream failure or incomplete/malformed venue application statuses; cancellation state is unknown
 
 components:
   securitySchemes:
@@ -472,7 +579,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: FARMDASH_API_KEY
-      description: Optional `FARMDASH_API_KEY` bearer token. Omit for Scout-tier endpoints. Use a Pioneer-tier key for higher-tier analysis endpoints and a Syndicate-tier key for execution endpoints. This bearer token gates tier access only and never replaces the required EIP-712 execution signature.
+      description: Optional `FARMDASH_API_KEY` bearer token. Omit for Scout-tier endpoints. Use a Pioneer-tier key or Syndicate-tier key for unlimited execution and analysis (5/day limit applies to Scout). This bearer token gates tier access only and never replaces the required EIP-712 execution signature.
 
   schemas:
     FundingAnalysis:
@@ -751,6 +858,9 @@ components:
     AccountSummary:
       type: object
       properties:
+        accountAddress:
+          type: string
+          description: Hyperliquid master/subaccount that owns the reported equity.
         equity:
           type: string
         totalNotionalPosition:
@@ -799,6 +909,20 @@ components:
         dailyPnlPct:
           type: string
         weeklyPnl:
+          type: string
+        realizedDailyPnl:
+          type: string
+        realizedWeeklyPnl:
+          type: string
+        unrealizedPnl:
+          type: string
+        pnlSource:
+          type: string
+          enum: [hyperliquid_venue_loss_pressure]
+        pnlAsOf:
+          type: integer
+          format: int64
+        pnlMethodology:
           type: string
         drawdown:
           type: string

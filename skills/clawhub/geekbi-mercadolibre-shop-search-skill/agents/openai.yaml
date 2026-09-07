@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mercado Libre 店铺搜索"
+  short_description: "查询和分析美客多店铺、卖家规模、信誉与销量"
+  default_prompt: "使用极鲸云真实数据查询并分析 Mercado Libre 店铺。"

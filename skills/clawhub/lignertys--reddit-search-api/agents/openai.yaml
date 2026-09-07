@@ -1,0 +1,5 @@
+interface:
+  display_name: Reddit Search API
+  short_description: Pure API reference for reddapi.dev - authentication, all endpoints (vector search, semantic search, trends, subreddit lookup), request parameters, response schemas, and error codes, with no research-workflow framing.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg

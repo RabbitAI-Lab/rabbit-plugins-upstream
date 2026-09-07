@@ -24,6 +24,30 @@ if os.environ.get("LOVART_INSECURE_SSL") == "1":
     _ssl_ctx.verify_mode = ssl.CERT_NONE
 
 
+def summarize_failures(failures: list) -> str:
+    """One-line summary of rejected tool calls, for the `warning` field.
+
+    Repeats of the same failure are collapsed with a count, since an Agent
+    that retries a rejected reference three times produces three identical
+    entries.
+    """
+    if not failures:
+        return ""
+    counts: dict = {}
+    for f in failures:
+        key = (f.get("tool_hint") or f.get("tool") or "tool",
+               f.get("code") or "TOOL_FAILED",
+               (f.get("message") or "").strip())
+        counts[key] = counts.get(key, 0) + 1
+    parts = []
+    for (tool, code, msg), n in counts.items():
+        times = f" (x{n})" if n > 1 else ""
+        parts.append(f"{tool} was rejected{times}: [{code}] {msg}")
+    head = "1 tool call was rejected. " if len(failures) == 1 else \
+           f"{len(failures)} tool calls were rejected. "
+    return head + " | ".join(parts)
+
+
 class AgentSkillError(Exception):
     def __init__(self, message: str, code: int = 0):
         self.message = message
@@ -260,20 +284,37 @@ class AgentSkill:
 
     def send(self, prompt: str, project_id: str, attachments=None, thread_id=None,
              prefer_models=None, include_tools=None, exclude_tools=None,
-             mode: Optional[str] = None) -> str:
+             mode: Optional[str] = None, subjects=None, kits=None) -> str:
         """Send a chat message. Returns thread_id.
 
         prefer_models: dict mapping category to list of tool names (soft preference)
-        include_tools: list of tool names to force use (hard constraint)
-        exclude_tools: list of tool names to exclude (hard constraint)
+        include_tools: list of tool names the Agent is told to prioritize.
+              This is a strong instruction in the prompt, not an enforced
+              whitelist — the Agent may still pick another tool.
+        exclude_tools: accepted for forward compatibility; it currently has
+              no effect on tool selection. To steer away from a tool, name
+              the one you do want via include_tools instead.
         mode: 'thinking' for deep structured reasoning, or 'fast' for
               lightweight single-pass. Default is 'fast' (matches the web
               UI). Mode is locked to the thread on the first message — to
               switch, start a new thread.
+        subjects: list of already-approved asset-library subjects to use as
+              references. Each entry is a dict with 'url' (required, the
+              library's own URL) and optional 'type' (subject_image /
+              subject_audio / subject_video, default subject_image),
+              'asset_id', 'display_name', 'channel'. Passing the library URL
+              reuses the asset's existing review, whereas re-uploading the
+              same file creates a new copy that gets reviewed again.
+        kits: list of brand kit IDs. The project's active kit is attached
+              automatically, so only pass this to reference a different kit.
         """
         body = {"prompt": prompt, "project_id": project_id}
         if attachments:
             body["attachments"] = attachments
+        if subjects:
+            body["subjects"] = subjects
+        if kits:
+            body["kits"] = kits
         if thread_id:
             body["thread_id"] = thread_id
         if mode:
@@ -368,7 +409,7 @@ class AgentSkill:
              attachments=None, thread_id=None,
              timeout=None, auto_create_project=True,
              prefer_models=None, include_tools=None, exclude_tools=None,
-             mode: Optional[str] = None) -> dict:
+             mode: Optional[str] = None, subjects=None, kits=None) -> dict:
         """Send → poll → get result. One-shot convenience method.
 
         mode: 'thinking' for deep reasoning, 'fast' for lightweight single-pass.
@@ -392,7 +433,7 @@ class AgentSkill:
                         attachments=attachments, thread_id=thread_id,
                         prefer_models=prefer_models,
                         include_tools=include_tools, exclude_tools=exclude_tools,
-                        mode=mode)
+                        mode=mode, subjects=subjects, kits=kits)
         status = self.poll(tid, timeout=timeout)
 
         if status == "pending_confirmation":
@@ -414,6 +455,8 @@ class AgentSkill:
         # content moderation, timed out, or the LLM decided not to call any
         # tool). Surface the assistant text under a clear field so callers
         # don't silently mistake it for a successful generation.
+        failures = result.get("failures") or []
+
         if status == "done":
             has_artifact = any(
                 (it.get("artifacts") or [])
@@ -426,16 +469,32 @@ class AgentSkill:
                     if it.get("text")
                 ]
                 result["generation_succeeded"] = False
-                result["warning"] = (
-                    "Thread ended without producing any artifact. The agent "
-                    "responded with text only — the upstream model may have "
-                    "refused the prompt (content moderation), timed out, or "
-                    "the LLM chose not to call a generation tool."
-                )
+                if failures:
+                    result["warning"] = (
+                        "Thread ended without producing any artifact. "
+                        + summarize_failures(failures)
+                    )
+                else:
+                    result["warning"] = (
+                        "Thread ended without producing any artifact. The agent "
+                        "responded with text only — the upstream model may have "
+                        "refused the prompt (content moderation), timed out, or "
+                        "the LLM chose not to call a generation tool."
+                    )
                 if assistant_texts:
                     result["agent_message"] = "\n\n".join(assistant_texts)
             else:
                 result["generation_succeeded"] = True
+                # Artifacts exist, but some tool calls were still rejected. The
+                # Agent is free to drop a reference or switch models and carry
+                # on, so the delivered result can quietly differ from the
+                # request. Say so instead of reporting a clean success.
+                if failures:
+                    result["warning"] = (
+                        summarize_failures(failures)
+                        + " The Agent may have dropped an input or switched models "
+                        "to finish, so check the result matches what you asked for."
+                    )
 
         # Auto-name project if it's still "Untitled", empty, or looks like a truncated ID
         if project_id:
@@ -623,9 +682,18 @@ def main():
     p.add_argument("--prefer-models", default=None,
                    help='JSON: model preferences by category, e.g. \'{"IMAGE":["generate_image_midjourney"]}\'')
     p.add_argument("--include-tools", nargs="*", default=None,
-                   help="Force use only these tools, e.g. upscale_image")
+                   help="Tools the Agent is told to prioritize, e.g. upscale_image. "
+                        "Strong instruction, not an enforced whitelist.")
     p.add_argument("--exclude-tools", nargs="*", default=None,
-                   help="Exclude these tools")
+                   help="Accepted for forward compatibility; currently has no effect "
+                        "on tool selection. Use --include-tools to steer instead.")
+    p.add_argument("--subjects", default=None,
+                   help='JSON list of already-approved asset-library subjects to use as '
+                        'references, e.g. \'[{"url":"LIBRARY_URL","asset_id":"asset_x",'
+                        '"display_name":"Hero","channel":"ark_sd2"}]\'')
+    p.add_argument("--kits", nargs="*", default=None,
+                   help="Brand kit IDs. The project's active kit is attached automatically; "
+                        "pass this only to reference a different kit.")
     p.add_argument("--mode", choices=["thinking", "fast"], default=None,
                    help="Reasoning mode: 'thinking' for deep structured reasoning, 'fast' for lightweight single-pass. Locked per thread.")
 
@@ -836,12 +904,14 @@ def main():
             project_id = args.project_id or state.get_project_id()
 
             prefer_models = json.loads(args.prefer_models) if args.prefer_models else None
+            subjects = json.loads(args.subjects) if args.subjects else None
             result = skill.chat(prompt=args.prompt, project_id=project_id,
                                 attachments=args.attachments, thread_id=args.thread_id,
                                 prefer_models=prefer_models,
                                 include_tools=args.include_tools,
                                 exclude_tools=args.exclude_tools,
-                                mode=args.mode)
+                                mode=args.mode,
+                                subjects=subjects, kits=args.kits)
 
             # Auto-save state
             if result.get("project_id"):

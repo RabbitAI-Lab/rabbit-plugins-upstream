@@ -1,44 +1,60 @@
-## Description: <br>
-Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates realistic digital-human broadcast videos from portrait images and audio or text using Jimeng OmniHuman 1.5.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External developers and agent users use this skill to generate digital human broadcast videos through the dLazy hosted Jimeng OmniHuman 1.5 API from supplied portrait images and audio or text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pinned CLI may upload selected local media, including during dry-run behavior identified by the security evidence. <br>
-Mitigation: Avoid dry-run with sensitive local images or audio unless the behavior is fixed or confirmed acceptable. <br>
-Risk: Saved API keys may not have the permission hardening claimed by the skill documentation. <br>
-Mitigation: Prefer DLAZY_API_KEY per invocation or manually restrict permissions on ~/.dlazy/config.json when saving a key. <br>
-Risk: Persistent global CLI installation increases exposure to package and update risks. <br>
-Mitigation: Prefer npx for one-off use when a persistent global CLI is not required. <br>
+## Use Case:
 
+External creators, marketers, and developers use this skill to have an agent generate digital-human broadcast video assets from portrait imagery plus audio or text prompts through the dLazy CLI and hosted API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5) <br>
-- [dLazy homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON CLI result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI responses may include generated media URLs or an async task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends prompts, parameters, and uploaded media to dLazy cloud endpoints for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only use prompts and media that are appropriate to upload to dLazy, and review the dLazy service and CLI links before use.
+
+Risk: The skill requires a dLazy API key stored in local CLI configuration or supplied through an environment variable.
+
+Mitigation: Treat the API key as a credential, run the CLI as an unprivileged user, and rotate or revoke the key if the machine or package is in doubt.
+
+Risk: A global npm install persists the dLazy CLI binary on the system.
+
+Mitigation: Use the pinned npx invocation when a non-persistent install is preferred.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted output URLs or asynchronous task identifiers from the dLazy service.]
+
+## Skill Version(s):
+
+1.3.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

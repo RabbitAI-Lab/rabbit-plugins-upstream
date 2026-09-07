@@ -1,0 +1,39 @@
+# ShieldSwarm quality floor matrix — flat key: value YAML (bash-parseable by
+# scripts/quality_floor_check.sh; valid YAML for any loader).
+#
+# Semantics:
+#   tier1 = frontier (strongest) · tier2 = strong-fast · tier3 = everything else
+#   task_<keyword>: tierN — first keyword found in the task text wins (file order).
+#   Unknown model names resolve to tier3 (fail-safe: uncertain => weak).
+#   POLICY: cloud-only. Local/offline models (gguf/ollama/llama.cpp/local/onnx)
+#   are rejected by the script regardless of tier.
+#
+# Tier membership is grounded in the operator's live provider fleet
+# (llm7 / openrouter / gemini / groq / mistral / cohere / zai / huggingface /
+# cloudflare). Refresh membership when the fleet changes; the script needs no
+# changes.
+
+schema: shieldswarm-quality-floor/1
+version: 2.1.0
+policy: cloud_only
+
+tier1_models: claude-opus-5, claude-opus-4-8, claude-sonnet-5, claude-sonnet-4-6, gpt-5.6-sol, gpt-5.5, gpt-5.4, grok-4.6
+tier2_models: claude-haiku-4-5, gpt-5.4-mini, gpt-oss-120b, deepseek-v4-flash, gemini-3-flash, gemini-3.5-flash-low, gemini-3.1-flash-lite, grok-4.5, kimi-k3, glm-4.7, codestral-latest, gemma4:31b
+
+# Order matters: most restrictive first. task_default is checked last.
+task_red_team: tier1
+task_security: tier1
+task_incident: tier1
+task_production: tier1
+task_code_review: tier2
+task_rollback: tier2
+task_postmortem: tier2
+task_status_update: tier2
+task_stakeholder: tier2
+task_model_selection: tier2
+task_triage: tier3
+task_default: tier2
+
+# Degraded-mode rule (enforced by convention, checked by selftest):
+# if the best available model is below the floor, disclose the quality
+# reduction to the user and offer a retry — never silently downgrade.

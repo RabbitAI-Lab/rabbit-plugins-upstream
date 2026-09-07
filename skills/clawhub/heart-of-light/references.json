@@ -1,0 +1,93 @@
+{
+  "schema": "heart-of-light.evidence.v1",
+  "retrieved_on": "2026-09-06",
+  "scope": "Research and design evidence for the 3.x revision. Sources support design principles, not claims that any language model is truthful or that a text screen is a safety guarantee.",
+  "sources": [
+    {
+      "id": "nist-genai-profile",
+      "url": "https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence",
+      "publisher": "NIST",
+      "published": "2024-07-26",
+      "takeaway": "The GenAI Profile is a companion to the AI RMF for managing trustworthiness risks across design, development, use, and evaluation.",
+      "implementation": "This release separates declared guidance from deterministic audit output, records limitations, and requires verification before completion claims."
+    },
+    {
+      "id": "owasp-llm01",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/2_0_vulns/LLM01_PromptInjection.html",
+      "publisher": "OWASP",
+      "published": "2025",
+      "takeaway": "Prompt injection cannot be prevented perfectly; mitigate impact with constrained behavior, expected output validation, least privilege, human approval, external-content separation, and adversarial testing.",
+      "implementation": "The tool never injects prompts or edits host configuration; audit output is advisory; external text is treated as data; high-risk actions remain human-controlled."
+    },
+    {
+      "id": "json-schema-2020-12-validation",
+      "url": "https://json-schema.org/draft/2020-12/json-schema-validation",
+      "publisher": "JSON Schema",
+      "published": "2022-06-16",
+      "takeaway": "JSON Schema expresses structural assertions and annotations for validating JSON instances.",
+      "implementation": "Schemas define versioned state, audit, contract, and feedback records without requiring a validator dependency at runtime."
+    },
+    {
+      "id": "rfc-8259",
+      "url": "https://www.rfc-editor.org/rfc/rfc8259.html",
+      "publisher": "IETF",
+      "published": "2017-12",
+      "takeaway": "JSON is an interoperable data interchange format; object names should be unique for predictable interpretation.",
+      "implementation": "CLI output uses standard JSON objects, stable schema identifiers, UTF-8 text, and no duplicate generated fields."
+    },
+    {
+      "id": "anthropic-effective-agents",
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "publisher": "Anthropic",
+      "published": "2024-12-19",
+      "takeaway": "Start with the simplest composable workflow; agents trade latency and cost for flexibility; programmatic gates improve fixed workflows.",
+      "implementation": "This skill uses a short declarative protocol and local deterministic gates instead of multi-agent calls, network memory, or autonomous self-editing."
+    },
+    {
+      "id": "openai-reasoning-best-practices",
+      "url": "https://developers.openai.com/api/docs/guides/reasoning-best-practices",
+      "publisher": "OpenAI",
+      "retrieved": "2026-09-06",
+      "takeaway": "Reasoning and lower-latency execution models have different strengths; select by task complexity, accuracy needs, speed, and cost.",
+      "implementation": "The skill is provider/model neutral, offers a compact contract for simple tasks, and recommends escalating only when ambiguity or stakes justify it."
+    }
+  ],
+  "claim_ledger": [
+    {
+      "id": "C-001",
+      "claim": "The published tool is offline and has no credential, network, model, or host-config dependency.",
+      "status": "locally_verified",
+      "evidence": ["scripts/heart_tool.py imports only Python standard-library modules", "selftest.py static boundary check", "published artifact scan"],
+      "limit": "A host can still run arbitrary tools outside this skill; this code does not sandbox the host."
+    },
+    {
+      "id": "C-002",
+      "claim": "The mode toggle changes only an explicitly selected workspace state file.",
+      "status": "locally_verified",
+      "evidence": ["state-v1 schema", "atomic write implementation", "mode/environment precedence test"],
+      "limit": "An operator can explicitly choose any writable path; review the path before use."
+    },
+    {
+      "id": "C-003",
+      "claim": "The text audit detects selected patterns associated with unsupported certainty, prompt injection, spiritual authority, disrespect, and unverified completion claims.",
+      "status": "locally_verified_as_heuristic",
+      "evidence": ["audit-v1 schema", "deterministic unit tests"],
+      "limit": "It is not a truth oracle, semantic classifier, policy engine, or guarantee against injection."
+    },
+    {
+      "id": "C-004",
+      "claim": "Feedback supports self-improvement without autonomous source or permission changes.",
+      "status": "locally_verified",
+      "evidence": ["feedback-v1 schema", "append/summary tests"],
+      "limit": "Feedback is user-provided evidence and must be reviewed; the tool does not learn or rewrite itself."
+    }
+  ],
+  "removed_or_qualified_claims": [
+    "No claim that an old prompt-toggle helper edits host prompt files or agent configuration files.",
+    "No claim that an absent certainty helper enforces certainty tags.",
+    "No claim that a numeric certainty score makes an answer true.",
+    "No claim that spiritual language is required or authoritative.",
+    "No claim that a self-test can certify model safety or moral correctness.",
+    "No claim that a compact prompt alone increases every model's raw tokens per second; it reduces avoidable input/output overhead and leaves generation speed model-dependent."
+  ]
+}

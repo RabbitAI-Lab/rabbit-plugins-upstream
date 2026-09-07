@@ -1,46 +1,65 @@
-## Description: <br>
-DeepEvidence循证医学AI助手 uses the DeepEvidence OpenAI-compatible API to generate traceable evidence summaries for clinical questions, drug safety review, guideline interpretation, and trial evidence synthesis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DeepEvidence public API skill for physicians' evidence-based clinical decision support, generating source-grounded answers from retrieved literature and guidelines for clinical reference.
 
-## Publisher: <br>
-[cindy8753](https://clawhub.ai/user/cindy8753) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cindy8753](https://clawhub.ai/user/cindy8753)
 
-## Use Case: <br>
-Clinicians, medical researchers, and developers use this skill to ask evidence-based medicine questions and receive structured, citation-preserving reference summaries. It is suited for clinical evidence review, medication safety checks, guideline interpretation, and app integrations that call DeepEvidence through an OpenAI-compatible interface. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Clinical questions and related context are sent to the DeepEvidence service. <br>
-Mitigation: Avoid patient-identifying details unless privacy obligations allow it; use opaque user identifiers and minimize logging of prompts, responses, and request bodies. <br>
-Risk: Medical evidence summaries may be incomplete, stale, or unsuitable for a specific patient. <br>
-Mitigation: Treat outputs as reference material, preserve returned citations, and require verification by a qualified clinician before clinical use. <br>
-Risk: The required DeepEvidence API key could be exposed through source control, logs, shell history, or error output. <br>
-Mitigation: Read DEEPEVIDENCE_API_KEY only from environment configuration, do not commit keys, and avoid printing secrets or full sensitive payloads. <br>
-Risk: The skill is not appropriate for emergency triage or urgent first-aid decisions. <br>
-Mitigation: For urgent symptoms, direct users to local emergency services or immediate medical care instead of relying on generated guidance. <br>
+## Use Case:
 
+External clinicians and developers use this skill to ask DeepEvidence for evidence-based clinical decision-support responses, guideline interpretation, drug-safety review, trial evidence synthesis, and supported medical image analysis. Outputs are for clinical reference and require clinician verification before patient-care decisions.
 
-## Reference(s): <br>
-- [DeepEvidence homepage](https://deepevid.medsci.cn/) <br>
-- [DeepEvidence API Reference](references/api_reference.md) <br>
-- [ClawHub skill page](https://clawhub.ai/cindy8753/deepevidence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Structured Markdown reports with preserved citation markers; may also include Python/OpenAI SDK snippets, shell commands, and configuration guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include DeepEvidence attribution, returned conversation IDs, token usage metadata, references, uncertainty notes, and clinical-use disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter says 1.5.0) <br>
+Risk: Clinical questions, images, and metadata may be sent to an external DeepEvidence service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: De-identify patient information, confirm consent and compliance terms before use, and avoid sending patient-identifiable data unless the integration explicitly permits it.
+
+Risk: Default storage behavior for submitted clinical content is unclear.
+
+Mitigation: Use no-store behavior where available and verify retention, deletion, and logging controls with the service owner before broad deployment.
+
+Risk: The release bundles an unnecessary compiled Python bytecode file.
+
+Mitigation: Ask the publisher to remove bundled bytecode and review source-only artifacts before deployment.
+
+Risk: The dependency declaration is broad and may resolve to unexpected OpenAI SDK versions.
+
+Mitigation: Pin and review dependencies in the deployment environment before production use.
+
+## Reference(s):
+
+- [DeepEvidence Open Platform Docs](https://deepevid.medsci.cn/platform/docs)
+- [DeepEvidence Homepage](https://deepevid.medsci.cn/)
+- [DeepEvidence API Reference](references/api_reference.md)
+- [ClawHub Skill Page](https://clawhub.ai/cindy8753/skills/deepevidence)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/cindy8753)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, OpenAI-compatible API examples, CLI output, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves returned citation markers and reference lists when DeepEvidence returns them; can include token usage metadata for API calls.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence; skill frontmatter reports 1.6.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

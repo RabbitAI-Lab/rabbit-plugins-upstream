@@ -1,42 +1,60 @@
-## Description: <br>
-用直觉代替死记，让物理概念从“背下来”变成“真正懂了”，并通过生活类比、实验想象、公式推导三种解释模型先建直觉再学公式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+初中物理概念直觉建立技能，用生活类比、头脑实验和公式推导帮助学生理解物理量与规律的含义。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutoring agents use this skill to explain physics concepts by building intuition before formulas through daily-life analogies, thought experiments, formula meaning restoration, and layered understanding checks. It is for conceptual tutoring and validation, not physical experiment operation guidance or problem-solving drill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Physical experiment examples could be mistaken for unsupervised real-world instructions, especially examples involving sunlight, heat, electricity, pressure, or sharp objects. <br>
-Mitigation: Present experiment examples as conceptual unless an appropriate supervisor is involved, and avoid operational safety-sensitive instructions when the goal is concept intuition. <br>
-Risk: The skill describes updates to learning-profile fields and reminder handoffs after repeated concept failures. <br>
-Mitigation: Keep learning-profile updates and reminders visible to the user and under user control. <br>
+## Use Case:
 
+Students and tutoring agents use this skill to build intuition for middle-school physics concepts before applying formulas. It supports explanations, guided questions, concept checks, and handoffs when a request is actually about solving a specific problem, experiment handling, or error tracking.
 
-## Reference(s): <br>
-- [Physics Analogy Bank](artifact/references/physics-analogy-bank.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured explanation steps, analogy mappings, formula interpretation, and validation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses draw on the bundled physics analogy bank and should keep experiment examples conceptual unless supervised.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill is designed for Mainland China Chinese K12 physics context, including curriculum assumptions and default crisis-referral channels.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize curriculum scope, emergency resources, and minor-data consent rules before deploying in another region or language.
+
+Risk: Learning-record, parent-sharing, and reminder behaviors depend on platform consent and capability settings.
+
+Mitigation: Confirm learning-record, parent-sharing, cross-skill sharing, and reminder-consent configuration before installation for the intended student age group.
+
+Risk: A student may disclose self-harm, abuse, bullying, or other crisis signals during tutoring.
+
+Mitigation: Follow the bundled crisis protocol: stop normal tutoring, avoid diagnosis or sensitive-detail retention, prompt contact with trusted adults, and use region-appropriate emergency resources.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition)
+- [物理概念生活类比素材库](artifact/references/physics-analogy-bank.md)
+- [平台能力约定与降级路径](artifact/shared/platform-conventions.md)
+- [危机识别与转介协议](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Conversational Markdown guidance in Simplified Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses stepwise analogies, thought experiments, formula-meaning explanations, and concept checks; may propose consent-gated learning-record or reminder handoffs when platform support is present.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,322 @@
+{
+  "date": "2026-09-04",
+  "title": "今日体育赛事总览（联网核实·2026-09-04 周五·真实对阵）",
+  "updated_at": "2026-09-04 19:45",
+  "_is_live": true,
+  "_feed": "websearch-public-schedule+thesportsdb",
+  "_source": "websearch-public-schedule+thesportsdb-free+official-league-sites",
+  "_live_error": null,
+  "_auto_thin": false,
+  "_sports_live": [
+    "american_football",
+    "football",
+    "basketball"
+  ],
+  "_note": "本数据集为 2026-09-04（周五）当日真实赛事，由智能体 WebSearch 从公开赛程源（懂球帝/dongqiudi、worldreferee、footballtoday、sportsmole、早报等）+ TheSportsDB 免费源逐场联网核对而成；覆盖美式足球(CFL/NCAA)、足球(西甲/法甲/德甲/意甲/英超/葡超)、篮球(女篮世界杯)三类球类共 16 场真实对阵。全部仅含对阵与开赛时间，为公开赛程信息整理，不含任何赛果类结论或荐单类内容。专家观点由 fresh_experts.json 每期联网刷新并打时间戳，仅作来源标注、不作赛果判断。",
+  "matches": [
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Montreal Alouettes vs BC Lions",
+      "league": "CFL",
+      "country": "Canada",
+      "kickoff_local": "2026-09-04 19:30",
+      "kickoff_actual": "2026-09-05 07:30",
+      "status": "",
+      "teams": [
+        {"name": "Montreal Alouettes"},
+        {"name": "BC Lions"}
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本），经 CFL.ca 官方赛程交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体按需联网补充公开情报。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Missouri vs Arkansas-Pine Bluff",
+      "league": "NCAA Division 1 Football",
+      "country": "United States",
+      "kickoff_local": "2026-09-04 19:00",
+      "kickoff_actual": "2026-09-04 08:00",
+      "status": "",
+      "teams": [
+        {"name": "Missouri"},
+        {"name": "Arkansas-Pine Bluff"}
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本），经 NCAA.com 官方赛程交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体按需联网补充公开情报。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "american_football",
+      "sport_cn": "美式足球",
+      "match": "Georgia Tech vs Colorado",
+      "league": "NCAA Division 1 Football",
+      "country": "United States",
+      "kickoff_local": "2026-09-04 19:00",
+      "kickoff_actual": "2026-09-04 08:00",
+      "status": "",
+      "teams": [
+        {"name": "Georgia Tech"},
+        {"name": "Colorado"}
+      ],
+      "info_points": [
+        "赛程来自 TheSportsDB 公开数据（实时当日对阵·免费样本），经 NCAA.com 官方赛程交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体按需联网补充公开情报。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "皇家社会 vs 塞尔塔",
+      "league": "西甲",
+      "country": "西班牙",
+      "kickoff_local": "2026-09-04 21:00",
+      "kickoff_actual": "2026-09-05 03:00",
+      "status": "",
+      "teams": [
+        {"name": "皇家社会"},
+        {"name": "塞尔塔"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（懂球帝/dongqiudi、worldreferee、footballtoday、sportsmole 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "图卢兹 vs 里尔",
+      "league": "法甲",
+      "country": "法国",
+      "kickoff_local": "2026-09-04 20:45",
+      "kickoff_actual": "2026-09-05 02:45",
+      "status": "",
+      "teams": [
+        {"name": "图卢兹"},
+        {"name": "里尔"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（懂球帝/dongqiudi、worldreferee、footballtoday、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "斯图加特 vs 科隆",
+      "league": "德甲",
+      "country": "德国",
+      "kickoff_local": "2026-09-04 20:30",
+      "kickoff_actual": "2026-09-05 02:30",
+      "status": "",
+      "teams": [
+        {"name": "斯图加特"},
+        {"name": "科隆"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、sportsmole、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "热那亚 vs 科莫",
+      "league": "意甲",
+      "country": "意大利",
+      "kickoff_local": "2026-09-04 20:45",
+      "kickoff_actual": "2026-09-05 02:45",
+      "status": "",
+      "teams": [
+        {"name": "热那亚"},
+        {"name": "科莫"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、sportsmole、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "伊普斯维奇 vs 利物浦",
+      "league": "英超",
+      "country": "英格兰",
+      "kickoff_local": "2026-09-04 20:00",
+      "kickoff_actual": "2026-09-05 03:00",
+      "status": "",
+      "teams": [
+        {"name": "伊普斯维奇"},
+        {"name": "利物浦"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、sportsmole、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "里昂 vs 欧塞尔",
+      "league": "法甲",
+      "country": "法国",
+      "kickoff_local": "2026-09-04 19:00",
+      "kickoff_actual": "2026-09-05 01:00",
+      "status": "",
+      "teams": [
+        {"name": "里昂"},
+        {"name": "欧塞尔"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "巴黎圣日耳曼 vs 摩纳哥",
+      "league": "法甲",
+      "country": "法国",
+      "kickoff_local": "2026-09-04 21:05",
+      "kickoff_actual": "2026-09-05 03:05",
+      "status": "",
+      "teams": [
+        {"name": "巴黎圣日耳曼"},
+        {"name": "摩纳哥"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、sportsmole、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "football",
+      "sport_cn": "足球",
+      "match": "波尔图 vs 莫雷拉人",
+      "league": "葡超",
+      "country": "葡萄牙",
+      "kickoff_local": "2026-09-04 20:15",
+      "kickoff_actual": "2026-09-05 03:15",
+      "status": "",
+      "teams": [
+        {"name": "波尔图"},
+        {"name": "莫雷拉人"}
+      ],
+      "info_points": [
+        "赛程来自公开赛事数据聚合（worldreferee、footballtoday、早报 交叉核对），仅含对阵与开赛时间。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "basketball",
+      "sport_cn": "篮球",
+      "match": "美国女篮 vs 中国女篮",
+      "league": "女篮世界杯",
+      "country": "德国(柏林)",
+      "kickoff_local": "2026-09-04 14:15",
+      "kickoff_actual": "2026-09-04 20:15",
+      "status": "",
+      "teams": [
+        {"name": "美国女篮"},
+        {"name": "中国女篮"}
+      ],
+      "info_points": [
+        "赛程来自 FIBA 官网小组赛预告（2026 女篮世界杯 9.4-9.13 柏林），经 WNBA.com 世界杯专题与早报交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "basketball",
+      "sport_cn": "篮球",
+      "match": "日本女篮 vs 马里女篮",
+      "league": "女篮世界杯",
+      "country": "德国(柏林)",
+      "kickoff_local": "2026-09-04 11:30",
+      "kickoff_actual": "2026-09-04 17:30",
+      "status": "",
+      "teams": [
+        {"name": "日本女篮"},
+        {"name": "马里女篮"}
+      ],
+      "info_points": [
+        "赛程来自 FIBA 官网小组赛预告（2026 女篮世界杯），经 WNBA.com 世界杯专题与早报交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "basketball",
+      "sport_cn": "篮球",
+      "match": "澳大利亚女篮 vs 波多黎各女篮",
+      "league": "女篮世界杯",
+      "country": "德国(柏林)",
+      "kickoff_local": "2026-09-04 11:30",
+      "kickoff_actual": "2026-09-04 17:30",
+      "status": "",
+      "teams": [
+        {"name": "澳大利亚女篮"},
+        {"name": "波多黎各女篮"}
+      ],
+      "info_points": [
+        "赛程来自 FIBA 官网小组赛预告（2026 女篮世界杯），经 WNBA.com 世界杯专题与早报交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "basketball",
+      "sport_cn": "篮球",
+      "match": "比利时女篮 vs 土耳其女篮",
+      "league": "女篮世界杯",
+      "country": "德国(柏林)",
+      "kickoff_local": "2026-09-04 17:30",
+      "kickoff_actual": "2026-09-04 23:30",
+      "status": "",
+      "teams": [
+        {"name": "比利时女篮"},
+        {"name": "土耳其女篮"}
+      ],
+      "info_points": [
+        "赛程来自 FIBA 官网小组赛预告（2026 女篮世界杯），经 WNBA.com 世界杯专题与早报交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    },
+    {
+      "sport": "basketball",
+      "sport_cn": "篮球",
+      "match": "西班牙女篮 vs 德国女篮",
+      "league": "女篮世界杯",
+      "country": "德国(柏林)",
+      "kickoff_local": "2026-09-04 17:45",
+      "kickoff_actual": "2026-09-04 23:45",
+      "status": "",
+      "teams": [
+        {"name": "西班牙女篮"},
+        {"name": "德国女篮"}
+      ],
+      "info_points": [
+        "赛程来自 FIBA 官网小组赛预告（2026 女篮世界杯），经 WNBA.com 世界杯专题与早报交叉核对。",
+        "战术风格 / 伤停 / 近期状态 / 专家观点等维度，由智能体在出报告时按需联网核实补充。"
+      ],
+      "live": true
+    }
+  ]
+}

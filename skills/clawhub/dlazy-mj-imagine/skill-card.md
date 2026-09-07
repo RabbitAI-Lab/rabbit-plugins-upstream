@@ -1,43 +1,60 @@
-## Description: <br>
-Midjourney style generation, supports aspect ratio, bot type, and output position for artistic and strongly stylized creative image generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Midjourney-style images through the dLazy CLI with aspect ratio, bot type, and grid or U1-U4 output controls.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agent users use this skill to call the dLazy CLI for Midjourney-style image generation from prompts, aspect ratio settings, bot type, and grid or upsample output choices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and any explicitly referenced media files to third-party dLazy cloud services. <br>
-Mitigation: Use only prompts and files approved for dLazy processing, and avoid passing sensitive or restricted local media. <br>
-Risk: The skill depends on a third-party npm CLI and stores or reads dLazy API credentials for authenticated requests. <br>
-Mitigation: Prefer the pinned `npx @dlazy/cli@1.2.3` command when a global install is not desired, protect `~/.dlazy/config.json`, and rotate or revoke API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers, creative operators, and agents use this skill to request strongly stylized Midjourney-style image generation through dLazy, including aspect ratio, bot type, and output-selection controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-mj-imagine) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source link from skill metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as JSON with file URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and release evidence) <br>
+Risk: The skill depends on a third-party SaaS API and npm-distributed CLI, which creates ordinary service and supply-chain trust considerations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked dLazy CLI source or npm package when supply-chain trust matters, and prefer npx or another isolated execution method over a persistent global install when practical.
+
+Risk: Prompts and selected local media files may be sent to dLazy API and media-storage endpoints.
+
+Mitigation: Only provide prompts and local files that are appropriate to send to dLazy, and review applicable service terms for the deployment context.
+
+Risk: The dLazy API key is a credential stored in local CLI configuration or supplied through an environment variable.
+
+Mitigation: Protect the API key like other credentials, use OS-level file permissions, and rotate or revoke the key if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-mj-imagine)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance]
+
+**Output Format:** [JSON result with generated image URLs or async task status, plus optional downloaded image files when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key and may send prompts and selected local media files to dLazy API and media-storage endpoints.]
+
+## Skill Version(s):
+
+1.3.12 (source: server release evidence; artifact frontmatter reports 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

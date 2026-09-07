@@ -12,7 +12,7 @@
 1. **采集原料**（Lighthouse + HTML；落盘含 `signals` / `dataAvailability`）：
 
 ```bash
-siluzan-tso website-diagnosis collect --url <网站URL> --json-out ./out --include-html
+siluzan-tso website-diagnosis collect --url <网站URL> --json-out ./out
 ```
 
 2. **生成脚手架**（Lighthouse 失败时 m2i1/m5i1 已预填 Absent）：

@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Shopee 选品与市场调研"
+  short_description: "查询 Shopee 商品、店铺和类目数据并完成选品分析"
+  default_prompt: "使用 $geekbi-shopee-research-skill 查询指定 Shopee 站点的真实数据并完成选品或市场分析。"

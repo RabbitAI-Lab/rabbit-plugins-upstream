@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/p-image",
   "slug": "p-image",
   "ownerHandle": null,
-  "version": "1.0.7",
-  "updatedAt": 1784810969443,
-  "contentHash": "59139a335b89b82966098bf198e86fcc8cb3dccedf2ba5cf0725816a16095071",
-  "fetchedAt": "2026-07-26T18:07:07.575Z"
+  "version": "1.0.11",
+  "updatedAt": 1788444638225,
+  "contentHash": "6b82bfa8d454cd5abdcec22beb90a8f17754bb48604160a533de6a4a9f3ea1c8",
+  "fetchedAt": "2026-09-07T14:16:19.490Z"
 }

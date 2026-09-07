@@ -1,0 +1,105 @@
+{
+  "skill": "benchmark-robustness-auditor",
+  "version": "2.0.0",
+  "schema": "bra.manifest.v1",
+  "runtime": "python3 (>=3.8, stdlib only) \u2014 no pip installs, no network",
+  "entrypoints": {
+    "doctor": "scripts/benchscan.py doctor",
+    "contam": "scripts/benchscan.py contam --benchmark B.jsonl --corpus C.jsonl [--n 13] [--cutoff YYYY-MM-DD --results R.jsonl]",
+    "selection": "scripts/benchscan.py selection --runs R.jsonl",
+    "fewshot": "scripts/benchscan.py fewshot --curve F.jsonl",
+    "judge": "scripts/benchscan.py judge --judgments J.jsonl [--rubric-terms T.json]",
+    "compare": "scripts/benchscan.py compare --a-preds A.jsonl --b-preds B.jsonl",
+    "tsguess": "scripts/benchscan.py tsguess --results T.jsonl",
+    "ensemble": "scripts/benchscan.py ensemble --runs E.jsonl",
+    "blind-normalize": "scripts/benchscan.py blind-normalize --input R.jsonl [-o out.jsonl]",
+    "severity": "scripts/benchscan.py severity --inflation PP --affected FRAC --evidence PRB",
+    "report": "scripts/benchscan.py report --name NAME [channels...] [-o report.md]",
+    "trend": "scripts/benchscan.py trend --name NAME",
+    "audit": "scripts/benchscan.py audit [--name NAME] [--verify]",
+    "selftest": "bash scripts/selftest.sh"
+  },
+  "contracts": [
+    "bra.doctor.v1",
+    "bra.contam.v1",
+    "bra.selection.v1",
+    "bra.fewshot.v1",
+    "bra.judge.v1",
+    "bra.compare.v1",
+    "bra.tsguess.v1",
+    "bra.ensemble.v1",
+    "bra.blind.v1",
+    "bra.severity.v1",
+    "bra.report.v1",
+    "bra.trend.v1",
+    "bra.audit.v1"
+  ],
+  "exit_codes": {
+    "0": "ok",
+    "1": "trend REGRESSED",
+    "2": "usage error / ruleset registry trip",
+    "3": "input or environment error (missing/malformed/insufficient data)",
+    "4": "report verdict COMPROMISED / severity CRITICAL / ledger chain broken"
+  },
+  "catalogue": {
+    "computable_offline": [
+      "C-1",
+      "C-2",
+      "C-3",
+      "G-1",
+      "P-1",
+      "P-2",
+      "P-3",
+      "T-3",
+      "E-1",
+      "E-2",
+      "E-3",
+      "M-1"
+    ],
+    "declared_invisible": [
+      "T-1",
+      "T-2",
+      "T-4",
+      "T-5",
+      "D-1"
+    ],
+    "discipline": "engine asserts every emitted finding.cat exists in the static CATALOGUE; rc2 otherwise (anti-hallucination)",
+    "count": 17
+  },
+  "severity_formula": "round(100*(0.40*min(1,|infl|/15)+0.35*min(1,|aff|/0.10)+0.25*clamp(ev,0,1))); tiers CRITICAL>=75 HIGH>=50 MEDIUM>=25 else LOW",
+  "statistics": [
+    "McNemar exact (paired correctness)",
+    "Wilson score intervals",
+    "paired bootstrap CI (percentile, PRNG seeded by input sha256 \u2014 deterministic)",
+    "two-sided exact binomial (guessing/verbosity)",
+    "chi-square letter distribution (regularized gamma)"
+  ],
+  "thresholds": {
+    "overlap_contaminated": 0.8,
+    "overlap_suspect": 0.3,
+    "paraphrase_token_f1": 0.8,
+    "paraphrase_jaccard": 0.5,
+    "position_flip_rate": 0.1,
+    "verbosity_share": 0.6,
+    "rubric_echo_share": 0.6,
+    "rubric_echo_min_pairs": 8,
+    "fewshot_range": 0.08,
+    "temporal_gap_pp": 10,
+    "chi2_small_n_suppression": "<5 obs/cell"
+  },
+  "policy": {
+    "network": false,
+    "telemetry": false,
+    "defense_only": true,
+    "ledger": "hash-chained JSONL per target name, O_NOFOLLOW + fchmod 0600 at create, monotonic seq; ${BENCHSCAN_LEDGER:-./.bra_history_<name>.jsonl}; keyless-chain limits documented",
+    "determinism": "bootstrap and all detectors reproducible from the same input bytes"
+  },
+  "docs": {
+    "operations": "docs/operations.md",
+    "evidence": "docs/evidence.md",
+    "integration": "docs/integration.md",
+    "history": "CHANGELOG.md"
+  },
+  "honest_scope": "audit/defense tool for benchmark validity. Cannot certify that a model is uncontaminated (training data is unauditable from outside); quantifies offline-auditable signals and declares the rest out of scope. Verdict is INSUFFICIENT_COVERAGE when zero channels ran (no false ROBUST on partial runs). P-3 chi2 suppressed on chi2_small_n, and on near-perfect accuracy with stable answers (>=0.995 acc, <0.05 unstable). T-3 requires binomial p<0.05 AND >=8 echo-asymmetric pairs. G-1 pooled test blocks on mixed choice counts. audit always verifies the chain (--verify accepted for compatibility). Ensemble mapping: display letter L at slot j -> content perms[i][j]; raw_acc is first-run letter accuracy (baseline meaningful only when perms[0] is canonical).",
+  "evidence_verified_utc": "2026-09-06"
+}

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/topic-monitor",
   "slug": "topic-monitor",
   "ownerHandle": null,
-  "version": "1.5.2",
-  "updatedAt": 1778485891685,
-  "contentHash": "5c357b76fca996c8f2b1f08a63a71b7f42a727d76e441d60d3cc9d005913edcc",
-  "fetchedAt": "2026-07-26T20:29:24.921Z"
+  "version": "1.6.0",
+  "updatedAt": 1788194139329,
+  "contentHash": "54fb687cf685a06f90166bc6b1ffc08d4d56f5091e3cdccbcc27946a4630719f",
+  "fetchedAt": "2026-09-07T14:23:36.840Z"
 }

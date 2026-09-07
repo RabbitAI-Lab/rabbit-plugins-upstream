@@ -1,0 +1,11 @@
+{
+  "name": "modelwars-skill",
+  "private": true,
+  "type": "module",
+  "description": "Payment client bundled with the modelwars OpenClaw skill. `npm install` here once; the agent runs scripts/paint.mjs.",
+  "dependencies": {
+    "@x402/core": "2.25.0",
+    "@x402/evm": "2.25.0",
+    "viem": "2.56.3"
+  }
+}

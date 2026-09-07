@@ -1,46 +1,59 @@
-## Description: <br>
-Web Search Plus provides multi-provider web search and URL extraction with auto-routing, freshness and news filters, locale defaults, result-quality filtering, and local caching controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web Search Plus provides source-only multi-provider web search and URL extraction with auto-routing across configured providers, freshness and news filters, locale-aware defaults, quality filtering, and local result caching.
 
-## Publisher: <br>
-[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbyczgw-cla](https://clawhub.ai/user/robbyczgw-cla)
 
-## Use Case: <br>
-Developers and agent users use this skill to run current web searches, gather research-oriented results, and extract page content through configured provider APIs from an OpenClaw-style runtime. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and extraction URLs are sent to configured third-party provider APIs. <br>
-Mitigation: Use an explicit provider for sensitive work, prefer a self-hosted SearXNG instance when appropriate, and avoid sending sensitive queries unless the selected provider is acceptable. <br>
-Risk: Extraction of private or internal URLs can disclose those URLs to an external provider if private URL access is intentionally enabled. <br>
-Mitigation: Keep private URL extraction disabled by default, rely on the built-in SSRF protections, and enable private URL access only for trusted networks and reviewed workflows. <br>
-Risk: Local caching can persist queries, results, provider failure history, and provider performance samples. <br>
-Mitigation: Use WSP_DISABLE_CACHE=1 or --no-cache when caching is not appropriate, clear cache data when needed, and protect config.json and API keys. <br>
+## Use Case:
 
+Developers and agent operators use this skill to retrieve current web sources, run multi-provider research searches, and extract page content for grounding OpenClaw-style workflows. It is useful when an agent needs ranked URLs or extracted text rather than model-written answers.
 
-## Reference(s): <br>
-- [Web Search Plus ClawHub Page](https://clawhub.ai/robbyczgw-cla/skills/web-search-plus) <br>
-- [README](README.md) <br>
-- [CHANGELOG](CHANGELOG.md) <br>
-- [Hermes Web Search Plus](https://github.com/robbyczgw-cla/hermes-web-search-plus) <br>
-- [Web Search Plus MCP](https://github.com/robbyczgw-cla/web-search-plus-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [CLI-oriented text or Markdown with structured JSON metadata from search and extraction scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include provider routing, freshness, locale, result-filter, cache, and extraction diagnostics; extracted pages can be truncated to a configurable character limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.0 (source: frontmatter, package.json, CHANGELOG released 2026-07-05, server release evidence) <br>
+Risk: Search queries and extraction URLs may be sent to the selected third-party provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose providers explicitly for sensitive work, use self-hosted SearXNG when appropriate, and avoid submitting internal or private URLs for extraction.
+
+Risk: The setup flow can save API keys locally even though the main skill text says keys are not persisted.
+
+Mitigation: Prefer environment variables for provider credentials, or protect config.json carefully when using the setup wizard.
+
+Risk: Cached queries, results, provider failures, and performance samples can expose sensitive search activity on disk.
+
+Mitigation: Disable caching with WSP_DISABLE_CACHE=1 or --no-cache for sensitive work, and clear existing cache files when needed.
+
+## Reference(s):
+
+- [Web Search Plus ClawHub listing](https://clawhub.ai/robbyczgw-cla/skills/web-search-plus)
+- [hermes-web-search-plus](https://github.com/robbyczgw-cla/hermes-web-search-plus)
+- [web-search-plus-mcp](https://github.com/robbyczgw-cla/web-search-plus-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with shell commands; CLI output may be text, JSON, or markdown depending on mode.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Source-only output: ranked URLs and extracted page text; no model-written answers.]
+
+## Skill Version(s):
+
+4.0.0 (source: frontmatter, package.json, CHANGELOG, released 2026-08-31)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

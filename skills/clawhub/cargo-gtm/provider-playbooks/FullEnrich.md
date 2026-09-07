@@ -30,7 +30,7 @@ Premium contact-detail provider. Four credits-based actions, all focused on fill
 ```bash
 # After sourcing + (optional) basic enrichment, find emails for the contacts
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","domainName":"acme.com"},
     {"firstName":"Bob","lastName":"Jones","linkedinUrl":"https://linkedin.com/in/bobjones"}
@@ -46,7 +46,7 @@ When you have an email but no other identity (e.g., from `snitcher.searchSession
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"reverseEmailLookup","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"reverseEmailLookup"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob@globex.com"}]' \
   --wait-until-finished
 ```
@@ -57,7 +57,7 @@ Returns LinkedIn URL + company name + (sometimes) title. Feed the LinkedIn URL i
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findPhoneAndEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findPhoneAndEmail"}' \
   --records '[{"firstName":"Alice","lastName":"Smith","linkedinUrl":"…","domainName":"acme.com"}]' \
   --wait-until-finished
 ```
@@ -86,6 +86,14 @@ If `FullEnrich.findEmail` returns nothing for a row, escalate via:
 
 Don't run all four blindly — the spine is `FullEnrich` first, escalate only on misses. **Demote dynamically**: if FullEnrich misses on the pilot's first ~10 rows of a batch (some segments — e.g. non-LinkedIn-native industries — are outside its coverage), move it behind hunter for the rest of that batch.
 
+## Recurring use
+
+No scheduled fit — per-record enrichment only. A found email is stable data; re-running the finder on a timer just re-bills rows that won't change.
+
+- **In-play shape:** `findEmail` as the CONTACT node of a play triggered by rows entering the segment; gate on the email column still being empty so re-evaluation never re-bills enriched rows.
+- **Recurring niche:** `reverseEmailLookup` (2) on newly captured email-only rows (webforms, `snitcher.searchSessions`) — gate on the LinkedIn-URL column being empty.
+- **Phone stays out of recurring chains:** `findPhone` (6) is explicit-request + qualified rows only (see Anti-patterns) — never wire it into a play's default path.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.** Note the capitalization: `FullEnrich` (camel-case starting with capital `F`).
+`{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.** Note the capitalization: `FullEnrich` (camel-case starting with capital `F`).

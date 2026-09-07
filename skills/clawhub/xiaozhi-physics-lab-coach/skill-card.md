@@ -1,39 +1,62 @@
-## Description: <br>
-A Chinese-language physics experiment coaching skill that helps students reason through experiment design, data analysis, error analysis, and experimental conclusions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Middle-school physics lab coach for experimental methods, variable control, data analysis, error analysis, and experiment evaluation.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to practice middle-school physics experiment reasoning, including variable control, measurement design, graph and table analysis, error reasoning, and standard conclusion wording. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may interact with learning-profile or reminder features when those are available in the OpenClaw environment. <br>
-Mitigation: Review configured integrations and student-data handling before enabling profile updates or reminders. <br>
+## Use Case:
 
+Students, guardians, teachers, and learning-support agents use this skill to coach Chinese middle-school physics experiment reasoning, including experiment design, lab methods, table and graph analysis, error analysis, and conclusion writing.
 
-## Reference(s): <br>
-- [物理实验方法深度手册](references/physics-experiment-methods.md) <br>
-- [物理数据分析方法手册](references/physics-data-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global; content and safety-channel defaults are designed for mainland China Chinese K12 settings and should be localized before other regional deployments.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring guidance and Socratic question prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs are coaching dialogue and structured physics experiment study guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can interact with student learning-profile and reminder workflows when the host platform enables those capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and use the disclosed privacy controls for viewing, correcting, deleting, pausing, exporting, and limiting sharing of the student's experiment ability profile.
+
+Risk: Default crisis support channels and curriculum assumptions are written for mainland China Chinese K12 usage.
+
+Mitigation: Localize emergency contacts, student data consent handling, and curriculum alignment before deploying in other regions.
+
+Risk: Coaching guidance may be inaccurate or too direct if generated answers are not reviewed in higher-stakes educational settings.
+
+Mitigation: Keep teacher or guardian review for generated practice items, experiment feedback, and any long-term profile or reminder handoffs.
+
+## Reference(s):
+
+- [Physics experiment methods handbook](references/physics-experiment-methods.md)
+- [Physics data analysis methods handbook](references/physics-data-analysis.md)
+- [Platform capability conventions and downgrade paths](shared/platform-conventions.md)
+- [Crisis exception guidance](shared/crisis-exception.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-lab-coach)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown-style coaching dialogue with structured handoff records when platform integrations are available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Socratic prompts and may generate privacy-control, reminder, or learning-profile handoff text when supported by the host platform.]
+
+## Skill Version(s):
+
+2.1.12 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

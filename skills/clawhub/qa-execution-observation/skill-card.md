@@ -1,39 +1,53 @@
-## Description: <br>
-This skill helps testers observe test execution across function behavior, interface responses, logs, UI rendering, data consistency, and performance, then record anomalies and follow-up questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA testers through execution observation by checking functional behavior, interface responses, logs, UI rendering, data consistency, performance signals, and anomalies during test runs.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill during test execution to capture structured observations, correlate each observation with a test case, and identify anomalies across functional, log, UI, data, dependency, and performance signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad troubleshooting or test-execution language may activate this workflow when the user intended a narrower task. <br>
-Mitigation: When the task is ambiguous, explicitly confirm whether to use this observation workflow before allowing shell or log-inspection steps. <br>
-Risk: The workflow may involve shell commands, log inspection, screenshots, or external monitoring in the target test environment. <br>
-Mitigation: Run it in a controlled environment and review requested commands, logs, and tool access before execution. <br>
+## Use Case:
 
+QA engineers and test teams use this skill to structure test execution observations, capture abnormal signals, and produce observation records for follow-up analysis and bug reporting.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown execution observation report with traceable observation IDs, test-case links, anomaly lists, and environment issue notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Observations should use unique OBS-XXXX IDs and link to TC-XXXX test case IDs; command or tool use should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may lead an agent to inspect logs, database state, screenshots, or monitoring data that can contain sensitive test or system information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in a controlled test environment with authorization for the systems and data being observed.
+
+Risk: Observation records can contain incorrect or incomplete conclusions if abnormal signals are not reproducible or supporting logs are unavailable.
+
+Mitigation: Record the environment, operation sequence, observed evidence, and follow-up questions so findings can be reviewed before bug reporting or root-cause analysis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-execution-observation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown observation records, checklists, anomaly summaries, and execution reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes observation IDs, linked test case IDs, observed results, anomalies, environment issues, and follow-up questions.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

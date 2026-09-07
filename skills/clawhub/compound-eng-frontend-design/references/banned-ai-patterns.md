@@ -19,9 +19,9 @@ Comprehensive list of visual patterns that signal AI-generated interfaces. Avoid
 
 | Pattern | Problem | Alternative |
 |---------|---------|-------------|
-| Purple/violet gradients (`#6366f1`--`#8b5cf6` range) | The single most recognizable AI color signature | Pick a different palette entirely -- earth tones, monochrome, warm accents |
+| Purple/violet gradients (`#6366f1`--`#8b5cf6` range) | The single most recognizable AI color signature | Pick a different palette entirely, then check the result against Composite Looks below -- the usual escapes (earth tones, monochrome, warm accents) land straight in one of them |
 | Purple-to-blue gradient hero | The default AI aesthetic | Pick a different palette entirely |
-| Evenly distributed accent colors | No visual hierarchy | One dominant accent, neutrals everywhere else |
+| Evenly distributed accent colors | No visual hierarchy | One dominant accent, neutrals everywhere else -- but source the accent from the subject's own world, not the default acid-green or vermilion on near-black (Composite Looks below) |
 | Generic blue (#3B82F6) as primary | Default Tailwind blue | Choose a distinctive hue with personality |
 | Oversaturated accent colors (saturation >80%) | Visually loud, cheap feel | Desaturate accents; muted tones read as more considered |
 | Pure black (`#000000`) for text or backgrounds | Harsh, unnatural contrast | Use near-blacks (`#0a0a0a`, `#111`) or tinted darks |
@@ -30,6 +30,19 @@ Comprehensive list of visual patterns that signal AI-generated interfaces. Avoid
 | Neon/outer glow effects (`shadow-[0_0_20px_...]`) | Dated, screams template | Subtle, tinted shadows that match the surface hue |
 | Warm AND cool grays in the same interface | Inconsistent tinting | Pick one gray family and commit |
 
+## Composite Looks
+
+The rows above ban individual tokens. These three ban whole *combinations* that pass every per-token rule and still arrive unprompted regardless of subject -- each one is a legitimate structure (single accent on neutrals, restrained palette, editorial typography) collapsed onto the same realization every time.
+
+| Look | Composition | Alternative |
+|------|-------------|-------------|
+| Warm editorial | Cream ground near `#F4F1EA` + high-contrast serif display + terracotta accent (near `#D97757`, Anthropic's own accent) | Keep the serif/neutral structure, move the ground and accent off the cream-terracotta pairing |
+| Acid dark | Near-black ground + exactly one bright acid-green or vermilion accent | Keep one accent on neutrals; derive its hue from the subject rather than the default two |
+| Broadsheet | Hairline rules + zero border-radius + dense newspaper columns | Keep the density; vary rule weight, radius, or column rhythm so all three do not co-occur |
+| SaaS-card kit | Identical rounded cards everywhere, one border-radius regardless of hierarchy, the same soft grey shadow (`rgba(0,0,0,.1)`) under each, gradient washes as decoration | Vary card treatment by hierarchy; drop the shared radius/shadow/gradient combination even where each token alone would pass a per-token check |
+
+Observed as of 2026-08. Treat as a dated list of over-used combinations, not a permanent ban -- if the brief pins one of these looks, follow the brief.
+
 ## Typography Patterns
 
 | Pattern | Problem | Alternative |
@@ -37,6 +50,7 @@ Comprehensive list of visual patterns that signal AI-generated interfaces. Avoid
 | Inter/Roboto/System font everywhere | Zero personality | Distinctive choices: Geist, Outfit, Cabinet Grotesk, Satoshi |
 | Uniform font-weight (400 regular everywhere) | Flat hierarchy | Weight contrast: 500/600 for headings, 400 for body |
 | Title Case In Every Heading Word | Overly formal, AI tell | Sentence case |
+| Single word or phrase accented inside a headline (italic, bold, or a different color on just one word) | Each token is legitimate elsewhere; applied mid-headline it reads as an AI tell | Let the whole headline carry one consistent treatment; drive emphasis through word choice, not mid-sentence formatting |
 
 ## Decoration Patterns
 
@@ -51,6 +65,8 @@ Comprehensive list of visual patterns that signal AI-generated interfaces. Avoid
 | Floating gradient blobs as background | Overused AI aesthetic | Noise textures, mesh gradients, geometric patterns |
 | Custom mouse cursors (`cursor: url(...)`) | Novelty that signals template code | Use system cursors; reserve custom cursors for drawing tools or games |
 | shadcn/ui components left in generic default state | Identifiably "template starter kit" | Customize colors, spacing, and radii to match the design system |
+| Meta strings joined with middle dots (`A · B · C`) | Templated info-string formatting, appears regardless of subject | Use a separator suited to the content -- comma, pipe, or a line break |
+| Trailing `→` appended to link or button text | Template chrome, not a functional affordance | Let the link text stand alone, or use a real icon component that carries intent |
 
 ## Interaction Patterns
 

@@ -1,50 +1,65 @@
-## Description: <br>
-建筑工程商机雷达 helps agents find early construction and infrastructure opportunities by searching proposed projects, procurement intents, and expiring service contracts, then ranking opportunities with follow-up guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents find early construction and infrastructure opportunities by searching proposed projects, procurement intents, and expiring service contracts, then ranking them by value, maturity, urgency, and match quality.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External business-development, sales, and construction-market users use this skill to discover earlier-stage engineering opportunities by region, sector, budget threshold, and project maturity. It produces prioritized opportunity lists with objective next steps for proposed projects, procurement intents, and contract-renewal windows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, regions, and opportunity criteria are sent to the vendor API. <br>
-Mitigation: Use the skill only when that disclosure is acceptable, and avoid entering confidential bid strategy or customer-sensitive context as search input. <br>
-Risk: Automatic trial registration may send a hashed MAC-based device identifier and persist credentials locally. <br>
-Mitigation: Prefer manually setting ZLBX_API_KEY; if using auto-registration, review the consent prompt and local credential file handling. <br>
-Risk: Generated HTML reports and returned sk links may provide direct access to opportunity details. <br>
-Mitigation: Treat reports and links as sensitive business documents and do not publish or forward them broadly. <br>
-Risk: Scheduled monitoring can continue to consume account credits and repeatedly send search criteria. <br>
-Mitigation: Disable cron or /loop schedules when monitoring is no longer needed and review expected credit use before scans. <br>
+## Use Case:
 
+External business development, sales, and market intelligence users can give an industry, product, region, or budget threshold and receive a ranked opportunity list for early construction-project pursuit. The skill is intended to support lead discovery and follow-up planning, not to replace independent commercial judgment.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/construction-project-opportunity-radar) <br>
-- [Workflow Manual](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliaobiaoxun Opportunity Platform](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown opportunity list, optional self-contained HTML report, and concise guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include ranked opportunity tables, data-source notes, API-derived links, and optional report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill sends construction-opportunity search terms and related query filters to a third-party vendor service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when sharing those search terms with Zhiliaobiaoxun is acceptable for the intended workflow.
+
+Risk: Automatic registration can collect a stable hashed MAC-derived device identifier and store credentials locally.
+
+Mitigation: Prefer a preconfigured ZLBX_API_KEY from a secure environment variable; use automatic registration only after informed user consent.
+
+Risk: Generated reports and returned announcement links can contain sk-style access-bearing links.
+
+Mitigation: Treat report files and returned links as share-sensitive and avoid posting them broadly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/construction-project-opportunity-radar)
+- [Publisher profile](https://clawhub.ai/user/dragonzu)
+- [Workflow reference](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Auto-registration reference](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun account and registration API](https://ai.zhiliaobiaoxun.com/web-api/)
+- [Zhiliaobiaoxun opportunity platform](https://agent.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown opportunity list in chat, optional self-contained HTML report file, and concise follow-up guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; complete scans are documented as about 8-15 API calls, with single-route scans about 2-6 calls.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

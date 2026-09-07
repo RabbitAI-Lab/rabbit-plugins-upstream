@@ -1,48 +1,68 @@
-## Description: <br>
-政府采购投标决策分析助手，基于知了标讯招中标数据帮助评估政采及央国企采购项目是否值得投标、识别限制性信号、预测竞争对手、参考历史成交价并生成决策报告。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+政府采购投标决策分析助手，基于知了标讯招中标历史数据，为具体政采类招标项目评估是否投标、限制性信号、采购方偏好、竞争对手、历史成交价、建议报价和合规风险。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, and bid teams use this skill to evaluate specific Chinese government, public institution, agency, and state-owned enterprise procurement opportunities. It helps decide whether to bid, estimate competition and pricing, identify compliance risks, and produce a traceable decision report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive bid or project information may be unsuitable for vendor API analysis. <br>
-Mitigation: Review before installing when bid data is sensitive and only submit project names, company names, or documents appropriate for external processing. <br>
-Risk: The skill can create or reuse persistent credentials through ZLBX_API_KEY or local configuration. <br>
-Mitigation: Prefer a user-managed ZLBX_API_KEY and avoid auto-registration if device de-duplication or local credential persistence is undesirable. <br>
-Risk: Generated HTML reports and signed sk links may share access to underlying records when forwarded. <br>
-Mitigation: Treat generated reports and sk-containing links as sensitive and share them only with intended recipients. <br>
+## Use Case:
 
+External business users, bid teams, and procurement analysts use this skill to evaluate a specific Chinese government procurement opportunity before deciding whether and how to bid. The skill produces a decision report covering project fit, buyer history, likely competitors, pricing reference points, data gaps, and compliance-sensitive risks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bid-decision) <br>
-- [Workflow reference](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration reference](references/auto-register.md) <br>
-- [知了标讯 API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision report plus optional generated HTML report file and file path.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based auto-registration; full analysis typically uses 12-25 vendor API calls and may write reports under ~/zlbx-bid-decision-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub server release evidence) <br>
+Risk: The skill may create a vendor trial account after user consent and collect a hashed MAC address for device deduplication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a preconfigured ZLBX_API_KEY when available; otherwise require explicit user consent and present the stated device-feature collection limits before registration.
+
+Risk: The skill stores and uses a vendor API key and may write configuration under the user's home directory.
+
+Mitigation: Do not ask users to paste API keys into chat, avoid exposing credentials in responses or logs, and review local credential storage before deployment.
+
+Risk: Generated HTML reports can include signed links returned by the vendor service, which may provide access intended only for the recipient.
+
+Mitigation: Preserve returned links for traceability but avoid sharing generated reports beyond intended audiences when signed links may grant access.
+
+Risk: The security scan flags the skill as suspicious because it combines bid analysis with account creation, device fingerprinting, credential storage, local report generation, and vendor links.
+
+Mitigation: Review the skill before installation, confirm that vendor domains and promotional links are acceptable, and deploy only where these behaviors match user expectations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bid-decision)
+- [ClawHub publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Skill definition](artifact/SKILL.md)
+- [Bid analysis workflow](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Report template](artifact/references/report-template.md)
+- [Automatic registration workflow](artifact/references/auto-register.md)
+- [HTML report renderer](artifact/scripts/render_report.py)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report with optional local HTML report file and supporting JSON input for report rendering]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ZLBX_API_KEY for vendor API access; full analysis is documented as about 12-25 API calls and quick analysis as about 5-8 API calls.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

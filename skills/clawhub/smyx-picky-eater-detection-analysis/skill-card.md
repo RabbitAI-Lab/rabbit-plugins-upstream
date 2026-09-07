@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes pet feeding-area videos or video URLs through server-side APIs to identify selective eating behaviors, summarize behavior frequency, and provide feeding-adjustment suggestions without diagnosing disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet feeding-bowl videos or URLs through server-side APIs to identify selective eating behaviors, record frequency, and return feeding-adjustment suggestions without providing disease diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet-care operators, and developers can use this skill to analyze pet feeding-bowl videos for picky-eating behaviors such as sorting food, pushing kibble away, or sniffing and leaving, then review structured feeding-behavior reports and related suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet-feeding videos or supplied video URLs are sent to Lifeemergence backend APIs with identity-linked report history. <br>
-Mitigation: Use the skill only when the publisher's privacy and retention terms are acceptable, and avoid sensitive home, clinic, or boarding-facility footage unless processing is approved. <br>
-Risk: The skill can silently create or reuse an identity and stores backend tokens in a local workspace SQLite database. <br>
-Mitigation: Run it in an isolated workspace, restrict filesystem access, and clear local state or tokens before reusing the workspace for another user. <br>
-Risk: The skill's security verdict is suspicious because it combines video upload, identity handling, cloud report lookup, and local token storage. <br>
-Mitigation: Review the skill before installation and limit execution to environments where outbound API calls and local credential storage are acceptable. <br>
+## Use Case:
 
+External pet owners, smart-feeder operators, boarding centers, and pet hospital staff use this skill to analyze feeding-bowl media for selective refusal patterns such as pushing kibble aside, eating only treats, or sniffing and leaving. It can also retrieve cloud-hosted history reports for the associated user identity.
 
-## Reference(s): <br>
-- [Pet Picky Eater Detection API Documentation](artifact/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-picky-eater-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured analysis text with report links, plus optional shell commands for running the skill] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save output to a file when the output path argument is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Pet media and identity-linked report data are sent to configured Life Emergence/Open API services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media and report data approved for that remote service, and review endpoint configuration before deployment.
+
+Risk: The skill may create or reuse a local account record and persist service tokens in the workspace SQLite database.
+
+Mitigation: Run it in an isolated workspace, avoid shared environments, and clear local account or token storage according to the operator's retention policy.
+
+Risk: Feeding behavior analysis can be mistaken for medical diagnosis.
+
+Mitigation: Treat outputs as feeding-behavior guidance only and route health concerns to qualified veterinary review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-picky-eater-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet picky eater detection API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown text with JSON-style analysis content and optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include feeding behavior findings, frequency summaries, feeding-adjustment suggestions, and cloud report export links.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

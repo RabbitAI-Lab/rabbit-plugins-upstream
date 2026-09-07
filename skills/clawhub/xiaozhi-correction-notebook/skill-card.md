@@ -1,43 +1,61 @@
-## Description: <br>
-AI驱动的智能错题归档与分析系统，用于在学生提交错题、描述做错过程或请求错因分析时记录错题、定位根因、触发弱项预警并生成复习材料。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+智能错题本 helps students record concrete wrong-answer cases, classify root causes across subjects, count recurring weak points, and prepare follow-up practice, reports, or handovers to subject-specific skills.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to turn wrong answers from photos, manual input, or spoken descriptions into structured records, four-dimensional cause analysis, weak-point alerts, targeted practice, and term-level reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to retain and reuse student wrong-answer history, weak-point labels, reports, reminders, and anxiety-related learning context across related skills. <br>
-Mitigation: Use it only where this learning-data retention and cross-skill sharing are acceptable, and review what context is stored or passed to related learning skills. <br>
-Risk: Photo or OCR-based problem intake may be unavailable or may misread the problem, and incomplete information can make root-cause analysis unreliable. <br>
-Mitigation: Fall back to manual or spoken input, confirm unclear problem text and the student's solution process before analysis, and label uncertain conclusions before assigning practice. <br>
-Risk: Subject-specific math and physics handoffs may duplicate analysis or share more learning context than needed if the boundaries are not followed. <br>
-Mitigation: Use the documented handoff boundaries: keep this skill to the common record and four-dimensional classification layer, and pass only the required summaries to the subject-specific skills. <br>
+## Use Case:
 
+Students and learning assistants use this skill to turn specific wrong-answer cases into a correction notebook with root-cause labels, 28-day weak-point counts, similar-question practice, and semester-level summaries. It can also prepare consent-gated handover records for subject-specific analysis skills.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-correction-notebook) <br>
-- [各科常见错误类型详细分类表](references/error-analysis-framework.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance, structured wrong-answer records, JSON-style handoff payloads, and report outlines.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on retained wrong-answer history, weak-point labels, reminders, and related subject-specific skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Student learning records may be persisted or shared without sufficiently explicit confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation before each persistent write or cross-skill handover, treat silence as no consent, and verify guardian or profile consent when applicable.
+
+Risk: Overly permissive handover validation may allow undocumented student data fields to be shared.
+
+Mitigation: Restrict handover payloads to documented schema fields and share only the minimum data needed for subject-specific analysis.
+
+Risk: Wrong-answer workflows may encounter minors' anxiety, self-harm, bullying, or safety signals.
+
+Mitigation: Stop the learning workflow for crisis signals, follow the bundled crisis referral protocol, and record only the referral disposition.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-correction-notebook)
+- [Error Analysis Framework](references/error-analysis-framework.md)
+- [Handover Protocol Schema](shared/handover-protocol.schema.json)
+- [Wrong Answer Handover Example](shared/wrong-answer-handover.example.json)
+- [Deep Analysis Writeback Example](shared/deep-analysis-writeback.example.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance, configuration]
+
+**Output Format:** [Conversational text, Markdown summaries and reports, and JSON handover or writeback records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Persistent writes and cross-skill sharing should require explicit confirmation and documented consent.]
+
+## Skill Version(s):
+
+2.1.12 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

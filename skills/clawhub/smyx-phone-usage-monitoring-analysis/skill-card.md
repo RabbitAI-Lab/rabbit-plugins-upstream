@@ -1,46 +1,59 @@
-## Description: <br>
-Detects workplace phone usage in images or video streams using cloud computer-vision analysis, then returns structured monitoring results, usage counts, duration statistics, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Based on computer vision, this skill detects workplace phone usage in images or video streams, counts usage duration and frequency, and returns structured monitoring reports with warnings and suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Enterprise operators and workplace-management teams use this skill to analyze office surveillance images, videos, or media URLs for phone-use behavior and to retrieve historical monitoring reports. The output is intended as an internal management aid and should be reviewed alongside privacy, labor, and workplace-notice requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs workplace surveillance analysis and may process employee images or videos. <br>
-Mitigation: Confirm employee notice or consent, lawful workplace-monitoring basis, retention rules, and human review before operational use. <br>
-Risk: Media and report queries are sent to a cloud service with historical report access. <br>
-Mitigation: Use only approved media, verify backend access controls and retention settings, and avoid submitting sensitive footage outside the intended workspace. <br>
-Risk: The skill may reuse or create an identity and store authentication tokens in local workspace data. <br>
-Mitigation: Run in an isolated workspace, review the workspace data file and SQLite database before use, and remove stored credentials when access should end. <br>
+## Use Case:
 
+Enterprise operators and workplace administrators use this skill to analyze office surveillance images or videos for phone-use behavior and produce structured reports for internal management review. The results should be treated as advisory and reviewed with privacy, labor, and consent requirements in mind.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-phone-usage-monitoring-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Workplace phone usage monitoring API documentation](references/api_doc.md) <br>
-- [Shared API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with optional saved output file and report-link text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires image/video input or a media URL; can also query historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter states 1.0.9) <br>
+Risk: The skill processes employee surveillance images or videos and may affect workplace privacy and labor compliance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only after confirming workplace notice, consent, legal basis, retention limits, and human review procedures for any management decisions.
+
+Risk: The security evidence reports silent identity linking, surveillance media upload, token storage, and insecure development HTTP endpoints.
+
+Mitigation: Review before installation and avoid real employee media, identities, or credentials until production HTTPS endpoints, cloud recipient documentation, retention controls, and explicit scoped authentication are in place.
+
+Risk: Computer-vision monitoring results can be inaccurate or misleading if used as the sole basis for discipline or performance assessment.
+
+Mitigation: Treat results as advisory, review source media and context, and keep a human decision-maker responsible for any follow-up action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-phone-usage-monitoring-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON monitoring report with analysis results, warnings, suggestions, and optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include compliance scores, detected phone-use counts, duration summaries, area assessments, efficiency warnings, improvement suggestions, and links to generated reports.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter states 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

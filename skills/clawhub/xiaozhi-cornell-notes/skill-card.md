@@ -1,41 +1,63 @@
-## Description: <br>
-康奈尔笔记 helps students convert classroom notes into Cornell-format cue questions, concise summaries, searchable note records, and consent-based study prompts for review, wrong-answer analysis, and Feynman testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把课堂笔记整理成可复习的康奈尔笔记：左栏线索问题、右栏课堂内容、底部一句话总结，并按学科、课题和日期归档。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students and tutoring agents use this skill to organize photographed or pasted classroom notes into Cornell-note study material, store consent-based study memory, retrieve related notes, and generate review prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may remember and reuse uploaded class notes, generated summaries, keywords, links to other notes, and retrieval history. <br>
-Mitigation: Use the skill only when this study-memory behavior is acceptable, and rely on platform controls to disable or delete saved note data when needed. <br>
-Risk: Photo-based note extraction depends on multimodal vision or OCR capability and may be unavailable or inaccurate. <br>
-Mitigation: Ask the student to confirm recognized subject and topic details, and fall back to pasted or manually entered note text when image recognition is not available. <br>
+## Use Case:
 
+Students in supported K12 grade bands use this skill to turn photographed or typed class notes into Cornell-style study notes, retrieve related notes during review, and receive consent-based note cues through companion learning workflows. When profile storage is enabled, it can summarize note usage without sharing full note text across skills.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes) <br>
-- [cornell-format-guide.md](references/cornell-format-guide.md) <br>
+### Deployment Geography for Use:
 
+Mainland China Chinese K12 context; curriculum, minor-consent requirements, and crisis referral resources should be localized before deployment elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cue questions, short summaries, keyword tags, related-note prompts, and note-health report sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence and frontmatter) <br>
+Risk: A long-term student note archive may contain sensitive learning data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile storage disabled unless intentionally enabled, and preserve view, correction, export, pause, and deletion controls for the student or guardian.
+
+Risk: Cross-skill sharing may exceed the skill's promise to share only aggregate note information.
+
+Mitigation: Limit shared profile updates to extensions.notes.noteCount, extensions.notes.recurringGaps, and extensions.notes.lastUpdated, and require crossSkillSharing consent before handoff.
+
+Risk: Reminder behavior and crisis referral guidance depend on consent and deployment region.
+
+Mitigation: Use reminder workflows only after reminderConsent is enabled, and localize crisis referral contacts before use outside Mainland China.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes)
+- [Cornell note format guide](artifact/references/cornell-format-guide.md)
+- [Platform capability conventions](artifact/shared/platform-conventions.md)
+- [Grade-band applicability](artifact/shared/grade-bands.md)
+- [Learning DNA profile schema](artifact/shared/dna-profile.schema.json)
+- [Multi-agent handover schema](artifact/shared/handover-protocol.schema.json)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured text, with JSON-compatible handover fields when profile or reminder workflows are enabled]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports OCR-assisted note intake when available; falls back to typed note points when image recognition or cross-session memory is unavailable.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

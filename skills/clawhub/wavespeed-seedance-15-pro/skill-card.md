@@ -1,42 +1,63 @@
-## Description: <br>
-Generate text-to-video and image-to-video clips with ByteDance's Seedance V1.5 Pro model through WaveSpeed AI, including options for duration, resolution, audio, camera control, and seed configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate text-to-video and image-to-video clips with ByteDance's Seedance V1.5 Pro model through WaveSpeed AI, including duration, resolution, audio, camera, and seed controls.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to generate short videos from text prompts or animate trusted source images through WaveSpeed AI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WaveSpeed API key exposure. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret manager, and do not hardcode or commit it. <br>
-Risk: Prompts and selected images are sent to WaveSpeed for processing. <br>
-Mitigation: Avoid uploading confidential media unless the provider's terms are acceptable, and validate media URLs before use. <br>
-Risk: Video generation can create billing impact. <br>
-Mitigation: Monitor usage and choose duration, resolution, and audio settings deliberately. <br>
+## Use Case:
 
+Developers, creators, and agents use this skill to generate videos from prompts or animate user-provided images through WaveSpeed AI. It helps configure model endpoints, media inputs, duration, resolution, audio, camera movement, and seeds.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-seedance-15-pro) <br>
-- [WaveSpeed AI access keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WaveSpeed model endpoint names, generation parameters, output URL handling, and secret-management guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Installing or running WaveSpeed npm packages introduces ordinary third-party package supply-chain risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if you trust the WaveSpeed packages and account workflow; prefer a pinned or locally managed package version and run commands as an unprivileged user.
+
+Risk: Media uploaded through the skill is sent to WaveSpeed for video generation.
+
+Mitigation: Upload only media that the user intends to send to WaveSpeed, and pass only media URLs supplied by the user or returned by a prior WaveSpeed run.
+
+Risk: API credentials could be exposed if pasted into chat or command text.
+
+Mitigation: Use the WaveSpeed login flow or the WAVESPEED_API_KEY environment variable; do not ask users to paste API keys into chat.
+
+Risk: Unsupported or malformed model parameters can cause failed runs or unintended outputs.
+
+Mitigation: Use only the documented parameters and confirm the live schema with the WaveSpeed CLI or MCP tools when unsure.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-seedance-15-pro)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed access key setup](https://wavespeed.ai/accesskey)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and model parameter tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce WaveSpeed CLI commands, MCP run_model input guidance, generated media URLs, and optional downloaded video file paths.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

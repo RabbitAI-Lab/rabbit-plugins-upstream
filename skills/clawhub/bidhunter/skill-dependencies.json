@@ -1,0 +1,74 @@
+{
+  "skill": "bidhunter",
+  "version": "1.5.0",
+  "summary": "国央企招投标信息监控与研判。依赖均为本地/用户自配置，无强制第三方服务；可选 AI 依赖仅增强，缺失不影响基础采集研判。",
+  "dependencies": [
+    {
+      "id": "minimax-api",
+      "type": "api",
+      "required": false,
+      "capabilities": ["v2.0 AI 速读标书", "v2.0 风险条款识别", "v2.5 投标策略建议"],
+      "checks": [
+        {"id": "cfg-exists", "type": "file-exists", "target": "~/.config/bidhunter/ai.json"},
+        {"id": "key-present", "type": "json-field-nonempty", "target": "~/.config/bidhunter/ai.json", "field": "api_key"}
+      ],
+      "configuration": {
+        "file": "~/.config/bidhunter/ai.json",
+        "format": "{\"api_key\":\"<你的MiniMaxKey>\",\"group_id\":\"<可选>\",\"model\":\"MiniMax-M2.7\",\"base_url\":\"https://api.minimaxi.com/v1/chat/completions\"}",
+        "official_signup": "https://www.minimaxi.com/",
+        "key_entry": "MiniMax 开放平台 → API 密钥管理 → 创建密钥",
+        "security": "密钥仅存本地文件，权限 600；不回显、不上传、不写进 skill 源码或公开仓库。轮换/撤销在 MiniMax 控制台操作。"
+      },
+      "degradation": {
+        "trigger": "ai.json 缺失或 api_key 为空",
+        "fallback": "AI 功能自动跳过，基础采集/比对/报告/推送/评分/日历/筛选照常",
+        "limitations": "无 AI 速读、无风险条款 LLM 识别、无投标建议",
+        "recovery": "配置 ai.json 后重跑对应命令即恢复"
+      }
+    },
+    {
+      "id": "push-config",
+      "type": "local-tool",
+      "required": false,
+      "capabilities": ["钉钉/企业微信/邮件多通道推送"],
+      "checks": [
+        {"id": "cfg-exists", "type": "file-exists", "target": "~/.config/bidhunter/push.json"}
+      ],
+      "configuration": {
+        "file": "~/.config/bidhunter/push.json",
+        "setup": "python3 config_wizard.py（交互式，未通过连通性测试不写入）",
+        "security": "配置文件权限 600；密码/密钥仅本地存储，show 命令脱敏显示。"
+      },
+      "degradation": {
+        "trigger": "push.json 不存在或未启用通道",
+        "fallback": "pipeline 仅生成报告文件，不推送，打印提示",
+        "limitations": "无 IM/邮件提醒",
+        "recovery": "运行 config_wizard.py 配置并测试通过后恢复推送"
+      }
+    },
+    {
+      "id": "pdf-doc-deps",
+      "type": "runtime",
+      "required": false,
+      "capabilities": ["v2.0 PDF/Word 标书原生解析"],
+      "checks": [
+        {"id": "pypdf2", "type": "python-import", "target": "PyPDF2"},
+        {"id": "docx", "type": "python-import", "target": "docx"}
+      ],
+      "configuration": {
+        "install": "pip install -r requirements.txt",
+        "security": "纯本地依赖，无网络/凭据"
+      },
+      "degradation": {
+        "trigger": "PyPDF2/python-docx 未安装",
+        "fallback": "PDF 走正则抽取（部分文本）、DOCX 可能解析不全；仍走 AI 流程但质量下降",
+        "limitations": "抽取完整度下降，复杂排版可能漏字段",
+        "recovery": "pip install -r requirements.txt 后恢复原生解析"
+      }
+    }
+  ],
+  "core-no-deps": {
+    "note": "采集、资质比对、匹配度评分、投标日历、多维筛选、规则编辑器、诊断、FAQ、示例、统一入口均为纯 stdlib，无外部依赖。",
+    "degradation_matrix_present": true
+  }
+}

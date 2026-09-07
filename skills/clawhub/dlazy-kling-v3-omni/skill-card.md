@@ -1,43 +1,56 @@
-## Description: <br>
-Versatile video generation with Kling v3 Omni, supporting multi-modal image and prompt inputs for dynamic video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates dynamic videos with Kling v3 Omni from prompts and multimodal references through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy Kling v3 Omni CLI for text-to-video and image or video reference generation workflows, including synchronous generation and asynchronous task polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths supplied to the CLI can be uploaded to dLazy's hosted service. <br>
-Mitigation: Use the skill only with content approved for dLazy cloud processing and avoid sending sensitive media or confidential prompts unless the user's policy permits it. <br>
-Risk: The dLazy CLI may save an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers and content creators use this skill to ask an agent to invoke dLazy's Kling v3 Omni workflow for text-to-video, image-to-video, and reference-based video generation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned through dLazy-hosted output URLs or an asynchronous task identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: The skill installs or invokes the external dLazy CLI package rather than vendoring executable code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting the dLazy CLI and npm package; prefer the npx invocation or an unprivileged sandbox when avoiding a persistent global binary.
+
+Risk: Prompts and local media references can be uploaded to dLazy's hosted API and media storage.
+
+Mitigation: Avoid sending private or sensitive media unless the user is comfortable with upload to dLazy's service and has reviewed applicable terms.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [npm package @dlazy/cli](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [JSON result payload with generated media URLs; optional downloaded media file when --save is used.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; prompts and referenced local media may be sent to dLazy API and file-hosting endpoints.]
+
+## Skill Version(s):
+
+1.3.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

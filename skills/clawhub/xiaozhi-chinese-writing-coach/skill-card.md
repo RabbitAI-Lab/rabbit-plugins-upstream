@@ -1,41 +1,66 @@
-## Description: <br>
-语文写作全流程AI教练，面向作文构思、提纲检查、作文批改、议论文论证和辩论训练，通过追问、指出问题和给出修改方向来帮助学生保留自己的表达。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese writing coach for upper-elementary and middle-school learners that uses questioning, rubric-based feedback, debate practice, and consent-gated writing-style memory to help students develop their own essays without ghostwriting for them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and their guardians or educators use this skill for Chinese writing coaching: brainstorming original ideas, checking essay logic, reviewing drafts, practicing argumentation, and receiving focused revision guidance without having the agent write the essay for the student. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student essay topics, drafts, writing-style profiles, grammar weaknesses, or progress records may be stored for future tutoring. <br>
-Mitigation: Install only where users can clearly consent to, disable, delete, and understand these records, with extra review before use by minors. <br>
+## Use Case:
 
+External Chinese K-12 learners and learning platforms use this skill to brainstorm, check logic, receive targeted composition feedback, and practice argumentation while keeping the student's own wording and ideas central.
 
-## Reference(s): <br>
-- [语文错因维度表](references/chinese-error-dimension-table.md) <br>
-- [AI 辩论赛话术与赛制详解](references/debate-script-guide.md) <br>
-- [写作5步流程 · 状态机定义](references/writing-5step-statemachine.md) <br>
-- [三文体评分维度与追问问题库](references/writing-rubric.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; deployments elsewhere require localized crisis-support guidance and minor-consent rules before student-facing use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style conversational Chinese coaching responses with questions, critique, rubrics, and revision directions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured feedback, staged workflow prompts, debate turns, and consent-gated writing-style memory summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence, released 2026-07-17) <br>
+Risk: Consent controls for remembering student writing patterns may not be enforced by every host platform.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only where the platform enforces explicit consent plus view, correct, delete, pause, export, and sharing controls before profile data is read or written.
+
+Risk: Grammar-profile data permissions may exceed the intended boundary for a writing coach.
+
+Mitigation: Route grammar-error profile updates through the designated grammar-tracking flow or a platform-confirmed handoff, rather than allowing direct grammar-profile writes by this skill.
+
+Risk: Crisis-support channels and minor-consent assumptions are tailored to mainland China.
+
+Mitigation: Localize crisis resources and legal consent rules before using the skill outside mainland China, and ask the learner's region before giving crisis phone numbers.
+
+Risk: Students may try to use the skill to obtain a finished essay instead of learning to write.
+
+Mitigation: Preserve the no-ghostwriting workflow: require student attempts, use progressive hints, and restrict examples to unrelated topics or partial scaffolds.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-writing-coach)
+- [Writing 5-step state machine](artifact/references/writing-5step-statemachine.md)
+- [Writing rubric](artifact/references/writing-rubric.md)
+- [Debate script guide](artifact/references/debate-script-guide.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Conversational Chinese markdown with optional structured handoff data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not produce completed student essays; provides questions, feedback, revision directions, and consent-gated profile handoffs.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

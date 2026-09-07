@@ -1,46 +1,52 @@
-## Description: <br>
-Systematic root-cause debugging with verification for errors, stack traces, broken tests, flaky tests, regressions, and unexpected behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Systematic root-cause debugging with verification for errors, stack traces, broken tests, flaky tests, regressions, and other unexpected behavior.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to debug software failures by reproducing issues, forming evidence-grounded hypotheses, tracing root causes, and verifying fixes with tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide an agent to run local tests and debugging commands. <br>
-Mitigation: Review commands before execution and run them only in the intended workspace or project context. <br>
-Risk: Diagnostic reports can expose local paths, username, git remote URL, and repository metadata. <br>
-Mitigation: Review and redact diagnostic reports before sharing them outside the workspace. <br>
+## Use Case:
 
+Developers and engineers use this skill to investigate failures systematically, reproduce symptoms, form evidence-backed hypotheses, trace root causes, implement focused fixes, and verify the result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-debugging) <br>
-- [Specification](SPEC.md) <br>
-- [Analysis of Competing Hypotheses](references/competing-hypotheses.md) <br>
-- [Defense-in-Depth Validation](references/defense-in-depth.md) <br>
-- [Root Cause Tracing](references/root-cause-tracing.md) <br>
-- [Specialized Debugging Patterns](references/specialized-patterns.md) <br>
-- [Diagnostic collection script](scripts/collect-diagnostics.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce debug reports, diagnostic commands, and verification steps; optional diagnostics can generate a local Markdown report containing environment and repository metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Diagnostic reports can expose local repository or machine metadata if shared without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and redact usernames, absolute paths, private repository names, git remote URLs, tokens, hostnames, and environment values before sharing reports.
+
+## Reference(s):
+
+- [Competing Hypotheses](references/competing-hypotheses.md)
+- [Defense-in-Depth Validation](references/defense-in-depth.md)
+- [Root Cause Tracing](references/root-cause-tracing.md)
+- [Specialized Debugging Patterns](references/specialized-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code, shell commands, and structured debugging reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include diagnostic reports or captured failure evidence that should be reviewed and redacted before sharing.]
+
+## Skill Version(s):
+
+4.5.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

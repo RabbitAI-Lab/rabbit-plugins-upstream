@@ -1,51 +1,66 @@
-## Description: <br>
-Inter-host OpenClaw session messaging over reachable HTTPS using built-in gateway webhook hooks for sending messages, checking peer health, managing peer registries, exchanging trust material, and enabling cross-host agent communication outside visible chat channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Authenticated messaging between OpenClaw instances over reachable HTTPS using built-in gateway webhook hooks.
 
-## Publisher: <br>
-[cshirley001](https://clawhub.ai/user/cshirley001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[clawreefantenna](https://clawhub.ai/user/clawreefantenna)
 
-## Use Case: <br>
-Developers, operators, and OpenClaw users use Antenna to let agents coordinate across separately hosted OpenClaw instances, send messages to specific sessions, pair trusted peers, and review or drain inbound message queues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation grants broad gateway, session, sandbox, and credential authority. <br>
-Mitigation: Review the gateway diff before setup and install only when that level of local administrative control is acceptable. <br>
-Risk: Overly broad peer or session access could allow unwanted cross-host message delivery. <br>
-Mitigation: Keep inbound and outbound peer allowlists and session allowlists narrow, and enable inbox review for new or less trusted peers. <br>
-Risk: Hooks tokens and identity secrets are sensitive credentials. <br>
-Mitigation: Protect credential files, rotate hooks tokens and identity secrets when exposure is suspected, and audit permissions with Antenna status or doctor checks. <br>
-Risk: Optional ClawReef pairing can involve third-party storage of webhook credentials. <br>
-Mitigation: Avoid ClawReef unless the operator accepts that credential-storage model. <br>
-Risk: Dry-run or test-report workflows may write prompts, secrets, or other sensitive content to local logs. <br>
-Mitigation: Do not use those features with sensitive content unless local log exposure is acceptable. <br>
+## Use Case:
 
+Developers and operators use Antenna to send authenticated cross-host messages between paired OpenClaw instances, manage peer registries, exchange bootstrap trust material, and check peer health without relying on visible chat channels.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cshirley001/antenna) <br>
-- [Repository](https://github.com/cshirley001/openclaw-skill-antenna) <br>
-- [GitHub releases](https://github.com/cshirley001/openclaw-skill-antenna/releases) <br>
-- [Antenna User Guide](references/USER-GUIDE.md) <br>
-- [Antenna Relay Protocol Functional Specification](references/ANTENNA-RELAY-FSD.md) <br>
-- [Security Policy](SECURITY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational guidance and command invocations for local Antenna scripts; setup and relay flows may create or update local runtime configuration, peer registry, inbox, log, and gateway registration state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata, skill frontmatter, changelog released 2026-04-28) <br>
+Risk: Receiving remote messages requires a dedicated relay agent with sandbox disabled, broad session visibility, agent-to-agent access, and a bash exec allowlist.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on hosts where that relay posture is acceptable, keep peer and session allowlists narrow, and review gateway changes before applying setup or upgrade plans.
+
+Risk: Peer credentials, hook tokens, and relay secrets are sensitive local files.
+
+Mitigation: Protect the skill secrets directory, keep secret files permission-restricted, use Antenna health checks, and prefer Ed25519 pairing over plaintext-legacy mode.
+
+Risk: Dry-run output and ClawReef Public Groups can disclose message content or other sensitive plaintext.
+
+Mitigation: Avoid sending credentials, private keys, regulated data, or sensitive operational details through public group routes or captured dry-run output.
+
+Risk: Durable inbox auto-approval can allow trusted peers to deliver messages without per-message review.
+
+Mitigation: Enable auto-approval only for peers that are fully trusted and keep inbound peer, outbound peer, and destination session allowlists constrained.
+
+## Reference(s):
+
+- [Antenna User Guide](references/USER-GUIDE.md)
+- [Ed25519 Protocol v1](references/ED25519-PROTOCOL-V1.md)
+- [OpenClaw 2026.8.1 Upgrade Guide](references/OPENCLAW-2026.8.1-UPGRADE.md)
+- [Repository](https://github.com/ClawReefAntenna/antenna)
+- [ClawHub Skill Page](https://clawhub.ai/clawreefantenna/skills/antenna)
+- [ClawReef](https://clawreef.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and relay status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Relay outputs are terse status strings such as delivered, queued, rejected, or error; setup and diagnostic flows may emit change previews and configuration guidance.]
+
+## Skill Version(s):
+
+1.6.5 (source: server release metadata, skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

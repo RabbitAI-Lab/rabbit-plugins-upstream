@@ -1,0 +1,153 @@
+{
+ "system": {
+  "protein": "1LPB porcine pancreatic lipase-colipase (A=colipase 85 res, B=lipase 450 res) + Ca2+",
+  "ligand": "mebendazole C16H13N3O3, 35 atoms with H, InChIKey OPXLLQIJSORQAM-UHFFFAOYSA-N (PubChem CID 4030)",
+  "particles": {
+   "min": 187800,
+   "max": 188199,
+   "note": "n_particles ~187,8xx observed; varies with neutralization/hydrogens"
+  },
+  "waters_opc4": "~45165",
+  "ions": {
+   "NA": 156,
+   "CL": 152,
+   "protein_net_charge": -4.0
+  },
+  "box_nm": 11.91,
+  "repairs": {
+   "cys_to_cyx_for_disulfides": 11,
+   "terminal_renames": {
+    "B": [
+     "NLYS",
+     "CCYX"
+    ],
+    "A": [
+     "NGLY",
+     "CVAL"
+    ],
+    "Z": [
+     "CA",
+     "CA"
+    ]
+   },
+   "evidence": "runbook refs prep step 5 — see TRAP-21"
+  }
+ },
+ "forcefields": {
+  "protein": "amber19/protein.ff19SB.xml",
+  "water": "amber19/opc.xml (4-site OPC, M virtual site)",
+  "ligand": "openff-2.2.0 (Sage) + AM1-BCC charges"
+ },
+ "integrator": {
+  "production": {
+   "type": "LangevinMiddle",
+   "T_K": 310,
+   "friction_per_ps": 1,
+   "dt_fs": 4
+  },
+  "equilibration": {
+   "friction_per_ps": 5,
+   "dt_fs": {
+    "B1-B4": 2,
+    "B5": 4
+   }
+  },
+  "hmr_hydrogen_mass_amu": 4,
+  "constraints": "HBonds",
+  "rigidWater": true,
+  "removeCMMotion": false,
+  "nonbonded": "PME cutoff 1.0 nm, ewaldErrorTolerance 5e-4, dispersion correction on"
+ },
+ "equilibration_ladder": [
+  [
+   "B1",
+   100,
+   2,
+   "NVT",
+   10.0,
+   10.0
+  ],
+  [
+   "B2",
+   250,
+   2,
+   "NPT",
+   5.0,
+   5.0
+  ],
+  [
+   "B3",
+   250,
+   2,
+   "NPT",
+   2.0,
+   3.0
+  ],
+  [
+   "B4",
+   250,
+   2,
+   "NPT",
+   0.5,
+   1.0
+  ],
+  [
+   "B5",
+   150,
+   4,
+   "NPT",
+   0.0,
+   0.0
+  ]
+ ],
+ "ladder_columns": [
+  "stage",
+  "ps",
+  "dt_fs",
+  "ensemble",
+  "k_CA(kcal/mol/A^2)",
+  "k_lig"
+ ],
+ "production": {
+  "chunk_steps": 2500,
+  "chunk_ps": 10,
+  "ckpt_steps": 12500,
+  "ckpt_ps": 50,
+  "total_steps": 25000000,
+  "target_ns": 100,
+  "dcd_atoms": 8130,
+  "dcd_content": "all protein heavy + ligand",
+  "selections": {
+   "CA": 534,
+   "LIG": 35
+  }
+ },
+ "budget": {
+  "session_wall_cap_h": "~9-12 (Kaggle-enforced)",
+  "weekly_quota_gpu_h": 30,
+  "speed_steps_per_s": "~240 (2fs, diagnostics on)",
+  "total_wall_h": "~29",
+  "sessions_needed": "2.5-3",
+  "equilibration_gpu_h": 0.55,
+  "bootstrap_s": "~90-100"
+ },
+ "environment_variables": {
+  "TARGET_NS": "100",
+  "MBZ_PAD": "1.2",
+  "MBZ_SALT": "0.15",
+  "MBZ_MINITER": "2000",
+  "MBZ_WORK": "/kaggle/working/mdout",
+  "MBZ_INP/MBZ_RES": "auto overrides",
+  "MBZ_DRY": "1=CPU smoke (min+100steps)",
+  "MBZ_DRY_FORCE": "force dump in DRY",
+  "MBZ_DRY_STEPS": "100"
+ },
+ "healthy_markers": {
+  "n_Pmin_outside_box": "~0 (RECELL fixed)",
+  "min_energy_kjmol": "-2.80e6 .. -2.81e6",
+  "B1_to_B5_energy_walk": "-2.438e6 -> -2.472e6",
+  "post_min_Fmax": "<~4000 (waters)",
+  "G0_asserts": "|q_lig|<0.02, |q_Ca-2|<0.1, dispersion on",
+  "particles": 187847
+ }
+}

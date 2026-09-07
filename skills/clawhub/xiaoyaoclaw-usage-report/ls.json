@@ -1,0 +1,146 @@
+[
+  {
+    "name": ".gitignore",
+    "path": ".gitignore",
+    "sha": "91f5d9bf5c2bead58ed8e5a1497fc144641bf4b5",
+    "size": 75,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/.gitignore?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/.gitignore",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/91f5d9bf5c2bead58ed8e5a1497fc144641bf4b5",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/.gitignore",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/.gitignore?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/91f5d9bf5c2bead58ed8e5a1497fc144641bf4b5",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/.gitignore"
+    }
+  },
+  {
+    "name": "LICENSE",
+    "path": "LICENSE",
+    "sha": "ea4ff3f646540039be3e1deb93e83e0c5204e9ee",
+    "size": 1063,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/LICENSE?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/LICENSE",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/ea4ff3f646540039be3e1deb93e83e0c5204e9ee",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/LICENSE",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/LICENSE?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/ea4ff3f646540039be3e1deb93e83e0c5204e9ee",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/LICENSE"
+    }
+  },
+  {
+    "name": "README.en.md",
+    "path": "README.en.md",
+    "sha": "5b0f27ae28e555ee1e5bcaad76fb4ada11d66475",
+    "size": 4719,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/README.en.md?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/README.en.md",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/5b0f27ae28e555ee1e5bcaad76fb4ada11d66475",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/README.en.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/README.en.md?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/5b0f27ae28e555ee1e5bcaad76fb4ada11d66475",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/README.en.md"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "ae2a759333778ddab0faec701b977a7dc6ed1a6d",
+    "size": 5475,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/README.md?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/ae2a759333778ddab0faec701b977a7dc6ed1a6d",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/ae2a759333778ddab0faec701b977a7dc6ed1a6d",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/README.md"
+    }
+  },
+  {
+    "name": "SKILL.md",
+    "path": "SKILL.md",
+    "sha": "84ee4fe0e058fe5b73ac1a65d8fc95cbb044b269",
+    "size": 4265,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/SKILL.md?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/SKILL.md",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/84ee4fe0e058fe5b73ac1a65d8fc95cbb044b269",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/SKILL.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/SKILL.md?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/84ee4fe0e058fe5b73ac1a65d8fc95cbb044b269",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/SKILL.md"
+    }
+  },
+  {
+    "name": "assets",
+    "path": "assets",
+    "sha": "39ef51fc36bd65541ce7fefd42125214540ddf93",
+    "size": 0,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/assets?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/assets",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/39ef51fc36bd65541ce7fefd42125214540ddf93",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/assets?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/39ef51fc36bd65541ce7fefd42125214540ddf93",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/assets"
+    }
+  },
+  {
+    "name": "docs",
+    "path": "docs",
+    "sha": "5739acf5ab14eaa7e5f702217bee5c28b5e35726",
+    "size": 0,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/docs?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/docs",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/5739acf5ab14eaa7e5f702217bee5c28b5e35726",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/docs?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/5739acf5ab14eaa7e5f702217bee5c28b5e35726",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/docs"
+    }
+  },
+  {
+    "name": "manifest.json",
+    "path": "manifest.json",
+    "sha": "d2df06cd3148b7752463a3110073b51d153db1f8",
+    "size": 767,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/manifest.json?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/manifest.json",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/d2df06cd3148b7752463a3110073b51d153db1f8",
+    "download_url": "https://raw.githubusercontent.com/dtsola/xiaoyaoclaw-usage-report/main/manifest.json",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/manifest.json?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/blobs/d2df06cd3148b7752463a3110073b51d153db1f8",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/blob/main/manifest.json"
+    }
+  },
+  {
+    "name": "scripts",
+    "path": "scripts",
+    "sha": "aa73bc36bc0d7c36c583d01e8af456a2c5cb388e",
+    "size": 0,
+    "url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/scripts?ref=main",
+    "html_url": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/scripts",
+    "git_url": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/aa73bc36bc0d7c36c583d01e8af456a2c5cb388e",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/contents/scripts?ref=main",
+      "git": "https://api.github.com/repos/dtsola/xiaoyaoclaw-usage-report/git/trees/aa73bc36bc0d7c36c583d01e8af456a2c5cb388e",
+      "html": "https://github.com/dtsola/xiaoyaoclaw-usage-report/tree/main/scripts"
+    }
+  }
+]

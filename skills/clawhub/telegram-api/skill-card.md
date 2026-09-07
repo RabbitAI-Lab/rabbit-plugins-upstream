@@ -1,48 +1,71 @@
-## Description: <br>
-Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and interacting with users through a connected Telegram bot. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and interacting with users through a connected Telegram bot.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected Telegram bot through Maton-managed authentication, including sending content, reading bot updates, managing chats, and configuring commands or webhooks. It requires a valid Maton API key and user approval before write or delete operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Exposed credentials could allow unauthorized access to Maton-managed Telegram bot operations. <br>
-Mitigation: Keep MATON_API_KEY private, store it only in approved secret handling, and avoid printing or committing it. <br>
-Risk: A request can affect the wrong bot, chat, message, webhook, command, or connection. <br>
-Mitigation: Check the exact target and effect before execution, and include the Maton-Connection header when more than one bot is connected. <br>
-Risk: Write, delete, webhook, command, or connection changes can alter Telegram bot behavior or user-visible content. <br>
-Mitigation: Require explicit user approval before sends, deletes, webhook changes, command changes, or connection changes. <br>
+## Use Case:
 
+Developers and agents use this skill to operate a Telegram bot through Maton with managed authentication. It supports read/list workflows and user-approved write actions such as sending messages, managing bot commands, updating webhooks, and editing or deleting messages.
 
-## Reference(s): <br>
-- [ClawHub Telegram Bot Skill](https://clawhub.ai/byungkyu/skills/telegram-api) <br>
-- [Telegram Bot API Documentation](https://core.telegram.org/bots/api) <br>
-- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods) <br>
-- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options) <br>
-- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup) <br>
-- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY; use Maton-Connection when more than one Telegram bot is connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Credential exposure from OAuth tokens, Maton API keys, or provider-issued tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth through the Maton CLI, do not print or persist credentials, and use raw HTTP with MATON_API_KEY only when the CLI cannot be installed.
+
+Risk: Unapproved writes can send messages, edit content, delete messages, change bot commands, or modify webhooks.
+
+Mitigation: Default to read and list calls, then require explicit user approval with target identifiers, payload, and intended effect before POST, PUT, PATCH, or DELETE operations.
+
+Risk: Ambiguous accounts or connections can send a request to the wrong Telegram bot.
+
+Mitigation: List active connections first and specify the intended Maton profile and connection when more than one is available.
+
+Risk: Telegram content, webhook payloads, or chat data may contain untrusted instructions or data.
+
+Mitigation: Treat API responses as data, avoid executing or interpolating returned content into commands, and extract only fields needed for the user-approved task.
+
+## Reference(s):
+
+- [ClawHub Telegram Bot Skill](https://clawhub.ai/byungkyu/skills/telegram-api)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Telegram Bot API Documentation](https://core.telegram.org/bots/api)
+- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods)
+- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options)
+- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup)
+- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON payload examples, and SDK or raw HTTP code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected Telegram bot.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

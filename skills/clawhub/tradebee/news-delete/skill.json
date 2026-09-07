@@ -1,0 +1,59 @@
+{
+  "name": "news-delete",
+  "description": "Delete Tradebee news records after explicit confirmation.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get. Every target ID must belong to this language."
+      },
+      "id_list": {
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 100,
+        "items": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Positive news ID selected from news-read."
+        },
+        "description": "Required array of 1-100 positive news IDs. Send an array even for one item."
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval and summary of the exact ID list.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language and news ID list approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "id_list",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result with data.success and data.fail."
+  },
+  "dependencies": {
+    "id_list": {
+      "skill": "news-read",
+      "field": "data.list[].news_id",
+      "mode": "select-many"
+    }
+  }
+}

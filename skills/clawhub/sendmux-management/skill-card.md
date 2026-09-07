@@ -1,41 +1,54 @@
-## Description: <br>
-Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers, operators, and team administrators use this skill to manage Sendmux account resources, including domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux root credentials can administer account-level resources and expose sensitive one-time secrets. <br>
-Mitigation: Use scoped Sendmux credentials where possible, keep root keys and generated secrets in a secret store, and do not paste secrets into chat. <br>
-Risk: Administrative actions can delete, suspend, rotate, test, or expose account resources, billing data, and logs. <br>
-Mitigation: Review confirmations carefully and verify target resources before destructive, high-impact, billing, log, or secret-rotation operations. <br>
+## Use Case:
 
+Developers and administrators use this skill to guide Sendmux account-management workflows across domains, mailboxes, mailbox keys, sending accounts, webhooks, billing, logs, and metrics. It helps agents choose between MCP tools, CLI commands, and SDK examples while preserving secret-handling and confirmation boundaries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sendmux.ai/skills/sendmux-management) <br>
-- [Sendmux Skills Homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, TypeScript code examples, MCP tool names, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes guidance for handling Sendmux credentials, confirmations, pagination, idempotency keys, and concurrency headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill supports sensitive Sendmux account-administration workflows, including root-key setup and generated mailbox or webhook secrets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped tokens where possible, keep root keys out of chat, and store generated mailbox keys or webhook secrets only in the user's chosen secret store.
+
+Risk: The skill can guide destructive or disruptive account actions such as deleting resources, suspending or resuming mailboxes, rotating secrets, or testing delivery.
+
+Mitigation: Confirm the target resource and user intent before delete, suspend, resume, rotate-secret, and test-delivery operations.
+
+## Reference(s):
+
+- [Sendmux skills repository](https://github.com/Sendmux/skills)
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-management)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with command tables, bash examples, TypeScript examples, and MCP tool names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Sendmux API credentials when the user provides them through an appropriate environment or secret store.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.4.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

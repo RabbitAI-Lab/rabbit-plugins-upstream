@@ -1,48 +1,67 @@
-## Description: <br>
-Helps users evaluate medical-device, consumables, reagent, and hospital IT procurement opportunities by using historical bid data to assess whether to bid, expected competitors, buyer preferences, pricing references, and rejection risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents analyze medical-device and hospital procurement bids using Zhiliaobiaoxun tender data to assess whether to bid, likely competitors, pricing anchors, and reporting risks.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users and commercial teams use this skill when they have a concrete hospital or health-system procurement opportunity and need a bid/no-bid recommendation, competitor analysis, buyer history, and pricing guidance. It can produce a full decision report or a lighter quick assessment based on the user's requested depth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The vendor receives query terms such as project names, company names, and procurement keywords during analysis. <br>
-Mitigation: Use the skill only when those query terms are appropriate to send to the vendor service, and avoid including unnecessary sensitive context in searches. <br>
-Risk: Free-trial registration can send a consent-gated device hash and stores an API key in the user's home directory. <br>
-Mitigation: Prefer a manually configured API key when available, confirm user consent before any automatic registration, and protect or remove the local API-key file according to local policy. <br>
-Risk: Generated HTML reports are saved locally and may preserve signed access links returned by the API. <br>
-Mitigation: Review reports before sharing or exporting them, and share files containing signed links only with recipients who should be able to access those linked records. <br>
+## Use Case:
 
+External procurement, sales, and bid teams use this skill to evaluate a specific hospital or medical-device procurement opportunity, estimate competition and pricing, and produce a bid decision report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/medical-device-bid-decision) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Decision workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
-- [ZLBX API base endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, html, guidance, configuration] <br>
-**Output Format:** [Markdown decision report in the conversation, with an optional self-contained HTML report file and citation appendix.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a consent-gated registration flow; complete reports typically consume 12-25 data queries, while quick assessments use about 5-8 queries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill handles sensitive procurement plans and bid strategy context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for information you are authorized to process, and review generated recommendations before relying on them for commercial decisions.
+
+Risk: The skill can perform automatic account registration, store credentials locally, and use device fingerprinting for trial-account deduplication.
+
+Mitigation: Prefer a managed ZLBX_API_KEY, require explicit user consent before auto-registration, and review ~/.zlbx/config.json for stored credentials.
+
+Risk: Generated reports and signed links may be shareable outside the intended audience.
+
+Mitigation: Avoid publishing generated reports or signed links publicly, and check ~/zlbx-bid-decision-files/ for files that should be restricted or removed.
+
+Risk: Bid analysis may be incomplete or misleading when source data is missing, stale, or ambiguous.
+
+Mitigation: Validate key figures, company names, source citations, and data gaps before acting on the report.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/medical-device-bid-decision)
+- [API Quick Reference](artifact/references/api-quick.md)
+- [Five-Step Analysis Workflow](artifact/references/workflow.md)
+- [Report Template](artifact/references/report-template.md)
+- [Auto Registration Flow](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun Agent Platform](https://agent.zhiliaobiaoxun.com)
+- [Zhiliaobiaoxun Skill Documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report plus optional HTML report file generated from JSON input.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May perform API calls, consume account credits, and create local HTML reports under ~/zlbx-bid-decision-files/.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

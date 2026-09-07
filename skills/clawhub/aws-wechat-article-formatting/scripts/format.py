@@ -15,6 +15,8 @@
     python format.py <article.md> --color "#0F4C81"     覆盖主色
     python format.py <article.md> --font-size 16px
     python format.py --list-themes                       列出可用主题
+    python format.py --export-theme default > my.yaml     导出主题 YAML（含默认变量/样式）作为自定义起点
+    python format.py <article.md> --no-preformat         跳过中英文加空格 / 引号替换等预格式化
 """
 
 from __future__ import annotations
@@ -26,7 +28,6 @@ import re
 import sys
 from pathlib import Path
 from urllib.parse import quote
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
 import yaml
 
@@ -40,6 +41,13 @@ USER_THEMES_DIRS = [
 ]
 
 THEME_SEARCH_DIRS = USER_THEMES_DIRS + [BUILTIN_THEMES_DIR]
+
+# 版式组件：markdown 里用 :::name[参数] … ::: 调用，渲染成设计过的 HTML 结构。
+# 为什么需要它：微信只认内联样式，没有伪元素，所以「标题前的角标」「引用块的大引号」
+# 这类装饰没法靠 CSS 变出来，必须真的插元素。而主题只能给标签配样式，表达不了结构。
+BUILTIN_COMPONENTS_DIR = SKILL_DIR / "references" / "components"
+USER_COMPONENTS_DIR = Path(".aws-article/presets/components")
+COMPONENT_SEARCH_DIRS = [USER_COMPONENTS_DIR, BUILTIN_COMPONENTS_DIR]
 
 DEFAULT_VARIABLES = {
     "primary-color": "#0F4C81",
@@ -173,6 +181,22 @@ def _list_themes() -> list[dict]:
     return themes
 
 
+def _export_theme(name: str) -> None:
+    """导出主题为完整 YAML（合并默认变量与样式，{变量} 引用保持原样）；仅向 stdout 输出 YAML。"""
+    path = _find_theme_file(name)
+    if not path:
+        available = ", ".join(t["name"] for t in _list_themes())
+        _err(f"主题 '{name}' 不存在。可用主题：{available}")
+    theme = _load_theme_file(path)
+    data = {
+        "name": theme.get("name", name),
+        "description": theme.get("description", ""),
+        "variables": {**DEFAULT_VARIABLES, **(theme.get("variables") or {})},
+        "styles": {**DEFAULT_STYLES, **(theme.get("styles") or {})},
+    }
+    sys.stdout.write(yaml.safe_dump(data, allow_unicode=True, sort_keys=False, width=1000))
+
+
 # ── 本篇 + 仓库 config（主题默认名、embeds）────────────────────
 
 _CONFIG_SKIP = frozenset({"writing_model", "image_model"})
@@ -206,7 +230,14 @@ def _merge_format_context(draft_dir: Path) -> dict:
     仅 embeds.related_articles 与全局深度合并；名片/小程序等仍以全局 embeds 为准，本篇 article.yaml 的其它 embeds 子键不参与覆盖。
     """
     merged: dict = {}
-    cfg = _safe_yaml_dict(Path(".aws-article/config.yaml"))
+    cfg_path = Path(".aws-article/config.yaml")
+    if not cfg_path.is_file():
+        # 静默跳过是最坏的失败方式：退出码 0、HTML 照出，只是名片/小程序等嵌入元素
+        # 和主题设置全都没生效，肉眼要比对两份产物才看得出来。
+        print(f"[WARN] 未在当前工作目录下找到 .aws-article/config.yaml（当前目录：{Path.cwd()}），"
+              f"本次不套用全局配置（嵌入元素、图注等按默认处理）。"
+              f"如非本意，请在仓库根下重跑。", file=sys.stderr)
+    cfg = _safe_yaml_dict(cfg_path)
     for k, v in cfg.items():
         if k not in _CONFIG_SKIP:
             merged[k] = v
@@ -496,13 +527,50 @@ def _build_styles(theme: dict, overrides: dict = None) -> dict:
     for key, val in styles.items():
         resolved[key] = _resolve_vars(str(val), resolved)
 
+    # 主题没写 variables 时（网站导出的主题都是这样），从它自己的样式里反推组件用色，
+    # 否则版式组件会全部落到 DEFAULT_VARIABLES 的兜底蓝，16 套主题的小标题一个色。
+    # 放在 styles 解析之后：反推要读已经解析好的 strong / a / blockquote。
+    if not overrides or not overrides.get("primary-color"):
+        resolved.update(_infer_theme_vars(theme, resolved))
+
+    # --font-size 覆盖：主题 p / li 若硬编码了字号（未用 {font-size} 变量），也一并替换
+    if overrides and overrides.get("font-size"):
+        fs = str(overrides["font-size"])
+        for key in ("p", "li"):
+            if resolved.get(key):
+                resolved[key] = re.sub(r"font-size:\s*[^;]+;?", f"font-size:{fs};", resolved[key])
+
     return resolved
 
 
 # ── Markdown 预格式化 ─────────────────────────────────────────
 
+# 预格式化时需原样保留的片段（按顺序匹配；先匹配到的片段内部不再被后续规则触碰）
+_PREFORMAT_PROTECT_PATTERNS = (
+    re.compile(r"^[ \t]*```[^\n]*\n.*?^[ \t]*```[ \t]*$", re.M | re.S),  # 围栏代码块
+    re.compile(r"`[^`\n]+`"),                                            # 行内代码
+    re.compile(r"\]\([^)\s]+(?:\s+\"[^\"]*\")?\)"),                       # 链接 / 图片目标 ](url)
+    re.compile(r"\{embed:\w+:[^}\n]+\}"),                                 # 嵌入占位
+    re.compile(r"<[A-Za-z/][^>\n]*>"),                                    # 原生 HTML 标签
+    re.compile(r"https?://[^\s<>()\"']+"),                                # 裸 URL
+)
+_PREFORMAT_TOKEN_RE = re.compile("\x00(\\d+)\x00")
+
+
 def _preformat_markdown(text: str) -> str:
-    """预格式化 Markdown：修复中文排版常见问题。"""
+    """预格式化 Markdown：修复中文排版常见问题。
+
+    围栏代码块、行内代码、链接/图片目标、{embed:...}、原生 HTML 标签与裸 URL 会被原样保留，
+    避免中英文加空格或引号替换改坏图片路径与示例代码。
+    """
+    protected: list[str] = []
+
+    def _stash(m: re.Match) -> str:
+        protected.append(m.group(0))
+        return f"\x00{len(protected) - 1}\x00"
+
+    for pattern in _PREFORMAT_PROTECT_PATTERNS:
+        text = pattern.sub(_stash, text)
 
     # 中英文之间加空格
     text = re.sub(r"([\u4e00-\u9fff])([A-Za-z0-9])", r"\1 \2", text)
@@ -512,8 +580,8 @@ def _preformat_markdown(text: str) -> str:
     text = re.sub(r"([\u4e00-\u9fff])(\d)", r"\1 \2", text)
     text = re.sub(r"(\d)([\u4e00-\u9fff])", r"\1 \2", text)
 
-    # ASCII 引号 → 中文引号（简单启发式）
-    text = re.sub(r'"([^"]*?)"', r"「\1」", text)
+    # ASCII 引号 → 中文引号（仅同一行内配对，避免跨段误配）
+    text = re.sub(r'"([^"\n]*?)"', r"「\1」", text)
 
     # 连续多个空行 → 最多两个
     text = re.sub(r"\n{3,}", "\n\n", text)
@@ -521,13 +589,158 @@ def _preformat_markdown(text: str) -> str:
     # 修复加粗标记中的空格问题（清理 **..** 配对内侧空格，不动外侧）
     text = re.sub(r"\*\* *(.+?) *\*\*", r"**\1**", text)
 
+    # 还原受保护片段
+    text = _PREFORMAT_TOKEN_RE.sub(lambda m: protected[int(m.group(1))], text)
+
     return text
 
 
 # ── Markdown → HTML ──────────────────────────────────────────
 
-def _md_to_html(md_text: str, styles: dict) -> str:
-    """Markdown → 带 inline style 的 HTML。正文不包含文章标题（第一个 h1 跳过，由公众号后台单独填）。"""
+# config.yaml 的 caption_style。原先这个字段谁也没读，图注是「alt 里有全角冒号就切一刀」
+# 写死的行为——用户在配置台选「无图注」照样出图注，选「关键图有」也毫无区别。
+CAPTION_ALWAYS = "有图注"
+CAPTION_NEVER = "无图注"
+CAPTION_KEY_ONLY = "关键图有"
+
+# 「关键图有」按图位判定：信息位的图是拿来解释内容的，图注补充说明有意义；
+# 节奏位（概念隐喻/场景还原/金句卡片）本来就不承载信息，图注只是重复一遍。
+# 形态名就写在 alt 的全角冒号之前（`![流程步骤：…]`），不必另存元数据。
+INFO_SLOT_FORMS = frozenset({"流程步骤", "结构分层", "数据图表", "对比两栏", "清单要点"})
+
+
+def _want_caption(alt: str, caption_style: str) -> bool:
+    """按 caption_style 决定这张图要不要图注。alt 形如 `形态：描述`。"""
+    style = (caption_style or "").strip() or CAPTION_ALWAYS
+    if "：" not in alt:
+        return False          # 没有描述部分，本来就无图注可出
+    if style == CAPTION_NEVER:
+        return False
+    if style == CAPTION_KEY_ONLY:
+        return alt.split("：", 1)[0].strip() in INFO_SLOT_FORMS
+    return True               # 有图注，以及无法识别的取值都按默认走
+
+
+def _load_components() -> dict:
+    """加载版式组件；同名时用户目录覆盖内置。"""
+    out: dict[str, dict] = {}
+    for d in reversed(COMPONENT_SEARCH_DIRS):      # 后加载的覆盖先加载的
+        if not d.is_dir():
+            continue
+        for f in sorted(d.glob("*.yaml")) + sorted(d.glob("*.yml")):
+            spec = _safe_yaml_dict(f)
+            name = str(spec.get("name") or f.stem).strip()
+            if name and spec.get("template"):
+                out[name] = spec
+    return out
+
+
+# 组件模板里可用的占位符 → 从当前主题取值，保证组件与主题不脱节
+_COMPONENT_VARS = (
+    "primary-color", "bg-accent-color", "text-color", "text-light",
+    "text-muted", "border-color", "link-color", "font-size", "line-height",
+)
+
+
+def _infer_theme_vars(theme: dict, styles: dict) -> dict:
+    """主题没写 variables 时，从它自己的样式里反推组件要用的颜色。
+
+    网站导出的主题（`.aws` 包里的 formatting/*.yaml）只有字面色的 styles，**没有
+    variables 块**——导出格式就不带变量表。而组件模板用 {primary-color} 取色，
+    结果 16 套网站主题的组件全部落到 DEFAULT_VARIABLES 的兜底蓝 #0F4C81，
+    「所有小标题都是蓝的」。
+
+    反推顺序按「最能代表这套主题强调色」排：strong 是行内强调、a 是链接、h3 次之。
+    取每条样式里第一个 color: 值。
+    """
+    if (theme.get("variables") or {}).get("primary-color"):
+        return {}
+    out = {}
+    for var, sources in (("primary-color", ("strong", "a", "h3", "h2")),
+                         ("bg-accent-color", ())):
+        for key in sources:
+            m = re.search(r"(?<!-)\bcolor\s*:\s*(#[0-9A-Fa-f]{3,8})", str(styles.get(key) or ""))
+            if m:
+                out[var] = m.group(1)
+                break
+    # 浅底色：从 blockquote / highlight 的 background 里取
+    for key in ("blockquote", "highlight", "code"):
+        m = re.search(r"background(?:-color)?\s*:\s*(#[0-9A-Fa-f]{3,8})", str(styles.get(key) or ""))
+        if m:
+            out["bg-accent-color"] = m.group(1)
+            break
+    return out
+
+
+def _sub_theme_vars(html: str, styles: dict) -> str:
+    """把模板里的 {primary-color} 等占位符换成当前主题的值。
+
+    行模板（row_template）必须和外层模板一样走这一步——行是先渲染再塞进 {content} 的，
+    只替换外层会让行里的占位符原样漏到产出里。
+    """
+    for var in _COMPONENT_VARS:
+        html = html.replace("{" + var + "}", str(styles.get(var, "")))
+    return html
+
+
+def _render_component(spec: dict, arg: str, body_lines: list[str], styles: dict) -> str:
+    """把一个 :::块 渲染成 HTML。arg 是方括号里的参数，body_lines 是块内正文。"""
+    body_kind = str(spec.get("body") or "free").strip()
+    if body_kind == "rows":
+        # 每行一条，按分隔符切列，逐行套 row_template。列不足时补空串，
+        # 多余的列丢弃——宁可少显示，也不要因为作者多打一个分隔符就整块渲染失败。
+        delim = str(spec.get("row_delimiter") or "|")
+        row_tpl = _sub_theme_vars(str(spec.get("row_template") or ""), styles)
+        ncol = int(spec.get("row_columns") or 0)
+        row_map = spec.get("row_map") or {}
+        rows_html = []
+        for ln in body_lines:
+            if not ln.strip():
+                continue
+            cells = [c.strip() for c in ln.split(delim)]
+            if ncol:
+                cells = (cells + [""] * ncol)[:ncol]
+            row = row_tpl
+            for i, cell in enumerate(cells):
+                # row_map：把某一列的取值映射成符号/短语（如 done → ✓）。
+                # 没有它的话，枚举列只能把 "done" 原样打进去——18px 宽的状态列会截成 "don"。
+                mapped = (row_map.get("c%d" % i) or {}).get(cell)
+                row = row.replace("{c%d}" % i,
+                                  str(mapped) if mapped is not None else _inline_format(cell, styles))
+            row = re.sub(r"\{c\d+\}", "", row)      # 未用到的列位清掉
+            rows_html.append(row.strip())
+        content = "\n".join(rows_html)
+    elif body_kind == "single":
+        content = _inline_format(" ".join(x.strip() for x in body_lines if x.strip()), styles)
+    else:                                           # free：空行分段
+        paras, buf = [], []
+        for ln in body_lines:
+            if ln.strip():
+                buf.append(ln.strip())
+            elif buf:
+                paras.append(" ".join(buf)); buf = []
+        if buf:
+            paras.append(" ".join(buf))
+        content = "<br />".join(_inline_format(x, styles) for x in paras)
+
+    html = _sub_theme_vars(str(spec["template"]), styles)
+    html = html.replace("{arg}", html_mod.escape(arg))
+    # {arg0} {arg1} …：把方括号参数按 / 切开，供「左标题 / 右标题」这类双栏组件用
+    parts = [x.strip() for x in arg.split("/")]
+    for i in range(max(len(parts), 4)):
+        html = html.replace("{arg%d}" % i, html_mod.escape(parts[i]) if i < len(parts) else "")
+    html = html.replace("{content}", content)
+    return html.strip()
+
+
+def _md_to_html(md_text: str, styles: dict, skip_first_h1: bool = True,
+                caption_style: str = CAPTION_ALWAYS,
+                components: dict | None = None) -> str:
+    """Markdown → 带 inline style 的 HTML。
+
+    skip_first_h1=True 时正文不包含文章标题（第一个 h1 跳过，由公众号后台单独填）；
+    closing.md 等附加片段应传 False，否则其首个 h1 会被误当作文章标题丢弃。
+    """
     lines = md_text.strip().split("\n")
     html_parts = []
     in_list = None
@@ -537,7 +750,7 @@ def _md_to_html(md_text: str, styles: dict) -> str:
     in_code_block = False
     code_block_lines = []
     paragraph_lines = []
-    first_h1_skipped = False
+    first_h1_skipped = not skip_first_h1
 
     def _p_style():
         """段落样式：主题提供则直接用，否则用变量拼接。"""
@@ -571,7 +784,7 @@ def _md_to_html(md_text: str, styles: dict) -> str:
             html_parts.append("</blockquote>")
             in_blockquote = False
 
-    for line in lines:
+    for line_idx, line in enumerate(lines):
         stripped = line.strip()
 
         # 围栏代码块（``` ... ```）
@@ -615,6 +828,32 @@ def _md_to_html(md_text: str, styles: dict) -> str:
             continue
 
         heading_match = re.match(r'^(#{1,4})\s+(.+)$', stripped)
+        # 版式组件：:::name[参数] … :::
+        directive = re.match(r'^:::([A-Za-z0-9_-]+)(?:\[(.*)\])?\s*$', stripped)
+        if directive and components:
+            name, arg = directive.group(1), (directive.group(2) or "")
+            spec = components.get(name)
+            end = None
+            for look in range(line_idx + 1, len(lines)):
+                if lines[look].strip() == ":::":
+                    end = look
+                    break
+            if spec and end is not None:
+                flush_paragraph()
+                close_list()
+                close_blockquote()
+                body = lines[line_idx + 1:end]
+                html_parts.append(_render_component(spec, arg, body, styles))
+                for skip_i in range(line_idx + 1, end + 1):
+                    lines[skip_i] = ""
+                continue
+            # 组件不存在或没有闭合，按原文走，别把内容吞掉
+            if not spec:
+                print(f"[WARN] 未知版式组件 :::{name}，按普通文本输出。"
+                      f"可用组件：{', '.join(sorted(components)) or '（无）'}", file=sys.stderr)
+            elif end is None:
+                print(f"[WARN] 组件 :::{name} 缺少结尾的 :::，按普通文本输出。", file=sys.stderr)
+
         if heading_match:
             flush_paragraph()
             close_list()
@@ -645,7 +884,7 @@ def _md_to_html(md_text: str, styles: dict) -> str:
             # 收集连续的表格行
             table_lines = [stripped]
             # 向前看后续行（通过索引）
-            cur_idx = lines.index(line)
+            cur_idx = line_idx
             lookahead = cur_idx + 1
             while lookahead < len(lines):
                 next_s = lines[lookahead].strip()
@@ -666,7 +905,7 @@ def _md_to_html(md_text: str, styles: dict) -> str:
                 cells = [c.strip() for c in tl.strip("|").split("|")]
                 rows.append(cells)
             # 过滤分隔行（|---|---|）
-            data_rows = [r for r in rows if not all(re.match(r'^-+$', c.strip()) for c in r)]
+            data_rows = [r for r in rows if not all(re.match(r'^:?-+:?$', c.strip()) for c in r)]
             if data_rows:
                 table_html = f'<table style="{tbl_style}">'
                 for ri, row in enumerate(data_rows):
@@ -681,11 +920,14 @@ def _md_to_html(md_text: str, styles: dict) -> str:
                 html_parts.append(table_html)
             continue
 
-        img_match = re.match(r'^!\[(.*?)\]\((.+?)\)$', stripped)
+        # 第三个分组是 markdown 原生的 title 参数，用来放图注：
+        #   ![信息图：画面指令给模型看](imgs/x.png "图注给读者看")
+        img_match = re.match(r'^!\[(.*?)\]\(\s*(\S+?)(?:\s+["\u201c\u2018\'](.*?)["\u201d\u2019\'])?\s*\)$', stripped)
         if img_match:
             flush_paragraph()
             alt = img_match.group(1)
             src = img_match.group(2)
+            caption_text = (img_match.group(3) or "").strip()
 
             # 封面图不进正文 HTML（通过 API 单独上传）
             if ("封面" in alt) or alt.startswith("cover"):
@@ -698,8 +940,12 @@ def _md_to_html(md_text: str, styles: dict) -> str:
                 f'<img src="{src}" alt="{alt_escaped}" style="{img_style}" />'
                 f'</p>'
             )
-            if "：" in alt:
-                caption = alt.split("：", 1)[1]
+            # 图注只用显式写的 title 参数。alt 里冒号后那段是**给生图模型的画面指令**
+            # （「开发者站在巨型 99.9 分数牌前，视线越过分数望向……」），拿它当图注等于
+            # 把读者眼睛已经看见的东西复述一遍，零信息；图没生成出来时更会同一句话出现
+            # 两次（一次破图 alt、一次图注）。没写 title 就不出图注——错的图注比没有更糟。
+            if caption_text and _want_caption(alt, caption_style):
+                caption = caption_text
                 fc_style = styles.get("figcaption", "") or (
                     f'text-align:center; font-size:14px; '
                     f'color:{styles["text-muted"]}; margin-top:-0.8em; margin-bottom:1.5em;'
@@ -710,13 +956,17 @@ def _md_to_html(md_text: str, styles: dict) -> str:
                 )
             continue
 
-        if stripped.startswith("> "):
+        if stripped.startswith(">"):
             flush_paragraph()
             close_list()
             if not in_blockquote:
                 html_parts.append(f'<blockquote style="{styles.get("blockquote", "")}">')
                 in_blockquote = True
-            text = _inline_format(stripped[2:], styles)
+            quote_text = stripped[1:].strip()
+            if not quote_text:
+                # 引用块内的空行（单独一个 >）：保持引用块打开
+                continue
+            text = _inline_format(quote_text, styles)
             html_parts.append(
                 f'<p style="margin:0.3em 0; font-size:{styles["font-size"]}; '
                 f'line-height:{styles["line-height"]};">{text}</p>'
@@ -734,6 +984,9 @@ def _md_to_html(md_text: str, styles: dict) -> str:
             indent = len((ul_match or ol_match).group(1))
             # 缩进层级：每 2 个空格（或 1 个 tab）为一级
             level = indent // 2
+            # 缩进跳级（如直接 4 空格）时只加深一层，避免产生空的嵌套容器
+            if level > list_depth + 1:
+                level = list_depth + 1
             list_type = "ul" if ul_match else "ol"
 
             ul_style = styles.get("ul", "") or f'margin:0.8em 0; padding-left:1.5em; color:{styles["text-color"]};'
@@ -799,7 +1052,26 @@ def _md_to_html(md_text: str, styles: dict) -> str:
 
 
 def _inline_format(text: str, styles: dict) -> str:
-    """行内格式：加粗、斜体、行内代码、链接。"""
+    """行内格式：加粗、斜体、删除线、行内代码、链接。
+
+    行内代码内容做 HTML 转义，且不参与加粗/斜体/链接等替换。
+    """
+    code_style = styles.get("code", "")
+    if not code_style:
+        code_style = (
+            f'background:{styles.get("bg-light", "#F7F7F7")}; padding:2px 6px; '
+            f'border-radius:3px; font-size:0.9em; color:{styles.get("primary-color", "#333")};'
+        )
+    code_spans: list[str] = []
+
+    def _stash_code(m: re.Match) -> str:
+        code_spans.append(
+            f'<code style="{code_style}">{html_mod.escape(m.group(1))}</code>'
+        )
+        return f"\x00C{len(code_spans) - 1}\x00"
+
+    text = re.sub(r'`([^`\n]+)`', _stash_code, text)
+
     # strong
     strong_style = styles.get("strong", "")
     if not strong_style:
@@ -819,27 +1091,17 @@ def _inline_format(text: str, styles: dict) -> str:
     # strikethrough ~~text~~
     del_style = styles.get("del", "") or "text-decoration:line-through; color:#999;"
     text = re.sub(r'~~(.+?)~~', rf'<del style="{del_style}">\1</del>', text)
-    # inline code
-    code_style = styles.get("code", "")
-    if not code_style:
-        code_style = (
-            f'background:{styles.get("bg-light", "#F7F7F7")}; padding:2px 6px; '
-            f'border-radius:3px; font-size:0.9em; color:{styles.get("primary-color", "#333")};'
-        )
-    text = re.sub(
-        r'`(.+?)`',
-        rf'<code style="{code_style}">\1</code>',
-        text,
-    )
-    # link
+    # link（排除行内图片语法 ![alt](src)）
     a_style = styles.get("a", "")
     if not a_style:
         a_style = f'color:{styles.get("link-color", "#576B95")}; text-decoration:none;'
     text = re.sub(
-        r'\[(.+?)\]\((.+?)\)',
+        r'(?<!!)\[(.+?)\]\((.+?)\)',
         rf'<a style="{a_style}" href="\2">\1</a>',
         text,
     )
+    # 还原行内代码
+    text = re.sub(r"\x00C(\d+)\x00", lambda m: code_spans[int(m.group(1))], text)
     return text
 
 
@@ -875,6 +1137,11 @@ def main():
     parser.add_argument("-o", "--output", help="输出路径（默认同名 .html）")
     parser.add_argument("--no-preformat", action="store_true", help="跳过 Markdown 预格式化")
     parser.add_argument("--list-themes", action="store_true", help="列出可用主题")
+    parser.add_argument(
+        "--export-theme",
+        metavar="主题名",
+        help="以 YAML 导出主题（合并默认变量与样式），可重定向到 .aws-article/presets/formatting/<名>.yaml 后修改",
+    )
 
     args = parser.parse_args()
 
@@ -886,6 +1153,10 @@ def main():
             print(f"  {t['name']}{label} [{t['source']}]{desc}")
         return
 
+    if args.export_theme:
+        _export_theme(args.export_theme)
+        return
+
     if not args.input:
         parser.print_help()
         sys.exit(0)
@@ -895,7 +1166,6 @@ def main():
         _err(f"文件不存在: {input_path}")
 
     draft_dir = input_path.parent
-    fmt_ctx = _merge_format_context(draft_dir)
     article_ctx = _load_article_context(draft_dir)
 
     if args.theme is None:
@@ -922,7 +1192,11 @@ def main():
 
     _info(f"主题: {theme_name}")
     styles = _build_styles(theme, overrides)
-    body_html = _md_to_html(md_text, styles)
+    caption_style = str(_merge_format_context(draft_dir).get("caption_style") or CAPTION_ALWAYS)
+    components = _load_components()
+    if components:
+        _info(f"已加载版式组件 {len(components)} 个: {', '.join(sorted(components))}")
+    body_html = _md_to_html(md_text, styles, caption_style=caption_style, components=components)
 
     embeds = _resolve_embeds_config(draft_dir)
     if embeds:
@@ -934,7 +1208,7 @@ def main():
     if closing_md_path.exists():
         closing_md = closing_md_path.read_text(encoding="utf-8")
         # 不对 closing.md 进行预格式化，避免意外更改作者自定义的链接与排版
-        closing_html = _md_to_html(closing_md, styles)
+        closing_html = _md_to_html(closing_md, styles, skip_first_h1=False, caption_style=caption_style, components=components)
         # 以段落分隔以避免直接黏连
         body_html = f"{body_html}\n\n<div style=\"margin-top:1.5em\"></div>\n{closing_html}"
         _info(f"已追加文末区块: {closing_md_path}")

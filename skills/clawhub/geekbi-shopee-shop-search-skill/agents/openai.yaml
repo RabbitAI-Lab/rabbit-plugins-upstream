@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Shopee 店铺研究"
+  short_description: "查询 Shopee 店铺及其商品结构和经营表现"
+  default_prompt: "使用 $geekbi-shopee-shop-search-skill 查询指定 Shopee 店铺并分析经营表现。"

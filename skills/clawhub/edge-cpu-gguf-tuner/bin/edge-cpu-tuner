@@ -1,0 +1,5 @@
+#!/bin/sh
+# Portable entry point; the implementation is stdlib-only and offline by default.
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+exec python3 "$ROOT/scripts/edge_cpu_tuner.py" "$@"

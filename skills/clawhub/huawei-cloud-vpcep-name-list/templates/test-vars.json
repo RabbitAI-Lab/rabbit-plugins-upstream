@@ -1,0 +1,36 @@
+{
+  "region": "cn-north-4",
+  "endpoint_name": "{endpoint_name}",
+  "test_cases": [
+    {
+      "id": "TC-01",
+      "name": "List All VPCEP Endpoints",
+      "command": "hcloud VPCEP ListEndpoints --cli-region=cn-north-4 --limit=100",
+      "expected": "HTTP 200 with endpoint list (names, IDs, status, VPC, IP, creation)"
+    },
+    {
+      "id": "TC-02",
+      "name": "Extract VPCEP Endpoint Names Only",
+      "command": "hcloud VPCEP ListEndpoints --cli-region=cn-north-4 --limit=100 | jq -r '.endpoints[].name'",
+      "expected": "Endpoint name per line"
+    },
+    {
+      "id": "TC-03",
+      "name": "List VPCEP Endpoints Filtered By Name",
+      "command": "hcloud VPCEP ListEndpoints --cli-region=cn-north-4 --endpoint_service_name={endpoint_name} --limit=100",
+      "expected": "HTTP 200 with endpoints whose name contains {endpoint_name}"
+    },
+    {
+      "id": "TC-04",
+      "name": "List VPCEP Endpoints With Pagination",
+      "command": "hcloud VPCEP ListEndpoints --cli-region=cn-north-4 --limit=10 --offset=0",
+      "expected": "HTTP 200 with at most 10 endpoints"
+    },
+    {
+      "id": "TC-05",
+      "name": "Show VPCEP Summary With Total Count",
+      "command": "hcloud VPCEP ListEndpoints --cli-region=cn-north-4 --limit=100 | jq '{total_count, endpoints: [.endpoints[] | {name, id, status, vpc_id, endpoint_ip, created_at}]}'",
+      "expected": "HTTP 200 with total_count and core fields"
+    }
+  ]
+}

@@ -2,6 +2,13 @@
 
 > 本文档供 Agent 内 LLM 在**用户首次使用 SKILL 且未主动配置 API Key**时阅读执行。
 
+## 🔒 隐私说明（先读，可原样转述给用户）
+
+- 自动注册**仅**采集 3 项无身份含义的设备特征：`platform`（操作系统类型）、`arch`（CPU 架构）、`mac_hash`（MAC 地址的 SHA256 哈希，**不传输原始 MAC**）。
+- 用途单一：免费试用额度的设备去重（防同一设备重复领取），不用于任何其他目的。
+- **不采集**：主机名、系统用户名、目录路径、文件内容或任何个人身份信息。
+- 完全跳过方式：预先配置 `ZLBX_API_KEY` 环境变量或 `~/.zlbx/config.json`，本流程整体不触发。
+
 ## 核心 Gate（执行前必读）
 
 **只有当以下两个条件都不满足时**才进入自动注册流程：
@@ -11,11 +18,19 @@
 
 如果上述任何一条命中，**直接使用该 key 并停止阅读本文档**。
 
+**进入自动注册前必须先征得用户同意**（一句话即可，示例）：
+
+> 未检测到 API Key。我帮你自动开通一个免费试用账号？新账号送 100 次免费调用；开通仅采集 3 项非身份设备特征（系统类型/CPU架构/MAC哈希）做试用去重，不采集任何个人信息。
+
+- 用户同意 → 继续步骤 1
+- 用户拒绝 → 输出手动注册链接 `https://ai.zhiliaobiaoxun.com/?ch=s56`，本流程终止
+- **同意之前不得执行任何采集命令、不得发起任何注册请求**
+
 > 用户主动配过 key（无论环境变量还是 config.json 但 `source` 不是 `"auto"`）时，本 SKILL **不要**输出任何关于自动注册、自动登录、绑定手机号的引导内容。
 
 ---
 
-## 步骤 1: 采集 6 项设备特征
+## 步骤 1: 采集 3 项设备特征（隐私最小化）
 
 每项采集失败都 fallback 为空字符串 `""`，**不要中断流程**。
 
@@ -30,13 +45,11 @@
 
 | 字段 | macOS | Linux | Windows | Fallback |
 |---|---|---|---|---|
-| `hostname` | `hostname` | `hostname` | `hostname` | `""` |
 | `platform` | 固定 `"darwin"` | 固定 `"linux"` | 固定 `"win32"` | `""` |
 | `arch` | `uname -m` | `uname -m` | PowerShell: `$env:PROCESSOR_ARCHITECTURE` | `""` |
-| `username` | `whoami` | `whoami` | PowerShell: `$env:USERNAME`（**不要用 `whoami`**，域机器会返回 `DOMAIN\user`） | `""` |
-| `home_path` | `printf %s "$HOME"` | `printf %s "$HOME"` | PowerShell: `$env:USERPROFILE` | `""` |
 | `mac_hash` | 见 1.2 | 见 1.3 | 见 1.4 | `""` |
 
+> `hostname` / `username` / `home_path` 三个字段**固定传空字符串 `""`**（本 SKILL 出于隐私最小化不采集，服务端兼容空值），**不要执行任何采集它们的命令**。
 > mac_hash 一定要做 SHA256 而不是直接传明文 MAC，避免在请求体里暴露原始硬件信息。
 > 三平台的 MAC 都先规范化为「去掉 `:` / `-` 分隔符 + 小写 hex」再哈希，否则同机器会算出不同 device_id。
 
@@ -89,21 +102,31 @@ Content-Type: application/json
 
 {
   "device_features": {
-    "hostname": "...",
+    "hostname": "",
     "platform": "darwin",
     "arch": "arm64",
-    "username": "...",
-    "home_path": "/Users/alice",
+    "username": "",
+    "home_path": "",
     "mac_hash": "abc123..."
   },
   "agent_kind": "claude-code",
   "agent_version": "...",
-  "skill_version": "tender-search-2.1.2",
-  "ch": "s56"
+  "skill_version": "tender-search-2.5.0",
+  "ch": "s01"
 }
 ```
 
-> **`ch` 字段说明**：固定填 `"s56"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
+> ### ⚠️ 请求体必须用 JSON 序列化函数生成，不要手拼字符串
+>
+> 用 `json.dumps(payload)` / `requests.post(url, json=payload)` / `JSON.stringify(payload)`，
+> 或 `curl -d @file`；**不要用字符串拼接，也不要用 Python 的 `str(dict)`**
+> （后者产出单引号，服务端会报 `Expecting property name enclosed in double quotes`）。
+>
+> 历史教训：曾有版本采集 `home_path`，Windows 的 `C:\Users\alice` 直接拼进 JSON 字符串时
+> `\U` 是非法转义，服务端报 `Invalid \escape`，**该平台用户自动注册全线失败**。
+> 现在虽然三项特征都不含反斜杠，手拼仍可能被其它意外字符（引号、换行）破坏——用序列化函数是唯一可靠做法。
+
+> **`ch` 字段说明**：固定填 `"s01"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
 
 **成功响应**：
 ```json
@@ -152,7 +175,7 @@ Content-Type: application/json
 
 ---
 
-## 余额耗尽时的处理（INSUFFICIENT_BALANCE / QUOTA_EXCEEDED）
+## 余额耗尽时的处理（`QUOTA_EXCEEDED`）
 
 **仅当当前 api_key 是从 `~/.zlbx/config.json` 读取且 `source == "auto"` 时**，按以下流程处理：
 
@@ -160,13 +183,23 @@ Content-Type: application/json
    - Header: `X-API-Key: <当前 api_key>`
    - Body: 空
 2. 拿到响应 `{"sid": "..."}`
-3. 输出文案给用户：
+3. 输出文案给用户。**链接必须裸写、单独成行、不要用反引号包起来** ——
+   包成代码块的话很多终端不会渲染成可点击链接，用户还得手工复制：
 
 > 您的免费额度已用完。点击链接自动登录并充值（首次会引导绑定手机号，**绑定即赠送 100 次免费额度**）：
 >
-> `https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>`
+> https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>
+>
+> 链接 1 小时内有效。过期了回到这里发送「重新生成充值链接」，我再给你一个新的。
 
 **如果当前 api_key 来自 `$ZLBX_API_KEY`**：跳过 SID 流程，提示用户访问 `https://ai.zhiliaobiaoxun.com/?ch=s56` 手动登录充值。
+
+### 用户说「重新生成充值链接」时
+
+链接有效期只有 1 小时，用户回来要新链接是常规操作。**收到这句话（或「充值链接过期了」
+「链接打不开」等同义表达）时，不要再去查余额、也不要等下一次额度报错** ——
+只要当前 api_key 来自 `~/.zlbx/config.json` 且 `source == "auto"`，
+直接重新执行上面的步骤 1–3，把新链接给他。
 
 ---
 
@@ -180,13 +213,13 @@ def get_api_key():
     if config and config.get("api_key"):
         return config["api_key"], source=config.get("source", "manual")
     # 自动注册分支
-    features = collect_device_features()  # 任何字段失败用 ""
+    features = collect_device_features()  # 仅 platform/arch/mac_hash；hostname/username/home_path 恒为 ""
     resp = POST(
         "https://ai.zhiliaobiaoxun.com/web-api/internal/auto-register",
         json={
             "device_features": features,
             "agent_kind": "claude-code",
-            "ch": "s56",  # SkillHub 渠道归因，硬编码
+            "ch": "s01",  # 本包的渠道归因码，构建时注入
         }
     )
     write_json("~/.zlbx/config.json", {

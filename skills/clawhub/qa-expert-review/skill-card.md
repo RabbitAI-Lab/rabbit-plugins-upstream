@@ -1,39 +1,48 @@
-## Description: <br>
-Reviews AI-generated test cases before release by sampling and checking business validity, scenario completeness, and executability, then produces corrections and prompt-optimization feedback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews AI-generated test cases before release, using senior QA sampling across business validity, scenario completeness, and executability to produce correction feedback and prompt-improvement suggestions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA reviewers, test engineers, and delivery teams use this skill to perform final review of AI-generated test cases before they are accepted or published. It supports sampling strategy, issue classification, correction suggestions, and feedback for improving future prompts.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill may activate on broad Chinese review or final-approval phrases when multiple review-related skills are installed.
+
+Mitigation: Use explicit QA test-case review wording when invoking the skill, especially in workspaces with several review skills.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and release reviewers use this skill to perform final expert review of AI-generated test cases before they are accepted for use. It supports sampling strategy selection, issue classification, correction recommendations, and prompt-improvement feedback loops. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad QA or final-review trigger phrases may activate the skill outside its intended test-case review context. <br>
-Mitigation: Use it only when reviewing AI-generated test cases or related requirements and correction history. <br>
-Risk: Review guidance could introduce incorrect or misleading QA recommendations if accepted without review. <br>
-Mitigation: Have a qualified reviewer validate findings before changing release-ready test suites, correction records, or prompt libraries. <br>
+**Output Format:** [Markdown review report with test-case tables, review summaries, issue lists, correction suggestions, learning points, and prompt-optimization recommendations]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Includes traceability identifiers such as REV-XXXX review IDs and TC_* test-case IDs.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review report with tables, correction items, learning points, and prompt-optimization recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include review IDs, sampling rates, issue lists, traceability IDs, corrections, and follow-up learning points.] <br>
+1.7.6 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

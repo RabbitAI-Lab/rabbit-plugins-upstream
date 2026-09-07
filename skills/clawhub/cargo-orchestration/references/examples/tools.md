@@ -64,11 +64,11 @@ cargo-ai orchestration tool list
 # → Find "Company Enrichment", extract tool.workflowUuid
 
 # Step 2 — Get the current draft release (contains the current node graph)
-cargo-ai orchestration draft-release get --workflow-uuid <tool.workflowUuid>
+cargo-ai orchestration release get-draft --workflow-uuid <tool.workflowUuid>
 # → Copy the "nodes" array and make your changes
 
 # Step 3 — Update the draft release with your new nodes
-cargo-ai orchestration draft-release update \
+cargo-ai orchestration release update-draft \
   --workflow-uuid <tool.workflowUuid> \
   --nodes '[...your updated node graph...]'
 
@@ -77,14 +77,14 @@ cargo-ai orchestration node validate --nodes '[...your updated node graph...]'
 # → { "outcome": "valid" }
 
 # Step 5 — Deploy the draft release
-cargo-ai orchestration draft-release deploy \
+cargo-ai orchestration release deploy-draft \
   --workflow-uuid <tool.workflowUuid> \
   --nodes '[...your updated node graph...]' \
   --form-fields 'null' \
   --description "Your release description"
 ```
 
-> **Do not skip validation.** Deploying an invalid node graph will cause runs to fail. Always run `node validate` before `draft-release deploy`.
+> **Do not skip validation.** Deploying an invalid node graph will cause runs to fail. Always run `node validate` before `release deploy-draft`.
 
 ---
 
@@ -145,7 +145,7 @@ Poll until `status` is `success`, `error`, or `cancelled`:
 Before running a tool on records from a file, you must upload the CSV first. The upload returns the `s3Filename` needed by batch commands.
 
 ```bash
-cargo-ai workspaceManagement file upload --file-path ./my-companies.csv
+cargo-ai workspaceManagement file upload --file ./my-companies.csv
 ```
 
 Response:
@@ -172,7 +172,7 @@ cargo-ai orchestration tool list
 # → Extract tool.workflowUuid
 
 # 2. Upload the CSV
-cargo-ai workspaceManagement file upload --file-path ./my-companies.csv
+cargo-ai workspaceManagement file upload --file ./my-companies.csv
 # → Extract s3Filename from the response
 
 

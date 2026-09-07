@@ -1,0 +1,114 @@
+[
+ {
+  "id": "R01",
+  "rule": "Edit run.py only; keep cp run.py run_md.py before every push",
+  "evidence": "v47",
+  "severity": "blocker",
+  "trap": "TRAP-06"
+ },
+ {
+  "id": "R02",
+  "rule": "Pin openmm=8.3.1 in the micromamba env (8.6+nvrtc13.3 rejects sm_60/sm_70)",
+  "evidence": "v38-v40",
+  "severity": "blocker",
+  "trap": "TRAP-01"
+ },
+ {
+  "id": "R03",
+  "rule": "Never rely on --accelerator to choose the GPU; design for the assigned one",
+  "evidence": "v38-v40",
+  "severity": "warn",
+  "trap": "TRAP-02"
+ },
+ {
+  "id": "R04",
+  "rule": "Reinstall kaggle CLI every fresh sandbox (key file persists, package does not)",
+  "evidence": "gotcha 2",
+  "severity": "warn",
+  "trap": "TRAP-07"
+ },
+ {
+  "id": "R05",
+  "rule": "Mount datasets via /kaggle/input/datasets/<owner>/<slug>; find_input_dir() tries that first, then falls back to /kaggle/input",
+  "evidence": "v34-v37",
+  "severity": "blocker",
+  "trap": "TRAP-04"
+ },
+ {
+  "id": "R06",
+  "rule": "After dataset re-upload, expect minutes of mount lag; poll, don't fix working code",
+  "evidence": "3.3",
+  "severity": "warn",
+  "trap": "TRAP-05"
+ },
+ {
+  "id": "R07",
+  "rule": "Rebuild restraint CustomExternalForce per stage; never bare setParticleParameters on 8.3",
+  "evidence": "v41/v53",
+  "severity": "blocker",
+  "trap": "TRAP-08"
+ },
+ {
+  "id": "R08",
+  "rule": "Re-center complex into [0,box)^3 BEFORE solvation; apply same shift to ligand+ions (RECELL)",
+  "evidence": "v34-v53",
+  "severity": "blocker",
+  "trap": "TRAP-03"
+ },
+ {
+  "id": "R09",
+  "rule": "Restrain to MINIMIZED coordinates, never raw input coordinates",
+  "evidence": "v50-v52",
+  "severity": "blocker",
+  "trap": "TRAP-12"
+ },
+ {
+  "id": "R10",
+  "rule": "Remove the previous stage's restraint force before adding the next (removeForce)",
+  "evidence": "v53-v54",
+  "severity": "blocker",
+  "trap": "TRAP-11"
+ },
+ {
+  "id": "R11",
+  "rule": "Use getState(getEnergy=True)+.getKineticEnergy()/.getPotentialEnergy() (no 8.6 kwargs on 8.3)",
+  "evidence": "v55",
+  "severity": "blocker",
+  "trap": "TRAP-09"
+ },
+ {
+  "id": "R12",
+  "rule": "Rebuild ligand via VF2 heavy-atom match + AddHs(addCoords=True); verify InChIKey vs PubChem; never EmbedMolecule+AlignMol",
+  "evidence": "sec 3.2/5",
+  "severity": "blocker",
+  "trap": "TRAP-13"
+ },
+ {
+  "id": "R13",
+  "rule": "Do not chase post-min |F|max~3700 to zero; equilibration absorbs it",
+  "evidence": "6.4",
+  "severity": "info",
+  "trap": "TRAP-16"
+ },
+ {
+  "id": "R14",
+  "rule": "OPC O-M same-residue 0.0159 nm pair is not a clash; exclude same-residue+bonded pairs",
+  "evidence": "6.3",
+  "severity": "info",
+  "trap": "TRAP-14"
+ },
+ {
+  "id": "R15",
+  "rule": "Plan >=3 sessions: 25,000,000 steps = 29h vs ~12h cap; checkpoint every 50 ps and resume — NEVER plan a single-session 100 ns run",
+  "evidence": "8.2",
+  "severity": "warn",
+  "trap": null
+ },
+ {
+  "id": "R16",
+  "rule": "Run exactly ONE bounded supervisor loop, only when the human asked for it; stop on done or 3 failures",
+  "evidence": "sec 9",
+  "severity": "warn",
+  "trap": "TRAP-18"
+ }
+]

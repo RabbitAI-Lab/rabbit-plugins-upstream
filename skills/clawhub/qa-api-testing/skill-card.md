@@ -1,40 +1,52 @@
-## Description: <br>
-Provides Chinese-language guidance for testing RESTful, GraphQL, gRPC, and WebSocket APIs, including functional validation, parameter combinations, authentication and authorization checks, timeout and retry behavior, idempotency, contract assertions, compatibility, test matrices, and tool selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+接口测试 helps QA and engineering teams design API test matrices, contract assertions, mock strategies, security checks, and tool recommendations for RESTful, GraphQL, gRPC, and WebSocket interfaces.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, developers, and test automation engineers use this skill to plan and review API testing for functional behavior, parameter combinations, authentication and authorization, timeouts, retries, idempotency, contracts, compatibility, and security checks.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: API testing guidance may lead an agent to send Bash or WebFetch requests against live systems.
+
+Mitigation: Keep all requests scoped to systems the user owns or is explicitly authorized to test, and review the full skill-set package before installation when using the broader workflow.
+
+Risk: Standalone use may provide a narrower workflow than the complete QA Test Skills package described by the artifact.
+
+Mitigation: Use the broader QA Test Skills workflow when end-to-end requirements analysis, architecture, CI/CD integration, and execution observation are needed.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, QA engineers, and test automation engineers use this skill to design API test plans, contract assertion checklists, mock strategies, security checks, and automation-script outlines for RESTful, GraphQL, gRPC, WebSocket, and third-party callback APIs. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: API testing guidance could be applied to systems the user is not authorized to assess. <br>
-Mitigation: Use the skill only for APIs and environments where testing is explicitly authorized. <br>
-Risk: Captured request and response logs may include secrets, tokens, personal data, or production credentials. <br>
-Mitigation: Avoid production credentials where possible and redact secrets and sensitive data from logs and shared test artifacts. <br>
+**Output Format:** [Markdown guidance with test-case tables, checklists, and optional command or script examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [Qa Api Testing on ClawHub](https://clawhub.ai/kokxi/skills/qa-api-testing) <br>
+**Other Properties Related to Output:** [Produces API test plans, mock strategies, automation script designs, security checklists, and coverage notes.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with structured checklists, tables, test matrices, and code or command snippets when useful] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are guidance artifacts for API testing, including test plans, test cases, mock strategies, automation script designs, security checks, contract assertions, and tool recommendations.] <br>
+1.7.6 (source: server release metadata; artifact frontmatter says 1.7.5)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

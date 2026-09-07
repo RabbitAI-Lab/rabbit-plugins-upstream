@@ -1,45 +1,69 @@
-## Description: <br>
-信创与 IT 信息化采招数据分析助手，用于检索招中标公告、分析 IT 品牌与型号价格、识别采购单位和供应商、评估集成商竞争格局，并支持数字政府与国产化选型情报分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Xinchuang, domestic IT, and digital-government procurement data by querying Zhiliaobiaoxun bid, company, market, pricing, and account APIs.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement analysts, IT vendors, system integrators, and agents use this skill to query Chinese Xinchuang and IT procurement data, compare brands and prices, find purchasers and suppliers, and support digital government localization sourcing decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic registration fingerprints the user's device and sends device and user identifiers to the vendor when no API key is configured. <br>
-Mitigation: Prefer a manually configured ZLBX_API_KEY or require explicit organizational approval before allowing automatic registration. <br>
-Risk: The skill can persist an API key in ~/.zlbx/config.json and generate auto-login recharge links. <br>
-Mitigation: Review local credential storage and recharge-link handling against organizational security policy before use. <br>
-Risk: Contact lookup and broad IT-procurement triggers may involve sensitive procurement or contact data. <br>
-Mitigation: Confirm the skill's scope matches privacy and procurement-data policies before enabling broad use. <br>
+## Use Case:
 
+Procurement, sales, market-intelligence, and public-sector IT teams use this skill to search Chinese bid notices, compare suppliers and brands, inspect company procurement histories, identify opportunities, and summarize market trends for domestic IT selection decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/xinchuang-it-procurement-analyzer) <br>
-- [API search reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global (focused on China procurement and bid data)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance, configuration] <br>
-**Output Format:** [Markdown text with JSON request examples and structured procurement analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use ZLBX_API_KEY or a local ~/.zlbx/config.json API key; automatic registration can create and persist an account key when no key is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Procurement queries are sent to an external vendor API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with data that is approved for that vendor service and avoid submitting confidential procurement or sourcing details without internal approval.
+
+Risk: The optional trial registration flow sends a MAC-derived device hash.
+
+Mitigation: Configure ZLBX_API_KEY manually or decline auto-registration when device fingerprinting is not acceptable.
+
+Risk: The optional registration flow can save an API key locally.
+
+Mitigation: Manage the local credential file as a secret, restrict file access, and rotate or remove the key when no longer needed.
+
+Risk: Contact data may be masked or governed by account limits.
+
+Mitigation: Preserve service-provided masking, do not attempt to reconstruct hidden contact details, and follow the account's usage limits.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/xinchuang-it-procurement-analyzer)
+- [Publisher Profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Bid Search API Reference](references/api-search.md)
+- [Company Analysis API Reference](references/api-company.md)
+- [Market Analysis API Reference](references/api-market.md)
+- [Account API Reference](references/api-account.md)
+- [Auto-Registration Flow](references/auto-register.md)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Manual Account and Recharge Entry](https://ai.zhiliaobiaoxun.com/?ch=s57)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with tables, concise prose, JSON request examples, and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based trial registration; calls external Zhiliaobiaoxun APIs and may surface masked contact data depending on account status.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

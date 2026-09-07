@@ -1,47 +1,56 @@
-## Description: <br>
-独行录（opcmenu.com） connects agents to a China one-person-company discovery and collaboration network for reading public marketplace information and, with a user-provided token, managing needs, contacts, messages, profiles, products, onboarding, posts, events, parks, and share cards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+在独行录（opcmenu.com）查合作需求、主理人、产品和报名机会，并处理本人报名、私信和主办方工作台。
 
-## Publisher: <br>
-[yzlee](https://clawhub.ai/user/yzlee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yzlee](https://clawhub.ai/user/yzlee)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to connect an agent to opcmenu.com, browse public OPC needs and profiles, and perform authenticated collaboration workflows such as creating needs, contacting people, sending messages, updating profiles, and exporting data cards after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A user-provided opcmenu token allows the agent to act on the user's account. <br>
-Mitigation: Keep the token out of chat and logs, use anonymous mode for public browsing when possible, and revoke or rotate tokens from opcmenu.com if they are exposed or no longer needed. <br>
-Risk: Write actions such as creating needs, sending messages, posting updates, changing profiles, and account-changing requests can affect public or private account state. <br>
-Mitigation: Show the proposed content or account change to the user and receive explicit confirmation before sending authenticated write requests. <br>
-Risk: The artifact references a one-click install script for macOS and Linux. <br>
-Mitigation: Review the install script before running it and install the skill only when the user intends to connect an agent to opcmenu.com. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to opcmenu for public discovery of collaboration needs, creators, products, services, funding, and signup opportunities. With user authorization, it supports account workflows such as signups, private messages, organizer review, profile updates, and daily briefs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yzlee/skills/opcmenu) <br>
-- [opcmenu MCP endpoint](https://mcp.opcmenu.com/mcp) <br>
-- [opcmenu REST API](https://api.opcmenu.com/v1) <br>
-- [opcmenu OpenAPI description](https://api.opcmenu.com/openapi.yaml) <br>
-- [opcmenu machine-readable navigation](https://opcmenu.com/llms.txt) <br>
-- [opcmenu connection guide](https://opcmenu.com/connect) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON configuration snippets, REST or MCP call suggestions, and structured data returned from opcmenu.com.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include authenticated account actions when the user supplies an opcmenu token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Authorized account actions may read or change real opcmenu data, send messages, submit signups, modify organizer activity, export CSVs, disclose contact information, or spend chat credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymous public browsing where possible, require user authorization for account or write actions, and confirm sensitive actions such as contact disclosure, CSV export, organizer bulk review, and chat-credit redemption before execution.
+
+## Reference(s):
+
+- [Skill instructions](artifact/SKILL.md)
+- [Connection and authentication](artifact/references/connection.md)
+- [Signup and organizer workflows](artifact/references/signup.md)
+- [Collaboration, positioning, and brief workflows](artifact/references/workflows.md)
+- [opcmenu connection page](https://opcmenu.com/connect)
+- [opcmenu public OpenAPI description](https://api.opcmenu.com/openapi.yaml)
+- [opcmenu agent navigation](https://opcmenu.com/llms.txt)
+- [ClawHub skill page](https://clawhub.ai/yzlee/skills/opcmenu)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell, JSON, YAML, and task guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May initiate remote MCP tool calls when the host and user authorization allow it.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

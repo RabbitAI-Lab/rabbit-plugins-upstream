@@ -1,48 +1,71 @@
-## Description: <br>
-Assists agents with evaluating Xinchuang and IT informationization bids by querying procurement history, competitor signals, pricing benchmarks, and producing decision reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+信创与IT信息化投标决策分析助手，基于知了标讯招中标历史数据，为具体IT招标项目生成投标建议、竞争预测、报价参考和风险评估。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Bid teams, proposal teams, and agents use this skill to decide whether to pursue IT, system integration, cloud, cybersecurity, data center, smart city, and Xinchuang procurement opportunities. It analyzes buyer history, incumbent suppliers, likely competitors, comparable pricing, qualification risks, and produces a traceable bid-decision report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; intended for Chinese IT procurement and Xinchuang bid data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register an account when no API key is configured, using a stable hashed MAC-derived device identifier for trial-usage deduplication. <br>
-Mitigation: Prefer supplying ZLBX_API_KEY through a trusted secret mechanism; allow auto-registration only after explicit user consent and disclose the collected device attributes before registration. <br>
-Risk: API keys may be stored locally and used for quota-consuming bid-data queries. <br>
-Mitigation: Keep local credential files private, never paste API keys into conversation, and tell users the expected query-credit cost before running a full report. <br>
-Risk: Generated reports and source links may contain signed access parameters or commercially sensitive project and company context. <br>
-Mitigation: Review Markdown and HTML reports before sharing, treat report links containing signed parameters as sensitive, and remove or restrict links when distribution is not intended. <br>
-Risk: Bid recommendations may be incomplete or misleading if public procurement data is missing, stale, or interpreted too strongly. <br>
-Mitigation: Keep conclusions tied to cited data, mark data gaps and confidence levels, use cautious wording for real organizations, and treat reports as reference material rather than business, legal, or procurement advice. <br>
+## Use Case:
 
+External business development, sales, and bid teams use this skill to assess whether to pursue a specific IT or Xinchuang procurement opportunity and prepare a data-grounded bid decision report. It analyzes buyer history, likely competitors, comparable pricing, qualification risks, and optional fit against the user's company.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/liu-jiapeng/skills/xinchuang-it-bid-decision) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, HTML, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown decision report with optional self-contained HTML report file and concise operational guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration; full analysis usually consumes 12-25 query credits, while quick analysis uses about 5-8.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill uses the vendor's cloud service for bid analysis and sends project names, company names, and related query terms to that service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that vendor service is acceptable for the project; avoid submitting confidential bid material beyond the terms needed for lookup.
+
+Risk: Automatic trial registration can transmit a hashed device identifier and create a local account key.
+
+Mitigation: Prefer a user-provided ZLBX_API_KEY to bypass automatic registration; if no key exists, obtain user consent before registration.
+
+Risk: A reusable API key may be stored in a plaintext local configuration file.
+
+Mitigation: Prefer environment-based credential configuration where possible and restrict access to local configuration files.
+
+Risk: Full analysis consumes account credits and may write HTML report files by default.
+
+Mitigation: Tell users the expected call or credit cost before analysis, pause before exceeding the documented budget, and disclose the full report output path.
+
+Risk: Generated reports can contain signed source links and business-sensitive competitive analysis.
+
+Mitigation: Review generated HTML links and report contents before sharing externally.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/xinchuang-it-bid-decision)
+- [Workflow guide](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Auto-registration guide](references/auto-register.md)
+- [Report template](references/report-template.md)
+- [知了标讯 API v2](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [知了标讯 AI skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report plus optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include cited bid/company records when available, cost-unit notes, data gaps, and a disclaimer.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

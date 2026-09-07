@@ -1,44 +1,65 @@
-## Description: <br>
-Automatically discovers novel, statistically validated patterns in tabular data and returns structured conditions, effect sizes, citations, and novelty scores. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discovery helps agents find statistically validated patterns, feature interactions, subgroup effects, citations, and novelty signals in tabular datasets.
 
-## Publisher: <br>
-[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow)
 
-## Use Case: <br>
-Developers, analysts, and data scientists use this skill to send tabular datasets to Disco, choose target and exclusion settings, run public or private analyses, and interpret statistically validated pattern results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Datasets may be sent to Disco's remote service, and public analyses may publish data or results. <br>
-Mitigation: Use private mode for confidential data and confirm the requested visibility before starting an analysis. <br>
-Risk: Private analyses and account actions can consume credits or involve paid plans. <br>
-Mitigation: Estimate cost first, get explicit user confirmation, and do not attach payment methods, buy credits, or change plans unless the user requested that exact action. <br>
+## Use Case:
 
+Developers, analysts, and data science agents use this skill to upload tabular datasets to Disco, choose a target column and exclusions, run public or private analyses, and return statistically validated findings. It is intended for exploratory pattern discovery rather than summary statistics, visualization, filtering, SQL querying, or standalone literature search.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jessicarumbelow/skills/discovery-engine) <br>
-- [Disco homepage](https://disco.leap-labs.com) <br>
-- [Disco MCP endpoint](https://disco.leap-labs.com/mcp) <br>
-- [Python SDK documentation](docs/python-sdk.md) <br>
-- [OpenAPI specification](docs/openapi.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API and tool-call guidance, configuration snippets, and code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured pattern summaries with conditions, p-values, effect sizes, citations, novelty labels, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.152 (source: ClawHub release evidence; artifact package metadata reports 0.2.151) <br>
+Risk: Agents can upload datasets to Disco, and public analyses publish results to the public gallery.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use private mode for confidential data, confirm visibility before analysis, and avoid sensitive or regulated datasets unless the provider's data handling is understood.
+
+Risk: The skill exposes billing, subscription, payment-method, and credit-purchase capabilities.
+
+Mitigation: Require explicit human approval before attaching payment methods, purchasing credits, or changing subscriptions.
+
+Risk: Including identifiers, leakage columns, tautological columns, or derived target fields can produce findings that are statistically real but not meaningful discoveries.
+
+Mitigation: Review columns before running analysis and exclude identifiers, leakage, tautological fields, and derived target components.
+
+Risk: API keys and account operations can grant access to datasets, credits, and reports.
+
+Mitigation: Keep DISCOVERY_API_KEY secret, do not expose it in prompts or logs, and use account checks before paid private analyses.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jessicarumbelow/skills/discovery-engine)
+- [Disco homepage](https://disco.leap-labs.com)
+- [Disco MCP server](https://disco.leap-labs.com/mcp)
+- [Disco API keys](https://disco.leap-labs.com/developers)
+- [Disco Python SDK](docs/python-sdk.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON/API results and code or shell snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured pattern results, p-values, effect sizes, citations, novelty classifications, report links, and account or billing guidance.]
+
+## Skill Version(s):
+
+0.2.173 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

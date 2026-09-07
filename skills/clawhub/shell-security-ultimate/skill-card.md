@@ -1,41 +1,58 @@
-## Description: <br>
-Classify every shell command as SAFE, WARN, or CRIT before your agent runs it. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Classifies shell commands as SAFE, WARN, or CRIT before execution and documents optional OpenClaw patch scripts that can enable plugin-level tool-call blocking.
 
-## Publisher: <br>
-[globalcaos](https://clawhub.ai/user/globalcaos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[globalcaos](https://clawhub.ai/user/globalcaos)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add pre-execution shell command classification, logging, and approval gates for OpenClaw or TinkerClaw-style agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The included installer scripts can modify and rebuild an OpenClaw codebase, which is high-impact behavior for a command-classification skill. <br>
-Mitigation: Review the scripts and exact source changes before running them, use only a trusted expected OpenClaw checkout, and keep a clean backup or version-control rollback available. <br>
-Risk: The rebuild step executes code from the target checkout. <br>
-Mitigation: Treat rebuild commands as code execution from that checkout and run them only in an environment where that code and dependencies are trusted. <br>
+## Use Case:
 
+Developers and agent operators use this skill to classify shell commands before an AI agent runs them and to surface warnings for commands that could modify state or cause damage. OpenClaw users may also inspect and run the optional patch scripts to enable plugin-level tool-call blocking in a local checkout.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/shell-security-ultimate) <br>
-- [TinkerClaw project](https://github.com/globalcaos/clawdbot-moltbot-openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with shell commands, Python helper output, and patch scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SAFE, WARN, and CRIT command labels; included patch scripts modify and rebuild a local OpenClaw checkout when run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.2 (source: server release evidence) <br>
+Risk: Prompt-level command classification can be bypassed by model error, prompt injection, or a determined jailbreak.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the SAFE/WARN/CRIT gate as guidance, review high-impact commands manually, and run agents in containers or VMs when hard isolation is required.
+
+Risk: The optional patch script modifies a TypeScript file in an OpenClaw checkout and can run that checkout's build scripts if --rebuild is used.
+
+Mitigation: Read the scripts before use, run --dry-run first, keep the target checkout under version control, avoid --allow-any-repo unless intentional, and rebuild only after reviewing the target project.
+
+Risk: Terminal-formatted command output can be spoofed, and command arguments may expose secrets through process tables or shell history.
+
+Mitigation: Do not pass secrets through cmd_display.py arguments and be cautious when displaying untrusted command output in a terminal.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/shell-security-ultimate)
+- [Project referenced by the skill documentation](https://github.com/globalcaos/clawdbot-moltbot-openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and optional terminal-formatted status output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill produces prompt-level command classifications; optional helper scripts require deliberate local execution.]
+
+## Skill Version(s):
+
+2.3.1 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

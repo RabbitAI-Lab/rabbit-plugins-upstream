@@ -1,45 +1,69 @@
-## Description: <br>
-Use when completing authenticated SpawnXchange /api/v1/buy purchases, verifying artifact delivery, and maintaining buyer state via the included references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when searching for and purchasing AI-generated code artifacts on SpawnXchange through POST /api/v1/items/{uuid}/acquire, retrieving the delivered artifact and invoice, re-accessing past orders, and leaving item feedback.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-Developers and agents use this skill to search SpawnXchange listings, complete authenticated /api/v1/buy purchase flows, verify artifact delivery, and maintain local buyer purchase state for reuse. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can authorize real crypto purchases when execute mode is used. <br>
-Mitigation: Use quote mode first, run execute mode only after confirming item, chain, amount, terms, and license, and use a dedicated low-balance wallet. <br>
-Risk: API keys, private keys, payment headers, signed URLs, purchase records, and cached artifacts are sensitive. <br>
-Mitigation: Keep them out of shared logs, repositories, chat transcripts, and shared folders; use private local permissions and encrypted backups. <br>
-Risk: Download URLs are short-lived bearer credentials, and delivery reachability does not prove artifact safety. <br>
-Mitigation: Persist order records instead of signed URLs, cache artifacts only when needed, and inspect downloaded artifacts before integration. <br>
+## Use Case:
 
+External developers and agents use this skill to search SpawnXchange listings, confirm price, chain, license, and terms, acquire code artifacts with wallet-backed x402 payments, retrieve invoices and artifacts, and manage purchase records and feedback.
 
-## Reference(s): <br>
-- [Buyer purchase persistence notes](references/purchase-store.md) <br>
-- [SpawnXchange skills repository](https://github.com/avlk/spawnxchange-skills) <br>
-- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage) <br>
-- [SpawnXchange machine manifest](https://spawnxchange.com/api/v1/skills) <br>
+### Deployment Geography for Use:
 
+Global where SpawnXchange is available
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python example code, and JSON purchase-record structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Quote mode can inspect payment requirements without signing; execute mode can authorize a real wallet-backed USDC purchase.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release metadata and frontmatter) <br>
+Risk: The skill can guide an agent through paid SpawnXchange purchases that spend wallet funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm item price, chain, license, and terms before any paid request, and cap spend at the listed item price when the wallet supports it.
+
+Risk: Wallet signing keys or payment credentials could be exposed through prompts or logs.
+
+Mitigation: Keep wallet keys in wallet-managed storage and out of prompt context, chat transcripts, logs, and local purchase records.
+
+Risk: Delivered artifacts may contain code that is unsafe or unsuitable to run directly.
+
+Mitigation: Inspect and scan downloaded artifacts before execution or integration.
+
+Risk: Signed download URLs are short-lived bearer credentials that can expose purchased artifacts.
+
+Mitigation: Fetch artifacts promptly, do not save or share signed URLs, and persist only the order ID and local artifact path.
+
+Risk: Local purchase records can reveal buying behavior, wallet linkage, order IDs, and cached artifacts.
+
+Mitigation: Store purchase records in owner-only local state, avoid committing or sharing them, and use encrypted backups if records are backed up.
+
+## Reference(s):
+
+- [Buyer purchase persistence notes](references/purchase-store.md)
+- [SpawnXchange skills homepage](https://github.com/avlk/spawnxchange-skills)
+- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage)
+- [SpawnXchange machine-readable endpoint list](https://spawnxchange.com/api/v1/skills)
+- [SpawnXchange OpenAPI](https://spawnxchange.com/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTTP request examples, JSON bodies, and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may include paid x402 purchase requests, zero-amount signed requests, public HTTPS fetches, and local purchase-record handling.]
+
+## Skill Version(s):
+
+0.2.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

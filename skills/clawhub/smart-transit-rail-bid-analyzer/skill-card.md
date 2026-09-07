@@ -1,46 +1,67 @@
-## Description: <br>
-Analyzes smart-transit, rail, highway, ETC, signal-system, and traffic electromechanical procurement notices, awards, companies, brands, prices, and market trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes smart-transit and rail-procurement opportunities by querying Zhiliaobiaoxun bid, company, market, and account data.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External procurement, business development, and market analysis users use this skill to query transportation infrastructure bid and award data, analyze suppliers and purchasers, compare brands and prices, and identify potential opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can contact zhiliaobiaoxun.com services and send device or user identifiers during automatic registration. <br>
-Mitigation: Prefer a manually provisioned ZLBX_API_KEY and approve any automatic registration path before installation or use. <br>
-Risk: The skill can write a local API credential to ~/.zlbx/config.json. <br>
-Mitigation: Review local credential files after first use and restrict file access to trusted users. <br>
-Risk: Procurement contact data may appear in query results. <br>
-Mitigation: Share outputs only with authorized users and apply the organization's data handling rules before redistribution. <br>
+## Use Case:
 
+External procurement, sales, market-analysis, and business-development users use this skill to search transportation infrastructure bid notices, analyze buyers and suppliers, review company procurement activity, find potential bidders, and summarize market or price trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/smart-transit-rail-bid-analyzer) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Auto-registration flow reference](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with JSON request examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or reuse an API key in ~/.zlbx/config.json when no credential is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Procurement queries and related account requests are sent to Zhiliaobiaoxun services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for queries appropriate to that third-party service and avoid sending confidential procurement strategy or unnecessary sensitive context.
+
+Risk: Auto-registration may send a device-derived MAC hash and persist an API key locally.
+
+Mitigation: Prefer a user-configured ZLBX_API_KEY when device tracking is a concern, and require explicit user consent before auto-registration.
+
+Risk: Contact lookup can return project contact details, with masking dependent on account status.
+
+Mitigation: Show contact data as returned, do not attempt to unmask or enrich masked phone numbers, and avoid bulk contact export.
+
+Risk: The skill includes account, recharge, and vendor referral flows.
+
+Mitigation: Keep recharge and referral links clearly attributable to the publisher and avoid presenting them as NVIDIA-owned services.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/smart-transit-rail-bid-analyzer)
+- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Auto-registration flow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API Calls, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with tables, JSON request examples, REST API call guidance, and concise configuration instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a ZLBX_API_KEY or user-approved auto-registration before data calls; contact details may be masked for free or trial accounts.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Dlazy Webtoon Adapter helps agents adapt web novel material into Chinese-language webtoon plot breakdowns, episode tags, and per-episode scripts, with optional dLazy CLI-backed image generation guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adapts web novels into webtoon drama plans and per-episode scripts, with optional dLazy CLI image-generation support.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to turn web novel source text into structured webtoon adaptation outputs in Chinese, including plot breakdowns, episode tagging, revision handling, and script drafts. When image generation is requested, it guides the agent through single-step dLazy CLI commands after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key in local configuration or accepts it through an environment variable. <br>
-Mitigation: Use a dedicated dLazy organization key, keep local configuration access-limited, and rotate or revoke the key from the dLazy dashboard when access changes. <br>
-Risk: Prompts and referenced local media may be sent to dLazy API and file services during generation. <br>
-Mitigation: Avoid sending sensitive source material or private media unless the user has approved that disclosure and accepts dLazy processing. <br>
-Risk: The skill asks agents to install or run @dlazy/cli@1.2.3 through npm or npx. <br>
-Mitigation: Review the npm package and CLI source before use, and prefer npx for one-off runs when a persistent global install is unnecessary. <br>
+## Use Case:
 
+External users and creators use this skill to turn web-novel material into Chinese-language webtoon adaptation outputs, including genre confirmation, plot breakdowns, episode tags, and episode scripts. Users may also invoke dLazy CLI workflows for related image generation when they intentionally want that integration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-webtoon-adapter) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and structured Chinese prose with optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are conversation-bound; generation commands require user confirmation and use @dlazy/cli@1.2.3.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence release and frontmatter) <br>
+Risk: Prompts and selected media paths may be sent to dLazy services for external processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with manuscripts and media suitable for that external processing, and avoid unpublished or sensitive material unless approved.
+
+Risk: The dLazy API key may be stored in a local CLI configuration file.
+
+Mitigation: Prefer short-lived or scoped credentials where available, use the DLAZY_API_KEY environment variable for temporary use, and rotate or revoke keys when no longer needed.
+
+Risk: Installing or running the npm CLI executes third-party package code with the user's normal account permissions.
+
+Mitigation: Install only when dLazy CLI integration is intended, keep the package version pinned, and review the package/source before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-webtoon-adapter)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown and structured Chinese prose with optional inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are returned in conversation; optional dLazy CLI calls can return externally hosted media URLs.]
+
+## Skill Version(s):
+
+1.3.13 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

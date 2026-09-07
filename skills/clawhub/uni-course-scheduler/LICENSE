@@ -1,0 +1,37 @@
+MIT License
+
+Copyright (c) 2026 ez-hq
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+# 云端服务专有声明 · Cloud Service Proprietary Notice
+
+本 MIT 许可仅适用于本仓库（及随包发布）中的**本地文件**，包括但不限于：
+`SKILL.md`、`README*`、`scripts/`、`references/`、`agents/`、`skill.json`、`manifest.json`
+等可安装、可运行的本地 Skill 代码与文本。您可以自由使用、修改、分发这些本地文件（含商用）。
+
+本许可 **不包含** 且明确排除以下**专有资产**，其全部权利归原作者 ez-hq 所有，不因本许可授予任何权利：
+- 托管在 LoomLoom 平台（含 Shengsuanyun 胜算云、CogFoundry）的**云端模板（TemplateSpec）**及其中的提示词、统计、编排逻辑、输出约束 schema；
+- 任何与云端执行、计费、marketplace listing 相关的云端配置与逻辑。
+
+这些云端资产在每个 SkillBot 中通过**付费调用**授权使用，**不随本次本地开源而开放**。如需以机构性、商业性或二次开发方式使用云端能力，请通过官方下载渠道（胜算云 / CogFoundry / GitHub Releases 对应安装包）按次/按量付费获取。
+
+若对开源范围产生任何歧义，以本声明 为准。

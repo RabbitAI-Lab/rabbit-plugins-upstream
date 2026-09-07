@@ -1,51 +1,68 @@
-## Description: <br>
-Helps agents create bid-data-informed company background-check reports covering business profile, customers and suppliers, bidding strength, competitors, public-risk signals, and optional two-company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Chinese company background-check reports from Zhiliaobiaoxun bidding data, covering business profile, customers and suppliers, winning-bid strength, competitors, public-risk signals, and optional company comparisons.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Business users and agents use this skill to assess a named company before cooperation, supplier review, customer verification, competitor research, or light due diligence. It produces a sourced narrative report and a shareable HTML report from public bidding data plus limited public web risk checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls a third-party company-intelligence API and may consume account credits. <br>
-Mitigation: Tell users the expected credit cost before running the report and only use auto-registration after explicit user consent. <br>
-Risk: The skill can save an API key locally and generate shareable reports or auto-login links containing sensitive access tokens. <br>
-Mitigation: Treat API keys, generated report links, auto-login links, and saved report paths as sensitive, and avoid exposing credentials in conversation. <br>
-Risk: Company background reports and public-risk sections can affect real-world business judgments. <br>
-Mitigation: Use sourced factual statements, include links for public-risk claims, avoid unsupported conclusions, and state data boundaries and gaps. <br>
-Risk: Contact details returned by the service may be privacy-sensitive or masked for trial accounts. <br>
-Mitigation: Show contact details only as returned by the API, do not enrich masked phone numbers from other sources, and avoid bulk contact exports. <br>
+## Use Case:
 
+Business, procurement, sales, and compliance users use this skill to assess a named company from a bidding-data perspective. It helps compare companies, review supplier or partner background, identify bidding competitors, and generate a shareable HTML intelligence report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/company-background-check) <br>
-- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [Workflow guide](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun company-intelligence API](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliaobiaoxun business-intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Configuration, Guidance] <br>
-**Output Format:** [Markdown report in chat plus optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or gated auto-registration; reports may include signed share links and sourced public-risk references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill may create or use a Zhiliaobiaoxun account and collect a persistent hashed MAC-derived device identifier for free-trial deduplication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Proceed only after explicit user consent for auto-registration, and prefer a preconfigured ZLBX_API_KEY when users want to skip device-feature collection.
+
+Risk: The skill stores an API key in ~/.zlbx/config.json when auto-registration succeeds.
+
+Mitigation: Treat the local config file as a credential store and avoid exposing its contents in prompts, reports, logs, or shared artifacts.
+
+Risk: Generated reports and raw API-returned sk links can provide signed login-bypass access to report-related resources.
+
+Mitigation: Share generated HTML reports and sk links only with the intended audience, and preserve the skill's warnings about not distributing those links broadly.
+
+Risk: Company background reports can be incomplete or misread as definitive judgments about real organizations.
+
+Mitigation: Keep conclusions tied to cited public bidding data and source links, retain data-boundary disclaimers, and avoid unsupported accusations or categorical risk labels.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/company-background-check)
+- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Workflow guide](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Auto-registration flow](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun AI platform](https://ai.zhiliaobiaoxun.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Chinese Markdown report plus a generated self-contained HTML report file; may include JSON-shaped report data for rendering.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based auto-registration; reports may include signed sk links returned by the service.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

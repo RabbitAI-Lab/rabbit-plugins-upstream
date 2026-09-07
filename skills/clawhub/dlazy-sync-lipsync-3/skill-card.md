@@ -1,43 +1,64 @@
-## Description: <br>
-fal.ai sync-lipsync v3 generates a new video whose speaker lip movements match a supplied audio track, for dubbing, localization, and virtual presenter re-syncing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a lip-synced video by aligning the speaker's mouth movement in an input video to a supplied audio track.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to invoke dLazy's hosted sync-lipsync-3 service from an agent workflow, supplying a video and audio track to generate lip-synced video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads user-provided video and audio files to dLazy's hosted service for processing. <br>
-Mitigation: Use only media that is approved for processing by dLazy, and avoid submitting sensitive content unless the user has accepted that transfer. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable or npx path when less local persistence is preferred, and rotate or revoke the key from dLazy when needed. <br>
+## Use Case:
 
+Developers and agents use this skill to run dLazy's hosted Sync Lipsync 3 video generation workflow for dubbing, localization, and re-syncing virtual presenters.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-sync-lipsync-3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files] <br>
-**Output Format:** [Markdown instructions with bash commands and CLI JSON output containing generated media URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return an asynchronous task identifier when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Local video and audio paths are uploaded to dLazy-hosted services for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only provide media intended for cloud processing and review the service terms before using sensitive content.
+
+Risk: The skill installs or runs a third-party npm CLI.
+
+Mitigation: Review the linked CLI source or npm package, prefer npx or an unprivileged local setup, and avoid running npm as administrator or root.
+
+Risk: API keys are used for dLazy requests and may be stored in local CLI configuration or supplied through the environment.
+
+Mitigation: Store keys only in the documented user config or per-invocation environment, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: The documented sample output appears inconsistent with a video lip-sync workflow.
+
+Mitigation: Validate the returned payload and saved media before using the result in downstream workflows.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-sync-lipsync-3)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return an asynchronous task identifier when no-wait mode is used; completed media results are returned as hosted URLs.]
+
+## Skill Version(s):
+
+1.3.13 (source: server release metadata; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

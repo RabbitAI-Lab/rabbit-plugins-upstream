@@ -1,44 +1,63 @@
-## Description: <br>
-Convert Persian RTL PDF slide decks into offline-first, accessible, exam-review HTML study-guide bundles using a staged fidelity-first workflow, evidence-based corrections, and automated QA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts operator-authorized Persian or mixed RTL lecture PDFs into accessible offline HTML study guides with OCR evidence, optional AI-assisted correction and enrichment, QA reports, and verified packaging.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External users and developers use this skill to convert authorized Persian RTL educational PDF slide decks into self-contained HTML study-guide bundles with fidelity checks, review aids, reports, and optional ZIP packaging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthorized or sensitive PDFs could be processed or shared in generated study-guide bundles. <br>
-Mitigation: Install and use only for authorized Persian RTL educational PDFs, keep processing local by default, and review generated reports and ZIP contents before sharing. <br>
-Risk: Optional external images or fonts could introduce provenance, copyright, watermark, or tracking concerns. <br>
-Mitigation: Use external supplementary assets only with operator approval, store them locally, inspect them visually, label provenance, and avoid trackers or misleading claims. <br>
-Risk: Incorrect extraction, enrichment, or QA claims could mislead readers about source-slide content. <br>
-Mitigation: Preserve extracted source text separately from editorial additions, base repairs on rendered-page evidence, record measured counts, and report missing or uncertain content honestly. <br>
+## Use Case:
 
+Developers, educators, and agent operators use this skill to turn authorized Persian or mixed RTL lecture PDFs into source-linked study guides with flashcards, quizzes, summaries, fidelity checks, and packaged offline output.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/persian-pdf-studyguide-forge) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
-- [Build manifest template](artifact/templates/build_manifest.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with local HTML, assets, reports, scripts, configuration files, and optional ZIP archive outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces offline-first Persian RTL study-guide bundles, preserves source-slide evidence separately from enrichment, and reports measured QA outcomes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: Document text can be sent to automatically discovered or custom AI providers using ambient API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use FORGE_MOCK=1 or a trusted local model for private PDFs, or explicitly review provider lists, base URLs, headers, and API-key environment variables before enabling remote AI.
+
+Risk: Prompt and completion content can be cached outside the workspace.
+
+Mitigation: Set FORGE_CACHE_DIR to a controlled location or purge the default cache after sensitive runs.
+
+Risk: The skill executes a local PDF/OCR/build pipeline with third-party dependencies.
+
+Mitigation: Install and run it only in a dedicated workspace, and prefer pinned dependencies or a locked environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/persian-pdf-studyguide-forge)
+- [Agent discovery card](AGENT_DISCOVERY.md)
+- [Model and agent compatibility](docs/MODEL_COMPATIBILITY.md)
+- [Workflow playbook](docs/WORKFLOW_PLAYBOOK.md)
+- [Integrations guide](integrations/README.md)
+- [Agent manifest](agent-manifest.json)
+- [Tool schema](integrations/tool-spec.json)
+
+## Skill Output:
+
+**Output Type(s):** [Files, HTML, JSON, Shell commands, Guidance]
+
+**Output Format:** [Offline HTML study guide, JSON status and evidence reports, Markdown guidance, and ZIP package artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports fully offline FORGE_MOCK=1 mode; optional provider-backed correction and enrichment should use authorized inputs only.]
+
+## Skill Version(s):
+
+1.5.4 (source: server release metadata; artifact frontmatter is 1.5.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

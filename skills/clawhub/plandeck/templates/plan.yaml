@@ -1,0 +1,55 @@
+# plan.yaml — your plan's single source of truth. Edit this file; the board
+# re-renders live. Plandeck computes Ready promotion, the critical path,
+# estimate rollups, and the next action for you — you never hand-place those.
+#
+# Card fields:
+#   id           required, stable (C001, C002, …)
+#   title        short imperative label
+#   column       backlog | ready | doing | review | done   (blocked is a state)
+#   status       active marks the ONE card in flight (optional; doing implies it)
+#   role         scout | worker | judge | pm                (who does it)
+#   estimate     story points (1,2,3,5,8,13); omitted cards count as one point
+#   confidence   0..1, how sure the estimate is
+#   priority     P0 (drop-everything) … P4
+#   risk         low | med | high
+#   depends_on   [ids] — Plandeck auto-promotes a card to Ready when all are done
+#   verify       [commands] that prove the card is really finished
+#   next_action  the one concrete next move (LLM-legible)
+#   receipt      what happened when it was done/blocked
+
+version: 1
+
+plan:
+  title: "<what you are shipping>"
+  slug: <short-slug>
+  kind: specific          # specific | open_ended | recovery | audit
+  status: active
+  north_star: "<the observable proof this is truly done — a test, a demo, an artifact>"
+  velocity: null          # optional points/day override; otherwise observed from done history
+
+cards:
+  - id: C001
+    title: "Map the problem and the verification path"
+    role: scout
+    column: doing
+    status: active
+    estimate: 2
+    priority: P1
+    next_action: "Read the relevant code, write down the exact command that will prove success."
+
+  - id: C002
+    title: "Build the first vertical slice"
+    role: worker
+    column: backlog
+    estimate: 5
+    priority: P1
+    depends_on: [C001]
+    verify: ["<the command that proves this slice works>"]
+
+  - id: C999
+    title: "Launch-readiness audit"
+    role: judge
+    column: backlog
+    estimate: 1
+    priority: P1
+    depends_on: [C002]

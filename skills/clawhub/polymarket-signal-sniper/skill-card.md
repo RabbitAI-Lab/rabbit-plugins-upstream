@@ -1,46 +1,65 @@
-## Description: <br>
-Snipe Polymarket opportunities from your own signal sources. Monitors RSS feeds with Trading Agent-grade safeguards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Snipe Polymarket opportunities from your own signal sources. Monitors RSS feeds with Trading Agent-grade safeguards.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-Traders and agent operators use this skill to monitor RSS feeds for Polymarket-relevant signals, match articles to target markets, inspect context warnings, and optionally run dry-run or live trade flows through Simmer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can inspect a Simmer trading account and potentially place real Polymarket trades. <br>
-Mitigation: Use dry-run or paper mode first, set conservative trade caps, and run live mode only when the operator accepts the financial risk. <br>
-Risk: Live trading may use high-impact wallet or account authority, including sensitive credentials. <br>
-Mitigation: Prefer a dedicated low-balance wallet, avoid production private keys, and provide credentials through environment variables or a secret store. <br>
-Risk: The security review notes automatic account-level behavior and no per-trade confirmation for unattended live runs. <br>
-Mitigation: Do not run --live unattended unless the operator has reviewed and accepted the auto-redeem behavior and missing per-trade confirmation. <br>
+## Use Case:
 
+External users and agents use this skill to monitor configured RSS feeds, match signals to Polymarket markets, review safeguards, and optionally execute capped trades through the Simmer SDK.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/simmer/polymarket-signal-sniper) <br>
-- [Disclaimer](DISCLAIMER.md) <br>
-- [Simmer API Base](https://api.simmer.markets) <br>
-- [Simmer Dashboard](https://simmer.markets/dashboard) <br>
-- [Simmer V2 Migration Guide](https://docs.simmer.markets/v2-migration) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, configuration variables, trading status output, and risk warnings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands that inspect a Simmer account or run dry-run, scan-only, or live Polymarket trading flows using user-provided credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.3 (source: server release metadata and skill frontmatter) <br>
+Risk: Untrusted RSS feed content can influence automated trading decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure only trusted feeds, use keywords and explicit market IDs, inspect matched articles, and start with scan-only or dry-run mode.
+
+Risk: Live mode can place real on-chain trades that cannot be recalled.
+
+Mitigation: Keep --live disabled until the strategy is reviewed, use low trade limits, cap position size, and confirm wallet configuration before funding live runs.
+
+Risk: Default trading parameters are not validated as a profitable strategy.
+
+Mitigation: Run paper mode for an extended period, raise confidence thresholds when appropriate, and scale only after independent performance review.
+
+Risk: Some fast-resolving markets may resolve before monitoring can exit a position.
+
+Mitigation: Avoid short-deadline markets when possible and rely on conservative position sizing as the primary control.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/simmer/skills/polymarket-signal-sniper)
+- [Publisher profile](https://clawhub.ai/user/simmer)
+- [Simmer API](https://api.simmer.markets)
+- [Simmer dashboard](https://simmer.markets/dashboard)
+- [Polymarket V2 migration guide](https://docs.simmer.markets/v2-migration)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can emit JSON status summaries when running in managed automation mode.]
+
+## Skill Version(s):
+
+1.5.4 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

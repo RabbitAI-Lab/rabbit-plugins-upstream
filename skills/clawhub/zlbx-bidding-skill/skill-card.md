@@ -1,47 +1,67 @@
-## Description: <br>
-Helps agents query and analyze Zhiliaobiaoxun procurement, bidding, award, company, supplier, competitor, market, and price-trend data through documented API workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query and analyze ZhiLiao BiaoXun bidding data, including bid notices, award results, company profiles, competitors, suppliers, market aggregates, price trends, and account status.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search bid notices, inspect award details, analyze companies and competitors, identify likely suppliers, and summarize procurement market trends from Zhiliaobiaoxun data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement, supplier, competitor, company, and contact lookup queries are sent to a third-party Zhiliaobiaoxun service using the user's API key. <br>
-Mitigation: Use the skill only for queries appropriate to share with that service and avoid including unnecessary sensitive details. <br>
-Risk: Broad searches can expose or process more business information than needed for the task. <br>
-Mitigation: Specify exact entities, date ranges, regions, and product terms so requests stay narrowly scoped. <br>
-Risk: Company matching and market analysis may return related entities that need business review before action. <br>
-Mitigation: Review matched company lists and analysis outputs before relying on them for procurement or competitive decisions. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve and summarize procurement and bidding intelligence from the ZhiLiao BiaoXun service. It supports bid discovery, company and competitor analysis, supplier sourcing, market aggregation, price trend lookup, and account balance checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/zlbx-bidding-skill) <br>
-- [Artifact: skill instructions](SKILL.md) <br>
-- [Artifact: bid search API reference](references/api-search.md) <br>
-- [Artifact: company analysis API reference](references/api-company.md) <br>
-- [Artifact: market analysis API reference](references/api-market.md) <br>
-- [Zhiliaobiaoxun API key setup](https://ai.zhiliaobiaoxun.com/?ch=s01) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API request guidance, configuration] <br>
-**Output Format:** [Markdown or text with JSON API request examples and summarized bid-intelligence results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends user procurement, company, supplier, competitor, and contact lookup queries to the Zhiliaobiaoxun API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.2 (source: server evidence release.version) <br>
+Risk: Bidding queries and account operations are sent to the third-party ZhiLiao BiaoXun service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when third-party processing of these queries is acceptable, and avoid submitting sensitive procurement details that should not leave the user's environment.
+
+Risk: Automatic registration can create a vendor account using a stable device-derived identifier.
+
+Mitigation: Prefer configuring ZLBX_API_KEY manually; if automatic registration is used, require user consent before collecting device features.
+
+Risk: The skill can save an API key in ~/.zlbx/config.json.
+
+Mitigation: Review the file permissions after setup and rotate or remove the key if the workstation is shared or no longer trusted.
+
+Risk: Some answers may include vendor referral or promotional links.
+
+Mitigation: Ask for data-only responses when promotional links are not desired, and review generated recommendations before acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/zlbx-bidding-skill)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Market API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration flow](references/auto-register.md)
+- [ZhiLiao BiaoXun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, configuration, guidance]
+
+**Output Format:** [Markdown responses with REST request guidance and structured bidding-data summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or a local ~/.zlbx/config.json API key; some account setup paths can persist an API key locally.]
+
+## Skill Version(s):
+
+1.4.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

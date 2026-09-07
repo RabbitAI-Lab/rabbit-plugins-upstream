@@ -13,6 +13,49 @@ Every new fix_plan entry contains three required elements. Single-line action-on
   - {optional sub-steps, command examples, file paths}
 ```
 
+### RAG pre-lookup gate (HARD STOP — context direction)
+
+**Before adding or upserting an item, run a RAG (vector-memory) semantic search on the item's core keywords.** This gate answers a different question than the Canonical medium gate below: canonical-medium asks "is this tracker the record of truth?"; this gate asks "is there already known context on this topic?" Writing a new entry without checking prior context risks re-investigating a problem that a past session already diagnosed, or duplicating an item that already exists in a different phrasing.
+
+1. **Search first**: run the skill domain's standard semantic-search script (e.g. `qdrant-search.py --semantic "<core keywords>" --limit 5`) before touching the tracker file's content. Prefer the domain's own script over an ad-hoc MCP call — see the workspace's tool-selection-priority rule (script/CLI first, MCP only when no script exists).
+2. **Fold hits into the entry**: if the search surfaces prior diagnosis, an existing related item, or a linked plan/research document, reference it in the new entry's body (`**Why**` or a one-line sub-bullet) instead of re-deriving the same analysis from scratch.
+3. **No hits is not skip-worthy evidence of anything but absence**: zero results means proceed with authoring normally — it does not excuse skipping the search itself.
+
+#### Don't / Do
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Read/edit the tracker file directly to add an item without running a semantic search on the item's topic first | Run the semantic search first, then open the tracker file to place the entry |
+| 2 | Re-derive a diagnosis or procedure from scratch when the search surfaces a matching prior session's finding | Cite the prior finding (one-line pointer) and build on it instead of repeating the investigation |
+| 3 | Treat the Canonical medium gate's pinned-header check as covering this | The two gates are independent axes — pinned-header answers "where does this belong", RAG search answers "what is already known about it". Both run, in either order relative to each other, but RAG search runs before the item body is drafted |
+
+#### Self-check before drafting a new entry
+
+1. Did you run a semantic search on the item's core keywords before drafting the entry body?
+2. If the search returned relevant hits, does the entry body reference them (rather than silently ignoring them)?
+3. If the search returned nothing, did you still author the entry normally rather than treating the empty result as a reason to skip the check next time?
+
+### Canonical medium gate (HARD STOP — creation direction)
+
+**Before adding a new item, determine whether this tracker is the canonical backlog or an index into an external one.** When an external tracker is canonical, an entry written only here is not a record — it is a pointer with nothing behind it, and it disappears the moment the file is regenerated or overwritten by a concurrent writer.
+
+Detect the canonical medium from **both** signals — either alone is insufficient:
+
+1. **Pinned header declaration** — read the file's top block (roughly the first 10 lines) before the session's first add. A tracker that delegates to an external system declares it there.
+2. **Existing index lines** — count entries carrying an external reference suffix (e.g. `→ <Tracker> (<issue URL>)`). A file where such entries dominate is an index in practice, whatever the header does or does not say.
+
+| Canonical medium | How to add |
+|------------------|-----------|
+| This file | Add the three-element entry normally (see below) |
+| External tracker | **Create the item in the external tracker first**, then write the local entry as an index line carrying the returned URL |
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Add `- [ ]` here and consider the item recorded, without checking whether an external tracker owns this backlog | Read the pinned header + count existing index lines first. External canonical → create there, then index here |
+| 2 | Reach the file by targeted read (`offset`) or grep and therefore never see the header | The header is where delegation is declared. A targeted read that skips it also skips the rule governing the write you are about to make — under context pressure this is the normal access pattern, not an edge case |
+| 3 | Defer the external write ("record locally now, sync later") | The local file is not durable against regeneration or a concurrent writer. Unsynced local-only entries are the exact loss this gate exists to prevent |
+| 4 | Treat the completion-direction guard (verify the external item before flipping `[x]`) as covering this | Completion and creation are separate directions. Guarding only completion leaves every new item unprotected |
+
 ### Why each element is required
 
 | Element | Purpose | What breaks if omitted |
@@ -38,6 +81,7 @@ fix_plan is a **session-to-session information transfer medium**. The context in
 2. **Why**: 1-2 sentences explaining the motivation?
 3. **How to apply**: core procedure / tools / commands?
 4. **Future-session test**: "Can a future session proceed from this entry alone without asking the user?" — If no, the entry is information-incomplete
+5. **Canonical medium**: did you confirm, from the pinned header **and** the existing index-line count, whether an external tracker owns this backlog? If it does, was the item created there first and is this entry carrying its URL? — A local-only entry under an external canonical medium is not a record
 
 ## Length budget — verbose body forbidden (HARD STOP)
 
@@ -66,6 +110,8 @@ fix_plan item body content = Action + Why + How (summary) + artefact reference +
 | Fix-option matrix / trade-offs / Test Plan / implementation procedure | **plan artefact** | `docs/generated/plan-<slug>.md` |
 | Related-context list (4 or more items) | **inside the research/plan artefact** | same as above |
 | Multi-step checklist (5 or more items) | **checklist artefact** | `docs/generated/checklist-<slug>.md` |
+| Progress / status updates for an item that references a plan artefact | **linked plan artefact — its `## Progress Checklist` section** (create the section if missing) | inside the referenced `plan-<slug>.md` |
+| Open action items (the referenced plan's remaining `[ ]` next-actions) | **fix_plan body — as `- [ ]` sub-checkboxes** | surface the immediate next-phase open items under the item; deeper phases stay pointer-only (keep the length budget). Distinct from "progress/status updates" above: what remains *to do* stays visible/trackable in the tracker, while status narrative goes to the plan |
 
 ### Don't / Do
 
@@ -76,6 +122,8 @@ fix_plan item body content = Action + Why + How (summary) + artefact reference +
 | 3 | Write "Decision record" / "User decision" as a paragraph in the body | One-line sub-bullet: `- **User decision (YYYY-MM-DD)**: Option D — short rationale` |
 | 4 | Allow a fix_plan body item to exceed 10 lines | Cap at 5-7 lines. Anything over → split into artefacts |
 | 5 | Include the A/B/C/D comparison table in fix_plan | Move to `plan-<slug>.md` "Trade-offs" section |
+| 6 | Relocate item detail into a NEW artefact without Reading the research/plan artefacts the item already references | Read each referenced artefact first — progress/status content routes into the plan's `## Progress Checklist` (create the section if missing); create a new artefact only for content with no owning research/plan doc |
+| 7 | Reduce an in-progress plan (one that has open `[ ]` Progress-Checklist items) to a prose-only pointer with zero checkboxes in the tracker item | Surface the immediate next-phase open items as `- [ ]` sub-checkboxes under the tracker item (within the length budget); keep deeper phases as a pointer to the plan's `## Progress Checklist`. A tracker item for in-progress work must stay actionable — the "slim pointer" rule governs status narrative, not the open action list |
 
 ### Self-check before saving an entry
 
@@ -83,6 +131,8 @@ fix_plan item body content = Action + Why + How (summary) + artefact reference +
 2. Does the entry contain diagnostics / reproduction / option matrix / related context? If yes, move to research/plan artefacts
 3. Is each artefact path expressed as a one-line sub-bullet?
 4. Are decision links one line each?
+5. Does the item already reference a research/plan artefact? Read it BEFORE relocating any content — progress/status updates belong in that plan's `## Progress Checklist` (create it if missing), not in a new standalone file
+6. Does the referenced plan have open `[ ]` Progress-Checklist items? If yes, did you surface the immediate next-actions as `- [ ]` sub-checkboxes in the tracker item, rather than leaving a prose-only pointer?
 
 ### Example — Bad (verbose)
 
@@ -107,3 +157,4 @@ fix_plan item body content = Action + Why + How (summary) + artefact reference +
 - [format.md](./format.md) — section structure and markers
 - [priority.md](./priority.md) — `[BLOCKED:P0-P3:reason]` annotation when an item is blocked
 - [move.md](./move.md) — how `[x]` entries get summarised into Completed
+- [upsert.md](./upsert.md) — dup-check the tracker before running this topic's schema; this file is upsert's fallback path for genuinely new items

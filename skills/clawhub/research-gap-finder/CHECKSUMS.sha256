@@ -1,0 +1,9 @@
+50ef2c10661207a31a019e6f9319f4b3f55ff2578a3d2851de01c777d4958c1a  ./AGENT_GUIDE.md
+e0410e13bb322b606ebab6a243b72e58aeb69d5c79ff9a0b35eb79c92c8a5864  ./SKILL.md
+77b890877ae1874245e5a3393c084ec1f71a9569b7c8e9ffc6b4b44562b8a4e2  ./references.md
+2561a16913934759535c896409ae8cb6de2b56a16de0df19b91bbed0337f913c  ./resources.md
+fd9fd1a71adcc1607e9581ffcd46c5832e29021e0cf4d5056d3d24e6bd6a0bfd  ./schemas/evidence.schema.json
+80fd8e1cdc246bb13651a894045cfa316685cc1e8fc32d9a2e709fc081170011  ./schemas/gaps.schema.json
+fda6f9dd30fef6da4d7e20b3f44bcedd1a7487cf7ab03475a8687532b185e17b  ./scripts/research_gap_cli.py
+7c0daa48bdb73a52ef0e0dcccbc8ab8c618334641a3d62b78013b7ab13daac0d  ./scripts/verify_integrity.py
+eff2631f84fd73aeaf0eeb3cb6ebd7a0aa3be8878d64c4e464b3b77af7b4a661  ./tests/test_cli.py

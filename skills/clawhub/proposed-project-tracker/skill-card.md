@@ -1,51 +1,64 @@
-## Description: <br>
-拟建项目跟踪与早期商机发现助手，用于查询发改立项/审批公示阶段项目、采购意向和临期续约机会，并输出按价值排序的商机清单。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents find early business opportunities by scanning proposed projects, procurement intentions, and expiring contracts through Zhiliaobiaoxun.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Business development and sales teams use this skill to find early public-sector and enterprise opportunity signals by industry, product, region, budget threshold, and project stage. It scans proposed projects, purchase intentions, and expiring contracts, then prepares a prioritized opportunity report with follow-up actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends opportunity-search keywords and regional filters to the Zhiliaobiaoxun API. <br>
-Mitigation: Use it only for queries acceptable to share with that service, and avoid entering confidential customer strategy or private deal information. <br>
-Risk: The skill can persist an API key in ~/.zlbx/config.json and uses ZLBX_API_KEY when provided. <br>
-Mitigation: Protect the local config file, avoid pasting API keys into chat, and rotate the key if it is exposed. <br>
-Risk: Generated reports and opportunity links may include signed sk parameters that can bypass login for details pages. <br>
-Mitigation: Treat exported reports and links as private access material, and review URLs before forwarding or publishing reports. <br>
-Risk: Opportunity reports are generated from third-party API data that can be incomplete, delayed, or commercially sensitive. <br>
-Mitigation: Validate high-value opportunities against source records before outreach or bidding decisions, and keep the report disclaimer with exported files. <br>
+## Use Case:
 
+Business development, sales, and bid teams use this skill to scan for earlier-stage commercial opportunities by industry, product, region, and budget threshold. It ranks proposed projects, procurement intentions, and expiring contracts, then recommends next actions for follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/proposed-project-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [Workflow reference](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template reference](references/report-template.md) <br>
-- [Auto-registration reference](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun agent portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, HTML files, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown opportunity lists and optional locally generated HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration; reports may include API-returned signed links and are written under ~/zlbx-opportunity-radar-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill sends user opportunity search terms to Zhiliaobiaoxun services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when vendor API processing is acceptable, and avoid sending sensitive internal strategy, customer data, or confidential project details as search terms.
+
+Risk: Automatic registration can derive a MAC-based device hash and persist a vendor API key under the user's home directory.
+
+Mitigation: Prefer a user-provided ZLBX_API_KEY when available, require consent before auto-registration, and review local credential file permissions after first use.
+
+Risk: Generated reports and opportunity links may contain login-bypass or signed access parameters.
+
+Mitigation: Review reports before sharing and avoid forwarding generated HTML reports or signed links beyond the intended recipients.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/proposed-project-tracker)
+- [Workflow Guide](references/workflow.md)
+- [API Quick Reference](references/api-quick.md)
+- [Report Template](references/report-template.md)
+- [Auto-Registration Flow](references/auto-register.md)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun Skill Documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Zhiliaobiaoxun Opportunity Assistant](https://agent.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown opportunity lists, JSON report data, and generated self-contained HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include signed opportunity links and locally saved HTML reports.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

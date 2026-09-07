@@ -1,45 +1,57 @@
-## Description: <br>
-Call the GLM API (glm-5.2, glm-5.1, glm-5-turbo, glm-5, glm-4.7, glm-4.6, glm-4.5, glm-4.5-air) through RunAPI using the official OpenAI SDK or compatible clients. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Call the GLM API (GLM 5.3 and earlier GLM 5 and 4 series) through RunAPI using OpenAI-compatible Chat Completions.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent builders use this skill to configure RunAPI access for GLM chat, streaming completions, and OpenAI-, Anthropic-, or Gemini-compatible request patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and API payloads used with the examples are sent to RunAPI's service. <br>
-Mitigation: Use this skill only when RunAPI is an approved provider for the workload, and avoid sending sensitive data unless covered by the user's data-handling requirements. <br>
-Risk: RunAPI API keys can be exposed if copied into source files, commits, or shell history. <br>
-Mitigation: Store the API key in OPENAI_API_KEY, RUNAPI_TOKEN, or a secret manager and avoid hard-coding credentials in examples or scripts. <br>
-Risk: Unsupported GLM-5.2 features or oversized requests may be rejected rather than silently downgraded. <br>
-Mitigation: Keep requests text-only, respect the documented context and output limits, and ask the user before removing rejected fields or changing request semantics. <br>
+## Use Case:
 
+Developers and agents use this skill to configure and call GLM models through RunAPI's OpenAI-compatible Chat Completions endpoint for text chat and streaming workflows.
 
-## Reference(s): <br>
-- [RunAPI GLM model page](https://runapi.ai/models/glm) <br>
-- [GLM model overview, pricing, and rate limits](https://runapi.ai/models/glm.md) <br>
-- [Z.AI provider comparison](https://runapi.ai/providers/z-ai.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with dotenv, Python, TypeScript, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires OPENAI_API_KEY and OPENAI_BASE_URL; examples send prompts and API payloads to RunAPI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+Risk: GLM prompts and responses are routed through RunAPI using a RunAPI API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm this routing is intended, use a RunAPI-scoped key, and avoid sending sensitive prompts unless account and data handling requirements allow it.
+
+Risk: Using unsupported protocols or undeclared GLM-5.3 capabilities can produce failed or misleading requests.
+
+Mitigation: Use OpenAI-compatible Chat Completions for glm-5.3 and add tools, reasoning controls, structured output, or multimodal input only when the current RunAPI contract verifies support.
+
+## Reference(s):
+
+- [RunAPI GLM documentation](https://runapi.ai/models/glm.md)
+- [RunAPI GLM homepage](https://runapi.ai/models/glm)
+- [RunAPI Z.AI provider page](https://runapi.ai/providers/z-ai.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [GLM compatibility protocols](references/compatibility-protocols.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, configuration]
+
+**Output Format:** [Markdown with Python code snippets and environment variable settings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a RunAPI API key and OPENAI_BASE_URL set to https://runapi.ai/v1.]
+
+## Skill Version(s):
+
+0.3.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

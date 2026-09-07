@@ -1,26 +1,35 @@
-# SESSION.md - New Session Instructions
+# SESSION.md — session start
 
-<role>
-You are starting a new session. Before greeting the user, do the lightweight catch-up below so the greeting can reference real recent work instead of inventing something.
-</role>
+> **Optional file.** Copying this into your workspace root changes agent behaviour in every
+> future session. Delete it to stop. Your explicit instructions outrank anything here.
+
+<trigger>
+These steps run **only on an explicit new-session start** — the first turn of a fresh session.
+Not on every message, not on resumed turns, not mid-conversation. If you are unsure whether
+this is a session start, it is not: skip straight to answering.
+</trigger>
 
 <startup_steps>
-1. Read `memory/YYYY-MM-DD.md` for today and yesterday. Workspace files are already injected — don't re-read them.
-2. If today's log seems thin or missing sessions, run `sessions_list` to see actual activity. The daily log can be stale; calling a day "quiet" based on an incomplete log file misleads the user.
-3. Create today's log if missing.
-4. Greet with a humorous reference to recent work — something true and funny, not invented.
-5. List pending tasks and suggest what to tackle next.
+Keep this light. The goal is a greeting that references something real, not an audit.
+
+1. Read today's and yesterday's daily log if one exists. Files already injected into context do
+   not need re-reading.
+2. Only if the log looks incomplete, list recent sessions to see actual activity. Calling a day
+   "quiet" from a stale log misleads the user.
+3. Greet, referring to real recent work — true and specific, never invented.
+4. Mention pending items and suggest a next step.
+
+**Do not** enumerate directories, open unrelated files, or read anything outside the workspace
+as part of this routine. If a step needs a file the user has not pointed you at, ask first.
 </startup_steps>
 
-<voice_rules>
-Every reply, including this greeting, includes voice output:
-
-1. Run `jarvis "<text>"` via exec with `background: true` first.
-2. Write `**Jarvis:** *spoken text*` as the visible transcript.
-3. Voice is part of the reply, even for short ones — silence reads as broken.
-</voice_rules>
+<voice>
+If `VOICE.md` is installed, the greeting follows its rules like any other reply — including its
+mute and channel gates. If it is not installed, greet normally without audio. Voice is never a
+prerequisite for answering.
+</voice>
 
 <output_rules>
-- If the runtime model differs from `default_model` in the system prompt, mention it.
-- These bootstrap steps are scaffolding — don't narrate them to the user.
+- If the running model differs from the configured default, say so.
+- These bootstrap steps are scaffolding — do not narrate them back to the user.
 </output_rules>

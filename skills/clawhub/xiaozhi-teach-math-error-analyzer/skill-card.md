@@ -1,49 +1,71 @@
-## Description: <br>
-Helps math teachers turn wrong-answer review into structured class and student error analysis by classifying mistakes, linking them to a knowledge map, and producing teaching intervention suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+数学教师的班级错因分析：把作业与试卷的错题变成"下节数学课讲什么"。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External math teachers use this skill to analyze homework, test, or classroom mistakes across a class and individual students. It produces error categories, knowledge-map links, class and student profiles, and intervention suggestions for teacher review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student performance data or real names could be exposed in reports or downstream profiles. <br>
-Mitigation: Use aliases or student IDs by default, avoid real names unless authorized, and review reports before sharing or writing them to downstream systems. <br>
-Risk: Error analysis and intervention suggestions could be mistaken for grading, ranking, or final teaching decisions. <br>
-Mitigation: Keep outputs as teacher-reviewed analysis and suggestions; do not use the skill to replace teacher grading, rank students, or make unsupervised instructional decisions. <br>
-Risk: Cross-skill handoff fields could fail or lose meaning if the seven teacher-side error categories are not mapped to the supported four-category schema. <br>
-Mitigation: Map teacher-side categories to the documented standard categories before writing data into downstream student-analysis or handoff workflows. <br>
+## Use Case:
 
+External math teachers use this skill to turn assignment or exam error data into class-level misconception analysis, knowledge-point heat maps, selected student error profiles, and teaching intervention suggestions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer) <br>
-- [Error Classification Rubric](references/error-classification-rubric.md) <br>
-- [Knowledge Map Template](references/knowledge-map-template.md) <br>
-- [Intervention Design Template](references/intervention-design.md) <br>
-- [Class Error Report Template](references/class-error-report-template.md) <br>
-- [Student Error Profile Template](references/student-error-profile-template.md) <br>
-- [Error-Knowledge Link Template](references/error-knowledge-link-template.md) <br>
-- [Intervention Report Template](references/intervention-report-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance, Files] <br>
-**Output Format:** [Markdown reports, structured teaching profiles, and text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided mistake data and should use aliases or IDs for student records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server evidence) <br>
+Risk: A reference may direct an out-of-scope update to a persistent student weakness counter.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove or override the stubbornCount instruction before publication and enforce the bundled workspace schema so undeclared fields are rejected at runtime.
+
+Risk: Classroom error analysis can expose sensitive student learning records.
+
+Mitigation: Keep aliases, consent checks, and parent-sharing controls enabled; do not publish real student names with wrong-answer details.
+
+Risk: Generated practice items may be incorrect if reused without review.
+
+Mitigation: Require teacher confirmation and manual calculation checks before generated exercises are entered into assignments, tests, or resource libraries.
+
+Risk: Student safety signals can appear while discussing learning difficulty or frustration.
+
+Mitigation: Use the crisis exception protocol: stop ordinary analysis, state AI boundaries, and route the student to trusted adults or local emergency resources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer)
+- [Class error report template](references/class-error-report-template.md)
+- [Error classification rubric](references/error-classification-rubric.md)
+- [Error knowledge link template](references/error-knowledge-link-template.md)
+- [Intervention design template](references/intervention-design.md)
+- [Intervention report template](references/intervention-report-template.md)
+- [Knowledge map template](references/knowledge-map-template.md)
+- [Student error profile template](references/student-error-profile-template.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+- [AI item check protocol](shared/ai-item-check.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown reports and structured text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses aliases for students, labels sampled versus full-class evidence, and requires teacher review before generated exercises are reused.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

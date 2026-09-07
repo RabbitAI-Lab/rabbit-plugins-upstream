@@ -1,8 +1,6 @@
 ---
 name: volcengine-landing-zone
 description: Use when the user asks to analyze, consult, setup, manage, configure, or design a Volcengine Landing Zone, including organization, accounts, finance, identity, cloudtrail, or network infrastructure.
-version: 1.8.1
-user-invocable: true
 allowed-tools: Bash, Read, Write
 ---
 

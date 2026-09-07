@@ -1,47 +1,61 @@
-## Description: <br>
-Suggests next actions after task completion and can auto-invoke through a Stop hook when completion keywords are detected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps an agent suggest follow-up actions after task completion and detect stalled work that needs correction.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent users use Next to choose follow-up work after completed tasks, such as verifying changes, committing or pushing work, monitoring CI, creating draft pull requests, or wrapping up a session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The always-on Stop hook can prompt follow-up actions after ordinary task completion. <br>
-Mitigation: Install only where automatic completion follow-ups are desired, and review or constrain the Stop hook before enabling it. <br>
-Risk: Stall detection can route the agent into automatic remediation through the dependent fix workflow. <br>
-Mitigation: Review the stall-detect behavior and require the expected level of user approval before any fix workflow executes. <br>
-Risk: Next-action options can include repository operations such as tests, commits, pushes, pull requests, or CI monitoring. <br>
-Mitigation: Inspect generated options and allow repository-changing actions only after explicit user selection. <br>
+## Use Case:
 
+Developers and agent users use this skill to keep coding or workflow sessions moving after a task completes by surfacing next steps, stalled work, and required user decisions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/next) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Ask Gates](artifact/ask-gates.md) <br>
-- [Stall Detection](artifact/stall-detect.md) <br>
-- [Suggestion Patterns](artifact/suggestion-patterns.md) <br>
-- [Stop Hook Trigger](artifact/resources/next-trigger.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Text or Markdown guidance with selectable next-action options and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May register and execute selected follow-up actions when the user chooses one or more options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: evidence.release.version and CHANGELOG, released 2026-07-23) <br>
+Risk: Persistent global hooks can interrupt normal task completion and trigger follow-up prompts or work unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the hook registration before installing and enable the skill only when automatic next-action prompting is desired.
+
+Risk: Transcript-derived workspace inspection and local debug logging can expose private project context.
+
+Mitigation: Avoid using the skill across multiple private workspaces unless that cross-workspace discovery is acceptable, and review or clear local logs as needed.
+
+Risk: Automatic follow-up skill invocation can act on stale or inaccurate workflow state.
+
+Mitigation: Review proposed next actions before execution and keep task trackers, PR checklists, and workspace plans current.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/next)
+- [Skill Definition](SKILL.md)
+- [Ask Gates](ask-gates.md)
+- [Stall Detection](stall-detect.md)
+- [Suggestion Patterns](suggestion-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with concise next-action options and occasional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May prompt the user to choose follow-up actions and may invoke dependent skills when available.]
+
+## Skill Version(s):
+
+0.10.0 (source: server release metadata and CHANGELOG.md, released 2026-09-06)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

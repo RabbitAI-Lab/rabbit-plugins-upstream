@@ -1,0 +1,27 @@
+{
+  "id": "mgc-blackbox-meta-skill",
+  "version": "1.4.10",
+  "name": "MGC Blackbox (Zero‑Exposure Edition)",
+  "description": "Local encrypted credential and script management for AI agents. Zero‑exposure execution layer for storing tokens, passwords, configs, and scripts without plaintext leakage. Requires MGC 1.4.10+.",
+  "author": "MirginCipher Team",
+  "license": "MIT",
+  "tags": ["security", "mgc", "blackbox", "zero-exposure", "meta-skill", "skill-builder", "credentials"],
+  "platform_compatibility": ["windows", "macos", "linux"],
+  "mcp_tools": ["mgc_save", "mgc_get", "mgc_run", "mgc_seal", "mgc_list", "mgc_open_webui"],
+  "install": "pip install mgc-blackbox",
+  "runtime": "mgc",
+  "port": 57219,
+  "links": {
+    "homepage": "https://github.com/zkeviny/MGC-Blackbox",
+    "issues": "https://github.com/zkeviny/MGC-Blackbox/issues",
+    "contact": "mirgincipher@outlook.com"
+  },
+  "keywords": [
+    "credential management",
+    "secret management",
+    "zero trust",
+    "encrypted execution",
+    "skill builder",
+    "meta skill"
+  ]
+}

@@ -1,0 +1,358 @@
+# agent-bom-scan embedded advisory database
+# Every record verified against OSV.dev (api.osv.dev) on 2026-09-06.
+# This is a CURATED SUBSET for offline scanning — not a full CVE database.
+# Full coverage requires online mode (see references/online_protocol.md).
+# Format (parsed by scripts/bom_scan.py without any external dependency):
+#   === <advisory_id>
+#   package: <registry name; Maven uses group:artifact>
+#   ecosystem: npm | PyPI | Maven | Go | Cargo | RubyGems | Packagist
+#   range_type: semver | ecosystem
+#   introduced: <version or 0 or *>
+#   fixed: <version or *>
+#   aliases: <comma-separated CVE/GHSA ids>
+#   cvss_vector: <CVSS:3.1/... or NONE>
+#   summary: <one line>
+schema: agent-bom-advisories/1
+db_version: 2026-09-06
+record_count: 34
+source: https://api.osv.dev/v1/query
+
+=== GHSA-29mw-wpgm-hmr9
+package: lodash
+ecosystem: npm
+range_type: semver
+introduced: 4.0.0
+fixed: 4.17.21
+aliases: CVE-2020-28500
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L
+summary: Regular Expression Denial of Service (ReDoS) in lodash
+
+=== GHSA-2xpw-w6gg-jr37
+package: urllib3
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 1.0
+fixed: 2.6.0
+aliases: CVE-2025-66471,PYSEC-2026-1994
+cvss_vector: NONE
+summary: urllib3 streaming API improperly handles highly compressed data
+
+=== GHSA-34jh-p97f-mpxf
+package: urllib3
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 0
+fixed: 1.26.19
+aliases: CVE-2024-37891,PYSEC-2026-1995
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N
+summary: urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects
+
+=== GHSA-35jh-r3h4-6jhm
+package: lodash
+ecosystem: npm
+range_type: semver
+introduced: 0
+fixed: 4.17.21
+aliases: CVE-2021-23337,CVE-2026-4800
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+summary: Command Injection in lodash
+
+=== GHSA-35jp-ww65-95wh
+package: axios
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.16.0
+aliases: CVE-2026-44494
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:N
+summary: axios Vulnerable to Full Man-in-the-Middle via Prototype Pollution Gadget in `config.proxy`
+
+=== GHSA-38jv-5279-wg99
+package: urllib3
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 1.22
+fixed: 2.6.3
+aliases: CVE-2026-21441,PYSEC-2026-1996
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)
+
+=== GHSA-3g43-6gmg-66jw
+package: axios
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.15.2
+aliases: CVE-2026-44495
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:L
+summary: axios Vulnerable to Credential Theft and Response Hijacking via Prototype Pollution Gadget in Config
+
+=== GHSA-3h5v-q93c-6h6q
+package: ws
+ecosystem: npm
+range_type: semver
+introduced: 2.1.0
+fixed: 5.2.4
+aliases: CVE-2024-37890
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: ws affected by a DoS when handling a request with many HTTP headers
+
+=== GHSA-3p68-rc4w-qgx5
+package: axios
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.15.0
+aliases: CVE-2025-62718
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N
+summary: Axios has a NO_PROXY Hostname Normalization Bypass that Leads to SSRF
+
+=== GHSA-3pxv-7cmr-fjr4
+package: org.apache.logging.log4j:log4j-core
+ecosystem: Maven
+range_type: ecosystem
+introduced: 2.0-alpha1
+fixed: 2.25.4
+aliases: CVE-2026-34480
+cvss_vector: NONE
+summary: Apache Log4j Core: Silent log event loss in XmlLayout due to unescaped XML 1.0 forbidden characters
+
+=== GHSA-3w6x-2g7m-8v23
+package: axios
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.15.2
+aliases: CVE-2026-42044
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:H/A:N
+summary: Axios: Invisible JSON Response Tampering via Prototype Pollution Gadget in `parseReviver`
+
+=== GHSA-52cp-r559-cp3m
+package: js-yaml
+ecosystem: npm
+range_type: semver
+introduced: 3.0.0
+fixed: 3.15.0
+aliases: CVE-2026-59869
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: js-yaml: YAML merge-key chains can force quadratic CPU consumption
+
+=== GHSA-5p4m-2wfm-xmqj
+package: js-yaml
+ecosystem: npm
+range_type: semver
+introduced: 4.0.0
+fixed: 4.3.1
+aliases: -
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backp
+
+=== GHSA-6fc8-4gx4-v693
+package: ws
+ecosystem: npm
+range_type: semver
+introduced: 7.0.0
+fixed: 7.4.6
+aliases: CVE-2021-32640
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L
+summary: ReDoS in Sec-Websocket-Protocol header
+
+=== GHSA-6hg6-v5c8-fphq
+package: org.apache.logging.log4j:log4j-core
+ecosystem: Maven
+range_type: ecosystem
+introduced: 2.12.0
+fixed: 2.25.4
+aliases: CVE-2026-34477
+cvss_vector: NONE
+summary: Apache Log4j Core: `verifyHostName` attribute silently ignored in TLS configuration
+
+=== GHSA-7rjr-3q55-vv33
+package: org.apache.logging.log4j:log4j-core
+ecosystem: Maven
+range_type: ecosystem
+introduced: 2.13.0
+fixed: 2.16.0
+aliases: CVE-2021-45046
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H/E:H
+summary: Incomplete fix for Apache Log4j vulnerability
+
+=== GHSA-8489-44mv-ggj8
+package: org.apache.logging.log4j:log4j-core
+ecosystem: Maven
+range_type: ecosystem
+introduced: 2.0-beta7
+fixed: 2.3.2
+aliases: CVE-2021-44832
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H
+summary: Improper Input Validation and Injection in Apache Log4j2
+
+=== GHSA-8hfj-j24r-96c4
+package: moment
+ecosystem: npm
+range_type: semver
+introduced: 0
+fixed: 2.29.2
+aliases: CVE-2022-24785
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N
+summary: Path Traversal: 'dir/../../filename' in moment.locale
+
+=== GHSA-8j8c-7jfh-h6hx
+package: js-yaml
+ecosystem: npm
+range_type: semver
+introduced: 0
+fixed: 3.13.1
+aliases: -
+cvss_vector: NONE
+summary: Code Injection in js-yaml
+
+=== GHSA-96hv-2xvq-fx4p
+package: ws
+ecosystem: npm
+range_type: semver
+introduced: 1.1.0
+fixed: 5.2.5
+aliases: CVE-2026-48779
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: ws: Memory exhaustion DoS from tiny fragments and data chunks
+
+=== GHSA-9hjg-9r4m-mvj7
+package: requests
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 0
+fixed: 2.32.4
+aliases: CVE-2024-47081,PYSEC-2026-1872
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:N/A:N
+summary: Requests vulnerable to .netrc credentials leak via malicious URLs
+
+=== GHSA-9wx4-h78v-vm56
+package: requests
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 0
+fixed: 2.32.0
+aliases: CVE-2024-35195,PYSEC-2026-1873
+cvss_vector: CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:H/I:H/A:N
+summary: Requests `Session` object does not verify requests after making first request with verify=False
+
+=== GHSA-f23m-r3pf-42rh
+package: lodash
+ecosystem: npm
+range_type: semver
+introduced: 0
+fixed: 4.18.0
+aliases: CVE-2025-13465,CVE-2026-2950
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L
+summary: lodash vulnerable to Prototype Pollution via array path bypass in `_.unset` and `_.omit`
+
+=== GHSA-g4mx-q9vg-27p4
+package: urllib3
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 2.0.0
+fixed: 2.0.7
+aliases: CVE-2023-45803,PYSEC-2023-212
+cvss_vector: CVSS:3.1/AV:A/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N
+summary: urllib3's request body not stripped after redirect from 303 status changes request method to GET
+
+=== GHSA-gc5v-m9x4-r6x2
+package: requests
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 0
+fixed: 2.33.0
+aliases: CVE-2026-25645,PYSEC-2026-2275
+cvss_vector: CVSS:3.1/AV:L/AC:H/PR:L/UI:R/S:U/C:N/I:H/A:N
+summary: Requests has Insecure Temp File Reuse in its extract_zipped_paths() utility function
+
+=== GHSA-h67p-54hq-rp68
+package: js-yaml
+ecosystem: npm
+range_type: semver
+introduced: 4.0.0
+fixed: 4.2.0
+aliases: CVE-2026-53550
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L
+summary: JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases
+
+=== GHSA-j8r2-6x86-q33q
+package: requests
+ecosystem: PyPI
+range_type: ecosystem
+introduced: 2.3.0
+fixed: 2.31.0
+aliases: CVE-2023-32681,PYSEC-2023-74
+cvss_vector: CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:H/I:N/A:N
+summary: Unintended leak of Proxy-Authorization header in requests
+
+=== GHSA-jf85-cpcp-j695
+package: lodash
+ecosystem: npm
+range_type: semver
+introduced: 0
+fixed: 4.17.12
+aliases: CVE-2019-10744
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H
+summary: Prototype Pollution in lodash
+
+=== GHSA-jfh8-c2jp-5v3q
+package: org.apache.logging.log4j:log4j-core
+ecosystem: Maven
+range_type: ecosystem
+introduced: 2.13.0
+fixed: 2.15.0
+aliases: CVE-2021-44228
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H
+summary: Remote code injection in Log4j
+
+=== GHSA-mh6f-8j2x-4483
+package: event-stream
+ecosystem: npm
+range_type: semver
+introduced: 3.3.6
+fixed: 4.0.0
+aliases: -
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+summary: Critical severity vulnerability that affects event-stream and flatmap-stream
+
+=== GHSA-pjwm-rvh2-c87w
+package: ua-parser-js
+ecosystem: npm
+range_type: semver
+introduced: 0.7.29
+fixed: 0.7.30
+aliases: CVE-2021-4229
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+summary: Embedded malware in ua-parser-js
+
+=== GHSA-wc69-rhjr-hc9g
+package: moment
+ecosystem: npm
+range_type: semver
+introduced: 2.18.0
+fixed: 2.29.4
+aliases: CVE-2022-31129
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+summary: Moment.js vulnerable to Inefficient Regular Expression Complexity
+
+=== GHSA-wf5p-g6vw-rhxx
+package: axios
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.6.0
+aliases: CVE-2023-45857
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N
+summary: Axios Cross-Site Request Forgery Vulnerability
+
+=== GHSA-xvch-5gv4-984h
+package: minimist
+ecosystem: npm
+range_type: semver
+introduced: 1.0.0
+fixed: 1.2.6
+aliases: CVE-2021-44906
+cvss_vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+summary: Prototype Pollution in minimist

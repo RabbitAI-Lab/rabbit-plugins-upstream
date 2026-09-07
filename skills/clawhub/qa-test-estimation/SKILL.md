@@ -1,8 +1,11 @@
 ---
 name: qa-test-estimation
-version: 1.6.0
+slug: qa-test-estimation
+displayName: 测试估算
+version: 1.7.5
 description: >-
   当项目经理问"这个版本多久测完"或者需要给测试排期做资源规划时使用此技能。基于需求复杂度、变更范围和历史数据系统化估算测试人天，输出包含冒烟/功能/回归/专项的逐阶段预估。不要拍脑袋——估算必须有依据（复杂度分级 + 历史基线 + 风险系数），同时标注置信度区间和风险预留。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"工作量估算"、"测试时间"、"排期"、"资源规划"、"估算工时"、"人天"、"工期"、"多久测完"、需要估算测试工作量、项目计划阶段需要测试工时评估时
 allowed-tools: Read Grep Glob
@@ -32,6 +35,9 @@ output_format:
   traceability:
     - 每份估算带唯一ID（EST-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - estimation_result: 工作量估算结果
     - breakdown: 工作分解结构
     - risk_buffer: 风险缓冲建议
@@ -44,6 +50,8 @@ error_recovery_guidance:
   on_failure: "估算遗漏关键模块时回退到需求解构补充范围"
   retry_behavior: "补全范围后重新估算"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及发布计划和工作量排期估算。
 > 这些是估算参考不是直接操作；请勿未经项目经理确认即变更发布计划或排期。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

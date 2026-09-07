@@ -1,0 +1,59 @@
+{
+  "_meta": {
+    "target_period": "2026104",
+    "last_updated": "2026-09-07",
+    "auto_scraped": true,
+    "source": "WebSearch + WebFetch 原文二次核对(新浪彩票/网易新闻)",
+    "note": "诚信说明: 仅收录【可追溯来源URL + 抓取时间戳 + 原文二次核对一致】的专家推荐; 剔除伪专家与无来源号码。专家推荐无预测力(no_edge), 任一6+1组合中奖概率恒为1/17,721,088, 仅作描述性/逆向信号, 绝不可据其认为某号更可能中奖。",
+    "verification_policy": "每条号码均经 WebFetch 打开来源页原文比对, 数字完全一致才标 verified=true; 动态页无法二次取回原文者标 verified=false 并注明, 不参与战绩自算。",
+    "expert_count": 3,
+    "schema": "expert/front/back(与 ssq_auto.load_expert_picks 一致)"
+  },
+  "experts": [
+    {
+      "expert": "樊欣易",
+      "platform": "新浪彩票(lotto.sina.cn)",
+      "type": "媒体名家",
+      "specialty": "区间分布/连码/和值",
+      "period": "2026104",
+      "kind": "6+1精准单挑",
+      "front": [7, 11, 14, 17, 18, 20],
+      "back": [5],
+      "note": "红球精准三胆14,17,18; 9+3小复式 07,11,14,17,18,20,26,30,31+02,05,14; 和值参考87, 关注连码17-18",
+      "source_url": "https://lotto.sina.cn/2026-09-07/detail-iniqymaa6334508.d.html?vt=4",
+      "scraped_at": "2026-09-07 10:26",
+      "verified": true,
+      "verify_method": "WebFetch 原文比对一致"
+    },
+    {
+      "expert": "会飞的小小鱼654",
+      "platform": "网易新闻(c.m.163.com)",
+      "type": "数据分析",
+      "specialty": "区间/奇偶/和值/跨度/重号邻号多维整合",
+      "period": "2026104",
+      "kind": "6+1推荐",
+      "front": [5, 11, 19, 22, 27, 31],
+      "back": [6],
+      "note": "三区比2:2:2, 奇偶比3:3, 和值115, 跨度26; 蓝球避开金百万必杀5蓝(03,05,07,12,15)选小偶数06",
+      "source_url": "https://c.m.163.com/news/a/L67HVDBD0556NXGM.html",
+      "scraped_at": "2026-09-07 11:11",
+      "verified": true,
+      "verify_method": "WebFetch 原文比对一致"
+    },
+    {
+      "expert": "荣少",
+      "platform": "新浪彩票(lotto.sina.cn)",
+      "type": "媒体名家",
+      "specialty": "012路/跨度/邻孤传",
+      "period": "2026104",
+      "kind": "单挑一注",
+      "front": [5, 6, 9, 14, 22, 27],
+      "back": [1],
+      "note": "推荐012路比3:1:2, 跨度22, 邻孤传2:3:1; 独蓝推荐01",
+      "source_url": "https://lotto.sina.cn/number/article.d.html?news_id=N2309102211254544668",
+      "scraped_at": "2026-09-07",
+      "verified": false,
+      "verify_method": "来源页为动态渲染, WebFetch 未能取回号码正文; 号码取自搜索引擎返回的原页摘要, 未获原文二次核对 → 标 verified=false 供参考, 不参与战绩自算"
+    }
+  ]
+}

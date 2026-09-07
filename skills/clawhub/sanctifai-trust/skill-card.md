@@ -1,43 +1,59 @@
-## Description: <br>
-Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrate SanctifAI Trust Proof-of-Human attestations. Use when an app needs cryptographic proof a human performed a task or human-in-the-loop verification.
 
-## Publisher: <br>
-[sanctifai](https://clawhub.ai/user/sanctifai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sanctifai](https://clawhub.ai/user/sanctifai)
 
-## Use Case: <br>
-Developers and engineers use this skill to integrate SanctifAI Trust attestations into applications that need proof a human completed or approved a task. It guides embedded REST API and extension-based integration paths that return a participation ID, certificate URL, QR URL, and optional verification URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Trust API key could be exposed if embedded integration code places it in client-side JavaScript. <br>
-Mitigation: Keep TRUST_API_KEY only on the backend or in a secret manager, and mint browser sessions server-side. <br>
-Risk: Public certificate URLs or on-chain attestations could reveal sensitive metadata if identifiers or labels contain PII. <br>
-Mitigation: Use opaque internal identifiers and avoid names, emails, account numbers, government IDs, addresses, or other PII in certificate-visible fields. <br>
-Risk: Production attestations depend on an external SanctifAI service and tenant configuration. <br>
-Mitigation: Confirm the organization trusts SanctifAI Trust before production use, target the production API, and verify tenant origin allowlists before asking users to test. <br>
+## Use Case:
 
+Developers and product teams use this skill to integrate Proof-of-Human attestations into applications or chat-agent workflows that need human participation verification and a returned certificate URL.
 
-## Reference(s): <br>
-- [SanctifAI Trust documentation](https://trust.sanctifai.com) <br>
-- [ClawHub skill page](https://clawhub.ai/sanctifai/skills/sanctifai-trust) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with JavaScript, HTML, environment variable, and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may produce backend API calls to SanctifAI Trust; no package install is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The chat-agent path may send raw task and result data to a hosted bridge even though the skill also describes privacy-preserving hashed payloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: For confidential, regulated, or customer data, prefer the embedded flow that hashes locally, or self-host/control the bridge and send only minimized, pseudonymous payloads.
+
+Risk: Public certificate URLs can expose metadata that an integrator places in attestation fields.
+
+Mitigation: Use opaque identifiers, avoid PII in certificate-visible fields and bridge payloads, and keep detailed records in the integrator's own system.
+
+Risk: Tenant API keys could be exposed if integration guidance is copied into client code or shared chat logs.
+
+Mitigation: Keep TRUST_API_KEY only in backend or controlled bridge environments, and never print or request it in agent-visible outputs.
+
+## Reference(s):
+
+- [SanctifAI Trust homepage](https://trust.sanctifai.com)
+- [ClawHub skill page](https://clawhub.ai/sanctifai/skills/sanctifai-trust)
+- [SanctifAI-hosted chat bridge](https://trust-agent-c94n.onrender.com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with code blocks, REST API examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include environment variable guidance for tenant credentials and API integration paths.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release metadata; artifact frontmatter reports 1.5.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

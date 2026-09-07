@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Shopee 商品搜索"
+  short_description: "查询真实 Shopee 商品与历史表现并完成候选筛选"
+  default_prompt: "使用 $geekbi-shopee-product-search-skill 查询 Shopee 商品并分析销量、价格与增长表现。"

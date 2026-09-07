@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ozon 店铺搜索"
+  short_description: "查询 Ozon 店铺、卖家规模、品牌、销量与趋势"
+  default_prompt: "使用 $geekbi-ozon-shop-search-skill 查询并分析 Ozon 竞品店铺。"

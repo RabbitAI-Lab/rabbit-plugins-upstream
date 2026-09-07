@@ -1,42 +1,60 @@
-## Description: <br>
-Convert storyboard details into a video-generation pipeline that can be added to an OpenClaw canvas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts storyboard details into a video-generation pipeline that an agent can add to a canvas.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content-production agents use this skill to turn storyboard context, dialogue, and video prompts into a canvas-ready generation pipeline for cloned audio, scene imagery, and videos. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's stated storyboard purpose is narrower than its behavior around CLI use, credential storage, external service calls, and terminal generation commands. <br>
-Mitigation: Install it only when dLazy cloud media generation is intended, and review each proposed terminal command before allowing generation. <br>
-Risk: Prompts and selected local media can be uploaded to dLazy services, and an API key may be stored locally. <br>
-Mitigation: Use appropriate input data for cloud processing, prefer npx or an environment variable for less persistent setup, and rotate or revoke API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers and creators use this skill to turn storyboard context, dialogue, and video prompts into a structured video generation pipeline for canvas-based workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-storyboard-generate) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with JSON pipeline examples and CLI command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces canvas-ready JSON pipeline elements; may invoke dLazy CLI workflows and external dLazy API endpoints when generation is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: release evidence and frontmatter) <br>
+Risk: The skill can send prompts, selected media paths or files, and generation data to dLazy services through the hosted CLI workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for workflows where that data sharing is acceptable, avoid sensitive media, and verify the configured dLazy account and API key before use.
+
+Risk: The artifact includes global third-party CLI installation and terminal-generation instructions that may not match ordinary storyboard canvas use.
+
+Mitigation: Prefer npx or an isolated environment, verify the @dlazy/cli package and version, and remove or clarify unrelated terminal-generation instructions before deployment.
+
+Risk: API keys may be stored in the user's dLazy CLI configuration or supplied through an environment variable.
+
+Mitigation: Protect the local CLI configuration, use least-privilege credentials where available, and rotate or revoke keys from the dLazy dashboard when access changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-storyboard-generate)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON pipeline snippets and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses storyboard aspect ratio, resolution, dialogue text, and video prompts to define audio, image, and video canvas elements.]
+
+## Skill Version(s):
+
+1.2.11 (source: server release metadata; artifact frontmatter lists 1.2.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

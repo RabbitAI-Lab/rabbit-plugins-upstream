@@ -1,47 +1,63 @@
-## Description: <br>
-施工建材采招助手-鲁班乐标，当查询词包含建材、钢材、管材、机械或特定建筑材料型号时调用，必须调用价格趋势查询和Top品牌接口，输出建材历史单价和主要供应商名单。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query Lubanlebiao/Zhiliaobiaoxun procurement data for construction materials, including bid notices, historical unit prices, top brands, suppliers, company records, contacts, and account status.
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to query Lubanlebiao/ZLBX procurement data for construction materials, supplier discovery, bid searches, company analysis, brand rankings, and historical bid-price trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive ZLBX_API_KEY credential. <br>
-Mitigation: Use a dedicated API key, store it only in the agent environment or approved configuration, and monitor quota usage. <br>
-Risk: The skill can perform broader procurement intelligence, company contact lookup, competitor analysis, and lead-generation workflows beyond construction-material price lookup. <br>
-Mitigation: Deploy it only for approved procurement-intelligence use cases and require user confirmation before expanding company searches or retrieving contact information. <br>
-Risk: Procurement research may involve confidential or commercially sensitive topics. <br>
-Mitigation: Avoid confidential procurement analysis unless approved by the organization responsible for the research. <br>
+## Use Case:
 
+External procurement, bidding, sales, and market-analysis users can ask an agent to search Chinese tender and award data, compare construction-material prices, identify major brands and suppliers, analyze companies, and check account usage.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/construction-material-bid-assistant-lubanlebiao) <br>
-- [Lubanlebiao/ZLBX API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [ZLBX API key portal](https://ai.zhiliaobiaoxun.com/?ch=s35) <br>
-- [api-search.md](references/api-search.md) <br>
-- [api-company.md](references/api-company.md) <br>
-- [api-market.md](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown or structured text summaries with API request examples and procurement-analysis guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY for authenticated read-only procurement API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill may use broader procurement, company, contact, account, and vendor-referral workflows than the construction-material description alone suggests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exposed workflows before installation and restrict use to approved procurement and market-analysis tasks.
+
+Risk: Automatic registration can collect a MAC-address hash for device deduplication and store an API key locally.
+
+Mitigation: Prefer supplying a manually created API key through a standard secret store; allow automatic registration only after users accept the device-tracking and local-credential behavior.
+
+Risk: Security evidence marks the release as suspicious because requested access and setup behavior are broader than the description clearly supports.
+
+Mitigation: Review before installing, especially in enterprise environments, and verify that API-key handling, quota use, and contact-data access match organizational policy.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thuanlynham-stack/skills/construction-material-bid-assistant-lubanlebiao)
+- [Skill Definition](artifact/SKILL.md)
+- [Bid Search API Reference](artifact/references/api-search.md)
+- [Company Analysis API Reference](artifact/references/api-company.md)
+- [Market Analysis API Reference](artifact/references/api-market.md)
+- [Account API Reference](artifact/references/api-account.md)
+- [Automatic Registration Reference](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with tables, JSON request examples, REST API calls, and setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or a local ~/.zlbx/config.json API key; some account and contact responses depend on service-side entitlement and quota.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

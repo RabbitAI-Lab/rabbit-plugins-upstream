@@ -129,10 +129,10 @@ Two levels:
 1. Light activation: no extra search needed if it only uses the existing
    diagnosis. Output one next note direction, 3 titles, 1 cover keyword, opening
    3 lines, and what to send back after publishing.
-2. Deep activation: may consume additional credits if it needs to find new
+2. Deep activation: may require additional online research if it needs to find new
    benchmark accounts, open note details, read comments, inspect backend
    screenshots with the note context, or build a 7-day/30-day content package.
-   Use `search-credit-notice.md` before expanding.
+   Use `research-scope-guard.md` before expanding.
 
 Good offer:
 
@@ -194,7 +194,7 @@ Do not embed remote cover images inside plain text or Word reports unless the im
 
 Before writing an own-account diagnosis, check how many public notes are visible
 or included in the confirmed analysis sample. Do not pretend a small homepage
-can support a full paid-grade diagnosis.
+can support a full formal diagnosis.
 
 Use this routing:
 
@@ -205,8 +205,8 @@ Use this routing:
 | 3-5 | 起步号小诊断 | Judge whether the direction is scattered, whether any early signal is worth continuing, and give a 7-day publishing path. Avoid heavy conclusions. |
 | 6-9 | 轻量账号分析 | Analyze preliminary content mainline, update state, title/cover issues, and next 7-14 days. Mark user persona and viral mechanism as early hypotheses. |
 | 10-19 | 标准账号分析 v1 | Include user persona, content columns, early standout vs baseline, title/cover patterns, same-stage references, and 7/30-day actions. |
-| 20-39 | 标准账号诊断报告 | Use as the normal full-report range. Deep profile analysis can use `--limit 20` after credit confirmation. |
-| 40+ | 深度诊断 / 博主蒸馏 / 知识库沉淀 | Use `--limit 40` after credit confirmation when the user wants deeper report, creator distillation, or knowledge-base assets. |
+| 20-39 | 标准账号诊断报告 | Use as the normal full-report range. Deep profile analysis can use `--limit 20` after scope confirmation. |
+| 40+ | 深度诊断 / 博主蒸馏 / 知识库沉淀 | Use `--limit 40` after scope confirmation when the user wants deeper report, creator distillation, or knowledge-base assets. |
 
 If the account has fewer than 10 public notes, the chat must explicitly say the
 sample is still small and downgrade the deliverable. The tone should be
@@ -337,7 +337,7 @@ For a client-facing own-account diagnosis, include these sections by default:
 18. 超预期高光结论：一张可以截图分享的结论卡，包含结论、行动建议和心理按摩
 19. 诊断后温柔结论 / 继续分析入口
 20. 可选诊断后行动包：只在用户想继续时提供轻量版或深度版，并按
-    `search-credit-notice.md` 说明是否会新增积分消耗
+    `research-scope-guard.md` 说明是否会新增查询范围
 
 Only use the full structure above when the sample-size gate allows standard
 account analysis or above. For accounts below 10 public notes, use a lighter
@@ -557,7 +557,7 @@ The order should be:
 3. 一个具体下一步: choose only one best next action, not a menu of everything.
 4. 回来复盘入口: tell the user exactly what to send back.
 5. Optional activation offer: if the user wants to turn the diagnosis into an
-   action package, offer the light/deep choice and explain credit scope before
+   action package, offer the light/deep choice and explain research scope before
    deeper search.
 6. Knowledge-base sync question if useful.
 

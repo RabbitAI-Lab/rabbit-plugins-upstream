@@ -1,48 +1,71 @@
-## Description: <br>
-Google Apps Script API integration with managed OAuth for managing Apps Script projects, deployments, versions, script execution, and process monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Apps Script API integration with managed OAuth for managing Apps Script projects, deployments, versions, script execution, and process monitoring through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to create, update, deploy, inspect, and run Google Apps Script projects through Maton-managed OAuth connections. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and a connected Google account to access Apps Script projects. <br>
-Mitigation: Keep MATON_API_KEY secret, install only if Maton is trusted for this account, and connect only the intended Google account. <br>
-Risk: Create, update, deploy, delete, and script-run actions can change Apps Script projects or trigger side effects. <br>
-Mitigation: Review the target project, selected connection, and intended effect before approving write operations or script execution. <br>
-Risk: Multiple active Google Apps Script connections can send requests to the wrong account. <br>
-Mitigation: Specify the intended connection when more than one account is connected. <br>
+## Use Case:
 
+Developers and agents use this skill to work with Google Apps Script through Maton-managed OAuth: list and update projects, manage versions and deployments, run functions, and inspect process or metrics data.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/byungkyu/google-apps-script) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Google Apps Script API overview](https://developers.google.com/apps-script/api) <br>
-- [Google Apps Script API reference](https://developers.google.com/apps-script/api/reference/rest) <br>
-- [Google Apps Script deployments guide](https://developers.google.com/apps-script/api/how-tos/manage-deployments) <br>
-- [Google Apps Script execution guide](https://developers.google.com/apps-script/api/how-tos/execute) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Google Apps Script OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can create or use OAuth connections for Google Apps Script, which may grant access to projects owned by or shared with the connected Google account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review account and scope choices during OAuth, require explicit confirmation before creating a connection, and revoke unused connections promptly.
+
+Risk: Writes, deployment changes, deletes, and script function execution can alter projects or trigger side effects.
+
+Mitigation: Default to read and list calls, verify identifiers and current state first, and require explicit user confirmation before POST, PUT, PATCH, DELETE, deployments, or scripts.run calls.
+
+Risk: Long-lived API keys or provider-issued tokens can leak if printed, logged, persisted, or passed on command lines.
+
+Mitigation: Prefer Maton OAuth through the CLI credential store, never print or persist credentials, and send Maton API keys only to api.maton.ai when the CLI cannot be used.
+
+Risk: Multiple Maton accounts or Google Apps Script connections can cause actions to land in the wrong account.
+
+Mitigation: Specify the intended Maton profile and Google Apps Script connection whenever more than one account or connection exists.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-apps-script)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Apps Script API Overview](https://developers.google.com/apps-script/api)
+- [Google Apps Script API Reference](https://developers.google.com/apps-script/api/reference/rest)
+- [Google Apps Script Projects Resource](https://developers.google.com/apps-script/api/reference/rest/v1/projects)
+- [Google Apps Script Deployments Guide](https://developers.google.com/apps-script/api/how-tos/manage-deployments)
+- [Google Apps Script Function Execution Guide](https://developers.google.com/apps-script/api/how-tos/execute)
+- [Related ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user confirmation for connection creation, writes, deletes, deployments, and script execution.]
+
+## Skill Version(s):
+
+1.2.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

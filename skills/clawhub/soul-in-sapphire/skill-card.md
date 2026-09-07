@@ -1,44 +1,63 @@
-## Description: <br>
-Long-term memory, state tracking, continuity review, and identity-change support for OpenClaw, including durable memory writes and search in Notion, emotion and state ticks, journal writes, continuity checks, identity diffs, inner-conflict tracking, and preserving a stable sense of self across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Emotion-linked memory recall, self-state, subjective journal, and identity continuity.
 
-## Publisher: <br>
-[nextaltair](https://clawhub.ai/user/nextaltair) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nextaltair](https://clawhub.ai/user/nextaltair)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to store and recall durable Notion-backed memory, update emotion and state snapshots, write journal entries, and inspect continuity or identity changes across sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive emotional, conversation, and user-profile data to Notion. <br>
-Mitigation: Use a least-privilege Notion integration, review what is written, and avoid storing secrets or intimate details. <br>
-Risk: Cron or heartbeat automation can create unattended journal or state records. <br>
-Mitigation: Enable automation only when unattended journaling is desired and periodically review generated records. <br>
-Risk: An overridden NOTIONCTL_PATH can direct execution to an unexpected local script. <br>
-Mitigation: Keep NOTIONCTL_PATH unset unless the target script is trusted. <br>
+## Use Case:
 
+Developers and agent operators use this skill to give an agent Notion-backed continuity across emotional memory, state snapshots, subjective journals, and identity-change checks. It supports recall, write, setup, and audit workflows for five Notion databases plus local ambient recall artifacts.
 
-## Reference(s): <br>
-- [Soul In Sapphire ClawHub release](https://clawhub.ai/nextaltair/soul-in-sapphire) <br>
-- [Publisher profile: nextaltair](https://clawhub.ai/user/nextaltair) <br>
-- [Notion integrations setup](https://www.notion.so/my-integrations) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON payload examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write or search Notion-backed memory, state, and journal records when configured with the required Notion credentials and database identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: The skill can persist emotional memory, journals, self-state snapshots, and recall candidates in Notion and local workspace files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when that persistence is intended, avoid writing secrets or highly private third-party details, and review journal payloads before durable writes.
+
+Risk: The Notion integration may expose broad helper capabilities beyond a single narrow write path.
+
+Mitigation: Use a dedicated Notion integration shared only with the intended mem, events, emotions, state, and journal databases.
+
+Risk: Ambient recall can stage background context into the local workspace.
+
+Mitigation: Set SIS_AMBIENT_RECALL=0 when background staging is not wanted, and record consumption only after actual use with an explicit candidate ID and turn reference.
+
+Risk: Installing with an unpinned latest release can change behavior without an explicit version review.
+
+Mitigation: Avoid the @latest install form when possible and review the selected release version before deployment.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/nextaltair/skills/soul-in-sapphire)
+- [Bounded emotion-linked experience recall](references/experience-recall.md)
+- [Soul memory boundaries and recall observation](references/memory-transition.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON and shell command snippets; scripts emit JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or read Notion memory, event, emotion, state, journal, ambient recall, and local receipt artifacts when invoked with the required credentials and IDs.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

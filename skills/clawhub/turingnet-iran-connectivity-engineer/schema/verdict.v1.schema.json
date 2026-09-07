@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/turingnet-iran-connectivity-engineer/schema/verdict.v1.schema.json",
+  "title": "turingnet.verdict.v1",
+  "description": "Machine verdict emitted by scripts/redact_pii.py --json (schema turingnet.redaction.v1), scripts/guard.py --json (schema turingnet.guard.v1) and scripts/low_bandwidth_report.py --json (schema turingnet.report.v1). The 'schema' field discriminates the emitter; the common envelope is described here. Exit codes: redactor 0 clean / 1 input error / 2 residual suspicion; guard 0 pass / 1 warn / 2 block / 3 input error; report 0 built / 1 input error / 2 guard-blocked.",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": { "type": "string", "pattern": "^turingnet\\.(redaction|guard|report)\\.v1$" },
+    "verdict": { "enum": ["pass", "warn", "block"], "description": "guard verdicts" },
+    "built": { "type": "boolean", "description": "report builder outcome" },
+    "replacements": {
+      "type": "object",
+      "additionalProperties": { "type": "integer", "minimum": 0 },
+      "description": "redactor: replacement counts by PII type (phone-ir, national-id-ir, imei, imsi, iccid-sim, bank-pan, iban-ir, ipv4, ipv6, mac, bearer-token, secret-assign, aws-key, gps, email)."
+    },
+    "total_replacements": { "type": "integer", "minimum": 0 },
+    "residual_suspects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": { "type": "string" },
+          "span": { "type": "string", "description": "Truncated matching text (already length-capped by the emitter)." }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "category", "severity"],
+        "properties": {
+          "id": { "type": "string" },
+          "category": { "type": "string" },
+          "severity": { "enum": ["warn", "block"] },
+          "span": { "type": "string" }
+        }
+      }
+    },
+    "error": { "type": "string" }
+  },
+  "additionalProperties": true
+}

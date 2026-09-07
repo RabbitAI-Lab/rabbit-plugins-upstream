@@ -1,47 +1,62 @@
-## Description: <br>
-企业投标决策智能助手 analyzes a specific tender using Zhiliaobiaoxun bidding data to produce bid/no-bid guidance, competitor forecasts, win probability signals, pricing references, buyer preference analysis, and disqualification risk notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a specific bidding opportunity with Zhiliaobiaoxun historical tender data to produce a decision report covering whether to bid, expected competitors, pricing guidance, buyer patterns, and bid-failure risks.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Business development, sales, and bid teams use this agent to evaluate whether to pursue a specific procurement opportunity, estimate competitive pressure, and draft a concise decision report grounded in bidding history. It is intended for users who provide a tender link, project title, or tender file and need commercial bid-decision support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register a vendor account and persist an API key when ZLBX_API_KEY is not already configured. <br>
-Mitigation: Prefer preconfiguring ZLBX_API_KEY or reviewing the auto-registration flow before installation so users understand the account creation and local credential storage behavior. <br>
-Risk: Generated reports may preserve signed sk links returned by the API, which can make shared reports easier to access than intended. <br>
-Mitigation: Review HTML and Markdown reports before sharing externally, and remove signed links unless the recipient is intended to receive them. <br>
-Risk: Bid recommendations can influence commercial decisions and may be wrong if source data is incomplete, stale, or unavailable. <br>
-Mitigation: Treat the report as decision support, require human review, and preserve the documented data gaps, time ranges, and disclaimers in final outputs. <br>
+## Use Case:
 
+External business users and bidding teams use this skill to assess a concrete tender, compare buyer and competitor signals, estimate pricing posture, and generate a concise bid/no-bid decision report.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/enterprise-bidding-decision-agent) <br>
-- [Publisher Profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [API Quick Reference](artifact/references/api-quick.md) <br>
-- [Workflow](artifact/references/workflow.md) <br>
-- [Report Template](artifact/references/report-template.md) <br>
-- [Auto Registration](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision report, optional HTML report file, and concise user guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or vendor auto-registration; normal full analysis is documented as about 12-25 API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can register accounts with a device fingerprint and store credentials locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require user consent before automatic registration, prefer a user-supplied ZLBX_API_KEY, and review permissions on ~/.zlbx/config.json if the skill creates it.
+
+Risk: Generated reports may preserve signed access links and report contents.
+
+Mitigation: Treat sk and auto-login links as access-bearing links and share generated HTML reports only with intended recipients.
+
+Risk: Bid recommendations can be misleading when source data is incomplete or stale.
+
+Mitigation: Keep the report's data-gap section, cite supporting tender or company records, and make final commercial decisions only after independent review.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhiliaobiaoxun/skills/enterprise-bidding-decision-agent)
+- [API quick reference](references/api-quick.md)
+- [Bidding analysis workflow](references/workflow.md)
+- [Report template](references/report-template.md)
+- [Automatic registration flow](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report, optional self-contained HTML report file, and concise user guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full analysis is documented as approximately 12-25 API calls; quick analysis is documented as approximately 5-8 API calls. Reports must identify data gaps and include a disclaimer.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

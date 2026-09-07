@@ -1,46 +1,63 @@
-## Description: <br>
-Implements energy-efficient, harm-reducing memory and pattern governance that preserves ecological variance and excludes identity tracking or profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Regenerative Intelligence is a documentation-only specification for designing, reviewing, and operating agentic AI memory and recall systems that prioritize harm reduction, non-identifiability, consent-scoped recall, honesty, and energy restraint.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Developers and agent designers use this skill as guidance for building non-identifying memory, recall, and pattern governance that reduces harmful retention, profiling, and energy-heavy long-context behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill describes persistent memory and non-transparent safety behaviors that may narrow or degrade responses under suspected misuse. <br>
-Mitigation: Install only with host controls that make storage, retention, opt-in sharing, audit visibility, and deletion verification clear to users. <br>
-Risk: Privacy, deletion, identity-vault, and sharing guarantees depend on the host implementation. <br>
-Mitigation: Review implementation controls before relying on the skill's privacy, deletion, identity separation, or sharing claims. <br>
+## Use Case:
 
+Developers, architects, reviewers, and auditors use this skill to specify or assess memory, recall, and pattern-stewardship systems for agentic AI. It helps them evaluate conformance to requirements for non-identifiability, consent-scoped recall, transparent refusal, no behavioral surveillance, and energy restraint.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/regenerative-intelligence) <br>
-- [Publisher profile](https://clawhub.ai/user/otherpowers) <br>
-- [Regenerative Intelligence Skill Specification](artifact/skill.md) <br>
-- [Architecture](artifact/architecture.md) <br>
-- [Metadata Schema](artifact/metadata-schema.md) <br>
-- [Threat Model](artifact/threat-model.md) <br>
-- [Energy Accounting](artifact/energy-accounting.md) <br>
-- [Non-Goals](artifact/non-goals.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Markdown documentation with memory schema and governance guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces architectural guidance for persistent memory, recall boundaries, metadata, stasis behavior, and non-identifying audit practices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: An implementation could treat this specification as proof that sensitive memory, deletion, identity separation, or refusal behavior is safe without reviewing the actual system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the implementation against the conformance checklist, threat model, and security guidance before claiming conformance.
+
+Risk: Readers could mistake the documentation for a runtime that stores data, builds a vault, monitors behavior, or enforces protections by itself.
+
+Mitigation: Treat the artifact as governance and design guidance only; require separate implementation evidence for any runtime capability.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/otherpowers/skills/regenerative-intelligence)
+- [Regenerative Intelligence specification](artifact/SKILL.md)
+- [Conformance Checklist](artifact/conformance-checklist.md)
+- [Threat Model](artifact/threat-model.md)
+- [Metadata Schema](artifact/metadata-schema.md)
+- [Energy Accounting](artifact/energy-accounting.md)
+- [Resonance Handshake](artifact/resonance-handshake.md)
+- [CARE Principles for Indigenous Data Governance](https://en.wikipedia.org/wiki/CARE_Principles_for_Indigenous_Data_Governance)
+- [Elinor Ostrom](https://en.wikipedia.org/wiki/Elinor_Ostrom)
+- [Edouard Glissant](https://en.wikipedia.org/wiki/Edouard_Glissant)
+- [Differential privacy](https://en.wikipedia.org/wiki/Differential_privacy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown prose, requirements, schemas, checklists, and review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; produces no executable code, hidden actions, data storage, or runtime monitoring.]
+
+## Skill Version(s):
+
+1.0.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

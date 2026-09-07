@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/calendly-api",
   "slug": "calendly-api",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781739759130,
-  "contentHash": "3eb538cb34ee0b8993c09f036ad4a41d586acf3ac50f19516cd446240f8a898c",
-  "fetchedAt": "2026-07-26T18:27:26.938Z"
+  "version": "1.2.2",
+  "updatedAt": 1788555798517,
+  "contentHash": "ae20326fc54844e60ad899c50462dc6b9a81420c1ab00792cac6683ac997a2b4",
+  "fetchedAt": "2026-09-07T14:13:27.824Z"
 }

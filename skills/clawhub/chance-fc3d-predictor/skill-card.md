@@ -1,48 +1,57 @@
-## Description: <br>
-Provides FC3D lottery analysis and number-selection guidance using historical draw statistics and 12 filtering methods for straight, group3, and group6 play. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chance Fc3d Predictor analyzes China Welfare Lottery 3D play types with statistical filters and Monte Carlo-style examples to produce advisory number-selection reports for human review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to generate FC3D lottery analysis reports, candidate number sets, filtering steps, and optional Python examples for personal reference. Outputs are advisory only and should not be treated as predictions or financial guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake lottery number recommendations for reliable predictions. <br>
-Mitigation: Present outputs as gambling-related entertainment and personal reference only, and require users to apply their own judgment. <br>
-Risk: Lottery guidance can encourage overspending. <br>
-Mitigation: Advise strict spending limits and rational betting before any real-world use. <br>
-Risk: Optional Python examples may install packages, contact an external lottery-data site, and create local report files. <br>
-Mitigation: Review optional code before running it and only execute it in an appropriate local environment. <br>
+## Use Case:
 
+External users and developers use this skill as an educational FC3D lottery-analysis reference to generate advisory reports, candidate numbers, and responsible-gambling context for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/chance-fc3d-predictor) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
-- [FC3D Python algorithm reference](references/fc3d_algorithm_python.md) <br>
-- [FC3D data templates and output norms](references/fc3d_data_templates.md) <br>
-- [FC3D strategy guide](references/fc3d_strategy_guide.md) <br>
-- [500.com FC3D data chart](https://datachart.500.com/fc3d/) <br>
+### Deployment Geography for Use:
 
+Global, subject to local lottery and gambling laws.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown analysis reports with tables, candidate number lists, and optional Python or shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only lottery guidance; optional code may fetch external draw data and create local report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.3 (source: release evidence) <br>
+Risk: Users may treat statistical filters or candidate numbers as guaranteed winning predictions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present outputs as probability reference only, require human review, and avoid claims of guaranteed results or returns.
+
+Risk: Lottery participation may be restricted by age, sales channel, or jurisdiction.
+
+Mitigation: Prompt users to verify local legal and responsible-gambling requirements before acting on any analysis.
+
+Risk: Illustrative Python snippets may be copied into a user-controlled environment.
+
+Mitigation: Review snippets before execution; the artifact bundles no executable files, persistence, credential use, or hidden data flows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chance-fc3d-predictor)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown reports with advisory text, tables, and optional illustrative Python code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are educational reference material only and require human review.]
+
+## Skill Version(s):
+
+4.0.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

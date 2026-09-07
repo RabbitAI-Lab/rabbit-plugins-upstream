@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendmux-cli",
   "slug": "sendmux-cli",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1783569493641,
-  "contentHash": "67899a4957ca5d99b88e91ed5d6c6e8d1f9a407a601effb584b28ef7c9d5fedb",
-  "fetchedAt": "2026-07-26T18:17:42.082Z"
+  "version": "1.0.7",
+  "updatedAt": 1788259101232,
+  "contentHash": "3b045f068b73d849ca2cadb3f0745c1c29c11092f39eb2729a98c1fd1043ace9",
+  "fetchedAt": "2026-09-07T14:21:46.156Z"
 }
