@@ -1,0 +1,26 @@
+{
+  "name": "token-panel-ultimate",
+  "version": "2.3.1",
+  "description": "Track AI usage across Claude Max, ChatGPT, Gemini & Manus in one OpenClaw dashboard. 5-hour/7-day rolling windows, per-model rate limits, credit balances, reset times. Webchat widget overlay. Never hit rate limits by surprise.",
+  "keywords": [
+    "api-usage",
+    "budget",
+    "chatgpt",
+    "claude-max",
+    "cost-tracking",
+    "dashboard",
+    "gemini",
+    "manus",
+    "openai",
+    "openclaw",
+    "rate-limits",
+    "token-counting",
+    "tokens",
+    "usage",
+    "usage-tracking",
+    "widget"
+  ],
+  "license": "MIT",
+  "author": "Oscar Serra",
+  "repository": "https://github.com/globalcaos/clawdbot-moltbot-openclaw"
+}

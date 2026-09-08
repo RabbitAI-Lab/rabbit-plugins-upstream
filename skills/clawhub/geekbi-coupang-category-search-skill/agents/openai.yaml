@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coupang 类目搜索"
+  short_description: "查询韩国站类目树、父链和类目商品样本"
+  default_prompt: "使用极鲸云真实数据查询并分析 Coupang 韩国站类目。"

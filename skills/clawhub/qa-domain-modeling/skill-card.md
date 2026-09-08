@@ -1,39 +1,53 @@
-## Description: <br>
-Helps QA and engineering teams model complex business logic and system boundaries with state machines, data-flow views, and service-dependency views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners model complex business requirements with state machines, data-flow views, and service-dependency diagrams to expose implicit business rules and system boundaries.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and requirements analysts use this skill to turn complex requirements or scenario-tree inputs into domain models that expose object states, data movement, service dependencies, and missing business rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause the agent to apply the skill to general modeling requests where a narrower skill would be enough. <br>
-Mitigation: Use the skill when the request involves complex requirements, subsystem interaction, state transitions, data flow, or service dependencies. <br>
-Risk: A domain model may omit subsystems, states, data paths, or failure impacts that are not explicit in the source requirements. <br>
-Mitigation: Cross-check outputs against the scenario tree or requirements, use the included completion checklist, and retry modeling after filling any gaps. <br>
+## Use Case:
 
+QA engineers and developers use this skill to turn complex requirements, scenario trees, or deconstructed requirements into domain models that clarify state transitions, data movement, service dependencies, and test scope.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with text diagrams and structured tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces state-machine, data-flow, and service-dependency views with traceability IDs when source scenarios are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Broad trigger terms can cause the skill to be invoked during generic design conversations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invoke it deliberately for QA domain-modeling tasks that include requirements, scenarios, or system interaction evidence.
+
+Risk: Incomplete or ambiguous requirements can lead to missing states, data paths, service dependencies, or unsupported coverage claims.
+
+Mitigation: Review generated models against the source requirements and label missing modules or unsupported coverage assumptions before using the output for test planning.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-domain-modeling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown tables and text diagrams]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes model IDs, scenario traceability, state-machine, data-flow, and service-dependency sections; coverage statements should avoid absolute 100% claims.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter lists 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

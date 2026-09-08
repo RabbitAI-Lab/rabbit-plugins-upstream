@@ -28,6 +28,18 @@ SECRETS_DIR="$SKILL_DIR/secrets"
 # effects) and has a double-source guard.
 # shellcheck source=../lib/peers.sh
 source "$SKILL_DIR/lib/peers.sh"
+# shellcheck source=../lib/secret-file.sh
+source "$SKILL_DIR/lib/secret-file.sh"
+# shellcheck source=../lib/gateway-roster.sh
+source "$SKILL_DIR/lib/gateway-roster.sh"
+# shellcheck source=../lib/relay-policy.sh
+source "$SKILL_DIR/lib/relay-policy.sh"
+# shellcheck source=../lib/v163-staging-cleanup.sh
+source "$SKILL_DIR/lib/v163-staging-cleanup.sh"
+# shellcheck source=../lib/cli-link.sh
+source "$SKILL_DIR/lib/cli-link.sh"
+# shellcheck source=../lib/change-plan.sh
+source "$SKILL_DIR/lib/change-plan.sh"
 
 # Colors
 RED='\033[0;31m'
@@ -69,7 +81,12 @@ prompt_yn() {
 
 NI_HOST_ID="" NI_DISPLAY="" NI_URL="" NI_AGENT="" NI_MODEL="" NI_TOKEN="" NI_FORCE=false
 NI_INBOX="" NI_INBOX_AUTO="" NI_ALLOW_INSECURE=false
+CLI_REPLACE_PATH=""
 INTERACTIVE=true
+ASSUME_YES=false
+PENDING_TOKEN_MODE="none"
+PENDING_TOKEN_VALUE=""
+OVERWRITE_EXISTING=false
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -82,6 +99,12 @@ while [[ $# -gt 0 ]]; do
     --inbox)         NI_INBOX="$2"; shift 2 ;;
     --inbox-auto-approve) NI_INBOX_AUTO="$2"; shift 2 ;;
     --force)         NI_FORCE=true; shift ;;
+    --yes|-y)        ASSUME_YES=true; shift ;;
+    --replace-cli-link)
+      CLI_REPLACE_PATH="${2:-}"
+      [[ -n "$CLI_REPLACE_PATH" ]] || { err "--replace-cli-link requires an absolute path"; exit 1; }
+      shift 2
+      ;;
     --allow-insecure) NI_ALLOW_INSECURE=true; shift ;;
     -h|--help)
       cat <<'EOF'
@@ -97,7 +120,9 @@ Non-interactive:
     --agent-id main \
     --model "openai/gpt-4o-mini" \
     --token-file /path/to/hooks_token \
-    [--force]
+    --yes \
+    [--force] \
+    [--replace-cli-link /absolute/path/to/antenna]
 
 Creates:
   - antenna-config.json (local runtime settings; gitignored)
@@ -105,12 +130,24 @@ Creates:
   - secrets/antenna-peer-<host-id>.secret (your identity secret)
   - Example/reference files remain available: antenna-config.example.json, antenna-peers.example.json
   - Prints gateway registration instructions
+
+Administrative changes are previewed before setup creates runtime state,
+credentials, gateway configuration, or a CLI target.
+Non-interactive setup requires --yes after all required values are supplied.
 EOF
       exit 0
       ;;
     *) err "Unknown option: $1"; exit 1 ;;
   esac
 done
+
+if [[ -n "$CLI_REPLACE_PATH" ]]; then
+  [[ "$CLI_REPLACE_PATH" == /* ]] || { err "--replace-cli-link must be an absolute path"; exit 1; }
+  [[ "$(basename -- "$CLI_REPLACE_PATH")" == "antenna" ]] \
+    || { err "--replace-cli-link must name an 'antenna' command path"; exit 1; }
+  [[ -d "$(dirname -- "$CLI_REPLACE_PATH")" ]] \
+    || { err "--replace-cli-link parent directory does not exist: $(dirname -- "$CLI_REPLACE_PATH")"; exit 1; }
+fi
 
 # ── Pre-flight checks ───────────────────────────────────────────────────────
 
@@ -129,6 +166,26 @@ if ! command -v openssl &>/dev/null; then
   exit 1
 fi
 
+if [[ -n "$CLI_REPLACE_PATH" ]]; then
+  cli_link_classify "$CLI_REPLACE_PATH" "$SKILL_DIR/bin/antenna.sh" "" || {
+    err "Cannot safely classify explicit CLI target: $CLI_REPLACE_PATH"
+    exit 1
+  }
+  case "$CLI_LINK_STATE" in
+    directory|other|ambiguous)
+      err "Refusing unsafe explicit CLI target: $CLI_REPLACE_PATH ($CLI_LINK_STATE)"
+      exit 1
+      ;;
+    correct) : ;;
+    *)
+      [[ -w "$(dirname -- "$CLI_REPLACE_PATH")" ]] || {
+        err "Explicit CLI target directory is not writable: $(dirname -- "$CLI_REPLACE_PATH")"
+        exit 1
+      }
+      ;;
+  esac
+fi
+
 if ! command -v age &>/dev/null; then
   warn "age not found — required for encrypted peer exchange (Layer A)."
   info "Install with: apt install age / brew install age / https://github.com/FiloSottile/age"
@@ -139,14 +196,14 @@ fi
 if [[ -f "$CONFIG_FILE" && "$NI_FORCE" != "true" ]]; then
   if [[ "$INTERACTIVE" == "true" ]]; then
     warn "Antenna is already configured ($CONFIG_FILE exists)."
-    if ! prompt_yn "Overwrite and start fresh?" "n"; then
-      info "Setup cancelled. Use 'antenna status' to check your current config."
-      exit 0
-    fi
+    info "The final change plan will ask once before replacing local runtime state."
+    OVERWRITE_EXISTING=true
   else
     err "Config already exists. Use --force to overwrite."
     exit 1
   fi
+elif [[ -f "$CONFIG_FILE" ]]; then
+  OVERWRITE_EXISTING=true
 fi
 
 # ── Banner ───────────────────────────────────────────────────────────────────
@@ -165,7 +222,7 @@ if [[ "$INTERACTIVE" == "true" ]]; then
   echo "    2. Your reachable HTTPS hook URL"
   echo "    3. Your primary agent ID (e.g., 'main', 'betty', 'lobster')"
   echo "    4. A relay model (lightweight is best — the relay doesn't think, it dispatches)"
-  echo "    5. Whether to enable inbox mode (optional, more secure)"
+  echo "    5. Whether to enable optional inbox review"
   echo "    6. Your OpenClaw hooks bearer token (setup can auto-detect or generate one)"
   echo ""
 fi
@@ -193,12 +250,11 @@ if [[ "$INTERACTIVE" == "true" ]]; then
   while :; do
     prompt HOST_URL "Your hook URL" ""
     HOST_URL="${HOST_URL%/}"
-    if validate_peer_url "$HOST_URL" "${NI_ALLOW_INSECURE:-false}" 2>/tmp/antenna-urlcheck.$$; then
-      rm -f /tmp/antenna-urlcheck.$$
+    _url_reason=""
+    if _url_reason="$(validate_peer_url_capture "$HOST_URL" "${NI_ALLOW_INSECURE:-false}")"; then
       break
     fi
-    err "$(cat /tmp/antenna-urlcheck.$$ 2>/dev/null || echo 'invalid URL')"
-    rm -f /tmp/antenna-urlcheck.$$
+    err "${_url_reason:-invalid URL}"
     info "Please enter a real https:// URL peers can reach (examples above)."
   done
 
@@ -228,10 +284,10 @@ if [[ "$INTERACTIVE" == "true" ]]; then
 
   # Relay model
   header "Step 4/7 — Relay Model — Choosing Your Dispatcher"
-  info "The model used by Antenna's relay agent for tool dispatch."
+  info "You don’t need the biggest lobster in the reef just to pass a message along."
+  info "Antenna gives its relay model a small, mechanical dispatch job, so smaller models are generally the best fit."
+  info "GPT‑5.6 Luna, Gemini Flash, and Haiku have shown reliable results."
   info "Use a full provider/model ID (not an alias) for portability."
-  info "Pick something lightweight — the relay agent is a courier, not a philosopher."
-  info "It dispatches messages, not opinions."
 
   # Try to load default model and aliases from gateway config
   _alias_names=()
@@ -314,10 +370,10 @@ if [[ "$INTERACTIVE" == "true" ]]; then
   echo "      Straight to your session, no delay. Like a walkie-talkie."
   echo "      Requires sandbox-off on the relay agent."
   echo ""
-  echo -e "    ${BOLD}Inbox queue${NC} (more secure)"
-  echo "      Messages wait in a queue for your review first."
+  echo -e "    ${BOLD}Inbox queue${NC} (optional supervision)"
+  echo "      Review applies globally; messages wait in a queue first."
   echo "      You approve or deny via 'antenna inbox' commands."
-  echo "      Trusted peers can skip the line."
+  echo "      Explicitly auto-approved paired peers bypass review until removed."
   echo ""
 
   INBOX_ENABLED=false
@@ -326,7 +382,8 @@ if [[ "$INTERACTIVE" == "true" ]]; then
     INBOX_ENABLED=true
     ok "Inbox mode enabled"
     echo ""
-    info "You can designate trusted peers whose messages skip the queue."
+    info "You can designate paired peers whose messages bypass inbox review."
+    info "This bypass remains in effect until you remove the peer from the list."
     info "Enter peer host IDs separated by commas, or leave empty for none."
     prompt INBOX_AUTO_APPROVE "Auto-approve peers (comma-separated, or empty)" ""
   else
@@ -347,11 +404,10 @@ if [[ "$INTERACTIVE" == "true" ]]; then
         info "Found hooks token in gateway config ($gw_candidate)"
         suggested_path="$SECRETS_DIR/hooks_token_${HOST_ID}"
         if prompt_yn "Create token file at $suggested_path from gateway config?" "y"; then
-          mkdir -p "$SECRETS_DIR"
-          printf '%s' "$DISCOVERED_TOKEN" > "$suggested_path"
-          chmod 600 "$suggested_path"
-          ok "Created token file: $suggested_path"
           TOKEN_FILE="$suggested_path"
+          PENDING_TOKEN_MODE="copy"
+          PENDING_TOKEN_VALUE="$DISCOVERED_TOKEN"
+          info "Token file will be created after confirmation: $suggested_path"
         fi
         break
       fi
@@ -367,10 +423,7 @@ if [[ "$INTERACTIVE" == "true" ]]; then
       echo ""
       if prompt_yn "Generate a new hooks bearer token now?" "y"; then
         gen_path="$SECRETS_DIR/hooks_token_${HOST_ID}"
-        mkdir -p "$SECRETS_DIR"
-        openssl rand -hex 24 > "$gen_path"
-        chmod 600 "$gen_path"
-        ok "Generated token file: $gen_path"
+        PENDING_TOKEN_MODE="generate"
         info "You will need to add this token to your gateway hooks.token config."
         TOKEN_FILE="$gen_path"
       fi
@@ -380,7 +433,7 @@ if [[ "$INTERACTIVE" == "true" ]]; then
     fi
   fi
 
-  if [[ -n "$TOKEN_FILE" && ! -f "$TOKEN_FILE" ]]; then
+  if [[ -n "$TOKEN_FILE" && ! -f "$TOKEN_FILE" && "$PENDING_TOKEN_MODE" == "none" ]]; then
     warn "Token file not found at: $TOKEN_FILE"
     if prompt_yn "Continue anyway? (you can fix this later)" "y"; then
       true
@@ -461,7 +514,17 @@ else
     fi
   fi
   AGENT_ID="$NI_AGENT"
-  RELAY_MODEL="${NI_MODEL:-openai/gpt-4o-mini}"
+
+  # Prefer the host's configured default. A baked-in model name can be valid
+  # elsewhere but unavailable on a clean host.
+  _host_default_model=""
+  for _gw_cand in "$HOME/.openclaw/openclaw.json" "/home/$USER/.openclaw/openclaw.json"; do
+    if [[ -f "$_gw_cand" ]]; then
+      _host_default_model=$(jq -r '.agents.defaults.model.primary // empty' "$_gw_cand" 2>/dev/null || true)
+      break
+    fi
+  done
+  RELAY_MODEL="${NI_MODEL:-${_host_default_model:-openai/gpt-4o-mini}}"
 
   # Resolve model alias if --model matched an alias name
   if [[ -n "$NI_MODEL" ]]; then
@@ -478,6 +541,27 @@ else
         break
       fi
     done
+  fi
+
+  # OpenClaw exposes the models allowed for this installation. When that
+  # inventory is available, fail before mutating config rather than installing
+  # a relay agent that cannot run. Older OpenClaw builds without this JSON
+  # surface remain supported by skipping the check.
+  _openclaw_model_bin=""
+  for _oc_cand in "openclaw" "$HOME/.local/bin/openclaw" "$HOME/.npm-global/bin/openclaw" "/usr/local/bin/openclaw"; do
+    if command -v "$_oc_cand" >/dev/null 2>&1 || [[ -x "$_oc_cand" ]]; then
+      _openclaw_model_bin="$_oc_cand"
+      break
+    fi
+  done
+  if [[ -n "$_openclaw_model_bin" ]]; then
+    _model_status=$("$_openclaw_model_bin" models status --json 2>/dev/null || true)
+    if jq -e '.allowed | type == "array" and length > 0' >/dev/null 2>&1 <<<"$_model_status" \
+      && ! jq -e --arg model "$RELAY_MODEL" '.allowed | index($model) != null' >/dev/null 2>&1 <<<"$_model_status"; then
+      err "Relay model is not available on this host: $RELAY_MODEL"
+      info "Choose one reported by: openclaw models status --json"
+      exit 1
+    fi
   fi
 
   # Inbox settings (non-interactive)
@@ -501,19 +585,38 @@ else
         [[ -n "$ni_discovered" ]] && break
       fi
     done
-    mkdir -p "$SKILL_DIR/secrets"
     ni_path="$SKILL_DIR/secrets/hooks_token_${HOST_ID}"
     if [[ -n "$ni_discovered" ]]; then
-      printf '%s' "$ni_discovered" > "$ni_path"
-      chmod 600 "$ni_path"
-      info "Auto-discovered hooks token from gateway config"
+      PENDING_TOKEN_MODE="copy"
+      PENDING_TOKEN_VALUE="$ni_discovered"
+      info "Will create the protected token file from gateway configuration"
       TOKEN_FILE="$ni_path"
     else
-      openssl rand -hex 24 > "$ni_path"
-      chmod 600 "$ni_path"
-      info "Auto-generated hooks bearer token: $ni_path"
+      PENDING_TOKEN_MODE="generate"
+      info "Will generate a protected hooks bearer token: $ni_path"
       TOKEN_FILE="$ni_path"
     fi
+  fi
+fi
+
+# Resolve gateway registration intent before the single administrative
+# confirmation. This is a configuration choice, not a mutation.
+GATEWAY_CFG=""
+for candidate in "$HOME/.openclaw/openclaw.json" "/home/$USER/.openclaw/openclaw.json"; do
+  if [[ -f "$candidate" ]]; then
+    GATEWAY_CFG="$candidate"
+    break
+  fi
+done
+
+DO_AUTO_REGISTER=false
+if [[ -n "$GATEWAY_CFG" ]]; then
+  if [[ "$INTERACTIVE" == "true" ]]; then
+    if prompt_yn "Register Antenna and enable its gateway hooks during setup?" "y"; then
+      DO_AUTO_REGISTER=true
+    fi
+  else
+    DO_AUTO_REGISTER=true
   fi
 fi
 
@@ -541,12 +644,59 @@ echo -e "  Examples:     ${BOLD}$SKILL_DIR/antenna-config.example.json${NC}"
 echo -e "                ${BOLD}$SKILL_DIR/antenna-peers.example.json${NC}"
 echo ""
 
-if [[ "$INTERACTIVE" == "true" ]]; then
-  if ! prompt_yn "Create configuration with these settings?" "y"; then
-    info "Setup cancelled."
-    exit 0
-  fi
+antenna_change_plan_reset "Antenna setup change plan"
+if [[ "$OVERWRITE_EXISTING" == "true" ]]; then
+  antenna_change_plan_add "Replace existing Antenna runtime configuration in $SKILL_DIR"
+else
+  antenna_change_plan_add "Create Antenna runtime configuration in $SKILL_DIR"
 fi
+antenna_change_plan_add "Create protected hook-token and identity-secret files plus local peer state"
+if [[ -n "$GATEWAY_CFG" ]]; then
+  antenna_change_plan_add "Back up the gateway configuration at $GATEWAY_CFG"
+fi
+if [[ "$DO_AUTO_REGISTER" == "true" ]]; then
+  antenna_change_plan_add "Register or update the Antenna relay agent with sandbox mode off"
+  antenna_change_plan_add "Enable hooks; add Antenna hook/session allowlist entries; set session visibility to all"
+  antenna_change_plan_add "Register the hook token only when the gateway token is empty or already matches; preserve a different existing token"
+  antenna_change_plan_add "Configure the Antenna agent exec allowlist when the OpenClaw CLI is available"
+else
+  antenna_change_plan_add "Leave relay-agent, hook, allowlist, session-visibility, sandbox, and token registration for the operator to complete manually"
+fi
+if [[ -n "$CLI_REPLACE_PATH" ]]; then
+  antenna_change_plan_add "Install the Antenna command at $CLI_REPLACE_PATH; preserve any displaced foreign target in a private backup"
+else
+  antenna_change_plan_add "Install or retain the Antenna command in a standard PATH location; preserve foreign targets"
+fi
+antenna_change_plan_add "Require a gateway restart after registration; setup will not restart it automatically"
+antenna_change_plan_add "Contact no peers and send no messages"
+antenna_change_plan_show
+
+if antenna_change_plan_confirm "$ASSUME_YES" "Proceed with Antenna setup?"; then
+  :
+else
+  plan_rc=$?
+  if [[ "$plan_rc" -eq 2 ]]; then
+    exit 2
+  fi
+  info "Setup cancelled. No runtime state, credentials, gateway configuration, CLI target, or peer state was changed."
+  exit 0
+fi
+
+# Materialize a discovered or generated hooks token only after authorization.
+case "$PENDING_TOKEN_MODE" in
+  copy)
+    install -d -m 700 "$SECRETS_DIR"
+    (umask 077; printf '%s' "$PENDING_TOKEN_VALUE" > "$TOKEN_FILE")
+    chmod 600 "$TOKEN_FILE"
+    ok "Created protected token file: $TOKEN_FILE"
+    ;;
+  generate)
+    install -d -m 700 "$SECRETS_DIR"
+    (umask 077; openssl rand -hex 24 > "$TOKEN_FILE")
+    chmod 600 "$TOKEN_FILE"
+    ok "Generated protected hooks bearer token: $TOKEN_FILE"
+    ;;
+esac
 
 # ── Create config ────────────────────────────────────────────────────────────
 
@@ -594,7 +744,7 @@ ok "Created $CONFIG_FILE"
 
 CANONICAL_TOKEN_REF="secrets/hooks_token_${HOST_ID}"
 CANONICAL_TOKEN_ABS="$SKILL_DIR/$CANONICAL_TOKEN_REF"
-mkdir -p "$SECRETS_DIR"
+install -d -m 700 "$SECRETS_DIR"
 
 if [[ -n "$TOKEN_FILE" && -f "$TOKEN_FILE" && "$TOKEN_FILE" != "$CANONICAL_TOKEN_ABS" ]]; then
   # Copy token contents to canonical location so the self peer always uses
@@ -632,11 +782,12 @@ ok "Created $PEERS_FILE (self-peer: $HOST_ID)"
 
 # ── Generate identity secret ────────────────────────────────────────────────
 
-mkdir -p "$SECRETS_DIR"
+install -d -m 700 "$SECRETS_DIR"
 SECRET_PATH="$SECRETS_DIR/antenna-peer-${HOST_ID}.secret"
-SECRET=$(openssl rand -hex 32)
-echo -n "$SECRET" > "$SECRET_PATH"
-chmod 600 "$SECRET_PATH"
+antenna_secret_generate_hex_file "$SECRET_PATH" || {
+  err "Could not generate protected identity secret"
+  exit 1
+}
 ok "Generated identity secret: $SECRET_PATH"
 
 # ── Create .gitignore if missing ─────────────────────────────────────────────
@@ -650,6 +801,7 @@ antenna.log.*
 test-results/
 antenna-config.json
 antenna-peers.json
+state/
 
 # Secrets — never commit
 **/secrets/
@@ -670,14 +822,6 @@ echo ""
 
 header "═══ Backing Up Your Gateway Config (Just in Case) ═══"
 echo ""
-GATEWAY_CFG=""
-for candidate in "$HOME/.openclaw/openclaw.json" "/home/$USER/.openclaw/openclaw.json"; do
-  if [[ -f "$candidate" ]]; then
-    GATEWAY_CFG="$candidate"
-    break
-  fi
-done
-
 if [[ -n "$GATEWAY_CFG" ]]; then
   BACKUP_PATH="${GATEWAY_CFG}.antenna-backup"
   cp "$GATEWAY_CFG" "$BACKUP_PATH"
@@ -699,15 +843,6 @@ echo ""
 # ── Attempt automatic gateway registration ──────────────────────────────────
 AUTO_REGISTERED=false
 if [[ -n "$GATEWAY_CFG" ]]; then
-  # Detect whether the gateway build supports systemPrompt in agent entries
-  # by checking existing agents or trying a conservative approach (omit it)
-  AGENT_ENTRY_FIELDS='{
-    id: "antenna",
-    name: "Antenna Relay",
-    model: $model,
-    agentDir: $agentdir
-  }'
-
   # Check if openclaw CLI is available for agent/hooks management
   OPENCLAW_BIN=""
   for oc_candidate in "openclaw" "$HOME/.local/bin/openclaw" "/usr/local/bin/openclaw"; do
@@ -717,23 +852,18 @@ if [[ -n "$GATEWAY_CFG" ]]; then
     fi
   done
 
-  do_auto_register=false
-  if [[ "$INTERACTIVE" == "true" ]]; then
-    if prompt_yn "Automatically register Antenna agent and enable hooks in gateway config?" "y"; then
-      do_auto_register=true
-    fi
-  else
-    # Non-interactive: always auto-register when gateway config is found
-    do_auto_register=true
+  if [[ "$INTERACTIVE" != "true" && "$DO_AUTO_REGISTER" == "true" ]]; then
     info "Auto-registering Antenna agent and hooks in gateway config..."
   fi
 
-  if [[ "$do_auto_register" == "true" ]]; then
-      # Back up again right before editing
-      cp "$GATEWAY_CFG" "${GATEWAY_CFG}.antenna-pre-register-$(date +%Y%m%d-%H%M%S)"
+  if [[ "$DO_AUTO_REGISTER" == "true" ]]; then
+      relay_policy_reason=""
+      if ! relay_policy_require_canonical "$SKILL_DIR/agent/AGENTS.md" "agent/AGENTS.md" relay_policy_reason; then
+        err "Packaged relay policy is not canonical: $relay_policy_reason"
+        err "Restore agent/AGENTS.md from the original Antenna release package before setup."
+        exit 1
+      fi
 
-      # 1) Enable/merge hooks config
-      tmp_gw=$(mktemp)
       # Read the hooks token from the token file to register it in gateway config
       file_token=""
       existing_hooks_token=""
@@ -754,18 +884,119 @@ if [[ -n "$GATEWAY_CFG" ]]; then
         fi
       fi
 
-      jq --arg aid "antenna" --arg prefix "hook:" --arg agent_prefix "agent:${AGENT_ID}:" --arg file_token "$file_token" '
-        .hooks.enabled = true |
-        .hooks.allowRequestSessionKey = true |
-        .hooks.allowedAgentIds = ((.hooks.allowedAgentIds // []) | if (index($aid) | not) then . + [$aid] else . end) |
-        .hooks.allowedSessionKeyPrefixes = (
-          (.hooks.allowedSessionKeyPrefixes // [])
-          | if (index($prefix) | not) then . + [$prefix] else . end
-          | if (index($agent_prefix) | not) then . + [$agent_prefix] else . end
-        ) |
-        (if $file_token != "" and ((.hooks.token // "") == "" or (.hooks.token == $file_token)) then .hooks.token = $file_token else . end)
-      ' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
+      # Build the complete gateway candidate off to the side. The shared roster
+      # guard rejects mixed, malformed, generation-mismatched, and include-owned
+      # rosters before this function commits any gateway change.
+      if ! gateway_roster_prepare_mutation "$GATEWAY_CFG"; then
+        err "Gateway roster is not safe for automatic Antenna registration."
+        exit 1
+      fi
+      _v163_mapping_audit="$(v163_staging_mapping_audit "$GATEWAY_CFG")" \
+        || { err "Could not audit the superseded v1.6.3 hook mapping."; exit 1; }
+      if [[ "$_v163_mapping_audit" == fail\|* ]]; then
+        err "Refusing customized/conflicting v1.6.3 hook mapping: ${_v163_mapping_audit#fail|}"
+        exit 1
+      fi
+      _v163_transform_dir=""
+      if ! v163_staging_resolve_transforms_dir "$GATEWAY_CFG" _v163_transform_dir; then
+        err "Cannot safely resolve hooks.transformsDir for v1.6.3 staging cleanup."
+        exit 1
+      fi
+      _v163_transform_live="$_v163_transform_dir/$V163_STAGING_MODULE"
+      _v163_transform_audit="$(v163_staging_transform_audit "$_v163_transform_live")"
+      if [[ "$_v163_transform_audit" == fail\|* ]]; then
+        err "Refusing customized/unsafe v1.6.3 transform: ${_v163_transform_audit#fail|}"
+        exit 1
+      fi
+      _roster_kind="$GATEWAY_ROSTER_KIND"
+      if [[ "$_roster_kind" == "list" ]]; then
+        _existing_agent_count="$(jq '(.agents.list // []) | length' "$GATEWAY_CFG")"
+      else
+        _existing_agent_count="$(jq '(.agents.entries // {}) | length' "$GATEWAY_CFG")"
+      fi
+      if gateway_roster_has_agent "$GATEWAY_CFG" antenna "$_roster_kind"; then
+        _had_antenna=true
+      else
+        _had_antenna=false
+      fi
+
+      _gateway_dir="$(dirname "$GATEWAY_CFG")"
+      _state_root="$(realpath -m "${OPENCLAW_STATE_DIR:-$_gateway_dir}")"
+      for _db_path in "$SKILL_DIR/agent/openclaw-agent.sqlite" "$SKILL_DIR/agent/openclaw-agent.sqlite-wal" "$SKILL_DIR/agent/openclaw-agent.sqlite-shm"; do
+        if [[ -e "$_db_path" || -L "$_db_path" ]]; then
+          err "OpenClaw state is present inside the Antenna workspace: $_db_path"
+          err "Move it through OpenClaw's supported state/Doctor workflow before starting a fresh setup; Antenna will not place agent state inside a replaceable skill tree."
+          exit 1
+        fi
+      done
+      _roster_candidate="$(mktemp "$_gateway_dir/.openclaw.antenna-roster.XXXXXX")"
+      _gateway_base_candidate="$(mktemp "$_gateway_dir/.openclaw.antenna-hooks.XXXXXX")"
+      _gateway_candidate="$(mktemp "$_gateway_dir/.openclaw.antenna-setup.XXXXXX")"
+      if ! gateway_roster_write_setup_candidate \
+          "$GATEWAY_CFG" "$_roster_candidate" "$AGENT_ID" "$RELAY_MODEL" "$SKILL_DIR/agent" "$_state_root"; then
+        rm -f -- "$_roster_candidate" "$_gateway_base_candidate" "$_gateway_candidate"
+        err "Could not construct a safe Antenna roster update."
+        exit 1
+      fi
+      if ! jq --arg aid "antenna" --arg prefix "hook:" \
+          --arg agent_prefix "agent:${AGENT_ID}:" --arg file_token "$file_token" '
+          .hooks = (if (.hooks | type) == "object" then .hooks else {} end)
+          | .hooks.enabled = true
+          | .hooks.allowRequestSessionKey = true
+          | .hooks.allowedAgentIds = ((.hooks.allowedAgentIds // []) |
+              if (index($aid) | not) then . + [$aid] else . end)
+          | .hooks.allowedSessionKeyPrefixes = (
+              (.hooks.allowedSessionKeyPrefixes // [])
+              | if (index($prefix) | not) then . + [$prefix] else . end
+              | if (index($agent_prefix) | not) then . + [$agent_prefix] else . end
+            )
+          | (if $file_token != "" and
+                ((.hooks.token // "") == "" or (.hooks.token == $file_token))
+             then .hooks.token = $file_token else . end)
+          | .tools = (if (.tools | type) == "object" then .tools else {} end)
+          | .tools.sessions = (if (.tools.sessions | type) == "object" then .tools.sessions else {} end)
+          | .tools.sessions.visibility = "all"
+          | .tools.agentToAgent = (if (.tools.agentToAgent | type) == "object" then .tools.agentToAgent else {} end)
+          | .tools.agentToAgent.enabled = true
+        ' "$_roster_candidate" > "$_gateway_base_candidate"; then
+        rm -f -- "$_roster_candidate" "$_gateway_base_candidate" "$_gateway_candidate"
+        err "Could not construct the complete gateway update."
+        exit 1
+      fi
+      rm -f -- "$_roster_candidate"
+      if ! v163_staging_write_cleanup_candidate "$_gateway_base_candidate" "$_gateway_candidate"; then
+        rm -f -- "$_gateway_base_candidate" "$_gateway_candidate"
+        err "Could not remove the exact superseded v1.6.3 hook mapping."
+        exit 1
+      fi
+      rm -f -- "$_gateway_base_candidate"
+      if ! gateway_config_commit_candidate \
+          "$GATEWAY_CFG" "$_gateway_candidate" "antenna-pre-register"; then
+        rm -f -- "$_gateway_candidate"
+        err "Gateway candidate failed validation; the original config is unchanged."
+        exit 1
+      fi
+      if [[ "$_v163_transform_audit" == pass\|* ]]; then
+        if ! v163_staging_remove_transform_if_canonical "$_v163_transform_live"; then
+          err "Gateway was updated, but the canonical v1.6.3 transform could not be removed: $_v163_transform_live"
+          exit 1
+        fi
+      fi
+
+      ok "Gateway update validated and committed atomically"
+      info "Private rollback backup: $GATEWAY_CONFIG_LAST_BACKUP"
+      if [[ "$_existing_agent_count" -eq 0 ]]; then
+        info "Created default primary agent entry '$AGENT_ID' in agents.$_roster_kind"
+      fi
+      if [[ "$_had_antenna" == "true" ]]; then
+        info "Updated existing Antenna agent without removing operator tool overrides"
+      else
+        ok "Registered Antenna agent in agents.$_roster_kind (sandbox off, least-privilege tools)"
+      fi
       ok "Hooks enabled and allowlists updated"
+      if [[ "$_v163_mapping_audit" == pass\|* || "$_v163_transform_audit" == pass\|* ]]; then
+        ok "Removed exact canonical v1.6.3 deterministic-staging residue"
+      fi
       case "$hooks_token_action" in
         registered) ok "Hooks token registered in gateway config" ;;
         unchanged) info "Gateway hooks.token already matched Antenna token" ;;
@@ -775,104 +1006,12 @@ if [[ -n "$GATEWAY_CFG" ]]; then
           fi
           ;;
       esac
-
-      # 2) Ensure a default agent exists before adding antenna
-      #    If agents.list is empty/absent, the default main agent is implicit.
-      #    Adding antenna alone would make it the only visible agent in the UI.
-      has_any_agent=""
-      has_any_agent=$(jq '[.agents.list // [] | .[]] | length' "$GATEWAY_CFG" 2>/dev/null || echo "0")
-      if [[ "$has_any_agent" -eq 0 ]]; then
-        _def_workspace=$(jq -r '.agents.defaults.workspace // "~/clawd"' "$GATEWAY_CFG" 2>/dev/null || echo "~/clawd")
-        _def_model=$(jq -r '.agents.defaults.model.primary // "openai/gpt-4o-mini"' "$GATEWAY_CFG" 2>/dev/null || echo "openai/gpt-4o-mini")
-        tmp_gw=$(mktemp)
-        jq --arg aid "$AGENT_ID" --arg ws "$_def_workspace" --arg model "$_def_model" '
-          .agents.list = [{
-            id: $aid,
-            name: "Main Agent",
-            model: $model,
-            agentDir: $ws,
-            workspace: $ws
-          }]
-        ' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
-        info "Created default main agent entry '$AGENT_ID' (agents.list was empty)"
-      fi
-
-      # 3) Register antenna agent if not already present
-      #    The relay agent gets:
-      #    - sandbox off: prevents per-command-hash approval prompts
-      #    - restrictive tools.deny: least-privilege (only exec needed)
-      #    NOTE: Do NOT set tools.exec (security/ask) on the antenna agent.
-      #    Explicit exec overrides cause silent relay failures where the hook session
-      #    acknowledges but delivery never completes, making messages invisible.
-      has_antenna=""
-      has_antenna=$(jq '[.agents.list // [] | .[] | select(.id == "antenna")] | length' "$GATEWAY_CFG" 2>/dev/null || echo "0")
-      if [[ "$has_antenna" -eq 0 ]]; then
-        tmp_gw=$(mktemp)
-        jq --arg model "$RELAY_MODEL" --arg agentdir "$SKILL_DIR/agent" '
-          .agents.list = ((.agents.list // []) + [{
-            id: "antenna",
-            name: "Antenna Relay",
-            model: $model,
-            agentDir: $agentdir,
-            workspace: $agentdir,
-            sandbox: { mode: "off" },
-            tools: {
-              deny: [
-                "group:web", "browser", "image", "image_generate",
-                "cron", "memory_search", "memory_get",
-                "web_search", "web_fetch"
-              ]
-            }
-          }])
-        ' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
-        ok "Registered Antenna agent in gateway config (sandbox off, least-privilege tools)"
-      else
-        info "Antenna agent already registered in gateway config"
-        # Ensure sandbox.mode=off on existing antenna entry without stripping any
-        # operator-managed tools.exec or tools.deny customization.
-        _needs_antenna_repair=$(jq '[.agents.list // [] | .[] | select(.id == "antenna" and ((.sandbox.mode // "") != "off" or (.tools | type) != "object"))] | length' "$GATEWAY_CFG" 2>/dev/null || echo "0")
-        if [[ "$_needs_antenna_repair" -gt 0 ]]; then
-          tmp_gw=$(mktemp)
-          jq '
-            .agents.list = [.agents.list[] |
-              if .id == "antenna" then
-                .sandbox = { mode: "off" } |
-                .tools = (if (.tools | type) == "object" then .tools else {} end) |
-                .tools.deny = (.tools.deny // [
-                  "group:web", "browser", "image", "image_generate",
-                  "cron", "memory_search", "memory_get",
-                  "web_search", "web_fetch"
-                ])
-              else . end
-            ]
-          ' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
-          ok "Updated existing Antenna agent: sandbox off without removing operator tool overrides"
-        fi
-      fi
-
-      # 4) Enable cross-agent session visibility
-      #    The deliver script's gateway RPC needs to deliver into other agents' sessions.
-      #    Without this, OpenClaw blocks cross-agent session access.
-      _current_vis=$(jq -r '.tools.sessions.visibility // empty' "$GATEWAY_CFG" 2>/dev/null || true)
-      if [[ "$_current_vis" != "all" ]]; then
-        tmp_gw=$(mktemp)
-        jq '.tools.sessions.visibility = "all"' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
-        ok "Set tools.sessions.visibility = \"all\" (required for cross-agent relay)"
-      else
-        info "tools.sessions.visibility already set to \"all\""
-      fi
-
-      _current_a2a=$(jq -r '.tools.agentToAgent.enabled // empty' "$GATEWAY_CFG" 2>/dev/null || true)
-      if [[ "$_current_a2a" != "true" ]]; then
-        tmp_gw=$(mktemp)
-        jq '.tools.agentToAgent.enabled = true' "$GATEWAY_CFG" > "$tmp_gw" && mv "$tmp_gw" "$GATEWAY_CFG"
-        ok "Set tools.agentToAgent.enabled = true"
-      else
-        info "tools.agentToAgent.enabled already true"
-      fi
+      ok "Set tools.sessions.visibility = \"all\" and tools.agentToAgent.enabled = true"
+      AUTO_REGISTERED=true
 
       # 6) Register exec allowlist for the antenna agent
-      #    The relay agent needs to run shell commands (bash, echo, jq, cat)
+      #    The relay agent stages the envelope and makes one shell call to the
+      #    deterministic wrapper.
       #    without requiring manual approval on each inbound message.
       if command -v openclaw &>/dev/null; then
         _allowlist_cmds=("/usr/bin/bash" "/usr/bin/echo" "/usr/bin/jq" "/usr/bin/cat")
@@ -894,15 +1033,6 @@ if [[ -n "$GATEWAY_CFG" ]]; then
         info "  openclaw approvals allowlist add --agent antenna /usr/bin/cat"
       fi
 
-      # 7) Validate
-      if jq empty "$GATEWAY_CFG" 2>/dev/null; then
-        ok "Gateway config is valid JSON — nothing broken, nothing weird."
-        AUTO_REGISTERED=true
-      else
-        err "Gateway config is not valid JSON after changes!"
-        warn "Restoring from backup..."
-        cp "${GATEWAY_CFG}.antenna-backup" "$GATEWAY_CFG" 2>/dev/null || true
-      fi
   fi
 fi
 
@@ -913,13 +1043,37 @@ header "═══ Putting Antenna on Your PATH ═══"
 ANTENNA_BIN="$SKILL_DIR/bin/antenna.sh"
 SYMLINK_TARGET=""
 
-# Prefer /usr/local/bin; fall back to ~/.local/bin
-for candidate in /usr/local/bin "$HOME/.local/bin"; do
-  if [[ -d "$candidate" ]] && echo "$PATH" | tr ':' '\n' | grep -qx "$candidate"; then
-    SYMLINK_TARGET="$candidate/antenna"
-    break
-  fi
-done
+# An explicit replacement names exactly one command path. Otherwise prefer an
+# existing standard command on PATH (even when its directory is not writable)
+# so a foreign command is reported rather than silently shadowed elsewhere.
+if [[ -n "$CLI_REPLACE_PATH" ]]; then
+  SYMLINK_TARGET="$CLI_REPLACE_PATH"
+else
+  while IFS= read -r candidate; do
+    if [[ "$candidate" != "/usr/local/bin" && "$candidate" != "$HOME/.local/bin" ]]; then
+      continue
+    fi
+    if [[ -e "$candidate/antenna" || -L "$candidate/antenna" ]]; then
+      SYMLINK_TARGET="$candidate/antenna"
+      break
+    fi
+  done < <(printf '%s' "$PATH" | tr ':' '\n')
+fi
+
+# With no existing command, prefer a writable PATH directory. Merely being on
+# PATH is insufficient: selecting unwritable /usr/local/bin previously blocked
+# the user-local fallback.
+if [[ -z "$SYMLINK_TARGET" ]]; then
+  while IFS= read -r candidate; do
+    if [[ "$candidate" != "/usr/local/bin" && "$candidate" != "$HOME/.local/bin" ]]; then
+      continue
+    fi
+    if [[ -d "$candidate" && -w "$candidate" ]]; then
+      SYMLINK_TARGET="$candidate/antenna"
+      break
+    fi
+  done < <(printf '%s' "$PATH" | tr ':' '\n')
+fi
 
 # If ~/.local/bin doesn't exist yet but /usr/local/bin isn't writable, create it
 if [[ -z "$SYMLINK_TARGET" ]]; then
@@ -944,19 +1098,40 @@ if [[ -z "$SYMLINK_TARGET" ]]; then
 fi
 
 if [[ -n "$SYMLINK_TARGET" ]]; then
-  if [[ -L "$SYMLINK_TARGET" ]] && [[ "$(readlink -f "$SYMLINK_TARGET")" == "$(readlink -f "$ANTENNA_BIN")" ]]; then
-    ok "antenna CLI already on PATH: $SYMLINK_TARGET"
-  else
-    # Remove stale symlink or file if it exists
-    rm -f "$SYMLINK_TARGET" 2>/dev/null || true
-    if ln -s "$ANTENNA_BIN" "$SYMLINK_TARGET" 2>/dev/null; then
-      ok "Symlinked antenna CLI → $SYMLINK_TARGET"
-    elif sudo ln -s "$ANTENNA_BIN" "$SYMLINK_TARGET" 2>/dev/null; then
-      ok "Symlinked antenna CLI → $SYMLINK_TARGET (with sudo)"
-    else
-      warn "Could not create symlink at $SYMLINK_TARGET"
-      echo "  Manual fix: ln -s $ANTENNA_BIN /usr/local/bin/antenna"
+  _replace_foreign=false
+  if [[ "$CLI_REPLACE_PATH" == "$SYMLINK_TARGET" ]]; then
+    _replace_foreign=true
+    cli_link_classify "$SYMLINK_TARGET" "$ANTENNA_BIN" "" || true
+    if [[ "$CLI_LINK_STATE" == "foreign_symlink" || "$CLI_LINK_STATE" == "regular_file" ]]; then
+      warn "Explicit CLI replacement requested: $SYMLINK_TARGET"
+      info "Current target type: $CLI_LINK_STATE${CLI_LINK_TARGET:+ ($CLI_LINK_TARGET)}"
+      info "The displaced command will be preserved in a private backup beside the link."
     fi
+  fi
+
+  if cli_link_apply "$SYMLINK_TARGET" "$ANTENNA_BIN" "" "$_replace_foreign"; then
+    case "$CLI_LINK_ACTION" in
+      unchanged) ok "antenna CLI already on PATH: $SYMLINK_TARGET" ;;
+      installed) ok "Symlinked antenna CLI → $SYMLINK_TARGET" ;;
+      replaced)
+        ok "Replaced command with Antenna CLI → $SYMLINK_TARGET"
+        warn "Recoverable displaced target: $CLI_LINK_BACKUP"
+        ;;
+    esac
+  else
+    _link_rc=$?
+    case "$CLI_LINK_STATE" in
+      foreign_symlink|regular_file)
+        warn "Refusing to overwrite existing $CLI_LINK_STATE: $SYMLINK_TARGET"
+        info "To replace it explicitly with a recoverable backup, rerun setup with:"
+        echo "  --replace-cli-link $SYMLINK_TARGET"
+        ;;
+      directory|other|ambiguous)
+        warn "Refusing unsafe or ambiguous CLI target: $SYMLINK_TARGET ($CLI_LINK_STATE)"
+        ;;
+      *) warn "Could not create symlink at $SYMLINK_TARGET (status $_link_rc)" ;;
+    esac
+    echo "  Antenna remains available at: $ANTENNA_BIN"
   fi
 else
   warn "Could not determine a suitable PATH directory for the antenna CLI."
@@ -979,7 +1154,7 @@ if [[ "$AUTO_REGISTERED" == "false" ]]; then
   echo "       - id: antenna"
   echo "         name: Antenna Relay"
   echo "         model: $RELAY_MODEL"
-  echo "         agentDir: $SKILL_DIR/agent"
+  echo "         agentDir: ${OPENCLAW_STATE_DIR:-$HOME/.openclaw}/agents/antenna/agent"
   echo "         workspace: $SKILL_DIR/agent"
   echo "         sandbox:"
   echo "           mode: off"
@@ -1047,20 +1222,29 @@ if [[ "$INBOX_ENABLED" == "true" ]]; then
   echo "  Deny messages:      antenna inbox deny 1,3"
   echo "  Deliver approved:   antenna inbox drain"
   echo ""
-  echo "  Tip: Add this to your HEARTBEAT.md for automatic checking:"
-  echo "    ## Antenna inbox check"
-  echo "    - Run: antenna inbox count"
-  echo "    - If > 0: run antenna inbox list and mention it"
+  if [[ -z "$GATEWAY_OPENCLAW_GENERATION" ]] && command -v openclaw >/dev/null 2>&1; then
+    gateway_openclaw_generation >/dev/null 2>&1 || true
+  fi
+  if [[ "$GATEWAY_OPENCLAW_GENERATION" == "entries" ]]; then
+    echo "  Tip: On OpenClaw 8.1+, use a cron job with scratch instructions:"
+    echo "    Check the Antenna inbox. If count is greater than zero, list it"
+    echo "    and mention pending messages; do not auto-approve unknown peers."
+  else
+    echo "  Tip: On OpenClaw 7.x, add this to your HEARTBEAT.md:"
+    echo "    ## Antenna inbox check"
+    echo "    - Run: antenna inbox count"
+    echo "    - If > 0: run antenna inbox list and mention it"
+  fi
   echo ""
   if [[ -n "$INBOX_AUTO_APPROVE" ]]; then
     echo "  Auto-approved peers: $INBOX_AUTO_APPROVE"
   else
     echo "  No auto-approved peers. All inbound messages will be queued."
-    echo "  Add trusted peers later: antenna config set inbox_auto_approve_peers \"peer1,peer2\""
+    echo "  Grant inbox bypass later: antenna config set inbox_auto_approve_peers \"peer1,peer2\""
   fi
   echo ""
 else
-  echo -e "  ${YELLOW}ℹ${NC}  Inbox is disabled — messages relay instantly (requires sandbox-off)."
+  echo -e "  ${YELLOW}ℹ${NC}  Inbox is disabled — paired, authenticated, allowlisted messages relay instantly."
   echo "    To enable later: antenna config set inbox_enabled true"
   echo ""
 fi
@@ -1077,7 +1261,8 @@ echo "    3. Complete bootstrap pairing with ClawReef"
 echo "    4. Browse the reef and send invites!"
 echo ""
 echo -e "  ClawReef is optional — direct pairing via ${BOLD}antenna pair${NC} always works."
-echo -e "  ClawReef stores public info only; trust stays local to Antenna."
+echo -e "  Direct messages and Private Groups stay peer-to-peer."
+echo -e "  Public Groups are public; ClawReef reads and relays their plaintext."
 echo ""
 ok "Setup complete! Welcome to the reef, ${BOLD}$HOST_ID${NC}. 🦞"
 echo ""

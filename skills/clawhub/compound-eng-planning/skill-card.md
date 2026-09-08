@@ -1,42 +1,59 @@
-## Description: <br>
-Software implementation planning with file-based persistence (.plan/) for code changes that touch multiple files, have ambiguous scope, or require architectural decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Software implementation planning with optional file-based persistence for requests that need a plan, unresolved architecture or scope decisions, or multi-phase recovery state.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this workflow to turn implementation requests into concrete, verifiable plans before coding. It is aimed at multi-file changes, ambiguous scopes, and work that benefits from persistent session notes in `.plan/`. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Starting a new plan can overwrite existing `.plan` files in the current workspace. <br>
-Mitigation: Review or preserve existing `.plan` files before initializing a new plan when those files contain work that must be kept. <br>
+## Use Case:
 
+Developers and engineers use this workflow to decide when a durable implementation plan is needed, define concrete scope and acceptance criteria, and preserve planning state across multi-phase work.
 
-## Reference(s): <br>
-- [ia-planning Specification](SPEC.md) <br>
-- [Execution & Decomposition Patterns](references/execution-and-methodology.md) <br>
-- [Operational Patterns](references/operational-patterns.md) <br>
-- [Plan Deepening](references/plan-deepening.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown planning files and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local `.plan/` files and add `.plan/` to `.gitignore` when the initialization script is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Durable planning can create or update local planning files, including .plan/task_plan.md and .gitignore.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review any existing .plan/task_plan.md before forcing a new plan, and preserve unfinished work unless the user has resolved which plan wins.
+
+Risk: A plan can introduce incorrect scope, weak acceptance criteria, or misleading implementation guidance.
+
+Mitigation: Verify the plan against the user's requirements, keep acceptance criteria concrete, and review proposed tasks before implementation.
+
+## Reference(s):
+
+- [Execution & Decomposition Patterns](references/execution-and-methodology.md)
+- [execution handoff](references/execution-handoff.md)
+- [goal definition](references/goal-definition.md)
+- [Operational Patterns](references/operational-patterns.md)
+- [Plan Deepening](references/plan-deepening.md)
+- [plan format](references/plan-format.md)
+- [task design](references/task-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown plans and concise chat guidance with optional shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local planning files such as .plan/task_plan.md when durable state is appropriate.]
+
+## Skill Version(s):
+
+4.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

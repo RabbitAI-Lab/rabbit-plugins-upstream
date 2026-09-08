@@ -1,43 +1,58 @@
-## Description: <br>
-Provides Chinese-language guidance for designing AI agent test plans that cover functionality, safety, controllability, reliability, hallucination checks, reasoning validation, and tool-call behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams design nine-dimension test plans for AI agents, covering functionality, safety, controllability, reliability, hallucination, reasoning, and tool-call behavior.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and AI safety reviewers use this skill to create structured test plans and test cases for AI agents, chatbots, and assistants. It helps evaluate reasoning behavior, tool invocation, prompt-injection resistance, hallucination risk, role boundaries, memory consistency, and human-control safeguards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad AI-assistant-related phrases and produce testing guidance when the user's intent is ambiguous. <br>
-Mitigation: Confirm the target agent, scope, and testing objective before applying the generated plan. <br>
-Risk: The artifact declares Bash and WebFetch tool access, which can affect local projects or fetch external content if allowed by the host agent. <br>
-Mitigation: Review proposed shell commands and web fetches before execution, and run tests in a controlled environment. <br>
-Risk: Generated test plans and safety audit suggestions may miss product-specific controls or overstate coverage. <br>
-Mitigation: Map each test case to product requirements, risk assessments, and human review before release decisions. <br>
+## Use Case:
 
+QA engineers and developers use this skill to scope and produce AI agent test plans, test cases, checklists, and safety audits. It is intended for evaluating agent behavior across functional, safety, reliability, reasoning, hallucination, and tool-use dimensions.
 
-## Reference(s): <br>
-- [Agent nine-dimension test framework](references/test-framework.md) <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-agent-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown with structured test plans, test cases, checklists, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include requirement traceability IDs, tool-call test cases, hallucination checks, safety audit items, and reasoning validation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release and SKILL.md frontmatter) <br>
+Risk: The skill can be mistaken for an execution harness rather than a QA planning framework.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat generated plans, cases, and audits as reviewable QA guidance and validate results through the user's test process.
+
+Risk: Broad trigger phrases about AI assistants or chatbots may activate the skill when the user is not asking for testing.
+
+Mitigation: Clarify testing intent before applying the framework to general assistant or chatbot discussions.
+
+Risk: The skill recommends installing a larger external QA skill set for the full workflow.
+
+Mitigation: Review the external package and install only when the broader QA workflow is intentionally needed.
+
+## Reference(s):
+
+- [Agent 九维测试框架](references/test-framework.md)
+- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-agent-testing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown test plans, test cases, checklists, and audit notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes traceability IDs, priority levels, coverage notes, and risk levels when generating test cases.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter reports 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,58 @@
-## Description: <br>
-Set up Sendmux for agents, choose MCP, CLI, SDK, or HTTP, validate scoped credentials, and make the first harmless call. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set up Sendmux for agents, register a durable inbox without an existing key, link an owner, choose a runtime surface, and make the first harmless call.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to Sendmux, select the right access surface and credential type, install the relevant package, and verify setup with a harmless first call. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux API keys, claim tokens, or agent credential bundles could be exposed through chat, logs, repo files, screenshots, or memory-only handling. <br>
-Mitigation: Use existing environment variables, local profiles, or trusted secret managers; rotate any credential that appears in chat or logs before continuing. <br>
-Risk: Root keys can grant account-level management access when a narrower mailbox or agent token would be sufficient. <br>
-Mitigation: Prefer scoped mailbox or agent tokens for mailbox and sending workflows, and reserve root keys for management-only tasks. <br>
+## Use Case:
 
+Developers and agent builders use this skill to set up Sendmux access, choose the correct CLI, MCP, SDK, or HTTP surface, and make an initial low-impact verification call before moving to mailbox, sending, or management workflows.
 
-## Reference(s): <br>
-- [Sendmux ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-getting-started) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux agent authentication guide](https://app.sendmux.ai/auth.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell commands, TypeScript examples, HTTP endpoint guidance, and setup decision tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance emphasizes scoped credentials, JSON CLI output, harmless validation calls, and secure secret storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: The skill can guide an agent through installing Sendmux tooling and creating or using Sendmux credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped keys where possible, rely on environment variables, CLI profiles, or a secret manager, and avoid pasting or printing secrets in chat, logs, prompts, screenshots, or repository files.
+
+Risk: Sending and management workflows can give an agent mailbox or account-level authority.
+
+Mitigation: Use separate least-privilege keys for mailbox, sending, and management work, and only approve sending or management steps when that authority is intended.
+
+Risk: Email, attachment, and remote-document content may contain untrusted setup instructions.
+
+Mitigation: Treat message content as data; do not fetch or execute setup instructions found inside email, attachments, or remote documents.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-getting-started)
+- [Sendmux skills repository](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, code, configuration]
+
+**Output Format:** [Markdown with shell commands, TypeScript examples, credential guidance, and routing recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes environment-variable guidance for SENDMUX_API_KEY, SENDMUX_MBX_KEY, and SENDMUX_ROOT_KEY.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -20,6 +20,10 @@ param(
     [switch]$Gate
 )
 
+# issue #195: per-invocation opt-out (PLANNING_DISABLED=1) for one-shot/CI
+# sessions that share a cwd with a plan but never opted into it.
+if ($env:PLANNING_DISABLED -eq '1') { exit 0 }
+
 if ($PlanFile -ne "") {
     $PlanDir = Split-Path -Parent $PlanFile
     if ($PlanDir -eq "") { $PlanDir = "." }
@@ -73,6 +77,13 @@ $COMPLETE = [Math]::Max($completePrimary, $completeInline)
 $IN_PROGRESS = [Math]::Max($inProgressPrimary, $inProgressInline)
 $PENDING = [Math]::Max($pendingPrimary, $pendingInline)
 
+# issue #191: no "### Phase" headings -> not a phase-structured plan. Report
+# nothing rather than a false "0/0 phases complete" status. With TOTAL=0 the
+# gate can never legitimately block (IN_PROGRESS is also 0), so exit is safe.
+if ($TOTAL -eq 0) {
+    exit 0
+}
+
 # advisory_report: the v2.43 status echo.
 function Write-AdvisoryReport {
     if ($COMPLETE -eq $TOTAL -and $TOTAL -gt 0) {
@@ -96,13 +107,27 @@ if (-not $Gate) {
 
 # ---- Gate path (-Gate). Resolves to advisory unless every guard says block. ----
 
-# Guard 1: gated mode. The .mode file must contain "gate".
+# Guard 1: gated mode. A .mode file must contain "gate".
+#
+# The project's root .mode is a FLOOR, not a default that slug scope replaces
+# (issue #238). Reading only <plan-dir>\.mode let a slug plan with no .mode
+# drop a project-committed gate. "gate" from EITHER file arms the gate; a slug
+# may raise strictness, never lower it. In root scope $PlanDir already IS the
+# project root, so the second source is skipped and behavior is unchanged.
 $modeFile = Join-Path $PlanDir ".mode"
+$rootForMode = if ($env:PWF_PLAN_ROOT) { $env:PWF_PLAN_ROOT } else { "." }
+$rootModeFile = $null
+if ($PlanDir -ne $rootForMode -and $PlanDir -ne ".") {
+    $rootModeFile = Join-Path $rootForMode ".mode"
+}
 $gatedMode = $false
-if (Test-Path $modeFile) {
-    $modeContent = Get-Content $modeFile -Raw -ErrorAction SilentlyContinue
+foreach ($candidateMode in @($modeFile, $rootModeFile)) {
+    if (-not $candidateMode) { continue }
+    if (-not (Test-Path $candidateMode)) { continue }
+    $modeContent = Get-Content $candidateMode -Raw -ErrorAction SilentlyContinue
     if ($null -ne $modeContent -and $modeContent -match "gate") {
         $gatedMode = $true
+        break
     }
 }
 if (-not $gatedMode) {

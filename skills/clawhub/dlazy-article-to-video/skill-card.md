@@ -1,47 +1,64 @@
-## Description: <br>
-Turns articles and documents into narrated explainer videos by using the dLazy hosted file-to-video workflow for outline, storyboard, voiceover, build, and validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a written article, text, or news item into a narrated explainer video workflow covering outline, storyboard, voiceover, build, and validation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to turn articles, PDFs, office documents, reports, courseware, or training material into narrated explainer videos through the dLazy CLI and hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill label emphasizes article-to-video, but the artifact and security summary show broader document and file-to-video handling. <br>
-Mitigation: Review and approve it as a hosted file/document conversion integration, not only as an article conversion helper. <br>
-Risk: Files attached with the dLazy CLI are uploaded to dLazy media storage. <br>
-Mitigation: Attach only files that are appropriate to upload to dLazy and avoid sensitive material unless the upload is approved. <br>
-Risk: The dLazy API key can be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation credentials when preferred, and rotate or revoke the dLazy API key when access is no longer needed. <br>
-Risk: A global CLI install leaves a persistent binary on the system. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install posture is preferred. <br>
+## Use Case:
 
+External users and developers use this skill to invoke the dLazy CLI and hosted agent to turn articles or documents into narrated explainer, report, courseware, or training videos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-article-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide dLazy CLI authentication, project selection, file upload, and follow-up commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence and skill frontmatter) <br>
+Risk: Prompts and options are sent to api.dlazy.com, and attached files are uploaded to files.dlazy.com.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm organizational approval for dLazy's hosted service and avoid uploading confidential documents unless dLazy's terms and policy requirements allow it.
+
+Risk: The skill uses a dLazy API key from local configuration or an environment variable.
+
+Mitigation: Use scoped credentials, keep local configuration access restricted, and rotate or revoke keys when needed.
+
+Risk: The release wraps an external CLI install path, optionally installed globally with npm.
+
+Mitigation: Prefer npx/on-demand execution when a persistent global CLI is not desired, and review the pinned @dlazy/cli package before global installation.
+
+Risk: The evidence notes a naming and scope mismatch between article-to-video wording and document/file-to-video behavior.
+
+Mitigation: Confirm the intended dLazy template and input type before invoking generation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-article-to-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and CLI output guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke a hosted dLazy service that returns streamed terminal text and project-scoped video generation results.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

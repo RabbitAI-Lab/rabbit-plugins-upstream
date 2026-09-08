@@ -75,19 +75,56 @@ Bearer/token 从加密 secret store 按 key 取（`secret_name`），不走明�
   `learn_cause_weights` `rca_corpus_from_maintenance` `historian_health` `alarm_bad_actors` `tag_health`
   `subscription_health` `heartbeat_health` `alarm_flood_analysis` `alarm_cascade`
   `alarm_rationalization_worksheet`
+- 告警事件聚类：`alarm_event_clusters` — `alarm_bad_actors` 按**来源**排名,回答的是「哪台仪表最吵」,
+  不是「哪个故障最吵」;一个把同一条件写成十种说法的厂会得到十个 bad actor。这个按事件**说了什么**分组。
+  合并规则是**去掉大小写/标点/数字后的精确相等,不是相似度** —— 故意做笨,所以不需要模型、且可核对;
+  每个簇都列出被合并的原文与来源。**它不主张两条措辞不同的告警是同一个故障**,那由人判断。
 - 数据质量：`data_quality_scorecard` `data_quality_fleet_rollup`
 - 分析：`oee_compute` `downtime_events` `oee_multidim` `monitor_changes`
   `health_summary` (deprecated) `anomaly_scan` (deprecated)
+- 上下文基线：`baseline_learn_contextual` `baseline_check_in_context` —— 一个位号只学一条带,
+  在它有不止一个「正常」时就是错的(同一台干燥机 recipe A 走 180 °C、B 走 240 °C,一条带横跨两者,
+  于是两个工况都不可能出错)。**上下文由人声明,绝不推断**(D16);某个上下文历史太薄就**拒学**,
+  不借用别的上下文的样本;读数落在没学过的上下文里报 `unknown_context`,**绝不回落到全局带** ——
+  回落等于把「这个工况从没见过」说成「这个工况正常」。
+- 上下游归因：`downtime_attribution` —— RCA 只按**时间**加权,所以一次上游停机会让每台下游设备
+  各自给出一个自信的本地根因。方向来自**声明的**产线顺序(D25:产线上共现是必然,拿它挖边等于
+  制造因果),顺序来自时间戳,**两者都要成立**;没声明关系就报 `not_evaluable` 并给出补法。
 - 资产：`asset_inventory` `cross_protocol_asset_model` `adopt_alias_map` `diff_alias_map`
+- 设备公告对照：`device_advisory_check` —— `scan` 早就在读 vendor/model/firmware,却什么都没做。
+  这条把它接上,并**刻意停在漏洞扫描器会继续往前走的地方**:只报「落在公告声明的版本范围内」,
+  **不说「可利用」、不给严重度** —— 可达性与补偿控制决定那件事,而只读扫描看不见它们。
+  **不内置任何 CVE 库**(过期却看着像最新的库比没有更糟),由现场挂载文件、离线可用,每条必须带来源。
+  读不出固件报 `version_unknown`,读得出但排不了序报 `version_unparsed` —— 都不算通过;
+  公告没提到的设备**不出现在结果里**,那是「未知」不是「没有」。
 - 基线：`baseline_learn` `baseline_check` `baseline_record_change` `baseline_status`
   （change-log 基线：拒学薄历史、只报持续越带、每次告警必引基线样本 —— 非黑盒异常检测）
 - 合规/信创：`compliance_mapping` `compliance_frameworks` `compliance_dengbao_levels`
   `compliance_report` `compliance_evidence_bundle`
-  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
+  `historian_push` `export_data` `historian_query` `historian_coverage` `stream_publish` `uns_publish` `stream_publish_event` `rca_narrate` `fleet_status` `fleet_incidents` `pdm_forecast`
   `historian_push` `export_data`
 - 程序解读：`plc_program_outline` `plc_program_xref` `plc_program_section` `plc_program_visibility`（解读导出的 ST/AWL/L5X 程序,只读文件,强制引用行号）
+- 程序变更基线：`plc_program_snapshot` `plc_program_drift` `plc_program_history` — 把「认可的那一版」
+  的结构记下来（文件 SHA-256 + 每个 block 的结构指纹：声明/调用/分支条件/定时器，**不含行号、注释、
+  block 顺序**，所以在文件顶上加一行注释不会把整份程序报成变更），之后问某一次导出**动没动**。
+  三个判词咬得很紧：`identical` **只**由 SHA-256 相同得出；`logic_changed` 逐 block 指出哪一类变了；
+  `changed_outside_extracted_structure` = 字节变了而结构指纹全同 —— 多半是注释/排版，但这些 parser
+  是结构抽取不是文法，**所以它不叫「仅文档」，也不构成放行**。删历史只在 CLI（`iaiops program forget`）：
+  删变更控制证据不该离 agent 只有一次调用。存的是 block 名 + 哈希 + 计数，**不落声明、源码行和注释**。
 - 医疗设施（healthcare facility 安全）：`isolation_room_check` — 隔离病房压差合规（ASHRAE 170 / CDC：空气传染隔离 AII 负压、保护性环境 PE 正压，≥2.5 Pa）；检出反向/不足/低裕度,worst-first,每项引用读数。读数来自 `bacnet_read_points` 的压差 AI 点或历史库,纯分析。
-- 元：`protocols_supported`
+- 自证：`verify_determinism` — 把「拿掉模型、断网、同一份数据重跑、输出逐字节相同」**跑出来**：
+  固定数据集过一遍分析层，规范化后取 SHA-256，在本进程跑两遍、再在两个不同 PYTHONHASHSEED 的
+  全新解释器里各跑一遍（这一臂才抓得到集合/字典迭代顺序渗进结果），全程 socket 抛异常。
+  给 CSV/验证团队的是一条能写进 IQ/OQ 的测试用例，不是一句形容词。
+- 元：`protocols_supported`(产品能做什么)· `site_readiness`(这个站点今天能跑什么、还差什么;零联网)
+- 调查层（§13，八步证据闭环）：`investigation_readiness` `investigation_open` `investigation_show`
+  `investigation_list` — 「真出事时这个站能走到第几步、每个缺口还差什么」，以及对一个**已过去的窗口**
+  逐步走完并留档（不碰设备）。缺口分两种:**你没供**(给命令) 与 **产品供不了**。
+- 产线关系与机制库：`line_relation_declare` `line_relations_list` `mechanism_library_check`
+  `mechanism_library_list` — 上下游由**人声明**（D25:线上下游共现是必然，推不出因果）；
+  机制库按 ISO 14224 分 mode/mechanism/cause，**可排除、绝不确认**，
+  库里没有这条原因 → `nothing_known`（不是「无异议」）。
+
 
 ## Workflows
 

@@ -1,47 +1,65 @@
-## Description: <br>
-基于百炼®标书开放 API 的招投标全流程助手，上传招标文件后生成结构化智能解读报告，并可生成投标文件或审查投标文件合规性。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uploads tender and bid documents to the 百炼®标书 cloud service to interpret bid requirements, generate editable .docx bid files, review compliance risks, and compare 2-3 bid files for similarity or duplicate-risk signals.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External business users, tender teams, and bid writers use this skill to analyze tender documents, identify disqualification risks and scoring criteria, generate bid documents, and review bid submissions before filing. It requires a百炼®标书 App Key and sends user-selected tender or bid files to the百炼®标书 cloud service for processing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com under the user's App Key account. <br>
-Mitigation: Confirm the user understands and agrees before upload, and avoid installing or using the skill unless that cloud processing and retention model is acceptable. <br>
-Risk: The App Key is a full account credential and can be exposed if pasted into chat or shared through links that contain key parameters. <br>
-Mitigation: Keep the App Key in the local config file only, do not paste it into conversations, and never forward links that include App Key or bind_key parameters. <br>
-Risk: Custom API base settings can redirect document uploads and credentials to a different endpoint. <br>
-Mitigation: Use the default biaoshu.zhiliaobiaoxun.com endpoint unless the user explicitly trusts the configured alternative. <br>
-Risk: Bid document generation consumes account points and long-running jobs can continue after a local client timeout. <br>
-Mitigation: Check balance before generation, track existing job IDs, and resume polling instead of resubmitting generation requests. <br>
+## Use Case:
 
+External users and bidding teams use this skill to analyze tender files, produce draft bid documents, review bid submissions for compliance concerns, and check legally held bid files for similarity risks before submission. The skill requires a user-provided 百炼®标书 API key and explicit handling of local tender or bid files.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-tender-reader) <br>
-- [百炼®标书 Platform](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API Contract Reference](references/api.md) <br>
-- [Usage and Operations Guide](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance plus generated HTML, Word, DOCX, and JSON-backed report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include structured tender interpretation, risk summaries, bid document files, compliance reports, progress updates, and absolute local file paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Tender and bid files can contain commercially sensitive, pricing, or personal information and are uploaded to the 百炼®标书 cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm user awareness and consent before first upload, and only process files the user explicitly provides as local uploads or paths.
+
+Risk: The API key grants account access and is stored locally for the skill.
+
+Mitigation: Have the user write the key directly to local configuration, do not request or echo it in chat, and remove or reset the key when access is no longer needed.
+
+Risk: Bid generation may consume the account's available words, and submission can be blocked when available words are insufficient.
+
+Mitigation: Check available words before submission and confirm deliberate generation steps before starting tasks that can affect the account balance.
+
+Risk: Duplicate-risk checks could be mistaken for a legal conclusion about collusion or bid validity.
+
+Mitigation: Require confirmation that the user legally holds and may process all uploaded files, and present duplicate results only as internal pre-submission risk signals.
+
+## Reference(s):
+
+- [百炼®标书 Open API contract](references/api.md)
+- [Execution and usage guide](references/usage.md)
+- [Knowledge-base field guide](references/knowledge-fields.md)
+- [百炼®标书 platform](https://biaoshu.zhiliaobiaoxun.com/?ch=c666)
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-tender-reader)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown responses with JSON results, HTML or Word reports, editable .docx bid documents, local configuration, and shell-command-backed workflow guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided API key; uploads local tender and bid files to 百炼®标书; generated bid documents may consume account available words.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

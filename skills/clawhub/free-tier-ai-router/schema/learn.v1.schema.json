@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/free-tier-ai-router/schema/learn.v1.schema.json",
+  "title": "ai_router.learn.v1",
+  "description": "Learned-reliability report emitted by `router.py --learn --json`. Per-route live outcome statistics collected automatically on every call (opt out per-call with --no-learn; clear with --learn-reset). The overlay only REORDERS routes inside a tier (reliability multiplier clamped to [0.5, 1.2]); it can never disable a route, and cooldowns/state stay authoritative. Records unused for 14 days are pruned.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "routes"],
+  "properties": {
+    "schema": { "const": "ai_router.learn.v1" },
+    "routes": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/record" },
+      "description": "Keys are 'provider|model'."
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "n", "ewma_s", "last_ts"],
+      "properties": {
+        "ok": { "type": "integer", "minimum": 0, "description": "Successful answers observed." },
+        "f429": { "type": "integer", "minimum": 0, "description": "Rate-limit failures observed (weighted 2x when computing reliability)." },
+        "fother": { "type": "integer", "minimum": 0, "description": "Other failures observed." },
+        "n": { "type": "integer", "minimum": 1, "description": "Total observations. Reliability is neutral (1.0) until n >= 5." },
+        "ewma_s": { "type": "number", "description": "EWMA latency in seconds (alpha 0.25); used to order task=fast." },
+        "last_ts": { "type": "number", "description": "Unix timestamp of the last observation (14-day pruning)." }
+      }
+    }
+  }
+}

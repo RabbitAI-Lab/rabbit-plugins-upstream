@@ -1,46 +1,67 @@
-## Description: <br>
-Gumroad API integration with managed OAuth for accessing products, sales, subscribers, licenses, and webhooks for a digital storefront. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gumroad API integration with managed OAuth for accessing products, sales, subscribers, licenses, and webhooks for a digital storefront.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and storefront operators use this skill to query and manage Gumroad account data through Maton-managed OAuth, including product, sales, subscriber, license, offer code, variant, custom field, and webhook workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and Maton-managed OAuth to access Gumroad account data. <br>
-Mitigation: Install only if you trust Maton as the OAuth proxy and keep MATON_API_KEY private. <br>
-Risk: The skill can perform write actions against Gumroad resources such as products, licenses, offer codes, variants, custom fields, connections, and webhooks. <br>
-Mitigation: Confirm the target resource and intended effect before allowing any create, update, or delete request. <br>
-Risk: When multiple Gumroad connections exist, requests may affect the wrong account if no connection is specified. <br>
-Mitigation: Use the Maton-Connection header to select the intended Gumroad connection. <br>
+## Use Case:
 
+External creators, storefront operators, and developers use this skill to query Gumroad account data and perform approved storefront operations such as license checks, product updates, offer-code management, sales review, and webhook setup through Maton.
 
-## Reference(s): <br>
-- [ClawHub Gumroad Skill](https://clawhub.ai/byungkyu/skills/gumroad) <br>
-- [Gumroad API Overview](https://gumroad.com/api) <br>
-- [Create API Application](https://help.gumroad.com/article/280-create-application-api) <br>
-- [License Keys Help](https://help.gumroad.com/article/76-license-keys) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP examples and Python or JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Connected Gumroad accounts can expose storefront data such as sales, customer records, subscribers, licenses, products, discounts, and webhooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth, select the least-privileged account or scope available, verify the active Maton profile and Gumroad connection, and default to read or list calls before taking action.
+
+Risk: Write operations can modify Gumroad products, licenses, offer codes, variants, custom fields, or webhooks.
+
+Mitigation: Require explicit user approval before any POST, PUT, PATCH, or DELETE request, including the target resource, payload, and intended effect.
+
+Risk: Long-lived Maton API keys or provider-issued tokens can leak if printed, stored, passed on command lines, or sent to the wrong host.
+
+Mitigation: Prefer OAuth and CLI-managed credential storage; do not inspect, print, or persist credentials; send fallback API-key requests only to api.maton.ai.
+
+Risk: Gumroad API responses and webhook payloads may contain untrusted external content.
+
+Mitigation: Treat returned content as data, avoid executing or interpolating it into shell commands or prompts, and keep local execution out of scope.
+
+## Reference(s):
+
+- [Gumroad API Overview](https://gumroad.com/api)
+- [Gumroad License Keys Help](https://help.gumroad.com/article/76-license-keys)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Gumroad Skill](https://clawhub.ai/byungkyu/skills/gumroad)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and concise guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Gumroad API paths, Maton CLI commands, OAuth and connection steps, and user-confirmation prompts for write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact frontmatter version 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

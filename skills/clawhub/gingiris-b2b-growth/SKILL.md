@@ -37,6 +37,8 @@ tags:
 
 # B2B SaaS Growth — PLG / SLG Playbook
 
+Podcast-derived stage evidence and claim boundaries: `references/podcast-evidence.md`.
+
 > 🌍 **Language / 语言**: [English](#english-version) | [中文](#中文版)
 
 "People like it but revenue isn't growing" is rarely one problem. It's usually a **mis-matched motion**: a PLG product run with an SLG playbook, or vice versa. Start by diagnosing the motion, then walk the staged path.
@@ -104,6 +106,14 @@ Unit economics, both ends:
 - Below **~$1M ARR**: PLG + organic + light paid marketing is enough. Above ~$1M ARR (and most ToB): you need SLG / local key-account channels to keep scaling.
 - Lean-team bar (podcast-recalled figures, treat as approximate): Notion ~4-8 people at million-user scale; ClickUp ~24 people at $1M ARR; several 8-10 person teams in the same space at $1M revenue. Operator rule: **over 25 people without $1M revenue = the org is the problem, not the market.**
 - Inbound-heavy SLG pattern (founder's own account, self-reported): Mattermost's community edition drives search ranking, self-serve trials, then inbound deals - growing from ~$100k contracts to ~$1M contracts without a large sales team. Dify sells a standardized on-prem edition at ~$30-50k per deal with a single deploy engineer, routing custom work to partner vendors.
+
+### Pre-product B2B outreach gate
+
+- Do not wait for prospects to prepare perfect workflow documents. Build a rough demo from public evidence, ask for whatever artifacts already exist during the call, and refine after observing the real workflow.
+- Segment each request into **standard product / guided setup / paid customization**. If setup quality affects the product experience, publish minimum standards and an evaluation checklist instead of leaving the buyer to improvise.
+- Start with reachable operators and smaller accounts; test roughly ten named enterprise accounts separately because procurement and internal politics make them a different motion.
+- Before outreach, remove or replace every broken CTA with a waitlist or explicit beta path. Outreach may precede a finished product; a dead first step may not.
+- Measure the funnel as `contacted -> replied -> meeting -> qualified test -> activated -> paid`, and reuse winning messages across owners.
 
 ### Enterprise deal execution (private deployment & custom 2B)
 
@@ -238,6 +248,14 @@ SOP（200+ 团队听过，真正执行完的不到 10 个）：
 - 人效基准（播客口述回忆，按约数看）：Notion 约 4–8 人时已达百万用户量级；ClickUp 约 24 人做到 $1M ARR；同赛道多个 8–10 人团队做到百万美金营收。操盘铁律：**超过 25 人还没到 $1M 营收 = 组织有问题，不是市场有问题。**
 - Inbound 型 SLG 范式（founder 面授口述）：Mattermost 社区版带搜索排名→用户自助试用→主动 inbound，从 ~$10 万一单做到 ~$100 万一单，无需养大型销售团队。Dify 只卖标准化私有部署版（~$3–5 万美金/单，派一个工程师部署），定制需求全部转给合作 vendor。
 
+### 产品未完全就绪时的 B2B 外联门槛
+
+- 不等客户把工作流资料准备齐：先用公开信息做粗版 demo，在会上直接索取已有材料，再基于真实流程迭代。
+- 把需求拆成 **标准产品 / 引导式配置 / 付费定制**；凡是会影响产品体验的配置，都提供最低质量标准与验收清单，不能完全交给客户自行摸索。
+- 优先从更容易触达的小型客户和一线操作者开始；大型企业单独抽样约 10 家验证，避免把采购流程和内部协同难度误判成产品需求。
+- 外联前逐个检查 CTA：未完成的登录或试用入口改成 waitlist / Beta 申请，不能让潜客第一步就卡死。
+- 漏斗统一记录为 `触达 -> 回复 -> 会议 -> 合格测试 -> 激活 -> 付费`，跨负责人复用已验证的文案和异议处理。
+
 ### 2B 打单与交付（私有化 & 定制）
 
 签下合同只是一半，全额收回款才是另一半。提炼自某 Multi-Agent 开源商业化项目复盘。
@@ -292,6 +310,14 @@ SOP（200+ 团队听过，真正执行完的不到 10 个）：
 - ❌ 不用 ToC 话术（"amazing"、"magical"）。
 
 ### 反模式
+
+### PLG 信号门（2026 会议纪要更新）
+
+- 免费 DAU 不等于 PLG 成立。先定义一个与价值直接相关的激活事件，再看 `注册 → 激活 → 重复使用 → 付费/合格扩张`。
+- 剔除内部、测试和活动赠送用户，并按注册月份做 cohort；只有登录、没有完成核心任务的用户不算激活。
+- 产品未达到稳定激活与留存前，不扩付费投放、不盲目加销售团队；回到访谈、onboarding 和定价实验。
+- 当团队使用、席位增长、安全/采购需求或明确扩张意图出现时再引入 sales-assist，而不是见到免费用户就交给销售。
+- 所有转化阈值注明日期、样本范围与数据来源；历史案例用于形成假设，不作为跨产品的永久标准。
 
 - ❌ 没 PMF 就投流（烧钱比学习快 10x）。
 - ❌ 到 $1M 就盲目 PLG → SLG（Vercel 坚持 PLG 到 $100M）。

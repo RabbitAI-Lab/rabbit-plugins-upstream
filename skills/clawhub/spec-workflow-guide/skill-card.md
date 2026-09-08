@@ -1,44 +1,53 @@
-## Description: <br>
-Guides agents through requirements, technical design, and task planning before medium-to-large coding changes, especially when work spans modules or acceptance criteria are unclear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when medium-to-large changes need explicit requirements, technical design, and task planning before implementation, especially for multi-module work, unclear acceptance criteria, or architecture-heavy requests.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to have an agent clarify requirements, document design decisions, and prepare implementation tasks before starting substantial or ambiguous coding work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can slow larger tasks by requiring requirements, design, and task confirmation before coding. <br>
-Mitigation: Apply it to medium-to-large or unclear work, and skip the full workflow for small, low-risk changes with clear acceptance criteria. <br>
-Risk: Planning documents can capture incorrect scope when the request is underspecified. <br>
-Mitigation: Ask follow-up questions for core product behavior and require confirmation before moving from requirements to design, tasks, and execution. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to decide when a change needs a structured requirements, design, task, and execution workflow before coding. It is intended for medium-to-large feature work, cross-module changes, architecture-heavy requests, and cases with unclear acceptance criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide) <br>
-- [CloudBase main entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Spec workflow raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md) <br>
-- [UI design sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md) <br>
-- [Data model sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/data-model-creation/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown planning documents and implementation checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce requirements.md, design.md, and tasks.md under a specs directory before implementation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.14 (source: ClawHub release evidence; artifact frontmatter reports 2.24.1) <br>
+Risk: The workflow can slow delivery or create unnecessary spec documents when applied to small, clear changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for medium-to-large or unclear work and skip it for small, low-risk changes with precise acceptance criteria.
+
+Risk: Incorrect or incomplete requirements, designs, or task plans could guide later implementation in the wrong direction.
+
+Mitigation: Review each planning phase before implementation and require user confirmation between requirements, design, and task breakdown.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance and spec document outlines]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to create requirements, design, and task Markdown documents under specs/<spec_name>/ and to ask for confirmation between planning phases.]
+
+## Skill Version(s):
+
+1.18.43 (source: server release metadata; artifact frontmatter reports 2.33.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

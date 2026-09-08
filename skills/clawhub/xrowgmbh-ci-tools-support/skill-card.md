@@ -1,42 +1,57 @@
-## Description: <br>
-Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and support maintainers use this skill to triage eligible CI Tools support issues and discussion threads, answer from public documentation or provided context, and hand off unsafe or out-of-scope requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Support may be provided to an unintended requester if SUPPORT_TRUSTED_DOMAINS is stale or too broad. <br>
-Mitigation: Keep SUPPORT_TRUSTED_DOMAINS current and verify the requester domain before answering. <br>
-Risk: Private customer details, private URLs, private logs, or internal project names could be exposed in public support replies. <br>
-Mitigation: Mark issues confidential when they include sensitive details and do not quote private logs into public places. <br>
-Risk: Incorrect CI Tools guidance could be given if component behavior or inputs are assumed. <br>
-Mitigation: Inspect the relevant public component template, documentation, issue, merge request, or pipeline log before answering. <br>
+## Use Case:
 
+Developers and support maintainers use this skill to triage eligible GitLab support issues and discussion threads for the CI Tools components catalog. It guides responses that rely on public documentation, public repositories, public GitLab history, or context explicitly provided in the request.
 
-## Reference(s): <br>
-- [ci-tools-support Support on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown support replies with citations or concise handoff guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are constrained to eligible CI Tools support requests and public or explicitly provided information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.165.2 (source: server-resolved release metadata) <br>
+Risk: Support may be given to an ineligible requester or for an out-of-scope issue.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the requester domain with SUPPORT_TRUSTED_DOMAINS, confirm the issue is related to CI Tools, and hand off anything outside the public CI Tools catalog.
+
+Risk: Public replies may expose private logs, customer details, private URLs, or internal project names.
+
+Mitigation: Mark issues confidential when sensitive details appear and do not quote private logs into public replies.
+
+Risk: Incorrect component guidance may be provided if behavior or inputs are assumed.
+
+Mitigation: Inspect the relevant public component template or documentation, cite the source used, and ask one focused follow-up question when a reproducible example is missing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain-text support replies with source citations and triage guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses should cite public sources, avoid quoting private logs into public places, and hand off out-of-scope or unsafe requests.]
+
+## Skill Version(s):
+
+4.185.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-Submit Dataify Instagram Reel Information Builder tasks for three Instagram Reel collection modes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Instagram Reel records from a Reel URL, Reel-list URL, or website URL. Do not use for profile data, post comments, or Google Shopping products.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to submit Dataify Builder jobs that collect Instagram Reel information by detail URL, list/profile URL, or website/list URL, then return the resulting task ID and status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill submits Instagram URLs, filters, file names, and a Dataify account token to Dataify Builder. <br>
-Mitigation: Use it only for authorized collection tasks and only with a Dataify token intended for this external service. <br>
-Risk: Saving DATAIFY_API_TOKEN locally could expose account access if the local environment is shared or compromised. <br>
-Mitigation: Ask for explicit user confirmation before saving the token and prefer per-run tokens when persistence is not needed. <br>
-Risk: Default sample parameters can create unintended collection jobs if submitted without review. <br>
-Mitigation: Confirm the collection mode, Instagram URL, count, dates, and file name before submitting a Builder request. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify collection jobs for Instagram Reels by detail URL, list/profile URL, or website/list URL, then receive the resulting task status and collected output.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-reels) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns Dataify task_id, status, submitted parameters, file name, dashboard URL, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: The skill sends target Instagram URLs, filters, file names, and the user's Dataify API token to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when the user intends to use Dataify for Instagram Reels collection, has authority to collect the targets, and is comfortable sharing those inputs with Dataify.
+
+Risk: Collection scope can affect Dataify credit usage and may involve private or sensitive targets.
+
+Mitigation: Review target URLs, filters, and collection volume before submission; avoid private or sensitive targets unless collection is authorized.
+
+## Reference(s):
+
+- [Modes and parameters](references/modes-and-parameters.md)
+- [Dataify dashboard login](https://dashboard.dataify.com/login?utm_source=skill)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-instagram-reels)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task/result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a Dataify task ID, task status, normalized collection parameters, and the final collected result; API token values should not be exposed.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

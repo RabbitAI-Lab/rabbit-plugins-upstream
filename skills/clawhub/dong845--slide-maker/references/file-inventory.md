@@ -2,8 +2,18 @@
 
 ## Files — scripts · agents · references · registry
 
+**Tests** (`tests/`, script-style — `main()` + explicit exit, so `pytest` collects NOTHING from
+them; CI invokes each directly and asserts it RAN rather than merely exited 0):
+`test_lint_regressions.py` (two-sided: lint catches real defects AND leaves declared craft alone) ·
+`test_codex_delivery_gate.py` · `test_codex_visual_contract.py` (Codex gate behaviour) ·
+`test_critic_waiver_gate.py` (the shared-path critic waiver must be CLASSIFIED — a free-text
+waiver once carried a whole deck through `all hand-off gates pass` with no independent critic) ·
+`lint_fixture.py` (shared fixture, not a suite).
+
 **Scripts** (`scripts/`):
 - `deckkit.py` — the build helpers (template & blank decks), **incl. the editable native charts**
+  (motif: `register_mark` 11 quiet kinds · `motif_page` 8 loud relations · `motif_legend` the key ·
+  `tag_motif` / `bleed_intent` the two declarations)
   (`native_chart`/`native_dual_axis`/`native_donut`/`native_pareto`/`native_bubble` — click-to-edit,
   any-language-safe) **and the build-time geometry gate** (`lint_layout(prs, strict=True)` — run before `prs.save()`;
   the in-process pre-render net for overflow/off-canvas/text-overlap/card-escape/footer/off-centre — plus
@@ -19,10 +29,244 @@
   hand-kept list, and a primitive in it would silence the tool forever. Exits 1 and prints
   `NOT CHECKED` rather than reporting clean when the deck could not be opened. ~50ms. Run it at
   PRE-FLIGHT 12.
+- `check_param_reach.py` — AST pass asserting every keyword parameter a public helper ACCEPTS is
+  READ by its own body. Found ten, seven of them unknown: `node(fill=)` drew white whatever you
+  passed, `backdrop_motif(kind=)` always drew the grid its docstring said was one of two modes,
+  `native_bubble(xlabel=/ylabel=)` dropped documented axis titles, `slide_transition(kind=)`
+  turned every transition into a fade. Deliberate no-ops go in `EXPECTED_UNREAD` with a reason.
+- `check_reference_code.py` — resolves every `deckkit.*` call TAUGHT IN THE SKILL'S PROSE against
+  the real module: unknown helper, bad keyword, dead `references/*.md` pointer, and the silent
+  `.fore_color.alpha = ...` no-op (python-pptx solid fills cannot carry alpha, so that assignment
+  raises nothing and renders a 100% OPAQUE shape). Exists because four wrong API facts shipped at
+  once in the shared references and nothing reported any of them — the build crashes at the
+  reader's desk, not in CI. Exit 0 clean / 1 findings / 2 could not run. Runs in CI.
+- `check_style_applied.py` — the register a deck DECLARES must be the one it APPLIES. Both
+  delivery gates required `style_pick` as a string and verified it in neither: measured by
+  grep, `presets.apply` / `set_geometry` / `set_ground` appeared in no gate script at all, so a
+  deck recording `"brutalist for engineering - beat blueprint"` and built with deckkit's stock
+  defaults passed on BOTH runtimes. AST-checks the build script for `presets.apply("<the
+  declared preset>")`; `bespoke` / `generated` / `n/a — <locked look>` are skipped by
+  definition, a deliberate departure is `style_pick_waived` (>=24 chars). Imported by
+  `render_deck.py --gate-check` and `codex_delivery_gate.py` — never copied, so the two paths
+  cannot grow two answers. `--selftest` proves it both ways. It checks the CALL, not the
+  pixels; `tests/test_register_expression.py` covers the other half.
+- `palette_audit.py` — also SIMULATES colour vision deficiency (Viénot–Brettel–Mollon, in LMS)
+  and names any pair that stops being two colours. `dk.OKABE_ITO` had been recommended for years
+  with nothing checking a palette, so the advice only helped whoever already remembered it. The
+  bar is ABSOLUTE distance after simulation, not how much the pair changed: Okabe-Ito's worst
+  red-green pair lands at 68 and the classic matplotlib red/green at 56, and any *ratio* cut sits
+  in a 6-point gap that would flag the set this skill recommends. Deuteranopia/protanopia (~8% of
+  men) and tritanopia (rarer than 1 in 10,000) are reported separately — Okabe-Ito itself collides
+  under tritanopia, and a check that called it unsafe would train people to dismiss it. The
+  simulation runs in LMS on purpose: the first version used the widely-copied RGB-space matrices
+  and turned pure green PINK-GREY under deuteranopia while leaving greys correct, which looks fine
+  until you check it against a reference.
+- `lint_deck.A11Y_CODES` / `A11Y_BLOCKING` — the accessibility codes this file already computed
+  and printed as advisory `[warn]`s. Measured by grep before the split existed, no gate on the
+  shared path read any of them and the codex path held only the two WCAG contrast codes, so the
+  same deck was accessible or not depending on which runtime shipped it. `A11Y_BLOCKING` is what a
+  gate may hold a deck on and deliberately EXCLUDES `NO SLIDE TITLE`: lint's own message for it
+  calls an off-canvas title "a sanctioned trick for statement slides", and on an ordinary
+  well-built 11-slide deck it fired once, on the closing slide. Both `render_deck.py --gate-check`
+  (`a11y` section) and `codex_delivery_gate.py` (`STRICT_WARNINGS`) derive from these constants
+  rather than restating them.
+- `deckkit._motif_faults` — the DECODABILITY checks, all three added after a first human reader
+  asked three questions about a deck that had passed every gate. `MOTIF_UNEXPLAINED_AT_FIRST_USE`:
+  the stranger test is about FIRST appearance, and the old check cleared on a legend ANYWHERE —
+  which is precisely the deferred reading SKILL.md calls "a FAILED test written as a passing
+  sentence". `UNNAMED_REPEATED_MARK`: >=4 near-identical marks on one page with no text within
+  reach of the group; such a set was invisible to every other check (not text, so the text checks
+  skip it; not tagged, so the motif checks skip it; trivially clears contrast and overlap), and
+  nine unlabelled rules shipped on a cover. Both are WARN, like their siblings — the figurative
+  answer is legitimate — but they now READ, and `tests/test_decodability.py` locks both directions.
+- `render_deck._icon_none_category_holds` — the icon waiver's CATEGORY, verified against the built
+  file. The four classes were compared to a list of strings, so any of the four words cleared the
+  gate: measured, `motif-dominant` was accepted on a deck carrying no loud motif, and the first
+  reader's first note was that icons should be there. Now `motif-dominant` requires a real loud
+  motif, `tiny-deck` a deck of 1-2 slides, `template-locked` a real template (python-pptx ships
+  eleven named layouts, so "has layout names" proved nothing), and `editorial-register` stays
+  declared because it is a taste claim about a look and inventing a measurement would be worse.
+  The waiver must also name EVERY flagged slide — naming a subset let the re-decision cover the
+  page the author had already thought about and skip the ones they had not.
+- `plan_rhythm.py` — composes the deck's ARCHITECTURE as a sequence before any page is built.
+  `lint_deck` demands >=4 distinct skeletons and reports 3 adjacent slides sharing 75% of their
+  structure, but both fire AFTER the build, when varying the architecture means re-laying written
+  pages — so it got decided one page at a time, in the order the content arrived. Maps each slide's
+  ROLE to the architectures that suit it (a result is a thing to look at, a comparison is a set to
+  scan, a process is stages in order), rotates when a role's picks are already in the last two
+  pages, and pushes `carried_by` slides toward architectures that can hold a signature move.
+  Deterministic arithmetic — ~40ms, no model call, no round-trip. Measured: the same content
+  planned scored 8 distinct skeletons against 2 improvised. `--selftest`; a PROPOSAL, not a verdict.
+- `composition_cues.py` — what a rendered page LOOKS like, as the seven cues an unsupervised
+  slide-quality study validated against human ratings (arXiv 2508.19289: whitespace, colorfulness,
+  edge density, brightness contrast, text density, colour harmony, layout balance; r ~= 0.83,
+  beating several commercial vision models). Three of them were computed nowhere here. 🔴 REPORTED,
+  NEVER GATED, deliberately: a number that tracks taste across a corpus does not license a threshold
+  on ONE deck — a quiet ink-wash register and a cluttered mess share a low colorfulness, and this
+  skill protects the first. Its real output is the deck-wide RANGE per cue, because a FLAT range is
+  the signal a single page's number cannot give: measured, a deliberately dead deck that linted
+  clean reported 6 of 7 cues flat. Reads renders already on disk — no extra render pass, ~0.6s for
+  14 pages. Whitespace is measured against the MODAL tone, so a dark register reads as mostly empty
+  rather than 100% full.
+- `check_direction_applied.py` — the direction the user PICKED must be the deck that shipped.
+  Four directions are rendered, one is clicked, and the choice was recorded as a sentence and
+  compared to nothing. Measured on a delivered deck: the chosen direction declared a Georgia
+  display face and a centred cover, and the deck shipped Helvetica Neue titles and a low-left
+  cover, because `style.py` set `display=` and every title passed `dk.FONT` — the DISPLAY slot was
+  never read. The author noticed; no gate did, while `check_register_pixels` and
+  `check_style_applied` already existed for the identical class. It compares only what a file can
+  settle — ground, accent presence, display and body faces, and `centred` vs `low-left` — and names
+  skeleton and motif as NOT checked rather than guessing. A deviation is legitimate and recorded
+  per axis in `design_plan.direction_deviations`; an unrecorded one is the version the user cannot
+  see. Run by both gate paths from one module.
+- `register_surface.py` — the half `presets.apply()` never had. apply() calls four things
+  (`set_palette`, `set_geometry`, `set_ground`, the font setters), so one identical page through all
+  18 presets RENDERED as 18 colourways of one page: no memphis bands, no bauhaus primitive, no
+  glass, no overprint, no scanlines. Each preset's `surface` field described all of that correctly,
+  in prose, for an author to build by hand — which is why it was never built. A kit is three things:
+  `ground()` paints the register's furniture and RETURNS the content rect left over, `card()` gives
+  its card FORM (the half that makes the pages differ in shape rather than colour), and the marks
+  (`halftone` · `starburst` · `boomerang` · `zigzag` · `tri` · `scanlines` · `color_band`) are
+  public so a bespoke register can borrow one. The rect it returns is a CONTRACT with teeth: a kit
+  that paints a loud mark inside it raises — the first render put a memphis triangle through a card
+  corner and a bauhaus disc through a third card while the docstring promised it could not happen.
+  Placement varies by page INDEX, never by a random number, so two builds of a deck stay identical.
+  All 18 registers have a kit; an unknown name raises rather than quietly returning a plain page,
+  and so does painting a surface before `presets.apply()` has set the palette (it used to die on a
+  blend deep inside a builder, with a TypeError that named nothing the caller could fix). Both gates NOTE a deck that declared a kitted register and used
+  none of it.
+- `register_surface.load_kits(dir)` — imports a deck's own `surface_*.py` kits so its INVENTED
+  registers exist in THIS process. Registration happens at import time and the gates run in a fresh
+  process after the build, so without it a bespoke register's declared prohibitions were enforced
+  in-process and nowhere else: measured with a scaffolded kit forbidding gradients and a deck
+  drawing one, the real gate reported "a bespoke look has no FORBIDS to check". Never raises — a
+  kit that fails to import becomes a gate NOTE naming it, because "unregistered" and "clean" are
+  different facts.
+- `bespoke_kits.py` — the four registers in `references/bespoke-registers.md`, as runnable kits.
+  The library taught how to invent a register in five prose fields and contained zero lines of code,
+  so every deck that reached for one re-derived the contracts by hand and got a different subset
+  right. Registered through `register_surface.register()`, they arrive with everything a preset's
+  kit has. A motif that NEEDS distinct hues derives them rather than reusing the base palette's one
+  accent — measured: on `swiss` (a single red) `current`'s two-colour crossing rendered in one
+  colour, which does not degrade the look, it deletes the idea.
+- `save_register.py` — keeps an INVENTED register after the deck ships. The example library held
+  4 while one real look history held 9 that had shipped and been lost, and grep found no script
+  anywhere that wrote a register or a look-history line: the mechanism was "remember to edit the
+  markdown", which is not one. Nothing is re-described — it reads the pick, palette, signature move
+  and `motif_generates` from `.deck-gates.json` and adds the colours `check_register_pixels`
+  measured on the render. Writes to the USER'S registry root beside `taste.md`, never into the
+  skill's own `bespoke-registers.md`, which is a teaching library rather than one user's
+  collection. Preset-based decks are skipped (they are in the gallery already). Idempotent on a
+  NORMALISED name: the gates record carries the English pick and the look history the human-typed
+  one, so `Section Drawing` and `Section Drawing 建筑剖面` are one register, not two — comparing
+  strings kept both on the first run. A gloss must ANNOUNCE itself (the other script, or an
+  annotation separator): plain containment made `Grid`/`Gridiron` and `Ledger`/`Ledger Line` the
+  same register too, and the loser vanished under "already kept". Reading spans every registry
+  root the way `taste_file()` and `list_templates()` do — the same person runs Claude Code on one
+  deck and a Codex host on the next — while new entries go to one. Writes temp-then-replace,
+  because truncating the user's design memory to add one line is not an acceptable worst case. `--from-history` recovers what a look history already names.
+  `render_deck --gate-check` NOTES an unkept register at hand-off, never blocks: keeping one is the
+  user's call about their own collection.
+- `check_register_guard.py` — the SHAPE-level half of a declared register. `apply()` sets palette,
+  geometry tokens and ground and nothing else, so measured, one page through all 18 presets came
+  out differing only in ground, radius and rule weight — memphis with no header bands, bauhaus with
+  no primitive. `check_style_applied` verifies the CALL and `check_register_pixels` says in its own
+  docstring that it judges COLOUR only, so "declare brutalist, ship its palette on rounded cards"
+  cleared every gate. Reads `presets.FORBIDS`: rounded · gradient · soft-shadow (shadow.inherit
+  left True) · proportional-face · confetti (>1 oversized primitive). Only 7 of 18 registers
+  declare prohibitions and only OOXML-readable properties are listed — a check that fired on lawful
+  composition would teach the waive reflex, and the undecidable guards ("photography carries ALL
+  the colour") stay prose and are REPORTED as unchecked. The register is resolved by
+  `check_style_applied.declared_preset`, never a substring search: a bespoke deck whose pick read
+  "beat blueprint-the-preset" was checked as `blueprint` on the first try.
+- `check_register_pixels.py` — the register a deck DECLARES must reach its RENDERED PIXELS, and
+  must not be a previous deck's. The half `check_style_applied.py` structurally cannot reach: a
+  BESPOKE register has no `presets.apply()` call to find, and a build that calls it and then
+  hand-sets the tokens back passes there too. Reads the deck's own PNGs and reports
+  `STOCK REGISTER SHIPPED` (deckkit's chromatic identity is what actually shipped while the
+  declared hues are absent — SKILL.md's "never ship the default blue"),
+  `DECLARED PALETTE ABSENT`, and `GROUND REPEAT` / `LAST DECK'S SCHEME` against `taste.md`'s LOOK
+  HISTORY ("never reuse the last deck's scheme"). Presence is measured per-colour and NOT by area:
+  measured on a real 15-page deck the signature accent covered 0.65% of its best page, so an
+  area ranking called the deck's own palette absent; colours genuinely absent measured 0.0000%
+  and an antialiased blend 0.093%, which is where the threshold sits. `DECLARED HUES ABSENT` is a
+  separate rule from the count: a ground and an ink are shared by half the world's decks, so the
+  HUES are the register — a deck rendered in greyscale scores 1 of 2 on the count and clears it.
+  An unreadable PNG is reported as `UNREADABLE RENDER` and the remaining pages are still measured,
+  because both callers wrap this module in try/except and anything RAISED would silently become
+  "NOT CHECKED" for the whole deck. Waive with `design_plan.register_pixels_waived`. Imported by `render_deck.py --gate-check` (section
+  `register_pixels`) and `codex_delivery_gate.py`. `--selftest` proves it both ways. It judges
+  COLOUR only — composition is the sameness gate's and the critic's. `DARK GROUND ON A PRINTED
+  BOARD` is the print carve: the freshness rule once told a real A0 poster to "move the VALUE (dark
+  for a light run)" and the board was rebuilt dark, which is the one ground print shops uniformly
+  advise against (ink, drying, streaking, surcharges, and light hairlines thinning at print
+  resolution). On a `chrome == "print"` format the repeat is still reported, but the advice becomes
+  paper warmth and accent hue; a dark canvas becomes its own finding. A projected deck is untouched
+  — 8 of the 18 registers are dark. The dark finding is scoped to LARGE-FORMAT boards (>=300 sq in,
+  which keeps A0/A1 in and A4/A3 out): the ink, drying and surcharge evidence is about wide-format
+  poster printing, an A4 sheet is a sixteenth of the ink, and a dark A4 leave-behind is a legitimate
+  design — below the threshold it is a note. And a LIGHT ground repeat on a printed board is
+  reported rather than held, because print advice leaves only pale stocks and every pale stock
+  matches every other; freshness there has to come from the accent and the type.
+- `check_surface.py` — the canvas format's contract, checked against the BUILT deck. `formats.py`
+  was producer-only: measured by grep, `import formats` appeared in two files and both write
+  formats, so every per-surface rule in `references/canvas-formats.md` was advisory by
+  construction. Recovers the format from the canvas SIZE (a built PPTX carries nothing else) and
+  reports `SAFE ZONE` · `COLUMNS` · `DECK CHROME` · `TYPE FLOOR` · `FILL` · `MISSING SECTION`.
+  The printed-board checks (`TYPE FLOOR`, `FILL`) apply only to formats declaring `type_floors` /
+  `fill_range` — A0/A1 posters **in both orientations**, which are read at a fixed distance and so
+  need ABSOLUTE point floors rather than lint's canvas-relative one. `COLUMNS` means a split of
+  running COPY (both blocks ≥0.8in tall and ≥18% of the canvas wide), so a stat pair or chip row on
+  a portrait card passes; `DECK CHROME` identifies furniture by what it SAYS — a page marker, slide
+  count or date — so the `payoff/handle bottom` line `canvas-formats.md` prescribes passes while a
+  real `deckkit.footer()`, whose tag and page number are two narrow shapes, is caught. `FILL`
+  measures the area COMMITTED to content blocks — all a PPTX can answer, and it cannot tell a full
+  panel from an empty one: measured on a real A0 board, 82% committed and 17% inked. When renders
+  exist the inked share is REPORTED beside it (and a wide gap named), deliberately without a
+  threshold — two poster renders is not a calibration set, and `lint_deck.py`'s calibrated
+  HOLLOW FILL is switched off in `--surface` mode, so on a board nobody was reporting either
+  number. A deck with no slides, and an unregistered canvas, report NOT CHECKED, never clean. Waive required sections with `design_plan.surface_sections_waived`. Imported by
+  `render_deck.py --gate-check` (section `surface`) and `codex_delivery_gate.py`; `--selftest`
+  proves it on built fixtures. `PROPORTION` and `TEXT BLOCK` hold a printed board to the ~20-25%
+  text / 40-50% graphics split the poster literature converges on, and to ~50-word blocks. PROSE is
+  what a reader has to READ: a panel drawn BEHIND text is a container, not a graphic (else a bigger
+  box would pass the check); a run of six words or fewer is a LABEL that rides with the graphic it
+  names (measured, classifying by "has text" scored a three-node flowchart 100% text and a results
+  table 69%, telling both to add figures they already were); and headline-sized runs are navigation,
+  not prose (counting the title penalised boards that size it correctly).
+- `check_design_contracts.py` — the DESIGN stack's index guard: every self-verify cross-reference in
+  the tree resolves to a real item, the `### Design self-verify (a–s)` header covers every item the
+  list actually defines (and its spelled-out count matches), the shared design thresholds agree
+  across every file that states them (the ~40–50% form-family band, the two-consecutive-card rule),
+  `references/checkpoint-convention.md` carries every line SKILL.md says it OWNS, and every
+  `DESIGN_FIELDS` entry the hand-off gate requires is named in SKILL.md. Exists because an audit
+  found the design pipeline's rules sound and its *indexes* rotted: the header said "(a–q)" while
+  the list ran to (r) — and (r) is the density line, the one self-verify item with a hard gate
+  behind it. These are agreements BETWEEN files, invisible to reading and decidable by a program.
+  `--selftest` proves each check can still fail. Exit 0 clean / 1 drift / 2 could not run. Runs in CI.
+- `codex_delivery_gate.py` — **Codex-only** post-lint evidence gate. It verifies a v2 evidence chain:
+  final PPTX/build hashes, source and claim ledger, direction/signature artifacts, per-slide component
+  and icon provenance, plus two schema-valid focused critic reviews. It does **not** alter Claude Code's
+  pipeline or `component_audit.py`'s advisory classification. With `--receipt`, it writes a
+  final-PPTX-bound PASS receipt only after the full gate succeeds.
+- `codex_handoff_guard.py` — **Codex-only** final hand-off check. It re-hashes the PPTX against the
+  PASS receipt from `codex_delivery_gate.py`; a missing, invalid, or stale receipt blocks a
+  Codex-verified file hand-off.
+- `codex_visual_contract.py` — **Codex-only** per-slide visual contract: local overlap and
+  icon-semantic drift, checked against the evidence record. Paired with `codex_delivery_gate.py`;
+  neither runs on the shared (Claude Code / Kimi) path.
 - `directions_diversity.py` — mechanical divergence check for direction-gate candidates
+- `arc_divergence.py` — its content-side twin: mechanical divergence + strawman check for the
+  2–3 narrative-arc candidates (Step 1), CJK-aware
   (mode · palette distance · type pairing · composition), flagging any pair that matches on ≥3 of 4
   axes. Exit 0 all diverge / 2 flagged / 1 unreadable. Never auto-kills: a flag means REDIVERGE **or**
   record a named justification on the `direction gate:` line. Run it before posting the preview link.
+- `preflight_check.py` — decides the MECHANICAL half of PRE-FLIGHT (items 1, 2, 3b, 4, 7, 8, 10)
+  and prints 5/6/6b/9/11 as still-yours rather than implying it covered them. Items 2, 7 and 10
+  are advisory, not failures: they depend on facts the file does not carry. Catches the defect
+  class nothing else does: `placeholder`/`TODO`/`(editable native chart)`/unfilled `<slot>` text
+  shipped on a slide. `--build <script>` adds the `build:`-docstring vs `Build.step` diff.
+  Exit 0 clean / 1 findings / 2 `NOT CHECKED`. Run it at the top of PRE-FLIGHT.
 - `render_deck.py` — pptx → one PNG per slide (verify + critic loop). **`--slides N[,M]` renders ONLY
   the named 1-indexed pages** — the Step-4 SIGNATURE PROOF and any "re-render just the page I edited"
   loop; byte-identical to those pages from a full render, and it deliberately leaves NO cache (a cache
@@ -30,22 +274,85 @@
   and with `--deliverables` (which needs the whole deck). **`--fast` re-renders only the
   slides whose content changed since the last run** (per-slide fingerprint + deck-global digest,
   cached in `render/.render-cache.json`; subsets the pptx, output byte-identical to a full render,
-  auto-falls-back to full whenever the page mapping could be wrong) — ~12s → ~4.7s for a one-slide
-  edit, 0.07s when nothing changed. **`--deliverables` (alias
+  auto-falls-back to full whenever the page mapping could be wrong) — on an 18-slide deck, ~2.8s →
+  ~2.3s for a one-slide edit (both start LibreOffice once, and that ~2.5s start is the floor), and
+  0.07s when nothing changed, which is the real win because it starts LibreOffice not at all.
+  **`--deliverables` (alias
   `--final`) additionally parks the PDF beside the pptx and writes `viewer.html`, a zero-dependency
   flip-through preview** — off by default, so an in-progress deck never accumulates stale copies;
   run it at hand-off once the user confirms the deck is final (PNGs always stay in `render/`); finds LibreOffice cross-platform
   or set `SOFFICE` (`.sh` is a shim). `check_env.py` — preflight if a render fails. `inspect_template.py`
-  — a template's layouts/placeholders/logos. `requirements.txt` / `install_skill.py` — deps / installer.
+  — a template's layouts/placeholders/logos. `requirements.txt` — deps.
+  `install_skill.py` — the installer: `--target all` (default) writes into EVERY runtime skill
+  root that exists (`~/.codex/skills/` · `~/.claude/skills/` · the host-neutral
+  `~/.agents/skills/` that `npx skills add` uses). It covered only the first two once, and the
+  third silently sat a whole major version behind while `check_version.py` correctly announced
+  the newer release nobody could apply to it.
+  `registry.py` — resolves the user's template + `taste.md` **Registry** root on ANY runtime
+  (Claude/Codex roots keep priority, host-neutral `~/.slide-maker/slide-templates/` otherwise,
+  `$SLIDE_MAKER_REGISTRY` overrides). 🔴 Run it instead of naming a root from memory — a
+  hardcoded two-host list left every other runtime with no registry at all, so Q1(a) lost the
+  saved-templates option and `taste.md` was never read or written, silently. `check_env.py`
+  prints the resolved root on every preflight.
+- **`sigs.py`** — one lookup, many helpers: exact signature + docstring head for every named deckkit/designed_charts helper, plus the run-tuple and RGBColor call-shape contracts. `--search TERM` to find one, `--list` for all, `--full` for whole docstrings. Use it BEFORE writing a build script; reading deckkit.py one function at a time costs a round-trip per question.
 - `lint_deck.py` — deterministic **render-time** layout lint and complement to deckkit's build-time
   `lint_layout`: re-checks geometry on the final file (off-slide overflow · block/image collision
   [containment excluded] · footer-zone intrusion · text-past-card · uneven rows) AND adds the
-  render/parse-only faults (CJK kinsoku/widow · whole-page-image · orphan slides — plus missing EA font as the render-time BACKSTOP; `lint_layout` now catches it at build time as `CJK_NO_EA`);
+  render/parse-only faults (CJK kinsoku/widow · whole-page-image · orphan slides — plus missing EA font as the render-time BACKSTOP; `lint_layout` now catches it at build time as `CJK_NO_EA`, whose fix is `deckkit.retrofit_ea(prs)` on the line above the lint — setting `EAFONT` fixes the next build, not this one);
   run after render, before critic; non-zero on findings. `smoke_deckkit.py` — regression guard for the helpers.
+- **Delivery-mode flags — the same word does NOT reach every tool.** SKILL.md names each flag at the
+  step that uses it; this is the complete map of which tool actually accepts which, because the
+  tools diverge and getting it wrong is quiet, not loud. Verified against the parsers, not the prose:
+  - `lint_deck.py` — `--selfread` · `--briefing` · `--textheavy` · `--surface` · `--static`
+    (each also spelled `--mode=NAME`), plus `--renders <dir>` · `--gates <.deck-gates.json>` ·
+    `--json <out>`. This is the only tool that implements **all five** modes.
+  - `render_deck.py` — `--slides N[,M]` · `--fast` · `--deliverables`/`--final` · `--gate-check` ·
+    `--selfread` · `--textheavy` · `--surface`. The output dir is **positional**, not `--outdir`
+    (`--headless`/`--convert-to`/`--outdir` in this file are the LibreOffice command line it emits,
+    not options it takes). 🔴 **It has no `briefing` floor** — `_KNOWN_DELIVERY` is
+    `presented|textheavy|selfread|surface` — so a briefing deck's hand-off gate runs at the
+    `presented` word budget unless `.deck-gates.json` records a `delivery` it recognises; passing
+    `--briefing` now exits with that explanation instead of silently absorbing it. `--static` is
+    accepted and deliberately **inert**: this tool already lints with `static_ok=True`, so NO BUILDS
+    cannot fire from it — it is consumed only so callers can pass it by symmetry with the lint.
+    Any flag this tool does not take used to resolve to the OUTPUT DIRECTORY and run the gate at the
+    `presented` floor in silence; it now exits with the accepted list.
+  - `preflight_check.py` — `--build <script>` · `--selfread` · `--static` only. No `--briefing`,
+    `--textheavy` or `--surface`.
+  - `validate_review.py` — `--record` (Step 5 writes the reviewed run to the record with it) ·
+    `--selftest` (the CI contract check).
 - `plan_wordcount.py` — advisory per-slide word-budget pass over the Content plan's table (the Step-1
   comprehension-gate check; write the table to a scratch path, never the deliverable folder).
   `validate_review.py` — stdlib schema validator for critic/arbiter JSON (`critic|arbiter <file|->`;
-  Step 5 runs it before acting on any review).
+  Step 5 runs it before acting on any review). **`--schema critic` PUBLISHES that contract as a
+  JSON Schema** to hand a subagent as its structured-output shape — same file publishes and
+  checks, from the same enum constants, so what a critic is asked for and judged by cannot drift.
+  Use it at every dispatch: the contract was previously discoverable only by failing, and the
+  failure arrives after the review has already run. (`--schema arbiter` deliberately refuses —
+  the Job-1 and Job-2 payloads are two shapes and silently picking one would be worse than not
+  offering it.)
+- `slide_index.py` — `slide N -> file:line function` + each slide's plan-row docstring, for one
+  build script or a set of section modules. Run it at the top of the Step-5 fix loop on any
+  fanned-out deck: section fan-out means the coordinator did NOT write the code, so a finding on
+  slide 7 otherwise begins with grepping modules it has never read (measured: 33 round-trips /
+  ~30,000 output tokens / ~9 min on one build, re-deriving a map the authors already had). Prefers
+  an explicit `SLIDES` registry, falls back to source order; names any module it could not import
+  instead of failing the run, because a partial map still beats grepping.
+- `dispatch_brief.py` — write the deck brief ONCE, point every dispatch at it. `init --deck <dir>`
+  creates the skeleton (in a scratch path, never the deck folder); `check --brief <p>` gates that
+  every required section is filled; `prompt --brief <p> --role critic|section|planner|design
+  [--lens A|B] [--round N] [--section N --slides a-b]` prints the dispatch prompt. Exists because
+  nine dispatches on one measured build cost 41,203 output tokens (~12.5 min) at ~4,600 each, and
+  almost all of it was the same interview answers, paths, cap and CONTRACT CARD retyped nine times;
+  the generated prompt is ~220 tokens. Second reason: it makes the contract card ONE artifact
+  instead of nine reconstructions. Refuses to emit a prompt while the brief has unfilled sections.
+- `roundtrip_budget.py` — measures the build's actual cost from the session transcript: round-trips,
+  the batching ratio (tool calls per round-trip), median context re-sent, and whether the render
+  self-check read the slide PNGs in one message or one at a time. Step 6 runs it to fill the
+  hand-off `cost:` line with a measured number (`--slides <N>`, `--json` for machine use). It is the
+  backstop for the batching rules in the preamble and Step 5, which are otherwise prose that fails
+  silently — a run can cost 4x its budget while every lint passes and the critic consents. Reports
+  only; it never fails a build.
 - `anim.py` — PowerPoint click-builds/transitions (pair `references/animation.md`).
 - `formats.py` — named canvas-format registry (16:9 default · 4:3 · square 1:1 · 小红书 3:4 · story
   9:16 · A4 print): dimensions, platform safe zones, chrome policy, density + lint flags, and the
@@ -61,7 +368,12 @@
   **bauhaus** · **midcentury** · **terminal** · **synthwave** — **18 total**; ink_wash/
   eastern_traditional → `references/east-asian-aesthetic.md`; the full style+component catalogue →
   `references/design-gallery.md`).
-- `image_prompts.py` (build the prompt manifest) → `generate_images_codex.py` (no-key, Codex CLI) /
+- `image_prompts.py` (build the prompt manifest; `--facts <visual-facts.md>` folds OBSERVED subject
+  attributes — written after looking at real reference photos — into each prompt as binding
+  attributes) → `generate_images_codex.py` (no-key, Codex CLI; `--ref-dir` stages matching
+  `slide-NN-*` reference photos beside the generation and REQUIRES `--ref-intent`
+  generic-concrete | stylized-illustration | fallback-rung, which also injects the
+  non-photographic render mode for the two illustration intents) /
   `generate_images_openai.py` (**metered** API path — gated, see the BILLING GATE). `archetypes_html.py` (direction-gate previews as
   **one HTML link** — `preset_directions([names])` turns best-fit preset names into direction tokens
   carrying each preset's real DNA, so the options are STYLES not colour schemes (accepts a **dict** in
@@ -75,9 +387,39 @@
   (`icon_png(spec, out, color=…, gradient=(c0,c1), px)`); pair with the deckkit container helpers
   `icon` / `icon_tile` (solid/gradient/glass tile) / `icon_badge` (ring) / `icon_ghost` (watermark) /
   `icon_card`. See `references/icons.md` ("Treatments").
+- `deck_gates.py` — write and shape-check `.deck-gates.json`, the record every hand-off gate
+  reads: `init <deck-dir> [--slides N]` (a fully-SHAPED skeleton whose every value is a placeholder
+  the checker rejects) · `set <deck-dir> <dotted.path> <value>` · `check <deck-dir>` (EVERY shape
+  problem at once — the half `--gate-check` deliberately cannot batch). A shape pre-flight, never
+  the gate: it never opens the .pptx.
+- `fetch_images.py` — the SOURCED-photo pipeline: `search` (look, download nothing) · `fetch`
+  (download candidates + write the `sources.json` provenance ledger) · `adopt` (mark the one you
+  chose, after LOOKING) · `ledger --tokens|--credits` (the plan's evidence rows, and the credit
+  lines the licence obliges). Keyless: Wikimedia Commons + Openverse. `--selftest` runs offline.
+- `image_qc.py` — what a program CAN measure about a candidate photo before it is placed:
+  resolution/DPI at the PLANNED box, crop loss, softness, flat plates, letterbox bars,
+  near-duplicates, a possible-watermark heuristic, and EXIF rotation (`--fix` bakes it in). Its
+  `--contact-sheet` is ONE labelled PNG of every candidate plus a sha256 — the artifact that makes
+  looking cheap, and that a critic's consent can name.
+- `check_image_provenance.py` — holds each `image_sources` evidence token against the ledger and
+  against the BUILT deck: a `searched, none found` rung must be backed by a recorded search (an
+  `unreachable` network is refused as one), and an attribution-required photo must be credited on
+  a slide. Called by `render_deck.py --gate-check` AND `codex_delivery_gate.py`, so both runtimes
+  enforce one contract.
 - `image_fx.py` — `duotone(img, ink_a, ink_b)` / `grayscale(img)` — preprocess a colour photo to the
   deck's ink so it doesn't fight the accent (riso/brutalist/ink/luxury/museum). See `design-gallery.md`.
-- `extract_pdf.py` (crop a figure from a PDF — `figures`/`figure`/`autofig` auto-detect, `page`/`crop`
+- `palette_audit.py` — resolve a palette into FILL-only vs TEXT-safe tokens ONCE, before the build,
+  with the darkened twin per ground (`--inks`/`--grounds`, or `--from-style <deck>/style.py`). The
+  two-token rule already exists in SKILL.md and is still easy to break because the check is
+  per-PAIR and a build touches dozens; `render_deck.py --gate-check` therefore requires the
+  resolved split as `design_plan.palette`.
+- `trace_composed.py` — split a built deck's shipped lines into SOURCE-QUOTED vs AUTHOR-COMPOSED
+  against the source files (`--source a.md,b.md`), so a content review aims at the composed set
+  instead of re-reading every page. Deliberately NOT a fabrication detector (that version was
+  measured at ~8% precision and dropped); Latin identifiers and numbers get an exact test instead,
+  which is precise. Run it before dispatching the content critic and hand it the composed list.
+- `extract_pdf.py` (crop a figure from a PDF — `figures`/`figure`/`autofig` auto-detect, `tables`
+  for structured table data with an explicit shortfall report, `page`/`crop`
   manual; **plus the long-source trio `map` (TOC + CJK-aware word-density skeleton), `text` (page-range
   dump for chunked reading), and `headings` (reconstruct a skeleton for a no-TOC book)** — the tooling
   for the content-planner's long-source mode) · `crop_helper.py`
@@ -86,6 +428,9 @@
   `frames` for a video's visual track, `probe` to route — with the vision/audio fidelity floor).
 **Agents** (`agents/`): `content-planner.md` (Step-1 CONTENT deep-understand + claim ledger + per-slide message; the content checkpoint) · `slide-design.md` (the art director — Step-2 design language + per-slide form/layout/rhythm + icons + appear-animation + the Form ledger; the design checkpoint) · `critic.md` (independent critic brief — the two review lenses + JSON schema) · `arbiter.md` (high-stakes finding cross-validation + fix-verification; no-op low-stakes) · `asset-prep.md` (execution-only asset materializer — crops/equations/plates/icons after the design plan is approved; zero design decisions) · `openai.yaml` (Codex display metadata).
 
-**References** (`references/`, loaded on demand): `canvas-formats.md` (per-surface layout DNA for the non-16:9 formats — square/rednote/story/A4 — + the repurpose/batch pattern; pairs `scripts/formats.py`) · `design-principles.md` (the craft / the "why"; incl. the **C.R.A.P. framework** — Contrast · Repetition · Alignment · Proximity) · `design-gallery.md` (style+component catalogue mined from 21 pro decks — pick a preset, reach for the right component) · `semantic-color-contract.md` (bind a hue to a concept deck-wide) · `review-rubrics.md` (universal + per-purpose review criteria) · `design-by-purpose.md` (per-purpose look for "design a clean one") · `form-selection.md` (**content-shape → candidate FORMS** — the single design-decision map; generate a set, pick deliberately) · `schematic-diagrams.md` (**HOW to draw a labelled SCIENCE schematic** — force/ray/circuit/apparatus/vector/wave; matplotlib/domain-lib recipes for precise/label-critical ones, OR the image tool for complex/stylized/template-matched ones with labels overlaid native; + the domain-accuracy fidelity gate) · `data-viz.md` (pick the chart type; editable-native vs raster) · `image-generation.md` (when/how; topical, text-free, consistently placed) · `icons.md` (one coherent open-licensed icon family, recolored, restrained) · `generated-template.md` (Q1's image-tool template branch) · `style-analysis.md` (mimic a style example, Q4) · `font-guidance.md` (portable fonts, tofu recovery) · `multilingual.md` (non-Latin / CJK / RTL) · `east-asian-aesthetic.md` (Chinese ink / traditional looks — paper · seal · CJK numerals · `ink_wash`/`eastern_traditional`) · `animation.md` (when/why + `anim.py`) · `large-deck-orchestration.md` (section fan-out; default is single-author) · `collaborative-mode.md` (direction→outline→draft gates) · `redesign-existing-deck.md` (diagnose-then-rebuild) · `handoff-and-iteration.md` (delivery + iterate without clobbering edits) · `design-intelligence-addendum.md` (the deck-level design gates Step 2 measures against — rhythm map · block-dependency audit · Concept→Visualization table · semantic-colour ledger · variation floors) · `troubleshooting-faq.md` (**symptom → cause → fix for every error surface** — env · build exceptions · both lints · render · images · CJK — plus the FAQ; consult on any failure, and report findings to the user in its plain-language form) · `user-taste.md` (the registry-root `taste.md` — schema · read protocol · dial-ledger promotion + consented-look write-back) · `examples/` (`build_example_generic.py`, `style_example.py`, `section_example.py`).
+**References** (`references/`, loaded on demand): `auto-delegation-quality-gates.md` (**auto mode rigor enforcement** — "decide yourself" means "you choose", not "skip steps"; checkpoint protocol, image legibility floors, component discipline, critic requirement) · `canvas-formats.md` (per-surface layout DNA for the non-16:9 formats — square/rednote/story/A4 — + the repurpose/batch pattern; pairs `scripts/formats.py`) · `design-principles.md` (the craft / the "why"; incl. the **C.R.A.P. framework** — Contrast · Repetition · Alignment · Proximity) · `design-gallery.md` (style+component catalogue mined from 21 pro decks — pick a preset, reach for the right component) · `semantic-color-contract.md` (bind a hue to a concept deck-wide) · `review-rubrics.md` (universal + per-purpose review criteria) · `design-by-purpose.md` (per-purpose look for "design a clean one") · `form-selection.md` (**content-shape → candidate FORMS** — the single design-decision map; generate a set, pick deliberately) · `schematic-diagrams.md` (**HOW to draw a labelled SCIENCE schematic** — force/ray/circuit/apparatus/vector/wave; matplotlib/domain-lib recipes for precise/label-critical ones, OR the image tool for complex/stylized/template-matched ones with labels overlaid native; + the domain-accuracy fidelity gate) · `data-viz.md` (pick the chart type; editable-native vs raster) · `image-generation.md` (when/how; topical, text-free, consistently placed; **TEXT LEGIBILITY floor — scrim required for all text-over-image**) · `icons.md` (one coherent open-licensed icon family, recolored, restrained) · `generated-template.md` (Q1's image-tool template branch) · `style-analysis.md` (mimic a style example, Q4) · `font-guidance.md` (portable fonts, tofu recovery) · `multilingual.md` (non-Latin / CJK / RTL) · `east-asian-aesthetic.md` (Chinese ink / traditional looks — paper · seal · CJK numerals · `ink_wash`/`eastern_traditional`) · `animation.md` (when/why + `anim.py`) · `large-deck-orchestration.md` (section fan-out; default is single-author) · `collaborative-mode.md` (direction→outline→draft gates) · `redesign-existing-deck.md` (diagnose-then-rebuild) · `handoff-and-iteration.md` (delivery + iterate without clobbering edits) · `design-intelligence-addendum.md` (the deck-level design gates Step 2 measures against — rhythm map · block-dependency audit · Concept→Visualization table · semantic-colour ledger · variation floors) · `troubleshooting-faq.md` (**symptom → cause → fix for every error surface** — env · build exceptions · both lints · render · images · CJK — plus the FAQ; consult on any failure, and report findings to the user in its plain-language form) · `user-taste.md` (the registry-root `taste.md` — schema · read protocol · dial-ledger promotion + consented-look write-back) · `examples/` (`build_example_generic.py`, `style_example.py`, `section_example.py`).
 
-**Registry** (NOT part of the skill): `~/.codex/slide-templates/` (Codex) · `~/.claude/slide-templates/` (Claude Code) — the user's saved templates, **plus `taste.md` at the root** (the portable taste profile — schema + read/write protocol in `references/user-taste.md`); read for choices, write new `profile.md`s to the active host — a freshly-designed look saved at hand-off carries the vetted critic `strengths` distilled into its profile's Notes. Empty for a new user (no templates, no `taste.md` — silently skipped; no write until the first durable signal).
+`codex-runtime.md` is the **Codex-only** execution adapter: visible design proof, typography/icon/component evidence, and a focused critic-pair gate. It never changes Claude Code's workflow.
+
+**Registry** (NOT part of the skill): resolved by `scripts/registry.py` — `~/.claude/slide-templates/` (Claude Code) · `~/.codex/slide-templates/` (Codex) · `~/.slide-maker/slide-templates/` (host-neutral: every other runtime, and the fallback that guarantees a write target exists) · `$SLIDE_MAKER_REGISTRY` overrides all three — the user's saved templates, **plus `taste.md` at the root** (the portable taste profile — schema + read/write protocol in `references/user-taste.md`); read for choices, write new `profile.md`s to the active host — a freshly-designed look saved at hand-off carries the vetted critic `strengths` distilled into its profile's Notes. Empty for a new user (no templates, no `taste.md` — silently skipped; no write until the first durable signal).
+| `scripts/contact_sheet.py` | Montage every `slideNN.png` onto ONE image so a critic can survey a whole deck in a single look, then open individual slides at full size only where needed. Narrows the COST of a review round, never its scope. |

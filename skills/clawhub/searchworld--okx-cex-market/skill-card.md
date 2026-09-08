@@ -1,50 +1,59 @@
-## Description: <br>
-Provides read-only OKX market data commands for prices, order books, candles, derivatives metrics, instrument discovery, market screening, and technical indicators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides read-only OKX public market data commands for prices, tickers, order books, candles, funding rates, open interest, instrument discovery, market screening, pair spreads, and technical indicators without requiring API credentials.
 
-## Publisher: <br>
-[searchworld](https://clawhub.ai/user/searchworld) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[searchworld](https://clawhub.ai/user/searchworld)
 
-## Use Case: <br>
-Developers and market analysts use this skill to retrieve public OKX market data, discover instruments, and inspect technical indicators. It is intended for informational market-data workflows, not account access, order placement, or trading bots. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing this skill adds the broader OKX CLI globally, including helper binaries under ~/.okx/bin. <br>
-Mitigation: Review the installed OKX CLI and helper binaries before installation, and install only in environments where a global OKX CLI is acceptable. <br>
-Risk: The broader OKX CLI may include account or trading capabilities outside this market-data skill. <br>
-Mitigation: Use this skill only for documented read-only market commands, and keep account or trading credentials separate unless intentionally using other OKX skills or commands. <br>
-Risk: Indicator and market-data outputs can be mistaken for trading recommendations. <br>
-Mitigation: Treat outputs as informational data only; users remain responsible for interpretation and trading decisions. <br>
-Risk: Large historical candle requests can consume excessive context or time. <br>
-Mitigation: Estimate requested candle counts before paginated historical fetches and ask for confirmation when the estimate exceeds 500 candles. <br>
+## Use Case:
 
+Developers, analysts, and external users use this skill to retrieve OKX public market data, discover instruments, inspect derivatives metrics, and compute objective technical indicator values before making their own decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-market) <br>
-- [OKX homepage](https://www.okx.com) <br>
-- [Price and market data commands](references/price-data-commands.md) <br>
-- [Derivatives and contract data commands](references/derivatives-commands.md) <br>
-- [Instrument discovery commands](references/instrument-commands.md) <br>
-- [Technical indicator command reference](references/indicator-commands.md) <br>
-- [Cross-skill workflows and MCP tool reference](references/workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional JSON command output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands are documented as read-only market-data calls that require no API credentials; users can request raw OKX API responses with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The security review flagged a suspicious verdict due to an unpinned global CLI install and inconsistent event-contract scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned or local install of @okx_ai/okx-trade-cli@1.4.6, review the package contents before installation, and keep event-contract trading routed to the appropriate trade skill.
+
+Risk: Market data and indicator values may be mistaken for trading recommendations.
+
+Mitigation: Treat outputs as raw market data only; do not provide credentials or use this skill for account access, order placement, strategy, recommendation, or optimization logic.
+
+## Reference(s):
+
+- [OKX homepage](https://www.okx.com)
+- [ClawHub skill page](https://clawhub.ai/searchworld/skills/okx-cex-market)
+- [Price & Market Data Commands](artifact/references/price-data-commands.md)
+- [Derivatives & Contract Data Commands](artifact/references/derivatives-commands.md)
+- [Instrument Discovery Commands](artifact/references/instrument-commands.md)
+- [Technical Indicator Command Reference](artifact/references/indicator-commands.md)
+- [Cross-Skill Workflows & MCP Tool Reference](artifact/references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only public market data; commands can emit raw OKX API v5 JSON with --json.]
+
+## Skill Version(s):
+
+1.4.6 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

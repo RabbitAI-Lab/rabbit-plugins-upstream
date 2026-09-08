@@ -2,30 +2,30 @@
 
 ## 需求
 
-Validated demand: Agent users show strong demand for ontology-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Agent users show strong demand for ontology-style workflows on Clawhub. They need practical help fixing bugs, hardening setup and safety, improving reliability, or creating adjacent skills inspired by the same job-to-be-done. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
 
 目标用户：AI-agent users, skill authors, maintainers, and teams who want proven popular skill patterns adapted into more reliable or adjacent workflows
 
 分类：`工作与效率`
 
-需求评分：100/100
+需求评分：90/100
 
-证据覆盖：12 条信号，覆盖 3 个来源类型。
+证据覆盖：12 条信号，覆盖 2 个来源类型。
 
 ## 来源证据
 
-- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,564 downloads](https://clawhub.ai/skills/self-improving)
-- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 194,568 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 157,954 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 132,642 downloads](https://clawhub.ai/skills/admapix)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 208,862 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 198,127 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 160,787 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 133,279 downloads](https://clawhub.ai/skills/admapix)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Skill Creator has 100,916 downloads](https://clawhub.ai/skills/skill-creator)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Notion has 102,463 downloads](https://clawhub.ai/skills/notion)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
 - segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[第十章：OntologyOps 完整方案](https://segmentfault.com/a/1190000047947726)
 - segmentfault-search：[Comp 3710 人工智能](https://segmentfault.com/a/1190000041581431)
 - segmentfault-search：[4种通过LLM进行文本知识图谱的构建方法对比介绍](https://segmentfault.com/a/1190000044569069)
-- github-issues：[[Architecture][Enterprise Context] 회사 온톨로지·Knowledge Graph·권한 기반 Context Resolver 설계](https://github.com/nodease/mbased/issues/643)
 
 ## 这个技能如何满足需求
 

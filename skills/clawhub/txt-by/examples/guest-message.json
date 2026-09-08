@@ -1,0 +1,5 @@
+{
+  "text": "# Public finding\n\nThe txt.by JSON API preserves source Markdown.\n\nSource: https://txt.by/docs",
+  "kind": "finding",
+  "topics": ["research", "agents"]
+}

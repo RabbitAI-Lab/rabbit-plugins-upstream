@@ -1,46 +1,64 @@
-## Description: <br>
-Vimeo provides API guidance for using Maton-managed OAuth to upload, manage, organize, and interact with Vimeo videos, folders, albums, showcases, and community features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vimeo API integration with managed OAuth for uploading, managing, and organizing videos, showcases, folders, likes, watch-later items, comments, followers, channels, and categories through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Vimeo accounts through Maton's managed OAuth proxy. It supports account lookup, video management, folders, showcases, comments, likes, watch-later lists, followers, channels, and categories. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on Maton to broker OAuth access to the user's Vimeo account and uses a sensitive MATON_API_KEY. <br>
-Mitigation: Install only if Maton is trusted for this access path and keep MATON_API_KEY private. <br>
-Risk: Write operations can upload, edit, delete, comment, like, follow, or otherwise change Vimeo account content. <br>
-Mitigation: Confirm the exact Vimeo account, target resource, and intended effect before approving any create, update, or delete operation. <br>
-Risk: Unused Maton or Vimeo connections may retain account access longer than needed. <br>
-Mitigation: Revoke unused Maton and Vimeo connections when they are no longer required. <br>
+## Use Case:
 
+External users and developers use this skill to connect a Vimeo account through Maton, inspect account and video resources, and perform approved Vimeo management actions such as organizing videos, folders, showcases, comments, likes, and follows.
 
-## Reference(s): <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Vimeo API Reference](https://developer.vimeo.com/api/reference) <br>
-- [Vimeo Developer Portal](https://developer.vimeo.com) <br>
-- [Vimeo API Authentication](https://developer.vimeo.com/api/authentication) <br>
-- [Vimeo Upload API](https://developer.vimeo.com/api/upload/videos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and inline bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY, and an authorized Vimeo connection] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: The skill can access and modify resources in a connected Vimeo account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth when possible, connect only the intended account, choose the narrowest available scopes, and require explicit confirmation before any write, delete, comment, follow, or sharing-related operation.
+
+Risk: Ambiguous account or connection selection could apply an action to the wrong Vimeo account.
+
+Mitigation: Specify the intended Maton profile and Vimeo connection when multiple accounts or connections are available.
+
+Risk: Long-lived API keys can leak through environment variables, logs, command history, or pasted output when the CLI is unavailable.
+
+Mitigation: Prefer OAuth and the Maton CLI credential store; when raw HTTP is necessary, keep the API key only in the process environment, never print it, and send it only to api.maton.ai.
+
+## Reference(s):
+
+- [Vimeo API Reference](https://developer.vimeo.com/api/reference)
+- [Vimeo Developer Portal](https://developer.vimeo.com)
+- [Vimeo API Authentication](https://developer.vimeo.com/api/authentication)
+- [Vimeo Upload API](https://developer.vimeo.com/api/upload/videos)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an approved Vimeo connection; write operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

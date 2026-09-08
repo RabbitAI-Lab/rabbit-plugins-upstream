@@ -1,42 +1,58 @@
-## Description: <br>
-Helps teams design maintainable QA test automation architecture using patterns such as Page Object, layered testing, keyword-driven testing, data-driven testing, test data separation, and CI integration planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents design maintainable test automation architecture for QA teams, including UI, API, and unit-test layering, framework selection, test data separation, and CI integration guidance.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test automation leads use this skill when designing or refactoring automation frameworks for UI, API, unit, integration, E2E, mobile, and CI/CD testing. It is intended to produce architecture guidance before test implementation, including framework selection, layer design, maintenance strategy, and traceable ARCH-XXXX design identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste real customer, payment, identity, production, or screenshot data while asking for QA architecture help. <br>
-Mitigation: Use anonymized or synthetic examples and redact sensitive values before sharing project context with the agent. <br>
-Risk: Architecture guidance may be incomplete or mismatched to the project if the input strategy, technology selection, or constraints are underspecified. <br>
-Mitigation: Review the proposed architecture before implementation and ensure it covers layer architecture, tool integration, and maintenance strategy. <br>
-Risk: The skill allows project inspection tools and Bash when the hosting agent enables them. <br>
-Mitigation: Run the skill in a controlled workspace and review any proposed shell commands before execution. <br>
+## Use Case:
 
+Developers, QA engineers, and test automation architects use this skill to plan or refactor automation frameworks before writing tests. It guides choices around layered test architecture, Page Object, keyword-driven and data-driven patterns, maintainability, reporting, and CI/CD integration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-automation-arch) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown architecture guidance with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should include a unique ARCH-XXXX traceability identifier and cover layer architecture, tool integration, and maintenance strategy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The artifact recommends installing the broader QA skill set, which would add more capabilities than this single skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the full skill set before installation and install only the skills needed for the intended workflow.
+
+Risk: The skill may be used with sensitive QA examples such as customer, payment, identity, screenshot, or production data.
+
+Mitigation: Use anonymized or masked test data and avoid pasting real customer, financial, identity, or production information into prompts.
+
+Risk: Architecture guidance can be misapplied if project constraints, existing strategy, or technology selection are incomplete.
+
+Mitigation: Review generated designs against the team's test strategy, technology choices, maintainability goals, and CI/CD constraints before implementation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-automation-arch)
+- [Publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with architecture sections, tables, code examples, and shell command snippets where installation context is relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include architecture IDs, framework recommendations, layer designs, maintenance strategies, coverage caveats, and CI integration plans.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

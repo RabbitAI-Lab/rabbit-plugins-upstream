@@ -1,15 +1,27 @@
-#!/usr/bin/env npx tsx
 /**
- * ChatGPT Conversation Exporter
+ * ChatGPT Conversation Exporter — browser-relay path (recommended)
  *
- * Uses browser relay to fetch conversations from ChatGPT's internal API.
- * Requires user to be logged into ChatGPT with browser relay attached.
+ * Fetches conversations from ChatGPT's internal API through an attached browser relay,
+ * using the session your browser already holds. It reads no token, no cookie jar and no
+ * credential file: every request runs inside the page with `credentials: 'include'`.
  *
- * Usage: npx tsx export-conversations.ts [--limit N] [--format json|md|both]
+ * WRITES TO DISK: index.json, summary.md, and (unless indexOnly) one .json and one .md per
+ * conversation containing full message text. The output directory is created mode 0700 and
+ * every file mode 0600. Nothing is uploaded anywhere.
+ *
+ * CONSENT: exportChatGPTConversations() refuses to run unless the caller passes
+ * `confirmed: true`. An agent must ask the user first — this is the gate that stops a
+ * skill install from turning into an unattended dump of someone's chat history.
+ *
+ * OFF SWITCH: set CHATGPT_EXPORT_DISABLE=1 or create ~/.openclaw/chatgpt-export.disabled
+ * and the function throws before any fetch or write.
+ *
+ * Usage: called from agent context. See SKILL.md.
  */
 
 import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { join } from "path";
+import { homedir } from "os";
 
 // Configuration
 const CHATGPT_BASE = "https://chatgpt.com";
@@ -91,10 +103,19 @@ const FETCH_CONVERSATIONS_JS = `
 })()
 `;
 
-const createFetchConversationJS = (id: string) => `
+function assertConversationId(id: string): string {
+  if (typeof id !== "string" || !id) throw new Error("Missing conversation id");
+  if (id.length > 128) throw new Error("Conversation id too long");
+  if (!/^[A-Za-z0-9_-]+$/.test(id)) throw new Error("Conversation id contains disallowed characters");
+  return id;
+}
+
+const createFetchConversationJS = (id: string) => {
+  const safeId = assertConversationId(id);
+  return `
 (async () => {
   const response = await fetch(
-    'https://chatgpt.com/backend-api/conversation/${id}',
+    'https://chatgpt.com/backend-api/conversation/${safeId}',
     { credentials: 'include' }
   );
   
@@ -105,6 +126,7 @@ const createFetchConversationJS = (id: string) => `
   return JSON.stringify(await response.json());
 })()
 `;
+};
 
 function slugify(text: string): string {
   return text
@@ -174,23 +196,53 @@ function conversationToMarkdown(conversation: FullConversation): string {
 // Main export function - designed to be called from agent context
 export async function exportChatGPTConversations(options: {
   browserEvaluate: (js: string) => Promise<string>;
+  /** Explicit user consent. Without `true` this function refuses to run. */
+  confirmed?: boolean;
   outputDir?: string;
   format?: "json" | "md" | "both";
   limit?: number;
+  /** Write only the conversation index — no message bodies are fetched or saved. */
+  indexOnly?: boolean;
   onProgress?: (current: number, total: number, title: string) => void;
 }): Promise<{ exported: number; outputDir: string; errors: string[] }> {
   const {
     browserEvaluate,
-    outputDir = join(process.cwd(), "chatgpt-export", new Date().toISOString().split("T")[0]),
+    confirmed = false,
+    outputDir = join(homedir(), "chatgpt-export", new Date().toISOString().split("T")[0]),
     format = "both",
     limit,
+    indexOnly = true,
     onProgress,
   } = options;
 
+  // Off switch — checked before any network call or file write.
+  if (
+    process.env.CHATGPT_EXPORT_DISABLE === "1" ||
+    existsSync(join(homedir(), ".openclaw", "chatgpt-export.disabled"))
+  ) {
+    throw new Error(
+      "ChatGPT export is disabled on this machine " +
+        "(CHATGPT_EXPORT_DISABLE=1 or ~/.openclaw/chatgpt-export.disabled). Nothing was fetched.",
+    );
+  }
+
+  // Consent gate — the caller must have asked the user, and say so.
+  if (!confirmed) {
+    throw new Error(
+      "Refusing to export without explicit consent. Tell the user that this writes a " +
+        "plaintext copy of their full ChatGPT history to " +
+        outputDir +
+        " — message text included, which may contain credentials, health, legal, financial " +
+        "or work-confidential material — then call again with { confirmed: true }. " +
+        "Use { indexOnly: true } to export titles and timestamps only.",
+    );
+  }
+
   const errors: string[] = [];
 
-  // Create output directories
-  mkdirSync(join(outputDir, "conversations"), { recursive: true });
+  // Create output directories, readable only by this user.
+  mkdirSync(outputDir, { recursive: true, mode: 0o700 });
+  mkdirSync(join(outputDir, "conversations"), { recursive: true, mode: 0o700 });
 
   // Fetch conversation list
   console.log("Fetching conversation list...");
@@ -200,7 +252,12 @@ export async function exportChatGPTConversations(options: {
   console.log(`Found ${items.length} conversations`);
 
   // Save index
-  writeFileSync(join(outputDir, "index.json"), JSON.stringify(items, null, 2));
+  writeFileSync(join(outputDir, "index.json"), JSON.stringify(items, null, 2), { mode: 0o600 });
+
+  if (indexOnly) {
+    console.log("indexOnly: skipping message bodies. Only index.json was written.");
+    return { exported: 0, outputDir, errors };
+  }
 
   // Fetch each conversation
   const toFetch = limit ? items.slice(0, limit) : items;
@@ -221,13 +278,16 @@ export async function exportChatGPTConversations(options: {
         writeFileSync(
           join(outputDir, "conversations", `${item.id}.json`),
           JSON.stringify(conversation, null, 2),
+          { mode: 0o600 },
         );
       }
 
       // Save Markdown
       if (format === "md" || format === "both") {
         const md = conversationToMarkdown(conversation);
-        writeFileSync(join(outputDir, "conversations", `${item.id}_${slug}.md`), md);
+        writeFileSync(join(outputDir, "conversations", `${item.id}_${slug}.md`), md, {
+          mode: 0o600,
+        });
       }
 
       exported++;
@@ -256,7 +316,7 @@ export async function exportChatGPTConversations(options: {
 ${items.map((i) => `- [${i.title || "Untitled"}](conversations/${i.id}_${slugify(i.title || "untitled")}.md)`).join("\n")}
 `;
 
-  writeFileSync(join(outputDir, "summary.md"), summary);
+  writeFileSync(join(outputDir, "summary.md"), summary, { mode: 0o600 });
 
   return { exported, outputDir, errors };
 }
@@ -266,4 +326,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log("This script should be run from the OpenClaw agent context.");
   console.log("The agent will use the browser tool to execute the export.");
   console.log('\nUsage from agent: "Export my ChatGPT conversations"');
+  console.log("");
+  console.log("It writes plaintext copies of your conversations to ~/chatgpt-export/<date>");
+  console.log("(mode 0700) and will not run until you have confirmed that.");
+  console.log("Off switch: CHATGPT_EXPORT_DISABLE=1 or touch ~/.openclaw/chatgpt-export.disabled");
 }

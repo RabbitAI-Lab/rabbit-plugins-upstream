@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""把百炼®标书「智能解读 / 合规审查」结果 JSON 渲染成报告（HTML / Word .docx）。
+"""把百炼®标书「智能解读 / 合规审查 / 标书查重」结果 JSON 渲染成报告（HTML / Word .docx）。
 
 零第三方依赖：HTML 拼字符串 + 内联 CSS（卡片/徽章/统计面板）；.docx 用最小 OOXML
 （zip + document.xml，带配色/字号/底纹）。字段口径依据《百炼®标书Skill服务.md》附录 A/B。
 被 zcm.py 的 `report` 子命令调用，也可独立运行：
     python3 report.py --in result.json --format both -o <目录> [--tender-name 招标文件名]
+Locale scope: zh-CN (Simplified Chinese) by design for mainland-China bidding workflows. The generated artifact keeps Chinese procurement terminology in report labels and headings; assistants may provide explanations in another language outside the artifact when needed.
 """
 from __future__ import annotations
 
@@ -49,9 +50,29 @@ def _risk_bucket(level):
 _RISK_LABEL = {"high": "高风险", "review": "待复核", "tip": "提示", "other": "其他"}
 # 行动建议优先级 high/medium/low → 中文
 _PRIORITY_ZH = {"high": "高", "medium": "中", "low": "低"}
+_SEMANTIC_STATE_ZH = {
+    "full": "完整完成",
+    "complete": "完整完成",
+    "completed": "完整完成",
+    "done": "完整完成",
+    "rules_only": "仅规则检查",
+    "semantic_partial": "部分完成",
+    "partial": "部分完成",
+    "running": "处理中",
+    "processing": "处理中",
+    "pending": "等待处理",
+    "failed": "异常",
+    "error": "异常",
+    "skipped": "未执行",
+}
 _DOCX_RISK_COLOR = {"high": "C0392B", "review": "B9770E", "tip": "0E7490", "other": "475569"}
-_LABEL = {"interpretation": "智能解读", "compliance": "合规审查"}
-
+_LABEL = {"interpretation": "智能解读", "compliance": "合规审查", "bid_duplicate": "标书查重"}
+_DUP_RISK_LABEL = {"high": "高风险", "medium": "中风险", "low": "低风险", "other": "其他"}
+_DUP_RISK_BUCKET = {"high": "high", "medium": "review", "low": "tip"}
+_DUP_FRAGMENT_LIMIT_PER_PAIR = 20
+_DUP_RISK_LIMIT_PER_PAIR = 20
+# Locale scope: report artifacts currently ship with zh-CN labels because bidding terminology
+# and exported templates follow mainland-China procurement conventions.
 
 # ============================== 最小 .docx 生成 ==============================
 # block = (kind, text, opts)
@@ -373,7 +394,7 @@ class Report:
               "L.forEach(function(a,j){a.classList.toggle('on',j===idx);});}"
               "document.addEventListener('scroll',spy,{passive:true});"
               "window.addEventListener('resize',spy);spy();})();</script>")
-        return (f"<!DOCTYPE html><html lang='zh'><head><meta charset='utf-8'>"
+        return (f"<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
                 f"<meta name='viewport' content='width=device-width,initial-scale=1'>"
                 f"<title>{esc(self.title)}</title><style>{_HTML_CSS}</style></head>"
                 f"<body><div class='shell'>"
@@ -390,6 +411,8 @@ class Report:
 def _unwrap(data):
     if isinstance(data, dict) and "result" in data and "service" in data:
         return data.get("service"), (data.get("result") or {})
+    if isinstance(data, dict) and ("duplicate" in data or "pairs" in data):
+        return "bid_duplicate", data
     if isinstance(data, dict) and ("issues" in data or "run_id" in data or "compliance" in data):
         return "compliance", data
     return "interpretation", (data or {})
@@ -416,6 +439,95 @@ def _ev(obj):
     if obj.get("source"):
         return f"来源：{obj['source']}"
     return ""
+
+
+def _pct(value):
+    try:
+        return f"{float(value) * 100:.1f}%"
+    except (TypeError, ValueError):
+        return "-"
+
+
+def _filesize(value):
+    try:
+        n = int(value)
+    except (TypeError, ValueError):
+        return "-"
+    if n >= 1024 * 1024 * 1024:
+        return f"{n / 1024 / 1024 / 1024:.2f} GB"
+    if n >= 1024 * 1024:
+        return f"{n / 1024 / 1024:.1f} MB"
+    if n >= 1024:
+        return f"{n / 1024:.1f} KB"
+    return f"{n} B"
+
+
+def _short_json(value, limit=220):
+    if value in (None, "", [], {}):
+        return ""
+    if isinstance(value, (dict, list)):
+        text = json.dumps(value, ensure_ascii=False)
+    else:
+        text = str(value)
+    return text if len(text) <= limit else text[:limit] + "..."
+
+
+def _semantic_review_lines(summary):
+    """把合规语义审查状态转成总览区可读文案。"""
+    if not isinstance(summary, dict):
+        return []
+    lines = []
+    phase = _g(summary, "conclusion_phase", default="")
+    overview_ready = _g(summary, "overview_ready", default=None)
+    semantic = _g(summary, "semantic_review", default={}) or {}
+    state = _g(semantic, "state", default="")
+    state_label = _SEMANTIC_STATE_ZH.get(str(state).strip(), str(state).strip()) if state else ""
+    phase_label = _SEMANTIC_STATE_ZH.get(str(phase).strip(), str(phase).strip()) if phase else ""
+    if state_label:
+        lines.append(f"语义审查状态：{state_label}")
+    if phase_label and phase_label != state_label:
+        lines.append(f"结论阶段：{phase_label}")
+    if overview_ready is not None:
+        lines.append(f"总览状态：{'可用' if bool(overview_ready) else '未完整生成'}")
+    msg = _g(semantic, "message_zh", default="") or _g(semantic, "message", default="")
+    if msg:
+        lines.append(str(msg))
+    return lines
+
+
+def _partial_summary_items(partial):
+    """兼容字段可能漂移的 partial_summary，只展示短值，跳过复杂嵌套。"""
+    if not isinstance(partial, dict) or not partial:
+        return []
+    labels = {
+        "high_count": "高风险",
+        "review_count": "待复核",
+        "tip_count": "提示项",
+        "similarity_count": "多文件雷同",
+        "manual_unchecked_count": "手动待确认",
+        "conclusion": "阶段结论",
+        "message": "阶段说明",
+        "message_zh": "阶段说明",
+        "state": "阶段状态",
+        "status": "阶段状态",
+        "checked_count": "已检查项",
+        "total_count": "总项数",
+    }
+    items = []
+    for key, label in labels.items():
+        val = partial.get(key)
+        if val in (None, "", [], {}):
+            continue
+        if key in ("state", "status"):
+            val = _SEMANTIC_STATE_ZH.get(str(val).strip(), val)
+        items.append(f"{label}：{val}")
+    for key, val in partial.items():
+        if key in labels or val in (None, "", [], {}):
+            continue
+        if isinstance(val, (dict, list)):
+            continue
+        items.append(f"{key}：{val}")
+    return items
 
 
 def _auto_tender_name(service, result):
@@ -540,6 +652,7 @@ def render_compliance(result):
     sims = _g(comp, "similarity_issues", default=[]) or []
     manual = _g(comp, "manual_items", default=[]) or []
     scope = _g(comp, "scope_summary_lines", default=[]) or []
+    partial = _g(comp, "partial_summary", default={}) or {}
 
     files = "、".join(_g(f, "filename", default="") for f in bid_files) or "-"
     r.cover("Compliance Review · 合规审查", "合规审查报告",
@@ -562,6 +675,16 @@ def render_compliance(result):
     ])
     if _g(summary, "conclusion"):
         r.callout(_g(summary, "conclusion", default=""))
+    semantic_lines = _semantic_review_lines(summary)
+    if semantic_lines:
+        r.h3("审查完整性")
+        for line in semantic_lines:
+            r.bullet(line)
+    partial_items = _partial_summary_items(partial)
+    if partial_items:
+        r.h3("阶段性/部分结果摘要")
+        for line in partial_items:
+            r.bullet(line)
     for line in scope:
         r.bullet(line)
 
@@ -624,8 +747,117 @@ def render_compliance(result):
     return r.render_html(), r.blocks
 
 
+# ============================== 查重报告 ==============================
+def render_bid_duplicate(result):
+    dup = result.get("duplicate") if isinstance(result, dict) and isinstance(
+        result.get("duplicate"), dict) else result
+    dup = dup if isinstance(dup, dict) else {}
+    r = Report("标书查重报告")
+
+    summary = _g(dup, "summary", default={}) or {}
+    files = _g(dup, "files", default=[]) or []
+    pairs = _g(dup, "pairs", default=[]) or []
+    risk_counts = summary.get("risk_counts") if isinstance(summary.get("risk_counts"), dict) else {}
+    run_id = _g(dup, "run_id", default=_g(result, "run_id", default="-"))
+    file_names = [str(_g(item, "filename", default="")).strip() for item in files if isinstance(item, dict)]
+    title_files = "、".join(x for x in file_names[:3] if x) or "-"
+
+    r.cover("Bid Duplicate Review · 标书查重", "标书查重报告",
+            [("任务编号", f"run_id {run_id}"), ("投标文件", title_files),
+             ("生成时间", f"{datetime.now():%Y-%m-%d %H:%M}")])
+
+    def _count(key):
+        try:
+            return int(risk_counts.get(key, 0) or 0)
+        except (TypeError, ValueError):
+            return 0
+
+    high, medium, low = _count("high"), _count("medium"), _count("low")
+    r.h2("一、风险概览")
+    r.risk_bar(high, medium, low)
+    r.metrics([
+        ("投标文件数", _g(summary, "file_count", default=len([f for f in files if _g(f, "role") == "bid"])), "ok"),
+        ("文件组合数", _g(summary, "pair_count", default=len(pairs)), "ok"),
+        ("高风险组合", high, "high"),
+        ("中风险组合", medium, "review"),
+        ("低风险组合", low, "tip"),
+    ])
+    r.callout("本报告用于投标文件提交前内部自查，仅呈现雷同/相似风险线索，不构成围标、串标、违法违规或投标有效性的法律认定。")
+
+    options = _g(dup, "options", default={}) or {}
+    if options:
+        r.h3("检查选项")
+        for label, key in (
+            ("图片相似检查", "enable_image"),
+            ("文档元数据检查", "enable_metadata"),
+            ("语义相似检查", "enable_semantic"),
+            ("排除招标原文共同表述", "exclude_tender_baseline"),
+        ):
+            if key in options:
+                r.bullet(f"{label}：{'开启' if bool(options.get(key)) else '关闭'}")
+
+    if files:
+        r.h2("二、参与文件")
+        for item in files:
+            role = "招标文件" if _g(item, "role") == "tender" else "投标文件"
+            r.bullet(f"{role}：{_g(item,'filename',default='')}（{_g(item,'format',default='-')}，{_filesize(_g(item,'size_bytes'))}）")
+
+    warnings = summary.get("parse_warnings") if isinstance(summary, dict) else []
+    warnings = [item for item in (warnings or []) if isinstance(item, dict)]
+    if warnings:
+        r.h2("三、解析告警")
+        for item in warnings:
+            r.bullet(f"{_g(item,'role',default='')} · {_g(item,'filename',default='')} · {_g(item,'code',default='')} · {_g(item,'message',default='')}")
+
+    pair_section_title = "四、文件组合判定" if warnings else "三、文件组合判定"
+    r.h2(pair_section_title)
+    if not pairs:
+        r.p("未生成文件组合。")
+    for idx, pair in enumerate([p for p in pairs if isinstance(p, dict)], 1):
+        raw_level = str(_g(pair, "risk_level", default="other") or "other")
+        rc = _DUP_RISK_BUCKET.get(raw_level, "other")
+        badge = _DUP_RISK_LABEL.get(raw_level, _DUP_RISK_LABEL["other"])
+        title = f"{idx}. {_g(pair,'file_a_name',default='文件A')} ↔ {_g(pair,'file_b_name',default='文件B')}"
+        metric_text = (
+            f"双向综合重复率：{_pct(_g(pair,'combined_text_rate'))}；"
+            f"章节加权重复率：{_pct(_g(pair,'weighted_combined_text_rate'))}；"
+            f"文件A覆盖率：{_pct(_g(pair,'file_a_coverage_rate'))}；"
+            f"文件B覆盖率：{_pct(_g(pair,'file_b_coverage_rate'))}"
+        )
+        reasons = _g(_g(pair, "summary", default={}) or {}, "reasons", default=[]) or []
+        note = "判级依据：" + "；".join(str(x) for x in reasons[:8]) if reasons else ""
+        r.signal_card(rc, badge, title, metric_text, note)
+
+        risks = [item for item in (_g(pair, "risks", default=[]) or []) if isinstance(item, dict)]
+        if risks:
+            r.h3(f"非文本风险线索（展示前 {min(len(risks), _DUP_RISK_LIMIT_PER_PAIR)} 条，共 {len(risks)} 条）")
+            for risk in risks[:_DUP_RISK_LIMIT_PER_PAIR]:
+                r.bullet(" · ".join(part for part in [
+                    str(_g(risk, "category", default="")),
+                    str(_g(risk, "evidence_kind", default="")),
+                    str(_g(risk, "strength", default="")),
+                    str(_g(risk, "explanation", default="")),
+                    _short_json(_g(risk, "evidence", default={})),
+                ] if part))
+
+        fragments = [item for item in (_g(pair, "fragments", default=[]) or []) if isinstance(item, dict)]
+        if fragments:
+            r.h3(f"文本重复证据（展示前 {min(len(fragments), _DUP_FRAGMENT_LIMIT_PER_PAIR)} 条，共 {len(fragments)} 条）")
+            for fragment in fragments[:_DUP_FRAGMENT_LIMIT_PER_PAIR]:
+                role = _g(fragment, "section_role", default="") or "未分类"
+                chars = _g(fragment, "normalized_chars", default="-")
+                r.issue_card(rc, "重复片段", f"{role} · {chars} 字",
+                             f"{_g(pair,'file_a_name',default='文件A')} ↔ {_g(pair,'file_b_name',default='文件B')}",
+                             "", "", _g(fragment, "text_a", default=""),
+                             f"对照片段：{_g(fragment, 'text_b', default='')}")
+
+    if not summary and not files and not pairs:
+        r.p("⚠️ 本次查重结果为空（后端可能未按文档返回完整数据）。")
+    return r.render_html(), r.blocks
+
+
 # ============================== 入口 ==============================
-RENDERERS = {"interpretation": render_interpretation, "compliance": render_compliance}
+RENDERERS = {"interpretation": render_interpretation, "compliance": render_compliance, "bid_duplicate": render_bid_duplicate}
 
 
 def _safe_name(name):
@@ -643,7 +875,7 @@ def generate(data, service=None, fmt="html", out_dir=".", basename=None, tender_
     detected, result = _unwrap(data)
     service = service or detected
     if service not in RENDERERS:
-        raise ValueError(f"未知 service：{service}（应为 interpretation / compliance）")
+        raise ValueError(f"未知 service：{service}（应为 interpretation / compliance / bid_duplicate）")
     html, blocks = RENDERERS[service](result)
     os.makedirs(out_dir, exist_ok=True)
     label = _LABEL[service]
@@ -669,9 +901,9 @@ def generate(data, service=None, fmt="html", out_dir=".", basename=None, tender_
 
 
 def main():
-    ap = argparse.ArgumentParser(description="把解读/合规结果 JSON 渲染成 HTML/Word 报告")
+    ap = argparse.ArgumentParser(description="把解读/合规/查重结果 JSON 渲染成 HTML/Word 报告")
     ap.add_argument("--in", dest="infile", required=True, help="结果 JSON 文件（/result 响应或 result 体）")
-    ap.add_argument("--service", choices=["interpretation", "compliance"], help="不指定则自动识别")
+    ap.add_argument("--service", choices=["interpretation", "compliance", "bid_duplicate"], help="不指定则自动识别")
     ap.add_argument("--format", choices=["html", "docx", "both"], default="html",
                     help="默认 html；要 Word 传 docx 或 both")
     ap.add_argument("-o", "--out-dir", default=".", help="输出目录")

@@ -1,5 +1,99 @@
 # Changelog
 
+## [0.10.1](https://github.com/es6kr/skills/compare/github-flow-v0.10.0...github-flow-v0.10.1) (2026-09-01)
+
+
+### Bug Fixes
+
+* **githooks:** fix set -e crash in BASE-7 guard + weigh review-cost in pr.md Step -1 ([#405](https://github.com/es6kr/skills/issues/405)) ([e651cc4](https://github.com/es6kr/skills/commit/e651cc49fa7051cdea819562b161964588979699))
+* staging branch next-fix sync into main ([bbbd460](https://github.com/es6kr/skills/commit/bbbd460bf3b6b1cba4c6d07b3641afa734c89860))
+
+## [0.10.0](https://github.com/es6kr/skills/compare/github-flow-v0.9.1...github-flow-v0.10.0) (2026-08-29)
+
+
+### Features
+
+* **works-config:** implement v0.2.0 role-based resolution & neutral SSOT guards config ([e22e117](https://github.com/es6kr/skills/commit/e22e117371370c59b18b77c72bdb926dcb1897cb))
+
+
+### Bug Fixes
+
+* address CodeRabbit and Copilot review feedback on PR [#389](https://github.com/es6kr/skills/issues/389) ([db4dfff](https://github.com/es6kr/skills/commit/db4dfff2829632bf263d93e0bbfdd1244772a5b2))
+* **github-flow:** require a fresh PR-state recheck immediately before gh pr merge ([#381](https://github.com/es6kr/skills/issues/381)) ([b0ba553](https://github.com/es6kr/skills/commit/b0ba553db9fc9139d44e64dcd37e2d563c1fe622))
+* **github-flow:** sync block-pr-url-gate.sh from the diverged downstream copy ([5cc5e14](https://github.com/es6kr/skills/commit/5cc5e140271a98adb2af53dbe5d58c38007b0c43))
+* **hook-kit:** document --json mode and scope WSCFG_* to hook scripts ([373634c](https://github.com/es6kr/skills/commit/373634c022b0e2b114a3bbb799bb9a8934c9fbb2))
+* **hook-kit:** scope PR-URL bare-ref check to per-number match, allow force-push in worktrees ([dd50dce](https://github.com/es6kr/skills/commit/dd50dced989eed4847daaf9a0cd4be12a04426e1))
+* promote next-fix batch (task plugin split, claudify matcher, pr recheck, omz chezmoi fix) ([3e90fd5](https://github.com/es6kr/skills/commit/3e90fd56ade0522d6773eb03f38760a317dd5180))
+* **review:** apply copilot review feedback on hooks and test suites ([cba86f4](https://github.com/es6kr/skills/commit/cba86f4ebbf274a0c979ab21aeea6d483f8cb8f3))
+
+
+### Refactor
+
+* **hooks:** sync hook registry, enhance bash-guard, and retire obsolete guards ([15d4a58](https://github.com/es6kr/skills/commit/15d4a58752d0d458f88c86cb41c537f90e3ca4dd))
+
+## [0.9.1](https://github.com/es6kr/skills/compare/github-flow-v0.9.0...github-flow-v0.9.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* accumulate 16 patch-level bug fixes and guard enhancements across skills ([d214e5d](https://github.com/es6kr/skills/commit/d214e5dcc7fac1bc07baf3b6cec62999aea732f0))
+* **core:** align workflow steps, next suggestion patterns, and browser topics ([c68d489](https://github.com/es6kr/skills/commit/c68d489d01a79862b8933b4a0542168cf676cd3a))
+* **github-flow:** stop claiming the PR-URL gate is registered and enforcing ([cbb433a](https://github.com/es6kr/skills/commit/cbb433a9e59bc1bd79bf292736aaacb069d791f1))
+* promote accumulated skill fixes from the working checkout ([770bed2](https://github.com/es6kr/skills/commit/770bed2386266fc13f7d605505c2996037d4c371))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+
+## [0.9.0](https://github.com/es6kr/skills/compare/github-flow-v0.8.3...github-flow-v0.9.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+## [0.8.3](https://github.com/es6kr/skills/compare/github-flow-v0.8.2...github-flow-v0.8.3) (2026-08-17)
+
+
+### Bug Fixes
+
+* **github-flow:** CI-gate-only base check before ready-transition claims ([435d43c](https://github.com/es6kr/skills/commit/435d43cd023e91688da8e5ffcd5c3c655605abbb))
+* **github-flow:** CI-gate-only base means skip ready transition, not just no review cost ([9418c40](https://github.com/es6kr/skills/commit/9418c408a4503402167bbd17706656f62789a287))
+* **github-flow:** forbid raw draft paths in plan-to-issue --body-file ([d0911f0](https://github.com/es6kr/skills/commit/d0911f0f0e742dd7cdf239ce880d4dfce3e0ab9e))
+* **github-flow:** require CI-gate-only base check before ready-transition claims ([6a94549](https://github.com/es6kr/skills/commit/6a9454941f40e26a9e7ef544db915c63f3b007cf))
+* **github-flow:** require open-PR check before repo-wide fix work ([#329](https://github.com/es6kr/skills/issues/329)) ([5da8855](https://github.com/es6kr/skills/commit/5da88554a3e425738ef5003e20ff32b96d96b4a5))
+* **github-flow:** verify PR creation via authoritative commit fields, not diff listing ([568ec87](https://github.com/es6kr/skills/commit/568ec874e2ad18f88b1c45bcc15e809786f5822d))
+* plan-to-issue frontmatter guard, cleanup gap-baseline sync, pre-commit placeholder exemption ([20e1698](https://github.com/es6kr/skills/commit/20e1698b3b3ee435b8c2705dfe32124567eedd29))
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.8.2](https://github.com/es6kr/skills/compare/github-flow-v0.8.1...github-flow-v0.8.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* **consolidate:** address CodeRabbit/Copilot review findings on PR [#270](https://github.com/es6kr/skills/issues/270) ([3b11a73](https://github.com/es6kr/skills/commit/3b11a730b5ad68803d35a8264eda540e48265d75))
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* **github-flow:** add merged-PR/stale-tracker branch to review-apply.md ([#237](https://github.com/es6kr/skills/issues/237)) ([5a880fb](https://github.com/es6kr/skills/commit/5a880fb936cc474ea791f2fa2e24edc2fd018142))
+* **github-flow:** align merge.md evidence format with fix-plan/format.md schema ([#244](https://github.com/es6kr/skills/issues/244)) ([ea609cf](https://github.com/es6kr/skills/commit/ea609cf3a1725298383d96a297252f19596d0e10))
+* **github-flow:** always disclose commit list in merge asks, not just 3+-commit ones ([#248](https://github.com/es6kr/skills/issues/248)) ([8c19508](https://github.com/es6kr/skills/commit/8c19508d6b3967af783fb372d452fecceec6953c))
+* **github-flow:** document rebase-conflict cost of squashing distinct-concern PRs ([#245](https://github.com/es6kr/skills/issues/245)) ([dc6cb34](https://github.com/es6kr/skills/commit/dc6cb3417ae945c8e9393d18d700aa6eccb0dfd5))
+* **github-flow:** gate squash-merge recommendation on commit count/distinctness ([45176ab](https://github.com/es6kr/skills/commit/45176ab8ee4d7a9e80c58f4062035e64143bc1bf))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.8.1](https://github.com/es6kr/skills/compare/github-flow-v0.8.0...github-flow-v0.8.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **github-flow:** correct stale five/four-condition wording after 6th gate added ([738e92e](https://github.com/es6kr/skills/commit/738e92ed078e6c5f81cdc2325f7b85e91d830d14))
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.8.0](https://github.com/es6kr/skills/compare/github-flow-v0.7.0...github-flow-v0.8.0) (2026-08-03)
+
+
+### Features
+
+* **github-flow:** add publish topic ([#206](https://github.com/es6kr/skills/issues/206)) ([4aba1b6](https://github.com/es6kr/skills/commit/4aba1b63fdf7357b636118a30d674a0f7db71706))
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
 ## [0.7.0](https://github.com/es6kr/skills/compare/github-flow-v0.6.1...github-flow-v0.7.0) (2026-07-23)
 
 

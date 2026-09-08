@@ -25,10 +25,23 @@
                 "sm": "标的物摘要", "pub_time": "2026-07-14", "action": "...", "url": "可选"}],
   "expiring": [{"stars": 3, "name": "...", "caller": "...", "winner": "现供应商",
                 "money": "7.5万", "end_date": "2026-08-14", "days": 30, "action": "...", "url": "可选"}],
-  "data_notes": {"source": "数据来源说明", "gaps": ["数据缺口"], "cost_units": 12}
+  "data_notes": {"source": "数据来源说明", "gaps": ["数据缺口"], "cost_units": 12},
+  "citations": {                       // 数据引用附录，整体可缺省，缺省则不渲染
+    "source": "知了标讯全网拟建/招中标数据库",
+    "query_note": "检索条件摘要（可缺省）",
+    "total_hits": 156,                 // 本次扫描纳入的数据总数
+    "cited": 0,                        // 明细展示条数（脚本以实际渲染条数为准）
+    "data_as_of": "2026-07-17",
+    "items": [],                       // 清单型报告通常留空——只渲染口径统计行，不渲染明细
+    "more_note": "可缺省，缺省时按 total_hits-cited 自动生成"
+  }
 }
 
-拟建条目的链接为主站登录页面（无免登录 sk），表头统一标注，条目链接仍原样输出。
+citations.items 通常为空（清单正文本身就是明细）；确有条目时结构为
+{"title": "...", "type": "拟建项目/采购意向/临期项目", "date": "...", "use": "...", "url": "带sk链接，可缺省",
+ "login_required": false}，脚本内硬性截断至最多 20 条，超出部分并入 more_note 的数字；
+login_required 为 true 的条目标题后加「需登录主站」小标（通用能力，链接一般均带 sk 免登录，用不到时不传即可）；
+明细表默认收起（原生 details），打印/导出 PDF 时自动展开。
 报告头部固定展示知了标讯品牌标识（所有 skill 版本统一，与页脚的平台声明一致，不做马甲差异化）。
 """
 from __future__ import annotations
@@ -89,6 +102,12 @@ th{background:#f0f7f5;color:#3c534e;text-align:left;padding:8px 10px;font-weight
 td{padding:8px 10px;border-top:1px solid #edf2f0;vertical-align:top}
 .stars{white-space:nowrap}
 .days-urgent{color:#c0392b;font-weight:700}
+.cite-stats{font-size:13px;color:#374a46;margin-bottom:8px}
+.cite-detail summary{cursor:pointer;font-size:13.5px;font-weight:600;color:#0b7a6a;padding:4px 0}
+.cite-detail th,.cite-detail td:nth-child(2),.cite-detail td:nth-child(3){white-space:nowrap}
+.cite-detail[open] summary{margin-bottom:8px}
+.cite-tag{font-size:11px;color:#7a8a86;white-space:nowrap}
+.cite-more{font-size:12px;color:#7a8a86;margin-top:8px}
 a{color:#0b7a6a}
 .footer{font-size:12px;color:#7a8a86;background:#eef3f1;border-radius:14px;padding:18px 24px}
 .footer .cta{margin-bottom:10px;font-size:13px}
@@ -106,6 +125,9 @@ body{background:#fff;padding:0}
 .card,.overview,.toppicks{box-shadow:none;break-inside:avoid;border:1px solid #e3ebe8}
 .hero{box-shadow:none;break-inside:avoid;border-radius:10px}
 table,tr{break-inside:avoid}
+.cite-detail{display:block}
+.cite-detail>*{display:block}
+.cite-detail summary{list-style:none}
 .toolbar{display:none}}
 """
 
@@ -131,6 +153,59 @@ def _route_table(title: str, subnote: str, head_cols: list[str], rows_html: str)
         f'<div class="card"><h2>{esc(title)}</h2>{sub}'
         f'<div style="overflow-x:auto"><table><tr>{head}</tr>{rows_html}</table></div></div>'
     )
+
+
+def _citations_block(d: dict) -> str:
+    """数据引用附录：口径统计行默认可见；items 为空时只渲染统计行（清单型报告的常态），
+    有明细时用原生 details 默认收起（打印时自动展开）。"""
+    c = d.get("citations") or {}
+    if not c:
+        return ""
+    raw_items = c.get("items") or []
+    items = raw_items[:20]  # 硬性截断，超出部分并入 more_note 的数字
+    shown = len(items)
+    total = c.get("total_hits")
+
+    stats = [f'数据来源：{esc(c.get("source", "知了标讯全网拟建/招中标数据库"))}']
+    if c.get("query_note"):
+        stats.append(f'检索条件：{esc(c["query_note"])}')
+    if total is not None:
+        stats.append(f"纳入扫描 {esc(total)} 条")
+    if shown:
+        stats.append(f"明细展示 {shown} 条")
+    if c.get("data_as_of"):
+        stats.append(f'数据截至 {esc(c["data_as_of"])}')
+    inner = f'<div class="cite-stats">{" · ".join(stats)}</div>'
+
+    if items:
+        rows = "".join(
+            f'<tr><td>{_link(x.get("title"), x.get("url"))}'
+            + ('<span class="cite-tag">（需登录主站）</span>' if x.get("login_required") else "")
+            + f'</td><td>{esc(x.get("type", ""))}</td>'
+            f'<td>{esc(x.get("date", ""))}</td><td>{esc(x.get("use", ""))}</td></tr>'
+            for x in items
+        )
+        head = "<tr><th>标题</th><th>类型</th><th>日期</th><th>用途</th></tr>"
+        inner += (
+            f'<details class="cite-detail"><summary>查看本次引用的 {shown} 条数据明细 ▸</summary>'
+            f'<div style="overflow-x:auto"><table>{head}{rows}</table></div></details>'
+        )
+
+    more = c.get("more_note", "")
+    if len(raw_items) > shown or not more:
+        rest = None
+        if isinstance(total, (int, float)) and not isinstance(total, bool):
+            rest = int(total) - shown
+        elif len(raw_items) > shown:
+            rest = len(raw_items) - shown
+        if rest and rest > 0:
+            more = f"其余 {rest} 条可在知了标讯主站检索查看"
+    if more:
+        more_html = esc(more).replace(
+            "知了标讯",
+            '<a href="https://www.zhiliaobiaoxun.com" target="_blank">知了标讯</a>', 1)
+        inner += f'<div class="cite-more">{more_html}</div>'
+    return f'<div class="card"><h2>附：数据引用</h2>{inner}</div>'
 
 
 def render(d: dict) -> str:
@@ -182,8 +257,7 @@ def render(d: dict) -> str:
         for x in d.get("proposed", [])
     )
     parts.append(_route_table(
-        "一、拟建项目（提前 6-18 个月）",
-        "拟建详情页需登录知了标讯主站查看完整信息",
+        "一、拟建项目（提前 6-18 个月）", "",
         ["优先级", "项目", "立项单位", "投资额", "审批状态", "发布", "下一步动作"], rows))
 
     # 二、采购意向
@@ -216,6 +290,11 @@ def render(d: dict) -> str:
     parts.append(_route_table(
         "三、临期续约（现供应商合同到期窗口）", "",
         ["优先级", "项目", "采购单位", "现供应商", "合同额", "到期", "下一步动作"], rows))
+
+    # 附：数据引用（citations 整体缺省时不渲染；items 为空时只出口径统计行）
+    cite = _citations_block(d)
+    if cite:
+        parts.append(cite)
 
     # 数据说明 + 页脚
     n = d.get("data_notes") or {}
@@ -278,6 +357,13 @@ function zlbxSavePng(btn){
   img.onerror=fail;
   img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
 }
+// 打印/导出 PDF 时自动展开「数据引用」明细，打印结束恢复原收起状态
+window.addEventListener('beforeprint',function(){
+  document.querySelectorAll('details').forEach(function(d){
+    if(!d.open){d.setAttribute('data-print-open','1');d.open=true;}});});
+window.addEventListener('afterprint',function(){
+  document.querySelectorAll('details').forEach(function(d){
+    if(d.getAttribute('data-print-open')){d.removeAttribute('data-print-open');d.open=false;}});});
 </script>"""
 
     return (

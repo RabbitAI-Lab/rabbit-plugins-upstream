@@ -1,10 +1,12 @@
 # Create Image Pro
 
-Read this for explicit Create Image Pro wording, REST `generate-image-v2`, exact grid or sheet requests, and small cell-size requests that are not already covered by `icon.md`.
+Read this for explicit Create Image Pro wording, MCP `create_image_pro`/REST `generate-image-v2`, exact grid or sheet requests, and small cell-size requests that are not already covered by `icon.md`.
 
-Create Image Pro / REST `generate-image-v2` is a general image-generation route. It can make attractive sprite sheets and texture sheets, but exact cell layout is prompt-guided rather than structurally guaranteed. A correct output canvas size is not proof that the image contains the requested cell grid. Style is prompt-guided too: there is no `detail`, `outline`, `shading`, `negative_description`, `color_image`, or `coverage_percentage` field, only `style_options` copying from a supplied `style_image`. Route to `create-image-pixen`, `create-image-pixflux`, or `create-image-bitforge` when one of those must be enforced by a field.
+Create Image Pro / MCP `create_image_pro` (+ `get_image`) / REST `generate-image-v2` is a general image-generation route. It can make attractive sprite sheets and texture sheets, but exact cell layout is prompt-guided rather than structurally guaranteed. A correct output canvas size is not proof that the image contains the requested cell grid. Style is prompt-guided too: there is no `detail`, `outline`, `shading`, `negative_description`, `color_image`, or `coverage_percentage` field; MCP accepts a preferred `style_image_url` or inline base64 plus `style_copy`, while REST has `style_image`+`style_options`. Route to `create_image_pixen`/`create-image-pixen`, `create_image_pixflux`/`create-image-pixflux`, or `create-image-bitforge` when another field must be enforced.
 
-`generate-image-v2` removes the background by default (`no_background` defaults to `true`). Send `no_background: false` when the user wants an opaque, full-bleed image, scene, or sheet.
+Prefer Pro when user instructions must be followed closely; it follows the user's description more closely than Pixen/v3/new, at higher cost and with a different character style.
+
+MCP `create_image_pro` and REST `generate-image-v2` both remove the background by default (`no_background` defaults to `true`). Send `no_background: false` when the user wants an opaque, full-bleed image, scene, or sheet.
 
 ## Sub-32px Cell Requests
 

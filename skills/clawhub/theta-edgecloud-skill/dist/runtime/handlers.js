@@ -149,6 +149,7 @@ const commandRegistry = {
             variant: args.variant,
             webhook: args.webhook,
             reasoningEffort: args.reasoning_effort,
+            enableThinking: args.enable_thinking,
             extraInput: args.extraInput,
             allowUnknownService: args.allowUnknownService
         })

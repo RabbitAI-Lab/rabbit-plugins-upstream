@@ -1,8 +1,11 @@
 ---
 name: qa-specialized-testing
-version: 1.6.0
+slug: qa-specialized-testing
+displayName: 专项测试
+version: 1.7.5
 description: >-
   当功能测试做完之后需要做进一步的质量验证时使用此技能。覆盖性能测试（负载/压力/稳定性）、安全测试（OWASP Top 10 TOP 漏洞）、兼容性测试（多浏览器/多设备）的测试方法。不要在功能测试还没做完时就做专项——先保证功能正确，再评估性能和安全。专项测试的产出是一组可复用的测试方案（性能指标基线、安全渗透用例、兼容性矩阵）。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"性能测试"、"安全测试（专项）"、"兼容性测试"、"专项测试"、"压力测试"、"渗透测试"、"SQL注入测试"、"跨浏览器测试"、需要进行专项测试、功能测试完成后需要补充专项测试时
 allowed-tools: Read Grep Glob Bash
@@ -28,9 +31,12 @@ input_format:
       description: 专项测试环境配置
 output_format:
   traceability:
-    - 每个专项测试用例带唯一ID（TC-XXXX）
-    - - 关联专项类型和需求ID
+    - 每个专项测试用例带唯一ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
+    - 关联专项类型和需求ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - specialized_test_plan: 专项测试方案
     - performance_cases: 性能测试场景
     - security_cases: 安全测试用例
@@ -43,6 +49,8 @@ error_recovery_guidance:
   on_failure: "专项测试遗漏维度时回退到测试策略补充范围"
   retry_behavior: "补全范围后重新执行专项测试"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 专项测试能力
 
 ## 核心原则

@@ -1,4 +1,4 @@
-"""FastMCP server for Microsoft Outlook."""
+"""MCP server for Microsoft Outlook."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.mcpserver import Context, MCPServer
 
 from outlook_mcp import __version__, toolsets
 from outlook_mcp.auth import AuthManager
@@ -45,18 +45,16 @@ async def lifespan(server):
     auth = AuthManager(config)
     # Try to load cached token silently — if this fails, tools will
     # return an error telling the user to run `outlook-mcp auth`.
-    auth.try_cached_token(auth.get_token_scopes())
+    auth.try_cached_token()
     yield {"config": config, "auth": auth}
 
 
-mcp = FastMCP(
+mcp = MCPServer(
     "outlook-mcp",
     instructions="MCP server for Microsoft Outlook via Microsoft Graph API",
     lifespan=lifespan,
+    version=__version__,
 )
-# FastMCP doesn't expose a `version` kwarg, so set it on the underlying server
-# directly. Otherwise serverInfo.version reports the MCP SDK's version.
-mcp._mcp_server.version = __version__
 
 
 # ── Helpers ─────────────────────────────────────────────
@@ -155,8 +153,9 @@ async def outlook_list_inbox(
     cursor: str | None = None,
     classification: str | None = None,
     concise: bool = False,
+    uncategorized_only: bool = False,
 ) -> dict:
-    """List messages in one folder with structured filters (read, sender, date, Focused class).
+    """List messages in one folder with structured filters (read, sender, date, category, Focused).
 
     Use this for folder-scoped browsing; use outlook_search_mail for KQL full-text search across
     all folders. For polling/recurring agents use outlook_list_inbox_delta (typically 10x cheaper
@@ -165,6 +164,7 @@ async def outlook_list_inbox(
     Example: outlook_list_inbox(folder="Junk Email", unread_only=True, count=5)
     `folder` accepts display names, well-known names ("inbox", "junkemail"), or Graph IDs — prefer
     names. Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
+    Pass uncategorized_only=True to return only messages with no categories assigned.
     """
     client = _get_graph_client(ctx)
     return await mail_read.list_inbox(
@@ -179,6 +179,8 @@ async def outlook_list_inbox(
         cursor=cursor,
         classification=classification,
         concise=concise,
+        uncategorized_only=uncategorized_only,
+        timezone=_get_config(ctx).timezone,
     )
 
 
@@ -254,6 +256,8 @@ async def outlook_search_mail(
 
     Example: outlook_search_mail(query="from:sarah@acme.com received>=2026-01-01", count=10)
     `query` is Microsoft KQL (from:, subject:, received>=, hasattachment:true, AND/OR/NOT).
+    Operators must be UPPERCASE — lowercase `and` is matched as a literal term. Two terms
+    with no operator between them broaden the search; use AND explicitly to narrow.
     Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
     """
     client = _get_graph_client(ctx)
@@ -314,7 +318,6 @@ async def outlook_send_message(
     bcc: list[str] | None = None,
     is_html: bool = False,
     importance: str = "normal",
-    sensitivity: str = "normal",
     request_read_receipt: bool = False,
     reply_to: list[str] | None = None,
 ) -> dict:
@@ -335,7 +338,6 @@ async def outlook_send_message(
         bcc,
         is_html,
         importance,
-        sensitivity=sensitivity,
         request_read_receipt=request_read_receipt,
         reply_to=reply_to,
         config=config,
@@ -566,7 +568,11 @@ async def outlook_get_event(
     ctx: Context,
     event_id: str,
 ) -> dict:
-    """Get one full calendar event by ID, including body, attendees, organizer, and recurrence."""
+    """Get one full calendar event by ID: body, attendees, organizer, recurrence, type.
+
+    `recurrence` comes back in the same shape outlook_create_event accepts; `type` is
+    "singleInstance", "seriesMaster", "occurrence" or "exception".
+    """
     client = _get_graph_client(ctx)
     return await calendar_read.get_event(client.sdk_client, event_id)
 
@@ -591,7 +597,9 @@ async def outlook_list_events_delta(
     is_deleted=True items are tombstones. has_more=True means drain immediately.
     """
     client = _get_graph_client(ctx)
-    return await calendar_delta.list_events_delta(client, start, end, page_size, delta_token)
+    return await calendar_delta.list_events_delta(
+        client, start, end, page_size, delta_token, timezone=_get_config(ctx).timezone
+    )
 
 
 # ── Calendar Write Tools ────────────────────────────────
@@ -609,13 +617,24 @@ async def outlook_create_event(
     attendees: list[str] | None = None,
     is_all_day: bool = False,
     is_online: bool = False,
-    recurrence: str | None = None,
+    recurrence: dict | str | None = None,
 ) -> dict:
     """Create a calendar event with optional attendees, recurrence, and Teams online meeting.
 
     Example: outlook_create_event(subject="Q3 review", start="2026-08-15T14:00:00Z",
-    end="2026-08-15T15:00:00Z", attendees=["alice@acme.com"], is_online=True)
-    `start`/`end` are ISO 8601. `recurrence` accepts a simple string ("daily", "weekly", "monthly").
+    end="2026-08-15T15:00:00Z", attendees=["alice@acme.com"])
+    `is_online` is accepted but has no effect on personal accounts — Graph silently ignores
+    isOnlineMeeting for consumer mailboxes (it returns isOnlineMeeting: False,
+    onlineMeetingProvider: "unknown"). Teams meetings require a work/school account.
+    `start`/`end` are ISO 8601. Passing `recurrence` creates a series, not a single event.
+    It takes either a shorthand — "daily", "weekdays", "weekly", "monthly", "yearly", all
+    anchored on `start` and open-ended — or a full Microsoft Graph recurrence object for
+    anything else, e.g. every other Mon+Fri for 10 occurrences:
+    {"pattern": {"type": "weekly", "interval": 2, "daysOfWeek": ["monday", "friday"]},
+     "range": {"type": "numbered", "numberOfOccurrences": 10}}
+    `range.startDate` defaults to the event's start date. Prefer a bounded range
+    ("endDate"/"numbered") when the event has attendees — a "noEnd" series invites them
+    to every future occurrence.
     """
     client = _get_graph_client(ctx)
     config = _get_config(ctx)
@@ -644,12 +663,38 @@ async def outlook_update_event(
     end: str | None = None,
     location: str | None = None,
     body: str | None = None,
+    recurrence: dict | str | None = None,
+    remove_recurrence: bool = False,
+    attendees: list[str] | None = None,
+    is_all_day: bool | None = None,
 ) -> dict:
-    """Update fields on an existing event (partial patch — only provided fields change)."""
+    """Update fields on an existing event (partial patch — only provided fields change).
+
+    `recurrence` takes the same shapes as outlook_create_event and converts a single
+    event into a series, or replaces an existing series' pattern. Omit it to leave any
+    recurrence alone; pass remove_recurrence=True to turn a series back into a single
+    event, keeping the first occurrence's time (the two are mutually exclusive).
+    `attendees` REPLACES the whole guest list (Graph has no add-one operation) and sends
+    invitations to everyone on it plus cancellations to anyone dropped — pass the full
+    intended list; [] removes everyone. `is_all_day` REQUIRES start and end in the same
+    call, both on midnight boundaries. Omitting an argument leaves it unchanged, so False
+    and [] are instructions, not absences.
+    """
     client = _get_graph_client(ctx)
     config = _get_config(ctx)
     return await calendar_write.update_event(
-        client.sdk_client, event_id, subject, start, end, location, body, config=config
+        client.sdk_client,
+        event_id,
+        subject,
+        start,
+        end,
+        location,
+        body,
+        recurrence,
+        remove_recurrence,
+        attendees,
+        is_all_day,
+        config=config,
     )
 
 
@@ -877,6 +922,8 @@ async def outlook_create_task(
     """Create a Microsoft To Do task with optional due date, importance, body, and recurrence.
 
     Example: outlook_create_task(title="Send invoice", due="2026-09-01", importance="high")
+    `reminder=True` requires `due` and sets the reminder to the due time — Graph silently
+    drops a reminder that has no time.
     `due` is ISO 8601. `importance` is "low", "normal", or "high". Defaults to the user's default
     list when `list_id` is omitted.
     """

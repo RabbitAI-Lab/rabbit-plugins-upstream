@@ -1,0 +1,56 @@
+# Iran Chemical Database — Python dependencies
+# HTTrack-powered live crawling architecture (see SKILL.md / docs/)
+
+# ---- API / web ----
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.8
+pydantic-settings>=2.4
+python-multipart>=0.0.9
+
+# ---- Database ----
+sqlalchemy>=2.0
+psycopg2-binary>=2.9
+alembic>=1.13
+redis>=5.0
+
+# ---- Task queue ----
+celery>=5.4
+
+# ---- Crawling / mirroring ----
+# httrack is a SYSTEM package:  sudo apt install httrack libhttrack-dev
+
+# ---- HTML parsing (local mirror files only) ----
+beautifulsoup4>=4.12
+lxml>=5.2
+parsel>=1.9
+
+# ---- PDF / Excel parsing ----
+pdfplumber>=0.11
+PyMuPDF>=1.24
+openpyxl>=3.1
+pandas>=2.2
+# camelot-py[cv]>=0.11   # optional: heavy PDF table extraction (needs ghostscript+opencv)
+
+# ---- JS fallback ----
+playwright>=1.45          # run: playwright install chromium
+
+# ---- Chemistry ----
+rdkit>=2024.03
+pubchempy>=1.0.4
+
+# ---- Persian NLP ----
+hazm>=0.9
+parsivar>=0.2
+langdetect>=1.0.9
+
+# ---- Dashboard ----
+streamlit>=1.36
+dash>=2.17
+plotly>=5.22
+
+# ---- Config / misc ----
+PyYAML>=6.0
+python-dotenv>=1.0
+requests>=2.32
+httpx>=0.27

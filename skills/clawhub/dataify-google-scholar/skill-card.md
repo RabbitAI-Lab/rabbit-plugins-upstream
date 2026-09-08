@@ -1,40 +1,55 @@
-## Description: <br>
-Turns a user's Google Scholar or academic paper search request into a confirmed Dataify Scraper API call. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Scholar for academic papers and scholarly results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to prepare and submit Google Scholar searches through Dataify after reviewing the request parameters. It is suited for academic search workflows that need structured Dataify API request construction and raw response return. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit Google Scholar search parameters to Dataify using a user-provided token. <br>
-Mitigation: Review the confirmation table before approving each API call and use only a Dataify token appropriate for these requests. <br>
-Risk: Incorrect inferred parameters could produce an unintended academic search. <br>
-Mitigation: Confirm or modify the displayed field values before allowing the skill to call the API. <br>
+## Use Case:
 
+External users and developers use this skill to translate Google Scholar research requests into Dataify Scraper API calls and receive compact academic search results.
 
-## Reference(s): <br>
-- [Dataify Google Scholar API Reference](references/google_scholar_api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, API calls, JSON, guidance] <br>
-**Output Format:** [Markdown confirmation table followed by raw Dataify API response body] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before API calls and returns the API response without post-processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill sends search parameters and a Dataify API token to Dataify and may consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requests before high-volume or ambiguous searches, keep the token in the environment, and avoid exposing credentials in chat or output.
+
+Risk: Security evidence flags a scope contradiction: the skill says not to use it for patents but documents and enables patent and U.S. case-law search paths.
+
+Mitigation: Treat patent and case-law searches as out of scope unless explicitly reviewed and approved for the deployment.
+
+## Reference(s):
+
+- [Dataify Google Scholar API Reference](references/google_scholar_api.md)
+- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-scholar)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with optional shell commands and raw JSON or HTML when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the Dataify Scraper API using a Dataify API token and return compact result summaries by default.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

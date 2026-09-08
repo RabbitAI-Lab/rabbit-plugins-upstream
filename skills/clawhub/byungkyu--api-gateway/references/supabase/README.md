@@ -2,6 +2,14 @@
 
 > **Safety:** All write operations (POST, PUT, PATCH, DELETE) require explicit user confirmation before execution. Verify the target resource and intended effect with the user first. See the main [SKILL.md](../SKILL.md#security--permissions) for full security policy.
 
+> **⚠ Backend administration, not just data access.** A Supabase connection reaches a live application backend with three distinct blast radiuses, and the admin routes below are far more powerful than ordinary record reads:
+>
+> - **Auth admin (`auth/v1/admin/*`) manages end-user accounts.** These routes enumerate, create, and delete the *application's users* — not the Maton user. Listing them exports an account roster with email addresses and identity metadata; creating one provisions a real login (and can set a password or mark an email confirmed, which is an authentication bypass if misused); deleting one destroys a person's account and whatever the app keys to it. Never enumerate users to "look around", never create an account the user did not ask for, and confirm deletions per user by email, not by UUID.
+> - **Storage admin manages buckets, not just files.** Deleting a bucket removes everything in it. Creating or updating one with `public: true` exposes every object it holds to anyone with the URL — a permanent, silent disclosure. State the intended visibility and get explicit approval before creating or changing a bucket.
+> - **Database writes go through PostgREST against production tables.** A `PATCH` or `DELETE` without a filter applies to every matching row. Always include a filter that identifies the intended rows, verify with a `GET` first, and never rely on the API's defaults to bound the change.
+>
+> Which of these the connection can actually do depends on the key behind it: a service-role key bypasses Row Level Security entirely and can read and write every table regardless of policy. Assume that level of access unless the user says otherwise, and prefer reads until they confirm the specific write.
+
 **App name:** `supabase`
 **Base URL proxied:** `{project_ref}.supabase.co`
 
@@ -22,141 +30,147 @@ Services:
 
 #### Get OpenAPI Schema
 ```bash
-GET /supabase/rest/v1/
+maton api '/supabase/rest/v1/'
 ```
 
 #### List Records
 ```bash
-GET /supabase/rest/v1/{table_name}?select=*&limit=10
+maton api '/supabase/rest/v1/{table_name}?select=*&limit=10'
 ```
 
 #### Get Single Record
 ```bash
-GET /supabase/rest/v1/{table_name}?id=eq.{id}
+maton api '/supabase/rest/v1/{table_name}?id=eq.{id}'
 ```
 
 #### Insert Record
 ```bash
-POST /supabase/rest/v1/{table_name}
-Content-Type: application/json
-Prefer: return=representation
-
+maton api -X POST '/supabase/rest/v1/{table_name}' \
+  -H 'Content-Type: application/json' \
+  -H 'Prefer: return=representation' \
+  --input - <<'EOF'
 {"name": "value"}
+EOF
 ```
 
 #### Update Record
 ```bash
-PATCH /supabase/rest/v1/{table_name}?id=eq.{id}
-Content-Type: application/json
-Prefer: return=representation
-
+maton api -X PATCH '/supabase/rest/v1/{table_name}?id=eq.{id}' \
+  -H 'Content-Type: application/json' \
+  -H 'Prefer: return=representation' \
+  --input - <<'EOF'
 {"name": "new_value"}
+EOF
 ```
 
 #### Delete Record
 ```bash
-DELETE /supabase/rest/v1/{table_name}?id=eq.{id}
+maton api '/supabase/rest/v1/{table_name}?id=eq.{id}' -X DELETE
 ```
 
 ### Auth (GoTrue)
 
 #### Get Health
 ```bash
-GET /supabase/auth/v1/health
+maton api '/supabase/auth/v1/health'
 ```
 
 #### Get Settings
 ```bash
-GET /supabase/auth/v1/settings
+maton api '/supabase/auth/v1/settings'
 ```
 
 #### List Users (Admin)
 ```bash
-GET /supabase/auth/v1/admin/users
+maton api '/supabase/auth/v1/admin/users'
 ```
 
 #### Get User (Admin)
 ```bash
-GET /supabase/auth/v1/admin/users/{user_id}
+maton api '/supabase/auth/v1/admin/users/{user_id}'
 ```
 
 #### Create User (Admin)
 ```bash
-POST /supabase/auth/v1/admin/users
-Content-Type: application/json
-
+maton api -X POST '/supabase/auth/v1/admin/users' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "email": "user@example.com",
   "password": "password123",
   "email_confirm": true
 }
+EOF
 ```
 
 #### Delete User (Admin)
 ```bash
-DELETE /supabase/auth/v1/admin/users/{user_id}
+maton api '/supabase/auth/v1/admin/users/{user_id}' -X DELETE
 ```
 
 ### Storage
 
 #### List Buckets
 ```bash
-GET /supabase/storage/v1/bucket
+maton api '/supabase/storage/v1/bucket'
 ```
 
 #### Get Bucket
 ```bash
-GET /supabase/storage/v1/bucket/{bucket_id}
+maton api '/supabase/storage/v1/bucket/{bucket_id}'
 ```
 
 #### Create Bucket
 ```bash
-POST /supabase/storage/v1/bucket
-Content-Type: application/json
-
+maton api -X POST '/supabase/storage/v1/bucket' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "id": "my-bucket",
   "name": "my-bucket",
   "public": false
 }
+EOF
 ```
 
 #### Delete Bucket
 ```bash
-DELETE /supabase/storage/v1/bucket/{bucket_id}
+maton api '/supabase/storage/v1/bucket/{bucket_id}' -X DELETE
 ```
 
 #### List Objects
 ```bash
-POST /supabase/storage/v1/object/list/{bucket_id}
-Content-Type: application/json
-
+maton api -X POST '/supabase/storage/v1/object/list/{bucket_id}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {"prefix": "", "limit": 100}
+EOF
 ```
 
 #### Upload Object
 ```bash
-POST /supabase/storage/v1/object/{bucket_id}/{path}
-Content-Type: {mime_type}
-
+maton api -X POST '/supabase/storage/v1/object/{bucket_id}/{path}' \
+  -H 'Content-Type: {mime_type}' \
+  --input - <<'EOF'
 {binary_data}
+EOF
 ```
 
 #### Download Object
 ```bash
-GET /supabase/storage/v1/object/{bucket_id}/{path}
+maton api '/supabase/storage/v1/object/{bucket_id}/{path}'
 ```
 
 #### Delete Object
 ```bash
-DELETE /supabase/storage/v1/object/{bucket_id}/{path}
+maton api '/supabase/storage/v1/object/{bucket_id}/{path}' -X DELETE
 ```
 
 ## Pagination
 
 ### PostgREST
 ```bash
-GET /supabase/rest/v1/{table}?limit=10&offset=20
+maton api '/supabase/rest/v1/{table}?limit=10&offset=20'
 ```
 
 Or use Range header:
@@ -166,7 +180,7 @@ Range: 0-9
 
 ### Auth Users
 ```bash
-GET /supabase/auth/v1/admin/users?page=1&per_page=50
+maton api '/supabase/auth/v1/admin/users?page=1&per_page=50'
 ```
 
 ## PostgREST Filter Operators

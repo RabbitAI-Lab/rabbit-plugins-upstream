@@ -1,42 +1,59 @@
-## Description: <br>
-Export all your ChatGPT conversations instantly - full context, timestamps, and metadata in seconds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Exports a user's ChatGPT conversation history to local JSON and Markdown files, with index-only defaults, consent prompts, and browser-based or token-based access paths.
 
-## Publisher: <br>
-[globalcaos](https://clawhub.ai/user/globalcaos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[globalcaos](https://clawhub.ai/user/globalcaos)
 
-## Use Case: <br>
-External users and developers use this skill to export their ChatGPT conversation history, including project conversations, timestamps, metadata, and message content, into local backup files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create plaintext local copies of full ChatGPT conversation history, including sensitive prompts, responses, timestamps, IDs, and project conversations. <br>
-Mitigation: Run it only when a complete local export is intentional, choose a private non-synced output directory, restrict file permissions, and avoid sharing raw exports. <br>
-Risk: One export path accepts a live ChatGPT access token as a command-line argument. <br>
-Mitigation: Prefer browser-session based execution where possible and avoid passing live access tokens on the command line. <br>
+## Use Case:
 
+External users and developers use this skill to back up, inspect, or migrate their own ChatGPT conversation history while choosing between index-only metadata exports and full-content exports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/chatgpt-exporter-ultimate) <br>
-- [Project repository linked by skill](https://github.com/globalcaos/clawdbot-moltbot-openclaw) <br>
-- [ChatGPT](https://chatgpt.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript, TypeScript, shell commands, JSON exports, and Markdown conversation files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Exports may include full private ChatGPT conversation history, timestamps, conversation IDs, project conversations, and local summary files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence) <br>
+Risk: Exports may store sensitive ChatGPT conversation history as plaintext local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer index-only mode unless message bodies are required, export to a private non-synced folder, and delete local exports when no longer needed.
+
+Risk: The headless token path requires access to a ChatGPT session bearer token.
+
+Mitigation: Prefer the browser relay or bookmarklet paths, use a hidden prompt instead of environment variables when possible, and never pass tokens as command-line arguments.
+
+Risk: Security evidence reports that the purge command can delete more local data than the documentation claims.
+
+Mitigation: Avoid using --purge until deletion target validation has been reviewed and fixed, and inspect the target path before any destructive cleanup.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/chatgpt-exporter-ultimate)
+- [Publisher profile](https://clawhub.ai/user/globalcaos)
+- [ChatGPT web application](https://chatgpt.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Local plaintext JSON and Markdown export files, plus command-line and browser execution guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Index-only mode avoids fetching message bodies; full exports can include sensitive conversation text and metadata.]
+
+## Skill Version(s):
+
+1.8.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

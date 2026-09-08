@@ -1,14 +1,13 @@
 ---
 name: dlazy-videoretalk
 version: 1.3.5
-description: 通义声动人像 VideoRetalk 口型同步（对口型、lip sync / lip-sync、配音对嘴）视频模型，输入一段人物讲话视频与一段人声音频，生成讲话口型与音频匹配的新视频；适用于让人物视频的口型对上新的语音。当视频中存在多张人脸时，可额外提供人脸参考图来指定要替换口型的目标人物。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy videoretalk -h 查看帮助信息。"}}
+description: "通义声动人像 VideoRetalk 口型同步（对口型、lip sync / lip-sync、配音对嘴）视频模型，输入一段人物讲话视频与一段人声音频，生成讲话口型与音频匹配的新视频；适用于让人物视频的口型对上新的语音。当视频中存在多张人脸时，可额外提供人脸参考图来指定要替换口型的目标人物。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy videoretalk -h 查看帮助信息。"}}
 ---
 
-# dlazy-videoretalk
+# 视频对口型 Video Retalk
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 通义声动人像 VideoRetalk 口型同步（对口型、lip sync / lip-sync、配音对嘴）视频模型，输入一段人物讲话视频与一段人声音频，生成讲话口型与音频匹配的新视频；适用于让人物视频的口型对上新的语音。当视频中存在多张人脸时，可额外提供人脸参考图来指定要替换口型的目标人物。
@@ -47,7 +46,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
@@ -87,6 +86,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -99,7 +99,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "videoretalk",
-    "modelId": "videoretalk",
+    "modelId": "bailian-videoretalk",
     "outputs": [
       {
         "type": "image",

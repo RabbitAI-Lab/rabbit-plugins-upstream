@@ -1,45 +1,64 @@
-## Description: <br>
-Connects an AI agent to Danube's growing marketplace of services and tools through a single API key so the agent can discover, search, and execute available tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Governed tool access for AI agents: one Danube API key unlocks an organization's private tools and a large catalog of services over MCP or REST, with confirmation before actions that write, send, spend, or delete.
 
-## Publisher: <br>
-[danube](https://clawhub.ai/user/danube) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[danube](https://clawhub.ai/user/danube)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect an AI agent to Danube's marketplace, discover available services and tools, execute selected tools, and guide users through credential requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Danube API key can grant user-scoped read, execute, and write access through marketplace tools. <br>
-Mitigation: Keep the API key private, scoped, and revocable; review each discovered tool's purpose and required parameters before running it. <br>
-Risk: Marketplace tools can include operations that write or delete user-scoped resources. <br>
-Mitigation: Confirm user intent before executing tools that modify resources, and inspect returned schemas and parameters before execution. <br>
-Risk: External service credentials may be required for some tools. <br>
-Mitigation: Direct users to configure credentials in the Danube dashboard and retry only after authorization is complete. <br>
+## Use Case:
 
+Developers and agent operators use Danube to discover, inspect, and invoke organization-approved marketplace or private tools through MCP or REST while preserving confirmation steps for write, spend, delete, credential, and batch actions.
 
-## Reference(s): <br>
-- [Danube homepage](https://danubeai.com) <br>
-- [Danube documentation](https://docs.danubeai.com) <br>
-- [Danube dashboard](https://danubeai.com/dashboard) <br>
-- [ClawHub skill page](https://clawhub.ai/danube/skills/tools-marketplace) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON configuration blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and a user-scoped DANUBE_API_KEY for marketplace access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-8.0.13 (source: server release metadata) <br>
+Risk: The skill can give an agent broad access to tools connected to the user's Danube account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a restricted Danube API key with service/tool limits and spending limits, and install it only when the agent is expected to operate through Danube.
+
+Risk: Some tool calls can write, send, spend funds, delete data, store credentials, or execute batches.
+
+Mitigation: Review the exact tool and parameters and require explicit user confirmation before these actions, including when a confirmation token is returned.
+
+Risk: Credential-related tools or self-hosted paths can expose live secrets when automatic capture or redaction is not available.
+
+Mitigation: Prefer dashboard or OAuth connection, avoid echoing raw secrets, and store only credentials the user explicitly provides and confirms.
+
+Risk: Tool calls can send user or organization data to third-party services in the catalog.
+
+Mitigation: Inspect tool schemas first, pass only task-required parameters, and do not forward unrelated personal or sensitive data.
+
+## Reference(s):
+
+- [Danube OpenClaw Guide](https://docs.danubeai.com/sdk/openclaw)
+- [Danube API Reference](https://docs.danubeai.com/api-reference/introduction)
+- [Danube REST API Reference](references/rest-api.md)
+- [Danube Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and REST/MCP tool names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference Danube API keys, MCP configuration, tool schemas, confirmations, and execution results.]
+
+## Skill Version(s):
+
+8.1.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,49 @@
-## Description: <br>
-Provides reusable QA heuristic checklist templates for common feature types such as forms, lists, shopping carts, payments, imports and exports, approvals, notifications, and permissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供面向登录、支付、搜索、购物车、导入导出、审批、消息通知和权限管理等功能类型的 QA 启发式测试清单，帮助测试人员生成测试要点、用例表格和探索测试指南。
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill to identify the right checklist for a feature type and avoid missing common test areas, especially when starting test design for an unfamiliar feature. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad testing-related prompts where a deeper QA strategy skill would be more appropriate. <br>
-Mitigation: Use this skill for checklist coverage, and choose a more specific QA skill for scenario design, boundary analysis, or deeper test strategy. <br>
-Risk: Example checklist items may describe destructive test actions such as deleting cart items or changing permissions. <br>
-Mitigation: Treat those items as test design prompts and execute them only in appropriate test environments with review of affected data. <br>
+## Use Case:
 
+测试人员、开发者和 QA 团队在面对新功能或不确定测试要点时使用此技能，按功能类型选择启发式清单并生成结构化测试用例、覆盖提示和探索测试指南。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-heuristic-checklist) <br>
-- [Functional heuristic checklists](references/checklists.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown checklist guidance with covered areas, uncovered areas, and exploration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should mark covered heuristic areas and avoid creating new unique traceability IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Checklist examples can include destructive target-application actions such as deleting cart items or changing roles.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run generated QA scenarios only in safe test environments and avoid applying them to production data.
+
+## Reference(s):
+
+- [功能类型启发式检查清单](references/checklists.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with a structured test-case table, heuristic checklist, coverage notes, and exploration guide]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a fixed 9-column test case table and calls out covered and uncovered areas without claiming absolute coverage.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release evidence; artifact frontmatter lists 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

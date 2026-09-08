@@ -1,43 +1,57 @@
-## Description: <br>
-fal.ai lets an agent operate fal.ai through an OOMOL-connected account by using the oo CLI connector for model discovery, pricing, queue status, results, and request cancellation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+fal.ai (fal.ai). Use this skill for ANY fal.ai request - reading, creating, and updating data. Whenever a task involves fal.ai, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect fal.ai model endpoints, estimate pricing, manage queued fal requests, retrieve completed results, and fetch JWKS data for webhook verification through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate fal.ai through the user's OOMOL-connected account and includes a write action for request cancellation. <br>
-Mitigation: Install it only when that account access is intended, and confirm the exact payload and effect before running write actions. <br>
-Risk: The setup instructions include shell-based oo CLI installation commands. <br>
-Mitigation: Prefer a verified installation method for the oo CLI before running connector commands. <br>
+## Use Case:
 
+Developers and external users use this skill to operate fal.ai through an OOMOL-connected account, including model discovery, pricing lookup, queue submission, queue status tracking, result retrieval, cancellation, and webhook JWKS retrieval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-fal-ai) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [fal.ai homepage](https://fal.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or summarize JSON responses returned by the oo CLI connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Queue submissions and cancellations can change fal.ai state or incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact payload and expected effect with the user before approving write or cancellation actions.
+
+Risk: The skill depends on an OOMOL-connected fal.ai account and local oo CLI availability.
+
+Mitigation: Use first-time setup steps only after an authentication, connection, scope, billing, or missing-command failure.
+
+## Reference(s):
+
+- [fal.ai homepage](https://fal.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fal-ai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides agents to inspect live connector schemas before forming payloads and to confirm write or cancellation actions before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

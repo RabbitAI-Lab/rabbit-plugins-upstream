@@ -1,8 +1,11 @@
 ---
 name: qa-retrospective
-version: 1.6.0
+slug: qa-retrospective
+displayName: 测试复盘
+version: 1.7.5
 description: >-
   当一个迭代结束、一个项目完成、或者发生线上事故需要事后分析时使用此技能。通过系统性的回顾会议和数据复盘，把个人和团队的经验教训转化为可复用的组织资产。不要沦为"说说好话走个形式"——有效的复盘需要有数据支撑（缺陷趋势/漏测分析/效率数据）、有根因分析（为什么出问题）和有 action items（下次怎么做不一样）。输出复盘报告和改进项追踪表。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"测试复盘"、"迭代复盘"、"项目复盘"、"经验沉淀"、"漏测分析"、"回顾总结"、"事后分析"、需要复盘总结经验、反复出现同类问题需要根因改进时
 allowed-tools: Read Grep Glob
@@ -31,6 +34,9 @@ output_format:
   traceability:
     - 每次复盘带唯一ID（RETRO-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - retrospective_report: 复盘报告
     - what_went_well: 做得好的事项
     - improvement_areas: 改进领域
@@ -44,6 +50,8 @@ error_recovery_guidance:
   on_failure: "复盘数据不充分时回退到质量度量收集更多数据"
   retry_behavior: "补齐数据后重新复盘"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及发布流程优化和协作流程调整建议。
 > 这些是复盘议题不是直接操作；请勿未经评审即变更团队流程，先达成共识再落地。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

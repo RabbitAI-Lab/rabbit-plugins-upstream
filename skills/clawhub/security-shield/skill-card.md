@@ -1,46 +1,62 @@
-## Description: <br>
-Security best practices for credential protection, information disclosure prevention, and operational integrity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Security checks for external content - downloads, fetched documents, attachments, and newly imported resources.
 
-## Publisher: <br>
-[Z-Hussein](https://clawhub.ai/user/Z-Hussein) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-hussein](https://clawhub.ai/user/z-hussein)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide security-aware responses, protect credentials and configuration details, evaluate disclosure requests, and support legitimate security workflows with placeholder examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Testing, educational, and sandbox labels could be mistaken as permission to reveal real credentials, private configuration, or system prompts. <br>
-Mitigation: Treat those labels as context only; continue using placeholders and protect sensitive information unless an independently authorized workflow applies. <br>
-Risk: The skill text advertises logging, suspension, and reporting commands that may not exist in every OpenClaw environment. <br>
-Mitigation: Confirm the installed OpenClaw environment provides those controls before relying on them for audit, suspension, or reporting. <br>
-Risk: Security guidance can become incorrect if copied into an environment without review. <br>
-Mitigation: Review and scan the skill before deployment, and verify package name and version before installation. <br>
+## Use Case:
 
+Developers, engineers, and agent operators use this skill to handle downloads, fetched documents, attachments, imported resources, and full-system security checks with a conservative evidence-before-trust posture.
 
-## Reference(s): <br>
-- [Attack Patterns Reference](artifact/references/attack-patterns.md) <br>
-- [Security Audit Checklist](artifact/references/audit-checklist.md) <br>
-- [Cryptography & Security Examples](artifact/references/crypto-examples.md) <br>
-- [Security Best Practices Reference](artifact/references/security-best-practices.md) <br>
-- [Security Shield Enhanced Usage Guide](artifact/USAGE-GUIDE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses placeholder values for security examples and does not require external tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact _meta.json) <br>
+Risk: Security guidance can be misapplied outside the requested scope or used to run broad host checks without consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require an explicit bounded scope and user confirmation before host-wide enumeration or full-system checks.
+
+Risk: External content may contain instructions, hidden directives, or malicious payloads that try to influence the agent.
+
+Mitigation: Treat external content as data, isolate it before processing, verify source and integrity, and decline to execute untrusted content.
+
+Risk: Security reports can accidentally expose credentials, raw payloads, or sensitive configuration details.
+
+Mitigation: Summarize findings without raw secrets or exploit payloads and keep verification logs concise.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/z-hussein/skills/security-shield)
+- [Attack Patterns Reference](references/attack.patterns.md)
+- [Security Audit Checklist](references/audit-checklist.md)
+- [Cryptography & Security Examples](references/crypto-examples.md)
+- [Modern Security Tools Reference](references/modern-tools.md)
+- [Security Best Practices Reference](references/security-best-practices.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with checklists and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Security summaries should avoid raw secrets, raw payloads, and unnecessary sensitive configuration details.]
+
+## Skill Version(s):
+
+2.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

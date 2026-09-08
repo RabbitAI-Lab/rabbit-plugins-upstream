@@ -1,7 +1,7 @@
 ---
 name: "sendmux-token-efficient-usage"
 description: "Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency."
-version: "1.3.0"
+version: "1.4.2"
 metadata:
   openclaw:
     skillKey: "sendmux-token-efficient-usage"
@@ -20,7 +20,8 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 
 - Do not ask the user to paste an API key.
 - Use send-capable `smx_mbx_*` keys or owner-approved Sending-resource `smx_agent_*` tokens for Sending calls, and `smx_mbx_*` keys for normal Mailbox calls.
-- Use scoped `smx_agent_*` only for the calls its scopes and resource allow. Pre-claim agent tokens cannot send.
+- For a self-registered agent, reuse one durable CLI profile for reads. Sending stays blocked until owner approval, then `sending:*` commands exchange and cache a one-hour delegated token automatically.
+- Its inbox is capped at 500 MiB before approval. Owner-approved sending raises it to at least 5 GiB first. Revoking sending does not itself change the current inbox storage allocation.
 - Use `smx_root_*` for Management calls.
 - Do not default to MCP for every task. MCP is best when the required tool is curated; CLI and SDK cover broader surfaces.
 - Do not pipe real attachments through model context as base64. Route attachment transfer to `sendmux-attachments`; prefer `file_path`, presigned URLs, CLI `--attach`, or SDK file helpers. Mailbox uploads cap each attachment at 7,500,000 bytes; Sending uploads cap each file at 18 MiB; MCP inline base64 caps at 32 KiB decoded.
@@ -55,6 +56,16 @@ Use this skill to choose the lowest-cost Sendmux route that still answers the ta
 | Manage sending accounts         | CLI/SDK; MCP does not curate provider tools yet.                                                                                       |
 | Manage webhooks                 | MCP for list/create/test; CLI/SDK for get/update/delete/rotate/delivery payloads.                                                      |
 | Inspect spend, logs, metrics    | Summary/metrics first; filter log lists with small `limit`, then fetch one selected row.                                               |
+
+For an agent with no key, avoid manual protocol calls and token copying:
+
+```bash
+sendmux agent:register my-agent --default --json
+sendmux mailbox:me:get --profile my-agent --json
+sendmux agent:invite-owner owner@example.com --profile my-agent --json
+```
+
+Register once, then reuse the durable profile across processes. After owner acceptance and sending approval, use the same profile with `sending:*`; the CLI handles the one-hour delegated token exchange and cache.
 
 ## Read less
 

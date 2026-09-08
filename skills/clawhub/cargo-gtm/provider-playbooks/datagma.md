@@ -29,7 +29,7 @@ Contact-info finder: one mid-tier email action and two premium phone actions. `f
 ```bash
 # Only on rows where the earlier rungs returned nothing
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findEmail"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","companyName":"Acme"},
     {"firstName":"Bob","lastName":"Jones","companyName":"Globex"}
@@ -44,7 +44,7 @@ All three fields are required — no domain-only or full-name variants. Every hi
 ```bash
 # Qualified, high-value leads only — 8 credits each
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findPhone","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"datagma","actionSlug":"findPhone"}' \
   --records '[{"personLinkedInUrl":"https://linkedin.com/in/alicesmith","email":"alice@acme.com"}]' \
   --wait-until-finished
 ```
@@ -69,6 +69,13 @@ Neither field is marked required in the schema — pass at least one identifier;
 - `findPhone` / `findPhoneAndEmail` — **CONTACT stage, last rung** of the phone chain: `prospeo` (3) → `FullEnrich` (6) → `waterfall` (7) → **datagma (8)** → `cleon1` (15, premium).
 - Every found email flows to **VERIFY** (`waterfall.verifyEmail`, 0.1) before activation.
 
+## Recurring use
+
+No scheduled fit — per-record enrichment only; every datagma action is an escalation rung, never a monitor.
+
+- **In-play gate:** `findEmail` runs only where `email` is still empty *and* the earlier rungs already missed; `findPhone` / `findPhoneAndEmail` (8) additionally gate on an empty phone field **and** the qualified-lead condition — the anti-pattern above ("ungated batch") applies doubly to a play that re-evaluates its segment.
+- **Stability:** a filled email or phone doesn't improve on re-lookup — re-running datagma on enriched rows re-bills last-rung prices for the same data.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"datagma","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"datagma","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

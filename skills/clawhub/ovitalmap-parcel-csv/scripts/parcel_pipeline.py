@@ -23,7 +23,7 @@ from batch_rules import (
     resolution_for,
 )
 from country_locator import locate_country
-from csv_builder import build_csvs, build_single_csvs, prepare_parcels
+from csv_builder import build_parcel_exports, normalize_export_mode, prepare_parcels
 from provider_matcher import fuzzy_match
 from response_protocol import (
     blocked_response,
@@ -46,11 +46,11 @@ STATE_DIR = WORKSPACE_ROOT / "ovitalmap_archive" / ".pipeline_state"
 
 
 class WorkflowInputError(ValueError):
-    def __init__(self, code, required_input, reply_zh, next_action):
-        super().__init__(reply_zh)
+    def __init__(self, code, required_input, message, next_action):
+        super().__init__(message)
         self.code = code
         self.required_input = required_input
-        self.reply_zh = reply_zh
+        self.message = message
         self.next_action = next_action
 
 
@@ -93,14 +93,14 @@ def step1_country_and_provider(parcels, country_code=None):
     annotated, parcel_countries = annotate_parcels(parcels)
     country_code = validate_country_code(country_code) if country_code else None
     if len(parcel_countries) > 1:
-        groups = "；".join(
-            f"{code}：{','.join(refs)}"
+        groups = "; ".join(
+            f"{code}: {','.join(refs)}"
             for code, refs in sorted(parcel_countries.items())
         )
         raise WorkflowInputError(
             "mixed_country_batch",
             ["separate_runs_by_country"],
-            f"同一批次包含多个国家/地区（{groups}）。请按国家/地区拆分为独立批次。",
+            f"The batch contains multiple countries or regions ({groups}). Split it into separate runs.",
             "split_by_country",
         )
     if parcel_countries:
@@ -110,7 +110,7 @@ def step1_country_and_provider(parcels, country_code=None):
             raise WorkflowInputError(
                 "country_mismatch",
                 ["country_code"],
-                f"{refs} 标注为 {parcel_country}，与批次国家/地区 {country_code} 不一致，请确认。",
+                f"{refs} is marked {parcel_country}, which conflicts with batch country or region {country_code}.",
                 "confirm_preflight",
             )
         country_code = country_code or parcel_country
@@ -218,7 +218,7 @@ def _apply_provider_resolutions(parcels, data, state):
         raise WorkflowInputError(
             "provider_confirmation_required",
             missing,
-            "请先确认每个待确认地块的提供者，再继续检查重复地块。",
+            "Confirm each missing provider before checking for duplicate parcels.",
             "confirm_preflight",
         )
     return resolved
@@ -427,11 +427,16 @@ def _replace_by_ref(parcels, replacements):
     return [by_ref.get(parcel["parcel_ref"], parcel) for parcel in parcels]
 
 
-def step3_build_and_archive(all_parcels, new_parcels, country_code):
+def step3_build_and_archive(
+    all_parcels,
+    new_parcels,
+    country_code,
+    export_mode="boundary",
+):
     country_code = validate_country_code(country_code)
     prepare_parcels(all_parcels)
+    export_mode = normalize_export_mode(export_mode)
 
-    hit_results = []
     cadastre_updates = []
     for parcel in all_parcels:
         if not parcel.get("is_archive_hit"):
@@ -444,35 +449,9 @@ def step3_build_and_archive(all_parcels, new_parcels, country_code):
                     parcel["official_id"],
                 )
             )
-        hit_result = build_single_csvs(parcel, country_code)
-        hit_result.update(
-            {
-                "parcel_ref": parcel.get("parcel_ref"),
-                "parcel_code": parcel["parcel_code"],
-            }
-        )
-        hit_results.append(hit_result)
-
-    new_csv_result = None
+    export_result = build_parcel_exports(all_parcels, country_code, export_mode)
     archive_result = None
     if new_parcels:
-        first_code = new_parcels[0]["parcel_code"]
-        new_csv_result = build_csvs(
-            new_parcels,
-            first_code,
-            len(new_parcels),
-            country_code,
-        )
-        new_csv_result.update(
-            {
-                "parcel_refs": [
-                    parcel.get("parcel_ref") for parcel in new_parcels
-                ],
-                "parcel_codes": [
-                    parcel["parcel_code"] for parcel in new_parcels
-                ],
-            }
-        )
         archive_rows = [
             {
                 "parcel_code": parcel["parcel_code"],
@@ -490,8 +469,7 @@ def step3_build_and_archive(all_parcels, new_parcels, country_code):
         archive_result = append_parcels(country_code, archive_rows)
 
     return {
-        "new_csv_result": new_csv_result,
-        "hit_csv_results": hit_results,
+        **export_result,
         "archive_result": archive_result,
         "cadastre_updates": cadastre_updates,
     }
@@ -510,6 +488,9 @@ def _run_step(step, data, state):
     date_hint = data.get("date") or state.get(
         "date", datetime.now().strftime("%y%m%d")
     )
+    if "export_mode" in data or "export_mode" not in state:
+        state["export_mode"] = normalize_export_mode(data.get("export_mode"))
+    export_mode = state["export_mode"]
 
     if step == "1":
         result = step1_country_and_provider(parcels, country_code)
@@ -532,7 +513,7 @@ def _run_step(step, data, state):
         raise WorkflowInputError(
             "country_required",
             ["country_code"],
-            "请提供或确认地块所在国家/地区后再继续。",
+            "Provide or confirm the parcel country or region before continuing.",
             "confirm_preflight",
         )
 
@@ -546,7 +527,7 @@ def _run_step(step, data, state):
             raise WorkflowInputError(
                 "coordinate_confirmation_required",
                 ["confirmed_coordinates"],
-                "请先核对并确认 WGS84 坐标，再继续检查重复地块。",
+                "Confirm the displayed WGS84 coordinates before checking for duplicates.",
                 "confirm_preflight",
             )
         parcels = _apply_provider_resolutions(parcels, data, state)
@@ -584,7 +565,7 @@ def _run_step(step, data, state):
             raise WorkflowInputError(
                 "batch_duplicate_resolution_required",
                 fields,
-                "请先确认批次内坐标相同的地块是同一地块还是不同地块。",
+                "Confirm whether identical boundaries in this batch are the same or different parcels.",
                 "resolve_batch_duplicates",
             )
         new_parcels = _apply_official_id_resolutions(
@@ -593,8 +574,8 @@ def _run_step(step, data, state):
         )
         official_conflicts = duplicate_official_ids(new_parcels)
         if official_conflicts:
-            lines = "；".join(
-                f"{item['parcel_ref']} 与 {item['first_ref']} 均使用 {item['official_id']}"
+            lines = "; ".join(
+                f"{item['parcel_ref']} and {item['first_ref']} both use {item['official_id']}"
                 for item in official_conflicts
             )
             raise WorkflowInputError(
@@ -603,7 +584,7 @@ def _run_step(step, data, state):
                     f"official_id_resolutions.{item['parcel_ref']}"
                     for item in official_conflicts
                 ],
-                f"批次内存在重复官方编号：{lines}。请更正或留空后再继续。",
+                f"Duplicate official identifiers found: {lines}. Correct or clear the later value.",
                 "resolve_official_ids",
             )
         state["step2b"]["new_parcels"] = new_parcels
@@ -630,11 +611,11 @@ def _run_step(step, data, state):
                 ),
                 None,
             )
-            parcel_ref = parcel["parcel_ref"] if parcel else "对应地块"
+            parcel_ref = parcel["parcel_ref"] if parcel else "the corresponding parcel"
             raise WorkflowInputError(
                 "official_code_exists",
                 [f"official_id_resolutions.{parcel_ref}"],
-                f"{parcel_ref} 的官方编码 {candidate} 已存在。请核对、更正或清空该官方编号。",
+                f"Official code {candidate} for {parcel_ref} already exists. Verify, correct, or clear the identifier.",
                 "resolve_official_ids",
             ) from exc
         ordered = _merge_assigned(
@@ -659,10 +640,15 @@ def _run_step(step, data, state):
             raise WorkflowInputError(
                 "code_confirmation_required",
                 ["confirmed_codes"],
-                "请先确认已生成的地块编码，再执行文件生成和归档。",
+                "Confirm the proposed parcel codes before export and archiving.",
                 "confirm_codes",
             )
-        result = step3_build_and_archive(state["parcels"], new_parcels, country_code)
+        result = step3_build_and_archive(
+            state["parcels"],
+            new_parcels,
+            country_code,
+            export_mode,
+        )
         state["step3"] = result
         return result
 
@@ -728,14 +714,14 @@ def main():
                 raise WorkflowInputError(
                     "preflight_confirmation_required",
                     ["confirmed"],
-                    "请先确认坐标、国家/地区和提供者信息，再执行完整流程。",
+                    "Confirm the coordinates, country or region, and provider information before running the complete workflow.",
                     "confirm_preflight",
                 )
             if not data.get("auto_accept_codes"):
                 raise WorkflowInputError(
                     "automatic_code_acceptance_required",
                     ["auto_accept_codes"],
-                    "完整自动流程会直接采用新生成的编码；如需继续，请明确允许自动采用编码。",
+                    "The complete workflow accepts generated codes automatically. Set auto_accept_codes only after explicit approval.",
                     "confirm_codes",
                 )
             outputs = {}

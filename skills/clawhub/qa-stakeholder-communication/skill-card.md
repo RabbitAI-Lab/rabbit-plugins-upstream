@@ -1,41 +1,53 @@
-## Description: <br>
-This skill helps QA teams tailor bug-fix, requirement-change, and quality-risk communication for developers, product managers, and leadership. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides QA stakeholder communication strategies and templates tailored for developers, product managers, and management when reporting bugs, requirement changes, or quality risks.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA practitioners and team stakeholders use this skill to convert QA findings into audience-specific communication plans, tailored reports, metric summaries, and risk highlights. It supports bug triage, requirement-change discussions, release reviews, and quality reporting across development, product, and management audiences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste real customer, payment, identity, order, or production incident data into QA communication examples. <br>
-Mitigation: Redact or mask sensitive data before using the skill, and avoid including production credentials, customer identifiers, or financial records. <br>
-Risk: Broad Chinese trigger phrases may make the skill appear for non-QA communication requests. <br>
-Mitigation: Confirm that the request is about QA stakeholder communication and identify the intended audience before applying the templates. <br>
+## Use Case:
 
+QA practitioners and delivery teams use this skill to adapt bug reports, requirement-change impact notes, and quality-risk summaries for developers, product managers, and management. It helps produce role-specific communication plans, concise reports, key metric summaries, and risk highlights.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-stakeholder-communication) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown communication plans, tailored reports, key metric summaries, and risk highlights with COMM-XXXX traceability IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code or shell commands; outputs should avoid real customer, payment, identity, order, or production incident data unless redacted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: QA communication inputs may contain production customer data, payment details, identity numbers, phone numbers, or unredacted screenshots.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and redact QA inputs before use; avoid providing real production customer data or sensitive screenshots.
+
+Risk: The optional full skill-set install uses an npx command that should be evaluated separately from this individual skill.
+
+Mitigation: Review the full skill-set source and installation behavior before running any npx command.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-stakeholder-communication)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or structured text templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include communication IDs, role-specific reports, key metrics, and risk highlights.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter says 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

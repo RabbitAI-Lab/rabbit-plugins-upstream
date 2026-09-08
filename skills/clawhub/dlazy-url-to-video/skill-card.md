@@ -1,41 +1,60 @@
-## Description: <br>
-Paste a URL and use the dLazy hosted URL-to-video workflow to create a promo, ad, or product demo video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a supplied URL or webpage link into a promotional, social ad, or product demo video by capturing the site, deriving brand context, storyboarding, adding voiceover, and building the video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to turn a webpage or landing-page URL into a video by invoking the dLazy website-to-video CLI workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, URLs, and explicitly attached files are sent to dLazy's hosted service, and login stores a local dLazy API key. <br>
-Mitigation: Review the data being submitted before use, prefer npx when avoiding a persistent global install, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers, marketers, and agents use this skill when a user supplies a URL and wants a generated promotional, social ad, or product demo video through dLazy.
 
-## Reference(s): <br>
-- [Dlazy Url To Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-url-to-video) <br>
-- [dLazy CLI GitHub repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance] <br>
-**Output Format:** [Terminal text with shell commands and streamed agent responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference project ids for continuing multi-turn video generation sessions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Prompts, URLs, and explicitly attached files are sent to the dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with content acceptable for third-party SaaS processing, and avoid sending sensitive URLs or files unless the account terms and user intent permit it.
+
+Risk: The skill depends on running the third-party dLazy npm CLI.
+
+Mitigation: Prefer the pinned npx invocation for one-off use, or review the package and source before installing a persistent global binary.
+
+Risk: The skill requires a dLazy API key stored locally or supplied through the environment.
+
+Mitigation: Keep the key scoped to the intended organization, avoid exposing it in prompts or logs, and rotate or revoke it if it is disclosed.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-url-to-video)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and streamed CLI text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference generated video work handled by the dLazy hosted service; requires a dLazy API key and a URL input.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter says 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

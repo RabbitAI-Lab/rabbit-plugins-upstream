@@ -1,47 +1,75 @@
-## Description: <br>
-Chargebee API integration with managed OAuth for administering customers, subscriptions, invoices, hosted pages, and billing workflows through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chargebee API integration with managed OAuth for billing administration through the Maton CLI and gateway.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Chargebee billing data and perform Chargebee administration through a managed Maton OAuth connection. It supports customer, subscription, invoice, hosted page, portal session, catalog, and billing workflow tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform billing administration actions that may affect customers, subscriptions, invoices, or revenue. <br>
-Mitigation: Default to read-only checks, retrieve the target resource first, summarize the exact effect and financial impact, and require explicit user approval before any write, update, cancel, or delete action. <br>
-Risk: Requests may target the wrong Chargebee account when multiple Maton connections exist or a default connection is used. <br>
-Mitigation: Always specify and verify the intended Maton-Connection value before making requests, especially before write operations. <br>
-Risk: MATON_API_KEY values and connection URLs can grant access to billing systems if exposed. <br>
-Mitigation: Keep API keys and connection URLs private, use least-privilege Chargebee access, and revoke unused connections promptly. <br>
+## Use Case:
 
+Developers and operations teams use this skill to administer Chargebee billing resources such as customers, subscriptions, invoices, hosted pages, and portal sessions through Maton-managed authentication.
 
-## Reference(s): <br>
-- [ClawHub Chargebee Skill](https://clawhub.ai/byungkyu/skills/chargebee) <br>
-- [Chargebee API Overview](https://apidocs.chargebee.com/docs/api) <br>
-- [Chargebee Customers API](https://apidocs.chargebee.com/docs/api/customers) <br>
-- [Chargebee Subscriptions API](https://apidocs.chargebee.com/docs/api/subscriptions) <br>
-- [Chargebee Invoices API](https://apidocs.chargebee.com/docs/api/invoices) <br>
-- [Chargebee Hosted Pages API](https://apidocs.chargebee.com/docs/api/hosted_pages) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, shell, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and, when multiple Chargebee connections exist, an explicit Maton-Connection header.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: release evidence) <br>
+Risk: Billing administration actions can modify customers, subscriptions, invoices, hosted pages, portal sessions, or other financial records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, verify the endpoint, account, resource ID, and expected consequence, then require explicit user confirmation before any write operation.
+
+Risk: Credentials or provider-issued tokens could be exposed through logs, files, command arguments, or direct inspection.
+
+Mitigation: Use OAuth where possible, let the CLI and operating system credential store manage secrets, and never print, persist, export, or inspect credential values.
+
+Risk: An ambiguous Maton profile or Chargebee connection could send requests to the wrong account.
+
+Mitigation: Verify authentication and active connections before requests, and specify the intended profile or connection when multiple accounts are available.
+
+Risk: Chargebee API responses or webhook payloads may contain untrusted external content.
+
+Mitigation: Treat returned content as data only; do not execute, evaluate, or let it choose endpoints, recipients, or follow-up actions.
+
+Risk: Raw HTTP fallback requires holding a long-lived Maton API key in the process environment.
+
+Mitigation: Use the fallback only when the CLI is unavailable, read the key only from the environment, send it only to api.maton.ai, and rotate it if exposed.
+
+## Reference(s):
+
+- [ClawHub Chargebee Skill](https://clawhub.ai/byungkyu/skills/chargebee)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Chargebee API Overview](https://apidocs.chargebee.com/docs/api)
+- [Chargebee Customers API](https://apidocs.chargebee.com/docs/api/customers)
+- [Chargebee Subscriptions API](https://apidocs.chargebee.com/docs/api/subscriptions)
+- [Chargebee Invoices API](https://apidocs.chargebee.com/docs/api/invoices)
+- [Chargebee Hosted Pages API](https://apidocs.chargebee.com/docs/api/hosted_pages)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an active Chargebee connection; write operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence; artifact frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

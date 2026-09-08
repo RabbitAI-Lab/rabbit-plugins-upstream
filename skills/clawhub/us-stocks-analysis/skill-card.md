@@ -1,47 +1,60 @@
-## Description: <br>
-US stocks analysis by an adversarial investment committee that combines quick data workflows with sourced sentiment, smart-money, SEC fundamentals, and reconciled investor-persona verdicts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+US Stocks Analysis helps agents produce educational US-equity briefs and adversarial investment-committee analyses using SentiSense read-only market data, sourced evidence ledgers, and recorded bull/bear disagreements.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-External users and analysts use this skill to produce educational US-equity briefs or thesis-grade committee analysis with sourced evidence ledgers, adversarial persona review, and recorded dissents. It is read-only and does not trade, purchase securities, modify accounts, or access wallets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ticker or query metadata and API-key authenticated requests are sent to SentiSense and public financial-data sources. <br>
-Mitigation: Use only when comfortable sharing that metadata, protect SENTISENSE_API_KEY, and avoid entering brokerage credentials or personal financial details. <br>
-Risk: Outputs could be mistaken for investment advice or personalized recommendations. <br>
-Mitigation: Treat results as educational analysis, verify sourced figures, and make independent decisions; the skill does not trade or modify accounts. <br>
-Risk: Market data, public filings, or sentiment samples may be unavailable, stale, or thinly sampled. <br>
-Mitigation: Use the skill's as-of dates, thin-sample guards, NOT AVAILABLE markers, and confidence caps instead of filling gaps with guesses. <br>
+## Use Case:
 
+External users and developers use this skill for educational US-stock research, quick market-data briefs, investment-thesis due diligence, and structured bull-versus-bear analysis. It is designed to keep numerical claims tied to an evidence ledger and to avoid trading, purchasing, or write operations.
 
-## Reference(s): <br>
-- [ClawHub Skill: us-stocks-analysis](https://clawhub.ai/thesentitrader/skills/us-stocks-analysis) <br>
-- [SentiSense Website](https://sentisense.ai) <br>
-- [SentiSense API Reference](https://sentisense.ai/skill.md) <br>
-- [SentiSense API Key Setup](https://app.sentisense.ai/get-api-key) <br>
-- [SEC Company Tickers](https://www.sec.gov/files/company_tickers.json) <br>
-- [FRED DGS10 CSV](https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown analysis with evidence ledgers, quick-read briefs, committee verdicts, and optional shell commands for bounded API calls.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SENTISENSE_API_KEY for SentiSense endpoints; public SEC EDGAR and FRED fetches are bounded when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.0 (source: server release evidence) <br>
+Risk: Stock queries and the API key are used with SentiSense.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the SentiSense terms and configure the SENTISENSE_API_KEY only for intended use; the skill declares read-only access to app.sentisense.ai.
+
+Risk: Users could mistake committee verdicts or quick reads for personalized buy or sell instructions.
+
+Mitigation: Keep the educational, non-advisory framing visible and treat outputs as research inputs rather than trading recommendations.
+
+Risk: Preview limits, quotas, delayed prices, or batch-generated signals can affect completeness and freshness.
+
+Mitigation: Carry source rows, as-of timestamps, and any preview or quota limitations into the final analysis before drawing conclusions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/thesentitrader/skills/us-stocks-analysis)
+- [SentiSense API reference](https://sentisense.ai/skill.md)
+- [SentiSense website](https://sentisense.ai)
+- [SentiSense application](https://app.sentisense.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown analysis with sourced evidence summaries and optional curl examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SENTISENSE_API_KEY; read-only network access is scoped to app.sentisense.ai; outputs are educational market research, not financial advice.]
+
+## Skill Version(s):
+
+2.7.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

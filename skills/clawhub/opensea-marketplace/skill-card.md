@@ -1,49 +1,61 @@
-## Description: <br>
-Buy and sell NFTs on OpenSea's Seaport marketplace. Fulfill listings, accept offers, create new orders, cross-chain purchases, and sweep multiple listings. Requires wallet signing; for read-only queries use opensea-api instead. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buy and sell NFTs through OpenSea on EVM chains and Solana. Fulfill listings, accept or create offers, cancel orders, make cross-chain purchases, and sweep listings. Requires wallet signing; for read-only queries use opensea-api instead.
 
-## Publisher: <br>
-[opensea](https://clawhub.ai/user/opensea) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[opensea](https://clawhub.ai/user/opensea)
 
-## Use Case: <br>
-Developers and agents use this skill to prepare and execute OpenSea marketplace trade workflows, including NFT purchases, offer acceptance, order creation, cross-chain purchases, and listing sweeps. It is intended for workflows where an operator can supply OpenSea API access and review wallet-signing actions before submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide real wallet transactions and account mutations using OpenSea API access and wallet-signing authority. <br>
-Mitigation: Use a dedicated low-balance wallet, managed signing provider policies and allowlists, and review every transaction before signing. <br>
-Risk: API and wallet-auth credentials may be persisted locally for reuse. <br>
-Mitigation: Avoid raw private keys, keep credentials in controlled environment variables or managed providers, and delete or rotate cached API/auth credentials when they are no longer needed. <br>
-Risk: Marketplace fulfillment data and API responses can contain untrusted order, metadata, token, or transaction fields. <br>
-Mitigation: Verify the transaction recipient, value, calldata, order hash, chain, and order expiry before signing, and do not follow instructions embedded in response content. <br>
+## Use Case:
 
+External developers and engineers use this skill to prepare OpenSea marketplace actions for NFT buying, selling, offer creation, order cancellation, cross-chain fulfillment, and listing sweeps. It is intended for workflows where a human or managed wallet policy reviews and signs returned transaction data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/opensea/skills/opensea-marketplace) <br>
-- [OpenSea skill homepage](https://github.com/ProjectOpenSea/opensea-skill) <br>
-- [OpenSea marketplace sub-skill](opensea-marketplace/SKILL.md) <br>
-- [Marketplace API reference](opensea-marketplace/references/marketplace-api.md) <br>
-- [Seaport reference](opensea-marketplace/references/seaport.md) <br>
-- [Wallet setup sub-skill](opensea-wallet/SKILL.md) <br>
-- [OpenSea CLI](https://github.com/ProjectOpenSea/opensea-cli) <br>
-- [OpenSea developer documentation](https://docs.opensea.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, API call examples, and transaction-review instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce transaction calldata or ordered transaction steps that require human review and wallet signing before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.19.0 (source: server release metadata, package.json, CHANGELOG) <br>
+Risk: The skill can initiate wallet-backed marketplace actions such as listings, offers, cancellations, fulfillment, and cross-chain purchases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before any state-changing action and review the exact order, quote, transaction target, calldata, value, and chain before signing.
+
+Risk: A compromised or overfunded agent wallet could expose funds during trades or approvals.
+
+Mitigation: Use a managed wallet provider with spending caps and allowlists, keep only limited funds in the agent wallet, and avoid production raw private keys.
+
+Risk: API keys, wallet credentials, cached auth data, JWTs, PATs, and provider secrets are sensitive.
+
+Mitigation: Store credentials only through approved secret handling, avoid logging secrets, and rotate or revoke credentials when no longer needed.
+
+## Reference(s):
+
+- [Marketplace API Reference](opensea-marketplace/references/marketplace-api.md)
+- [Seaport Reference](opensea-marketplace/references/seaport.md)
+- [OpenSea Developer Docs](https://docs.opensea.io/)
+- [OpenSea CLI](https://github.com/ProjectOpenSea/opensea-cli)
+- [Skill Homepage](https://github.com/ProjectOpenSea/opensea-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON/API payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can include OpenSea API request guidance and transaction/action details that require separate wallet review, signing, and submission.]
+
+## Skill Version(s):
+
+2.21.1 (source: package.json and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

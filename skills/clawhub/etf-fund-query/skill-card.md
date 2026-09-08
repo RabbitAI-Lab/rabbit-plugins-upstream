@@ -1,45 +1,59 @@
-## Description: <br>
-Queries factual ETF information from 易方达指数直通车, including ETF basics, fees, holdings, historical dividends, returns, fund flows, leaderboards, and stock-to-ETF lookups; it does not provide investment advice or real-time market quotes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries exchange-traded ETF information and market data from Chinese natural-language requests, including ETF details, holdings, dividends, returns, fund flows, rankings, hot searches, and intraday quote fields.
 
-## Publisher: <br>
-[e-fintech](https://clawhub.ai/user/e-fintech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[e-fintech](https://clawhub.ai/user/e-fintech)
 
-## Use Case: <br>
-External users and agent developers use this skill to answer ETF information queries, compare ETF facts on a consistent data basis, inspect holdings and historical distributions, and explain available ETF metrics without giving investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer persistently stores the ETF API key in plaintext in the shell profile and local configuration file. <br>
-Mitigation: Use a limited-scope API key, avoid sharing the installed directory or shell profile, and remove persisted key entries when uninstalling. <br>
-Risk: The evidence reports an inconsistent boundary around real-time market-data support. <br>
-Mitigation: Treat real-time market data as limited or unavailable unless the installed skill and current API response clearly support the requested field, and keep user-facing answers to sourced facts. <br>
-Risk: ETF facts, comparisons, fund flows, heat lists, and short-term performance can be mistaken for investment advice. <br>
-Mitigation: Use the bundled final-answer guardrail and include the required disclaimer that outputs are AI-generated information only and not investment advice, forecasts, or trading decisions. <br>
+## Use Case:
 
+External users and agents use this skill to answer factual questions about listed ETFs, compare ETF characteristics, inspect holdings and returns, and retrieve live or recent ETF quote information. It is intended for information lookup and comparison, not account operations, trading instructions, investment advice, or return promises.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/etf-fund-query) <br>
-- [ETF query catalog](references/catalog-etf.md) <br>
-- [易方达指数直通车 API service](https://www.etf.com.cn/api/etf-api-service) <br>
-- [API key setup guide](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/readme.pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown text with tables or lists for ETF facts and comparisons] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final answers must include data dates or reporting periods, avoid investment advice, and pass the bundled answer guardrail before being shown to users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requires an Index Hub API key and stores it under the user's home directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on trusted systems, keep the credentials file private, and rotate or remove the key when access is no longer needed.
+
+Risk: ETF query parameters are sent to www.etf.com.cn for data lookup.
+
+Mitigation: Submit only the ETF, index, stock, topic, or date information needed for the query, and avoid including personal or account information.
+
+Risk: Financial lookup summaries could be mistaken for investment advice or return predictions.
+
+Mitigation: Keep answers factual, include data dates or quote times, preserve the standard disclaimer, and avoid recommendations, trade instructions, or promised outcomes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/etf-fund-query)
+- [Index Hub AI Skills help](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/help.pdf)
+- [ETF interface field reference](references/catalog-etf.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with concise tables or lists; setup guidance may include shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an Index Hub API key for live data lookup; final user-facing answers retain the provider disclaimer and avoid investment advice.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

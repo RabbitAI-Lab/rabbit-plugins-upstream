@@ -3,8 +3,10 @@
  * Translate text via the DeepL API (Free tier by default, Pro via DEEPL_API_HOST). Cross-platform (Node 18+).
  *
  * Reads the auth key from the DEEPL_API_KEY environment variable (never hardcode).
- * Prints ONLY the translated text on success; prints a line starting with
- * "ERROR:" and exits non-zero on failure. Newlines / paragraphs are preserved.
+ * Prints ONLY the translated text on stdout; on failure prints a line starting with
+ * "ERROR:" to stderr and exits non-zero. Newlines / paragraphs are preserved.
+ * Always terminates: the request is capped at 60s, so an endpoint that connects and
+ * then never answers fails loudly instead of hanging the caller forever.
  *
  * Usage:
  *   node translate.mjs --target ZH --text "Hello world"
@@ -19,7 +21,9 @@
 const ENDPOINT = `https://${process.env.DEEPL_API_HOST || "api-free.deepl.com"}/v2/translate`;
 
 function fail(msg) {
-  console.log("ERROR: " + msg);
+  // stderr, not stdout: stdout carries the translation and nothing else, so a caller doing
+  // `t=$(node translate.mjs ...)` cannot end up with "ERROR: ..." as the translated text.
+  console.error("ERROR: " + msg);
   process.exitCode = 1;
 }
 
@@ -54,8 +58,14 @@ async function main() {
       method: "POST",
       headers: { Authorization: "DeepL-Auth-Key " + key, "Content-Type": "application/json" },
       body: JSON.stringify(body),
+      // fetch has no default timeout: a connection that is accepted and then never answered
+      // (a throttled or blackholed endpoint, a captive portal, a stalled proxy) leaves this
+      // hanging forever with no output and no exit — the caller waits until it is killed.
+      signal: AbortSignal.timeout(60_000),
     });
   } catch (e) {
+    if (e.name === "TimeoutError")
+      return fail("DeepL did not respond within 60s. The endpoint may be unreachable or throttled from this network; check connectivity (and DEEPL_API_HOST if you are on Pro).");
     return fail("DeepL request failed: " + e.message);
   }
 
@@ -69,6 +79,11 @@ async function main() {
   try {
     data = await resp.json();
   } catch (e) {
+    // A body that starts and then stalls trips the same AbortSignal as a connection that
+    // never answers, but surfaces here rather than at the fetch. Name it for what it is
+    // instead of blaming DeepL's JSON.
+    if (e.name === "TimeoutError" || /aborted|timeout/i.test(e.message))
+      return fail("DeepL started replying but the response never finished within 60s. Treat it as a network problem, not a bad key or bad input.");
     return fail("Invalid JSON from DeepL: " + e.message);
   }
   let result = data && data.translations && data.translations[0] && data.translations[0].text;

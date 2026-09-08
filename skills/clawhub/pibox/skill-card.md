@@ -1,48 +1,62 @@
-## Description: <br>
-pibox lets agents and developers run pi-coding-agent in a Docker container through shell, REST, OpenAI-compatible chat, MCP, Telegram, or cron interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+pibox helps agents and developers operate pi-coding-agent through Docker-based shell, REST, OpenAI-compatible, MCP, Telegram, and cron interfaces.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and automation teams use pibox to expose pi-coding-agent as a containerized coding agent that can be driven from scripts, HTTP clients, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthenticated API or MCP surfaces can allow remote agent execution and workspace file access when bearer tokens are empty. <br>
-Mitigation: Set non-empty API and MCP bearer tokens, bind services to localhost, or place them behind an authenticating proxy. <br>
-Risk: Workspace mounts expose files to the coding agent and to network surfaces enabled by the deployment. <br>
-Mitigation: Mount only the workspace intended for agent access and avoid shared unauthenticated deployments. <br>
-Risk: Delete and cancel routes can remove files or interrupt runs without undo. <br>
-Mitigation: Treat delete and cancel actions as admin-only operations and confirm the specific target before use. <br>
+## Use Case:
 
+Developers and automation engineers use this skill to choose, configure, and call the appropriate pibox interface for scripted coding-agent runs, remote MCP access, OpenAI-compatible clients, Telegram workflows, or scheduled maintenance tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/pibox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [Setup reference](references/setup.md) <br>
-- [docker-pibox repository](https://github.com/psyb0t/docker-pibox) <br>
-- [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent) <br>
-- [docker-aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
-- [Model Context Protocol](https://modelcontextprotocol.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, JSON examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides setup and use of a high-power networked coding-agent surface; generated commands and configuration should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.15.3 (source: server release evidence) <br>
+Risk: A mutable third-party Docker image can change between installs while receiving credentials and writable workspace access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted publisher, pin the image by digest, and mount only the smallest workspace needed for the task.
+
+Risk: API and MCP services can be exposed without authentication when their bearer-token environment variables are unset.
+
+Mitigation: Set both API and MCP tokens, bind services to localhost, or place them behind an authenticated proxy before exposing them to a network.
+
+Risk: Delete, cancel, and scheduled cron behavior can remove or disrupt workspace state.
+
+Mitigation: Treat destructive and scheduled operations as admin-only, require explicit user confirmation for the exact target, and avoid bulk deletion patterns.
+
+## Reference(s):
+
+- [pibox ClawHub page](https://clawhub.ai/psyb0t/skills/pibox)
+- [Setup reference](references/setup.md)
+- [pibox homepage](https://github.com/psyb0t/docker-pibox)
+- [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent)
+- [docker-aicodebox](https://github.com/psyb0t/docker-aicodebox)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JSON, YAML, shell commands, and API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended for configuring or invoking a remote coding-agent container and may include endpoint, token, workspace, model, and scheduling details.]
+
+## Skill Version(s):
+
+0.15.13 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,55 @@
-## Description: <br>
-Use for Dataify Amazon product collection Builder tasks, including Amazon product scraping by ASIN, product URL and zip code, keyword, category URL, or Best Sellers URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Amazon product details by ASIN or URL, or collect standard product results by keyword, category URL, or Best Sellers URL. Do not use for reviews, seller profiles, global-marketplace collection, or keyword-and-domain product lists.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to create Dataify Amazon product collection jobs, confirm task parameters, submit the Builder request, and receive a task_id for later review in Dataify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Dataify API TOKEN and sends Amazon URLs, ASINs, keywords, zip codes, and task settings to Dataify. <br>
-Mitigation: Confirm parameters before submission, use DATAIFY_API_TOKEN only for intended Dataify jobs, and do not submit without user approval. <br>
+## Use Case:
 
+External developers and agents use this skill to submit Amazon product collection jobs through Dataify Builder by ASIN, product URL, keyword, category URL, or Best Sellers URL, then monitor and return final JSON results.
 
-## Reference(s): <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-amazon-product) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown parameter confirmations, shell command examples, and JSON task submission summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Submits task creation requests only; returns task_id and directs users to Dataify for results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: DATAIFY_API_TOKEN exposure could grant access to Dataify collection capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat DATAIFY_API_TOKEN as a secret; avoid pasting it into chat or printing it in logs.
+
+Risk: Broad, multi-page, or multi-input collections can consume credits or run longer than expected.
+
+Mitigation: Review collection scope before submission and confirm high-volume or credit-consuming requests before running.
+
+## Reference(s):
+
+- [Modes and Parameters](artifact/references/modes-and-parameters.md)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-amazon-product)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task or result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command if final-result monitoring times out; large result payloads may be summarized while preserving access to the raw result.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

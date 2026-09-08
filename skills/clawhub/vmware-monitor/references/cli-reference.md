@@ -107,6 +107,40 @@ Returns detailed VM information: CPU, memory, disks, NICs, guest OS, IP, VMware 
 
 `snapshot-list` lists existing snapshots with name and creation time. No create, revert, or delete operations exist. The same data is exposed via the MCP tool `vm_list_snapshots`.
 
+```bash
+vmware-monitor snapshots backup-window <vm> [--days 30] [--cycles]
+```
+
+Infers backup windows for one VM from its snapshot task history: image-level
+backup products snapshot the VM, copy the frozen disks, then delete the
+snapshot, and vCenter records both ends. Reports four hour statistics
+(backup active / snapshot present / total window / removal itself) plus
+creations that never got a matching removal.
+
+Two lines in the output change what the numbers mean, and both are printed
+rather than left to the reader: a note when vCenter could not be read at all
+(which is not "no backups"), and a note when part of the requested window has
+already aged out of task history (`task.maxAge`, 30 days by default — the
+option is not called `vpxd.task.maxAge`; that name raises `vim.fault.InvalidName`).
+Duplicate VM names are refused rather than resolved to one. The same data is
+exposed via the MCP tool `vm_backup_snapshot_history`.
+
+## vSphere 9.1 (read-only)
+
+```bash
+vmware-monitor memory tiering [--host <esxi>] [--limit <n>] [--target <name>]
+vmware-monitor patch compliance <cluster-moid> [--target <name>]
+vmware-monitor patch last-apply <cluster-moid> [--target <name>]
+vmware-monitor deployment-size [--target <name>]
+```
+
+- `memory tiering`: Per-host memory tiering (DRAM/NVMe tiers) and NVMe uplift ratio via pyVmomi `hardware.memoryTierInfo`. Requires ESXi/vCenter **8.0U3+**; on older targets the command fails with a teaching error naming the missing property. Same data as the MCP tool `host_memory_tiering`.
+- `patch compliance`: vLCM software (patch) compliance for one cluster over vSphere Automation REST. `<cluster-moid>` is the cluster **MoID** (e.g. `domain-c123`) — get it from `inventory clusters`, not the display name. When vCenter is mid-patch it answers 503 and the command prints a "state unavailable, retry shortly" line instead of crashing; `non-compliant` shows `?` when the host-status field is unknown (never a false 0). MCP tool: `cluster_patch_compliance`.
+- `patch last-apply`: Result (status + end time) of the last vLCM remediation on one cluster. `<cluster-moid>` as above. Reports the outcome only; it never runs a remediation. MCP tool: `cluster_last_apply_result`.
+- `deployment-size`: vCenter appliance deployment size class over REST (NEW in vSphere 9.1). MCP tool: `vcenter_deployment_size`.
+
+> These four commands resolve config **without opening a SOAP session** and only ever GET, so they still degrade gracefully when vCenter is mid-patch (answering 503). The three REST commands' endpoints are spec-verified, but their JSON field names are read defensively pending a live 9.1 vCenter replay — each result carries a `note` that self-labels the parse as best-effort.
+
 ## Scanning & Daemon
 
 ```bash

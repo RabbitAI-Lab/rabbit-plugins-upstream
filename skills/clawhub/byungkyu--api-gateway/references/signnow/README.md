@@ -16,71 +16,89 @@
 ### User
 
 ```bash
-GET /signnow/user
-GET /signnow/user/documents
+maton api '/signnow/user'
+maton api '/signnow/user/documents'
 ```
 
 ### Documents
 
 ```bash
-# Upload document (multipart form data)
-POST /signnow/document
+# Upload document: multipart needs a body assembled first; see the example below.
 
 # Get document
-GET /signnow/document/{document_id}
+maton api '/signnow/document/{document_id}'
 
 # Update document
-PUT /signnow/document/{document_id}
+maton api -X PUT '/signnow/document/{document_id}'
 
 # Download document
-GET /signnow/document/{document_id}/download?type=collapsed
+maton api '/signnow/document/{document_id}/download?type=collapsed'
 
 # Get document history
-GET /signnow/document/{document_id}/historyfull
+maton api '/signnow/document/{document_id}/historyfull'
 
 # Move document to folder
-POST /signnow/document/{document_id}/move
+maton api -X POST '/signnow/document/{document_id}/move'
 
 # Merge documents (returns PDF)
-POST /signnow/document/merge
+maton api -X POST '/signnow/document/merge'
 
 # Delete document
-DELETE /signnow/document/{document_id}
+maton api '/signnow/document/{document_id}' -X DELETE
+```
+
+Upload document:
+
+```bash
+# `maton api` sends a body verbatim but does not build a multipart envelope: assemble it
+# first, then hand the result to --input. Nothing here handles a credential — the CLI injects it.
+FILE=/path/to/document.pdf            # exactly the path the user gave, never a discovered one
+BOUNDARY="maton-$$"
+{
+  printf -- '--%s\r\nContent-Disposition: form-data; name="file"; filename="%s"\r\nContent-Type: application/pdf\r\n\r\n' "$BOUNDARY" "$(basename "$FILE")"
+  cat "$FILE"
+  printf -- '\r\n'
+  printf -- '--%s--\r\n' "$BOUNDARY"
+} > /tmp/signnow-upload.body
+
+maton api -X POST '/signnow/document' \
+  -H "Content-Type: multipart/form-data; boundary=$BOUNDARY" \
+  --input /tmp/signnow-upload.body
 ```
 
 ### Templates
 
 ```bash
 # Create template from document
-POST /signnow/template
+maton api -X POST '/signnow/template'
 
 # Create document from template
-POST /signnow/template/{template_id}/copy
+maton api -X POST '/signnow/template/{template_id}/copy'
 ```
 
 ### Invites
 
 ```bash
 # Send freeform invite
-POST /signnow/document/{document_id}/invite
+maton api -X POST '/signnow/document/{document_id}/invite'
 
 # Create signing link (requires document fields)
-POST /signnow/link
+maton api -X POST '/signnow/link'
 ```
 
 ### Folders
 
 ```bash
-GET /signnow/folder
-GET /signnow/folder/{folder_id}
+maton api '/signnow/folder'
+maton api '/signnow/folder/{folder_id}'
 ```
 
 ### Webhooks (Event Subscriptions)
 
 ```bash
-GET /signnow/event_subscription
-POST /signnow/event_subscription
-DELETE /signnow/event_subscription/{subscription_id}
+maton api '/signnow/event_subscription'
+maton api -X POST '/signnow/event_subscription'
+maton api '/signnow/event_subscription/{subscription_id}' -X DELETE
 ```
 
 ## Notes

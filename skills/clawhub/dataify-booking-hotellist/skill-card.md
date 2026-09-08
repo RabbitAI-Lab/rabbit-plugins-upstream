@@ -1,41 +1,49 @@
-## Description: <br>
-Collect Booking hotel information through Dataify Scraper API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured Booking.com hotel records from a known Booking hotel or listing URL.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to preview parameters, confirm required Booking URLs, and create Dataify collection tasks for Booking hotel listings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Dataify API token and may save DATAIFY_API_TOKEN in the local environment. <br>
-Mitigation: Confirm token handling before each run, never echo the token, and save it persistently only after explicit user consent. <br>
-Risk: The skill creates Booking hotel collection tasks through Dataify after parameter confirmation. <br>
-Mitigation: Review the Markdown confirmation table and verify all Booking URLs and task parameters before making the API call. <br>
+## Use Case:
 
+External users and agents use this skill to submit known Booking.com hotel or listing URLs to Dataify and return collected Booking hotel records. It is suited for hotel detail or listing extraction when the target Booking URL is already known.
 
-## Reference(s): <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-booking-hotellist) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown confirmation tables with inline shell commands and task status text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Booking URL and a Dataify API token; can submit one or more spider parameter sets after confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: User-supplied Booking.com URLs are sent to Dataify and collection tasks may consume Dataify credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set DATAIFY_API_TOKEN outside chat, review the target URL and collection scope before larger or multi-URL jobs, and resume existing task IDs instead of resubmitting paid tasks.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-booking-hotellist)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [JSON results or Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Booking.com URL and a Dataify API token; waits up to 600 seconds for final results by default.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

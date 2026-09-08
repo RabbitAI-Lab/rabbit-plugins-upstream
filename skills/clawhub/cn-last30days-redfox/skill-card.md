@@ -1,44 +1,61 @@
-## Description: <br>
-Searches recent discussions from Xiaohongshu, Douyin, and WeChat Official Accounts, then synthesizes cross-platform sentiment and trend reports for Chinese social media topics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Xiaohongshu, Douyin, and WeChat Official Accounts for recent discussions about a topic and helps an agent produce cross-platform social media research reports with optional JSON and HTML outputs.
 
-## Publisher: <br>
-[yuanyi-github](https://clawhub.ai/user/yuanyi-github) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yuanyi-github](https://clawhub.ai/user/yuanyi-github)
 
-## Use Case: <br>
-Content creators, brand operators, market researchers, and other external users use this skill to research Chinese social media topics, monitor sentiment, compare brands or products, and generate structured Markdown plus optional JSON/HTML reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Research topics and derived search terms may be sent to WebSearch and RedFox. <br>
-Mitigation: Avoid sensitive topics unless disclosure to those services is acceptable, and confirm the intended query before running broad research. <br>
-Risk: The bundled public API key uses shared public quota and may not provide user-level control. <br>
-Mitigation: Use a personal REDFOX_API_KEY or the --api-key option when quota, traceability, revocation, or access control matters. <br>
-Risk: JSON and HTML reports are saved as persistent local files. <br>
-Mitigation: Choose and review the output directory before use, and delete or protect reports that contain sensitive research topics or links. <br>
+## Use Case:
 
+External users, content creators, brand operators, and market researchers use this skill to research Chinese social media discussion, trends, and brand or product sentiment across Xiaohongshu, Douyin, and WeChat Official Accounts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yuanyi-github/cn-last30days-redfox) <br>
-- [Output rules and templates](references/output-rules.md) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, HTML, Shell commands, Configuration] <br>
-**Output Format:** [Markdown research report with cited links, plus optional JSON data files and interactive HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script writes persistent report files to the selected output directory and can regenerate HTML from prior JSON without making API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: Research topics and API credentials can be sent to RedFox and search providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated REDFOX_API_KEY, avoid unrelated X_API_KEY values in the environment, and do not submit confidential brand, product, or strategy terms.
+
+Risk: Generated HTML reports may contain dynamic data that is not fully escaped.
+
+Mitigation: Review generated HTML before sharing, and open reports only with explicit intent from trusted local output paths.
+
+Risk: The skill writes JSON and HTML reports to the local filesystem.
+
+Mitigation: Use a controlled output directory and inspect generated files before redistribution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yuanyi-github/skills/cn-last30days-redfox)
+- [Publisher profile](https://clawhub.ai/user/yuanyi-github)
+- [Output rules and templates](artifact/references/output-rules.md)
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub)
+- [RedFox service](https://redfox.hk?source=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown research report with inline links, plus JSON summaries and optional HTML report files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a REDFOX_API_KEY when available, writes reports to a local output directory, and may include platform engagement metrics and source links.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter declares 2.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

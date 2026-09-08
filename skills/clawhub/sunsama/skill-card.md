@@ -1,44 +1,62 @@
-## Description: <br>
-Sunsama MCP integration with managed authentication for managing daily tasks, calendar events, backlog, objectives, time tracking, and linked email threads from connected Gmail or Outlook accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sunsama MCP integration with managed authentication for managing daily tasks, calendar events, backlog, objectives, time tracking, and email threads from connected Gmail or Outlook accounts.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Sunsama planning workflows, including tasks, backlog items, calendar scheduling, objectives, timers, and connected email threads through Maton-managed authentication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and OAuth connection to mediate access to Sunsama and linked Gmail or Outlook email threads. <br>
-Mitigation: Install only when Maton-mediated Sunsama and email access is intended, keep MATON_API_KEY private, and rotate or revoke the key if exposure is suspected. <br>
-Risk: Write, delete, meeting, calendar, recurring-task, and email-thread actions can modify or remove user data. <br>
-Mitigation: Review the target resource and intended effect before approving each write, delete, meeting, calendar, recurring-task, or email operation. <br>
+## Use Case:
 
+Employees and external users use this skill to let an agent help plan and update Sunsama work items, calendars, timers, weekly objectives, backlog entries, and connected email-thread follow-ups. It is intended for authenticated Sunsama workflows mediated through Maton.
 
-## Reference(s): <br>
-- [Sunsama ClawHub release](https://clawhub.ai/byungkyu/sunsama) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Sunsama](https://sunsama.com) <br>
-- [Maton community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON schemas and example Python, JavaScript, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Sunsama MCP connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: Maton mediates access to the user's Sunsama account and connected calendar or email data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this mediation is acceptable, prefer OAuth over API keys, and use the intended Maton profile and Sunsama connection.
+
+Risk: Write and deletion operations can change or remove Sunsama tasks, calendar events, recurring task instances, and email threads.
+
+Mitigation: Confirm every write or deletion with the user before execution, including the target resource and intended effect.
+
+Risk: Multiple Maton profiles or Sunsama connections can route actions to the wrong account.
+
+Mitigation: Pin the intended Maton profile and Sunsama connection whenever more than one account or connection is available.
+
+## Reference(s):
+
+- [Sunsama](https://sunsama.com)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/sunsama)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI commands, Sunsama MCP endpoint paths, and JSON payloads for task, calendar, backlog, objective, timer, preference, recurring task, and email-thread operations.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

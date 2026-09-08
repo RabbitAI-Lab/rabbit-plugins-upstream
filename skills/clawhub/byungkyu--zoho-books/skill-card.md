@@ -1,48 +1,66 @@
-## Description: <br>
-Zoho Books API integration with managed OAuth for reading, creating, updating, and deleting invoices, contacts, bills, expenses, sales orders, purchase orders, and other accounting records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Books API integration with managed OAuth for managing invoices, contacts, bills, expenses, and other accounting data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Zoho Books through Maton's managed OAuth proxy and manage contacts, invoices, bills, expenses, orders, and other accounting records. It is intended for workflows that need authenticated Zoho Books API calls with explicit approval before write or delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete accounting records in Zoho Books. <br>
-Mitigation: Require explicit user approval for each write or delete action after confirming the target account, resource ID, and business effect. <br>
-Risk: MATON_API_KEY grants access through Maton's OAuth proxy. <br>
-Mitigation: Keep the key secret, avoid logging it, and revoke unused or compromised credentials promptly. <br>
-Risk: Requests may affect the wrong Zoho Books account when multiple connections exist. <br>
-Mitigation: Use the Maton-Connection header to select the intended connection and verify it before acting. <br>
+## Use Case:
 
+Developers and operators use this skill to help an agent read, create, update, and delete Zoho Books accounting records through the Maton gateway. It is intended for workflows involving contacts, invoices, bills, expenses, sales orders, purchase orders, and related financial data.
 
-## Reference(s): <br>
-- [Zoho Books API v3 Introduction](https://www.zoho.com/books/api/v3/introduction/) <br>
-- [Zoho Books Invoices API](https://www.zoho.com/books/api/v3/invoices/) <br>
-- [Zoho Books Contacts API](https://www.zoho.com/books/api/v3/contacts/) <br>
-- [Zoho Books Bills API](https://www.zoho.com/books/api/v3/bills/) <br>
-- [Zoho Books Expenses API](https://www.zoho.com/books/api/v3/expenses/) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-books) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API endpoints, Python and JavaScript examples, shell commands, and JSON response examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before create, update, or delete operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can access and modify Zoho Books accounting records, including invoices, contacts, bills, and expenses.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested OAuth scopes, prefer read-only access when possible, and require clear user confirmation before creating, editing, emailing, voiding, or deleting financial records.
+
+Risk: Financial writes may affect the wrong account or record if a default connection or profile is ambiguous.
+
+Mitigation: Verify account context and resource identifiers before write operations, and specify the intended connection or profile when more than one is available.
+
+Risk: Credentials or provider-issued tokens could be exposed if printed, logged, saved, or passed through shell commands.
+
+Mitigation: Use managed OAuth or the operating system credential store, avoid exposing long-lived API keys, and never print, persist, or transmit credential values outside the intended gateway.
+
+## Reference(s):
+
+- [ClawHub Zoho Books Skill](https://clawhub.ai/byungkyu/skills/zoho-books)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Zoho Books API v3 Introduction](https://www.zoho.com/books/api/v3/introduction/)
+- [Zoho Books Invoices API](https://www.zoho.com/books/api/v3/invoices/)
+- [Zoho Books Contacts API](https://www.zoho.com/books/api/v3/contacts/)
+- [Zoho Books Bills API](https://www.zoho.com/books/api/v3/bills/)
+- [Zoho Books Expenses API](https://www.zoho.com/books/api/v3/expenses/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose API calls that require network access, OAuth authorization, and user confirmation for writes.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

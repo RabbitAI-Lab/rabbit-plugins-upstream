@@ -1,6 +1,6 @@
 {
   "name": "theta-edgecloud-skill",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "private": true,
   "description": "Theta EdgeCloud runtime for OpenClaw cost optimization across AI, media, inference, video, and GPU workloads",
   "type": "module",
@@ -17,5 +17,6 @@
   "devDependencies": {
     "typescript": "^5.7.3",
     "@types/node": "^22.10.2"
-  }
+  },
+  "license": "MIT-0"
 }

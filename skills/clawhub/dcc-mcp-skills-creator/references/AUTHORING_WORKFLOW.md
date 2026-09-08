@@ -35,6 +35,29 @@ When modernizing a skill, migrate top-level `dcc`, `version`, `tags`, `tools`,
 under `metadata.dcc-mcp.*`, then run creator validation against the actual
 installable skill directory.
 
+Set `metadata.dcc-mcp.dcc` to the concrete host that owns the implementation.
+Use `dcc: any` only for genuinely host-neutral tools whose scripts and runtime
+dependencies work in every adapter. A concrete-host tool with the same loaded
+tool name overrides the `any` entry for that host. This target is independent
+of `tools.yaml` `affinity: any`, which only controls execution thread affinity.
+
+Declare the canonical public owner for machine-readable feedback routing:
+
+```yaml
+metadata:
+  dcc-mcp:
+    links:
+      repo: https://github.com/dcc-mcp/dcc-mcp-godot
+      issues: https://github.com/dcc-mcp/dcc-mcp-godot/issues
+```
+
+Use a canonical public HTTPS GitHub repository URL and its matching issues URL.
+Marketplace publication carries `links.issues` into the catalog.
+When a runtime captures a Skill-phase Finding, copy the Skill name and both
+link values into bounded `evidence.routing` with `source: skill_metadata`.
+Never invent a fallback owner: missing or conflicting values must fail closed.
+Routing remains read-only and does not authorize external issue creation.
+
 ### Dependency-Aware Skills
 
 Use machine-readable dependencies whenever one skill must run after another.
@@ -114,7 +137,11 @@ host process.
 Import shared helper APIs from `dcc_mcp_core.skills_helper` before adding small
 dependencies or local utility modules. That namespace is the preferred path for
 JSON/YAML codecs, bounded HTTP requests, safe file/path helpers, validation,
-result envelopes, argument normalization, and cancellation checks. Keep
+argument normalization, and cancellation checks. Use `skill_success` /
+`skill_error` from this preferred namespace for result envelopes; the lazy
+exports delegate to the canonical implementation in `dcc_mcp_core.skill`.
+Failures carry a string error code and structured details under namespaced
+`_meta`. Keep
 `requests`, PyYAML, custom HTTP/file helpers, or SDK-specific libraries only
 when they provide behavior `skills_helper` intentionally does not cover, such
 as sessions, streaming, multipart upload, custom retry/auth flows, or rich
@@ -139,3 +166,19 @@ from the script's `if __name__ == "__main__"` block.
 import avoidable dependencies covered by `skills_helper`. New generated and
 reference skills should ship without those warnings; legacy production skills
 can migrate one helper category at a time while their existing tests stay green.
+
+For an async skill, keep `agents/openai.yaml` aligned with the tool contract:
+tell the Agent to start the operation once, follow typed job progress to a
+terminal state, and query the existing job id after timeout. Do not prompt it to
+relaunch work, scan output directories repeatedly, or schedule polling by default.
+
+## 5. Package Related Skills
+
+Keep `SKILL.md` as the runtime contract. When related Skills must install,
+update, and uninstall together, package them as an Agent Plugin 1.0 with root
+`plugin.json` and immediate `skills/<name>/SKILL.md` children. Use marketplace
+`package.format: agent-plugin` and list the component names in
+`package.skills`. For an existing multi-root layout, use `skill-bundle`.
+
+Do not bundle Skills that have independent versions, credentials, supported
+DCCs, or user intent. A shared repository is insufficient evidence.

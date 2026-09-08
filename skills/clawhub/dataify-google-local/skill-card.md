@@ -1,42 +1,54 @@
-## Description: <br>
-When the user requests "call Google Local" or "local search/nearby search/place search", or explicitly mentions the local search field, the dataify-google-local skill is triggered. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Local for nearby businesses and local results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and agents use this skill to convert Google Local or nearby-place search requests into confirmed Dataify Scraper API calls. It helps preview request parameters, collect missing required input, and return the API response body after explicit user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Google Local search parameters to Dataify and requires an API token. <br>
-Mitigation: Provide the token only through the documented token flow or DATAIFY_API_TOKEN, and review the parameter preview before confirming any call. <br>
-Risk: Generic local-search wording may trigger the skill for broad nearby-place requests. <br>
-Mitigation: Confirm that Dataify Google Local is the intended provider before approving the API call. <br>
+## Use Case:
 
+External users and developers use this skill to run user-directed Google Local searches for nearby businesses, local pack results, and location-scoped business discovery through Dataify.
 
-## Reference(s): <br>
-- [Dataify Google Local API](artifact/references/google_local_api.md) <br>
-- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-local) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown parameter previews, shell command examples, and raw API response bodies.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user confirmation and a Dataify API token before sending requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The artifact states that the skill should not be used for known Place ID or detailed map records, while the implementation accepts Google CID/place-record lookup parameters.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy with policy or review controls that restrict use to broad, user-directed Google Local search queries and block known place/CID lookup requests unless explicitly approved.
+
+Risk: Live requests require a Dataify API token and may consume account credits.
+
+Mitigation: Use dry-run or parameter preview modes before execution when scope or cost is unclear, and rely on environment-based token configuration without exposing the token in chat or logs.
+
+## Reference(s):
+
+- [Dataify Google Local API](references/google_local_api.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-local)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown summaries, shell command examples, parameter previews, or raw JSON/HTML when explicitly requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API token for live API calls; dry-run and parameter preview modes can run without submitting a request.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,8 +1,11 @@
 ---
 name: qa-bug-lifecycle
-version: 1.6.0
+slug: qa-bug-lifecycle
+displayName: 缺陷生命周期
+version: 1.7.5
 description: >-
   当团队缺陷管理混乱、Bug 没有统一的分级标准、或者领导要看缺陷趋势数据时使用此技能。覆盖缺陷从提交到关闭的完整生命周期，包括严重度/优先级分级规范、各状态流转条件和时效要求、缺陷度量和趋势分析。如果缺陷管理不规范，复盘数据就是垃圾——"严重Bug数量下降"可能是因为大家不再标记严重了。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"缺陷管理"、"Bug管理"、"缺陷流程"、"Bug状态"、"严重度"、"缺陷趋势"、需要管理缺陷、分析缺陷趋势、团队需要规范缺陷管理流程时
 allowed-tools: Read Grep Glob
@@ -27,9 +30,12 @@ input_format:
       description: 修复验证结果
 output_format:
   traceability:
-    - 每个缺陷沿用原始ID（BUG-XXXX）
-    - - 关联生命周期状态ID
+    - 每个缺陷沿用原始ID（TC_{缺陷模块缩写}_{功能缩写}_{序号}，如 TC_BUG_LOGIN_001；缺陷追溯保留 BUG 前缀）
+    - 关联生命周期状态ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - lifecycle_state: 当前生命周期状态
     - severity_level: 严重度分级
     - priority_level: 优先级分级
@@ -45,6 +51,8 @@ depth_requirement_quantification:
   reference_value: "根据缺陷数量调整管理深度：简单×1/中等×2/复杂×3"
   minimum: "至少覆盖严重度分级、状态流转、时效要求3个维度"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及订单号、支付金额、截图、身份证、手机号等敏感数据。
 > 实际使用时请勿粘贴真实生产数据、客户信息或财务凭证；测试前应脱敏/掩码处理。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

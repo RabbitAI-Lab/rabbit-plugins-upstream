@@ -1,8 +1,11 @@
 ---
 name: qa-mobile-testing
-version: 1.6.0
+slug: qa-mobile-testing
+displayName: 移动端测试
+version: 1.7.5
 description: >-
   当需要测试 iOS/Android 原生 App、H5 页面或小程序的移动端专项场景时使用此技能。移动端的坑主要不在功能逻辑上——中断（电话/通知/低电量）、弱网/断网/网络切换、前后台切换、系统权限管理、多机型适配和各种系统版本兼容才是重灾区。不要只测功能流程，移动端的 Bug 有一半以上是中断和兼容性相关的。输出按中断/网络/权限/兼容/性能分类的测试要点清单。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"移动测试"、"App测试"、"Android测试"、"iOS测试"、"手机上测"、"H5测试"、"小程序测试"、"移动端中断测试"、"移动端兼容测试"、需要测试移动应用、移动端发版前全面测试时
 allowed-tools: Read Grep Glob Bash
@@ -14,7 +17,6 @@ related_skills:
     - qa-ci-cd-testing           # 输出：移动端测试用于CI/CD
     - qa-release-risk-governance # 输出：测试结果用于发布评估
 references:
-  - references/platform-desktop.md
   - references/platform-mini-program.md
   - references/platform-mobile-app.md
   - references/platform-mobile-web.md
@@ -33,9 +35,12 @@ input_format:
       description: 测试设备和OS版本列表
 output_format:
   traceability:
-    - 每个移动端测试用例带唯一ID（TC-XXXX）
-    - - 关联平台和需求ID
+    - 每个移动端测试用例带唯一ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
+    - 关联平台和需求ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - mobile_test_plan: 移动端测试方案
     - device_coverage: 设备覆盖矩阵
     - platform_specific: 平台特性测试清单
@@ -48,6 +53,8 @@ depth_requirement_quantification:
   reference_value: "根据平台复杂度调整测试深度：简单×1/中等×2/复杂×3"
   minimum: "至少覆盖中断、网络、权限、兼容4个移动端维度"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 移动端测试专项
 
 ## 核心原则
@@ -77,8 +84,8 @@ depth_requirement_quantification:
 > - [`references/platform-mobile-app.md`](references/platform-mobile-app.md) — iOS/Android 原生 App 专项
 > - [`references/platform-mobile-web.md`](references/platform-mobile-web.md) — H5/移动 Web 专项
 > - [`references/platform-mini-program.md`](references/platform-mini-program.md) — 小程序专项
-> - [`references/platform-desktop.md`](references/platform-desktop.md) — 桌面端（非移动）专项
-> - [`references/platform-pc-web.md`](references/platform-pc-web.md) — PC Web 专项
+>
+> 桌面端 / PC Web 专项不属于本技能范围，如需测试桌面端或 PC Web 请使用通用测试策略技能。
 
 ## 移动端测试检查清单
 

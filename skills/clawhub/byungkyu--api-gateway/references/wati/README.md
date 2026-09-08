@@ -20,71 +20,84 @@ Both v1 and v2 endpoints are supported. v2 provides enhanced response formats wi
 
 #### Get Contacts
 ```bash
-GET /wati/api/v1/getContacts?pageSize=10&pageNumber=1
+maton api '/wati/api/v1/getContacts?pageSize=10&pageNumber=1'
 ```
 
 Optional filters: `name`, `attribute`, `createdDate`
 
 #### Add Contact
 ```bash
-POST /wati/api/v1/addContact/{whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/addContact/{whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "name": "John Doe",
   "customParams": [
     {"name": "member", "value": "VIP"}
   ]
 }
+EOF
 ```
 
 #### Update Contact Attributes
 ```bash
-POST /wati/api/v1/updateContactAttributes/{whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/updateContactAttributes/{whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "customParams": [
     {"name": "member", "value": "VIP"}
   ]
 }
+EOF
 ```
 
 ### Messages
 
 #### Get Messages
 ```bash
-GET /wati/api/v1/getMessages/{whatsappNumber}?pageSize=10&pageNumber=1
+maton api '/wati/api/v1/getMessages/{whatsappNumber}?pageSize=10&pageNumber=1'
 ```
 
 #### Send Session Message
 ```bash
-POST /wati/api/v1/sendSessionMessage/{whatsappNumber}
-Content-Type: application/x-www-form-urlencoded
-
+maton api -X POST '/wati/api/v1/sendSessionMessage/{whatsappNumber}' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  --input - <<'EOF'
 messageText=Hello%20World
+EOF
 ```
 
 #### Send Session File
 ```bash
-POST /wati/api/v1/sendSessionFile/{whatsappNumber}
-Content-Type: multipart/form-data
+# `maton api` sends a body verbatim but does not build a multipart envelope: assemble it
+# first, then hand the result to --input. Nothing here handles a credential — the CLI injects it.
+FILE=/path/to/document.pdf            # exactly the path the user gave, never a discovered one
+BOUNDARY="maton-$$"
+{
+  printf -- '--%s\r\nContent-Disposition: form-data; name="file"; filename="%s"\r\nContent-Type: application/octet-stream\r\n\r\n' "$BOUNDARY" "$(basename "$FILE")"
+  cat "$FILE"
+  printf -- '\r\n'
+  printf -- '--%s--\r\n' "$BOUNDARY"
+} > /tmp/wati-upload.body
 
-file=@document.pdf
+maton api -X POST '/wati/api/v1/sendSessionFile/{whatsappNumber}' \
+  -H "Content-Type: multipart/form-data; boundary=$BOUNDARY" \
+  --input /tmp/wati-upload.body
 ```
 
 ### Message Templates
 
 #### Get Message Templates
 ```bash
-GET /wati/api/v1/getMessageTemplates?pageSize=10&pageNumber=1
+maton api '/wati/api/v1/getMessageTemplates?pageSize=10&pageNumber=1'
 ```
 
 #### Send Template Message
 ```bash
-POST /wati/api/v1/sendTemplateMessage?whatsappNumber={whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/sendTemplateMessage?whatsappNumber={whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "template_name": "order_update",
   "broadcast_name": "order_update",
@@ -93,13 +106,14 @@ Content-Type: application/json
     {"name": "ordernumber", "value": "12345"}
   ]
 }
+EOF
 ```
 
 #### Send Template Messages (Bulk)
 ```bash
-POST /wati/api/v1/sendTemplateMessages
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/sendTemplateMessages' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "template_name": "order_update",
   "broadcast_name": "order_update",
@@ -110,6 +124,7 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 ### Message Templates (v2)
@@ -118,21 +133,22 @@ v2 endpoints return `localMessageId` for tracking.
 
 #### Send Template Message (v2)
 ```bash
-POST /wati/api/v2/sendTemplateMessage?whatsappNumber={whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v2/sendTemplateMessage?whatsappNumber={whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "template_name": "order_update",
   "broadcast_name": "order_update",
   "parameters": [{"name": "name", "value": "John"}]
 }
+EOF
 ```
 
 #### Send Template Messages (v2 - Bulk)
 ```bash
-POST /wati/api/v2/sendTemplateMessages
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v2/sendTemplateMessages' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "template_name": "order_update",
   "broadcast_name": "order_update",
@@ -143,28 +159,30 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 ### Interactive Messages
 
 #### Send Interactive Buttons Message
 ```bash
-POST /wati/api/v1/sendInteractiveButtonsMessage?whatsappNumber={whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/sendInteractiveButtonsMessage?whatsappNumber={whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "header": {"type": "text", "text": "Header"},
   "body": "Message body",
   "footer": "Footer text",
   "buttons": [{"text": "Button 1"}]
 }
+EOF
 ```
 
 #### Send Interactive List Message
 ```bash
-POST /wati/api/v1/sendInteractiveListMessage?whatsappNumber={whatsappNumber}
-Content-Type: application/json
-
+maton api -X POST '/wati/api/v1/sendInteractiveListMessage?whatsappNumber={whatsappNumber}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "header": "Header",
   "body": "Message body",
@@ -177,20 +195,21 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 ### Operators
 
 #### Assign Operator
 ```bash
-POST /wati/api/v1/assignOperator?email=agent@example.com&whatsappNumber={whatsappNumber}
+maton api -X POST '/wati/api/v1/assignOperator?email=agent@example.com&whatsappNumber={whatsappNumber}'
 ```
 
 ### Media
 
 #### Get Media
 ```bash
-GET /wati/api/v1/getMedia?fileName={fileName}
+maton api '/wati/api/v1/getMedia?fileName={fileName}'
 ```
 
 ## Pagination
@@ -198,7 +217,7 @@ GET /wati/api/v1/getMedia?fileName={fileName}
 Uses page-based pagination:
 
 ```bash
-GET /wati/api/v1/getContacts?pageSize=50&pageNumber=1
+maton api '/wati/api/v1/getContacts?pageSize=50&pageNumber=1'
 ```
 
 **Parameters:**

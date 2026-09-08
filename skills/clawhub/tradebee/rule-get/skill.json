@@ -1,6 +1,6 @@
 {
   "name": "rule-get",
-  "description": "Read the tenant-scoped HTML fragment generation rules for one exact language and one exact scene from the Tradebee Website Builder Open API. Use this before generating `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.",
+  "description": "Read the tenant-scoped HTML fragment generation rules for one exact language and one exact scene from the Tradebee Website Builder Open API. Use this before generating `navigation.content`, `news.description`, `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`.",
   "version": "1.0.0",
   "input": {
     "type": "object",
@@ -12,6 +12,8 @@
       "scene": {
         "type": "string",
         "enum": [
+          "navigation.content",
+          "news.description",
           "blog.description",
           "faq.answer",
           "products.description",

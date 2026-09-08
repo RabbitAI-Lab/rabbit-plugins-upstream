@@ -1,44 +1,59 @@
-## Description: <br>
-Helps AI-agent users and skill authors build or adapt multi-search-engine-style workflows by clarifying requirements, producing practical artifacts, and checking results against success criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agent users and skill authors create, repair, harden, and validate Multi Search Engine-style productivity workflows using repeatable local-friendly plans, checklists, analysis, code changes, or configuration guidance.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-External AI-agent users, skill authors, maintainers, and teams use this skill to turn multi-search-engine workflow needs into local-friendly plans, checklists, analyses, code changes, or implementation support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation terms may cause the skill to be selected for ordinary search, engine, integration, or bug-fix requests that are not really about multi-search-engine workflows. <br>
-Mitigation: Prefer explicit invocation or narrow the trigger terms when maintaining the skill. <br>
+## Use Case:
 
+Developers, skill authors, maintainers, and AI-agent users use this skill to turn validated demand for multi-search workflows into concrete plans, reusable checklists, implementation help, and validation notes.
 
-## Reference(s): <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [Work Productivity Multi Search Workflow Helper on ClawHub](https://clawhub.ai/kyro-ma/skills/work-productivity-multi-search-workflow-helper) <br>
-- [Popular Clawhub skill demand: Multi Search Engine](https://clawhub.ai/skills/multi-search-engine) <br>
-- [Popular Clawhub skill demand: Agent Browser](https://clawhub.ai/skills/agent-browser-clawdbot) <br>
-- [Popular Clawhub skill demand: Tavily Search](https://clawhub.ai/skills/openclaw-tavily-search) <br>
-- [Apply startup behavior setting on launch](https://github.com/lolren/stepper-browser/issues/22) <br>
-- [Add ConceptDiffTool for 85% Token Reduction on Web Scrapes](https://github.com/huggingface/smolagents/issues/2571) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with optional code blocks, command snippets, checklists, and verification notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only workflow helper; no executable code or credential handling is included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.120312 (source: server release evidence) <br>
+Risk: Activation keywords are broad, so implicit invocation may route ordinary search or workflow requests to this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Narrow activation keywords or review routing behavior before enabling implicit invocation in shared agent environments.
+
+Risk: The skill can produce workflow, setup, safety, or reliability guidance that may be incomplete for a user's specific environment.
+
+Mitigation: Review outputs against the stated constraints, available inputs, and success criteria before applying changes.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [ClawHub Skill Page](https://clawhub.ai/kyro-ma/skills/work-productivity-multi-search-workflow-helper)
+- [Popular ClawHub Skill Demand: Multi Search Engine](https://clawhub.ai/skills/multi-search-engine)
+- [Popular ClawHub Skill Demand: Agent Browser](https://clawhub.ai/skills/agent-browser-clawdbot)
+- [Popular ClawHub Skill Demand: Tavily Search](https://clawhub.ai/skills/openclaw-tavily-search)
+- [SegmentFault JavaScript Topic](https://segmentfault.com/t/javascript)
+- [SegmentFault TypeScript Topic](https://segmentfault.com/t/typescript)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with optional code blocks, shell commands, configuration snippets, checklists, and validation notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only helper; outputs should be checked against the user's stated constraints and success criteria.]
+
+## Skill Version(s):
+
+0.20260908.51704 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

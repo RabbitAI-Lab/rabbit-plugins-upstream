@@ -1,44 +1,61 @@
-## Description: <br>
-Monitors LLM behavior over time by capturing baselines, running behavioral tests, detecting output drift, and sending alerts when regressions are found. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors LLM behavior over time by capturing baselines, running scheduled behavioral checks, tracking drift trends, and sending configured alerts when outputs change unexpectedly.
 
-## Publisher: <br>
-[swanand33](https://clawhub.ai/user/swanand33) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[swanand33](https://clawhub.ai/user/swanand33)
 
-## Use Case: <br>
-Developers and engineers use this skill to set up scheduled behavioral regression tests for LLM applications, capture expected-output baselines, and receive alerts when prompts or models drift unexpectedly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys, prompts, LLM outputs, reports, and alerts may contain sensitive information. <br>
-Mitigation: Use least-privilege provider keys, keep .env private and out of version control, avoid unapproved sensitive prompts, and send alerts only to private Slack or WhatsApp destinations. <br>
-Risk: Generated baseline, report, and alert log files can expose model behavior or user data if committed. <br>
-Mitigation: Add .llm_behave_baselines/, monitor_report.json, and monitor_alerts.log to .gitignore before running the monitoring scripts. <br>
-Risk: Monitoring scripts call configured LLM providers and may send prompt content to third-party or custom endpoints. <br>
-Mitigation: Confirm the selected provider is approved for the data being tested and prefer a trusted project environment or virtual environment for installation and execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to set up behavioral regression monitoring for LLM applications, capture expected baselines, run scheduled checks, and receive alerts when outputs drift or assertions fail.
 
-## Reference(s): <br>
-- [Providers setup guide](references/providers.md) <br>
-- [Test suite format](references/test-suite-format.md) <br>
-- [Ollama](https://ollama.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with YAML configuration examples, shell commands, and JSON monitoring reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can generate baseline files, monitor_report.json, and monitor_alerts.log when its helper scripts are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: LLM prompts, outputs, baselines, reports, trend logs, and alert logs may contain sensitive application or customer information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive test prompts and outputs where possible, add generated monitoring files to .gitignore, and install the skill only in projects where local storage of these artifacts is acceptable.
+
+Risk: Failure summaries can be sent to configured WhatsApp, Slack, Discord, or email destinations.
+
+Mitigation: Configure alert channels only for approved recipients and avoid including secrets or sensitive customer data in monitored prompts and outputs.
+
+Risk: Unpinned Python dependencies can change behavior across installations.
+
+Mitigation: Pin dependency versions before production use and review dependency updates before deployment.
+
+## Reference(s):
+
+- [LLM Regression Monitor Skill Page](https://clawhub.ai/swanand33/skills/llm-regression-monitor)
+- [swanand33 Publisher Profile](https://clawhub.ai/user/swanand33)
+- [Providers Setup Guide](references/providers.md)
+- [test_suite.yaml Field Reference](references/test-suite-format.md)
+- [Ollama](https://ollama.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSON, Text]
+
+**Output Format:** [Markdown guidance with YAML examples, shell commands, generated JSON reports, JSONL trend logs, and text alert summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates local baseline, report, trend, warning, and alert log files when the bundled scripts are run.]
+
+## Skill Version(s):
+
+1.1.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

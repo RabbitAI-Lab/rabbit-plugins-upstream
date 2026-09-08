@@ -1,41 +1,54 @@
-## Description: <br>
-Transforms vague prompts into precise, structured AI instructions for prompt refinement, prompt engineering, system prompts, and more effective AI instructions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms vague prompts into precise, structured AI instructions for prompt refinement, prompt engineering, and system prompt writing.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers, prompt engineers, and agent builders use this skill to turn vague requests into precise markdown prompts, including system prompts and task instructions, while asking for clarification when intent is unclear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompt content may include secrets, private data, or other sensitive information. <br>
-Mitigation: Avoid putting secrets or private data into prompts submitted for refinement, and review the refined prompt before reuse. <br>
-Risk: The optional save step can store refined prompt content in the workspace. <br>
-Mitigation: Approve saving only when workspace persistence is intended; otherwise use the refined prompt without writing it to .ai/PROMPT.md. <br>
-Risk: Refining harmful or illegal requests could make unsafe instructions more actionable. <br>
-Mitigation: Do not refine prompts for harmful or illegal tasks, and ask for clarification when the original intent is unclear. <br>
+## Use Case:
 
+Developers and agent builders use this skill to turn vague prompt requests into precise, structured AI instructions. It is suited for refining prompts, writing system prompts, and validating that a prompt states task, constraints, context, and output format clearly.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prompt text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs only the refined prompt unless the user explicitly asks for explanation; may offer to append the result to .ai/PROMPT.md after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.5 (source: server release evidence) <br>
+Risk: The skill can offer to save refined prompts locally, which could persist sensitive or incorrect instructions if approved without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before writing and review the refined prompt before saving.
+
+Risk: Prompt refinement can accidentally change user intent by adding unsupported constraints.
+
+Mitigation: Use only information present in the original prompt or conversation context and ask for clarification when critical information is missing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-refine-prompt)
+- [Skill specification](artifact/SPEC.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown refined prompt, with an optional confirmation step before saving locally]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Refined output targets 0.75x-1.5x the original prompt unless structural changes justify otherwise; local persistence requires user confirmation.]
+
+## Skill Version(s):
+
+4.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

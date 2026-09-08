@@ -1,0 +1,100 @@
+name: pro-docking-full
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+channel_priority: strict
+dependencies:
+  # language/runtime
+  - python=3.11
+  - pip
+  - ipykernel
+  - jupyterlab
+
+  # scientific base
+  - numpy
+  - scipy
+  - pandas
+  - pyarrow
+  - scikit-learn
+  - statsmodels
+  - matplotlib
+  - seaborn
+  - plotly
+  - tqdm
+  - pyyaml
+  - joblib
+  - networkx
+  - requests
+  - beautifulsoup4
+
+  # cheminformatics / ligand preparation
+  - rdkit
+  - openbabel
+  - dimorphite-dl
+  - molvs
+  - datamol
+  - mordredcommunity
+  - spyrmsd
+  - selfies
+  - mols2grid
+  - py3dmol
+
+  # receptor / structure preparation and analysis
+  - biopython
+  - gemmi
+  - pdbfixer
+  - pdb-tools
+  - freesasa
+  - propka
+  - pdb2pqr
+  - mdtraj
+  - mdanalysis
+  - nglview
+
+  # docking and virtual screening
+  - autodock-vina
+  - smina
+  - meeko
+  - fpocket
+
+  # molecular simulation / rescoring foundation
+  - openmm
+  - openmmforcefields
+  - openff-toolkit
+  - ambertools
+  - gromacs
+  - parmed
+  - openff-interchange
+
+  # public bio/chem data APIs
+  - chembl_webresource_client
+  - pubchempy
+
+  # workflow / scaling
+  - dask
+  - distributed
+  - snakemake-minimal
+  - parallel
+
+  # pip-only or more reliable via pip
+  - pip:
+      - plip
+      - prolif
+      - oddt
+      - prolif
+      - pdbecif
+      - biotite
+      - prody
+      - MDAnalysisTests
+      - gmx_MMPBSA
+      - openfe
+      - cinnabar
+      - kaleido
+      - rich
+      - typer
+      - pydantic
+      - psutil
+      - diskcache
+      - duckdb
+      - polars

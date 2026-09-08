@@ -1,6 +1,6 @@
 # 投标决策分析 · 五步工作流执行手册
 
-> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.3`。
+> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.5`。
 > 工具参数速查见 `api-quick.md`。每步都有「降级策略」——数据缺失时照做，不要中断也不要编造。
 
 ## 模式选择
@@ -12,7 +12,7 @@
 
 ## ① 解析标的（1-3 次调用）
 
-**目标**：把公告拆成结构化画像——甲方单位、预算、标的物、门槛、时间窗口。
+**目标**：项目画像——采购方、预算、标的物、资质门槛、时间线。
 
 1. 用户给了知了标讯链接或 bid_id → `get_bid_detail`（拿 `fulltext` 原文）
 2. 用户只给了项目标题 → `search_bids`（keywords=[标题关键词], match_modes=["title"]）定位后再 `get_bid_detail`
@@ -54,16 +54,13 @@
 
 ## ④ 价格基准（2-5 次调用）
 
-**目标**：算出建议报价区间：上限保竞争力、下限防亏损。
+**目标**：报价带——报多少有竞争力、低于多少可能亏。
 
 1. 标的物有明确品牌/型号 → `get_price_trends`（brand+model+product, exclude_keywords=["维保","耗材"]）→ 历史成交单价 min/avg/median
 2. 服务类/无明确型号 → `aggregate_bids_advanced`（filters: keywords=标的物+同类范围, bid_type=2, 近 2 年; group_by=["quarter"]）→ 同类项目金额分布与趋势
 3. 参考②中该采购方同类项目的历史成交价（最直接的锚点）
 
 **输出**：建议报价带 = [有竞争力下限, 稳妥上限]，注明依据（历史中标价分位数、预算折扣率惯例）。价格分占比高的项目提示低价策略空间。
-
-
-> 行业示例：查「达梦 DM8」数据库的历史中标单价可直接用 get_price_trends；同类「信创改造」项目的金额分布用 aggregate_bids_advanced。
 
 **降级**：无同型号价格记录 → 用同品类均价 + 明确标注「价格参考基于品类均值而非同型号，误差较大」。
 

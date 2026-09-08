@@ -1,41 +1,53 @@
-## Description: <br>
-Qa Req Deconstruction breaks vague requirement descriptions into testable input, operation, state, output, and rule dimensions while surfacing implicit and derived requirements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners deconstruct ambiguous requirements into explicit, implicit, and derived requirements across input, operation, state, output, and rule dimensions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and product teams use this skill to turn PRDs, URLs, file paths, or short requirement descriptions into structured requirement IDs, explicit requirements, implicit requirements, derived requirements, business rules, five-dimension breakdowns, risks, and open questions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requirement inputs may contain production data, customer information, payment details, or identity data. <br>
-Mitigation: Redact or mask sensitive data before using the skill, and prefer sanitized requirement examples. <br>
-Risk: Broad trigger wording may activate the skill for general requirement-analysis requests. <br>
-Mitigation: Confirm the user wants QA-focused requirements decomposition before applying the workflow. <br>
-Risk: Implicit or derived requirements can be mistaken for confirmed product requirements. <br>
-Mitigation: Label inferred items as assumptions or pending confirmation and review them with product or QA owners. <br>
+## Use Case:
 
+QA engineers, testers, and developers use this skill to turn vague or short requirement descriptions into structured, testable requirement analysis. It supports requirement discovery before scenario modeling, risk review, API testing, test case design, test data planning, and test strategy work.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown requirement decomposition tables and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes requirement IDs, risk IDs, five-dimension breakdowns, and assumption labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Requirement inputs can contain production identifiers, customer data, financial records, screenshots, ID numbers, or phone numbers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask sensitive production and customer information before using the skill.
+
+Risk: URL-based requirement sources may trigger network contact with the linked site.
+
+Mitigation: Use only public or approved requirement URLs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-req-deconstruction)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown tables and structured requirement analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs requirement IDs, explicit requirements, implicit requirements, derived requirements, business rules, five-dimension decomposition, risk points, and test-case table guidance.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter reports 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,102 @@
+{
+  "name": "newsgroup-create",
+  "description": "Create one Tradebee news group after explicit confirmation.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact language selected from languages-get."
+      },
+      "newsgroup": {
+        "type": "object",
+        "description": "Required complete news-group payload.",
+        "properties": {
+          "group_name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 300,
+            "description": "Required, 2 to 300 characters."
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "description": "News-group tag containing 1-50 characters."
+            },
+            "description": "Required 1 to 6 tags; each 1 to 50 characters."
+          },
+          "brief_description": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional, up to 300 characters."
+          },
+          "seo": {
+            "type": "object",
+            "description": "Optional SEO metadata.",
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 90,
+                "description": "Optional SEO title, up to 90 characters."
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Optional SEO description, up to 200 characters."
+              },
+              "keywords": {
+                "type": "string",
+                "maxLength": 120,
+                "description": "Optional comma-separated SEO keywords, up to 6 keywords and 120 total characters."
+              }
+            }
+          }
+        },
+        "required": [
+          "group_name",
+          "tags"
+        ]
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval of the exact payload.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language and news-group payload approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "newsgroup",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result containing newsgroup_id and URL."
+  },
+  "dependencies": {
+    "language": {
+      "skill": "languages-get",
+      "field": "list[].language",
+      "mode": "select"
+    }
+  }
+}

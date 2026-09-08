@@ -1,8 +1,11 @@
 ---
 name: qa-tech-debt-management
-version: 1.6.0
+slug: qa-tech-debt-management
+displayName: 测试技术债管理
+version: 1.7.5
 description: >-
   当自动化用例频繁维护、跑一次就倒下一批、或者发现团队的测试资产维护成本越来越高时使用此技能。系统化识别测试自动化债务和测试资产技术债，评估每项债务的利息（维护成本）和本金（重写成本），给出分阶段的还款规划。不要追着 flaky test 修——技术债务管理解决的是"为什么有这么多 flaky test"的系统性问题。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"技术债务"、"测试债务"、"自动化债务"、"重构"、"债务治理"、"维护成本"、需要管理技术债务、自动化维护成本高需要评估时
 allowed-tools: Read Grep Glob Bash
@@ -29,6 +32,9 @@ output_format:
   traceability:
     - 本技能评估债务，每个债务项沿用关联的缺陷ID或自动化架构ID
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - debt_inventory: 技术债务清单
     - impact_analysis: 影响分析
     - repayment_plan: 偿还计划
@@ -41,6 +47,8 @@ error_recovery_guidance:
   on_failure: "债务治理遗漏高优债务时回退到质量度量补充数据"
   retry_behavior: "补充数据后重新评估治理优先级"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及发布阻塞评估和线上问题影响分析。
 > 实际使用时请勿直接基于评估结论阻塞发布或下线功能，先与开发和产品确认风险。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

@@ -1,0 +1,4 @@
+interface:
+  display_name: "token-stats-skill"
+  short_description: "Record and analyze token usage across six local agents"
+  default_prompt: "Use $token-stats-skill with the published token-stats CLI to record local agent token usage, analyze a date range, or set up periodic collection."

@@ -1,42 +1,55 @@
-## Description: <br>
-Reviews requirement documents across completeness, clarity, consistency, testability, and feasibility before test design or implementation planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews Chinese-language requirement and PRD text across completeness, clarity, consistency, testability, and feasibility, returning scored findings and improvement guidance.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, product reviewers, and developers use this skill to review PRDs or requirement descriptions before test case design. It produces a structured review that identifies missing, ambiguous, inconsistent, hard-to-test, or infeasible requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked broadly before requirement-related test design, including when a user only wants execution support or bug triage. <br>
-Mitigation: Invoke it when the task involves PRD or requirement quality review; skip it for execution-only or bug-triage requests. <br>
-Risk: The skill can produce incorrect or incomplete requirement-review guidance if the source requirement description lacks context. <br>
-Mitigation: Ask for missing business context, acceptance criteria, constraints, or historical defects before treating the review as final. <br>
+## Use Case:
 
+QA engineers, product teams, and agents use this skill to assess requirements before test design, identify unclear or untestable statements, and produce a structured review report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-requirement-review) <br>
-- [Requirement review report template](references/report-template.md) <br>
-- [Five-dimension review standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance] <br>
-**Output Format:** [Markdown requirement review report with scored dimensions, issue lists, and improvement suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include traceability identifiers and classify issues by P0, P1, and P2 severity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may encourage agents to perform requirement review before many test-related tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and enable it only where a Chinese-language requirement-review workflow is desired, and scope activation to requirement or PRD review tasks.
+
+Risk: The artifact recommends installing a broader QA skills package for the complete workflow.
+
+Mitigation: Review the separately recommended QA skills package before installing it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-requirement-review)
+- [Requirement review report template](references/report-template.md)
+- [Five-dimension review standards](references/review-standards.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown review report with scores, issue tables, and improvement recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses five review dimensions and P0/P1/P2 issue severity categories.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

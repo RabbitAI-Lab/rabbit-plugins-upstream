@@ -1,42 +1,60 @@
-## Description: <br>
-Turns a user's Google Trends request into a confirmed Dataify Scraper API form submission and returns the raw API response. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Trends for keyword interest and trend data.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to convert Google Trends requests into confirmed Dataify Scraper API calls for trend data retrieval. The skill is useful when an agent needs to map natural-language trend analysis requests to Dataify parameters and return the service response directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Trends query parameters and the Dataify API token are sent to Dataify when a call is confirmed. <br>
-Mitigation: Review the confirmation table before approving each call and prefer DATAIFY_API_TOKEN from the environment instead of pasting tokens into chat. <br>
-Risk: Incorrect inferred parameters could produce an unintended Dataify request. <br>
-Mitigation: The skill requires a complete Markdown parameter table and explicit user confirmation before each API call, and regenerates the table when parameters change. <br>
+## Use Case:
 
+Developers and external users use this skill to convert Google Trends requests into Dataify API calls and return trend results for keyword interest, regional interest, related topics, related queries, and optional raw formats.
 
-## Reference(s): <br>
-- [Dataify Google Trends API Reference](references/google_trends_api.md) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-trends) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Text] <br>
-**Output Format:** [Markdown confirmation table plus raw Dataify API response body] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The response body is returned directly without summarizing, extracting, cleaning, translating, or reshaping.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: ClawHub release evidence) <br>
+Risk: Google Trends query terms, filters, and the Dataify API token are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure the token through the environment rather than chat, avoid sensitive search terms, and install only when Dataify is an acceptable processor for the intended queries.
+
+Risk: The skill is scoped to Google Trends and may produce misleading results if used as a general web search tool.
+
+Mitigation: Use it only for Google Trends data and route general web search requests to a separate search-capable tool.
+
+Risk: Missing, rejected, or insufficient-credit Dataify credentials can prevent successful retrieval.
+
+Mitigation: Verify that DATAIFY_API_TOKEN is configured without printing its value and use Dataify account management for invalid tokens or credit issues.
+
+## Reference(s):
+
+- [Dataify Google Trends API Reference](references/google_trends_api.md)
+- [Dataify skill page](https://clawhub.ai/dataify-server/skills/dataify-google-trends)
+- [Dataify Scraper API endpoint](https://scraperapi.dataify.com/request)
+- [Dataify Dashboard](https://dashboard.dataify.com/login?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API results]
+
+**Output Format:** [Markdown guidance with shell commands, plus Dataify API response output as JSON, HTML, light JSON, or CSV when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API token supplied through DATAIFY_API_TOKEN or an explicit token argument; query terms and filters are sent to Dataify.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

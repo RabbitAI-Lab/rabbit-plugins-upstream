@@ -1,48 +1,61 @@
-## Description: <br>
-Plans Amazon product image sets, writes slot-by-slot generation briefs, and helps generate or review MAIN, Listing, Standard/Premium A+, and PC/Mobile paired images when the active agent has the needed image capabilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans Amazon main, listing, and A+ image sets with product fact locking, slot-level generation briefs, PC/mobile pairing, missing-evidence checks, and QA review when the active agent has the required image capabilities.
 
-## Publisher: <br>
-[ssesweb](https://clawhub.ai/user/ssesweb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[ssesweb](https://clawhub.ai/user/ssesweb)
 
-## Use Case: <br>
-External sellers, marketplace operators, and creative teams use this skill to plan Amazon-compliant product image sets, separate verified product facts from assumptions, write executable generation briefs, and review draft or final images for factual, slot, and device-pairing quality. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may structure work that uses image-generation capabilities supplied by the active agent. <br>
-Mitigation: Verify marketplace rules, product facts, brand permissions, and rights to customer or reference images before generation or publication. <br>
-Risk: Missing or unverified product facts can lead to misleading dimensions, materials, accessories, functions, certifications, quantities, or performance claims. <br>
-Mitigation: Use the fact-lock workflow and mark unsupported or unresolved checks as BLOCKED rather than treating them as ready. <br>
+## Use Case:
 
+External sellers, marketplace operators, designers, and agents use this skill to plan and review Amazon product image sets without inventing product facts or unsupported claims. It produces structured image slot manifests, generation briefs, device-pairing guidance, missing-evidence findings, and QA status for MAIN, Listing, and A+ assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ssesweb/skills/generate-amazon-image-set) <br>
-- [Publisher profile](https://clawhub.ai/user/ssesweb) <br>
-- [Public mini straw hat example](https://www.quietphoenix.top/archives/generate-amazon-image-set) <br>
-- [Composition and Device Rules](references/composition-and-devices.md) <br>
-- [Product Input and Fact Lock](references/input-and-facts.md) <br>
-- [Generation Brief Contract](references/prompt-contract.md) <br>
-- [Quality Review Protocol](references/quality-review.md) <br>
-- [Slot and Dimension Contract](references/slots-and-dimensions.md) <br>
-- [Validated mini straw hat example](references/example-mini-straw-hat.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured tables and status labels] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include generation briefs, product fact locks, slot manifests, PC/Mobile pairing matrices, plan QA, final-image QA, and overall status labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence and SKILL.md version note) <br>
+Risk: The skill may add publisher attribution and external profile links to the first response when invoked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation and remove the attribution behavior or make it opt-in if promotional output is not acceptable.
+
+Risk: Image-set work may be blocked by missing product facts, unverified dimensions, or unavailable image inspection capabilities.
+
+Mitigation: Use the skill's NEEDS_REVIEW and BLOCKED states, and require confirmed evidence before exact claims, package contents, dimensions, or final qualification.
+
+## Reference(s):
+
+- [Product Input and Fact Lock](references/input-and-facts.md)
+- [Slot and Dimension Contract](references/slots-and-dimensions.md)
+- [Composition and Device Rules](references/composition-and-devices.md)
+- [Generation Brief Contract](references/prompt-contract.md)
+- [Quality Review Protocol](references/quality-review.md)
+- [已验证案例：4.5 cm 迷你草帽](references/example-mini-straw-hat.md)
+- [Amazon A+ design guide](https://sell.amazon.com/blog/a-plus-content-design-guide)
+- [Amazon A+ comparison guide](https://sellercentral.amazon.com/help/hub/reference/external/G202102930)
+- [Public mini straw hat workflow case](https://www.quietphoenix.top/archives/generate-amazon-image-set)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with structured tables, status codes, and generation briefs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include assumptions and scope, product fact locks, missing-evidence lists, slot manifests, PC/mobile pairing matrices, generation briefs, plan QA, final-image QA, and overall status.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and SKILL.md version line)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
