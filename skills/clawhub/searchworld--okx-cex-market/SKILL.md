@@ -1,10 +1,10 @@
 ---
 name: okx-cex-market
-description: "Use this skill when the user asks for: price of any asset, ticker, order book, candles, OHLCV, funding rate, open interest, OI change scanner, market screener (top movers, high-volume, newly listed), mark price, index price, recent trades, instrument list, stock tokens, metals prices (gold, XAU, XAG), commodities (oil, OIL), forex rates (EUR/USD, EURUSDT), bond instruments, non-crypto assets, or any technical indicator query (RSI, MACD, EMA, Bollinger Bands, KDJ, SuperTrend, AHR999, BTC rainbow, and 70+ more). All commands are read-only and do NOT require API credentials. Do NOT use for account balance/positions (okx-cex-portfolio), placing/cancelling orders (okx-cex-trade), or bots (okx-cex-bot)."
+description: "Use this skill when the user asks for: price of any asset, ticker, order book, candles, OHLCV, funding rate, open interest, OI change scanner, market screener (top movers, high-volume, newly listed), mark price, index price, recent trades, instrument list, stock tokens, metals prices (gold, XAU, XAG), commodities (oil, OIL), forex rates (EUR/USD, EURUSDT), bond instruments, non-crypto assets, or any technical indicator query (RSI, MACD, EMA, Bollinger Bands, KDJ, SuperTrend, AHR999, BTC rainbow, and 70+ more). All commands are read-only and do NOT require API credentials. Do NOT use for account balance/positions (okx-cex-portfolio), placing/cancelling orders (okx-cex-trade), or bots (okx-cex-bot). Do NOT use when the user wants to TRADE a directional view as an event contract — that is okx-cex-trade. Merely ASKING which way an asset's price is moving is a market-data question and belongs here."
 license: MIT
 metadata:
   author: okx
-  version: "1.4.0"
+  version: "1.4.6"
   homepage: "https://www.okx.com"
   agent:
     requires:
@@ -12,7 +12,7 @@ metadata:
     install:
       - id: npm
         kind: node
-        package: "@okx_ai/okx-trade-cli@1.4.0"
+        package: "@okx_ai/okx-trade-cli@1.4.6"
         bins: ["okx"]
         label: "Install okx CLI (npm)"
 ---
@@ -27,6 +27,8 @@ Public market data for OKX: prices, order books, candles, funding rates, open in
 - Market data / indicators → `okx-cex-market` (this skill)
 - Account balance / positions → `okx-cex-portfolio`
 - Place / cancel orders → `okx-cex-trade`
+- **Trading a directional view as an event contract** → `okx-cex-trade`
+- Market sentiment / most bullish-bearish coins → `okx-sentiment-tracker`
 - Grid / DCA bots → `okx-cex-bot`
 
 ## Preflight
@@ -51,7 +53,7 @@ Market data commands return the same public data regardless of demo/live mode �
 |---|---|---|
 | 1 | `okx market ticker <instId>` | Last price, 24h high/low/vol/change% |
 | 2 | `okx market tickers <instType>` | All tickers for SPOT / SWAP / FUTURES / OPTION |
-| 3 | `okx market instruments --instType <type> [--instId <id>]` | List instruments (instId, ctVal, lotSz, minSz, tickSz, state) |
+| 3 | `okx market instruments --instType <type> [--instId <id>] [--uly <uly>] [--instFamily <fam>] [--seriesId <id>]` | List instruments (instId, ctVal, lotSz, minSz, tickSz, state); OPTION requires `--uly` or `--instFamily`; EVENTS requires `--seriesId` |
 | 4 | `okx market orderbook <instId> [--sz <n>]` | Order book asks/bids (default top 5 per side, max 400) |
 | 5 | `okx market candles <instId> [--bar <bar>] [--limit <n>] [--after <ts>] [--before <ts>]` | OHLCV candles (default `--bar 1m`); auto-routes to historical endpoint for data back to 2021; `--after` paginates back in time, `--before` paginates forward |
 | 6 | `okx market index-candles <instId> [--bar <bar>] [--limit <n>] [--history]` | Index OHLCV (use `BTC-USD` not `BTC-USDT`) |
@@ -88,6 +90,18 @@ Market data commands return the same public data regardless of demo/live mode �
 | List instruments, discover stock tokens, metals/commodities/forex/bonds, find option instIds | `{baseDir}/references/instrument-commands.md` |
 | Multi-step or cross-skill workflows; MCP tool names | `{baseDir}/references/workflows.md` |
 
+**Event contracts are not served by this skill.**
+
+| User asks | Do |
+|---|---|
+| Which way an asset is moving — "is BTC going up", "what's the 15m trend" | **Answer here** with candles / indicators |
+| Direction *and* whether they can trade it | Answer the data half here, then name `okx-cex-trade` for the trade half |
+| To trade an event contract — "buy YES/NO on …" | **Route to `okx-cex-trade`**, serve nothing here |
+
+Never substitute another product for an event contract — not a perp, not a futures position,
+not market data presented as the contract they asked for. If you cannot load
+`okx-cex-trade`, say so and stop.
+
 ### Step 2 — Run commands immediately
 
 All market data commands are read-only — no confirmation needed.
@@ -101,7 +115,8 @@ All commands in this skill are read-only.
 ## Edge Cases
 
 - **instId format**: SPOT `BTC-USDT` · SWAP `BTC-USDT-SWAP` · FUTURES `BTC-USDT-250328` · OPTION `BTC-USD-250328-95000-C` · Index `BTC-USD` · Stock token `TSLA-USDT-SWAP` · Metals/Commodities/Forex/Bonds: use `instruments-by-category` to discover valid instIds first
-- **OPTION listing**: `instruments --instType OPTION` requires `--uly BTC-USD`; if unknown, run `open-interest --instType OPTION` first to discover active instIds
+- **OPTION listing**: `instruments --instType OPTION` requires `--uly BTC-USD` or `--instFamily BTC-USD`; if unknown, run `open-interest --instType OPTION` first to discover active instIds
+- **EVENTS listing**: `instruments --instType EVENTS` requires `--seriesId` (e.g. `--seriesId BTC-ABOVE-DAILY`); run `okx event series` first to discover valid series IDs
 - **funding-rate / price-limit**: SWAP only · mark-price: SWAP / FUTURES / OPTION only
 - **candles `--bar`**: uppercase — `1H` not `1h`; use `--after <ts>` to paginate back into historical data (back to 2021); index-candles supports `--history` for extended history
 - **⚠️ Large historical range**: before fetching with `--after`/`--before`, estimate candle count = `time_range_ms / bar_interval_ms`. If estimate > 500, tell the user the estimated count and ask for confirmation before proceeding. This prevents silently filling the context window.

@@ -1,47 +1,65 @@
-## Description: <br>
-Memory and defence for AI agents: semantic recall, knowledge graph and decay, plus a memory firewall that scans and enforces against prompt injection, credential leaks and poisoning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Memory and defence for AI agents: semantic recall, knowledge graph and decay, plus a memory firewall that scans and enforces against prompt injection, credential leaks and poisoning.
 
-## Publisher: <br>
-[jarvis-drakon](https://clawhub.ai/user/jarvis-drakon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jarvis-drakon](https://clawhub.ai/user/jarvis-drakon)
 
-## Use Case: <br>
-Developers and agent users use ShieldCortex to add persistent local memory, semantic recall, knowledge graph features, and security scanning or enforcement around memory writes and tool output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist conversation-derived data in local memory. <br>
-Mitigation: Review auto-memory and proactive recall settings before enabling; disable auto-memory for sensitive projects and regularly inspect or purge ~/.shieldcortex. <br>
-Risk: The hook can automatically change or delete hook files during bootstrap. <br>
-Mitigation: Review self-heal behavior before use; set SHIELDCORTEX_SKIP_SELF_HEAL=1 or disable self-heal in config when automatic file changes are not acceptable. <br>
-Risk: Optional cloud sync can transmit selected memory content when explicitly enabled. <br>
-Mitigation: Keep cloud sync disabled unless needed; if enabling it, review API key, memory classification, and content-mode settings first. <br>
+## Use Case:
 
+Developers and AI-agent users use ShieldCortex to add persistent local memory, semantic recall, knowledge graph support, and memory-write protection against prompt injection, credential leakage, and poisoning across supported agent environments.
 
-## Reference(s): <br>
-- [ShieldCortex ClawHub page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex) <br>
-- [Publisher profile](https://clawhub.ai/user/jarvis-drakon) <br>
-- [ShieldCortex homepage](https://shieldcortex.ai) <br>
-- [ShieldCortex documentation](https://shieldcortex.ai/docs) <br>
-- [ShieldCortex source link from metadata](https://github.com/Drakon-Systems-Ltd/ShieldCortex) <br>
-- [ShieldCortex npm package](https://www.npmjs.com/package/shieldcortex) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with command examples and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local CLI commands, MCP configuration, and security guidance for the user's agent environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.47.16 (source: server release metadata and skill frontmatter) <br>
+Risk: Durable local memory and auto-memory features can retain prompts, assistant replies, decisions, preferences, or confidential context on disk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review auto-memory and proactive recall settings before enabling integrations, and periodically inspect or delete stored memories in ~/.shieldcortex.
+
+Risk: Cloud sync, configured webhooks, and license activation can send selected metadata or memory content outside the local machine when enabled.
+
+Mitigation: Keep cloud sync and webhooks disabled unless approved for the workspace, and review Cloud API key, license, and content-mode settings before use.
+
+Risk: First-use embedding downloads and npx fallback paths can perform outbound package or model fetches.
+
+Mitigation: Preinstall the ShieldCortex binary or configure binaryPath, pre-seed the embedding model cache, or set SHIELDCORTEX_SKIP_EMBEDDINGS=1 when network fetches are not allowed.
+
+Risk: The OpenClaw hook self-heal path can write hook files and remove named stale legacy hook directories during gateway bootstrap.
+
+Mitigation: Disable mutating self-heal with SHIELDCORTEX_SKIP_SELF_HEAL=1 or the selfHeal configuration when automatic hook-file changes are not acceptable.
+
+## Reference(s):
+
+- [ShieldCortex ClawHub skill page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex)
+- [ShieldCortex homepage](https://shieldcortex.ai)
+- [ShieldCortex documentation](https://shieldcortex.ai/docs)
+- [ShieldCortex npm package](https://www.npmjs.com/package/shieldcortex)
+- [ShieldCortex source repository](https://github.com/Drakon-Systems-Ltd/ShieldCortex)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces guidance for installing, configuring, using, and auditing local memory and security integrations.]
+
+## Skill Version(s):
+
+4.54.15 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

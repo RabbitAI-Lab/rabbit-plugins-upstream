@@ -4,6 +4,211 @@ All notable changes to outlook-graph-mcp are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.19.0] — 2026-09-08
+
+Tiers 2 and 3 of the silent-no-op audit, and the two bugs they found on their first run.
+
+### Added
+
+- **`tests/test_no_dead_modules.py`** — builds the intra-package import graph from the console-script entry point and fails on any module nothing reaches. The module-level counterpart of the dead-parameter guard: `models/` sat unreferenced for months while 30 tests imported it directly, because tests that import a module by name make dead code look alive. Collects imports from every AST node, since this package imports lazily inside functions. Mutation-verified.
+- **`tests/test_sdk_fields_exist.py`** — every `model.attr = …` in `tools/` where `model` was bound by an `msgraph.generated.models` constructor must name a declared dataclass field of that class. Dataclass instances accept arbitrary attributes, so assigning a field the SDK doesn't have raises nothing, serializes nothing, and reaches nothing. Offline, no mocks.
+- **`tests/test_write_payloads_reach_the_wire.py`** — for eleven write tools across calendar, mail, drafts, contacts and To Do, calls the handler with a distinctive sentinel for every argument, serializes the object handed to `.post()`/`.patch()` exactly as kiota would, and asserts each value is present in that JSON. Attribute-level assertions cannot see a field the handler forgot (#41) or the SDK dropped (`remove_recurrence`); the wire can.
+- **Live round-trips for contacts and To Do** (`test_live_contacts_write.py`, `test_live_todo_write.py`): every parameter each write tool accepts is written, read back through the tool's own read path, and asserted — the only detector for Graph accepting a value and ignoring it. The write tier's rules now cover calendar, contacts and To Do (the three surfaces with no outward side effect; still no mail, ever). Because the real config may whitelist only some write categories, `live_write_config` opens the three it needs on an **in-process copy**; `~/.outlook-mcp/config.json` is never touched.
+
+### Removed
+
+- **`sensitivity` on `outlook_send_message`.** Found by the wire test and confirmed by the field guard: msgraph-sdk's `Message` has no `sensitivity` field — not in the dataclass, not in `serialize()`, not in the deserializers. `msg.sensitivity = Sensitivity.Private` hung a stray attribute on the instance that kiota never saw. Sending it by hand via `additional_data` was then tried against live Graph (as a draft, deleted): `400 UnableToDeserializePostBody`. It is a legacy MAPI property that this endpoint does not accept, so there is nothing to implement. The parameter never did anything for anyone; it is removed rather than left as a convincing no-op. **Schema change** on one tool.
+- **`src/outlook_mcp/tools/auth_tools.py`** — a six-line docstring stub left behind when the auth tools moved into `server.py`, imported by nothing. Flagged by the new module guard.
+
+### Fixed
+
+- **To Do `reminder=True` was silently stored as off.** The live round-trip caught it: Graph accepts `isReminderOn: true`, returns 201, and persists `false` unless `reminderDateTime` is also set. Confirmed by isolating the two cases live. `create_task` now anchors the reminder on the due time, and `reminder=True` without `due` is a named error — there is nothing to anchor it on, and the alternative is the no-op we just removed.
+
+### Verified
+
+- Offline **638 passed, 32 deselected**; ruff clean across `src/`, `tests/`, `scripts/`.
+- **16 live write-tier tests** — calendar 10, contacts 3, To Do 3 — plus preflight 13/13, live 10, integration 6. Calendar, contacts and tasks swept afterwards for leftover test data: none.
+- 62 tools, unchanged.
+
+## [1.18.0] — 2026-09-08
+
+A guard against the bug class that produced [#41], and the bug it immediately found.
+
+### Added
+
+- **`tests/test_no_dead_parameters.py`** — fails the build on any parameter that is declared and never read. That is the static half of the #41 shape: `outlook_create_event` took `recurrence`, threaded it to the handler, never applied it, and returned `status: created` for fourteen releases. An AST walk catches it offline, in CI, for free.
+
+  Deliberately strict about what counts as a use: only `Name` loads, never attribute names. Counting `event.recurrence` as a use of a `recurrence` parameter is precisely how #41 would have slipped past. Functions taking `*args`/`**kwargs` are skipped, since forwarding makes the question undecidable. Two framework-callback parameters are allowlisted with written reasons, and a second test fails if an allowlist entry goes stale — a stale exemption silently re-opens the hole it was excusing. The guard is mutation-verified: injecting a dead parameter makes it fail with the file, line and parameter name.
+
+  It catches one of the three shapes. Graph accepting a field and ignoring it (`is_online`, 1.16.0) needs live coverage; the SDK dropping a field from the payload (`remove_recurrence`, 1.17.0) needs assertions on serialized output. Both are noted in the module docstring.
+
+### Fixed
+
+- **`outlook_reply` ignored `is_html`** — found by the new guard on its first run. Every reply sent with `is_html=True` went out as plain text, with any markup stripped. Graph's reply action takes `comment` as plain text only; markup has to ride on the action's `message` field as an `ItemBody` with contentType HTML. Both are now set correctly and exclusively — setting `comment` alongside `message` would duplicate the text in the sent reply. Verified that Graph stores and preserves an HTML body on a reply-shaped message; the send path itself is not live-tested, because the write tier does not send mail.
+- **`AuthManager.login_interactive()` and `try_cached_token()` took a `scopes` argument they ignored**, resolving scopes internally via `get_token_scopes()` instead. Callers passed a value that did nothing. The parameter is removed from both. Internal API; no MCP tool signature changes.
+
+### Verified
+
+- Offline **619 passed, 26 deselected**; ruff clean across `src/`, `tests/`, `scripts/`.
+- preflight 13/13, live 10, integration 6, live_write 10 — the auth signature change is on the path every credentialed tier and `outlook-mcp status` uses, so all four were re-run.
+- 62 tools, unchanged.
+
+## [1.17.0] — 2026-09-07
+
+Ending a series without deleting it.
+
+### Added
+
+- **`remove_recurrence` on `outlook_update_event`.** Ending a series previously meant deleting the event — there was no way to turn a series master back into a single occurrence. `remove_recurrence=True` does that, keeping the first occurrence's time. It is a separate flag rather than a sentinel on `recurrence`, because `None` there already means "leave alone"; passing both raises.
+
+  The implementation is not the obvious one. Graph clears a series with an explicit `"recurrence": null`, but the msgraph SDK **omits any field set to `None`** from the serialized payload — `Event(subject="x", recurrence=None)` serializes to `{"subject": "x"}` — so `event.recurrence = None` is a silent no-op of exactly the kind that produced [#41]. The null is therefore sent through `additional_data`, which kiota does serialize. Two tests pin this: one asserts the wire format contains `"recurrence": null` rather than checking the attribute (an attribute assertion would stay green through the bug), and one asserts the SDK still drops an explicit `None`, so if kiota ever changes, the workaround can be simplified.
+
+  Verified live: a `seriesMaster` becomes a `singleInstance` with `recurrence: null` and its start time intact.
+
+## [1.16.0] — 2026-09-07
+
+Calendar editing catches up with calendar creation, and a layer that only looked like validation comes out.
+
+### Added
+
+- **`attendees` on `outlook_update_event`.** You could create a meeting with guests but never add one to a meeting that already existed. Note the semantics, which are Graph's, not ours: there is no add-one operation, so the argument **replaces the whole collection** — Outlook emails invitations to everyone on the new list and cancellations to anyone dropped. `[]` removes them all. Every argument on this tool keeps `None` = "leave alone", so `False` and `[]` remain instructions rather than absences.
+- **`is_all_day` on `outlook_update_event`**, which requires `start` and `end` in the *same* call. Graph rejects a lone isAllDay patch with `ErrorInvalidRequest: Missing parameters: Event.Start`; that is now a named local error naming both bounds instead of an opaque 400 from the wire.
+- **`type` on every listed event** (`singleInstance` / `seriesMaster` / `occurrence` / `exception`). `outlook_list_events` could not distinguish a recurring series from a one-off without fetching each event individually. Computed once in the summary formatter; the detail formatter inherits it. `concise=True` still omits it — that mode exists to drop tokens.
+- **`Accept-Encoding: gzip` on the two raw-httpx paths** (`fetch_delta_pages`, `read_messages`). The SDK path already negotiated compression; these bypass the SDK and did not. Delta pages and 20-message `$batch` responses are large, highly compressible, and refetched constantly by polling agents. Roadmap Tier-0 #7.
+
+### Removed
+
+- **`src/outlook_mcp/models/` — the entire Pydantic I/O layer.** All 22 classes across `calendar.py`, `mail.py`, `todo.py`, `contacts.py` and `common.py` were referenced by zero non-model source files; only their own tests imported them. They read as the input-validation layer, and `CLAUDE.md` claimed one existed ("All input validated via Pydantic + validation.py"), but nothing on any tool path ever constructed them. This is the exact mechanism that hid [#41] for fourteen releases: `CreateEventInput.validate_recurrence` enforced the shorthand allowlist, looked authoritative, and never ran. They are redundant by construction — `MCPServer` generates tool schemas from the type annotations. `CLAUDE.md` now says what actually runs, and requires any future model layer to be wired to the tool path in the same commit. Drops 30 tests that exercised only dead code.
+- **`scripts/probe_datetime_semantics.py`.** One-off evidence gathering for 1.15.0's timezone question. The question is answered, the finding is recorded in the 1.15.0 entry below, and a script that creates and deletes real calendar events should not ship in a bundle other people install.
+
+### Fixed
+
+- **`is_online` is documented as a no-op on personal accounts.** Adding it to `outlook_update_event` was in scope until the live write tier caught what mocks cannot: Graph accepts `isOnlineMeeting` on a consumer mailbox and silently ignores it. A created event comes back `isOnlineMeeting: False`, `onlineMeetingProvider: "unknown"`, `onlineMeeting: None`. Teams meetings require a work/school account, which this server does not target — so `outlook_create_event`'s `is_online` parameter has never done anything for this project's only audience. Rather than ship a convincing no-op on a second tool, the parameter was left off `update_event`, the behavior is documented on `create_event`, and a live test now pins it: if Microsoft ever starts honouring it, that test fails and tells us the parameter is worth adding.
+
+### Verified
+
+- Offline suite **608 passed, 25 deselected**; `ruff check src/ tests/` clean; 62 tools register (unchanged — this release adds parameters, not tools).
+- **9 live write-tier tests** against a real personal `@outlook.com` calendar, including all-day conversion, partial-patch isolation, and the online-meeting pin. `attendees` is deliberately *not* exercised live — patching it emails real invitations, and the tier's no-attendees rule outranks the coverage; the built payload is unit-tested instead.
+
+[#41]: https://github.com/mpalermiti/outlook-mcp/issues/41
+
+## [1.15.0] — 2026-09-07
+
+Recurring calendar events, which have never actually worked, and a timezone bug found while fixing them.
+
+### Fixed
+
+- **`outlook_create_event` silently discarded `recurrence`.** Every "recurring" event the server has ever created was a single occurrence with `recurrence: null`. The parameter was declared on both the tool and the handler and then never assigned to the Graph `Event` before `POST /me/events` — so the call returned `status: created` and looked like it worked. Two independent failures sat on that one argument: the tool schema typed it `str | None`, so a Graph recurrence object was rejected by Pydantic before reaching the handler, and the JSON-string workaround reached the handler and was dropped there. The `daily`/`weekly`/`monthly` shorthands the docstring has advertised since 1.0 were equally inert — `CreateEventInput.validate_recurrence` in `models/calendar.py` is referenced only by its own unit test, never by the tool path, so any string was accepted and ignored. Reported by @Wermeling. ([#41])
+- **`outlook_get_event` returned a Python repr for `recurrence`.** The read path did `str(event.recurrence)`, emitting ~500 characters of `PatternedRecurrence(additional_data={}, odata_type=None, pattern=...)` into a field the response model declares as `dict | None`. It now returns the same JSON shape `outlook_create_event` accepts, with unset fields omitted.
+
+- **Zone-less datetimes were resolved against the server's clock.** `validate_datetime` handed a naive datetime ("2026-10-22T12:30:00") straight to `.astimezone()`, which resolves against the *process's* local timezone. The same query string therefore meant a different instant depending on where the server happened to run: `12:30` became `12:30Z` on a UTC container, `19:30Z` on a laptop in California and `10:30Z` in Berlin. That skewed every `$filter` bound built from a zone-less value in `outlook_list_inbox`, `outlook_list_events` and `outlook_list_events_delta`, and — the one with a visible consequence — the PR_DEFERRED_SEND_TIME of a scheduled message, so "send this at 09:00" went out hours off. `validate_datetime` now takes an explicit `tz` for zone-less input only; input carrying a `Z` or an offset already pins its own instant and is untouched. The default is UTC and the server passes `config.timezone`, which is what `CLAUDE.md` has always said input interpretation should use.
+
+  **Behavior change** where `config.timezone` is not UTC: a bare date now means midnight *there* rather than midnight UTC, so `after="2026-10-22"` on an `America/Los_Angeles` config resolves to `2026-10-22T07:00:00Z`. Hosts running in the configured zone — the common case — see no change at all; hosts where the two disagreed were the ones silently producing different answers.
+
+  The write paths (`calendar_write`, `todo`) call `validate_datetime` for its exception and discard the normalized value, so they are unaffected. That is deliberate and now verified rather than assumed: `scripts/probe_datetime_semantics.py` established that Graph honors an explicit offset in the `dateTime` field and reads a naive value as the declared `timeZone`, making the current write behavior correct. "Fixing" those call sites to use the discarded value would have introduced exactly the host-clock bug this entry removes.
+
+### Added
+
+- **`recurrence` accepts three input shapes** on `outlook_create_event`: a Microsoft Graph recurrence object (matching `outlook_create_task`, which has taken `dict` since 1.5.0); a JSON-encoded string of one, since some client bridges stringify nested arguments; or a shorthand — `daily`, `weekdays`, `weekly`, `monthly`, `yearly` — expanded against the event's own start, so `weekly` on a Monday start means every Monday and `monthly` on the 7th means the 7th.
+- **`range.startDate` is reconciled with the event start.** Graph requires the range to begin on the day of the first occurrence and returns `ErrorInvalidRecurrenceRange` otherwise. It is now defaulted from `start` when omitted, and a supplied value that disagrees is rejected locally with a message naming both dates instead of surfacing as an opaque 400. The date is taken as the caller wrote it rather than UTC-normalized, so an evening or early-morning series doesn't shift a day.
+- **`recurrence` on `outlook_update_event`.** There was previously no path to add recurrence to an event that already existed — the parameter simply wasn't there, so a single event could never become a series. It now takes the same three shapes as `outlook_create_event`. Graph anchors a series on the master's start, so when `start` isn't part of the same patch the event's current start is read first and used as the anchor; a partial patch that omits `recurrence` leaves any existing pattern untouched. Reading that start back also required `event_start_date` to tolerate Graph's seven-digit fractional seconds, which `datetime.fromisoformat` rejects on the project's 3.10 floor.
+- **`type` on `outlook_get_event`** — `singleInstance`, `seriesMaster`, `occurrence` or `exception`. This is the field that lets a client confirm a series actually took; its absence is part of why #41 needed a raw Graph call to diagnose.
+- **`src/outlook_mcp/tools/_recurrence.py`** — recurrence conversion shared by calendar and To Do, which model it identically. `build_patterned_recurrence` is To Do's 1.5.0 converter moved here unchanged, so `outlook_create_task` keeps exactly its previous behavior; `build_event_recurrence` is the calendar entry point layered on top; `serialize_recurrence` is the inverse for read paths.
+- **`live_write` test tier** — the project's first write-side tests, and the reason this fix is trustworthy. Recurrence cannot be validated any other way: a `PatternedRecurrence` that is well-formed to the SDK still 400s if the range disagrees with the start, and mocks only ever assert what we *build*. Double-gated (marker deselected by default **and** skipped without `OUTLOOK_MCP_LIVE_WRITE=1`), calendar-only, no attendees, bounded ranges only, everything deleted in a `finally`. Rules in `tests/conftest.py`; runbook step 1d in `RELEASING.md`.
+
+### Verified
+
+- Five write-tier tests green against live Graph on a personal `@outlook.com` account: the series master is created, comes back `type: seriesMaster`, the recurrence round-trips through `outlook_get_event` as a dict, the `startDate` we default is one Graph accepts, and a non-recurring control still reports `singleInstance`. Every created event deleted; the calendar was re-queried afterwards and held no leftovers.
+- Offline suite: **609 passed, 21 deselected** (was 577 / 16 at 1.14.0). `ruff check src/ tests/ scripts/` clean.
+- A separate probe (`scripts/probe_datetime_semantics.py`) established what Graph does with the datetimes this tool sends, since `create_event` labels every start `timeZone: "UTC"` while passing the caller's string through verbatim. Graph honors an explicit offset (`12:30:00+02:00` → `10:30:00Z`) and reads a naive datetime as the declared UTC. Both are correct and deterministic; no change was made. Recorded because the obvious "fix" — using the normalized value `validate_datetime` already computes and throws away — would have introduced a real bug, resolving naive input against the *server's* local clock.
+
+[#41]: https://github.com/mpalermiti/outlook-mcp/issues/41
+
+## [1.14.0] — 2026-09-04
+
+Migration to the `mcp` 2.x SDK, lifting the `<2` ceiling that 1.13.1 pinned as a stopgap. **No behavior change for clients** — all 62 tool schemas serialize byte-for-byte identically to 1.13.1.
+
+### Changed
+
+- **`mcp[cli]` requirement raised to `>=2`** (was `>=1.27,<2`). The SDK renamed `FastMCP` to `MCPServer` and moved it from `mcp.server.fastmcp` to `mcp.server.mcpserver` in 2.0.0 (2026-07-28). 1.13.1 pinned below that release to restore installs; this completes the migration instead of living under the ceiling. The Python floor is unchanged — `mcp` 2.1.1 requires `>=3.10`, same as this project.
+- `ToolAnnotations` moved to snake_case field names in the SDK (`read_only_hint`, `destructive_hint`), retaining the camelCase forms as serialization aliases. The wire format clients see (`readOnlyHint` / `destructiveHint`) is unchanged; only in-process attribute reads in `tests/test_toolsets.py` needed updating. The annotation and `OUTLOOK_MCP_TOOLSETS` gating work from 1.12.0 carries over untouched.
+
+### Removed
+
+- The `mcp._mcp_server.version = __version__` workaround. `MCPServer` accepts a `version` kwarg directly, so `serverInfo.version` is now set through public API rather than by reaching into a private attribute.
+
+### Verified
+
+- Offline suite green on `mcp` 2.1.1: `577 passed, 16 deselected` — identical to 1.13.1.
+- All 62 tool schemas dumped from 1.x and 2.1.1 and diffed: **byte-for-byte identical** (52,998 bytes each).
+- `serverInfo.version` reports `1.14.0`; 62 tools register.
+
+## [1.13.1] — 2026-09-04
+
+Hotfix. **Every fresh install since 2026-07-28 was dead on arrival** — this restores it. No code changes; one dependency bound and a CI job to make sure it cannot happen again.
+
+### Fixed
+
+- **`mcp[cli]` was declared with no upper bound, so new installs pulled an incompatible major.** `mcp` 2.0.0 (2026-07-28) removed `mcp.server.fastmcp` by design — it was renamed to `MCPServer`. `src/outlook_mcp/server.py` imports `from mcp.server.fastmcp import Context, FastMCP`, so a fresh `pip install outlook-graph-mcp` resolved `mcp` 2.1.1 and `outlook-mcp serve` exited 1 with:
+
+  ```
+  ModuleNotFoundError: No module named 'mcp.server.fastmcp'
+  ```
+
+  Now pinned to `mcp[cli]>=1.27,<2`, which resolves 1.29.1 and imports cleanly with all 62 tools.
+
+  This was **not** a 1.13.0 regression. 1.12.0 shipped 2026-07-18, ten days before `mcp` 2.0.0, and was broken by the same unbounded specifier the moment that release landed. Every install path — PyPI, `uvx`, ClawHub, the MCP registry — was affected for roughly five weeks. Migrating to the `mcp` 2.x `MCPServer` API is a separate, deliberate piece of work; this release only restores a working install.
+
+- **CI could not see it, which is why it lasted five weeks.** The test job runs `uv sync`, which resolves through `uv.lock` — and the lock pinned the old, working `mcp` 1.27.0. All 577 tests passed in 0.75s against a dependency set no new user would ever get. Same shape as the bugs fixed in 1.13.0: a green suite testing something other than what ships.
+
+### Added
+
+- **`fresh-install` CI job.** Builds the wheel, installs it into a clean venv with a **fresh dependency resolve that deliberately ignores `uv.lock`**, prints the resolved versions, then asserts the server imports and registers all 62 tools. This is the check that turns "an upstream major broke us" from a user-reported outage into a failed PR. It fails today on `main` without the pin — verified locally before shipping.
+
+## [1.13.0] — 2026-09-04
+
+Correctness release. Three shipped bugs fixed, all of which were invisible to a fully green mock suite — including one tool that had never worked in any released version. Adds the live test tier that would have caught them. One new filter parameter; no new tools (still 62), no breaking changes.
+
+### Fixed
+
+- **`outlook_list_inbox` returned `400 InefficientFilter` whenever `from_address` or `classification` was used** ([#31](https://github.com/mpalermiti/outlook-mcp/issues/31)). `list_inbox` sets `$orderby=receivedDateTime desc` unconditionally, but Graph requires an `$orderby` property to also appear in `$filter` **and to precede** the other filtered properties — clause order is load-bearing, not just presence. Both parameters failed on every call, as did `unread_only + from_address` and `from_address + after`. Clauses are now emitted date-first, with a permissive `receivedDateTime` floor prepended only when the caller supplies no `after`/`before`. Validation still runs in signature order, so validation-error precedence is unchanged.
+
+  Considered and rejected: dropping `$orderby` when `receivedDateTime` isn't filtered. Graph's implicit ordering follows whichever index served the filter and is **ascending** for `inferenceClassification` — that fix would have silently returned the *oldest* focused mail with no error.
+
+- **`outlook_list_thread` returned `400` on every call and had never worked in a released version.** Same root cause: `$filter=conversationId eq '…'` with `$orderby=receivedDateTime asc`. Verified against six real conversations before and after.
+
+- **`outlook_search_mail` silently returned zero results for every documented KQL property restriction** ([#30](https://github.com/mpalermiti/outlook-mcp/issues/30)). `sanitize_kql` stripped `:`, so `subject:Unlock` was sent as `"subjectUnlock"` — HTTP 200, no error, no results. The docstring's own example (`from:sarah@acme.com`) was broken; `from:`, `subject:` and `hasattachment:true` were all dead.
+
+  `:`, `(` and `)` are now preserved. Still stripped, each for a measured reason: `"` (an embedded quote makes Graph *silently discard* `$search` and return the whole mailbox — the real injection vector), `\` (a genuine escape metachar: `\s` is a 400, a trailing `\` escapes our closing quote), `*` (buys nothing, since Graph already prefix-matches, and a bare `*` would become a silent whole-mailbox read where it is currently a loud 400), and `&` `|` `!` (not operators; the symbol forms silently zero out a matching query). Applies to `outlook_search_contacts` too, which shares the sanitizer.
+
+  A query that sanitizes to empty now raises a clear `ValueError` instead of an opaque Graph `BadRequest`.
+
+- **Integration tests had been silently skipping since they were written.** The fixture called `AuthManager.login()`, which does not exist; the `AttributeError` was swallowed by a bare `except Exception` and reported as a skip — the "6 skipped" in every run. Repointed at `try_cached_token`. Running them then surfaced two more latent defects: a session-scoped Graph client raised `Event loop is closed` (the kiota/httpx transport binds to the running loop, so it is now function-scoped), and `test_list_drafts_smoke` asserted `result["drafts"]` where `list_drafts` returns `messages`.
+
+### Added
+
+- **`uncategorized_only` on `outlook_list_inbox`** ([#28](https://github.com/mpalermiti/outlook-mcp/pull/28), thanks [@jasond727](https://github.com/jasond727)) — filters to messages with no categories assigned via OData `not categories/any()`. Default `False`; behavior unchanged when omitted. Lets an agent ask "what have I not triaged yet?" server-side instead of pulling and filtering the whole inbox.
+
+- **Live query-shape test tier (`uv run pytest -m live`)** — 10 read-only tests guarding the three failure classes above. Mocks assert what we *send*; they cannot see what Graph *does* with it, which is how all three bugs shipped under 558 green tests. These assert on returned data, not just absence of an exception, because the dangerous failure mode is a silent 200 with wrong results. Mutation-verified: reverting each fix fails the corresponding tests. `scripts/preflight.py` does not cover this — it probes endpoint reachability and treats a 400 as a non-blocking SKIP.
+
+  The default `pytest` run is now the offline unit suite only; `integration` and `live` are deselected via `addopts`. Previously `integration` ran for real on any machine holding a cached token and merely *skipped* in CI, which reads as "covered" when nothing was exercised.
+
+### Changed
+
+- `outlook_list_inbox` summary line now names `category` as a filter dimension — that first docstring line is what an LLM reads when choosing among 62 tools.
+- `outlook_search_mail` docstring records two Graph behaviors that cost real query results: `AND`/`OR`/`NOT` must be **uppercase** (lowercase `and` matches as a literal term), and two terms with no operator between them *broaden* rather than narrow.
+- The `403 ErrorAccessDenied` recovery hint now carries a URL. It previously said "See ROADMAP 'Investigated and not viable'", but `ROADMAP.md` ships in neither the sdist nor the wheel — anyone who installed from PyPI had nothing to open.
+
+### Documentation
+
+- **`ROADMAP.md` mailboxSettings entry carried a misattributed quote.** It claimed the endpoint "is documented as `Delegated (personal Microsoft account): Not supported`". Both mailboxSettings reference pages list personal accounts as *supported*, and their permissions tables have been unchanged since 2023-10-27 — so they did not say that when 1.7.1 shipped either. The string belongs to a neighbouring `MailboxSettings`-scoped page (`workHoursAndLocations`, a different resource). The empirical `403` was always the real justification and is unaffected; re-verified 2026-09-03. The 1.7.1 entry below repeats the quote and is deliberately left as written — this changelog does not retroactively edit released sections.
+
+- **Inbox message rules documented as non-viable** ([#29](https://github.com/mpalermiti/outlook-mcp/pull/29), thanks [@tlewthwa](https://github.com/tlewthwa)) — `/me/mailFolders/inbox/messageRules` returns `403 ErrorAccessDenied` on personal accounts despite Graph's docs listing personal-MSA support, verified with a raw HTTP probe and the token's scopes recorded. Includes a COM/MAPI side investigation and a pointer to `/me/inferenceClassification/overrides`, the one rule-shaped capability that does work on personal accounts. This closes out the only Near-term roadmap item as blocked.
+
+### Tool count
+
+- 1.12.0 → 1.13.0: **62 tools, 13 categories** (no change).
+
 ## [1.12.0] — 2026-07-18
 
 Performance & efficiency pass for recurring agent loops (personal-account mail + calendar). No new tools, no breaking changes; the default tool surface is unchanged (62 tools). Validated against a measured tool-schema token count (~8,644 tokens/turn) and a mid-2026 ecosystem review.

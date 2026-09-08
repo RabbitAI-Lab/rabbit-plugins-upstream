@@ -1,0 +1,184 @@
+[
+ {
+  "provider": "mistral",
+  "model": "mistral-medium-latest",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 0.43
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 0.63
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.5-flash-lite",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 0.66
+ },
+ {
+  "provider": "openrouter",
+  "model": "inclusionai/ling-3.0-flash:free",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 0.93
+ },
+ {
+  "provider": "kilo",
+  "model": "kilo-auto/free",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 1.46
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3-flash-preview",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 1.5
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.5-flash",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 1.53
+ },
+ {
+  "provider": "kilo",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 2.3
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-super-120b-a12b:free",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 2.77
+ },
+ {
+  "provider": "kilo",
+  "model": "stepfun/step-3.7-flash:free",
+  "score": 5,
+  "of": 5,
+  "avg_sec": 3.41
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-small-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 0.45
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-large-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 0.46
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-3b-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 0.49
+ },
+ {
+  "provider": "mistral",
+  "model": "open-mistral-nemo",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 0.68
+ },
+ {
+  "provider": "mistral",
+  "model": "mistral-tiny-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 0.72
+ },
+ {
+  "provider": "mistral",
+  "model": "ministral-8b-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 1.22
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 1.4
+ },
+ {
+  "provider": "mistral",
+  "model": "magistral-medium-latest",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 4.81
+ },
+ {
+  "provider": "kilo",
+  "model": "openrouter/free",
+  "score": 4,
+  "of": 5,
+  "avg_sec": 5.89
+ },
+ {
+  "provider": "mistral",
+  "model": "codestral-latest",
+  "score": 3,
+  "of": 5,
+  "avg_sec": 0.59
+ },
+ {
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "score": 2,
+  "of": 5,
+  "avg_sec": 0.85
+ },
+ {
+  "provider": "openrouter",
+  "model": "poolside/laguna-s-2.1:free",
+  "score": 1,
+  "of": 5,
+  "avg_sec": 0.48
+ },
+ {
+  "provider": "openrouter",
+  "model": "openai/gpt-oss-20b:free",
+  "score": 1,
+  "of": 5,
+  "avg_sec": 0.88
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-3.6-flash",
+  "score": 0,
+  "of": 5,
+  "avg_sec": 0.23
+ },
+ {
+  "provider": "gemini",
+  "model": "gemini-flash-latest",
+  "score": 0,
+  "of": 5,
+  "avg_sec": 0.25
+ },
+ {
+  "provider": "kilo",
+  "model": "cohere/north-mini-code:free",
+  "score": 0,
+  "of": 5,
+  "avg_sec": 0.58
+ }
+]

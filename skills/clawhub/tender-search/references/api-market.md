@@ -24,8 +24,8 @@
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
 | `exclude_keywords` | list[str] | 排除关键词 |
-| `min_amount` | float | 最低金额（元） |
-| `max_amount` | float | 最高金额（元） |
+| `min_amount` | float | 最低金额（元，本类工具不做万元转换） |
+| `max_amount` | float | 最高金额（元，本类工具不做万元转换） |
 | `limit` | int | 返回数量，默认20，最大100 |
 | `sort_field` | str | 排序字段：`count`/`amount`/`pub_time`，默认 `count` |
 
@@ -80,8 +80,8 @@
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
 | `exclude_keywords` | list[str] | 排除关键词 |
-| `min_amount` | float | 最低金额（元） |
-| `max_amount` | float | 最高金额（元） |
+| `min_amount` | float | 最低金额（元，本类工具不做万元转换） |
+| `max_amount` | float | 最高金额（元，本类工具不做万元转换） |
 | `limit` | int | 返回数量，默认20，最大100 |
 | `sort_field` | str | 排序字段：`count`/`amount`/`pub_time`，默认 `count` |
 
@@ -136,6 +136,7 @@
 | `end_date` | str | 统计结束日期 |
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
+| `counties` | list[str] | 区县列表 |
 | `limit` | int | 返回品牌数量，默认10，最大50 |
 
 ### 响应结构
@@ -293,6 +294,7 @@
 | `end_date` | str | 统计结束日期 |
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
+| `counties` | list[str] | 区县列表 |
 | `limit` | int | 返回记录数量，默认20，最大200 |
 
 ### 响应结构
@@ -357,9 +359,16 @@
 
 | 工具 | 金额参数 | 单位 |
 |------|---------|------|
-| search_bids | `min_amount`, `max_amount` | 元 |
+| search_bids | `min_amount`, `max_amount` | **万元** |
 | query_bids_advanced | `min_money`, `max_money` | 元 |
+| search_expiring_projects / search_proposed_projects | `min_amount`, `max_amount` | **万元** |
+| get_company_partners | `min_amount` | **万元** |
 | aggregate_bids_advanced | `filters.min_money`, `filters.max_money` | 元 |
 | get_top_brands / get_price_trends | `min_price`, `max_price` | 元 |
 
-响应中 `money` 单位为元，`money_wan` 单位为万元。
+响应侧的元口径字段各接口不同名：标讯搜索是 `money`（对应 `money_wan`）、聚合是
+`sum_amount` / `total_amount`（对应 `sum_amount_wan`）、Top 类是 `total_amount`
+（对应 `total_amount_wan`）、合作伙伴是 `cooperation_amount`（对应 `cooperation_amount_wan`）。
+
+**例外**：`search_proposed_projects`（拟建项目）返回的 `money` **本身就是万元**，不要再除 10000；
+它的 `money_format` 有已知缺陷（按元又除了一次），别用。

@@ -1,46 +1,62 @@
-## Description: <br>
-Adaptive Hyperliquid perps execution engine for OpenClaw agents. Provides research, pre-trade simulation, predictive funding shifts, and zero-custody EIP-712 order routing with forensic telemetry. Scout (5/day), Pioneer (unlimited), and Syndicate (unlimited) execution supported. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Hyperliquid perpetual futures markets, account state, strategy sizing, and user-signed execution or cancellation workflows.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-External users and OpenClaw agents use this skill to research Hyperliquid perpetual futures markets, simulate strategies, size positions, and prepare order or cancellation requests. State-changing actions require explicit user confirmation and a fresh user-signed EIP-712 payload. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prepared futures orders can cause financial loss, liquidation, or unwanted exposure if confirmed with incorrect details. <br>
-Mitigation: Before every execution or cancellation, verify the asset, side, size, leverage, stop, liquidation estimate, margin impact, and order IDs before signing or confirming. <br>
-Risk: Private key, seed phrase, mnemonic, or raw wallet export disclosure would compromise the user's funds. <br>
-Mitigation: Do not provide wallet secrets to the agent or FarmDash; use only fresh local EIP-712 signatures from the user's Hyperliquid API wallet. <br>
-Risk: Stale strategy data or mutated order parameters can make a signed request unsafe or invalid. <br>
-Mitigation: Re-run strategy analysis when quotes are stale, and use nonce, expiresAt, and intentHash checks so signed actions match the presented order. <br>
-Risk: Oracle latency, price deviation, low liquidity, or conflicting signals can make leveraged execution unsuitable. <br>
-Mitigation: Respect no-trade outcomes, oracle-latency and deviation guardrails, adaptive risk reductions, and explicit user review before any non-reduce-only action. <br>
+## Use Case:
 
+External users and agent developers use this skill to research Hyperliquid perpetual futures markets, inspect account risk, size strategy proposals, and prepare user-approved signed execution or cancellation requests.
 
-## Reference(s): <br>
-- [FarmDash agents homepage](https://www.farmdash.one/agents) <br>
-- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist) <br>
-- [Bundled OpenAPI contract](artifact/openapi.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Guidance, JSON, API Calls, Shell commands] <br>
-**Output Format:** [Markdown guidance with structured JSON strategy, sizing, simulation, receipt, and order or cancellation payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scout tier supports up to 5 execution or analysis requests per day; state-changing actions require explicit user confirmation and user-signed EIP-712 authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.20 (source: server release metadata; artifact frontmatter version 3.0.1) <br>
+Risk: The skill can place or cancel real leveraged Hyperliquid futures trades while the top-level description says orders are preview-only.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat execution and cancellation as live financial actions; require fresh explicit user confirmation for every request and present trade details, leverage, fees, exposure, and cancellation impact before signing.
+
+Risk: Persisted workflow ledger data may expose sensitive trading state without clear retention limits.
+
+Mitigation: Keep workflow state isolated and short-lived unless a clear retention policy, access controls, and user expectations are in place.
+
+Risk: Wallet or account setup could lead users to share private key material.
+
+Mitigation: Never request, store, or transmit private keys, seed phrases, mnemonics, wallet exports, OAuth tokens, or raw wallet secrets; rely on per-request EIP-712 signing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical FarmDash Futures Strategist skill manual](https://www.farmdash.one/openclaw-skills/farmdash-futures-strategist/SKILL.md)
+- [FarmDash OpenAPI contract](https://www.farmdash.one/agents/openapi.yaml)
+- [FarmDash security and authority boundaries](https://www.farmdash.one/security)
+- [FarmDash fees and commercial terms](https://www.farmdash.one/fees)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, API calls, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with structured JSON strategy objects and API request or response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can include market analysis, account-risk summaries, position sizing, no-trade reasons, and user-confirmation prompts before signed execution or cancellation.]
+
+## Skill Version(s):
+
+1.0.23 (source: server release metadata; artifact metadata reports 3.2.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

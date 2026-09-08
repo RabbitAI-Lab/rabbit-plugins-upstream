@@ -1,44 +1,65 @@
-## Description: <br>
-wickworks helps agents compute technical indicators and Smart-Money-Concepts primitives from caller-provided OHLC candlestick bars through a stateless REST or MCP service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+wickworks lets an agent compute stateless technical indicators and Smart-Money-Concepts objects from caller-supplied OHLC candlestick bars through REST or MCP.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and trading-data agents use wickworks when they already have OHLC bars and need technical indicators or SMC structures computed without forecasting, scoring, or stateful data storage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The wickworks service is auth-less if exposed beyond localhost. <br>
-Mitigation: Bind it to localhost by default and expose it off-host only behind an authenticated reverse proxy or VPN. <br>
-Risk: Using an unpinned container image can reduce deployment reproducibility. <br>
-Mitigation: Pin a specific Docker image version for deployments that need repeatable behavior. <br>
-Risk: Requests can fail when they exceed configured bar limits or do not include enough warm-up bars for selected indicators. <br>
-Mitigation: Respect MAX_BARS and MIN_BARS settings, and handle insufficient_bars and 413 responses in the calling workflow. <br>
+## Use Case:
 
+Developers and engineers use wickworks when an agent needs technical indicators, Smart-Money-Concepts structure, or compact market-data summaries computed from OHLC bars supplied by the caller. It is useful for enriching trading or market datasets without asking the skill to fetch data, forecast prices, or produce buy/sell opinions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks) <br>
-- [wickworks setup](references/setup.md) <br>
-- [Model Context Protocol](https://modelcontextprotocol.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, JSON, REST, and MCP examples; service responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Computes stateless, NaN-safe outputs from caller-provided OHLC bars and returns insufficient-input or oversize-request errors when limits are not met.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.3 (source: server release metadata) <br>
+Risk: The setup uses a mutable third-party container image.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run only a trusted instance and prefer a pinned image digest or locally audited build.
+
+Risk: The service is unauthenticated by default and can be called by anyone who can reach its port.
+
+Mitigation: Bind it to 127.0.0.1 by default, or expose it only behind authenticated reverse-proxy or VPN controls.
+
+Risk: Caller-supplied OHLC data may be proprietary or sensitive.
+
+Mitigation: Send bars only to an endpoint you operate or otherwise trust.
+
+Risk: The skill returns market-analysis primitives, not forecasts or trading recommendations.
+
+Mitigation: Treat outputs as computed indicators for analysis and avoid presenting them as buy, sell, or price-prediction advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks)
+- [wickworks setup](references/setup.md)
+- [Project homepage](https://github.com/psyb0t/docker-wickworks)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [OpenClaw MCP bridge plugin](https://github.com/psyb0t/docker-wickworks/tree/main/.agents/plugins/wickworks)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JSON examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides an agent to call a stateless JSON service that returns NaN-safe indicator series, structured indicator objects, metadata, health results, or MCP tool results.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

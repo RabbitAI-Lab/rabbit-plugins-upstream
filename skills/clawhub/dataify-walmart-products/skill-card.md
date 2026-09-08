@@ -1,42 +1,54 @@
-## Description: <br>
-Submit Dataify Walmart Product Information Builder tasks for product URL, category URL, SKU, or keyword collection modes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Walmart product records by URL, category URL, SKU, or keyword. Do not use for Amazon, eBay, or general shopping-search results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to create Dataify Walmart product collection jobs, validate mode-specific parameters, and receive the submitted task ID and status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read DATAIFY_API_TOKEN from the local environment and use it to submit Dataify Builder requests. <br>
-Mitigation: Install only when Dataify task creation is intended, review token use before running, and remove or rotate DATAIFY_API_TOKEN if future automatic use is not desired. <br>
-Risk: Broad invocation could submit Walmart collection jobs when the user intent or collection mode is unclear. <br>
-Mitigation: Confirm the collection mode and mode-specific parameters before submitting a Builder request. <br>
+## Use Case:
 
+External users and developers use this skill to submit and monitor Dataify Builder jobs that collect Walmart product records from product URLs, category URLs, SKUs, or keywords.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-walmart-products) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with optional shell commands and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, selected mode, spider_id, parameters, file name, dashboard URL, and a short success message after submission.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: evidence release metadata) <br>
+Risk: The release includes under-disclosed generic scraping code and a runtime import path that can load code from outside the skill package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation, limit the package to Walmart Builder submission, and remove or separately package generic workflow code and sibling runtime imports.
+
+Risk: Dataify API TOKEN handling and task submission can expose credentials or consume account credits if misconfigured.
+
+Mitigation: Use a scoped or replaceable Dataify API TOKEN, keep tokens out of request URLs and logs, validate collection scope before submission, and monitor credit usage.
+
+## Reference(s):
+
+- [Modes and parameters](references/modes-and-parameters.md)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-walmart-products)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit external Dataify Builder jobs and return task status, task IDs, or collected JSON results.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

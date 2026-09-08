@@ -1,43 +1,59 @@
-## Description: <br>
-Generate and archive Ovitalmap parcel vertex/boundary CSVs for users who provide parcel coordinates or images and request 奥维地图 CSV export, archive re-export, or coordinate correction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert parcel boundaries into OvitalMap-compatible CSV files, assign stable parcel codes, and maintain deduplicated country and master archives.
 
-## Publisher: <br>
-[jeromeex](https://clawhub.ai/user/jeromeex) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jeromeex](https://clawhub.ai/user/jeromeex)
 
-## Use Case: <br>
-External users and developers use this skill to turn confirmed parcel coordinates into Ovitalmap-compatible vertex and boundary CSV files, then maintain local per-country and master parcel archives. It is intended for workflows that need provider matching, code assignment, archive re-export, or coordinate correction with explicit confirmation gates before writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill writes generated CSVs and can update local parcel archives. <br>
-Mitigation: Set OVITALMAP_WORKSPACE to the intended project folder, review coordinate, provider, and code confirmations before allowing writes, and keep backups of important archives. <br>
-Risk: Incorrect country, provider, parcel code, or coordinate confirmation could create misleading Ovitalmap exports or archive records. <br>
-Mitigation: Treat script-reported error and needs_input states as blocking, require explicit confirmation for non-exact matches and generated codes, and do not guess missing geographic or identity fields. <br>
+## Use Case:
 
+Developers and field-mapping teams use this skill to convert confirmed parcel coordinates into OvitalMap CSV exports, allocate stable parcel codes, and maintain local country and master archives. It supports WGS84, DMS, and UTM coordinate inputs, including archive re-exports and coordinate corrections.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jeromeex/skills/ovitalmap-parcel-csv) <br>
-- [CSV Compatibility Contract](references/csv-contract.md) <br>
-- [Interaction and Edge Cases](references/interaction-and-edge-cases.md) <br>
-- [OpenClaw Reply Contract](references/reply-contract.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Chinese user-facing replies with generated CSV files, file paths, JSON-driven script calls, and concise Markdown guidance when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces Ovitalmap vertex and boundary CSVs and can update local parcel archive CSVs after required user confirmations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release evidence) <br>
+Risk: Parcel coordinates and provider metadata are written to local CSV exports and archives.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set OVITALMAP_WORKSPACE to a dedicated directory and manage access to the generated files according to the sensitivity of the parcel data.
+
+Risk: Incorrect coordinates, country codes, provider names, or generated parcel codes could produce misleading map exports.
+
+Mitigation: Review displayed WGS84 coordinates and proposed parcel codes before approval, and stop on needs_input or blocked responses until the requested fields are resolved.
+
+Risk: The output may be mistaken for legal cadastral validation.
+
+Mitigation: Use the generated files as mapping and export assistance only, not as cadastral or legal validation.
+
+## Reference(s):
+
+- [CSV Compatibility Contract](references/csv-contract.md)
+- [Workflow Contract](references/workflow-contract.md)
+- [Interaction and Edge Cases](references/interaction-and-edge-cases.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated CSV file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated exports and archives are local CSV files; OVITALMAP_WORKSPACE can set a dedicated output directory.]
+
+## Skill Version(s):
+
+3.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,53 @@
-## Description: <br>
-This skill helps QA leaders manage testing teams, set goals and performance standards, define growth plans, evaluate staff, design interview standards, and build team structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides QA team leadership guidance for team structure, goals, KPI and performance evaluation, interview standards, hiring, and team growth.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA managers, test leads, and engineering leaders use this skill to create structured management plans for testing teams, including team assessments, capability models, performance evaluation, hiring standards, and improvement roadmaps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on generic management terms such as goals. <br>
-Mitigation: Confirm the request is about QA or testing leadership before applying the skill's recommendations. <br>
-Risk: Management, hiring, or performance guidance can affect people decisions if used without review. <br>
-Mitigation: Use the output as planning support and review it against organizational policy, applicable employment requirements, and manager judgment before action. <br>
-Risk: A management plan may omit relevant team roles or assessment context. <br>
-Mitigation: Apply the artifact's recovery guidance: supplement the team capability assessment, then redesign the plan. <br>
+## Use Case:
 
+QA leaders, test managers, and engineering managers use this skill to organize QA teams, define goals and capability models, evaluate performance, and prepare recruiting and interview standards.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-leadership) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured text with LEAD-XXXX traceability identifiers] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include team assessments, improvement roadmaps, stakeholder plans, metrics frameworks, interview standards, and recovery guidance for missing roles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release) <br>
+Risk: The skill may activate on broad management or hiring prompts outside a QA team context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify that the requested work is about QA team leadership before applying the skill.
+
+Risk: Management, evaluation, or hiring workflows may invite unnecessary sensitive personnel details.
+
+Mitigation: Provide only personnel details needed for the requested management or evaluation output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-leadership)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with tables, checklists, and structured management plans]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include unique management plan IDs such as LEAD-XXXX when producing plans.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

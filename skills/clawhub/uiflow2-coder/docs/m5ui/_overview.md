@@ -4,6 +4,20 @@ M5UI is a UI library based on LVGL v9.3. It provides a set of widgets and functi
 
 It has been adapted for M5Stack devices and you only need to call `m5ui.init()` to start using it.
 
+## Supported Controllers
+
+The current UiFlow2 firmware enables both LVGL and M5UI on the following 9 controllers:
+
+- Core2 (`M5STACK_Core2`)
+- CoreS3 (`M5STACK_CoreS3`)
+- M5Dial (`M5STACK_Dial`)
+- StackChan (`M5STACK_StackChan`)
+- StopWatch (`M5STACK_StopWatch`)
+- Tab5 (`M5STACK_Tab5`)
+- Tab5X (`M5STACK_Tab5X`; inherits the Tab5 LVGL and M5UI configuration)
+- Tough (`M5STACK_Tough`)
+- ToughC5 (`M5STACK_ToughC5`)
+
 ## M5 Series Display Libraries
 
 #### 1. Display (M5.Lcd)
@@ -19,11 +33,13 @@ It has been adapted for M5Stack devices and you only need to call `m5ui.init()` 
 - Suitable for simple interactive UI elements.
 - **Access via**: `M5.Widgets.Label()`, `M5.Widgets.Image()`, `M5.Widgets.Rectangle()`, etc.
 - **Important**: `M5.Widgets` provides UI component **classes**, not drawing methods.
+- **Recommendation**: For new interactive UI projects, prefer M5UI/LVGL. Use M5.Widgets for simple or legacy UI components.
 
 #### 3. M5UI
 
 - A high-level UI framework based on LVGL.
 - Provides page management, multi-widget layouts, and unified event handling.
+- **Recommendation**: Prefer M5UI/LVGL for new interactive UI projects.
 - **Access via**: `m5ui.M5Label()`, `m5ui.M5Button()`, `m5ui.M5Page()`, etc.
 
 #### Usage Tips
@@ -31,7 +47,7 @@ It has been adapted for M5Stack devices and you only need to call `m5ui.init()` 
 - ⚠️ Do not mix M5GFX, M5Widgets, and M5UI simultaneously, as it may cause rendering issues or event conflicts.
 - For graphics-only drawing → use M5GFX (M5.Lcd).
 - For simple interactive widgets → use M5Widgets.
-- For multi-page UI → use M5UI.
+- For multi-page UI → use M5UI/LVGL (recommended for new projects).
 
 #### Common Mistakes to Avoid
 
@@ -67,6 +83,16 @@ Some builds, such as Tab5, also include `lv.font_montserrat_20`,
 `lv.font_montserrat_22`, `lv.font_montserrat_30`, and
 `lv.font_montserrat_36`.
 
+Most firmware builds with CJK font support also expose these 24 px LVGL font
+objects for `m5ui` widgets:
+
+- `lv.AlibabaPuHuiTi_CN24` - Simplified Chinese
+- `lv.AlibabaSans_JP24` - Japanese
+- `lv.AlibabaSans_KR24` - Korean
+
+The LVGL and `M5.Lcd.FONTS` object names are different. Use the spelling
+shown for the UI API you are using.
+
 **M5.Lcd / Widgets CJK fonts**
 
 For drawing text with `M5.Lcd` or widgets based on `M5.Widgets`, use
@@ -76,17 +102,14 @@ For drawing text with `M5.Lcd` or widgets based on `M5.Widgets`, use
 - `M5.Lcd.FONTS.AlibabaSansJA24` - Japanese
 - `M5.Lcd.FONTS.AlibabaSansKR24` - Korean
 
-The older `EFontCN24`, `EFontJA24`, and `EFontKR24` names are deprecated
-aliases; prefer the `Alibaba*` names above. These CJK fonts may be disabled on
-small-flash or resource-constrained firmware builds.
-
-> Important: Do not assume every font is available on every device. If your code may run
-> on multiple boards, use common fonts or check availability before using an
-> optional size/font, for example `hasattr(lv, "font_montserrat_20")` for
-> LVGL fonts.
+> Important: Check the target controller's documentation for its supported fonts before
+> selecting a font. If the documentation does not provide this information,
+> check availability at runtime, for example with
+> `hasattr(lv, "font_montserrat_20")`.
 **Font Selection Guide**:
 
 - `m5ui` labels/buttons/dropdowns -> `lv.font_montserrat_*`
+- `m5ui` widgets with CJK text -> `lv.Alibaba*24`
 - `M5.Lcd.drawString()` / `M5.Widgets` English text -> `M5.Lcd.FONTS.Montserrat*`
 - `M5.Lcd.drawString()` / `M5.Widgets` Chinese/Japanese/Korean text -> `M5.Lcd.FONTS.Alibaba*24`
 
@@ -118,5 +141,3 @@ value = m5ui.M5Label("123", x=10, y=80, font=optional_font, parent=page0)
     Deinitialize the M5UI library. This function should be called when you no longer need to use M5UI.
 
     - Returns: None
-
-## Classes

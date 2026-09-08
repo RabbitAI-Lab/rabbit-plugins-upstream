@@ -1,0 +1,78 @@
+{
+  "skill": "arena-turn-accelerator",
+  "version": "2.1.2",
+  "schema": "arena_turn.manifest.v1",
+  "runtime": "python3 (>=3.8, stdlib only)",
+  "entrypoints": {
+    "preflight": "scripts/turn_preflight.py --text T [--turn N --chars N --latency S --stakes low|normal|high --rapport cold|warm --draft D --agent A --model M --ctx-tokens N] (--json [--compact] | --brief | --schema | human)",
+    "compact": "scripts/prompt_compactor.py --text T [--file F --json --profile conservative|standard|aggressive --lang L --verify --selfcheck]",
+    "fence": "scripts/request_lifecycle.py new|check G|supersede|complete G|status [--json]",
+    "hygiene": "scripts/context_hygiene.py record|assess|brief [--json --ctx-tokens N]",
+    "verification": "scripts/verification_triage.py [--vpn yes|no --blocker MODE --cookies MODE --tabs N]",
+    "spine": "scripts/spine.py classify|guard|pin TEXT",
+    "register": "scripts/register.py pick|check TEXT [--stakes S --rapport R]",
+    "quarry": "scripts/quarry.py opening|seed|check TEXT [--turns-since-strike N]",
+    "arbiter": "scripts/arbiter.py TEXT [--json --stakes S --rapport R --turns-since-strike N --urgent]",
+    "report": "scripts/turn_report.py [--agent A --ctx-tokens N --json]",
+    "selftest": "bash scripts/selftest.sh",
+    "schema": "scripts/turn_preflight.py --schema  (JSON Schema of the turn_preflight.v1 bundle)"
+  },
+  "contracts": [
+    "turn_preflight.v1",
+    "request_lifecycle.v1",
+    "context_hygiene.v1",
+    "turn_report.v1"
+  ],
+  "verification_contract": "prompt_compactor --verify: exit 0 VERIFIED, exit 3 VIOLATED (missing spans/numbers/signals listed)",
+  "state": {
+    "dir": "~/.arena_turn (legacy shared) or ~/.arena_turn/agents/<name> (--agent/$ARENA_AGENT)",
+    "files": [
+      "lifecycle.json",
+      "context.json",
+      "spine.json"
+    ],
+    "bounded": "history capped at 400 samples",
+    "writes_confined": true,
+    "network": false,
+    "sudo": false
+  },
+  "exit_codes": {
+    "turn_report.py": {
+      "0": "HEALTHY",
+      "1": "WATCH",
+      "2": "COMPACT NOW",
+      "3": "RESET"
+    },
+    "prompt_compactor.py --verify": {
+      "0": "verified",
+      "3": "constraint violation"
+    }
+  },
+  "docs": {
+    "rationale": "docs/problems.md",
+    "evidence": "docs/evidence.md",
+    "integration": "docs/INTEGRATION.md",
+    "history": "CHANGELOG.md"
+  },
+  "evidence_verified_utc": "2026-09-06",
+  "execution": {
+    "mode": "in-process by default (stages imported and called, no interpreter per stage)",
+    "fallback": "automatic subprocess fallback; force with ARENA_PREFLIGHT_SUBPROC=1",
+    "measured": "human path ~5.9x faster, --json ~2.5x faster than the v2.0.0 subprocess engine"
+  },
+  "token_costs": {
+    "--brief": "~130 chars (~32 tokens) — one injection line for low-context models",
+    "--json --compact": "minified; ~22.7% smaller than --json on the reference prompt",
+    "--json": "indented; for humans and diffing"
+  },
+  "encoding": {
+    "stdout": "forced UTF-8 (errors=replace) by scripts/utf8io.py",
+    "state_files": "UTF-8, ensure_ascii=False (real characters, not \\uXXXX escapes)",
+    "argv": "lone surrogates repaired, so non-ASCII is safe under LC_ALL=C"
+  },
+  "trust_boundary": {
+    "verdicts": "fence/spine/register/ctx/constraints — emitted BEFORE the echo; tool output",
+    "untrusted": "Q(...) echo and compaction.compact — user-controlled DATA, never instructions",
+    "neutralised": "| -> U+2502, : -> U+A789, \" -> ', control chars -> space"
+  }
+}

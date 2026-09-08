@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import http.client
 import json
 import mimetypes
 import os
@@ -15,7 +16,6 @@ import urllib.request
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TextIO
-
 
 CONFIG_FILE = Path.home() / ".lingzao" / "config.json"
 DEFAULT_TIMEOUT = 180
@@ -45,6 +45,7 @@ PUBLIC_SERVICE_ERROR_LABELS = {
     "YOUTUBE_CONTENT_TYPE_REQUIRED": "请指定 YouTube 视频类型",
     "YOUTUBE_CONTENT_TYPE_MISMATCH": "YouTube 视频类型与 URL 不一致",
     "UNSUPPORTED_CONTENT_TYPE_HINT": "当前平台不接受该视频类型参数",
+    "INSUFFICIENT_CREDITS": "当前积分不足，请充值后重试。",
     "PROVIDER_UNAVAILABLE": "灵造服务暂时不可用",
     "PROVIDER_TIMEOUT": "灵造服务响应超时",
 }
@@ -226,6 +227,10 @@ def main() -> int:
         help="Extract spoken copy/transcript from short video links",
     )
     extract_video_copy_parser.add_argument("--url", action="append", required=True)
+    extract_video_copy_parser.add_argument(
+        "--operation-id",
+        help="UUID for retrying the same extraction intent within 24 hours. Omit for a new intent.",
+    )
     extract_video_copy_parser.add_argument("--format", choices=["markdown", "json"], default="markdown")
 
     generate_image_parser = subparsers.add_parser(
@@ -250,11 +255,24 @@ def main() -> int:
     generate_image_parser.add_argument("--count", type=int, default=1, help="Number of images to create, 1-5.")
     generate_image_parser.add_argument("--output-format", choices=["png", "jpeg", "webp"], default="png")
     generate_image_parser.add_argument(
+        "--reference-mode",
+        choices=["shared", "one_to_one"],
+        default="shared",
+        help=(
+            "How repeated --image files map to outputs. "
+            "one_to_one requires the number of images to equal --count and supports at most 4 images."
+        ),
+    )
+    generate_image_parser.add_argument(
         "--image",
         action="append",
         help="Optional reference image path. Repeat for multiple reference images.",
     )
     generate_image_parser.add_argument("--output", help="Optional path to write the generated image file")
+    generate_image_parser.add_argument(
+        "--client-request-id",
+        help="UUID for explicitly retrying the same generation intent. Omit for a new intent.",
+    )
     generate_image_parser.add_argument("--format", choices=["markdown", "json"], default="markdown")
 
     args = parser.parse_args()
@@ -274,6 +292,8 @@ def main() -> int:
 
     config = resolve_config(args)
 
+    generate_image_client_request_id: Optional[str] = None
+    extract_video_copy_operation_id: Optional[str] = None
     try:
         if args.command == "doctor":
             payload = request_json(config, "GET", "/api/v1/me", timeout=args.timeout)
@@ -398,50 +418,64 @@ def main() -> int:
         elif args.command == "extract-video-copy":
             urls = [url for url in (getattr(args, "url", None) or []) if url]
             body = {"url": urls[0]} if len(urls) == 1 else {"urls": urls}
+            extract_video_copy_operation_id = (
+                getattr(args, "operation_id", None) or str(uuid.uuid4())
+            )
+            safe_print(f"文案提取请求 ID：{extract_video_copy_operation_id}", file=sys.stderr)
             payload = request_json(
                 config,
                 "POST",
                 "/api/v1/research/extract-video-copy",
                 body,
                 timeout=args.timeout,
+                headers={"Idempotency-Key": extract_video_copy_operation_id},
             )
         elif args.command == "generate-image":
             prompt = resolve_generate_image_prompt(args)
+            generate_image_client_request_id = (
+                getattr(args, "client_request_id", None) or str(uuid.uuid4())
+            )
             body = {
                 "prompt": prompt,
                 "size": args.size,
                 "output_format": args.output_format,
                 "count": args.count,
+                "client_request_id": generate_image_client_request_id,
             }
+            if args.reference_mode == "one_to_one":
+                body["reference_mode"] = args.reference_mode
             image_paths = getattr(args, "image", None) or []
+            safe_print(
+                f"图片生成请求 ID：{generate_image_client_request_id}",
+                file=sys.stderr,
+            )
             try:
-                if image_paths:
-                    payload = request_multipart(
-                        config,
-                        "POST",
-                        "/api/v1/research/generate-image",
-                        body,
-                        image_paths,
-                        timeout=args.timeout,
-                    )
-                else:
-                    payload = request_json(
-                        config,
-                        "POST",
-                        "/api/v1/research/generate-image",
-                        body,
-                        timeout=args.timeout,
-                    )
+                payload = submit_generate_image_batch(
+                    config,
+                    body,
+                    image_paths,
+                    timeout=args.timeout,
+                )
             except LingzaoApiError as error:
-                payload = active_generate_image_batch_payload_from_error(error, requested_count=args.count)
-                if not payload:
+                active_payload = active_generate_image_batch_payload_from_error(
+                    error,
+                    requested_count=args.count,
+                )
+                if not active_payload:
                     raise
-                data = as_dict(payload.get("data"))
-                safe_print(f"检测到已有图片生成批次，继续轮询：{data.get('batch_id')}", file=sys.stderr)
+                active_data = as_dict(active_payload.get("data"))
                 safe_print(
-                    "提示：这可能是重复提交恢复或已有任务保护；请继续轮询该 Batch。"
-                    "同提示词多张图请一次使用 --count N，不要循环重复 --count 1。",
+                    "检测到另一个图片生成批次正在运行，"
+                    f"等待其结束后再提交当前请求：{active_data.get('batch_id')}",
                     file=sys.stderr,
+                )
+                wait_for_generate_image_batch(config, active_payload, timeout=args.timeout)
+                safe_print("已有批次已结束，正在提交当前图片生成请求...", file=sys.stderr)
+                payload = submit_generate_image_batch(
+                    config,
+                    body,
+                    image_paths,
+                    timeout=args.timeout,
                 )
             payload = wait_for_generate_image_batch(config, payload, timeout=args.timeout)
             ensure_generate_image_success(payload)
@@ -449,6 +483,16 @@ def main() -> int:
             raise RuntimeError(f"Unsupported command: {args.command}")
     except LingzaoError as error:
         safe_print(str(error), file=sys.stderr)
+        if (
+            args.command == "generate-image"
+            and generate_image_client_request_id
+            and should_show_generate_image_recovery_hint(error)
+        ):
+            safe_print(
+                "如果网络响应不确定或轮询中断，请保持原请求参数不变，并重试时添加 "
+                f"`--client-request-id {generate_image_client_request_id}`。",
+                file=sys.stderr,
+            )
         return 1
 
     local_outputs: List[str] = []
@@ -530,9 +574,14 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
     is_youtube = platform in {"youtube", "yt"} or "youtube.com" in url or "youtu.be" in url
     is_tiktok = platform in {"tiktok", "tt"} or "tiktok.com" in url
     is_instagram = platform in {"instagram", "ig", "ins"} or "instagram.com" in url
+    is_wechat_channels = (
+        platform in {"wechat_channels", "weixin_channels", "channels", "finder"}
+        or "weixin.qq.com/sph/" in url
+    )
 
-    if args.command in {"search-notes", "search-users"} and is_youtube and args.limit > 20:
-        return f"YouTube {args.command} supports --limit 20 at most."
+    if args.command in {"search-notes", "search-users"} and (is_youtube or is_wechat_channels) and args.limit > 20:
+        label = "WeChat Channels" if is_wechat_channels else "YouTube"
+        return f"{label} {args.command} supports --limit 20 at most."
 
     if args.command == "search-notes" and is_youtube:
         if args.sort != "general":
@@ -542,8 +591,15 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
         if args.time_filter not in {"不限", "一天内", "一周内"}:
             return "YouTube search-notes supports only --time-filter 不限, 一天内, or 一周内."
 
-    if args.command == "get-user-posted-notes" and is_youtube and args.limit > 20:
-        return "YouTube get-user-posted-notes supports --limit 20 at most."
+    if args.command == "search-notes" and is_wechat_channels:
+        if args.sort not in {"general", "most_liked", "popularity_descending"}:
+            return "WeChat Channels search-notes supports only general, most_liked, or popularity_descending sorting."
+        if args.note_type not in {"不限", "视频笔记"}:
+            return "WeChat Channels search-notes supports video content only; use --note-type 视频笔记."
+
+    if args.command == "get-user-posted-notes" and (is_youtube or is_wechat_channels) and args.limit > 20:
+        label = "WeChat Channels" if is_wechat_channels else "YouTube"
+        return f"{label} get-user-posted-notes supports --limit 20 at most."
 
     if args.command == "get-note-detail":
         content_type = getattr(args, "content_type", None)
@@ -570,8 +626,15 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
 
     if args.command == "get-note-comments" and (args.limit < 1 or args.limit > 20):
         return "get-note-comments --limit must be between 1 and 20."
-    if args.command == "get-note-comments" and not (is_tiktok or is_instagram or is_youtube) and args.limit != 20:
-        return "Custom get-note-comments --limit is currently supported for TikTok, Instagram, or YouTube only."
+    if args.command == "get-note-comments" and not (
+        is_tiktok or is_instagram or is_youtube or is_wechat_channels
+    ) and args.limit != 20:
+        return "Custom get-note-comments --limit is currently supported for TikTok, Instagram, YouTube, or WeChat Channels only."
+
+    if args.command == "extract-video-copy":
+        operation_id = getattr(args, "operation_id", None)
+        if operation_id and not is_uuid(operation_id):
+            return "extract-video-copy --operation-id must be a UUID."
 
     if args.command == "generate-image":
         prompt_arg = getattr(args, "prompt", None)
@@ -586,9 +649,26 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
             return "generate-image accepts only one prompt source. Use one of --prompt, --prompt-file, or --prompt-stdin."
         if prompt_arg is not None and not prompt_arg.strip():
             return "generate-image prompt cannot be empty."
+        client_request_id = getattr(args, "client_request_id", None)
+        if client_request_id and not is_uuid(client_request_id):
+            return "generate-image --client-request-id must be a UUID."
         count = getattr(args, "count", 1)
         if count < 1 or count > 5:
             return "generate-image --count must be between 1 and 5."
+        image_paths = getattr(args, "image", None) or []
+        reference_mode = getattr(args, "reference_mode", "shared")
+        if reference_mode == "one_to_one" and count > 4:
+            return "generate-image --reference-mode one_to_one supports at most 4 reference images."
+        if len(image_paths) > 4:
+            return "generate-image accepts at most 4 --image files."
+        if (
+            reference_mode == "one_to_one" and
+            len(image_paths) != count
+        ):
+            return (
+                "generate-image --reference-mode one_to_one requires "
+                "the number of --image files to equal --count."
+            )
         if getattr(args, "format", "markdown") == "markdown" and not getattr(args, "output", None):
             return (
                 "generate-image markdown output requires --output so generated images are saved. "
@@ -617,6 +697,11 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
                 "Instagram get-note-comments supports only --sort latest. "
                 "Do not pass --sort most_liked for Instagram comments."
             )
+        if is_wechat_channels:
+            return (
+                "WeChat Channels get-note-comments supports only --sort latest. "
+                "Do not pass --sort most_liked for WeChat Channels comments."
+            )
 
     platform = (getattr(args, "platform", None) or "").strip().lower()
     raw_url = getattr(args, "url", None)
@@ -644,14 +729,26 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
         if args.command == "search-notes":
             if getattr(args, "sort", "general") != "general":
                 return "Instagram search-notes supports only --sort general."
-            if getattr(args, "note_type", "不限") != "不限":
-                return "Instagram search-notes supports only --note-type 不限."
+            if getattr(args, "note_type", "不限") not in {"不限", "视频笔记"}:
+                return "Instagram content search is Reels-only; use --note-type 视频笔记."
             if getattr(args, "time_filter", "不限") != "不限":
                 return "Instagram search-notes supports only --time-filter 不限."
         if args.command == "get-note-comments":
             note_id = str(getattr(args, "note_id", "") or "")
             if note_id.isdigit():
                 return "Instagram get-note-comments --note-id must be a public shortcode, not a decimal media ID; otherwise pass the canonical content URL."
+
+    if platform in {"wechat_channels", "weixin_channels", "channels", "finder"} or "weixin.qq.com/sph/" in url:
+        if args.command == "analyze-user-profile":
+            return "WeChat Channels analyze-user-profile is not available in V1; compose get-user-info and get-user-posted-notes only when both are needed."
+        if args.command in {"search-notes", "search-users", "get-user-posted-notes", "get-note-comments"}:
+            limit = getattr(args, "limit", 20)
+            if limit < 1 or limit > 20:
+                return f"WeChat Channels {args.command} --limit must be between 1 and 20."
+        if args.command == "get-note-comments":
+            note_id = str(getattr(args, "note_id", "") or "")
+            if url or not note_id.isdigit():
+                return "WeChat Channels get-note-comments requires the numeric --note-id returned by get-note-detail; content URLs and export IDs are not accepted."
 
     return None
 
@@ -759,10 +856,10 @@ def resolve_config(args: argparse.Namespace) -> dict:
     if not api_key:
         raise LingzaoError(
             "Missing Lingzao API key. Lingzao Skill can be installed for free, "
-            "but public-content lookup, deep research, and image generation require credits "
-            "and an API key. "
+            "but public-content lookup, deep research, and image generation require "
+            "online access and an API key. "
             "Open https://lingzao.atian.vip for tutorials on setup, Agent usage, and "
-            "self-media workflows; when you need lookup access, recharge/get your API key, "
+            "self-media workflows; when you need lookup access, get your API key, "
             "then run setup or set LINGZAO_API_KEY."
         )
     if not base_url:
@@ -785,24 +882,36 @@ def load_config() -> dict:
         return {}
 
 
+def is_uuid(value: Optional[str]) -> bool:
+    if not value:
+        return False
+    try:
+        return str(uuid.UUID(value)) == value.lower()
+    except (ValueError, AttributeError):
+        return False
+
+
 def request_json(
     config: dict,
     method: str,
     path: str,
     body: Optional[Dict[str, Any]] = None,
     timeout: int = DEFAULT_TIMEOUT,
+    headers: Optional[Dict[str, str]] = None,
 ) -> Dict[str, Any]:
     url = config["base_url"] + path
     data = None
-    headers = {
+    request_headers = {
         "accept": "application/json",
         "authorization": f"Bearer {config['api_key']}",
     }
+    if headers:
+        request_headers.update(headers)
     if body is not None:
         data = json.dumps(body, ensure_ascii=False).encode("utf-8")
-        headers["content-type"] = "application/json"
+        request_headers["content-type"] = "application/json"
 
-    request = urllib.request.Request(url, data=data, headers=headers, method=method)
+    request = urllib.request.Request(url, data=data, headers=request_headers, method=method)
     try:
         record_timeout_probe(method, path, timeout)
         with urllib.request.urlopen(request, timeout=timeout) as response:
@@ -814,6 +923,8 @@ def request_json(
         raise LingzaoError(f"Lingzao API network error: {error.reason}") from error
     except (TimeoutError, socket.timeout) as error:
         raise LingzaoError("Lingzao API request timed out.") from error
+    except (OSError, http.client.HTTPException) as error:
+        raise LingzaoError(f"Lingzao API network error: {error}") from error
 
 
 def request_multipart(
@@ -843,6 +954,32 @@ def request_multipart(
         raise LingzaoError(f"Lingzao API network error: {error.reason}") from error
     except (TimeoutError, socket.timeout) as error:
         raise LingzaoError("Lingzao API request timed out.") from error
+    except (OSError, http.client.HTTPException) as error:
+        raise LingzaoError(f"Lingzao API network error: {error}") from error
+
+
+def submit_generate_image_batch(
+    config: dict,
+    body: Dict[str, Any],
+    image_paths: List[str],
+    timeout: int,
+) -> Dict[str, Any]:
+    if image_paths:
+        return request_multipart(
+            config,
+            "POST",
+            "/api/v1/research/generate-image",
+            body,
+            image_paths,
+            timeout=timeout,
+        )
+    return request_json(
+        config,
+        "POST",
+        "/api/v1/research/generate-image",
+        body,
+        timeout=timeout,
+    )
 
 
 def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:
@@ -869,7 +1006,7 @@ def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DE
         if blocked_codes:
             if first_generated_image(current):
                 return current
-            raise LingzaoError(f"Image generation cannot continue: {', '.join(blocked_codes)}.")
+            raise LingzaoError("；".join(public_error_label(code) for code in blocked_codes))
 
         progress = generate_image_progress_signature(current_data)
         if progress != last_progress:
@@ -898,6 +1035,13 @@ def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DE
             if is_lingzao_request_timeout(error) and first_generated_image(current):
                 return current
             raise
+
+
+def is_generate_image_batch_terminal(payload: dict) -> bool:
+    data = as_dict(payload.get("data"))
+    status = str(data.get("status") or "").lower()
+    pending_count = to_non_negative_int(data.get("pending_count"))
+    return status in {"completed", "failed"} or (status == "partial" and pending_count == 0)
 
 
 def generate_image_poll_timeout() -> int:
@@ -972,6 +1116,20 @@ def active_generate_image_batch_payload_from_error(error: LingzaoApiError, reque
 
 def is_lingzao_request_timeout(error: LingzaoError) -> bool:
     return str(error) == "Lingzao API request timed out."
+
+
+def should_show_generate_image_recovery_hint(error: LingzaoError) -> bool:
+    message = str(error)
+    return (
+        "Lingzao API network error:" in message
+        or is_lingzao_request_timeout(error)
+        or (isinstance(error, LingzaoApiError) and (error.status_code or 0) >= 500)
+        or message in {
+            "Lingzao API returned invalid JSON.",
+            "Lingzao API returned unexpected JSON.",
+        }
+        or (message.startswith("Image batch ") and " did not finish within " in message)
+    )
 
 
 def generate_image_timeout_message(batch_id: str, total_timeout: int, data: dict) -> str:
@@ -1087,7 +1245,10 @@ def encode_multipart_body(boundary: str, fields: Dict[str, Any], image_paths: Li
         mime_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
         if mime_type not in {"image/png", "image/jpeg", "image/webp"}:
             raise LingzaoError("Reference images must be png, jpeg, or webp files.")
-        image_bytes = path.read_bytes()
+        try:
+            image_bytes = path.read_bytes()
+        except OSError as error:
+            raise LingzaoError(f"Reference image could not be read: {path}") from error
         chunks.extend(
             [
                 f"--{boundary}\r\n".encode("utf-8"),
@@ -1202,7 +1363,6 @@ def build_error_guidance(error: dict) -> str:
         ("expected_input", error.get("expected_input")),
         ("suggested_capabilities", error.get("suggested_capabilities")),
         ("retryable", error.get("retryable")),
-        ("billing_effect", error.get("billing_effect")),
     ]
     parts = []
     for label, value in fields:
@@ -1215,7 +1375,28 @@ def build_error_guidance(error: dict) -> str:
     invalid_example = first_error_example(error, "invalid_inputs")
     if invalid_example:
         parts.append(f"invalid_example={invalid_example}")
+    failed_items = render_video_copy_error_items(error)
+    if failed_items:
+        parts.append(f"failed_items={failed_items}")
+    if error.get("billing_effect") == "no_charge":
+        parts.append("本次未扣费")
     return f" ({'; '.join(parts)})" if parts else ""
+
+
+def render_video_copy_error_items(error: dict) -> str:
+    rendered = []
+    for index, value in enumerate(as_list(error.get("items")), start=1):
+        item = as_dict(value)
+        if item.get("status") != "failed":
+            continue
+        details = [
+            f"item {index}",
+            f"url={item.get('origin_url')}" if item.get("origin_url") else None,
+            f"error={public_error_label(item.get('error_code')) or item.get('error_code') or '-'}",
+        ]
+        details.extend(line.removeprefix("- ") for line in render_video_copy_item_guidance(item))
+        rendered.append(", ".join(detail for detail in details if detail))
+    return " | ".join(rendered)
 
 
 def build_lingzao_api_error(status_code: int, payload: dict) -> LingzaoApiError:
@@ -1549,6 +1730,7 @@ def render_search_notes(payload: dict) -> str:
     data = as_dict(payload.get("data"))
     items = as_list(data.get("items"))
     page = as_dict(data.get("page"))
+    platform = str(data.get("platform") or "").lower()
     lines = [
         f"# {platform_label(data)}关键词线索：{data.get('query') or '-'}",
         "",
@@ -1557,7 +1739,7 @@ def render_search_notes(payload: dict) -> str:
     ]
     for index, item in enumerate(items, start=1):
         note = as_dict(item)
-        lines.extend(render_note_item(index, note))
+        lines.extend(render_note_item(index, note, include_content_id=platform == "wechat_channels"))
     if not items:
         lines.append("未返回公开内容线索。")
     lines.extend(render_opaque_page(data))
@@ -1625,6 +1807,7 @@ def render_user_posted_notes(payload: dict) -> str:
     data = as_dict(payload.get("data"))
     notes = as_list(data.get("items"))
     page = as_dict(data.get("page"))
+    platform = str(data.get("platform") or "").lower()
     lines = [
         f"# {platform_label(data)}主页近期公开内容",
         "",
@@ -1633,11 +1816,16 @@ def render_user_posted_notes(payload: dict) -> str:
         "## 近期笔记",
     ]
     for index, item in enumerate(notes, start=1):
-        lines.extend(render_note_item(index, as_dict(item)))
+        lines.extend(
+            render_note_item(
+                index,
+                as_dict(item),
+                include_content_id=platform == "wechat_channels",
+            )
+        )
     if not notes:
         lines.append("未返回近期公开笔记。")
     lines.extend(render_opaque_page(data))
-    platform = str(data.get("platform") or "").lower()
     if platform == "douyin":
         followup = (
             "如需继续查看主页作品结构、商业信号、内容热词和相似创作者，可继续请求 analyze-user-profile；"
@@ -1647,6 +1835,8 @@ def render_user_posted_notes(payload: dict) -> str:
         followup = "YouTube V1 不支持 analyze-user-profile；如需查看某条公开视频详情或评论，显式调用对应单条工具；我不会自动调用。"
     elif platform == "tiktok":
         followup = "TikTok V1 仅支持基础主页资料和近期公开内容；如需完整主页资料，可继续请求 get-user-info；我不会自动调用。"
+    elif platform == "wechat_channels":
+        followup = "视频号 V1 不支持 analyze-user-profile；如需完整主页资料，可继续请求 get-user-info；查看评论前先调用 get-note-detail 获取纯数字内容 ID；我不会自动调用。"
     else:
         followup = "如需继续查看主页作品正文、中文字幕、封面和商单/商品信号，可继续请求 analyze-user-profile；我不会自动调用。"
     lines.extend(
@@ -1787,8 +1977,8 @@ def render_analyze_user_profile(payload: dict) -> str:
 
 def render_success_notice(payload: dict) -> List[str]:
     message = str(payload.get("message") or "").strip()
-    if not message and payload.get("deduped") is True:
-        message = "已复用近期同参结果，本次未扣费；如需重新分析，请使用 --force-new。"
+    if payload.get("deduped") is True:
+        message = "已复用近期同参结果；如需重新分析，请使用 --force-new。"
     if not message:
         return []
     message = message.replace("请传 force_new=true", "请使用 --force-new")
@@ -1880,11 +2070,24 @@ def shell_quote(value: str) -> str:
 def render_note(payload: dict) -> str:
     data = as_dict(payload.get("data"))
     note = as_dict(data.get("item"))
+    platform = str(data.get("platform") or "").lower()
+    include_body_images = (
+        platform == "xhs"
+        and str(note.get("xhs_note_type") or "").lower() == "image"
+    )
     lines = [
         f"# {platform_label(data)}内容：{note.get('title') or note.get('id') or '-'}",
         "",
     ]
-    lines.extend(render_note_item(1, note, include_index=False))
+    lines.extend(
+        render_note_item(
+            1,
+            note,
+            include_index=False,
+            include_content_id=platform == "wechat_channels",
+            include_body_images=include_body_images,
+        )
+    )
     return "\n".join(lines).strip()
 
 
@@ -1985,8 +2188,15 @@ def render_extract_video_copy(payload: dict) -> str:
         "",
         f"- Batch ID: {batch.get('batch_id', '-')}",
         f"- 成功: {batch.get('success_count', 0)} / {batch.get('total_count', len(items))}",
-        "",
     ]
+    if payload.get("replayed") is True:
+        lines.extend(
+            [
+                "",
+                "> 已重放同一文案提取请求的成功结果，本次新增费用为 0。继续重试请复用当前 --operation-id；明确发起新提取时请使用新的 operation ID。",
+            ]
+        )
+    lines.append("")
     for index, item in enumerate(items, start=1):
         record = as_dict(item)
         error_code = record.get("error_code")
@@ -1999,6 +2209,7 @@ def render_extract_video_copy(payload: dict) -> str:
                 f"- 链接: {record.get('origin_url') or record.get('input_url') or '-'}",
                 f"- 状态: {record.get('status') or '-'}",
                 f"- 错误: {error_code_label} / {error_message}",
+                *render_video_copy_item_guidance(record),
                 f"- 时长: {record.get('duration_seconds') or '-'} 秒",
                 "",
                 str(record.get("content") or "未返回文案。"),
@@ -2008,6 +2219,17 @@ def render_extract_video_copy(payload: dict) -> str:
     if not items:
         lines.append("未返回文案提取结果。")
     return "\n".join(lines).strip()
+
+
+def render_video_copy_item_guidance(record: dict) -> List[str]:
+    lines = []
+    if isinstance(record.get("retryable"), bool):
+        lines.append(f"- 是否重试: {'可以稍后重试' if record['retryable'] else '不要重试该链接'}")
+    if record.get("billing_effect") == "no_charge":
+        lines.append("- 结果: 该失败项未扣费")
+    if record.get("agent_action") == "ask_user_for_shorter_video":
+        lines.append("- 下一步: 请更换较短的视频链接")
+    return lines
 
 
 def render_generate_image(payload: dict) -> str:
@@ -2039,7 +2261,7 @@ def render_generate_image(payload: dict) -> str:
     else:
         lines.append("- 文件: 未保存；下次可加 `--output /tmp/lingzao-image.png`")
     if blocked_codes:
-        lines.append(f"- 未完成: {', '.join(blocked_codes)}")
+        lines.append(f"- 未完成: {', '.join(public_error_label(code) for code in blocked_codes)}")
     if item_errors:
         lines.append(f"- 错误: {', '.join(item_errors)}")
     lines.extend(
@@ -2047,7 +2269,7 @@ def render_generate_image(payload: dict) -> str:
             "",
             "## Agent 提示",
             "",
-            "- 短时间重复提交完全相同的请求会返回同一个 Batch；完全相同包括 `prompt/size/output_format/count` 以及参考图。看到同一个 Batch 时请继续轮询，不要再次 POST 同一请求。",
+            "- CLI 会在请求前打印请求 ID。网络响应不确定或轮询中断时，保持原参数不变并添加 `--client-request-id <打印的 UUID>`，服务端会恢复同一个 Batch；新生成请省略该参数。",
             "- 同提示词需要多张图时，一次调用 `generate-image --count N`（N=2..5），不要循环多次 `--count 1`；需要不同概念时请改写 prompt。",
         ]
     )
@@ -2108,12 +2330,22 @@ def platform_label(data: dict) -> str:
         return "YouTube"
     if platform == "tiktok":
         return "TikTok"
+    if platform == "instagram":
+        return "Instagram"
+    if platform == "wechat_channels":
+        return "视频号"
     if platform == "wechat_mp":
         return "微信公众号"
     return platform
 
 
-def render_note_item(index: int, note: dict, include_index: bool = True) -> List[str]:
+def render_note_item(
+    index: int,
+    note: dict,
+    include_index: bool = True,
+    include_content_id: bool = False,
+    include_body_images: bool = False,
+) -> List[str]:
     metrics = as_dict(note.get("metrics"))
     author = as_dict(note.get("author"))
     title_prefix = f"{index}. " if include_index else ""
@@ -2124,6 +2356,8 @@ def render_note_item(index: int, note: dict, include_index: bool = True) -> List
         f"- 作者: {author.get('name') or author.get('id') or '-'}",
         f"- 类型: {note.get('content_type') or note.get('type') or '-'}",
     ]
+    if include_content_id:
+        lines.insert(1, f"- 内容 ID: {note.get('id') or '-'}")
     if note.get("xhs_note_type"):
         lines.append(f"- 详情参数: xhs_note_type={note.get('xhs_note_type')}")
     lines.extend(
@@ -2131,10 +2365,35 @@ def render_note_item(index: int, note: dict, include_index: bool = True) -> List
             f"- 指标: 点赞 {metrics.get('liked', 0)} / 收藏 {metrics.get('collected', 0)} / 评论 {metrics.get('commented', 0)} / 分享 {metrics.get('shared', 0)}",
             f"- 标签: {', '.join(str(tag) for tag in tags) if tags else '-'}",
             f"- 摘要: {note.get('summary') or '-'}",
-            "",
         ]
     )
+    if include_body_images:
+        image_urls = note_body_image_urls(note)
+        lines.extend(["", f"#### 正文图片（{len(image_urls)} 张）", ""])
+        if image_urls:
+            lines.extend(f"{image_index}. <{url}>" for image_index, url in enumerate(image_urls, start=1))
+            lines.extend(["", "> 图片链接可能过期，请及时使用；灵造不下载、代理或长期保存这些图片。"])
+        else:
+            lines.append("无正文图片链接。")
+    lines.append("")
     return lines
+
+
+def note_body_image_urls(note: dict) -> List[str]:
+    media = as_dict(note.get("media"))
+    urls: List[str] = []
+    seen = set()
+    for item in as_list(media.get("images")):
+        if isinstance(item, str):
+            url = item.strip()
+        else:
+            image = as_dict(item)
+            url = str(image.get("url") or "").strip()
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        urls.append(url)
+    return urls
 
 
 def render_user_identity(user: dict) -> str:

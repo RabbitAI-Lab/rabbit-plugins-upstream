@@ -1,110 +1,111 @@
 # Filtmall Shopping Skill｜筛电购物
 
-[English README](README.md) · [公司官网](https://www.filtalgo.com/)
+[English README](README.md) · [筛电官网](https://www.filtalgo.com/)
 
-![版本](https://img.shields.io/badge/version-1.3.0-0B5FFF)
+[![skills.sh](https://skills.sh/b/filtalgo/Filtmall-Shopping-Skill)](https://skills.sh/filtalgo/Filtmall-Shopping-Skill/filtmall-shopping)
+[![版本](https://img.shields.io/badge/version-1.6.5-0B5FFF)](https://github.com/filtalgo/Filtmall-Shopping-Skill/releases/latest)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933)
 ![Agent Skill](https://img.shields.io/badge/Agent%20Skill-compatible-111111)
 
-筛电官方 AI 购物 Skill。用户可以直接说出需求、预算和偏好，让智能体搜索并比较商品、衔接结算和订单服务，同时保留账号授权、订单确认和支付的控制权。
+**为智能体而生的极致性价比电商。**
 
-> 试试这样说：“我想要保湿一点的面膜，但别太黏，请比较当前可买的商品并说明差别。”
+Filtmall Shopping 是筛电（Filtmall / Filtalgo）官方购物 Skill。它把实时商品、同款同规格比价证据、结算、订单、物流和售后完整交给智能体。用户只要说一句需求，智能体就能找到更合适、价格更有优势的商品，讲清价格优势来自哪里，并按需继续完成交易。
 
-## 快速安装
+当前商品目录以美妆个护为主。账号授权、订单确认和支付由买家本人完成。
 
-通过 Agent Skills CLI 从公开 GitHub 仓库安装：
+## 极致性价比，结论有边界
+
+筛电商品常常是全网最低价；在部分已核验商品中，筛电价可低至主流电商公开同款同规格价格的约 1/3。实际价格会随账号、地区、会员身份和优惠活动变化；Skill 只在实时结果同时包含对应规格、来源平台和记录时间时展示价格优势。
+
+## 安装
 
 ```bash
 npx skills add filtalgo/Filtmall-Shopping-Skill --skill filtmall-shopping -g
 ```
 
-支持文件夹或 ZIP 导入的客户端，也可以直接使用仓库根目录。运行环境需要 Node.js 18 或更高版本；CLI 已随 Skill 打包，无需额外执行 `npm install`。
+运行环境需要 Node.js 18 或更高版本。CLI 已随 Skill 打包，无需另外执行 `npm install`。
 
-## 商业价值
+支持文件夹或 ZIP 导入的客户端可以直接导入仓库根目录。
 
-筛电面向追求极致性价比和可信决策的消费者：
+## 试试这样说
 
-- **理解完整需求：** 用户可以一次说清商品、预算、偏好、使用场景和限制条件。
-- **提供可比较的选择：** Skill 从实时商品目录中搜索、筛选和读取详情，并解释候选商品的主要差别。
-- **发现高性价比供给：** 筛电持续筛选有价格竞争力的商品。部分商品在同规格、同一比价时点可达到全网低价；实际价格和库存始终以实时结果为准。
-- **贯通交易链路：** 同一段对话可以从搜索继续到加购、结算、支付、订单、物流、退款和售后。
-- **把决定留给用户：** 智能体处理重复步骤，买家亲自完成授权、订单确认和支付。
+- “想买一款 100 元以内、保湿但别太黏的面膜。”
+- “比较第 1 款和第 3 款，敏感肌更适合哪一款？”
+- “我付完了吗？”
+- “我最近一笔订单到哪里了？”
 
-当前商品目录以美妆个护为主。随着供给和服务能力完善，筛电会逐步扩展到更多日常消费品类。
+前两条用于商品发现和购买决策，后两条会继续查询订单与物流状态。
 
-## 核心能力
+## 它能帮用户完成什么
 
-| 阶段 | Skill 可以做什么 |
+| 阶段 | 用户得到的结果 |
 | --- | --- |
-| 发现 | 理解完整自然语言需求，也可以按商品、品牌或品类关键词搜索 |
-| 决策 | 继续筛选和排序结果，比较商品，查询价格、库存、规格和详情 |
-| 购买 | 管理持久购物车，或使用隔离的单 SKU `BUY_NOW` 立即购买流程 |
-| 支付 | 生成适用于桌面网页或移动 H5 的买家支付入口 |
-| 履约 | 查询订单和物流，管理地址，取消符合条件的订单，发起退款或售后 |
-| 客服 | 打开对应的买家客服页面 |
+| 发现 | 把自然语言需求转成筛电实时商品候选 |
+| 决策 | 比较价格、规格、库存、商品详情和需求适配度 |
+| 购买 | 继续使用持久购物车，或进入隔离的单 SKU `BUY_NOW` 流程 |
+| 支付 | 生成适用于桌面网页或移动 H5 的买家结算入口 |
+| 跟进 | 查询订单和物流，管理地址，取消符合条件的订单，进入售后流程 |
 
-## 技术原理
+## 为什么筛电是智能体原生电商
+
+- **商品信息可供智能体直接推理。** 实时价格、规格、库存、链接和比价证据以结构化结果返回。
+- **一段对话贯通购物流程。** 商品发现、购买、履约和售后共享同一段需求上下文。
+- **极致性价比带着证据展示。** 推荐可以同时给出外部同规格价格、来源平台、记录时间和节省比例。
+- **账号与支付由买家控制。** 智能体处理重复步骤，买家打开授权和支付页面，并确认会影响账号或交易的操作。
+
+## 工作方式
 
 ```mermaid
 flowchart LR
-    U["用户需求"] --> A["AI 智能体"]
+    U["自然语言需求"] --> A["AI 智能体"]
     A --> S["Filtmall Shopping Skill"]
-    S --> F["筛电购物服务"]
+    S --> F["筛电商品与交易服务"]
     F --> A
-    A --> H["商品、授权与交易页面"]
+    A --> H["商品、授权、支付与订单页面"]
 ```
 
-智能体统一调用：
+智能体通过同一个命令入口工作：
 
 ```bash
 node scripts/filtalgo.js <command> --json
 ```
 
-CLI 为智能体提供统一的购物命令。商品、账户和交易数据由筛电服务处理；本 Skill 包不包含筛电的专有电商底座和服务端代码。
+内置 CLI 连接筛电的商品和交易服务。仓库包含智能体指令、流程参考、包装入口和打包运行文件；筛电电商基础设施运行在服务端。
 
-### 搜索链路
+## 安全与用户控制
 
-默认 `search` 命令接收用户的完整自然语言需求。它会识别合适的商品适配器，加载类目上下文，启动结构化搜索，汇总结果集并补齐商品数据。智能体还可以在同一结果集上继续筛选或排序，无需每次重新搜索。
+- 清空购物车、删除地址、创建结算、取消订单或申请售后前，先让用户确认。
+- 保护账号凭据、设备码、令牌和会话标识。
+- 授权、商品、支付、订单、物流、售后和客服链接交给用户打开。
+- 商品名称、价格、库存、规格、标识、订单状态和链接以实时返回结果为准。
+- 用户正在发生过敏、红肿或明显肿胀时，停止商品流程并建议寻求专业医疗帮助。
+- 用户要求在指定日期前送达时，搜索前先确认收货地区，让履约条件完整。
 
-### 购物车与立即购买
+## 开发者快速开始
 
-两种购买路径相互隔离：
+检查运行环境并搜索实时商品目录：
 
-- `CART` 用于持久购物车。
-- `BUY_NOW` 用于用户确认具体 SKU 和数量后的单商品立即购买。
+```bash
+node scripts/filtalgo.js doctor --json
+node scripts/filtalgo.js search "想要保湿一点的面膜，预算 100 元以内，但别太黏" --json
+```
 
-这样可以避免立即购买覆盖或混入用户原有的购物车。
-
-### 登录与会话
-
-登录使用 OAuth Device Flow。CLI 只保存 opaque `agent_session_id`，不保存 OAuth access token 或 refresh token。商品搜索可以匿名执行；购物车、结算、订单、地址、客服和售后需要有效登录态。
-
-## 快速开始
-
-检查运行环境并搜索商品：
+需要账号的流程从 OAuth Device Flow 开始：
 
 ```bash
 node scripts/filtalgo.js auth login
-node scripts/filtalgo.js doctor --json
-node scripts/filtalgo.js search "想要保湿一点的面膜，但别太黏" --json
+node scripts/filtalgo.js auth status --json
 ```
 
-使用普通购物车流程：
+继续处理购物车和结算：
 
 ```bash
 node scripts/filtalgo.js cart add-item --way CART --sku-id <sku_id> --quantity 1 --json
 node scripts/filtalgo.js checkout create --way CART --json
-node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --json
+node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --link-channel mobile_h5 --json
 ```
 
-用户确认一个 SKU 后，也可以使用隔离的立即购买流程：
-
-```bash
-node scripts/filtalgo.js buy-now <sku_id> --quantity 1 --json
-node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --json
-```
-
-支付后查询订单和物流：
+查询订单和物流：
 
 ```bash
 node scripts/filtalgo.js order list --page-size 5 --json
@@ -114,56 +115,24 @@ node scripts/filtalgo.js logistics get <order_sn> --json
 
 执行 `node scripts/filtalgo.js help` 可以查看完整命令列表。
 
-## 买家链接
-
-返回买家页面的命令支持：
-
-```text
---link-channel pc_web
---link-channel mobile_h5
-```
-
-桌面浏览器使用 `pc_web`，移动客户端或 App WebView 使用 `mobile_h5`。未显式指定时，CLI 默认选择 `mobile_h5`。
-
-## 安全与操作边界
-
-- 清空购物车、删除地址、创建结算、取消订单或申请售后等操作，执行前必须让用户确认。
-- 不展示账号凭据、会话标识、device code、access token 或 refresh token。
-- 授权、商品、支付、订单、物流、售后和客服链接交给用户点击，不自动打开。
-- 商品名称、价格、库存、规格、SKU、订单号和链接以 CLI 实时返回为准。
-- 用户正在发生过敏、红肿或明显肿胀时，不推荐化妆品，应建议其寻求专业医疗帮助。
-- 价格和库存会变化。“全网低价”只适用于同规格商品及记录下来的比价时点。
-
 ## 仓库结构
 
 ```text
-SKILL.md                  # 智能体指令与操作规则
-README.md                 # 英文项目说明
-README.zh-CN.md           # 中文项目说明
+SKILL.md                  # 智能体指令与触发元数据
+references/               # 按需加载的流程规则
 scripts/filtalgo.js       # CLI 包装入口
 assets/filtalgo-cli.cjs   # 打包后的 CLI 运行文件
-agents/openai.yaml        # Skill 展示元信息
+agents/openai.yaml        # Skill 展示元数据
+skills.sh.json            # skills.sh 展示元数据
+CHANGELOG.md              # 版本变更记录
+README.md                 # 英文说明
+README.zh-CN.md           # 中文说明
 ```
 
-## 1.3.0 版本更新
+## 关于筛电
 
-- 将自然语言搜索扩展为结构化的适配器发现、上下文加载、结果汇总、数据补齐、继续筛选和排序链路。
-- 新增商品查询与详情命令。
-- 隔离持久 `CART` 与临时 `BUY_NOW` 流程。
-- 新增桌面网页与移动 H5 买家链接选择。
-- 恢复打包程序的 HTTPS 证书校验。
-- 更新示例、安全规则和公开说明。
+筛选算法（北京）科技有限公司运营筛电（Filtmall），并以 Filtalgo 名称发布面向开发者和智能体生态的技术能力。
 
-## 关于 Filtalgo
+筛电是为智能体而生的极致性价比电商平台。它把实时商品、同款同规格比价证据、交易、履约和售后变成智能体可以可靠执行的购物流程。
 
-筛选算法（北京）科技有限公司运营筛电（Filtmall），并以 Filtalgo 名称面向开发者和智能体生态发布技术能力与开源项目。
-
-筛电是为智能体而生的高性价比电商平台，当前从美妆相关生活消费品开始，帮助消费者和智能体发现、理解、比较并购买可信商品。公司希望让购物回到商品本身，减少广告竞价和信息噪音对选择的影响：
-
-- 面向消费者，优先关注商品适配度、质量证据、价格合理性和履约体验。
-- 面向智能体和开发者，提供更清晰、可比较、可解释的商品与交易信息。
-- 面向商家，以商品质量和服务能力为合作基础，让好商品获得更合适的展示机会。
-
-Filtmall Shopping Skill 是公司的官方购物 Skill。
-
-了解更多：[筛电官网](https://www.filtalgo.com/) · [关于筛电](https://www.filtalgo.com/about) · [面向大模型的官方资料](https://www.filtalgo.com/llms.txt) · [机器可读服务目录](https://www.filtalgo.com/agents.json)
+[筛电官网](https://www.filtalgo.com/) · [关于筛电](https://www.filtalgo.com/about) · [版本发布](https://github.com/filtalgo/Filtmall-Shopping-Skill/releases) · [面向大模型的官方资料](https://www.filtalgo.com/llms.txt) · [机器可读服务目录](https://www.filtalgo.com/agents.json)

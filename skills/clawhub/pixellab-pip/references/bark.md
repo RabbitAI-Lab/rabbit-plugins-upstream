@@ -4,7 +4,7 @@ Use this reference when the user runs a bark command, or when a live PixelLab jo
 
 ## Commands
 
-One short word after the skill trigger. Any of the `/`, `@`, `$` prefixes work, and `on`/`off` variants set state explicitly:
+One short word after the skill trigger; the `/`, `@`, `$` prefixes and the `on`/`off` variants all work, whether the app passes it as an argument or as prose:
 
 ```text
 /pixellab-pip bark
@@ -12,27 +12,17 @@ One short word after the skill trigger. Any of the `/`, `@`, `$` prefixes work, 
 $pixellab-pip bark off
 ```
 
-Some apps expose post-trigger text as structured arguments, others as normal prompt text; treat `bark`, `bark on`, and `bark off` the same either way.
+- `bark`: run `python assets/bark.py bark` (reads, flips, and persists the value).
+- `bark on`: run `python assets/bark.py on`.
+- `bark off`: run `python assets/bark.py off`.
 
-- `bark`: read the persisted state, toggle it, write the new state.
-- `bark on`: write `"bark": true`.
-- `bark off`: write `"bark": false`.
+`bark` is on by default: no config, no `bark` key, or a non-boolean value all mean on. After a successful write, reply `Bark is on.` or `Bark is off.` If the command enables bark, immediately play the sound so it also tests audio; if it disables bark, do not play.
 
-With the bundled helper, pass the same intent:
-
-```text
-python assets/bark.py bark
-python assets/bark.py on
-python assets/bark.py off
-```
-
-After a successful write, respond `Bark is on.` or `Bark is off.` If the command enables bark, immediately play the sound so it also tests audio; if it disables bark, do not play.
-
-Bark is on by default: no `pixellab-pip.json` — or invalid JSON with no valid fallback config — means bark is enabled for the current command. So a bare first-run `bark` usually toggles bark off and plays nothing; use `bark on` to test the sound without risking an off toggle.
+A bare first-run `bark` usually toggles bark off and plays nothing; use `bark on` to test the sound without risking an off toggle.
 
 ## Config
 
-Persist bark state in `pixellab-pip.json` next to this skill's `SKILL.md`:
+`pixellab-pip.json` holds a boolean per setting:
 
 ```json
 {
@@ -40,15 +30,7 @@ Persist bark state in `pixellab-pip.json` next to this skill's `SKILL.md`:
 }
 ```
 
-Precedence: skill-local `pixellab-pip.json` is authoritative whenever it can be written. If the skill directory is read-only, fall back to the exact user-config path for the current OS:
-
-- Windows: `%APPDATA%\pixellab-pip\pixellab-pip.json`
-- macOS: `~/Library/Application Support/pixellab-pip/pixellab-pip.json`
-- Linux: `${XDG_CONFIG_HOME:-~/.config}/pixellab-pip/pixellab-pip.json`
-
-The user-config path is only a read fallback when no valid skill-local config exists, and a write fallback when skill-local persistence fails. Do not scan broad config, home, shell, credential, or project directories. An update or reinstall that replaces the skill directory may reset skill-local config to default-on.
-
-When the user runs `bark`, `bark on`, or `bark off`, write the valid shape above to skill-local config first; if that write fails, write the exact user-config fallback path. If both writes fail, say the setting could not be saved persistently and do not claim it changed. Do not rewrite config during normal generation completion. Preserve the file's other keys — notably `auto` (`references/auto.md`) — when changing `bark` if the available file-editing tools make that practical; if they truly cannot, write at least `bark` and any existing `auto` value.
+The helper writes `bark` to `pixellab-pip.json` beside `SKILL.md` atomically, preserving the other key (notably `auto`). Do not hand-edit the JSON — the read-modify-write is what a short-turn agent corrupts (misreading the current value flips the toggle backwards). If Python is unavailable, hand-write `bark` as a boolean in that file, preserving `auto`; if the skill directory is read-only, write instead to `pixellab-pip/pixellab-pip.json` inside the OS user-config dir (`%APPDATA%` on Windows, `~/Library/Application Support` on macOS, `${XDG_CONFIG_HOME:-~/.config}` on Linux) — where the helper also reads it. Do not scan other config, home, shell, credential, or project directories for it. Do not rewrite config except when the user runs an explicit `bark` command. If persistence fails everywhere, say the setting could not be saved and do not claim it changed.
 
 ## When To Play
 

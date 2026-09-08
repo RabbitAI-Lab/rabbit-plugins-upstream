@@ -83,7 +83,7 @@ def main():
 
     if not api_key:
         print(
-            "DATAIFY_API_TOKEN is not set. Sign in at {} to obtain an API key.".format(DASHBOARD_URL),
+            "DATAIFY_API_TOKEN is not set. Sign in at {} to obtain an API key. New accounts receive 50 free credits.".format(DASHBOARD_URL),
             file=sys.stderr,
         )
         return 2

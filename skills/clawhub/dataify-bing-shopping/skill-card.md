@@ -1,41 +1,54 @@
-## Description: <br>
-Searches Bing Shopping product results through Dataify after mapping a user's request to API fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Bing Shopping for products and shopping results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to run Bing Shopping product searches through Dataify, preview request parameters before the call, and receive the raw API response for downstream use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed searches send the shopping query and Dataify API token to Dataify. <br>
-Mitigation: Review the parameter table before confirming, use a scoped or temporary token when available, and avoid sharing tokens in chats or persistent shell profiles unless intended. <br>
-Risk: The skill returns the Dataify API response directly, including HTML when that output format is requested. <br>
-Mitigation: Prefer JSON-only responses unless HTML is needed, and review returned HTML before rendering or reusing it. <br>
+## Use Case:
 
+External users and developers use this skill to search Bing Shopping for product results through Dataify, with optional market, country, offset, filter, cache, and output-format controls.
 
-## Reference(s): <br>
-- [Dataify Bing Shopping API Reference](references/api.md) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, text] <br>
-**Output Format:** [Markdown parameter table followed by raw Dataify API response text, usually JSON and optionally HTML.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN for confirmed live calls and asks for user confirmation before sending the request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Shopping searches, locale, country, offset, and filter values are sent to Dataify during live lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when sharing those query details with Dataify is acceptable, and avoid sensitive shopping searches.
+
+Risk: Live calls require a Dataify API token in the agent environment.
+
+Mitigation: Prefer a session-scoped DATAIFY_API_TOKEN and never paste the token into chat or persist it unless that is intentional.
+
+## Reference(s):
+
+- [Dataify Bing Shopping API Reference](artifact/references/api.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-bing-shopping)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, API calls]
+
+**Output Format:** [Concise Markdown summaries, parameter previews, shell commands, or raw JSON/HTML when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses DATAIFY_API_TOKEN for live calls and defaults to compact product result summaries.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

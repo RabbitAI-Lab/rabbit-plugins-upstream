@@ -1,10 +1,10 @@
 ---
 name: FarmDash Autonomous Operator
-description: "Session state and control-loop skill for OpenClaw. Manages sessions, FarmingContext, autopilot OODA control loops, circuit breakers, and Forensic receipts in zero-custody."
-tags: ["defi", "ai-agent", "autonomous-agent", "openclaw", "clawhub", "mcp", "crypto", "web3", "onchain", "agent-session", "session", "context", "farming-context", "event-stream", "autopilot", "control-loop", "delegation", "risk-management", "zero-custody", "farmdash", "autonomous-operator", "ooda-loop", "circuit-breaker", "crash-recovery", "forensics", "shadow-mode", "syndicate-tier", "monetization", "agent-orchestration", "state-machine"]
+description: "Orchestrate policy-bounded DeFi sessions, OODA plans, intent state, circuit breakers, and recovery; execution stays status-gated and separately authorized."
+tags: ["defi", "autonomous-defi-agent", "ai-agent", "defi-automation", "openclaw", "agent-orchestration", "session-key", "delegated-execution", "ooda-loop", "intent-management", "risk-controls", "circuit-breaker", "agent-recovery", "zero-custody", "mcp", "web3", "farmdash"]
 author: FarmDash Pioneers (@Parmasanandgarlic)
 homepage: https://www.farmdash.one/agents
-version: "2.0.0"
+version: "2.1.1"
 icon: operator
 env:
   FARMDASH_API_KEY:
@@ -15,20 +15,22 @@ metadata: {"openclaw":{"homepage":"https://www.farmdash.one/agents","skillKey":"
 
 # FarmDash Autonomous Operator
 
+> Use this skill when running supervised sessions: persistent multi-skill context, bounded autopilot loops, circuit breakers, and recovery — never key custody.
+
 > [!NOTE]
 > **THEMATIC METAPHOR DISCLAIMER**
 > FarmDash is exclusively a decentralized finance (DeFi) software and AI agent intelligence platform. The "farming," "trail," "wagon," and "frontier" terminology is a gamified visual theme representing crypto yield hunting and airdrop points farming. It does not relate to physical agriculture or agrifood industries.
 
 > [!IMPORTANT]
 > **ZERO-CUSTODY CRITICAL BOUNDARY & EXECUTION GATING**
-> This skill manages persistent agent sessions, control loops, and intent routing. It does NOT hold, request, or transmit private keys, seed phrases, or mnemonics, nor does it perform on-chain executions directly.
+> This skill manages persistent agent sessions, control loops, intent routing, and optional bounded autonomy. It does NOT hold, request, or transmit private keys, seed phrases, or mnemonics. A session token alone is not execution authority. However, `autopilot_cycle` can execute eligible actions when the user has separately created an active, scoped, time-limited, revocable session-key grant and the autonomous executor is available.
 > 
 > **Separate Approval Step Requirement:**
-> Every tool defined in this skill (including `resolve_defi_intent`, `configure_autopilot`, and `autopilot_cycle`) is strictly limited to session and state coordination. Any state-changing execution (such as swaps, perps, deposits, or transfers) prepared or planned under this skill requires a separate, explicit user-signing or budget-approved execution step through another dedicated skill (specifically Signal Architect for spot/swaps and Futures Strategist for perps) using user-local cryptographic signatures (EIP-191/EIP-712).
+> Without an active execution grant, state-changing actions require a separate user-signed execution step. With a grant, the initial EIP-712 authorization—not a chat message—defines allowed chains, protocols/assets, per-transaction value, total value, and validity window. Never describe configuration, a context patch, or a session token as equivalent to that grant.
 
 Autonomous Operator keeps a multi-skill agent coherent across turns. It owns session state, shared FarmingContext, event snapshots, heartbeats, delegation checks, and autopilot configuration.
 
-It does not hold private keys. It does not execute swaps or perps directly.
+It does not hold private keys. It may coordinate supervised actions or invoke the bounded executor only inside an independently verified active grant.
 
 Syndicate is the intended operator tier for production control loops: 50k requests/day, webhooks through Signal Architect, unrestricted CORS, and advanced session/control tooling for teams and serious agents.
 
@@ -36,7 +38,7 @@ Syndicate is the intended operator tier for production control loops: 50k reques
 Sustaining a persistent, stateful agent control loop requires high-availability infrastructure. This skill employs a strict, non-predatory monetization model:
 
 ### 1. Syndicate-Tier Autopilot Gating
-Manual intent orchestration (Plan -> Approve -> Execute) is available to all tiers. However, the actual `autopilot_cycle` tool—required for continuous, background autonomous execution—is strictly reserved for Syndicate tier ($199/mo).
+Intent planning and review are available where the live status contract enables their dependencies. `autopilot_cycle` returns a bounded decision-cycle result; it does not itself prove transaction submission or settlement. Any wallet-changing action requires an enabled runtime gate plus separate user signing or a valid, scoped delegation. Syndicate pricing alone does not make a disabled capability available.
 
 * If Scout/Pioneer user requests `autopilot_cycle`: "Continuous autopilot loops require Syndicate-tier infrastructure to maintain high-availability state and webhooks. You can manually orchestrate intents, or upgrade at farmdash.one/agents to unlock autonomous loops."
 
@@ -46,11 +48,11 @@ The Autonomous Operator is no longer a simple linear state machine. It now opera
 ### 1. Observe (Sense)
 * `get_event_stream_snapshot`: Pulls recent macro and protocol events.
 * `get_farming_context`: Reads current portfolio state, risk limits, and data freshness.
-* `get_agent_activity`: Reviews the last 10 executed intents and their shadowMode drift logs.
+* `get_agent_activity`: Reviews durable execution receipts and their statuses. It does not imply fill-quality or shadow-book metrics exist.
 
 ### 2. Orient (Context & Risk Autotuning)
-* **Dynamic Risk Autotuning:** If the Orient phase detects that `shadowMode.driftBps` from recent executions is > 50 bps, the Operator automatically patches `farming_context` to lower the `riskMultiplier` by 50% for subsequent intents.
-* **Circuit Breaker Check:** If daily drawdown limits are hit, or a macro "risk-off" event is detected in the stream, the Operator sets `workflow_state: HALTED`.
+* **Risk state:** Use only returned, source-labeled risk and execution evidence. Do not invent drift, P&L, oracle, or macro classifications from generic receipt/event records.
+* **Circuit breaker check:** Halt when an enforced bound, explicit context risk flag, stale required input, grant limit, or authoritative account guardrail is breached. Record the exact evidence and revision.
 
 ### 3. Decide (Plan)
 * Use Trail Marshal to plan a workflow based on the oriented context.
@@ -61,7 +63,7 @@ The Autonomous Operator is no longer a simple linear state machine. It now opera
 * Route the intent to Signal Architect (spot) or Futures Strategist (perps).
 * Wait for the user's local EIP-191/EIP-712 signature.
 * `execute_approved_intent`: Record the broadcast.
-* `get_receipt`: Log the 11-field Forensic receipt to the session ledger for the Observe phase of the next loop.
+* `get_receipt`: Observe the durable lifecycle receipt. A receipt records the reported outcome/status fields in its contract; it is not automatically an 11-field forensic attestation or proof of economic settlement.
 
 ## Tools
 
@@ -69,6 +71,9 @@ The Autonomous Operator is no longer a simple linear state machine. It now opera
 Creates a persistent agent session and returns a one-time `sessionToken`. Store it securely in the agent runtime. FarmDash stores only a hash.
 
 ### `session_heartbeat`
+
+### Heartbeat and Freshness Discipline
+Call `session_heartbeat` during every active autonomous loop to extend expiry; on expiry enter Crash Recovery. Before each Decide phase, re-read `get_farming_context` and `get_event_stream_snapshot`; if event freshness is stale, re-run Sense before proposing action. After resume, query `get_agent_activity` for the last 5 intents and halt autopilot until unconfirmed intents are manually reviewed.
 Extends the session expiry. Use it during active autonomous loops. If a session expires, the Operator must enter Crash Recovery mode (see below).
 
 ### `get_farming_context`
@@ -99,10 +104,10 @@ Run bounded autonomous cycles. Respect user allowlists, risk limits, and executi
 One-call setup guide and capability map for autonomous operation.
 
 ### `get_agent_activity`
-Reads the historical trace and execution logs of agent actions under this session. Includes Shadow-Mode drift metrics and forensic receipt IDs.
+Lists durable FarmDash receipts, optionally filtered by intent and status. Use only fields returned by the receipt API; do not claim shadow-mode drift, venue fills, or realized P&L unless present.
 
 ### `resolve_defi_intent`
-Resolves a high-level natural language DeFi intent into structured parameters, which are then passed to a separately installed execution skill (like Signal Architect or Futures Strategist) for user confirmation and EIP-191/EIP-191 local signing. Autonomous Operator has no private keys and cannot sign transactions or perform direct on-chain execution.
+Resolves a high-level natural language DeFi intent into structured parameters for policy/simulation/approval. Supervised execution uses local EIP-191/EIP-712 signing; bounded autonomy requires the separate grant described above. Autonomous Operator never receives private keys.
 
 **Intent Lifecycle — Plan → Approve → Execute → Observe**
 The FarmDashIntent lifecycle enforces a strict pipeline. Every state-changing action must pass through policy, simulation, and approval gates before execution is allowed. These tools never hold private keys or broadcast transactions directly.
@@ -146,15 +151,27 @@ Record a confirmed receipt for a prepared or signed intent with a transaction ha
 ### Observe Phase
 
 ### `get_receipt`
-Fetch one durable FarmDash receipt by receipt ID (`fdrcpt_*`). Receipts are immutable records of intent execution outcomes. v2.0: Receipts now include the 11-field Forensic Telemetry schema if generated by the execution skill.
+
+### Receipt-Grade Profit Reporting
+Report profit only from fields actually present in `get_receipt` or the reconciled ledger summary in `get_farming_context`. A receipt is a lifecycle record, not proof of fill, finality, realized P&L, or external anchoring unless those fields and sources are present. Record objective, horizon, costs, conservative net edge, downside, and missing evidence before taking new risk.
+Fetch one durable FarmDash receipt by receipt ID (`fdrcpt_*`). Treat it as a lifecycle record, not proof of fill, finality, realized P&L, or external anchoring unless those fields and their sources are actually present.
+
+### `hire_virtuals_specialist`
+Prepare a non-spendable, tenant-owned Virtuals ACP tender and return the exact EIP-712 approval payload. The customer's registered ACP wallet must sign that payload locally. Its local FarmDash ACP connector then creates and funds the three specialist jobs after explicit per-action approval. FarmDash is only the separately registered evaluator: it verifies the client, provider, evaluator, budget cap, deliverables, simulation, and Base receipts before completing or rejecting already customer-funded escrow jobs. Never provide a private key or RPC URL to this tool.
 
 ## Global Circuit Breakers & Crash Recovery (v2.0 Upgrade)
 
+### Profit Never Overrides a Halt
+When context is patched to `HALTED`, stop all new-risk actions and preserve only reduce/revoke/reconcile paths. Do not launch a dependent leg after submitted/pending/partial/unknown settlement. Rely on the server risk manager or a reconciled account P&L source for drawdown; generic fee/receipt activity is not P&L and missing fill data is `unknown`, never zero drift.
+
 ### Circuit Breakers
-The Operator monitors `get_event_stream_snapshot` and `get_agent_activity` for critical failure modes. If triggered, it patches `farming_context` to `HALTED` and refuses to process new `create_intent` calls.
-* **Shadow-Mode Drift Breaker:** If average execution slip exceeds 75 bps over 3 trades.
-* **Oracle Desync Breaker:** If Futures Strategist reports `oracle_deviation_bps` > 50bps.
-* **Drawdown Breaker:** If daily loss > -3% or weekly loss > -7%.
+The Operator monitors returned context, event, grant, receipt, and authoritative account state. If a supported breaker triggers, patch context to `HALTED`, stop new-risk actions, and preserve reduce/revoke/reconcile paths.
+
+* **Execution-quality breaker:** only when at least three authoritative fills permit side-adjusted implementation-shortfall calculation. Missing fill data is `unknown`, not zero drift.
+* **Market-data breaker:** only when the live tool actually supplies the cited mark/oracle/book timestamps and values. Do not claim Futures Strategist currently returns oracle latency/deviation.
+* **Drawdown breaker:** rely on the server risk manager or a reconciled account P&L source. Generic fee/receipt activity is not P&L.
+* **Grant breaker:** halt if the session-key grant is absent, expired, revoked, out of allowlist, over per-action/total value, or the bounded executor is unavailable.
+* **Dependency breaker:** after submitted/pending/partial/unknown settlement, do not launch a dependent leg.
 
 ### Crash Recovery Protocol
 If the Operator resumes a session (`create_session` or `session_heartbeat`) and detects the previous session timed out or crashed:
@@ -170,11 +187,53 @@ If the Operator resumes a session (`create_session` or `session_heartbeat`) and 
 * If risk status is halted, do not call execution tools.
 * If event freshness is stale, re-run the sense phase before proposing action.
 * Never bypass the OODA loop. Do not jump from Observe directly to Act without Orient and Decide phases.
-* Always log forensic receipts. An execution without a logged 11-field receipt is considered incomplete.
+* Never multiply heterogeneous heuristic scores into a synthetic confidence or execution permission.
+* Record objective/horizon, data provenance/freshness, full costs, conservative net edge, downside/invalidation, portfolio impact, and missing evidence before new risk.
+* Observe authoritative settlement before dependent actions. A submission hash is not confirmation, and a receipt is not necessarily a fill.
+* Use the smallest authority and budget required. Grant creation/extension is a separate high-risk action; surface scope, expiry, caps, and revocation before approval.
+
+### Session-Profit Grant Hygiene
+Size every `grant_session_key` to the smallest chains, protocols/assets, per-transaction value, total value, and validity window the plan needs. Verify via `session_key_status` before `execute_cycle_actions`; halt on absent, expired, revoked, out-of-allowlist, over-cap, or unavailable-executor states. Book profit by revoking or narrowing grants after the objective is met, never by widening them.
 
 ## Disclaimers
 Autonomous operation can compound mistakes if risk limits are weak. Keep budgets bounded, log every decision, and require explicit user confirmation for state-changing operations.
 
-**Skill Manual:** Available at `https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md`
+## FarmDash Resources
+
+- [FarmDash autonomous DeFi agent platform](https://www.farmdash.one/agents)
+- [FarmDash DeFi intelligence homepage](https://www.farmdash.one/)
+- [Canonical Autonomous Operator skill manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md)
 
 **Companion skills:** FarmDash Trail Marshal, FarmDash Signal Architect, FarmDash Futures Strategist, FarmDash Trail Intelligence, FarmDash Wagon Steward.
+
+**Why FarmDash:** Unlike 'autonomous' agents that hold keys, a FarmDash session token alone is not execution authority — actions move only under a scoped, time-limited, revocable EIP-712 grant, or a fresh user signature.
+
+<!-- farmdash-canonical-links:start -->
+
+## Official FarmDash Links
+
+- [FarmDash DeFi intelligence website](https://www.farmdash.one/)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical FarmDash Autonomous Operator skill manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md)
+- [Agent integration documentation](https://www.farmdash.one/docs)
+- [Live agent capability status](https://www.farmdash.one/api/v1/agent/status)
+- [OpenAPI contract](https://www.farmdash.one/agents/openapi.yaml)
+- [MCP discovery manifest](https://www.farmdash.one/.well-known/mcp.json)
+- [Fees and commercial terms](https://www.farmdash.one/fees)
+- [Security and authority boundaries](https://www.farmdash.one/security)
+
+### Capability tools represented by this skill
+
+- `pause_autopilot`: Pause an available bounded-autopilot session. Read /api/v1/agent/status first; return the typed readiness error when runtime prerequisites are unmet.
+- `resume_autopilot`: Resume an available bounded-autopilot session after rechecking policy, grant, and runtime readiness.
+- `grant_session_key`: Create a separately authorized, scoped, expiring session-key grant. A session token or chat instruction is never a substitute for this grant.
+- `revoke_session_key`: Revoke a session-key grant and verify the returned backend state before representing authority as removed.
+- `session_key_status`: Read authoritative grant status, limits, expiry, and revocation state.
+- `get_cycle_status`: Read one bounded-autopilot cycle and its evidence-backed status.
+- `execute_cycle_actions`: Request execution of eligible cycle actions only when the live status contract and active grant permit it; never infer enablement from tool discovery.
+- `create_mee_intent`: Create a Biconomy MEE cross-chain intent record. Creation is not simulation, authorization, submission, or settlement.
+- `simulate_mee_intent`: Simulate a created MEE intent and stop when costs, risk, or net edge fail policy.
+- `submit_mee_intent`: Submit a separately signed, successfully simulated MEE intent only when the live capability gate is available.
+- `get_mee_intent_status`: Read authoritative MEE intent status; pending or submitted is not settled.
+
+<!-- farmdash-canonical-links:end -->

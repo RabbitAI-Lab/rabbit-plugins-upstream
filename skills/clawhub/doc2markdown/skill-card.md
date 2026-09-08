@@ -1,42 +1,58 @@
-## Description: <br>
-Lightweight document utility designed to convert files to Markdown (MD), built specifically for intelligent agents to read and process content across common document, spreadsheet, presentation, image, ebook, and office formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lightweight document utility designed to convert files to Markdown (MD), built specifically for intelligent agents (e.g., OpenClaw, ClaudeCode) to read and process content.
 
-## Publisher: <br>
-[haoyt27](https://clawhub.ai/user/haoyt27) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haoyt27](https://clawhub.ai/user/haoyt27)
 
-## Use Case: <br>
-Developers and agents use this skill to convert user-provided documents into Markdown so the document content can be read, summarized, extracted, or analyzed. It supports single Markdown output and a full Markdown package with images and tables. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documents are sent to the third-party lab.hjcloud.com conversion service. <br>
-Mitigation: Require explicit user confirmation before upload and avoid confidential, regulated, credential-bearing, or customer documents unless the service's privacy and retention practices have been independently reviewed. <br>
-Risk: The skill may be invoked for broad read, summarize, or analyze requests without a separate consent step. <br>
-Mitigation: Ask the user to confirm the specific file and conversion mode before each upload, especially for sensitive or ambiguous document requests. <br>
+## Use Case:
 
+Developers and agent users use Doc2Markdown to convert office documents, PDFs, images, ebooks, and related file formats into Markdown so agents can read, summarize, analyze, or export document content.
 
-## Reference(s): <br>
-- [Doc2Markdown ClawHub listing](https://clawhub.ai/haoyt27/doc2markdown) <br>
-- [Docchain document conversion service](https://lab.hjcloud.com/llmdoc) <br>
-- [Docchain Skills support repository](https://github.com/wct-lab/docchain-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown files, extracted ZIP packages, and command-line status text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js. Conversion uploads the source document to lab.hjcloud.com, polls for completion, and may return a document ID for later checking.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: The skill can upload private PDFs, office files, images, or business documents to the third-party cloud service at lab.hjcloud.com for conversion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when third-party cloud processing is acceptable, and avoid submitting sensitive or confidential documents unless the service's data handling practices have been reviewed.
+
+Risk: Agents may invoke conversion for broad read, summarize, or analyze requests without an explicit consent step.
+
+Mitigation: Confirm user intent before converting documents that may contain private, regulated, or business-confidential content.
+
+Risk: The optional API key is sent to the conversion service when configured.
+
+Mitigation: Configure the API key only when the service is trusted, keep the token scoped to this skill, and prefer environment-based secret management over checked-in configuration files.
+
+## Reference(s):
+
+- [Doc2Markdown service endpoint](https://lab.hjcloud.com/llmdoc)
+- [ClawHub skill page](https://clawhub.ai/haoyt27/skills/doc2markdown)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown files or extracted ZIP packages with command-line status text and document IDs for pending conversions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js. Outputs are saved beside the source file as either a single Markdown file or a directory containing the converted Markdown package.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

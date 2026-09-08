@@ -1,8 +1,11 @@
 ---
 name: qa-release-risk-governance
-version: 1.6.0
+slug: qa-release-risk-governance
+displayName: 发布测试风险治理
+version: 1.7.5
 description: >-
   当版本要发布了、需要决定"能不能发"、或者需要设计灰度/回滚方案时使用此技能。系统化评估变更风险（变更范围/影响面/回退成本），设计灰度发布策略（按用户/区域/流量比例），制定回滚方案和线上监控计划。不要问"这个版本稳不稳"——要问"如果出问题了，我们能在几分钟内发现并回滚"。产出发布风险评估报告和灰度发布方案。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"发布风险"、"灰度策略"、"回滚方案"、"风险评估"、"版本发布"、"紧急发布"、需要评估发布风险、大版本发布前风险评估时
 allowed-tools: Read Grep Glob
@@ -33,6 +36,9 @@ output_format:
   traceability:
     - 每次发布评估带唯一ID（REL-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - release_decision: 发布决策建议
     - risk_summary: 风险摘要
     - blocking_issues: 阻塞性问题清单
@@ -46,6 +52,8 @@ error_recovery_guidance:
   on_failure: "发布评估发现阻塞性问题时回退到测试策略补齐"
   retry_behavior: "修复阻塞问题后重新评估发布"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及发布决策、灰度方案和回滚操作。
 > 实际使用时请勿直接执行发布或回滚，先确认审批权限、灰度比例和回滚预案。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

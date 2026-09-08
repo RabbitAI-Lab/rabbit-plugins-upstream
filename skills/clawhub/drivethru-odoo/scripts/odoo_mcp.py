@@ -35,7 +35,17 @@ import sys
 import anyio
 
 from mcp import ClientSession
-from mcp.client.streamable_http import streamablehttp_client
+
+# The Streamable-HTTP client factory has shipped under two spellings across
+# mcp SDK releases (`streamablehttp_client` in 1.x; some builds expose the
+# snake_case `streamable_http_client`). Import defensively so the shell
+# fallback works regardless of which version the host pre-installed.
+try:
+    from mcp.client.streamable_http import streamablehttp_client
+except ImportError:  # pragma: no cover - depends on installed mcp version
+    from mcp.client.streamable_http import (  # type: ignore
+        streamable_http_client as streamablehttp_client,
+    )
 
 
 def _fail(error_type: str, message: str, code: int = 1) -> int:

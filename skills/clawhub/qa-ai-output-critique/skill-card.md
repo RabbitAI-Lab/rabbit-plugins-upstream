@@ -1,45 +1,54 @@
-## Description: <br>
-QA AI Output Critique reviews AI-generated test cases across completeness, correctness, executability, risk coverage, formatting, traceability, consistency, and redundancy, producing scored quality reports and improvement suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews AI-generated test cases across completeness, correctness, executability, risk coverage, formatting, consistency, traceability, and redundancy before those cases are accepted as QA artifacts.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill after AI generates test cases to critique their quality before final delivery, identify coverage gaps, and guide iteration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: General QA phrases such as "check the output" may trigger the skill when the user intended a different kind of review. <br>
-Mitigation: Confirm the intended review target before applying the skill to broad or ambiguous QA requests. <br>
-Risk: The documentation mixes six- and eight-dimension review modes, which can make pass/fail thresholds inconsistent for strict quality gates. <br>
-Mitigation: Standardize the selected review mode and scoring threshold before using the report as a gating result. <br>
-Risk: Review suggestions may include merging, simplifying, or deleting low-value test cases. <br>
-Mitigation: Treat these as non-persistent review proposals; back up source test data and require human confirmation before changing or deleting cases. <br>
+## Use Case:
 
+QA engineers, developers, and test reviewers use this skill after AI generates test cases to score quality, identify missing or weak cases, and produce improvement guidance before the cases enter a test suite.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ai-output-critique) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
-- [Review dimensions](references/review-dimensions.md) <br>
-- [Report templates](references/report-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown critique report with scores, issue tables, coverage gaps, quality score, and improvement suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May operate in complete or quick review mode depending on whether scenario trees, risk lists, and traceability data are provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill may activate on broad review requests and critique content outside formal QA artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Invoke it explicitly around AI-generated test cases when formal QA review is intended.
+
+Risk: The skill can recommend deleting, merging, or changing test cases.
+
+Mitigation: Review suggestions before applying them to real test data, and back up important QA artifacts first.
+
+## Reference(s):
+
+- [Review Dimensions](references/review-dimensions.md)
+- [Report Templates](references/report-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown critique report with scoring tables, issue lists, quality scores, coverage gaps, and improvement suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports an eight-dimensional review when scenario and risk evidence are available, and a simplified six-dimensional review when upstream context is missing.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

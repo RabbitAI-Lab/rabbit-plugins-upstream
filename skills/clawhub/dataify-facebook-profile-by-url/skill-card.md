@@ -1,42 +1,60 @@
-## Description: <br>
-Submits Dataify Builder jobs to collect Facebook personal profile data by profile URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collects a Facebook personal profile from a known profile URL, excluding posts, comments, events, pages, and company data.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users or developers use this skill to submit one or more Facebook personal profile URLs to Dataify Builder and receive the resulting task_id and status so they can view results in Dataify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Facebook profile URLs submitted through the skill are sent to Dataify for collection. <br>
-Mitigation: Use the skill only for profiles you are allowed to collect and only when you intend to process those URLs through Dataify. <br>
-Risk: DATAIFY_API_TOKEN authorizes actions on the user's Dataify account. <br>
-Mitigation: Treat DATAIFY_API_TOKEN as a credential, provide it only when needed, and avoid persisting it unless the user explicitly chooses to save it. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify Builder jobs for known Facebook personal profile URLs, monitor the asynchronous task, and return the collected JSON result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-facebook-profile-by-url) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify login](https://dashboard.dataify.com/login?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with parameter tables, shell command examples, and JSON task summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns task_id, status, submitted parameters, file name, dashboard URL, and message when the helper script is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill sends Facebook profile URLs to Dataify and can consume Dataify account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when that data transfer and credit use are intended, and review multi-profile or higher-cost collection requests before execution.
+
+Risk: A Dataify API TOKEN could be exposed if handled directly in chat or logs.
+
+Mitigation: Configure DATAIFY_API_TOKEN through the shell or environment, verify only that it is present, and never print the token value.
+
+Risk: Requests outside the intended target type could collect unsupported or unwanted data.
+
+Mitigation: Use only Facebook personal profile URLs that start with https://www.facebook.com/ and exclude posts, comments, events, pages, and company data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-facebook-profile-by-url)
+- [Dataify publisher profile](https://clawhub.ai/user/dataify-server)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify API token login](https://dashboard.dataify.com/login?utm_source=skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with shell command examples and JSON task or result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit a Dataify Builder task, monitor the returned task ID, and summarize large final payloads while preserving access to raw results.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

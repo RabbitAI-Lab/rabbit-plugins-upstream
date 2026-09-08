@@ -1,43 +1,55 @@
-## Description: <br>
-Dataify Google Images turns a user's Google Images request into a Dataify Scraper API form submission after parameter confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google Images for image results. Do not use for Google Lens reverse-image search or general web results.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to prepare, confirm, and execute Google Images searches through Dataify's Scraper API while preserving the raw API response. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search parameters and request details are sent to Dataify when the API call is confirmed. <br>
-Mitigation: Confirm the user is comfortable sending the selected parameters to Dataify before making the request. <br>
-Risk: The skill requires a DATAIFY_API_TOKEN for authenticated API access. <br>
-Mitigation: Keep the token out of displayed parameter tables and avoid echoing token values in responses. <br>
-Risk: Raw upstream API responses or errors may include query and request details. <br>
-Mitigation: Review raw API responses before sharing them further. <br>
+## Use Case:
 
+External users and developers use this skill to turn Google Images search requests into Dataify Scraper API calls and receive compact image-result summaries or raw responses when requested.
 
-## Reference(s): <br>
-- [Dataify Google Images API Reference](references/google_images_api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-images) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown confirmation table followed by the raw API response body after explicit user confirmation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify API token and sends confirmed search parameters to Dataify.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: Image search queries and related request parameters are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive queries or parameters unless sharing them with Dataify is acceptable.
+
+Risk: The Dataify API token could be exposed if pasted into chat or printed in logs.
+
+Mitigation: Keep DATAIFY_API_TOKEN in the agent environment and do not paste or display the token value.
+
+## Reference(s):
+
+- [Dataify Google Images API Reference](references/google_images_api.md)
+- [Dataify Google Images Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-images)
+- [Dataify Scraper API Endpoint](https://scraperapi.dataify.com/request)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, parameter tables, shell commands, and raw JSON or HTML when explicitly requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an image query and a DATAIFY_API_TOKEN supplied through the agent environment.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

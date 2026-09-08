@@ -1,41 +1,54 @@
-## Description: <br>
-A QA critical-thinking skill that challenges assumptions in requirements and test cases to uncover hidden constraints, edge cases, alternative scenarios, and risk reevaluations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chinese-language QA review skill for challenging assumptions, surfacing hidden constraints, and finding missed test scenarios through critical questioning.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, and developers use this skill to review requirements and test cases with reverse thinking, 5W1H questioning, assumption challenges, and risk-focused follow-up questions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requirements or test-case review may include customer, payment, identity, production, or other sensitive data. <br>
-Mitigation: Mask or remove sensitive data before using the skill, as recommended by the security guidance and artifact warning. <br>
-Risk: Broad Chinese trigger phrases may cause the skill to activate during general discussion. <br>
-Mitigation: Apply contextual judgment before activation and use it only for QA critical-thinking, requirements review, or test-case review tasks. <br>
+## Use Case:
 
+QA engineers, developers, and test reviewers use this skill to pressure-test requirements and test cases by challenging normal-path assumptions, identifying edge cases, and reassessing risk.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-critical-thinking) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown or structured text review output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce thinking gaps, assumption challenges, alternative scenarios, and risk reevaluation notes; discovered challenges may be mapped to requirement IDs or scenario IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Prompts or test materials may include real customer, identity, payment, or production data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or remove sensitive data before using the skill.
+
+Risk: Generic Chinese phrases may trigger the skill outside strictly QA-focused conversations.
+
+Mitigation: Confirm the task is a QA assumption-review or test-scenario analysis before applying the skill output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-critical-thinking)
+- [ClawHub publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with QA tables, checklists, assumption challenges, scenario suggestions, and risk review notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a fixed nine-column test case table, thinking gap list, assumption challenges, alternative scenarios, and risk reevaluation notes.]
+
+## Skill Version(s):
+
+1.7.6 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

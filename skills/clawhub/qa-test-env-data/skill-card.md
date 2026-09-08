@@ -1,40 +1,53 @@
-## Description: <br>
-Provides QA teams with guidance for managing authorized non-production test environments, diagnosing environment issues, and preparing traceable test data checklists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps QA teams manage unstable or capacity-limited test environments and prepare test data through environment health checks, configuration guidance, multi-environment strategy, and data preparation checklists.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill when a test environment is unstable, unavailable, newly deployed, or requires prepared test data. It helps structure environment requirements, health checks, configuration guidance, maintenance planning, and data preparation for non-production testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated cleanup, restart, or configuration guidance could be applied to the wrong environment. <br>
-Mitigation: Use only in authorized non-production environments and confirm the target environment name or address before acting. <br>
-Risk: Data cleanup or reset guidance could remove useful test data or affect shared testing workflows. <br>
-Mitigation: Confirm backups and approvals before data changes, prefer a dry run first, and coordinate shared-environment windows with affected teams. <br>
+## Use Case:
 
+QA testers, test leads, and engineers use this skill when building, diagnosing, or maintaining authorized non-production test environments and preparing test data for execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-env-data) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown checklist and structured guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Environment configurations should include traceable ENV-XXXX identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Environment changes, restarts, or repairs could affect the wrong system or disrupt a shared test environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target environment, verify it is an authorized non-production environment, obtain approval, and coordinate any shared-environment maintenance window before acting.
+
+Risk: Data cleanup, reset, archival, or test-data generation could remove or alter data needed by other testers or teams.
+
+Mitigation: Confirm backups or create a backup first, use a dry run in a lower-risk environment when available, start with a small scope, and record approved changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-env-data)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with checklists, structured text, and inline shell commands when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces environment health checks, environment and data preparation checklists, configuration guidance, and maintenance plans.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter says 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

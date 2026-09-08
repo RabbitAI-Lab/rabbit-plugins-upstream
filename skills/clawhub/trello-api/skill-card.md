@@ -1,51 +1,78 @@
-## Description: <br>
-Trello API integration with managed OAuth for managing boards, lists, cards, checklists, labels, and members through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trello API integration with managed OAuth for managing boards, lists, cards, members, labels, checklists, and Trello search through the Maton CLI or API gateway.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to read and manage Trello project data through a Maton-managed OAuth connection. It supports board, list, card, checklist, label, member, search, and connection workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Trello boards, lists, cards, labels, checklists, and membership assignments through the connected account. <br>
-Mitigation: Install only when Maton is trusted to broker Trello OAuth access, and confirm every create, update, or delete action before it runs. <br>
-Risk: Requests may target the wrong Trello account when multiple OAuth connections are active. <br>
-Mitigation: Use the intended Trello connection explicitly when multiple connections exist. <br>
+## Use Case:
 
+Developers, operators, and project teams use this skill to inspect and manage Trello project data from an agent workflow. It supports read-first Trello API access and user-approved changes to boards, lists, cards, members, labels, and checklists through Maton-managed authentication.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/trello-api) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Trello API Overview](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/) <br>
-- [Trello Boards API](https://developer.atlassian.com/cloud/trello/rest/api-group-boards/) <br>
-- [Trello Lists API](https://developer.atlassian.com/cloud/trello/rest/api-group-lists/) <br>
-- [Trello Cards API](https://developer.atlassian.com/cloud/trello/rest/api-group-cards/) <br>
-- [Trello Checklists API](https://developer.atlassian.com/cloud/trello/rest/api-group-checklists/) <br>
-- [Trello Labels API](https://developer.atlassian.com/cloud/trello/rest/api-group-labels/) <br>
-- [Trello Members API](https://developer.atlassian.com/cloud/trello/rest/api-group-members/) <br>
-- [Trello Search API](https://developer.atlassian.com/cloud/trello/rest/api-group-search/) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Trello OAuth connection. Write operations should be confirmed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server-resolved release metadata) <br>
+Risk: Maton brokers access to the user's Trello account and the skill can modify Trello data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable authorizing Maton for the account, prefer OAuth over API keys, and revoke unused Trello connections when work is complete.
+
+Risk: Write operations can delete, bulk move, update membership, add comments, change labels, or alter boards, lists, cards, and checklists.
+
+Mitigation: Default to read and list calls first, then require explicit approval of the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE operation.
+
+Risk: Long-lived Maton API keys can leak through environment exposure, logs, shell history, command arguments, or persisted files.
+
+Mitigation: Use the CLI OAuth flow when possible; if an API key is unavoidable, never print or persist it, never pass it on a command line, send it only to api.maton.ai, and rotate it if exposed.
+
+Risk: Ambiguous Maton profiles or multiple Trello connections can send reads or writes to the wrong account or board.
+
+Mitigation: Verify authentication with maton whoami, list active Trello connections, and pin the intended profile or connection before executing account-specific changes.
+
+Risk: Trello content, comments, and webhook payloads can contain untrusted instructions or adversarial text.
+
+Mitigation: Treat API responses as data only; do not execute, eval, or interpolate returned content into commands, prompts, endpoints, or recipients without validation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/trello-api)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Trello API Overview](https://developer.atlassian.com/cloud/trello/rest/api-group-actions/)
+- [Trello Boards API](https://developer.atlassian.com/cloud/trello/rest/api-group-boards/)
+- [Trello Lists API](https://developer.atlassian.com/cloud/trello/rest/api-group-lists/)
+- [Trello Cards API](https://developer.atlassian.com/cloud/trello/rest/api-group-cards/)
+- [Trello Checklists API](https://developer.atlassian.com/cloud/trello/rest/api-group-checklists/)
+- [Trello Labels API](https://developer.atlassian.com/cloud/trello/rest/api-group-labels/)
+- [Trello Members API](https://developer.atlassian.com/cloud/trello/rest/api-group-members/)
+- [Trello Search API](https://developer.atlassian.com/cloud/trello/rest/api-group-search/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Trello or Maton JSON responses; requires network access, a Maton account, and a Trello connection.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

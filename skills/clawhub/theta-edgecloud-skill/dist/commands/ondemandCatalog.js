@@ -1,4 +1,7 @@
 export const ONDEMAND_CHAT_SERVICE_SLUGS = [
+    'glm_5_3',
+    'glm_5_3_flash',
+    'glm_5_2',
     'qwen3',
     'minimax_m2_5',
     'gpt_oss_120b',
@@ -11,6 +14,54 @@ export function isOnDemandChatService(slug) {
 // Refreshed against live public on-demand service discovery on 2026-05-26.
 // Source: https://ondemand.thetaedgecloud.com/service/list
 export const ONDEMAND_SERVICE_CATALOG = {
+    glm_5_3_flash: {
+        slug: 'glm_5_3_flash',
+        name: 'GLM 5.3 Flash',
+        category: 'LLM',
+        requiredInputFields: ['messages'],
+        supportsInputPresignedUrls: false,
+        defaultPrediction: 'completions',
+        inputSchemaKind: 'chat_messages',
+        variants: ['default'],
+        maxTokensDefault: 5000,
+        supportsTools: true,
+        pricingHint: 'live list 2026-08-31: input=17/output=55 per 1M tokens; ~9x cheaper input than glm_5_3',
+        liveStatus: 'live-public-2026-08-31',
+        notes: 'Fast/cheap GLM-5.3 variant. Same OpenAI-compatible /infer_request/chat/completions contract as glm_5_3 incl. structured tool_calls (verified 2026-08-31). Supports reasoning_effort low/high/max. Good default for high-volume worker tasks.'
+    },
+    glm_5_3: {
+        slug: 'glm_5_3',
+        name: 'GLM 5.3',
+        category: 'LLM',
+        requiredInputFields: ['messages'],
+        supportsInputPresignedUrls: false,
+        defaultPrediction: 'completions',
+        inputSchemaKind: 'chat_messages',
+        variants: ['default'],
+        maxTokensDefault: 5000,
+        contextWindow: 1000000,
+        license: 'MIT',
+        supportsTools: true,
+        pricingHint: 'live list: input=154/output=484, divisor=1000000; raw split-price units, currency unverified',
+        liveStatus: 'live-public-2026-08-31',
+        notes: 'Canonical slug is glm_5_3. Use OpenAI-compatible POST /infer_request/chat/completions with model "glm_5_3" for structured tool_calls (tool_choice none/auto/required/forced, parallel calls, streaming, tool-result continuation all verified 2026-08-31). The job-style /infer_request/glm_5_3 endpoint does NOT expose structured tool_calls. OpenClaw model: litellm/glm_5_3, alias theta-glm-53; configured fallback #2 behind claude-opus-4-7 with glm_5_2 fallback #3.'
+    },
+    glm_5_2: {
+        slug: 'glm_5_2',
+        name: 'GLM 5.2',
+        category: 'LLM',
+        requiredInputFields: ['messages'],
+        supportsInputPresignedUrls: false,
+        defaultPrediction: 'completions',
+        inputSchemaKind: 'chat_messages',
+        variants: ['default'],
+        maxTokensDefault: 5000,
+        contextWindow: 1000000,
+        license: 'MIT',
+        pricingHint: 'live list: input=154/output=484, divisor=1000000; raw split-price units, currency unverified',
+        liveStatus: 'live-public-2026-08-05',
+        notes: 'Canonical slug is glm_5_2. Live schema includes enable_thinking. Keep opt-in for bounded, verifiable worker tasks.'
+    },
     qwen3: {
         slug: 'qwen3',
         name: 'Qwen3',

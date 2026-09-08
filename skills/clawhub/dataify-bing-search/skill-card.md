@@ -1,44 +1,58 @@
-## Description: <br>
-Runs Bing web searches through the Dataify API and returns the API response directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Bing web results through Dataify and returns structured results for an agent.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to turn natural-language Bing search requests into Dataify API parameters, confirm the request, and retrieve raw Bing search responses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The debug endpoint override can send the user's Dataify API token to a non-Dataify destination. <br>
-Mitigation: Use the fixed Dataify endpoint for normal searches and allow `--url` only for trusted debugging destinations. <br>
-Risk: Search location and GPS coordinate parameters may disclose precise user location when included in a request. <br>
-Mitigation: Only provide `location`, `lat`, or `lon` when they are needed for the user's search task. <br>
-Risk: Persisting a Dataify token in shell profile files can increase credential exposure. <br>
-Mitigation: Prefer a temporary `DATAIFY_API_TOKEN` environment variable or a per-run token for live calls. <br>
+## Use Case:
 
+Developers and external users can use this skill to turn a natural-language search request into a Dataify Bing Search API call and receive compact result summaries, source links, or requested raw JSON/HTML.
 
-## Reference(s): <br>
-- [Dataify Bing Search API Reference](references/api.md) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-bing-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown parameter tables, shell command examples, and direct API responses in JSON or HTML.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill requires user confirmation before live API calls and returns the script output without summarizing or post-processing it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: A debug endpoint override can send the Dataify bearer token to an arbitrary URL if used with an untrusted destination.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default Dataify endpoint for normal searches and allow --url only for trusted debugging.
+
+Risk: Tokens passed directly on a command line can be exposed through shell history or process listings.
+
+Mitigation: Configure DATAIFY_API_TOKEN in the environment and avoid --token for normal use.
+
+Risk: Persistent shell setup can expose credentials if copied into shared profiles, logs, or screenshots.
+
+Mitigation: Review shell-specific setup before making persistent changes and prefer session-scoped configuration when appropriate.
+
+## Reference(s):
+
+- [Dataify Bing Search API Reference](references/api.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-bing-search)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries by default; raw JSON or HTML when explicitly requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Dataify API token for live calls; dry-run and parameter preview modes can run without network submission.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

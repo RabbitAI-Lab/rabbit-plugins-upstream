@@ -1,41 +1,58 @@
-## Description: <br>
-Guides agents through structured QA bug root-cause analysis by classifying symptoms, tracing direct, indirect, and systemic causes, and producing fix and prevention recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides QA teams through bug root-cause analysis using 5 Why, causal diagrams, and fishbone methods to distinguish direct, indirect, and systemic causes and propose prevention measures.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and incident reviewers use this skill to analyze recurring or production bugs, identify root causes, assess impact, and define fixes and prevention measures. It is suited for post-defect analysis when logs, environment details, reproduction steps, and bug descriptions are available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill during general troubleshooting. <br>
-Mitigation: Confirm the user wants a formal QA root-cause analysis before applying the workflow to generic debugging requests. <br>
-Risk: Bug reports, logs, screenshots, and payment or customer examples can contain sensitive production data. <br>
-Mitigation: Mask production logs, customer identifiers, payment details, screenshots, credentials, and environment secrets before using the skill. <br>
+## Use Case:
 
+QA engineers and developers use this skill to investigate recurring, production, or hard-to-explain bugs, classify symptoms, validate root-cause hypotheses, and define fixes and prevention measures.
 
-## Reference(s): <br>
-- [ClawHub skill release page](https://clawhub.ai/kokxi/skills/qa-bug-root-cause-analysis) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured root-cause analysis fields, traceability IDs, tables, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include ROOT-XXXX traceability, BUG-XXXX linkage, root cause, contributing factors, impact assessment, fix suggestions, prevention measures, and verification guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Bug reports, logs, screenshots, payment details, identity data, or production incident records may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Mask or remove customer, payment, identity, and production data before using the skill.
+
+Risk: Optional examples or workflows may rely on external log or monitoring tools.
+
+Mitigation: Run any tool-assisted analysis only in controlled QA or incident-analysis environments.
+
+Risk: The optional full QA Test Skills set expands the installed workflow surface.
+
+Mitigation: Review the full skill-set installation separately before adding it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-bug-root-cause-analysis)
+- [ClawHub publisher profile](https://clawhub.ai/user/kokxi)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include root-cause conclusions, contributing factors, impact assessment, fix suggestions, prevention measures, traceability IDs, and QA test-case tables.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

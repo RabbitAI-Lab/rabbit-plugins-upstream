@@ -1,40 +1,56 @@
-## Description: <br>
-Helps teams evaluate and choose QA testing tools by comparing requirements, constraints, costs, risks, and implementation plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams choose or replace testing tools by comparing candidate frameworks, performance tools, and management platforms across requirements, cost, maintainability, community activity, extensibility, and risk.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers, test leads, and developers use this skill when selecting, comparing, or replacing testing tools for automation, performance testing, or test management. It produces a structured evaluation with candidate comparisons, a recommendation, risks, and a POC or migration plan.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Tool recommendations may be incomplete or poorly matched if project requirements, team skills, budget, or technical constraints are missing.
+
+Mitigation: Validate recommendations against explicit requirements and run a POC before adopting or migrating tools.
+
+Risk: External research can introduce stale, biased, or vendor-favored information into a tool comparison.
+
+Mitigation: Check source dates, compare multiple authoritative sources, and document assumptions in the evaluation.
+
+Risk: The artifact suggests installing a larger QA skill set with an npx command.
+
+Mitigation: Review the referenced package and command before running it in an agent environment.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when selecting automation frameworks, performance testing tools, or test management platforms. It guides requirement analysis, weighted comparisons, recommendations, risk review, POC planning, and migration guidance. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may route general architecture or tool-selection questions to this skill when another specialist skill is a better fit. <br>
-Mitigation: Review trigger phrases and route this skill to QA or testing technology selection; use more specific skills for broader architecture decisions. <br>
-Risk: Tool recommendations can be incomplete when requirements, technical constraints, team capability, or budget are missing. <br>
-Mitigation: Collect the missing inputs, compare at least three candidate tools across core dimensions, and re-evaluate before adopting a recommendation. <br>
+**Output Format:** [Markdown report with comparison matrices, recommendations, risk notes, and POC or migration planning guidance.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-tech-selection) <br>
+**Other Properties Related to Output:** [May include structured tables, weighted scoring, and unique selection IDs such as SEL-XXXX.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown report with comparison tables, checklists, recommendations, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes SEL-XXXX traceability IDs and recommends comparing at least three candidate tools across core dimensions.] <br>
+1.7.6 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.6.0 (source: evidence release and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

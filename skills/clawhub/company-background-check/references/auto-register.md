@@ -111,12 +111,22 @@ Content-Type: application/json
   },
   "agent_kind": "claude-code",
   "agent_version": "...",
-  "skill_version": "company-intel-1.0.0",
+  "skill_version": "company-intel-1.0.2",
   "ch": "s119"
 }
 ```
 
-> **`ch` 字段说明**：固定填 `"s119"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
+> ### ⚠️ 请求体必须用 JSON 序列化函数生成，不要手拼字符串
+>
+> 用 `json.dumps(payload)` / `requests.post(url, json=payload)` / `JSON.stringify(payload)`，
+> 或 `curl -d @file`；**不要用字符串拼接，也不要用 Python 的 `str(dict)`**
+> （后者产出单引号，服务端会报 `Expecting property name enclosed in double quotes`）。
+>
+> 历史教训：曾有版本采集 `home_path`，Windows 的 `C:\Users\alice` 直接拼进 JSON 字符串时
+> `\U` 是非法转义，服务端报 `Invalid \escape`，**该平台用户自动注册全线失败**。
+> 现在虽然三项特征都不含反斜杠，手拼仍可能被其它意外字符（引号、换行）破坏——用序列化函数是唯一可靠做法。
+
+> **`ch` 字段说明**：固定填 `"s105"`。**不要从用户环境或动态来源读**。非法值（非 `^[A-Za-z0-9_]{1,16}$`）服务端会静默丢弃，不影响主流程。
 
 **成功响应**：
 ```json
@@ -130,13 +140,33 @@ Content-Type: application/json
 }
 ```
 
-`is_new=False` 时表示同设备之前已注册过，会返回原有的 `api_key` 和当前余额——这种情况不要重复提示用户「新账号已创建」。
+成功响应里 `is_new` 恒为 `true`：**同设备之前已注册过的情况不会返回成功响应**，而是下面那个 401 `ACCOUNT_RECOVERY_REQUIRED`（2026-09-07 起）。
+旧文档里「`is_new=False` 会返回原有 `api_key`」的说法**已作废**，别照它去重试本接口。
 
 **失败响应（429 限流）**：
 ```json
 { "detail": "自动注册过于频繁，请稍后再试" }
 ```
 此时不要重试，提示用户访问 `https://ai.zhiliaobiaoxun.com/?ch=s119` 手动登录注册。
+
+**失败响应（401 设备已注册）**：
+```json
+{ "detail": { "code": "ACCOUNT_RECOVERY_REQUIRED", "message": "...", "hint": "..." } }
+```
+这份设备特征已对应一个已有账号，但本次请求没有可信凭证，服务端无法确认你就是账号主人，
+因此**不会**把 api_key 发回来。
+
+处理方式（三条都要照做）：
+- **不要重试本接口**；
+- **不要改动设备特征再试一次** —— 那不会「换一台机器」，只会建出重复账号；
+- 按 `hint` 提示用户：访问 `https://ai.zhiliaobiaoxun.com/?ch=s119` 用手机号登录（新号有赠送额度），
+  在「API Key」页复制 Key 写入 `~/.zlbx/config.json` 的 `api_key` 字段。
+  注意手机号登录拿到的是该手机号名下的账号，**不会自动接管本机原匿名账号的余额**；
+  用户确认原来还有余额的话，引导他联系客服。
+
+> 为什么不能自动取回：设备特征是可复制的，`mac_hash` 取不到时会退化成常量，
+> 不同机器会算出同一个 `device_id`。凭它下发密钥等于把别人的账号交出去
+> （2026-09-07 修复）。所以拿不到 key 时，正确做法永远是走登录，不是改特征重试。
 
 ---
 
@@ -165,7 +195,7 @@ Content-Type: application/json
 
 ---
 
-## 余额耗尽时的处理（INSUFFICIENT_BALANCE / QUOTA_EXCEEDED）
+## 余额耗尽时的处理（`QUOTA_EXCEEDED`）
 
 **仅当当前 api_key 是从 `~/.zlbx/config.json` 读取且 `source == "auto"` 时**，按以下流程处理：
 
@@ -173,13 +203,23 @@ Content-Type: application/json
    - Header: `X-API-Key: <当前 api_key>`
    - Body: 空
 2. 拿到响应 `{"sid": "..."}`
-3. 输出文案给用户：
+3. 输出文案给用户。**链接必须裸写、单独成行、不要用反引号包起来** ——
+   包成代码块的话很多终端不会渲染成可点击链接，用户还得手工复制：
 
 > 您的免费额度已用完。点击链接自动登录并充值（首次会引导绑定手机号，**绑定即赠送 100 次免费额度**）：
 >
-> `https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>`
+> https://ai.zhiliaobiaoxun.com/auto-login?sid=<sid>
+>
+> 链接 1 小时内有效。过期了回到这里发送「重新生成充值链接」，我再给你一个新的。
 
 **如果当前 api_key 来自 `$ZLBX_API_KEY`**：跳过 SID 流程，提示用户访问 `https://ai.zhiliaobiaoxun.com/?ch=s119` 手动登录充值。
+
+### 用户说「重新生成充值链接」时
+
+链接有效期只有 1 小时，用户回来要新链接是常规操作。**收到这句话（或「充值链接过期了」
+「链接打不开」等同义表达）时，不要再去查余额、也不要等下一次额度报错** ——
+只要当前 api_key 来自 `~/.zlbx/config.json` 且 `source == "auto"`，
+直接重新执行上面的步骤 1–3，把新链接给他。
 
 ---
 
@@ -199,9 +239,17 @@ def get_api_key():
         json={
             "device_features": features,
             "agent_kind": "claude-code",
-            "ch": "s119",  # 官网官方版渠道归因，硬编码
+            "ch": "s119",  # 本包的渠道归因码，构建时注入
         }
     )
+    if resp.status == 401 and resp.json()["detail"]["code"] == "ACCOUNT_RECOVERY_REQUIRED":
+        # 这份特征已对应一个已有账号，服务端无法确认你是主人 —— 不重试、不改特征，
+        # 照 detail.hint 引导用户登录取 Key。详见上文「失败响应（401 设备已注册）」。
+        show_to_user(resp.json()["detail"]["hint"])
+        return None, source=None
+    if resp.status == 429:
+        show_to_user("自动注册过于频繁，请访问 https://ai.zhiliaobiaoxun.com/?ch=s119 手动注册")
+        return None, source=None
     write_json("~/.zlbx/config.json", {
         "api_key": resp["api_key"],
         "source": "auto",

@@ -1,42 +1,61 @@
-## Description: <br>
-Provides mobile QA planning guidance and categorized test checklists for iOS and Android apps, H5/mobile web pages, and mini-program releases, with emphasis on interruptions, network changes, permissions, compatibility, and performance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chinese-language mobile QA guidance for planning and producing mobile app, H5, and mini-program test plans, device coverage matrices, platform-specific checklists, performance checks, and structured test cases.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and developers use this skill to plan mobile release testing and produce structured coverage for device compatibility, interruption handling, weak-network behavior, permissions, performance, and platform-specific scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Desktop and PC web reference files may be mistaken for primary mobile coverage. <br>
-Mitigation: Use the mobile app, mobile web, and mini-program references as the primary planning sources, and treat desktop and PC web references as supplemental cross-platform material. <br>
+## Use Case:
 
+QA engineers and developers use this skill to design mobile release testing coverage for iOS/Android apps, mobile web/H5 pages, and mini-programs. It helps organize functional, interruption, network, permission, compatibility, performance, and security test cases into concise checklists, plans, matrices, and tables.
 
-## Reference(s): <br>
-- [Mobile App Testing](references/platform-mobile-app.md) <br>
-- [Mobile Web/H5 Testing](references/platform-mobile-web.md) <br>
-- [Mini Program Testing](references/platform-mini-program.md) <br>
-- [Desktop Testing](references/platform-desktop.md) <br>
-- [PC Web Testing](references/platform-pc-web.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown checklists and structured QA planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include mobile test plans, device coverage matrices, platform-specific checklists, performance checks, and traceable test case IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate for broad mobile or app testing requests where a narrower platform-specific testing skill would be more appropriate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the trigger behavior and route requests to this skill only when mobile app, H5, mini-program, interruption, network, permission, compatibility, or mobile release coverage is needed.
+
+Risk: The guidance is primarily Chinese-language and may not match teams that require another working language.
+
+Mitigation: Translate or localize the generated plans and checklists before using them in multilingual review, compliance, or release workflows.
+
+Risk: Generic QA checklists can miss application-specific risks, device constraints, regulatory requirements, or release blockers.
+
+Mitigation: Review generated coverage against the product requirements, supported device and OS matrix, security expectations, and release criteria before execution.
+
+## Reference(s):
+
+- [移动端App测试专项](references/platform-mobile-app.md)
+- [移动Web/H5测试专项](references/platform-mobile-web.md)
+- [小程序测试专项](references/platform-mini-program.md)
+- [PC Web端测试专项](references/platform-pc-web.md)
+- [桌面端测试专项](references/platform-desktop.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown checklists, test plans, device matrices, platform-specific coverage notes, and structured test case tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are primarily Chinese-language QA planning artifacts and may include concise code examples when discussing mobile test automation patterns.]
+
+## Skill Version(s):
+
+1.7.6 (source: server release metadata; artifact frontmatter says 1.7.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

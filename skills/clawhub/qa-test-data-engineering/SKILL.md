@@ -1,8 +1,11 @@
 ---
 name: qa-test-data-engineering
-version: 1.6.0
+slug: qa-test-data-engineering
+displayName: 测试数据工程
+version: 1.7.5
 description: >-
   当需要批量构造测试数据（造 1000 条订单、准备各种状态的用户数据）、或者需要使用真实生产数据但需要脱敏时使用此技能。覆盖造数策略（API 造数/DB 直接构造/数据工厂）、脱敏方案（敏感字段识别/替换/掩码）、合规要求（GDPR/等保/个保法）和数据工厂架构设计。手工一条条造数据效率太低——测试数据工程的目标是让造数变成一键操作。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: 用户说"造数"、"批量造数"、"数据构造"、"测试数据脱敏"、"测试数据合规"、"数据工厂"、"造1000条"、"造大量数据"、需要管理测试数据、环境数据不足需要批量构造时
 allowed-tools: Read Grep Glob Bash
@@ -29,6 +32,9 @@ output_format:
   traceability:
     - 每套造数方案带唯一ID（DATA-XXXX）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - data_strategy: 测试数据策略
     - data_generation: 数据生成方案
     - data_mask_rules: 数据脱敏规则
@@ -41,6 +47,8 @@ error_recovery_guidance:
   on_failure: "造数方案遗漏合规要求时回退到需求解构补充"
   retry_behavior: "补充合规要求后重新设计造数方案"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 # 测试数据工程
 
 ## 核心原则

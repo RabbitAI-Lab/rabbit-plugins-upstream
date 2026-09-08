@@ -1,39 +1,60 @@
-## Description: <br>
-Submits Amazon product review collection tasks by URL through Dataify Builder and returns the resulting task_id. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Amazon product reviews from one or more known product URLs. Use for Amazon review or comment extraction. Do not use for product details, product lists, or seller profiles.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External users and developers use this skill to confirm Amazon product review collection parameters, submit a Dataify Builder job, and receive a task_id for later review in Dataify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Dataify API TOKEN and can create Dataify Builder tasks. <br>
-Mitigation: Confirm the Amazon URL and file_name before submission, and only persist DATAIFY_API_TOKEN when storing that credential in the user environment is acceptable. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify jobs that collect Amazon product reviews from known product URLs and retrieve the resulting JSON. It is not intended for product details, product lists, or seller profiles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-amazon-comment) <br>
-- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, code, guidance] <br>
-**Output Format:** [Markdown guidance and parameter tables with optional shell commands; the helper script prints a JSON task summary.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Dataify API TOKEN, confirms the Amazon URL and file_name before submission, and returns task_id, dashboard_url, and message when the Builder task is created.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill uses DATAIFY_API_TOKEN to submit external Dataify requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store the token in the environment, never paste it into chat, and verify only that it is present without printing its value.
+
+Risk: Ambiguous, high-volume, multi-page, or media-related collection requests can increase credit use or runtime.
+
+Mitigation: Review material ambiguities and high-volume scopes before execution; return the task ID and a resume path instead of resubmitting if monitoring times out.
+
+Risk: The skill is scoped to Amazon review collection and may be misapplied to other Amazon data tasks.
+
+Mitigation: Use it only with known Amazon product URLs for reviews or comments, and do not use it for product details, product lists, or seller profiles.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-amazon-comment)
+- [Dataify dashboard](https://dashboard.dataify.com?utm_source=skill)
+- [Dataify API token login](https://dashboard.dataify.com/login?utm_source=skill)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, configuration, guidance]
+
+**Output Format:** [JSON results with concise Markdown guidance and shell commands when setup is required]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and a known Amazon product URL; may wait for asynchronous task completion.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

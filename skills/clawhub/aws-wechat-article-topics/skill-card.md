@@ -1,46 +1,59 @@
-## Description: <br>
-公众号 AI 选题与标题生成助手，支持热点调研、选题策划、标题候选、摘要候选和系列排期，面向自媒体编辑与内容运营人员。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps WeChat public-account editors research article topics, generate headline and summary options, and plan single articles or series.
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-External content creators, editors, and content operations teams use this skill to research WeChat public-account article topics, generate headline and summary candidates, plan article series, and create handoff notes for drafting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read .aws-article configuration and product notes while preparing topics and titles. <br>
-Mitigation: Install and run it only in workspaces where the agent is allowed to access those article-planning files. <br>
-Risk: The workflow may write draft metadata and planning files such as topic-card.md, research.md, and article.yaml. <br>
-Mitigation: Review generated article metadata and draft files before using them in a publishing workflow. <br>
-Risk: The full aws-wechat-article suite may reference sibling Python helpers outside this skill artifact. <br>
-Mitigation: Review referenced sibling helpers before allowing the agent to execute them. <br>
+## Use Case:
 
+Content editors and operations teams use this skill to research WeChat public-account topic ideas, compare angles, generate headline and digest candidates, and plan article series before drafting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/aiworkskills/aws-wechat-article-topics) <br>
-- [Publisher profile](https://clawhub.ai/user/aiworkskills) <br>
-- [Output format reference](artifact/references/output-format.md) <br>
-- [Research strategy reference](artifact/references/research-strategy.md) <br>
-- [Title presets reference](artifact/references/title-presets.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with topic cards, research summaries, title and digest candidates, article metadata notes, and occasional shell command suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update topic-card.md, research.md, article.yaml, and series planning files in the user's article workspace when directed by the workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.23 (source: server release metadata) <br>
+Risk: The workflow can alter article metadata or add related-article links to publishable content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review metadata changes and approve every related-article URL before publishing.
+
+Risk: Related-link insertion is described as using an unaudited sibling script.
+
+Mitigation: Treat related-link insertion as a publishing action and run it only where generated changes can be inspected before release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-topics)
+- [Publisher profile](https://clawhub.ai/user/aiworkskills)
+- [Skill homepage](https://aiworkskills.cn)
+- [Source repository](https://github.com/aiworkskills/wechat-article-skills)
+- [Output format reference](artifact/references/output-format.md)
+- [Research strategy reference](artifact/references/research-strategy.md)
+- [Title presets reference](artifact/references/title-presets.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown topic cards, research summaries, YAML metadata updates, and occasional Python shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update topic-card.md, research.md, and article.yaml in the article workspace.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

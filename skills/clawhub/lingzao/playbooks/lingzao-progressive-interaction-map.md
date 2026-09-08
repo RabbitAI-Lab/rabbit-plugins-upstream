@@ -1,5 +1,10 @@
 # Lingzao Progressive Interaction Map
 
+Read `router-index.json` before this file. Load this map only when the user's
+input is vague, link-only, or still ambiguous after input/platform/stage/intent
+classification. Do not use this file as an always-on substitute for the
+central route registry.
+
 This file is bundled inside the Lingzao Agent plugin. Use it to keep user interaction layered and progressive, similar to a lightweight skill stack instead of a pile of separate prompts.
 
 Core idea:
@@ -40,7 +45,7 @@ review, knowledge-base saving, or next experiment.
   entered a diagnosis flow, assume there is a hidden wish to change even when
   they resist action. Output should include conclusion, action advice, and
   psychological reassurance.
-- Before any Lingzao search/lookup, remind the user of the likely search type and credit logic. Follow `search-credit-notice.md`.
+- Before any Lingzao search/lookup, remind the user of the likely search type and scope logic. Follow `research-scope-guard.md`.
 - Infer the user's current interest from repeated behavior. If the user asks
   Lingzao to break down many notes/accounts in the same direction, such as 10
   female-growth notes, AI-tool notes, food/local-life notes, or creator
@@ -102,7 +107,7 @@ First check for one-post wording. When the surrounding words say 这条笔记, �
 评论, 文案, 口播, 字幕, or 单条拆解, or the share text looks like a title snippet
 plus `前往【小红书】一探究竟吧`, the intent is one-post detail or video-copy. Do not
 route it to homepage commands. If the next action needs `get-note-detail`, ask
-one light question before spending credits:
+one light question before making online requests:
 
 这是小红书单篇内容短链。要打开详情的话，我需要打开后的最终笔记链接或 note_id，并且需要知道它是图文还是视频；如果你其实想看账号主页近期内容，也可以说一声，我会改走主页查看。
 
@@ -131,7 +136,7 @@ B. 这是别人的账号：我会帮你拆它的爆款有哪些、为什么能�
 
 灵造可以继续帮你找对标、找参考内容、找选题、提取文案，也可以拆文案的脚本模式、内容思路、爆款结构和金句。简单说，它不是只看一个链接，而是帮你把小红书内容拆成可以模仿、改写、测试和执行的下一步。
 
-如果接下来要开始搜索，我会先让你选择基础搜索还是深度搜索，并告诉你两种分别能得到什么、大概会消耗多少积分。
+如果接下来要开始搜索，我会先让你选择基础搜索还是深度搜索，并告诉你两种分别能得到什么。
 
 Do not put this sentence in a copyable block.
 
@@ -162,7 +167,7 @@ profile verification, keep the `users[].id` returned by `search-users` and do
 not derive a short profile URL from `RED ID` in bios. The first recommendation
 round should return up to 5 strong accounts, not 10-20 accounts. Tell the user "我这边先给你 5 个你看看是否适合你"; if they want a follower range, stage, city, audience, or
 format constraint, narrow the next search before expanding because broader
-verification may spend more credits. Benchmark outputs should list follower
+verification may require more lookups. Benchmark outputs should list follower
 count, total liked count, latest visible update, recent high-interaction works
 from the last 30 days when available, note metrics, content format, and why each
 account is worth learning. Sort visible recommendations by follower count from
@@ -180,8 +185,8 @@ too small:
 - 6-9 notes: provide 轻量账号分析.
 - 10-19 notes: offer 标准账号分析 v1.
 - 20+ notes: offer 标准账号诊断报告; if using deep profile analysis, explain the
-  20-work credit scope first.
-- 40+ notes: offer 深度诊断 / 博主蒸馏 / 知识库沉淀; explain the 40-work credit
+  20-work research scope first.
+- 40+ notes: offer 深度诊断 / 博主蒸馏 / 知识库沉淀; explain the 40-work
   scope first.
 
 If fewer than 10 public notes are visible, use this wording before the output:
@@ -362,7 +367,7 @@ If the user has no links, ask for the smallest useful input:
 
 你可以先发 3-10 条你最近收藏、喜欢、想模仿的小红书链接；如果暂时没有链接，也可以发一个关键词，比如“女性成长图文”“35岁职场”“AI工具”“本地生活探店”。我先帮你做第一版内容资产表。
 
-If a search is needed, use `search-credit-notice.md` before searching.
+If a search is needed, use `research-scope-guard.md` before searching.
 
 Knowledge-base outputs should organize transformed learning notes, not copied
 archives. Preserve source links and public metrics when available, then add:
@@ -452,7 +457,7 @@ Examples:
 - 帮我做口播 / 图文 / Vlog
 
 This workflow sits between topic radar and draft rewrite. It should not stop at
-search results. Confirm the search scope and credit tier, filter learnable
+search results. Confirm the search scope and research depth, filter learnable
 examples, then produce content packages. If the user clearly expects a result
 now, produce a one-stop minimum package first: article outline or direct-read
 script, 4-7 graphic-note page texts, 10 publishing keywords, pinned content,
@@ -473,42 +478,34 @@ request in `keyword-to-publishable-content-package.md`. Only route to
 cross-platform distribution when the user explicitly asks for multiple
 platforms such as 公众号、朋友圈、知识星球、X、B站、抖音 or says 全平台/多平台/分发包.
 
-## Layer 0.5: Search Credit Notice
+## Layer 0.5: Research Scope Guard
 
-Before running any search, lookup, keyword research, comparable-account search, note lookup, or comment lookup, tell the user whether this is:
+For a clear small request, proceed directly. When both a small and a materially
+broader route are plausible, ask whether the user wants:
 
 - 基础搜索：usually 1 known account, 1 known note, or a small set that only needs title/cover/basic metrics/link/basic copy signals
-- 批量搜索：usually around 10 accounts or 10-30 notes at the basic-result layer
-- 深度搜索：broad keyword/account/note research, full-copy/body-text/subtitle/transcript analysis, or often 50+ searches
+- 批量搜索：around 10 accounts or 10-30 notes at the basic-result layer
+- 深度搜索：broad keyword/account/note research, full-copy/body-text/subtitle/transcript analysis, or a formal report
 
-Required user-facing point:
-
-灵造不是按“你给 Agent 发了一条指令”计积分，而是按实际查看的账号、笔记和内容深度计算。基础搜索主要看标题、封面、点赞/收藏/评论、链接和普通搜索能返回的基础文案信息；如果进一步查看完整文案正文、字幕、逐字稿或更深内容结构，属于深度搜索。
-
-Current backend pricing truth:
-
-- 普通搜索、主页资料、主页近期内容、单篇详情：20 credits/次。
-- 评论区：20 credits/页。
-- 主页深度解析：20 条作品 50 credits；40 条作品 100 credits。
-- 短视频文案：开始前需要至少 50 credits/条 URL 的余额；成功后按 10 credits/分钟、最低 1 分钟扣费。
-
-Do not tell users that search results cost 20 credits per returned note. A search can return multiple results in one list; credit growth comes from additional searches, opening details/comments, profile deep analysis, subtitles/transcripts, and broader scope.
+Explain the result difference: basic search uses visible list/profile signals;
+deep search may additionally open full copy, subtitles, transcripts, note
+details, or comments.
 
 For batch/deep search, estimate scope before continuing:
 
 - roughly how many accounts/notes may be inspected
 - whether the task only needs basic fields or also full copy/subtitle/transcript/content-structure analysis
-- 50 次以上搜索、批量关键词、完整正文/字幕/逐字稿分析都属于深度搜索，需要先说明范围
+- batch keywords and full-copy/subtitle/transcript analysis are deep search and require scope confirmation
 
 Do not silently expand a basic lookup into batch or deep search.
 
 If both a quick search and a deeper search are possible, ask the user to choose first:
 
-A. 基础搜索：先看 1 个账号 / 1 篇笔记 / 少量结果，主要看标题、封面、点赞/收藏/评论、链接和基础文案信息，给出快速判断。普通搜索、主页近期内容、单篇详情这类基础查看通常是 20 credits/次。用户会得到当前阶段、明显资产、最大问题、第一步建议，或者单篇笔记的标题/封面/结构判断。
+A. 基础搜索：先看 1 个账号 / 1 篇笔记 / 少量结果，主要看标题、封面、点赞/收藏/评论、链接和基础文案信息，给出快速判断。用户会得到当前阶段、明显资产、最大问题、第一步建议，或者单篇笔记的标题/封面/结构判断。
 
-B. 深度搜索：看多个关键词、账号或笔记，也可以进一步查看完整文案正文、字幕、逐字稿和更深内容结构。主页深度解析是 20 条作品 50 credits、40 条作品 100 credits；评论区按页查看；短视频文案按时长计算。用户会得到更完整的参考样本、关键词/选题聚类、爆款机制对比、脚本结构和行动建议。
+B. 深度搜索：看多个关键词、账号或笔记，也可以进一步查看完整文案正文、字幕、逐字稿和更深内容结构。用户会得到更完整的参考样本、关键词/选题聚类、爆款机制对比、脚本结构和行动建议。
 
-Wait for the user's A/B choice before starting a deep search. Do not let the Agent spend hundreds or thousands of credits by expanding the scope on its own.
+Wait for the user's A/B choice before starting a deep search. Do not let the Agent expand the scope on its own.
 
 ## Layer 1: First Useful Output
 
@@ -526,7 +523,7 @@ Chat should only show:
 - 诊断后温柔结论：承认用户可能知道问题但暂时不想改，把改变降到一个小测试
 - 回来复盘入口：告诉用户下一步发什么回来，比如标题封面、草稿、笔记链接或 24 小时后台截图
 - 可选行动包入口：如果用户想把诊断变成下一条内容，可以继续生成轻量行动包；
-  如果需要新对标、评论区、完整内容包或更深复盘，先说明积分范围
+  如果需要新对标、评论区、完整内容包或更深复盘，先说明新增查询范围
 - 完整报告链接 / 路径 / or report generation offer
 
 Do not let account diagnosis end with only "立刻做" or a mechanical action
@@ -585,7 +582,7 @@ If the user wants Word / HTML / PDF / Feishu report after a light comparable-acc
 - appendix with links, public metrics, and cover/screenshot notes when reliable
 - optional comparison if the user also sends their own account: gap, similarity, learnable points, and content fit
 
-Before expanding, remind the user that this is no longer only a light one-account judgment. It may require more Lingzao searches/credits because it opens more notes and deeper content. Do not silently upgrade scope.
+Before expanding, remind the user that this is no longer only a light one-account judgment. It may require more Lingzao searches because it opens more notes and deeper content. Do not silently upgrade scope.
 
 After a comparable-account report or light breakdown, ask whether the user has their own account:
 
@@ -778,7 +775,7 @@ keyword/dropdown analysis, or enterprise/brand/institution keyword opportunity
 report, route to `keyword-insight-report-template.md` before searching. A
 keyword insight report is not one search result; it is a scoped deliverable
 with a main keyword, confirmed related keywords, sample classification, user
-demand map, opportunity list, and credit estimate.
+demand map, opportunity list, and planned external actions.
 
 Flow:
 

@@ -1,47 +1,65 @@
-## Description: <br>
-Analyzes 1688 product listings by collecting seller product data, diagnosing performance, traffic, search ranking, advertising, and competitive issues, and returning actionable optimization recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+1688-product-analysis helps 1688 sellers diagnose product performance by combining seller and product data for multi-shop abnormal product discovery, scoring-based product selection, keyword search, competitive comparison, and single-product diagnosis.
 
-## Publisher: <br>
-[1688aiinfra](https://clawhub.ai/user/1688aiinfra) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[1688aiinfra](https://clawhub.ai/user/1688aiinfra)
 
-## Use Case: <br>
-External sellers and operators use this skill to select abnormal 1688 listings, retrieve real listing data, and produce concise product diagnosis reports with follow-up optimization choices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires ALI_1688_AK credentials and can access 1688 seller and product data. <br>
-Mitigation: Configure ALI_1688_AK specifically for this skill and install it only when that account-level access is acceptable. <br>
-Risk: The skill can reuse 1688 credentials stored for related skills or unintended USER_ID/X_USER_ID values. <br>
-Mitigation: Review the OpenClaw credential configuration before use and remove or correct unintended user identifiers. <br>
-Risk: Follow-up action choices may hand off to downstream image or title optimizer skills that can affect product changes. <br>
-Mitigation: Review downstream optimizer permissions and require explicit approval before allowing changes to listings. <br>
-Risk: CLI command execution reports usage automatically. <br>
-Mitigation: Review the release's telemetry behavior before deploying in environments where usage reporting is restricted. <br>
+## Use Case:
 
+1688 sellers and commerce operations teams use this skill to find products that need attention, inspect traffic, sales, add-to-cart, conversion, advertising, and competitor signals, and generate actionable product diagnosis reports.
 
-## Reference(s): <br>
-- [1688 Product Analysis ClawHub page](https://clawhub.ai/1688aiinfra/1688-product-analysis) <br>
-- [Analysis Dimensions](references/analysis-dimensions.md) <br>
-- [Interaction Specs](references/interaction-specs.md) <br>
-- [Simple Report Template](references/report-template-simple.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown diagnosis report with JSON CLI responses and interactive selection data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ALI_1688_AK credentials; CLI responses use success, markdown, and data fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: The skill connects to a 1688 seller account and queries authenticated seller and product data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only for accounts where this access is intended, and verify ALI_1688_AK/OpenClaw configuration before use.
+
+Risk: Generated reports and local caches can contain seller-specific product and performance information.
+
+Mitigation: Store generated reports and cache files in trusted workspaces and avoid sharing them outside the intended operations team.
+
+Risk: Follow-up optimization and scheduled diagnosis workflows could affect seller operations if invoked unintentionally.
+
+Mitigation: Require explicit user confirmation before optimization or scheduling actions, as described by the security guidance and artifact behavior.
+
+Risk: Command-level usage telemetry is sent to the 1688 gateway.
+
+Mitigation: Use the skill only where this telemetry is acceptable under the seller account's operational and privacy policies.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/1688aiinfra/skills/1688-product-analysis)
+- [Analysis dimensions](references/analysis-dimensions.md)
+- [Report template](references/report-template-simple.md)
+- [Interaction specifications](references/interaction-specs.md)
+- [Scoring rules](references/scoring-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown reports with structured product-selection interactions and JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python 3 and a configured ALI_1688_AK/OpenClaw environment for authenticated 1688 seller data access.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

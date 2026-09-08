@@ -1,45 +1,54 @@
-## Description: <br>
-Turns a user's Bing News request into Dataify Bing News API parameters, previews the request for confirmation, and returns the confirmed API response directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Bing News for current news results. Do not use for general Bing web search.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and agents use this skill to run confirmed Bing News searches through the Dataify/ScraperAPI endpoint. It is useful when a user wants raw Bing News API results after reviewing request parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dataify API tokens could be exposed if shared in prompts, logs, or copied output. <br>
-Mitigation: Prefer the DATAIFY_API_TOKEN environment variable or an explicit token parameter for the current run, and avoid displaying Authorization values. <br>
-Risk: News search terms and request parameters are sent to Dataify/ScraperAPI. <br>
-Mitigation: Avoid confidential or unrelated secret text in search prompts and confirm the full parameter table before calling the API. <br>
-Risk: Raw API output may contain unreviewed JSON or HTML returned by the service. <br>
-Mitigation: Review raw API output before sharing it elsewhere or using it in downstream workflows. <br>
+## Use Case:
 
+External users and developers use this skill to run Bing News searches through Dataify's scraper API and receive compact news results with source links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-bing-news) <br>
-- [Publisher profile](https://clawhub.ai/user/dataify-server) <br>
-- [Dataify Bing News API Reference](references/api.md) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, HTML, Shell commands, Guidance] <br>
-**Output Format:** [Markdown parameter preview tables, shell commands, and raw API response text that may contain JSON or HTML] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before live API calls; raw API output is returned without summarizing or reformatting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill uses a Dataify API token and the security evidence notes broader credential handling than the instructions disclose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure DATAIFY_API_TOKEN through the environment only, never paste tokens into chat or prompts, and review the skill before installing in sensitive environments.
+
+Risk: Search queries are sent to Dataify's scraper API.
+
+Mitigation: Avoid sending confidential or regulated information in news search queries.
+
+## Reference(s):
+
+- [Dataify Bing News API Reference](references/api.md)
+- [Dataify Scraper API Endpoint](https://scraperapi.dataify.com/request)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, parameter tables, setup commands, or raw JSON/HTML when explicitly requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses DATAIFY_API_TOKEN from the environment and sends search queries to Dataify's scraper API.]
+
+## Skill Version(s):
+
+1.3.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -10,7 +10,7 @@
 
 ## P1
 
-- [ ] Add CLI wrappers for uncovered high-value endpoints: `workbook_profile`, `lineage_trace`, SQL compile/write, export
+- [ ] Add CLI wrappers for uncovered high-value endpoints: lineage trace and SQL compile/write
 - [ ] Keep command examples in `references/cli-commands.md` in sync with CLI repo releases
 
 ## P2

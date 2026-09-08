@@ -1,45 +1,64 @@
-## Description: <br>
-Typeform API integration with managed OAuth for creating forms, managing responses, and accessing insights. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Typeform API integration with managed OAuth for creating forms, managing responses, and accessing insights through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to a Typeform account through Maton, list and manage forms, retrieve responses, and inspect Typeform insights. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton as an OAuth proxy for Typeform API actions, so requests depend on the intended Typeform connection and a protected MATON_API_KEY. <br>
-Mitigation: Use the intended Typeform connection, set the Maton-Connection header when multiple connections exist, and keep MATON_API_KEY out of logs and shared outputs. <br>
-Risk: Create, update, and delete actions can change forms, responses, or related Typeform resources in the connected account. <br>
-Mitigation: Confirm the target resource and intended effect with the user before allowing any write or delete request to run. <br>
+## Use Case:
 
+Developers and operators use this skill to connect a Typeform account, inspect forms and responses, and perform approved form-management API calls. It is suited for agents that need guided Typeform access while keeping credentials in Maton-managed OAuth or credential storage.
 
-## Reference(s): <br>
-- [ClawHub Typeform skill](https://clawhub.ai/byungkyu/skills/typeform) <br>
-- [Typeform API Overview](https://www.typeform.com/developers/get-started) <br>
-- [Typeform Forms API](https://www.typeform.com/developers/create/reference/retrieve-forms) <br>
-- [Typeform Responses API](https://www.typeform.com/developers/responses/reference/retrieve-responses) <br>
-- [Typeform Workspaces API](https://www.typeform.com/developers/create/reference/retrieve-workspaces) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline HTTP paths, JSON examples, Python and JavaScript snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be confirmed with the user before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill can act on a connected Typeform account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, choose the narrowest Typeform scopes available, and confirm the intended account before connecting or acting.
+
+Risk: Form changes or deletions can alter or remove Typeform resources.
+
+Mitigation: Review proposed form changes, target identifiers, payloads, and deletion effects before approving any write operation.
+
+Risk: Long-lived API keys are more exposed than OAuth-backed CLI credentials.
+
+Mitigation: Prefer OAuth login and avoid printing, logging, exporting, or persisting credentials.
+
+## Reference(s):
+
+- [ClawHub Typeform Skill](https://clawhub.ai/byungkyu/skills/typeform)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Typeform API Overview](https://www.typeform.com/developers/get-started)
+- [Typeform Forms API](https://www.typeform.com/developers/create/reference/retrieve-forms)
+- [Typeform Responses API](https://www.typeform.com/developers/responses/reference/retrieve-responses)
+- [Typeform Workspaces API](https://www.typeform.com/developers/create/reference/retrieve-workspaces)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, API calls, configuration, code]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing instructions for Maton CLI and SDK use; API responses are returned by Typeform through Maton.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Use when someone wants a multi-part story with voiceover: episodic B-roll, chaptered promo, or several linked video scenes without on-camera dialogue. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a multi-part story with voiceover - episodic B-roll, chaptered promo, or several linked video scenes without on-camera dialogue.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and developers use this skill to plan and generate narrated multi-scene video stories, including scene tables, still-image anchors, narration audio, video clips, and final assembly guidance.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Prerequisite generation skills may change behavior or terms after installation.
+
+Mitigation: Review prerequisite Pruna skills before installing and prefer pinned or known-good versions.
+
+Risk: API-backed image, audio, or video generation can consume paid credits before the user has confirmed the intended scene plan.
+
+Mitigation: Use the documented approval gates and proceed with cost-bearing generation only after the plan and required review steps are confirmed.
+
+Risk: Narration-led video clips can truncate when scene audio exceeds the API duration cap.
+
+Mitigation: Check each narration file duration and shorten, speed up, or split lines before sending clips to video generation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and creators use this skill to plan, gate, generate, review, and assemble narrated multi-scene videos from stills, TTS voiceover, video clips, optional music beds, and ffmpeg assembly steps. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can send prompts and media to external image, audio, and video generation services and may spend generation credits. <br>
-Mitigation: Use the approval gates before generation, confirm media is appropriate to upload, and verify related skill installs come from the intended PrunaAI source. <br>
-Risk: Narration-led video clips can be truncated or require regeneration when scene audio exceeds the documented duration limit. <br>
-Mitigation: Check each narration file with ffprobe and keep scene lines at or below the skill's approximately 19 second gate before video generation. <br>
-Risk: Generated stills, clips, or narration may not match the intended story, style, or continuity. <br>
-Mitigation: Review the plan, stills, and clips at the required phase gates and rerun only the affected scene when corrections are needed. <br>
+**Output Format:** [Markdown with tables, JSON snippets, and inline bash code blocks]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/narrated-multi-scene) <br>
+**Other Properties Related to Output:** [May include scene manifests, media URLs, generated file paths, and ffmpeg command proposals.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with tables, JSON payload examples, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include scene plans, prompts, asset URLs, API payloads, ffmpeg commands, and assembly manifests.] <br>
+1.0.11 (source: server release evidence and skill frontmatter metadata)
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

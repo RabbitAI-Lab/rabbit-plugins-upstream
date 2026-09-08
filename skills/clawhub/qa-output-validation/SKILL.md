@@ -1,8 +1,11 @@
 ---
 name: qa-output-validation
-version: 1.6.0
+slug: qa-output-validation
+displayName: 输出验证
+version: 1.7.5
 description: >-
   在最终输出前对测试用例做最后一轮防幻觉验证：事实核查（引用的需求ID是否存在）、一致性检查（用例之间是否矛盾）、可执行性验证（步骤是否能实际操作）、来源追溯（每个用例是否能追溯到具体需求）。当测试用例已经生成完毕、准备输出了，但你不确定AI有没有编造不存在的功能或需求时，应当使用此技能。这是整个工作流的最终质量守门——如果验证失败，必须返回问题清单要求修正，不得跳过。
+  本技能属于 QA Test Skills 技能集（49 个技能之一），完整工作流体验需安装全套：npx skills add Kokxi/qa-test-skills
 
 when_to_use: AI生成测试用例后、最终输出前自动激活；用户说"验证一下输出"、"检查有没有幻觉"、"这个用例对吗"、"确认一下质量"时
 allowed-tools: Read Grep Glob
@@ -26,8 +29,11 @@ input_format:
       description: 评审结果
 output_format:
   traceability:
-    - 本技能验证输出，不新增唯一ID；问题清单关联到原用例ID（TC-XXXX）
+    - 本技能验证输出，不新增唯一ID；问题清单关联到原用例ID（TC_{模块缩写}_{功能缩写}_{序号}，如 TC_API_LOGIN_001）
   structure:
+    - 测试用例表格：固定 9 列（用例编号|测试类型|功能模块|测试标题|用例级别|预置条件|测试步骤|预期结果|风险等级）
+    - 用例级别：P0≤20%（核心流程）/ P1≤40%（主要功能）/ P2≤30%（次要功能）/ P3≤10%（边缘场景）
+    - 覆盖率：标注口径（基于现有需求/输入文档），禁止"全覆盖/100%"绝对化表述；缺失模块标注"未覆盖+原因"
     - validation_result: "pass/fail"
     - fact_check: "事实核查结果"
     - consistency_check: "一致性检查结果"
@@ -42,6 +48,8 @@ depth_requirement_quantification:
   reference_value: "根据用例数量调整验证深度：简单×1/中等×2/复杂×3"
   minimum: "至少完成事实核查、一致性检查、可执行性验证、来源追溯4项"
 ---
+> ⚠️ 本技能单独使用效果有限，建议配合完整技能集（12 步工作流）使用。安装：npx skills add Kokxi/qa-test-skills
+
 > **⚠️ 安全警告**：本技能的示例可能涉及对虚无功能的删除或标记建议。
 > 实际使用时请勿直接删除测试用例或功能项，先确认其来源并备份原数据。
 > 本技能仅在 workspace/ 输出评估文件，不持久化、不外传、不跨会话复用。

@@ -1,0 +1,134 @@
+{
+  "infographic_id": "value_pyramid_b2b_ai_demo",
+  "intent": "persuade",
+  "chart_family": "pyramid",
+  "language": "zh-CN",
+  "audience": "product marketing and enterprise sales",
+  "source_summary": "把 B2B AI 协作产品的核心价值拆成价值金字塔，方便销售和产品统一对外表达。",
+  "message": {
+    "title": "B2B AI 产品价值金字塔",
+    "subtitle": "从基础可用到高层战略价值",
+    "core_takeaway": "先提供稳定可用与效率提升，再向决策支持与组织级标准化升级，价值才能持续放大。",
+    "cta": "销售话术按层递进，不要一上来就讲顶层愿景。"
+  },
+  "layout": {
+    "layout_mode": "pyramid",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "4:5",
+    "reading_order": "top-to-bottom",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "enterprise-value-stack",
+    "palette_mode": "brand",
+    "emphasis_style": "editorial",
+    "brand_colors": ["#4F46E5", "#06B6D4", "#F59E0B", "#111827"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "价值金字塔",
+      "content": "统一产品价值表达，便于销售与方案共用。",
+      "visual_role": "primary",
+      "icon_hint": "triangle",
+      "must_include": ["塔形结构", "层级色带"],
+      "avoid": ["过度写实"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_core",
+      "block_type": "summary",
+      "title": "核心逻辑",
+      "content": "底层讲稳定与效率，中层讲决策支持，顶层讲组织标准化与战略协同。",
+      "visual_role": "primary",
+      "icon_hint": "layers-3",
+      "must_include": ["总述卡片"],
+      "avoid": ["字太多"],
+      "text_budget": 28
+    },
+    {
+      "block_id": "layer_foundation",
+      "block_type": "node",
+      "title": "基础层：稳定可用",
+      "content": "更快接入、权限可靠、流程可追溯。",
+      "visual_role": "secondary",
+      "group_id": "value_layers",
+      "icon_hint": "shield-check",
+      "payload": {"layer": 1, "customer_value": "可落地"},
+      "must_include": ["底座大层"],
+      "avoid": ["抽象空话"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "layer_efficiency",
+      "block_type": "node",
+      "title": "效率层：节省时间",
+      "content": "自动整理会议、任务与知识沉淀。",
+      "visual_role": "secondary",
+      "group_id": "value_layers",
+      "icon_hint": "timer-reset",
+      "payload": {"layer": 2, "customer_value": "可量化 ROI"},
+      "must_include": ["中层"],
+      "avoid": ["重复表达"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "layer_decision",
+      "block_type": "node",
+      "title": "决策层：更快判断",
+      "content": "通过摘要、洞察和提醒支持管理决策。",
+      "visual_role": "secondary",
+      "group_id": "value_layers",
+      "icon_hint": "brain-circuit",
+      "payload": {"layer": 3, "customer_value": "更快决策"},
+      "must_include": ["洞察价值"],
+      "avoid": ["技术名词过多"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "layer_strategy",
+      "block_type": "node",
+      "title": "顶层：组织标准化",
+      "content": "把最佳实践沉淀成统一模板与协作规范。",
+      "visual_role": "primary",
+      "group_id": "value_layers",
+      "icon_hint": "flag",
+      "payload": {"layer": 4, "customer_value": "组织规模效应"},
+      "must_include": ["塔尖高亮"],
+      "avoid": ["宣传语堆砌"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "cta_sales",
+      "block_type": "cta",
+      "title": "对外表达建议",
+      "content": "先讲底层可落地，再引出顶层战略收益。",
+      "visual_role": "supporting",
+      "icon_hint": "message-square",
+      "must_include": ["销售提示"],
+      "avoid": ["太长说明"],
+      "text_budget": 22
+    }
+  ],
+  "relations": [
+    {
+      "from": "layer_foundation",
+      "to": "layer_efficiency",
+      "relation_type": "contain",
+      "label": "打好基础才能提效"
+    },
+    {
+      "from": "layer_efficiency",
+      "to": "layer_decision",
+      "relation_type": "contain",
+      "label": "效率数据支撑判断"
+    },
+    {
+      "from": "layer_decision",
+      "to": "layer_strategy",
+      "relation_type": "contain",
+      "label": "决策升级为组织能力"
+    }
+  ]
+}

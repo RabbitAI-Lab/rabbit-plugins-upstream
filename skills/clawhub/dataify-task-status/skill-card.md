@@ -1,41 +1,54 @@
-## Description: <br>
-Check the execution status of a Dataify scraper task by task ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Check whether a known Dataify scraper task is processing, successful, or failed, with automatic completed-result retrieval when the task status is successful.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to check whether a Dataify Builder scraping task is still processing, succeeded, or failed, and to retrieve the JSON result when the task succeeds. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A successful status check may automatically download and print the full task JSON result, which can contain sensitive or large scraped data. <br>
-Mitigation: Use the skill only in environments where printing full Dataify task output is acceptable, and review task sensitivity before running status checks. <br>
-Risk: The skill contacts Dataify using DATAIFY_API_TOKEN. <br>
-Mitigation: Provide the token through the environment only, avoid pasting it into chat or command lines, and restrict use to accounts and task IDs the operator is authorized to access. <br>
+## Use Case:
 
+External users and developers use this skill to check the state of an existing Dataify scraper task ID and handle processing, success, or failure responses. When the status is successful, the bundled script automatically retrieves and prints the completed JSON result.
 
-## Reference(s): <br>
-- [Dataify task status endpoint](https://scraperapi.dataify.com/task_status) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-task-status) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May print the full Dataify task JSON result after a successful status response; API tokens are read from DATAIFY_API_TOKEN and redacted from output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may display completed task data because a successful status triggers automatic JSON result retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only for task IDs whose completed result may be shown in the agent output, or ask the publisher to separate status checking from result download.
+
+Risk: The skill requires a Dataify API token and uses it for both status checks and successful-result downloads.
+
+Mitigation: Provide the token only through DATAIFY_API_TOKEN, review account access before use, and do not paste credentials into chat or command arguments.
+
+## Reference(s):
+
+- [Task Status API](references/task_status_api.md)
+- [Dataify task status endpoint](https://scraperapi.dataify.com/task_status)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, guidance]
+
+**Output Format:** [Plain text or JSON response bodies, with Markdown guidance when setup or error handling is needed.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May automatically print completed task JSON when the task status is successful.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

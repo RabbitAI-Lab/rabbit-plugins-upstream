@@ -1,40 +1,54 @@
-## Description: <br>
-Generate precise git commit messages following Conventional Commits with auto language detection, scope inference, and multi-module support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent prepare, review, and, after explicit confirmation, create Conventional Commit plans from uncommitted repository changes.
 
-## Publisher: <br>
-[wlykan](https://clawhub.ai/user/wlykan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wlykan](https://clawhub.ai/user/wlykan)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect repository changes, infer Conventional Commit type and scope, and draft commit messages or user-approved git commit commands that match project language and style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads git status, diffs, and recent commit history, which may expose private code or secrets to the agent context. <br>
-Mitigation: Use it only in repositories where sharing change context with the agent is acceptable, and review diffs for secrets or private data before requesting commit assistance. <br>
-Risk: Generated git add and git commit commands may include unintended files or produce an inaccurate commit message. <br>
-Mitigation: Review the proposed file list, grouping, scope, and commit text before approving any command execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to turn current repository changes into reviewable, atomic Conventional Commit plans and commit messages before any Git write operation is performed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wlykan/gitcommit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with git commit messages and optional bash command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include grouped git add and git commit proposals for explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill inspects uncommitted repository changes while preparing commit plans.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the displayed plan and avoid including sensitive paths or secret material in a commit unless intentionally approved.
+
+Risk: A commit operation can alter repository history by adding a new commit after confirmation.
+
+Mitigation: The skill requires an explicit confirmation after presenting the complete plan before staging or committing changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wlykan/skills/gitcommit)
+- [Publisher profile](https://clawhub.ai/user/wlykan)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown commit plan with Conventional Commit messages and Git command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires explicit user confirmation before staging or committing changes.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
