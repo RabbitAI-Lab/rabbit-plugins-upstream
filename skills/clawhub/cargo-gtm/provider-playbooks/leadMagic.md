@@ -29,7 +29,7 @@ Mid-tier email finder whose hits come **pre-annotated**: `findEmail` (0.5) retur
 ```bash
 # Run on the rows the earlier rung missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"findEmail"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","domain":"acme.com"},
     {"firstName":"Bob","lastName":"Jones","companyName":"Globex"}
@@ -43,7 +43,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"enrichProfile","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"enrichProfile"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob.jones@gmail.com","isPersonal":true}]' \
   --wait-until-finished
 ```
@@ -68,6 +68,13 @@ Returns `profile_url`. Validate the URL with `linkedin.enrichProfile` before tru
 - Every hit flows to the VERIFY stage: free pre-cull → `waterfall.verifyEmail` (0.1). leadMagic has **no verify action of its own**.
 - `enrichProfile` — LinkedIn-URL-resolution fallback after `FullEnrich.reverseEmailLookup`.
 
+## Recurring use
+
+No scheduled fit — **per-record enrichment only**; found emails and profile URLs are stable, so a scheduled re-pull just re-bills unchanged rows.
+
+- **In-play gate:** as a chain rung, run `findEmail` (0.5) only where the email column is still empty *and* the earlier rung already missed; gate `enrichProfile` (3) on an empty LinkedIn-URL column.
+- **Right trigger:** the recurring shape here is a play fired by rows *entering* the segment (new prospects without an email), not a cron sweep over the whole model.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.** Note the capitalization: `leadMagic` (camel-case with capital `M`).
+`{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.** Note the capitalization: `leadMagic` (camel-case with capital `M`).

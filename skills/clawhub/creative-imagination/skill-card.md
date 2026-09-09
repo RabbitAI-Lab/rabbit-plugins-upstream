@@ -1,42 +1,63 @@
-## Description: <br>
-Transforms vague creative goals into small, accessible, consent-driven exercises that generate shareable, practical imaginative outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creative Imagination helps an agent guide a person through a short, accessible creative loop that turns a stuck or exploratory prompt into a tiny shareable artifact with reflection.
 
-## Publisher: <br>
-[OtherPowers](https://clawhub.ai/user/OtherPowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-External users and creative practitioners use this skill to turn an intention, medium, constraint, accessibility reality, and avoid list into a small shareable creative output. It is useful for guided creative practice across writing, image, sound, product or UX, strategy, protocols, and research synthesis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask users for creative preferences, accessibility constraints, and content or style boundaries. <br>
-Mitigation: Users should share only information they are comfortable using in the exercise and can mark uncertain fields as unknown. <br>
-Risk: Creative coaching output may not fit a user's access needs or boundaries on the first pass. <br>
-Mitigation: Use the built-in low-lift paths, avoid list, and escape hatch to narrow scope, change modes, or stop. <br>
+## Use Case:
 
+External users, creators, and agent operators use this skill for lightweight brainstorming, creative practice, and small copy/paste-ready creative outputs. It is not intended for emotional support, legal rights clearance, publishing decisions for minors, or specialized safety review.
 
-## Reference(s): <br>
-- [Creative Imagination release](https://clawhub.ai/OtherPowers/creative-imagination) <br>
-- [OtherPowers publisher profile](https://clawhub.ai/user/OtherPowers) <br>
-- [Accessibility guidance](artifact/ACCESSIBILITY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a tiny shareable, next constraint, three prompts for the next round, and one care line.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Users may invoke the skill for creative-block language that overlaps with emotional distress.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for brainstorming and small creative practice only; pause the creative loop for distress and avoid therapy, diagnosis, or clinical claims.
+
+Risk: Generated or co-created material may be mistaken for cleared, registerable, or legally safe work.
+
+Mitigation: Keep a plain making/provenance line when the agent drafts material, and route sales, licensing, registration, or rights-clearance questions to current official guidance or counsel.
+
+Risk: Requests involving young people, public sharing, or commercial publication can require safeguards the skill cannot verify itself.
+
+Mitigation: Rely on host age gating and safety filters, keep youth-facing outputs age-appropriate, and route public or commercial sharing decisions to a trusted adult.
+
+## Reference(s):
+
+- [Creative Imagination on ClawHub](https://clawhub.ai/otherpowers/skills/creative-imagination)
+- [Yoko Ono](https://en.wikipedia.org/wiki/Yoko_Ono)
+- [Octavia E. Butler](https://en.wikipedia.org/wiki/Octavia_E._Butler)
+- [Audre Lorde](https://en.wikipedia.org/wiki/Audre_Lorde)
+- [Lynda Barry](https://en.wikipedia.org/wiki/Lynda_Barry)
+- [Oulipo](https://en.wikipedia.org/wiki/Oulipo)
+- [Oblique Strategies](https://en.wikipedia.org/wiki/Oblique_Strategies)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with a tiny shareable, next constraint, prompts, care line, and optional making line]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Plain-text first; no executable code, privileged access, or required media-only output.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; matches SKILL.md status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

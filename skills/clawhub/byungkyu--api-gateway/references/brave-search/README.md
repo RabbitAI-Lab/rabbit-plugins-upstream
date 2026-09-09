@@ -15,86 +15,86 @@
 
 ### Search
 ```bash
-GET /brave-search/res/v1/web/search?q={query}&count=10
+maton api '/brave-search/res/v1/web/search?q={query}&count=10'
 ```
 
 ## Image Search
 
 ### Images
 ```bash
-GET /brave-search/res/v1/images/search?q={query}&count=10
+maton api '/brave-search/res/v1/images/search?q={query}&count=10'
 ```
 
 ## News Search
 
 ### News
 ```bash
-GET /brave-search/res/v1/news/search?q={query}&count=10
+maton api '/brave-search/res/v1/news/search?q={query}&count=10'
 ```
 
 ## Video Search
 
 ### Videos
 ```bash
-GET /brave-search/res/v1/videos/search?q={query}&count=10
+maton api '/brave-search/res/v1/videos/search?q={query}&count=10'
 ```
 
 ## Local Search
 
 ### Local POIs
 ```bash
-GET /brave-search/res/v1/local/pois?ids={poi_ids}
+maton api '/brave-search/res/v1/local/pois?ids={poi_ids}'
 ```
 
 ### POI Descriptions
 ```bash
-GET /brave-search/res/v1/local/descriptions?ids={poi_ids}
+maton api '/brave-search/res/v1/local/descriptions?ids={poi_ids}'
 ```
 
 ## Autosuggest (Requires Subscription)
 
 ### Suggest
 ```bash
-GET /brave-search/res/v1/suggest/search?q={query}&count=5
+maton api '/brave-search/res/v1/suggest/search?q={query}&count=5'
 ```
 
 ## Spellcheck (Requires Subscription)
 
 ### Spellcheck
 ```bash
-GET /brave-search/res/v1/spellcheck/search?q={query}&country=US
+maton api '/brave-search/res/v1/spellcheck/search?q={query}&country=US'
 ```
 
 ## Summarizer (Requires Subscription)
 
 ### Summarizer Search
 ```bash
-GET /brave-search/res/v1/summarizer/search?key={summarizer_key}
+maton api '/brave-search/res/v1/summarizer/search?key={summarizer_key}'
 ```
 
 ### Summary Only
 ```bash
-GET /brave-search/res/v1/summarizer/summary?key={key}
+maton api '/brave-search/res/v1/summarizer/summary?key={key}'
 ```
 
 ### Title Only
 ```bash
-GET /brave-search/res/v1/summarizer/title?key={key}
+maton api '/brave-search/res/v1/summarizer/title?key={key}'
 ```
 
 ### Enrichments
 ```bash
-GET /brave-search/res/v1/summarizer/enrichments?key={key}
+maton api '/brave-search/res/v1/summarizer/enrichments?key={key}'
 ```
 
 ### Follow-ups
 ```bash
-GET /brave-search/res/v1/summarizer/followups?key={key}
+maton api '/brave-search/res/v1/summarizer/followups?key={key}'
 ```
 
 ### Entity Info
 ```bash
-GET /brave-search/res/v1/summarizer/entity_info?key={key}
+maton api '/brave-search/res/v1/summarizer/entity_info?key={key}'
 ```
 
 ## Query Parameters
@@ -150,7 +150,7 @@ All Brave Search API responses include:
 - Maximum 10 pages (offset 0-9)
 - Privacy-focused search engine
 - Results include web, news, videos, discussions, FAQ, infobox
-- Uses API key authentication
+- Authentication is handled by the gateway. Upstream, Brave Search uses an API key rather than OAuth, but that key belongs to the Maton connection and is injected server-side: do not build an `Authorization` header, do not ask the user for a Brave Search key, and never place one in a request, a script, or a trigger destination. Requests carry the Maton credential only, exactly like every other app in this gateway.
 - Some endpoints require additional subscription plans
 
 ## Resources

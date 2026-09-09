@@ -1,0 +1,87 @@
+{
+  "name": "news-read",
+  "description": "Read Tradebee news records with exact filters and pagination.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled language."
+      },
+      "news_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional exact news ID; mutually exclusive with newsgroup_id."
+      },
+      "newsgroup_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional news-group filter; mutually exclusive with news_id."
+      },
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "news_id",
+            "language",
+            "group",
+            "publisher",
+            "publication_date",
+            "source",
+            "title",
+            "images",
+            "tags",
+            "summary",
+            "description",
+            "seo",
+            "news_url",
+            "create_time",
+            "update_time"
+          ],
+          "description": "Supported news field name."
+        },
+        "description": "Optional fields to return. Omit it or send [] for all supported fields."
+      },
+      "pagination": {
+        "type": "object",
+        "description": "Optional pagination settings; defaults to current_page=1 and page_size=5.",
+        "properties": {
+          "current_page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1,
+            "description": "Page number starting at 1. Follow returned has_next_page and next_page values."
+          },
+          "page_size": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5,
+            "description": "Records per page, from 1-10; defaults to 5."
+          }
+        }
+      }
+    },
+    "required": [
+      "language"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result with data.pagination and data.list."
+  },
+  "dependencies": {
+    "language": {
+      "skill": "languages-get",
+      "field": "list[].language",
+      "mode": "select"
+    },
+    "newsgroup_id": {
+      "skill": "newsgroup-read",
+      "field": "data.list[].newsgroup_id",
+      "mode": "select"
+    }
+  }
+}

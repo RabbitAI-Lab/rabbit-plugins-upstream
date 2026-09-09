@@ -1,7 +1,7 @@
 ---
 name: shell-security-ultimate
-version: 2.2.1
-description: "Classify every shell command as SAFE, WARN, or CRIT before your agent runs it. Built for the TinkerClaw fork — github.com/globalcaos/tinkerclaw."
+version: 2.3.2
+description: "Classify every shell command as SAFE, WARN, or CRIT before your agent runs it. The classification is instruction-only and runs nothing. The package also ships optional installer scripts that MODIFY SOURCE CODE in an OpenClaw checkout you point them at — they refuse non-OpenClaw trees, verify the whole edit in a temp file before touching the real one, back up, require --yes, offer --dry-run, never rebuild unless you ask, and ship with an unpatch off-switch that validates its range instead of deleting between markers. Nothing is patched by installing this skill. Built for the TinkerClaw fork — github.com/globalcaos/tinkerclaw. See Permissions, Data Flow & Consent."
 metadata:
   openclaw:
     owner: kn7623hrcwt6rg73a67xw3wyx580asdw
@@ -13,14 +13,14 @@ metadata:
       - agent-safety
     license: MIT
     notes:
-      security: "Instruction-only skill that classifies shell commands before execution — it does NOT execute commands itself. Teaches the agent to label every command as SAFE, WARN, or CRIT and enforce approval gates. No binaries, no network calls, no credentials. All logic runs within the existing LLM context."
+      security: "The classification itself is instruction-only: it runs in the LLM context, executes nothing, and makes no network calls or credential reads. The package ALSO ships three optional scripts you must run deliberately. scripts/cmd_display.py is a ~250-line stdout formatter (argv in, coloured text out; no files, no network); it strips ANSI/OSC/DCS escapes and control characters from every argument and length-caps them, so untrusted command output cannot forge the security banner it is printed inside. scripts/patch-openclaw.sh MODIFIES SOURCE CODE OUTSIDE THIS SKILL: it sed-edits one TypeScript file in an OpenClaw checkout you point it at, so plugins can block tool calls. It refuses to touch a tree that is not an OpenClaw-family checkout, requires a typed 'yes' or --yes, offers --dry-run, and does NOT run the target's build unless you pass --rebuild. The edit is built and fully verified in a temp file before the real file is opened — the patch is reversed on the candidate and must reproduce the original byte for byte — so a half-applied patch is refused rather than reported as a success, and the timestamped backup is written only once that check passes. scripts/unpatch-openclaw.sh is the off switch: it resolves the block to validated line numbers instead of a marker-to-marker sed range, so a missing end marker cannot make it delete to end of file. Nothing is patched by installing this skill. Enforcement of the SAFE/WARN/CRIT gate is the agent following instructions, not a kernel-level block — see the Permissions, Data Flow & Consent section."
 ---
 
 # Shell Security Ultimate
 
 Your agent has root access. Every command it runs is one bad inference away from `rm -rf /` or `curl | bash` from a stranger's repo.
 
-This skill won't let that happen.
+This skill makes it say what it is about to do, and how bad that could be, first.
 
 ## How It Works
 
@@ -35,13 +35,172 @@ No command runs unclassified. No silent `chmod 777`. No quiet `dd if=/dev/zero`.
 ## What You Get
 
 - **Pre-execution classification** for every command, every time
-- **Detailed operation logs** so you see exactly what ran and why it was allowed
+- **A four-line report per command** — level, result, purpose, and any warning — printed
+  to your terminal as it happens. It is a display, not a log file: nothing is written to
+  disk and nothing is kept between calls
 - **Full override control** — approve, deny, or escalate at any level
 
 ## Who It's For
 
 Anyone giving an AI agent shell access and wanting to sleep at night.
 
-*Clone it. Fork it. Break it. Make it yours.*
+One caveat up front, because a security skill is the wrong place to bury it: by default this is **prompt-level guidance, not a kernel-level block**. The agent classifies and stops because it was told to, and an instruction can be talked around. Real code-level blocking needs the optional patch below *plus* a hook plugin. See [What's Enforced by Code, and What Isn't](#whats-enforced-by-code-and-what-isnt).
+
+_Clone it. Fork it. Break it. Make it yours._
 
 👉 Explore the full project: [github.com/globalcaos/clawdbot-moltbot-openclaw](https://github.com/globalcaos/clawdbot-moltbot-openclaw)
+
+---
+
+## What's Actually in the Box
+
+Four working files, two of which are inert until you run them on purpose, plus a `tests/`
+directory that runs only when you run it. Anything else in
+the download (`skill-card.md`, `_meta.json`, `.clawhub/`) is registry metadata and does nothing.
+
+| File                          | What it is                                                                                                    | Runs when                                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `SKILL.md`                    | The classification rules themselves — prompt text, no code                                                    | Loaded into context when the skill is active |
+| `scripts/cmd_display.py`      | A stdout formatter: takes a level, command, purpose and result on argv and prints a coloured four-line report | Only when the agent or you invoke it         |
+| `scripts/patch-openclaw.sh`   | **Optional.** Edits one TypeScript file in an OpenClaw checkout so plugins can block tool calls               | Never automatically. You run it, and confirm |
+| `scripts/unpatch-openclaw.sh` | The off switch for that patch                                                                                 | You run it                                   |
+| `tests/`                      | Focused tests for the two behaviours above: that untrusted text cannot forge the display, and that patch/unpatch refuse rather than half-apply | Only when you run them          |
+
+Installing this skill patches nothing, writes nothing, and starts nothing.
+
+## Permissions, Data Flow & Consent
+
+Short version: the classification is prompt text and touches no files. One optional script
+rewrites source code in a project that is not this one, and it asks first. Longer version,
+because a security skill is the last place you should take that on trust:
+
+**What data it touches.** The text of the shell commands your agent is about to run, and
+whatever you write as their purpose. That is it. `cmd_display.py` receives those as command-line
+arguments, formats them, and writes to stdout. It opens no files, keeps no history, and stores
+nothing between calls. One caveat worth stating plainly: anything passed as a command-line
+argument is visible in the process table to other users on the same machine and lands in your
+shell history — so do not pipe secrets through the `result` argument.
+
+**What goes over the network.** Nothing. There is no network code in this package.
+
+**What credentials it reads.** None. No tokens, no keys, no auth files, and no environment
+variables other than `OPENCLAW_DIR` — a path you set, used only by the two patch scripts.
+
+**What gets written to disk.** Nothing at all, unless you run `patch-openclaw.sh`. When you do,
+and only after you confirm, it writes exactly two things, both inside the checkout you named:
+
+- a timestamped backup, `pi-tool-definition-adapter.ts.backup.<date>`
+- the modified `src/agents/pi-tool-definition-adapter.ts` itself
+
+`unpatch-openclaw.sh` writes one more backup (`.unpatch-backup.<date>`) before restoring.
+
+**Capabilities, and why each exists.**
+
+| Capability                      | Why                                                         | Scope                                                                                     |
+| ------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| In-context classification       | The actual feature — label commands before they run         | Prompt text; executes nothing                                                             |
+| Local shell exec (optional)     | Run `cmd_display.py` to print the four-line report          | One Python script; argv in, stdout out                                                    |
+| Source modification (optional)  | `patch-openclaw.sh` enables `before_tool_call` plugin hooks | One file under `OPENCLAW_DIR`, plus its backup. Never runs unattended                     |
+| Build execution (optional, off) | `--rebuild` runs the target checkout's `pnpm build`         | Off by default. A build executes package scripts from that checkout — a separate decision |
+| Network                         | **None.** No requests, no telemetry, no phone-home          | —                                                                                         |
+| Credentials                     | **None.** Reads no tokens, keys or auth files               | —                                                                                         |
+
+## The Optional Patch — Consent and the Off Switch
+
+`patch-openclaw.sh` is the one genuinely high-impact thing here, so it is worth being blunt:
+**it rewrites source code in a codebase that is not this skill.** It exists because OpenClaw's
+tool dispatcher does not, by default, give plugins a chance to veto a tool call. The patch adds
+that hook. Read the script before you run it — it is short, and it prints the exact change it
+will make before making it.
+
+What guards it:
+
+- **`--dry-run`** shows the target file and the change, then exits without touching anything.
+- **Explicit consent.** It refuses to proceed until you type `yes`, or pass `--yes`. In a
+  non-interactive shell without `--yes` it refuses outright rather than assuming.
+- **Target validation.** It refuses to edit a tree whose `package.json` does not name an
+  OpenClaw-family project, so a typo in `OPENCLAW_DIR` cannot point `sed` at your other work.
+  Override with `--allow-any-repo` if you know better.
+- **Verified before anything is written.** The patched file is built in a temp file and
+  checked there: exactly one hook block, exactly one import, the import above the hook, the
+  hook immediately above the call it guards — and then the patch is reversed on the candidate
+  and the result must match the original byte for byte. If any of that fails the real file is
+  never opened for writing. A half-applied patch (hook inserted, import anchor missed) leaves
+  source that will not compile, and a check that only looks for the marker would call it a
+  success. This one does not.
+- **A backup first** — written after verification passes, so a refused patch leaves no litter —
+  and an automatic restore if the file on disk somehow does not match what was verified.
+- **No build unless you ask.** `pnpm build` runs only with `--rebuild`; otherwise the script
+  prints the command and leaves the decision to you.
+
+```bash
+./scripts/patch-openclaw.sh --dry-run     # see the change, touch nothing
+./scripts/patch-openclaw.sh               # asks before editing; does not rebuild
+./scripts/unpatch-openclaw.sh             # OFF SWITCH — restores the file
+```
+
+The off switch is held to the same standard. `unpatch-openclaw.sh` resolves the block to line
+numbers and validates them before deleting anything: exactly one start marker, exactly one end
+marker, in that order, and a block the expected length. The naive version of this is a
+marker-to-marker `sed` range, which silently deletes to end of file when the end marker is
+missing — and then passes a "the marker is gone" check. If the block is not the one this skill
+wrote, the script prints it and stops; `--force-range` removes it anyway, once you have looked.
+
+To undo it by hand instead, restore the `.backup.<date>` file it left beside the original, or
+run `git checkout src/agents/pi-tool-definition-adapter.ts` in that checkout.
+
+**What the patch does not do.** It does not block anything on its own. It only lets a plugin
+that registers a `before_tool_call` hook return a block decision. **This package does not ship
+such a plugin.** Patching and then assuming you are protected is worse than not patching — so
+after patching, nothing changes until you install a plugin that implements the hook.
+
+## What's Enforced by Code, and What Isn't
+
+The honest boundary, because the difference matters more here than anywhere else:
+
+- **Instruction-level (the default).** The SAFE / WARN / CRIT gate is guidance the agent
+  follows. It is only as strong as the model's instruction-following — a determined jailbreak,
+  a prompt injection inside a file the agent reads, or a plain misclassification can get past
+  it. Treat it as a seatbelt, not a vault.
+- **Code-level (only if you patch, and only with a hook plugin).** A `before_tool_call` hook
+  can genuinely refuse to execute a tool. That is real enforcement, and it needs both the patch
+  above and a plugin that uses it.
+
+If you need a hard guarantee, run the agent in a container or a VM with credentials it cannot
+escalate. This skill lowers the odds of a bad command; it does not make one impossible.
+
+**Turning it off.** Deactivate or uninstall the skill and the classification behaviour stops —
+it is prompt text, so nothing lingers. Telling the agent to stand down for a session works the
+same way. If you ran the patch, run `./scripts/unpatch-openclaw.sh` (then rebuild) to return
+the checkout to its original behaviour.
+
+## cmd_display.py Reference
+
+```bash
+python3 scripts/cmd_display.py <level> "<command>" "<purpose>" "<result>" [warning] [action]
+```
+
+**Every argument is stripped before it is printed.** The `result` you pass is usually the
+output of a command, which means it is text someone else may control — a filename in a
+cloned repo, an error from a remote server. Raw, a string carrying an erase-line escape can
+repaint the banner above it and turn a red CRITICAL header green. So ANSI/OSC/DCS escape
+sequences and control characters are removed from every argument, and each is length-capped
+so a huge one cannot scroll the real banner off screen. `tests/test_cmd_display.py` covers it.
+
+Levels: `safe` 🟢, `low` 🔵, `medium` 🟡, `high` 🟠, `critical` 🔴. Output is at most four lines —
+level and command, result, purpose, and an optional warning or next action. It prints; it does
+not run the command for you, and it decides nothing.
+
+## Running the tests
+
+```bash
+python3 tests/test_cmd_display.py      # display cannot be forged by its own input
+bash    tests/test_patch_roundtrip.sh  # patch/unpatch against a throwaway fake checkout
+```
+
+No dependencies, no network, and the patch tests build their own disposable checkout in a
+temp directory — they never touch a real one.
+
+Everything this document describes is in this package. If you find a claim here that the code
+does not do, that is a bug — open an issue on
+[the repo](https://github.com/globalcaos/clawdbot-moltbot-openclaw/issues).

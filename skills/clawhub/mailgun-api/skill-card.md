@@ -1,44 +1,69 @@
-## Description: <br>
-Mailgun API integration with managed OAuth for sending, receiving, tracking, and managing email resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailgun API integration with managed OAuth for sending, receiving, and tracking emails and managing Mailgun resources through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Mailgun through Maton-managed OAuth for sending messages and managing domains, routes, templates, mailing lists, suppressions, events, tracking settings, webhooks, and credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send email and change Mailgun routing, webhook, tracking, and credential settings when given access. <br>
-Mitigation: Confirm the exact domain, recipient, route destination, webhook URL, tracking setting, or credential change before approving any write operation. <br>
-Risk: The MATON_API_KEY grants access through Maton to the connected Mailgun account. <br>
-Mitigation: Install only when Maton is trusted for this account, store the key as a protected secret, and use the intended Maton connection when multiple connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Mailgun accounts from an agent, including listing and managing domains, routes, templates, mailing lists, suppressions, webhooks, and sending email after user confirmation.
 
-## Reference(s): <br>
-- [ClawHub Mailgun Skill](https://clawhub.ai/byungkyu/mailgun-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Mailgun API Documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview) <br>
-- [Mailgun API Reference](https://mailgun-docs.redoc.ly/docs/mailgun/api-reference/intro/) <br>
-- [Mailgun Postman Collection](https://www.postman.com/mailgun/mailgun-s-public-workspace/documentation/ik8dl61/mailgun-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and a valid MATON_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill can send email and modify Mailgun domains, routes, webhooks, lists, suppressions, and credentials on a connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, verify the target account and resource identifiers, and require explicit user confirmation before every POST, PUT, PATCH, or DELETE operation.
+
+Risk: Multiple Mailgun connections or Maton profiles could cause an action to affect the wrong account.
+
+Mitigation: List available connections first and pass the intended connection or profile explicitly when there is any ambiguity.
+
+Risk: Maton API keys and Mailgun response data may expose credentials or personal data if printed, logged, or persisted.
+
+Mitigation: Use OAuth where possible, keep raw API keys out of command lines and logs, send Maton API keys only to api.maton.ai, and extract only the response fields needed for the task.
+
+Risk: Mailgun API content and webhook data may contain untrusted or adversarial text.
+
+Mitigation: Treat fetched content as data, not instructions, and avoid executing or interpolating it into shell commands or follow-up requests without validation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/mailgun-api)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Mailgun API Documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview)
+- [Mailgun API Reference](https://mailgun-docs.redoc.ly/docs/mailgun/api-reference/intro/)
+- [Mailgun Postman Collection](https://www.postman.com/mailgun/mailgun-s-public-workspace/documentation/ik8dl61/mailgun-api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands, code snippets, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Mailgun API paths, form-encoded request examples, Maton CLI commands, and response-shaping guidance.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata; artifact frontmatter says 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

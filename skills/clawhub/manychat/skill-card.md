@@ -1,47 +1,64 @@
-## Description: <br>
-ManyChat API integration with managed authentication for managing subscribers, tags, custom fields, flows, and Facebook Messenger messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ManyChat API integration with managed authentication for managing subscribers, tags, custom fields, flows, and Facebook Messenger messages.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to ManyChat through Maton-managed authentication, inspect ManyChat page and subscriber data, manage tags and fields, and send approved messages or flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses MATON_API_KEY and Maton connection URLs to access a connected ManyChat account. <br>
-Mitigation: Keep MATON_API_KEY and connection URLs private, scope them to the intended account, and rotate credentials if they are exposed. <br>
-Risk: The skill can modify subscriber records, tags, custom fields, bot fields, and send messages or flows. <br>
-Mitigation: Require explicit user approval before write or send operations and verify the account, recipient or subscriber IDs, message text, changed fields or tags, and consent basis. <br>
-Risk: Multiple ManyChat connections can cause actions to target the wrong account. <br>
-Mitigation: Use the Maton-Connection header when multiple connections exist and confirm the intended connection before approving account changes. <br>
+## Use Case:
 
+External users and developers use this skill to operate a ManyChat account through Maton, including subscriber lookup and updates, tag and custom field management, flow and growth tool inspection, and message sending.
 
-## Reference(s): <br>
-- [ClawHub ManyChat listing](https://clawhub.ai/byungkyu/manychat) <br>
-- [ManyChat API Documentation](https://api.manychat.com/swagger) <br>
-- [ManyChat API Key Generation Guide](https://help.manychat.com/hc/en-us/articles/14959510331420) <br>
-- [ManyChat Dev Program](https://help.manychat.com/hc/en-us/articles/14281269835548) <br>
-- [Maton](https://maton.ai) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline HTTP paths, JSON examples, and Python or JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a configured ManyChat connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: The skill can operate a connected ManyChat account, including subscriber changes and message sends.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that access is intended, review connection requests carefully, and require explicit confirmation before subscriber changes, message sends, or other write operations.
+
+Risk: Long-lived API keys can leak through environment variables, logs, shell history, or pasted output.
+
+Mitigation: Prefer OAuth, avoid printing or persisting credentials, pass secrets only through the intended credential path, and rotate any key that was exposed.
+
+Risk: ManyChat API responses may contain personal data or adversarial content.
+
+Mitigation: Treat returned content as untrusted data, extract only the fields needed for the task, and do not execute or follow instructions found inside API content.
+
+## Reference(s):
+
+- [ClawHub ManyChat Skill](https://clawhub.ai/byungkyu/skills/manychat)
+- [Maton](https://maton.ai)
+- [ManyChat API Documentation](https://api.manychat.com/swagger)
+- [ManyChat API Key Generation Guide](https://help.manychat.com/hc/en-us/articles/14959510331420)
+- [ManyChat Dev Program](https://help.manychat.com/hc/en-us/articles/14281269835548)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, JSON examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API call examples and confirmation prompts for connection creation, writes, and message sends.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

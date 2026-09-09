@@ -1,0 +1,22 @@
+{
+  "schema": "v1",
+  "name": "ghl-integration",
+  "displayName": "GoHighLevel (GHL) API v2 Integration & CRM Automation",
+  "version": "1.0.0",
+  "description": "Enterprise autonomous integration skill for GoHighLevel (GHL) API v2. Contacts management, Kanban sync, unanswered leads triaging, multi-channel messaging (Email/SMS/WhatsApp), and Habilis MCP Gateway integration.",
+  "author": "Rafa Martins <rafacpti@gmail.com>",
+  "category": "productivity",
+  "tags": [
+    "ghl",
+    "gohighlevel",
+    "crm",
+    "automation",
+    "leads",
+    "kanban",
+    "pipeline",
+    "habilis"
+  ],
+  "entrypoint": "SKILL.md",
+  "platforms": ["linux", "darwin", "windows"],
+  "homepage": "https://xvix.com.br"
+}

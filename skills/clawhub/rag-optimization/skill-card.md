@@ -1,47 +1,64 @@
-## Description: <br>
-提供RAG检索增强与优化指导，涵盖Self-RAG、命题分块、片段提取、上下文压缩、引用溯源、查询意图、多跳检索和文档预处理等策略，并配套实现脚本、配置模板和评估框架。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RAG检索增强为开发者提供检索诊断、分块、重排序、Self-RAG、上下文压缩、引用溯源和评估工具，用于提升知识库问答的准确性并降低幻觉风险。
 
-## Publisher: <br>
-[kiwifruit13](https://clawhub.ai/user/kiwifruit13) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifruit13](https://clawhub.ai/user/kiwifruit13)
 
-## Use Case: <br>
-Developers and engineers use this skill to diagnose, implement, configure, and evaluate RAG systems for knowledge-base question answering, retrieval accuracy improvement, noise reduction, citation tracking, and hallucination control. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Evaluation data, document text, and user queries may be sent to external LLM providers during RAG evaluation or judging. <br>
-Mitigation: Disable remote judging unless needed, pass only approved LLM clients, redact sensitive text before evaluation, and avoid private, regulated, or customer data unless controls are in place. <br>
-Risk: API keys used by external model providers may be exposed if handled directly in prompts, files, or logs. <br>
-Mitigation: Provide API keys through environment variables or a secrets manager and keep them out of skill content, test data, prompts, and logs. <br>
-Risk: RAG optimization guidance can produce misleading results if applied without reviewing retrieval quality, citations, and evaluation assumptions. <br>
-Mitigation: Review generated recommendations before execution, scan the skill before deployment, and validate changes against representative test cases and baseline metrics. <br>
+## Use Case:
 
+Developers and engineers use this skill to diagnose and improve RAG systems for knowledge-base question answering, retrieval accuracy, hallucination reduction, citation tracking, and retrieval evaluation.
 
-## Reference(s): <br>
-- [RAG检索优化技能 README](references/README.md) <br>
-- [5分钟快速上手](references/quickstart.md) <br>
-- [RAG高级技术实现指南](references/advanced-techniques.md) <br>
-- [RAG优化实施指南](references/implementation-guide.md) <br>
-- [全局操作说明](references/global-operations.md) <br>
-- [RAG original paper](https://arxiv.org/abs/2005.11401) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with Python scripts and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces implementation guidance, diagnostic steps, reusable script recommendations, and configuration patterns for RAG workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Private documents, prompts, or retrieval context may be sent to remote model or embedding endpoints when LLM-backed RAG features are enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted HTTPS endpoints, avoid confidential corpora without privacy review, and disable or review LLM-backed features for sensitive data.
+
+Risk: API credentials may be loaded from environment variables or project .env files.
+
+Mitigation: Use controlled secret handling, accept .env files only from trusted sources, and do not distribute real credentials in shared skill files or configuration.
+
+Risk: Dependency and model choices can affect retrieval quality and reproducibility.
+
+Mitigation: Install in an isolated environment with pinned dependencies and validate retrieval behavior on a representative golden set before production use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/kiwifruit13/skills/rag-optimization)
+- [RAG优化快速入门](references/quickstart.md)
+- [全局操作说明](references/global-operations.md)
+- [RAG高级技术实现指南](references/advanced-techniques.md)
+- [RAG系统全链路问题与应对策略](references/implementation-guide.md)
+- [Golden Set 建设指南](references/golden-set-guide.md)
+- [scripts API 参考文档](references/api_reference.md)
+- [API 文档自动生成](references/api-docs-auto-generation.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python code examples, shell commands, JSON configuration templates, and evaluation report JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some LLM-backed features require API credentials and may fall back to rule-based behavior when not configured.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

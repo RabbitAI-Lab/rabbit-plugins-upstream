@@ -1,10 +1,14 @@
 ---
 name: cmclaw
-version: "1.0.0"
+version: "1.0.1"
+display_name: "创意管家 AI 策略分析助手"
+display_name_en: "Creative Manager AI Strategy Analysis Assistant"
 description: >
   有米云创意管家 AI 策略分析：AI 驱动创意策略迭代，为你全方位分析第三方广告素材和自有待投放的广告素材，生成广告投放策略报告或持续碰撞，灵感激发。
   当用户需要广告投放策略分析、创意灵感激发、素材策略分析，或提到"创意管家"、
   "策略探索"、"灵感激发"、或使用 `/cmclaw` 时触发。
+description_zh: "有米云创意管家 AI 策略分析：AI 驱动创意策略迭代，全方位分析第三方广告素材和自有待投放素材，生成广告投放策略报告或持续碰撞、灵感激发。触发词：创意管家、策略探索、灵感激发、投放策略分析、素材策略分析；命令：/cmclaw"
+description_en: "YouCloud Creative Manager AI strategy analysis: AI-driven creative strategy iteration that comprehensively analyzes third-party ad creatives and your own creatives pending launch, generating ad placement strategy reports or ongoing brainstorming and inspiration. Triggers: keywords Creative Manager, strategy exploration, inspiration, creative analysis; command /cmclaw"
 invocation: /cmclaw
 emoji: 🎯
 metadata:

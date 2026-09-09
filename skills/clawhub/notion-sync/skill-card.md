@@ -1,44 +1,65 @@
-## Description: <br>
-Bi-directional sync and management for Notion pages and databases. Use when working with Notion workspaces for collaborative editing, research tracking, project management, or when you need to sync markdown files to/from Notion pages or monitor Notion pages for changes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read, search, export, create, update, monitor, query, inspect, batch-edit, and explicitly archive Notion pages and databases when the user requests Notion content or database operations and a host secret manager can supply NOTION_API_KEY.
 
-## Publisher: <br>
-[robansuini](https://clawhub.ai/user/robansuini) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robansuini](https://clawhub.ai/user/robansuini)
 
-## Use Case: <br>
-Developers, researchers, and workspace operators use this skill to search, query, update, monitor, and synchronize Notion pages or databases with local Markdown workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A batch update can modify many Notion records if the selected database, filter, or stdin page list is broader than intended. <br>
-Mitigation: Run batch updates with --dry-run first, set a narrow --filter or explicit stdin page list, and keep --limit scoped to the intended pages. <br>
-Risk: The Notion integration token can access important shared or business data if it is over-permissioned or exposed. <br>
-Mitigation: Use a least-privilege Notion integration shared only with needed pages and databases, and protect token files or stdin/env handling. <br>
-Risk: File sync commands can read from or write to local paths outside the current workspace when --allow-unsafe-paths is used. <br>
-Mitigation: Keep the default workspace path guard enabled and use --allow-unsafe-paths only for deliberate, reviewed paths. <br>
+## Use Case:
 
+Developers, researchers, and workspace operators use Notion Sync to let an agent search, read, export, create, update, monitor, query, inspect, batch-edit, and archive Notion content shared with a configured integration.
 
-## Reference(s): <br>
-- [Notion Sync API Reference](references/API-REFERENCE.md) <br>
-- [Notion Integrations](https://www.notion.so/my-integrations) <br>
-- [ClawHub Skill Page](https://clawhub.ai/robansuini/skills/notion-sync) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands; scripts can emit JSON results or Markdown content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and a Notion integration token supplied through NOTION_API_KEY, a token file, or stdin.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.5.3 (source: server release metadata) <br>
+Risk: A Notion integration token can expose workspace content if it is pasted into chat, source control, command arguments, logs, or committed environment files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store NOTION_API_KEY in a secret manager and avoid printing, inspecting, logging, or passing the credential through chat or shell arguments.
+
+Risk: The skill can read, create, update, batch-edit, and archive Notion content shared with the configured integration.
+
+Mitigation: Share only the necessary Notion pages or databases with the integration, prefer host-bound egress to api.notion.com, and review filters before mutating operations.
+
+Risk: Batch updates or archives can change multiple Notion pages when the target set is too broad.
+
+Mitigation: Use dry-run and filter options carefully before batch updates; page archiving requires the explicit --confirm-archive flag.
+
+Risk: Local markdown sync can read or write files selected by the user.
+
+Mitigation: Keep workspace path restrictions enabled and authorize external paths only with exact mode-specific --allow-read-path or --allow-write-path values.
+
+## Reference(s):
+
+- [Notion Sync API Reference](references/API-REFERENCE.md)
+- [Migrating notion-sync from v1/v2 to v3](references/MIGRATION-V3.md)
+- [Changelog](CHANGELOG.md)
+- [ClawHub notion-sync skill page](https://clawhub.ai/robansuini/skills/notion-sync)
+- [Notion API outbound host](https://api.notion.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON-capable script outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js and NOTION_API_KEY; local file access outside the workspace requires exact read or write path authorization.]
+
+## Skill Version(s):
+
+3.0.2 (source: changelog and server release metadata, released 2026-09-08)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

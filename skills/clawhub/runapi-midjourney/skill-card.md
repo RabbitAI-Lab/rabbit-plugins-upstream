@@ -1,47 +1,62 @@
-## Description: <br>
-Generate and edit images, create or extend video from images, derive or shorten prompt suggestions, and look up seeds with Midjourney through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images, create or extend video from images, derive or shorten prompt suggestions, and look up seeds with Midjourney through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to integrate Midjourney through RunAPI for image generation, image editing, image-to-video, video extension, prompt derivation, prompt shortening, and seed lookup workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, API keys, and media URLs may be sent to RunAPI and downstream services during normal image and video generation. <br>
-Mitigation: Confirm trust in RunAPI before installation, use environment authentication or saved CLI configuration, and avoid sending sensitive prompts or non-public media URLs unless authorized. <br>
-Risk: Generated media URLs are temporary, and some operations depend on account-owned task IDs or publicly fetchable input media. <br>
-Mitigation: Download generated media to durable storage, verify task ownership before extension or seed lookup, and ensure input URLs are intentionally public. <br>
+## Use Case:
 
+Developers and agents use this skill to generate and edit Midjourney images, create image-based video, retrieve seeds, and prepare RunAPI CLI or SDK requests for one-off work and application integration.
 
-## Reference(s): <br>
-- [RunAPI Midjourney model overview](https://runapi.ai/models/midjourney) <br>
-- [RunAPI Midjourney documentation](https://runapi.ai/models/midjourney.md) <br>
-- [Midjourney V8.1 text-to-image documentation](https://runapi.ai/models/midjourney/v8.1.md) <br>
-- [Midjourney image editing documentation](https://runapi.ai/models/midjourney/edit-image.md) <br>
-- [Midjourney image-to-video documentation](https://runapi.ai/models/midjourney/image-to-video.md) <br>
-- [RunAPI Midjourney provider page](https://runapi.ai/providers/midjourney.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [RunAPI CLI skill guidance](https://github.com/runapi-ai/cli-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands, SDK package names, and integration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce RunAPI CLI commands, SDK integration direction, request-field checks, and result-handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release metadata) <br>
+Risk: Prompts and local media paths included in requests may be sent to RunAPI or Midjourney.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid private files or sensitive prompt content unless they are intended inputs, and review request JSON before submission.
+
+Risk: Midjourney operations may consume paid credits.
+
+Mitigation: Submit each request only once, verify task creation before retrying, and require user authorization before any replacement paid request.
+
+Risk: The skill depends on the external RunAPI CLI and authentication state.
+
+Mitigation: Confirm the installed RunAPI CLI is trusted and authenticated before executing model operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-midjourney)
+- [RunAPI Midjourney model overview](https://runapi.ai/models/midjourney)
+- [RunAPI Midjourney model documentation](https://runapi.ai/models/midjourney.md)
+- [RunAPI Midjourney provider documentation](https://runapi.ai/providers/midjourney.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Midjourney SDK](https://github.com/runapi-ai/midjourney-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to produce request JSON, task identifiers, response files, downloaded media files, and SDK integration code.]
+
+## Skill Version(s):
+
+0.3.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

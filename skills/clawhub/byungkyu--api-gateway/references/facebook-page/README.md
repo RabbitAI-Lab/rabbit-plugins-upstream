@@ -15,39 +15,48 @@
 
 Facebook's Graph API requires a **Page Access Token** for page-scoped endpoints (feed, insights, comments). The gateway injects the connection's User Access Token, which authorizes `me/accounts` and page metadata but not page-scoped operations. This is a Facebook API constraint, not a gateway feature — the token is issued by Facebook, scoped to pages the connected user already administers, and grants no access beyond what that user's existing connection already permits.
 
-> **Handling rules — the page token is a credential.** It is obtained from and used against `api.maton.ai` only.
+> **Handling rules — the page token is a credential.** `api.maton.ai` is the only host that issues it and the only host that accepts it.
 > - **Never** write it to disk, logs, environment files, shell history, or scrollback.
 > - **Never** print, echo, or include it in any output shown to the user or returned to a caller.
-> - **Never** send it to any host other than `api.maton.ai` — not in a webhook destination, trigger header, body template, or third-party request.
+> - **No other host may receive it** — not a webhook destination, trigger header, body template, or third-party request.
 > - Hold it in an in-memory variable for the duration of the current request sequence only; discard it afterward. Do not cache or reuse it across sessions.
-> - Request it only when a page-scoped call actually requires it. Prefer the User-Access-Token endpoints below when they satisfy the task.
+> - Request it only when a page-scoped call actually requires it. Prefer the endpoints below that need no page token at all.
 
 **Start here — do not retrieve a token you don't need.** These endpoints work with the gateway-injected User Access Token alone, with no `access_token` parameter and no token retrieval step:
 - `GET /facebook-page/v25.0/me/accounts`
 - `GET /facebook-page/v25.0/{page_id}`
 
-If one of these satisfies the task, stop — there is no reason to read a page token.
+If one of these satisfies the task, stop — no page token is needed at all.
 
 **Obtaining a page token** — only when a specific page-scoped endpoint below actually requires one, and only for the page the user named:
-1. `GET /facebook-page/v25.0/me/accounts?fields=id,name,access_token` — read the `access_token` field for that one page
+1. `GET /facebook-page/v25.0/me/accounts?fields=id,name,access_token` — the response carries an `access_token` field for that one page
 2. Pass it as the `access_token` query parameter on that page-scoped call, then discard it
 
 Retrieve and consume it inside a single script so the value never crosses a process boundary and never lands in shell history or scrollback:
 
 ```bash
-python <<'EOF'
-import urllib.request, os, json
-KEY = os.environ["MATON_API_KEY"]
+python3 <<'EOF'
+import json, re, subprocess
 
+BASE = '/facebook-page/v25.0'
+
+# Each call goes through `maton api`, so the gateway injects the credential and this
+# script never reads or holds a Maton key. Only the page token lives in memory.
 def call(path):
-    req = urllib.request.Request(f'https://api.maton.ai/facebook-page/v25.0/{path}')
-    req.add_header('Authorization', f'Bearer {KEY}')
-    return json.load(urllib.request.urlopen(req))
+    p = subprocess.run(['maton', 'api', path], capture_output=True, text=True, check=True)
+    return json.loads(p.stdout)
 
-pages = call('me/accounts?fields=id,name,access_token')     # token is never printed
-page_id, page_token = pages['data'][0]['id'], pages['data'][0]['access_token']
+pages = call(f'{BASE}/me/accounts?fields=id,name,access_token')   # token is never printed
+page = pages['data'][0]
+page_id, page_token = page['id'], page['access_token']
 
-feed = call(f'{page_id}/feed?fields=id,message,created_time&limit=10&access_token={page_token}')
+# These came out of an API response, and they are about to go into a request path.
+# Check their shape first rather than trusting the response (see Security & Permissions).
+if not re.fullmatch(r'[0-9]+', page_id) or not re.fullmatch(r'[A-Za-z0-9_-]+', page_token):
+    raise SystemExit('unexpected page id or token format - stopping')
+
+feed = call(f'{BASE}/{page_id}/feed?fields=id,message,created_time&limit=10'
+            f'&access_token={page_token}')
 del page_token                                              # discard immediately after use
 print(json.dumps(feed, indent=2))                           # response only
 EOF
@@ -59,92 +68,95 @@ In the endpoint examples below, `{page_access_token}` marks **where the runtime 
 
 ### List Pages
 ```bash
-GET /facebook-page/v25.0/me/accounts?fields=id,name,category,fan_count,followers_count
+maton api '/facebook-page/v25.0/me/accounts?fields=id,name,category,fan_count,followers_count'
 ```
 
 ### Get Page Details
 ```bash
-GET /facebook-page/v25.0/{page_id}?fields=id,name,about,category,fan_count,followers_count,website,link
+maton api '/facebook-page/v25.0/{page_id}?fields=id,name,about,category,fan_count,followers_count,website,link'
 ```
 
 ### Get Page Feed
 ```bash
-GET /facebook-page/v25.0/{page_id}/feed?fields=id,message,created_time&limit=10&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/feed?fields=id,message,created_time&limit=10&access_token={page_access_token}'
 ```
 
 ### Get Published Posts
 ```bash
-GET /facebook-page/v25.0/{page_id}/published_posts?fields=id,message,created_time&limit=10&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/published_posts?fields=id,message,created_time&limit=10&access_token={page_access_token}'
 ```
 
 ### Publish a Post
 ```bash
-POST /facebook-page/v25.0/{page_id}/feed?access_token={page_access_token}
-Content-Type: application/json
-
+maton api -X POST '/facebook-page/v25.0/{page_id}/feed?access_token={page_access_token}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "message": "Hello from my page!"
 }
+EOF
 ```
 
 ### Update a Post
 ```bash
-POST /facebook-page/v25.0/{post_id}?access_token={page_access_token}
-Content-Type: application/json
-
+maton api -X POST '/facebook-page/v25.0/{post_id}?access_token={page_access_token}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "message": "Updated post content"
 }
+EOF
 ```
 
 ### Delete a Post
 ```bash
-DELETE /facebook-page/v25.0/{post_id}?access_token={page_access_token}
+maton api '/facebook-page/v25.0/{post_id}?access_token={page_access_token}' -X DELETE
 ```
 
 ### Get Comments on a Post
 ```bash
-GET /facebook-page/v25.0/{post_id}/comments?fields=id,message,from,created_time&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{post_id}/comments?fields=id,message,from,created_time&access_token={page_access_token}'
 ```
 
 ### Post a Comment
 ```bash
-POST /facebook-page/v25.0/{post_id}/comments?access_token={page_access_token}
-Content-Type: application/json
-
+maton api -X POST '/facebook-page/v25.0/{post_id}/comments?access_token={page_access_token}' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "message": "Thanks for your feedback!"
 }
+EOF
 ```
 
 ### Get Page Insights
 ```bash
-GET /facebook-page/v25.0/{page_id}/insights?metric=page_views_total,page_posts_impressions,page_video_views&period=day&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/insights?metric=page_views_total,page_posts_impressions,page_video_views&period=day&access_token={page_access_token}'
 ```
 
 ### Get Page Insights with Date Range
 ```bash
-GET /facebook-page/v25.0/{page_id}/insights?metric=page_views_total&period=day&since=2026-01-01&until=2026-01-31&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/insights?metric=page_views_total&period=day&since=2026-01-01&until=2026-01-31&access_token={page_access_token}'
 ```
 
 ### Get Page Photos
 ```bash
-GET /facebook-page/v25.0/{page_id}/photos?fields=id,name,created_time,images&limit=10&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/photos?fields=id,name,created_time,images&limit=10&access_token={page_access_token}'
 ```
 
 ### Get Page Videos
 ```bash
-GET /facebook-page/v25.0/{page_id}/videos?fields=id,title,description,created_time&limit=10&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/videos?fields=id,title,description,created_time&limit=10&access_token={page_access_token}'
 ```
 
 ### Get Product Catalogs
 ```bash
-GET /facebook-page/v25.0/{page_id}/product_catalogs?access_token={page_access_token}
+maton api '/facebook-page/v25.0/{page_id}/product_catalogs?access_token={page_access_token}'
 ```
 
 #### Get Products in a Catalog
 ```bash
-GET /facebook-page/v25.0/{catalog_id}/products?fields=id,name,price,image_url&access_token={page_access_token}
+maton api '/facebook-page/v25.0/{catalog_id}/products?fields=id,name,price,image_url&access_token={page_access_token}'
 ```
 
 ## Notes

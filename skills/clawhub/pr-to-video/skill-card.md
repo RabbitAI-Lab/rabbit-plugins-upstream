@@ -1,46 +1,63 @@
-## Description: <br>
-Turn a GitHub pull request into a code-change explainer video using the PR diff, commits, and files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a GitHub pull request into a code-change explainer video built from the PR diff, commits, and files.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to convert a GitHub pull request into a storyboarded, narrated HyperFrames explainer video for changelogs, feature reveals, fixes, or refactor walkthroughs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may update globally installed HyperFrames skills without asking first. <br>
-Mitigation: Review and approve this update behavior before installation, and run the skill only where global skill changes are acceptable. <br>
-Risk: The skill uses GitHub CLI access to read PR metadata and diffs and may contact media services for audio or assets. <br>
-Mitigation: Use it only with repositories, credentials, and media-service access that are approved for the task. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to turn GitHub pull requests into concise explainer videos for changelogs, feature reveals, fixes, and refactor walkthroughs.
 
-## Reference(s): <br>
-- [Skill source](artifact/SKILL.md) <br>
-- [Story design reference](artifact/references/story-design.md) <br>
-- [Visual design reference](artifact/references/visual-design.md) <br>
-- [Code vocabulary reference](artifact/references/code-vocabulary.md) <br>
-- [Motion language reference](artifact/references/motion-language.md) <br>
-- [Cut catalog reference](artifact/references/cut-catalog.md) <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/pr-to-video) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, video] <br>
-**Output Format:** [Markdown guidance, shell commands, project files, HTML frame compositions, and rendered MP4 output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses GitHub PR metadata and diffs as source material; may generate narration, captions, contributor avatar assets, and HyperFrames project artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.20 (source: server release metadata) <br>
+Risk: The skill may use GitHub CLI access and ingest PR text from untrusted authors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on repositories and pull requests you are authorized to process, and review the PR source before allowing generated plans or scripts to drive work.
+
+Risk: The workflow may contact GitHub, CDN, HeyGen, and media services and may use HeyGen or media credentials.
+
+Mitigation: Confirm the authentication status and allowed service posture before running; use offline paths or avoid sensitive repositories when external service use is not permitted.
+
+Risk: The workflow may update globally installed HyperFrames skills through unpinned npx commands.
+
+Mitigation: Review the installed package and skill updates before use, prefer an isolated environment, and pin or pre-approve versions when required by organizational policy.
+
+## Reference(s):
+
+- [Story design - PR to narrative](references/story-design.md)
+- [Visual design - PR-to-video per-frame shot method](references/visual-design.md)
+- [Code vocabulary - code animation blocks](references/code-vocabulary.md)
+- [Motion language](references/motion-language.md)
+- [Cut catalog](references/cut-catalog.md)
+- [Frame worker - PR-to-video delta](sub-agents/frame-worker.md)
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/pr-to-video)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown plans and scripts, JavaScript/HTML project files, shell commands, configuration files, and rendered video artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a HyperFrames project from a GitHub pull request and can include narration, background music, sound effects, contributor avatars, and a final MP4 render.]
+
+## Skill Version(s):
+
+1.0.31 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

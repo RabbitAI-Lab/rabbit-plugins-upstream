@@ -1,45 +1,57 @@
-## Description: <br>
-Call the Claude API through RunAPI using Anthropic, OpenAI, Gemini-compatible, or other compatible clients for chat, streaming, multimodal input, tool use, extended thinking, token counting, and protocol-compatible integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Call Claude models through RunAPI using the Anthropic Messages protocol. Use for Claude chat, streaming, vision, tools, reasoning, token counting, or an existing compatibility client that needs the conditional reference.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent builders use this skill to configure Claude API calls through RunAPI, including SDK setup, streaming, multimodal requests, token counting, and OpenAI or Gemini protocol compatibility. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Claude prompts and API traffic may be routed to RunAPI using a RunAPI token. <br>
-Mitigation: Install and use the skill only when RunAPI is the intended Claude API route, and configure credentials explicitly through ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL. <br>
-Risk: Broad Claude-related trigger wording may activate the skill for generic Claude help when stricter RunAPI-specific routing is desired. <br>
-Mitigation: Review the trigger wording before deployment and narrow it if the environment should separate general Claude guidance from RunAPI API usage. <br>
+## Use Case:
 
+Developers and external users use this skill to configure agents or Anthropic-compatible clients to call Claude models through RunAPI for chat, streaming, vision, tools, reasoning, and token-counting workflows. Existing OpenAI or Gemini clients can use the compatibility reference only when that protocol is required.
 
-## Reference(s): <br>
-- [RunAPI Claude Model Documentation](https://runapi.ai/models/claude.md) <br>
-- [RunAPI Anthropic Provider Documentation](https://runapi.ai/providers/anthropic.md) <br>
-- [RunAPI Model Catalog](https://runapi.ai/models.md) <br>
-- [RunAPI Claude Homepage](https://runapi.ai/models/claude) <br>
-- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-claude) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/runapi-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires RunAPI credentials via ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL for the described API flows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.11 (source: server release evidence) <br>
+Risk: Prompts, images, and tool-call payloads sent through this skill go to RunAPI using the configured API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only where sending those payloads to RunAPI is acceptable, and protect ANTHROPIC_API_KEY as a credential.
+
+Risk: Compatibility protocols can be misapplied to unsupported client or model shapes.
+
+Mitigation: Use Anthropic Messages as the primary protocol and verify exact model support in RunAPI documentation before using OpenAI or Gemini compatibility paths.
+
+## Reference(s):
+
+- [RunAPI Claude model documentation](https://runapi.ai/models/claude.md)
+- [RunAPI Anthropic provider documentation](https://runapi.ai/providers/anthropic.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI Claude homepage](https://runapi.ai/models/claude)
+- [Claude compatibility protocols](references/compatibility-protocols.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions]
+
+**Output Format:** [Markdown with inline code examples and configuration values]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL; users should verify exact model support against RunAPI documentation.]
+
+## Skill Version(s):
+
+0.2.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

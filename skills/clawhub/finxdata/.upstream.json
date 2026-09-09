@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/finxdata",
   "slug": "finxdata",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1782812624341,
-  "contentHash": "5ed0ea94610721b6a4f9eb499e87eba80142aeeacd4090cd29eb52eb98c4c707",
-  "fetchedAt": "2026-07-26T18:22:03.761Z"
+  "version": "1.0.12",
+  "updatedAt": 1788919725235,
+  "contentHash": "f7d6d01e8a4554c85f8f3736da4f55e9a8da83eb09dd632e07ab0e1e4af2430c",
+  "fetchedAt": "2026-09-09T12:27:01.705Z"
 }

@@ -1,44 +1,60 @@
-## Description: <br>
-Identifies plant growth stages from images or videos using a cloud analysis service and returns structured results for precision agriculture decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Accurately identifies key growth stages of plants from germination to fruiting based on computer vision and deep learning, provides structured data for precision agriculture decision support.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers, agents, and agricultural operators use this skill to submit plant imagery or video for growth-stage recognition and retrieve structured analysis reports and history links for farm-management decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant images, videos, or submitted URLs to the Lifeemergence cloud service for analysis. <br>
-Mitigation: Use only media and URLs approved for that service, and avoid private farm footage, internal URLs, or regulated business media unless the service's retention and access controls are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores service tokens locally. <br>
-Mitigation: Ask the publisher for permission scoping, opt-out and deletion instructions, and instructions to delete local SQLite data and stored tokens. <br>
-Risk: Historical report listing is tied to the locally resolved account identity. <br>
-Mitigation: Review history access before using shared workspaces and request a way to disable, delete, or opt out of account history if needed. <br>
+## Use Case:
 
+External users and agricultural workflow developers use this skill to send plant images, videos, or URLs to a publisher-operated cloud service for growth-stage recognition, structured analysis, recommendations, report links, and history lookup.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with structured analysis results, report links, history lists, and command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local file paths or public image/video URLs; supports basic, standard, and json detail modes; can write results to a file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release and frontmatter) <br>
+Risk: The skill sends plant media, identifiers, and report-history requests to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with media and identifiers approved for transfer to the publisher service, and obtain explicit user consent before analysis or report-history retrieval.
+
+Risk: The server security summary says the skill is configured to send media and credentials over cleartext HTTP despite claiming HTTPS.
+
+Mitigation: Require HTTPS-only endpoints and verify transport configuration before production use.
+
+Risk: The server security guidance flags silent identity and token handling, including smyx-api-key.txt identity fallback and token storage concerns.
+
+Mitigation: Remove or validate the local identity fallback, make identity/report retrieval consent explicit, and store tokens securely before production use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [JSON or Markdown text with report links and optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces plant growth-stage analysis, structured report content, recommendations, and cloud report-history listings.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata; artifact frontmatter states 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

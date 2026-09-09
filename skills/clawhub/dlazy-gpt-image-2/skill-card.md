@@ -1,43 +1,59 @@
-## Description: <br>
-GPT Image 2 supports text-to-image generation and image editing with reference inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates images from text and edits or synthesizes images with GPT Image 2 using optional reference inputs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to call dLazy's hosted GPT Image 2 service for image generation, image editing, and synthesis from prompts and reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Use only prompts and files that are appropriate to share with dLazy, and avoid submitting sensitive or regulated content unless approved. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-run environment variable is used. <br>
-Mitigation: Use OS user permissions, rotate or revoke keys when needed, and prefer DLAZY_API_KEY for short-lived runs where persistent storage is not desired. <br>
+## Use Case:
 
+Developers and agent users use this skill to call the dLazy CLI for text-to-image generation and reference-image editing workflows. It is useful when an agent needs generated image URLs or saved image assets as part of a broader task.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gpt-image-2) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Image URLs, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses with generated image URLs and task status fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports synchronous results or asynchronous generateId polling; generated media is hosted by dLazy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill requires a dLazy API key that may be stored locally or supplied through the environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a revocable organization-scoped key, restrict local access to the config file, and rotate or revoke the key if exposure is suspected.
+
+Risk: Reference image files passed to the CLI can be uploaded to dLazy's hosted media service.
+
+Mitigation: Only provide files that are appropriate to upload to the service and review applicable service terms before using sensitive content.
+
+Risk: A global CLI installation creates a persistent local binary.
+
+Mitigation: Use the pinned on-demand npx command when a persistent global install is not needed, and review the linked source or npm package before installation.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gpt-image-2)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Image files, Shell commands, Configuration guidance]
+
+**Output Format:** [JSON response with generated image URLs; optional downloaded image file when a save path is provided.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key and may upload reference image files to dLazy's hosted service.]
+
+## Skill Version(s):
+
+1.3.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

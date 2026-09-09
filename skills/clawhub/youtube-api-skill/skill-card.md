@@ -1,44 +1,62 @@
-## Description: <br>
-YouTube Data API integration with managed OAuth for searching videos, managing playlists, accessing channel data, and interacting with comments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+YouTube Data API integration with managed OAuth for searching videos, managing playlists, accessing channel data, and interacting with comments through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to work with YouTube through Maton-managed OAuth, including searches, channel and video lookups, playlists, comments, subscriptions, and account-scoped write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton-managed OAuth can perform account-changing YouTube actions such as playlist, comment, subscription, rating, and deletion operations. <br>
-Mitigation: Install only if you trust Maton to broker OAuth access, confirm the intended YouTube connection before use, and approve write actions only after checking the exact target and effect. <br>
+## Use Case:
 
+Developers and external users use this skill to access YouTube Data API workflows from an agent, including video search, channel and playlist inspection, playlist management, subscriptions, and comment operations. The skill is suited for tasks that need managed OAuth through Maton and human approval before account changes.
 
-## Reference(s): <br>
-- [ClawHub YouTube Skill](https://clawhub.ai/byungkyu/skills/youtube-api-skill) <br>
-- [YouTube Data API Overview](https://developers.google.com/youtube/v3) <br>
-- [YouTube Data API Search](https://developers.google.com/youtube/v3/docs/search/list) <br>
-- [YouTube Data API Playlists](https://developers.google.com/youtube/v3/docs/playlists) <br>
-- [YouTube Data API Comments](https://developers.google.com/youtube/v3/docs/comments) <br>
-- [YouTube Data API Quota Calculator](https://developers.google.com/youtube/v3/determine_quota_cost) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with CLI commands, API endpoint examples, code snippets, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected YouTube OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill can access a connected YouTube account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, connect only the needed YouTube account and scopes, and revoke unused connections.
+
+Risk: Playlist, comment, subscription, and rating operations can modify account state or public content.
+
+Mitigation: Default to read and list calls first, then confirm the target resource, payload, and intended effect before any write operation.
+
+Risk: The raw API-key fallback exposes a long-lived Maton credential if used carelessly.
+
+Mitigation: Avoid the raw API-key path unless the CLI cannot be used; never print, log, persist, or send the key outside api.maton.ai.
+
+## Reference(s):
+
+- [ClawHub YouTube Skill Page](https://clawhub.ai/byungkyu/skills/youtube-api-skill)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [YouTube Data API Overview](https://developers.google.com/youtube/v3)
+- [YouTube Data API Quota Calculator](https://developers.google.com/youtube/v3/determine_quota_cost)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, Configuration, Code]
+
+**Output Format:** [Markdown with inline shell commands, API paths, JSON examples, and optional code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected YouTube account; API calls can return JSON.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Pre-release code review that runs lint and type checks, reviews diffs for cleanliness, design, efficiency, and side-effect ordering issues, validates findings, and fixes approved issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pre-release code review skill that runs project validation, reviews diffs for cleanliness, design, efficiency, and side-effect ordering issues, validates findings, and applies targeted fixes after approval.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineering teams use this skill before committing, pushing, or releasing code to catch actionable issues in changed files and apply targeted fixes after approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run project-defined validation commands while reviewing a repository. <br>
-Mitigation: Use it only where running the repository's scripts is acceptable, especially for untrusted repositories, and review commands before allowing execution. <br>
-Risk: The skill can edit files and the security summary notes some fixes may occur before clear approval. <br>
-Mitigation: Require explicit approval before automatic fixes and review all generated changes before committing or releasing them. <br>
+## Use Case:
 
+Developers and engineering teams use code-polish before committing or pushing changes to run validation, inspect changed code through multiple review lenses, verify findings, and apply minimal fixes after approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/code-polish) <br>
-- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/polish) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with file references; shell commands and code or file edits may be produced when fixes are approved.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts an optional base-ref argument and requires approval before proceeding from reported findings to fixes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.4.1 (source: frontmatter and changelog, released 2026-07-22) <br>
+Risk: The skill may run project validation commands selected from repository documentation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect CLAUDE.md and the configured check command before use, and require explicit approval for command execution when operating in untrusted repositories.
+
+Risk: The skill can edit source files after reviewing findings.
+
+Mitigation: Keep the approval gate before fixes, review proposed findings first, and verify changes with the project's validation command.
+
+Risk: Diff contents can contain instruction-shaped text or secrets.
+
+Mitigation: Treat reviewed diffs as untrusted data, use explicit content boundaries when prompting review agents, and mask credential values in reports.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/tenequm/skills/code-polish)
+- [Declared project homepage](https://github.com/tenequm/skills/tree/main/skills/polish)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown review report with file and line references, recommendations, and optional targeted code edits or validation commands after approval]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run repository validation commands and inspect or edit source files when the user approves fixes.]
+
+## Skill Version(s):
+
+2.7.0 (source: server release metadata, skill metadata, and changelog, released 2026-09-09)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

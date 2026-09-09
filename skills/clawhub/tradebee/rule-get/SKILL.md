@@ -1,7 +1,6 @@
 ---
 name: rule-get
 description: A rule retrieval skill based on the "Tradebee Website Builder" Open API. It is used to read the exact tenant-scoped HTML fragment rules for one selected language and one fixed scene before generating Tradebee description HTML.
-homepage: https://open.tradew.com
 metadata: {"clawdbot":{"emoji":"bee","requires":{"env":["BEE_API_KEY"]},"primaryEnv":"BEE_API_KEY"}}
 ---
 
@@ -11,6 +10,8 @@ metadata: {"clawdbot":{"emoji":"bee","requires":{"env":["BEE_API_KEY"]},"primary
 
 Use this skill before generating any of these HTML fragments:
 
+- `navigation.content`
+- `news.description`
 - `blog.description`
 - `faq.answer`
 - `products.description`
@@ -33,6 +34,8 @@ Authentication uses only the configured `BEE_API_KEY` environment variable. Neve
 
 Use one exact fixed value only:
 
+- `navigation.content`
+- `news.description`
 - `blog.description`
 - `faq.answer`
 - `products.description`

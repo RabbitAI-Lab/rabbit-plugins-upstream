@@ -1,46 +1,64 @@
-## Description: <br>
-Confluence API integration with managed OAuth for managing pages, spaces, blogposts, comments, and attachments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Confluence API integration with managed OAuth for managing pages, spaces, blogposts, comments, attachments, and properties through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to read and manage Confluence Cloud content through Maton-managed OAuth. It supports page, space, blogpost, comment, attachment, property, task, label, and custom-content workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and OAuth connection that can access Confluence content. <br>
-Mitigation: Install only if Maton is trusted to broker access, keep MATON_API_KEY secret, and avoid sharing command output that could expose credentials or sensitive workspace data. <br>
-Risk: Create, update, and delete operations can change or remove Confluence content. <br>
-Mitigation: Require exact user confirmation of the target resource and intended effect before approving any write operation. <br>
-Risk: When multiple Confluence connections exist, a request may target the wrong workspace or account. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header when more than one account is available. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and manage Confluence Cloud pages, spaces, blogposts, comments, attachments, and properties via Maton with OAuth-managed access.
 
-## Reference(s): <br>
-- [Confluence skill on ClawHub](https://clawhub.ai/byungkyu/confluence-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Confluence REST API V2 documentation](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/) <br>
-- [Confluence REST API V2 reference](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/) <br>
-- [Confluence storage format](https://confluence.atlassian.com/doc/confluence-storage-format-790796544.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP endpoints and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Confluence OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can read and modify Confluence content through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, choose the narrowest Confluence scopes available, specify the intended connection when multiple accounts exist, and review every proposed write or deletion before approving it.
+
+Risk: Granting Maton access to Confluence can expose workspace content to an external service.
+
+Mitigation: Confirm the user trusts Maton and is comfortable granting Confluence access before installing or connecting an account.
+
+Risk: Long-lived API keys can leak through logs, shell history, process listings, or saved files.
+
+Mitigation: Prefer OAuth; when an API key is unavoidable, keep it out of command arguments and logs, avoid persisting it, and rotate it if exposed.
+
+## Reference(s):
+
+- [ClawHub Confluence Skill](https://clawhub.ai/byungkyu/skills/confluence-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Confluence REST API V2 Documentation](https://developer.atlassian.com/cloud/confluence/rest/v2/intro/)
+- [Confluence REST API V2 Reference](https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-page/)
+- [Confluence Storage Format](https://confluence.atlassian.com/doc/confluence-storage-format-790796544.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request or response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, Maton authentication, and user approval before new connections or modifying Confluence content.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

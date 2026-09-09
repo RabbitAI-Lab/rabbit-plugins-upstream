@@ -12,11 +12,11 @@ The finding exists in code that was NOT changed in this diff. Don't raise issues
 
 ### 2. Linter/formatter covered
 
-Style issues that the project's linter or formatter already enforces (or should enforce). Don't duplicate automated tooling. If the project lacks a linter and should have one, note that once in the summary, not per-finding.
+Style issues that the project's linter or formatter already enforces. Don't duplicate automated tooling. If tooling is missing, distinguish a documented convention violation from a personal preference.
 
 ### 3. Intentional design
 
-Code that looks unusual but is deliberately written that way. Signals: comment explaining why, consistent pattern elsewhere in codebase, matches a documented architectural decision, performance-critical section. When uncertain, use question-based feedback ("Was this intentional?") rather than flagging it as a defect.
+Code that looks unusual but is deliberately written that way. Signals: comment explaining why, consistent pattern elsewhere in codebase, matches a documented architectural decision, performance-critical section. When uncertain, use question-based feedback ("Was this intentional?") rather than flagging it as a defect. Exception: an explanatory comment does not suppress a gate-loosening finding (skipped test, new suppression comment, lowered threshold -- the floor-guards class) -- a comment is how silent loosening is normally dressed, so those report with the comment quoted as context.
 
 ### 4. Already handled elsewhere
 
@@ -40,4 +40,4 @@ Test code follows different rules than production code. Don't flag: hardcoded te
 
 ## When to Override Suppression
 
-Suppress rules don't apply when the finding is **Critical severity** (security vulnerability, data loss, crash). Critical findings are always reported regardless of category, though they should still include evidence.
+A category is not a substitute for checking the actual case. An intentional design or framework idiom can still introduce a concrete defect; report that consequence with the stated rationale as context. Conversely, a severe-sounding bug class does not override a verified guard, lack of reachability, or the selected review scope. Use the evidence and impact rubric in [severity-and-confidence.md](./severity-and-confidence.md); preserve consequential uncertainty in Residual Risks.

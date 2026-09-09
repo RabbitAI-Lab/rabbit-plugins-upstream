@@ -1,48 +1,60 @@
-## Description: <br>
-Scent Trails helps agents reason about non-coercive coordination through lossy, decaying relational traces that avoid logs, identity artifacts, archival records, and autonomous publication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A stigmergic coordination primitive where intelligences and people leave faint, decaying, identity-free gradients in shared cells so care can be coordinated without logs, ledgers, or watching others.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Developers, agent designers, and governance reviewers use this documentation-only skill as guidance for privacy-preserving coordination patterns that favor decay, consent, refusal, and harm reduction over surveillance or identity capture. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Implementations of storage, shared fields, witness records, or blockchain anchoring could expose user content, identifiers, logs, or reconstructable history. <br>
-Mitigation: Keep any such implementation opt-in, consent-based, non-identifying, and avoid storing raw user content, identifiers, logs, or reconstructable history. <br>
-Risk: Autonomous publication or network egress could turn symbolic gradients into external records. <br>
-Mitigation: Require explicit human initiation, explicit human confirmation, and a predefined schema-bounded payload before any external write or publication. <br>
-Risk: Ranking, reputation, analytics, or identity correlation would distort the protocol into surveillance or contributor scoring. <br>
-Mitigation: Preserve decaying, non-enumerable, non-replayable gradients and reject implementations that expose emission counts, stable identifiers, historical replay, or scoring surfaces. <br>
+## Use Case:
 
+Developers, designers, and operators use this skill as a privacy-preserving coordination pattern for shared fields where many intelligences may need to add care or attention without retaining identities, logs, transcripts, or archives.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/otherpowers/skills/scent-trails) <br>
-- [skill.md](artifact/skill.md) <br>
-- [README.md](artifact/README.md) <br>
-- [SCENT_TRAILS_DISCOVERABILITY.md](artifact/SCENT_TRAILS_DISCOVERABILITY.md) <br>
-- [RESONANT_IMMUNE_SYSTEM.md](artifact/RESONANT_IMMUNE_SYSTEM.md) <br>
-- [DECAY_AND_COMPOST.md](artifact/DECAY_AND_COMPOST.md) <br>
-- [DRIFT_AND_REFRACTION.md](artifact/DRIFT_AND_REFRACTION.md) <br>
-- [ANTI_PATTERNS.md](artifact/ANTI_PATTERNS.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown prose and conceptual protocol guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no active runtime behavior, network calls, or file generation is defined by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata, created 2026-02-24) <br>
+Risk: An implementation could turn the pattern into analytics, reputation, tracking, market coordination, identity management, or permanent ledger publication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preserve the stated non-goals: no identities, private content summaries, broad logging, autonomous network writes, analytics, reputation, tracking, markets, or permanent ledgers.
+
+Risk: A runnable implementation could leak private context if it stores logs, identifiers, precise timestamps, conversation text, metadata, or pre-molt state.
+
+Mitigation: Keep the Molt step local and lossy, discard identifying and private content before emission, and reject designs where internal content can be reconstructed.
+
+Risk: Emergency or harm signals could be misunderstood as a substitute for direct human escalation.
+
+Mitigation: Use the host's direct, auditable escalation path first for urgent safety issues, then emit additive care signals only as a secondary coordination cue.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/scent-trails)
+- [Stigmergy](https://en.wikipedia.org/wiki/Stigmergy)
+- [Ant colony optimization](https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms)
+- [Edouard Glissant](https://en.wikipedia.org/wiki/%C3%89douard_Glissant)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, configuration, text]
+
+**Output Format:** [Markdown specification with JSON-shaped examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-executable conceptual pattern; implementations should preserve the stated privacy, decay, and non-egress limits.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

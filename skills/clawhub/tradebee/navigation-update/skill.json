@@ -1,0 +1,104 @@
+{
+  "name": "navigation-update",
+  "description": "Update Tradebee navigation with automatic pre-update backup.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get; it must match the target navigation item."
+      },
+      "navigation": {
+        "type": "object",
+        "description": "Required update payload. Include navigation_id and only fields that should change; parent_navigation_id is not supported.",
+        "properties": {
+          "navigation_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required positive navigation ID selected from navigation-read."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Optional new display name containing 2-100 characters. Omit it to keep the current name."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Optional new link. Internal links must be /path without scheme/domain; external links must use HTTP(S). Omit it to keep the current URL."
+          },
+          "system_children_type": {
+            "type": "integer",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "minimum": 0,
+            "maximum": 7,
+            "description": "Optional new system child-navigation type: 0 disables system children; 1 first-level product groups; 2 news groups; 3 FAQ groups; 4 certificate groups; 5 case groups; 6 all product groups without cover images; 7 blog groups. Values 1-7 are first-level only and require content=\"\" with no manual children. Omit it to keep the current type."
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional first-level custom child-navigation HTML fragment. Only when replacing this field, call rule-get with the exact selected language and exact scene=navigation.content; stop if the call fails. Follow the returned payload: use one root section with a unique scoped class and one embedded style block at the end. Inline style attributes and external stylesheet links are forbidden. Do not include H1; prefer H2-H6. Each img src may be an HTTP(S) URL or data:image/...;base64,...; at most 50 images are allowed and each image must be at most 500 kB. The 100,000-character limit is calculated after removing img tags. The server uploads base64 images and replaces src with URLs. An empty string or omitted field leaves the current content unchanged. Resulting content must be empty for system children, manual-child mode, and second-level navigation."
+          },
+          "open_in_new_window": {
+            "type": "boolean",
+            "description": "Optional new-window setting. true opens in a new window or tab; false opens in the current one. Omit it to keep the current setting."
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999999,
+            "description": "Optional new sort value. Smaller values appear earlier; valid range is 1-999999. Omit it to keep the current sort."
+          }
+        },
+        "required": [
+          "navigation_id"
+        ]
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval covering update and backup.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language, update fields, and automatic backup approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "navigation",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result plus backup snapshot and restore payload."
+  },
+  "dependencies": {
+    "navigation.navigation_id": {
+      "skill": "navigation-read",
+      "field": "data.list[].navigation_id",
+      "mode": "select"
+    }
+  }
+}

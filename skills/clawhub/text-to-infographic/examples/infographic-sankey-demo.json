@@ -1,0 +1,198 @@
+{
+  "infographic_id": "lead_flow_sankey_demo",
+  "intent": "dashboard",
+  "chart_family": "sankey",
+  "language": "zh-CN",
+  "audience": "growth ops and revops",
+  "source_summary": "展示线索从流量来源到注册、激活、付费与流失的流向，适合在飞书文档或白板中快速说明漏斗瓶颈。",
+  "message": {
+    "title": "线索流转桑基图",
+    "subtitle": "把来源、转化与流失放在一条路径上看清楚",
+    "core_takeaway": "广告与内容都能带来注册，但注册到激活和激活到付费的损耗最值得优先优化。",
+    "cta": "先排查注册页体验和激活引导，不要只追加投放预算。"
+  },
+  "layout": {
+    "layout_mode": "flow",
+    "coordinate_system": "hybrid",
+    "aspect_ratio": "16:9",
+    "reading_order": "left-to-right",
+    "density": "high"
+  },
+  "visual_system": {
+    "theme_id": "sankey-revops",
+    "palette_mode": "duo",
+    "emphasis_style": "technical",
+    "brand_colors": ["#0F172A", "#38BDF8", "#F59E0B"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "桑基图",
+      "content": "同一张图看清线索流向与损耗。",
+      "visual_role": "primary",
+      "icon_hint": "git-branch-plus",
+      "must_include": ["流向粗细变化"],
+      "avoid": ["过多标签"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_core",
+      "block_type": "summary",
+      "title": "关键结论",
+      "content": "注册到激活和激活到付费是两个主要损耗点。",
+      "visual_role": "primary",
+      "icon_hint": "scan-search",
+      "must_include": ["总结卡片"],
+      "avoid": ["长段落"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "src_content",
+      "block_type": "node",
+      "title": "内容流量",
+      "content": "知识库、社区与 SEO。",
+      "visual_role": "secondary",
+      "group_id": "sources",
+      "icon_hint": "file-text",
+      "payload": {"stage": "source"},
+      "must_include": ["来源节点"],
+      "avoid": ["多余细分"],
+      "text_budget": 18
+    },
+    {
+      "block_id": "src_ads",
+      "block_type": "node",
+      "title": "付费流量",
+      "content": "信息流、品牌词与活动投放。",
+      "visual_role": "secondary",
+      "group_id": "sources",
+      "icon_hint": "badge-dollar-sign",
+      "payload": {"stage": "source"},
+      "must_include": ["来源节点"],
+      "avoid": ["标签太多"],
+      "text_budget": 18
+    },
+    {
+      "block_id": "src_referral",
+      "block_type": "node",
+      "title": "转介绍",
+      "content": "客户推荐与伙伴引荐。",
+      "visual_role": "secondary",
+      "group_id": "sources",
+      "icon_hint": "share-2",
+      "payload": {"stage": "source"},
+      "must_include": ["来源节点"],
+      "avoid": ["过多说明"],
+      "text_budget": 16
+    },
+    {
+      "block_id": "stage_signup",
+      "block_type": "node",
+      "title": "注册",
+      "content": "完成邮箱或手机号验证。",
+      "visual_role": "secondary",
+      "group_id": "conversion",
+      "icon_hint": "user-plus",
+      "payload": {"stage": "signup"},
+      "must_include": ["中间节点"],
+      "avoid": ["太多子步骤"],
+      "text_budget": 18
+    },
+    {
+      "block_id": "stage_activation",
+      "block_type": "node",
+      "title": "激活",
+      "content": "完成首次任务并看到结果。",
+      "visual_role": "secondary",
+      "group_id": "conversion",
+      "icon_hint": "zap",
+      "payload": {"stage": "activation"},
+      "must_include": ["关键转化节点"],
+      "avoid": ["语义过长"],
+      "text_budget": 18
+    },
+    {
+      "block_id": "stage_paid",
+      "block_type": "node",
+      "title": "付费",
+      "content": "进入团队版或企业版。",
+      "visual_role": "primary",
+      "group_id": "outcomes",
+      "icon_hint": "credit-card",
+      "payload": {"stage": "paid"},
+      "must_include": ["高亮结果"],
+      "avoid": ["密集文字"],
+      "text_budget": 16
+    },
+    {
+      "block_id": "sink_churn",
+      "block_type": "node",
+      "title": "流失",
+      "content": "离开、沉默或未继续推进。",
+      "visual_role": "supporting",
+      "group_id": "outcomes",
+      "icon_hint": "x-circle",
+      "payload": {"stage": "churn"},
+      "must_include": ["损耗出口"],
+      "avoid": ["多余注释"],
+      "text_budget": 18
+    }
+  ],
+  "relations": [
+    {
+      "from": "src_content",
+      "to": "stage_signup",
+      "relation_type": "flow",
+      "label": "内容引导注册",
+      "weight": 320
+    },
+    {
+      "from": "src_ads",
+      "to": "stage_signup",
+      "relation_type": "flow",
+      "label": "广告进入注册",
+      "weight": 260
+    },
+    {
+      "from": "src_referral",
+      "to": "stage_signup",
+      "relation_type": "flow",
+      "label": "推荐进入注册",
+      "weight": 140
+    },
+    {
+      "from": "stage_signup",
+      "to": "stage_activation",
+      "relation_type": "flow",
+      "label": "注册后完成激活",
+      "weight": 420
+    },
+    {
+      "from": "stage_signup",
+      "to": "sink_churn",
+      "relation_type": "flow",
+      "label": "注册后流失",
+      "weight": 300
+    },
+    {
+      "from": "stage_activation",
+      "to": "stage_paid",
+      "relation_type": "flow",
+      "label": "激活后付费",
+      "weight": 180
+    },
+    {
+      "from": "stage_activation",
+      "to": "sink_churn",
+      "relation_type": "flow",
+      "label": "激活后流失",
+      "weight": 240
+    }
+  ],
+  "delivery": {
+    "primary_target": "svg",
+    "secondary_targets": ["whiteboard", "doc"],
+    "doc_mode": "companion-detail"
+  }
+}

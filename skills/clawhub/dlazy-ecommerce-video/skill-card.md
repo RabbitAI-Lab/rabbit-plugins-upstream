@@ -1,44 +1,56 @@
-## Description: <br>
-Turns product photos, specifications, catalogs, or ecommerce listings into conversion-focused shopping ad videos with multilingual voiceover and an optional virtual host. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns product photos, product links, specs, manuals, or catalogs into conversion-focused ecommerce ad videos with multilingual voiceover and an optional virtual host.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, ecommerce teams, and developers use this skill to start or continue dLazy projects that generate product, shopping, TikTok Shop, and ecommerce ad videos from product files or listing links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, project context, and files passed with `--files` are sent to dLazy-hosted services. <br>
-Mitigation: Avoid sending sensitive content unless approved for that service, and review dLazy terms before use. <br>
-Risk: The dLazy API key may be saved in `~/.dlazy/config.json`, while the referenced CLI package may not enforce the private file permissions claimed by the skill. <br>
-Mitigation: Use a dedicated, revocable API key; prefer `DLAZY_API_KEY` per invocation when persistence is not needed; and verify local config file permissions after login. <br>
-Risk: Global installation adds a third-party CLI package to the local environment. <br>
-Mitigation: Review the dLazy CLI before installing and consider using the pinned `npx @dlazy/cli@1.2.3` path instead of a persistent global install. <br>
+## Use Case:
 
+External users and developers use this skill to ask the dLazy hosted ecommerce-video agent to generate shopping, store, TikTok Shop, or advertising videos from product images, links, or supporting product files.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a pinned dLazy CLI invocation and may reference project IDs, prompts, API-key setup, and local files supplied by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The skill sends prompts, options, and attached product files to dLazy's hosted API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Attach only files that are appropriate to upload to dLazy and review the service before using it with sensitive product data.
+
+Risk: A globally installed CLI persists a local executable and stores API configuration on the user's machine.
+
+Mitigation: Use `npx @dlazy/cli@1.2.3` for on-demand execution when a persistent global binary is unnecessary, and rotate or revoke the API key when access is no longer needed.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-ecommerce-video)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and service response text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference generated ecommerce video projects and uploaded product files through the dLazy hosted service.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter lists 1.0.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

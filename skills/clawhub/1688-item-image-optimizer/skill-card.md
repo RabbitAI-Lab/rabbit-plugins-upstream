@@ -1,45 +1,55 @@
-## Description: <br>
-Opens the 1688 product image optimization page and, when a product ID is present, includes it in the page URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a unified workflow for 1688 product image creation, including main image optimization, carousel images, detail images, background replacement, and digital model routing.
 
-## Publisher: <br>
-[1688aiinfra](https://clawhub.ai/user/1688aiinfra) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[1688aiinfra](https://clawhub.ai/user/1688aiinfra)
 
-## Use Case: <br>
-External users and 1688 shop operators use this skill to open a product image optimization workflow for main product images, optionally scoped to a detected offer ID. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The released package includes CLI configuration behavior for a 1688 access key, even though the advertised workflow is a simple page opener. <br>
-Mitigation: Use the open_tab interaction only unless API-key configuration is intentionally needed and reviewed. <br>
-Risk: Providing a 1688 access key may store it in local OpenClaw configuration or send it to a configured OpenClaw gateway. <br>
-Mitigation: Review the configured gateway and local OpenClaw settings before entering credentials. <br>
-Risk: CLI use may report usage metadata. <br>
-Mitigation: Avoid running the bundled CLI in environments where usage telemetry is not acceptable. <br>
+## Use Case:
 
+External 1688/OpenClaw merchants use this skill to route product-image requests to the correct 1688 image tool, pass eligible uploaded image URLs, check digital model permission, and open the generated tool page.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/1688aiinfra/1688-item-image-optimizer) <br>
-- [Publisher profile](https://clawhub.ai/user/1688aiinfra) <br>
-- [Interaction component specification](references/interaction-specs.md) <br>
-- [1688 image optimization page](https://air.1688.com/app/CSBC-modules/csbc-ai-component-loader/picture-optimize.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, guidance] <br>
-**Output Format:** [JSON open_tab interaction payload] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include an offerId query parameter when a product ID is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: The skill expects a 1688/OpenClaw AK and may use the active session to open 1688 image tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher is trusted, configure credentials through the expected OpenClaw path, and verify the gateway URL before running configure.
+
+Risk: CLI command execution sends signed usage metadata and generated tool URLs may include a local session identifier.
+
+Mitigation: Review telemetry and session handling before deployment, and use the skill only in account contexts where this reporting is acceptable.
+
+## Reference(s):
+
+- [Interaction component specifications](references/interaction-specs.md)
+- [ClawHub skill page](https://clawhub.ai/1688aiinfra/skills/1688-item-image-optimizer)
+- [1688 image tool entry point](https://air.1688.com/app/CSBC-modules/csbc-ai-component-loader)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [JSON CLI responses with markdown text and OpenClaw interaction payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return open_tab or card interaction data for the host agent to display.]
+
+## Skill Version(s):
+
+0.51.0 (source: server release metadata; artifact frontmatter declares 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

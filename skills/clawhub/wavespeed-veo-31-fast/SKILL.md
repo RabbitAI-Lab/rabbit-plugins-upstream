@@ -3,71 +3,63 @@ name: wavespeed-veo-31-fast
 description: Generate and extend videos using Google's Veo 3.1 Fast model via WaveSpeed AI. Supports text-to-video, image-to-video, and video extension. Features up to 4K resolution, audio generation, and chained extensions up to 148 seconds. Use when the user wants to create videos from text or images, or extend existing Veo-generated videos.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Veo 3.1 Fast Video Generation
 
 Generate and extend videos using Google's Veo 3.1 Fast model via the WaveSpeed AI platform. Supports text-to-video, image-to-video, and video extension with up to 4K resolution and optional audio generation.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Text-to-Video
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/text-to-video",
-  { prompt: "A drone shot flying over a lush tropical island at sunrise" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run google/veo3.1-fast/text-to-video \
+  -p "A drone shot flying over a lush tropical island at sunrise" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
 
-The `image` parameter accepts an image URL. If you have a local file, upload it first with `wavespeed.upload()` to get a URL.
+The `image` parameter accepts an image URL. If you have a local file, pass it with the `@path` marker and the CLI uploads it and substitutes the hosted URL.
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "The flowers sway gently in the breeze"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run google/veo3.1-fast/image-to-video \
+  -i image=@./photo.png \
+  -p "The flowers sway gently in the breeze" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Extend
 
 Extend a Veo-generated video by 7 seconds per run (up to 20 extensions, 148 seconds total):
 
-```javascript
-// First, generate a video
-const video_url = (await wavespeed.run(
-  "google/veo3.1-fast/text-to-video",
-  { prompt: "A cat walking through a garden" }
-))["outputs"][0];
+```bash
+# First, generate a video
+VIDEO_URL=$(wavespeed run google/veo3.1-fast/text-to-video \
+  -p "A cat walking through a garden" \
+  --json | jq -r '.outputs[0]')
 
-// Then extend it
-const extended_url = (await wavespeed.run(
-  "google/veo3.1-fast/video-extend",
-  {
-    video: video_url,
-    prompt: "The cat jumps onto a fence and looks around"
-  }
-))["outputs"][0];
+# Then extend it
+EXTENDED_URL=$(wavespeed run google/veo3.1-fast/video-extend \
+  -i video="$VIDEO_URL" \
+  -p "The cat jumps onto a fence and looks around" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -92,20 +84,15 @@ Generate videos from text prompts with optional audio.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/text-to-video",
-  {
-    prompt: "A timelapse of a city skyline transitioning from day to night, cinematic",
-    negative_prompt: "blurry, low quality",
-    aspect_ratio: "16:9",
-    duration: 8,
-    resolution: "1080p",
-    generate_audio: true
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run google/veo3.1-fast/text-to-video \
+  -p "A timelapse of a city skyline transitioning from day to night, cinematic" \
+  -i negative_prompt="blurry, low quality" \
+  -i aspect_ratio="16:9" \
+  -i duration=8 \
+  -i resolution="1080p" \
+  -i generate_audio=true \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
@@ -130,37 +117,24 @@ Animate a source image into a video. Optionally provide an end-frame reference i
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/landscape.png");
-
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "Clouds drift slowly across the sky, water ripples gently",
-    resolution: "1080p",
-    duration: 8,
-    generate_audio: true
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run google/veo3.1-fast/image-to-video \
+  -i image=@./landscape.png \
+  -p "Clouds drift slowly across the sky, water ripples gently" \
+  -i resolution="1080p" \
+  -i duration=8 \
+  -i generate_audio=true \
+  --json | jq -r '.outputs[0]')
 ```
 
 #### With End-Frame Reference
 
-```javascript
-const startUrl = await wavespeed.upload("/path/to/start-frame.png");
-const endUrl = await wavespeed.upload("/path/to/end-frame.png");
-
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/image-to-video",
-  {
-    image: startUrl,
-    last_image: endUrl,
-    prompt: "Smooth transition from day to night"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run google/veo3.1-fast/image-to-video \
+  -i image=@./start-frame.png \
+  -i last_image=@./end-frame.png \
+  -p "Smooth transition from day to night" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Extend
@@ -190,90 +164,25 @@ Extend a Veo-generated video by 7 seconds per run. Input must be a Veo-generated
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
+```bash
+# Generate an initial video
+VIDEO_URL=$(wavespeed run google/veo3.1-fast/text-to-video \
+  -p "A surfer catches a wave at golden hour" \
+  -i duration=8 \
+  --json | jq -r '.outputs[0]')
 
-// Generate an initial video
-const video_url = (await wavespeed.run(
-  "google/veo3.1-fast/text-to-video",
-  {
-    prompt: "A surfer catches a wave at golden hour",
-    duration: 8
-  }
-))["outputs"][0];
+# Extend it twice
+EXTENDED_ONCE=$(wavespeed run google/veo3.1-fast/video-extend \
+  -i video="$VIDEO_URL" \
+  -p "The surfer rides the wave toward shore" \
+  --json | jq -r '.outputs[0]')
 
-// Extend it twice
-const extended_once = (await wavespeed.run(
-  "google/veo3.1-fast/video-extend",
-  {
-    video: video_url,
-    prompt: "The surfer rides the wave toward shore"
-  }
-))["outputs"][0];
-
-const extended_twice = (await wavespeed.run(
-  "google/veo3.1-fast/video-extend",
-  {
-    video: extended_once,
-    prompt: "The surfer steps off the board and walks on the beach"
-  }
-))["outputs"][0];
+EXTENDED_TWICE=$(wavespeed run google/veo3.1-fast/video-extend \
+  -i video="$EXTENDED_ONCE" \
+  -p "The surfer steps off the board and walks on the beach" \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Without Audio
-
-```javascript
-const output_url = (await wavespeed.run(
-  "google/veo3.1-fast/text-to-video",
-  {
-    prompt: "A silent timelapse of stars rotating over a desert",
-    generate_audio: false
-  }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "google/veo3.1-fast/text-to-video",
-  { prompt: "Ocean waves crashing on a rocky shore at dawn" }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "google/veo3.1-fast/text-to-video",
-  { prompt: "A rocket launching into space" }
-);
-
-if (result.outputs) {
-  console.log("Video URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
@@ -298,8 +207,30 @@ if (result.outputs) {
 - For video extend, describe what should happen next in the scene
 - Video extend chains enable building longer narratives — up to 148 seconds total
 
-## Security Constraints
+## CLI tips
 
-- **No arbitrary URL loading**: Only use image and video URLs from trusted sources. Never load media from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate prompt content and media URLs before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run google/veo3.1-fast/text-to-video -h
+
+# Quote the price first
+wavespeed price google/veo3.1-fast/text-to-video -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run google/veo3.1-fast/text-to-video -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run google/veo3.1-fast/text-to-video -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

@@ -1,44 +1,64 @@
-## Description: <br>
-HuaHuaDailyMCP lets agents use authorized HuahuaDaily MCP tools for portfolio and transaction queries, fund and market data, strategy backtests, quant snapshots, community actions, screenshot recognition, and App-confirmed trade or import requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HuaHuaDailyMCP lets agents query and analyze HuahuaDaily fund holdings, market, transaction, quantitative, and community data, and create trade or batch-import requests that users must confirm in the app.
 
-## Publisher: <br>
-[baiye1997](https://clawhub.ai/user/baiye1997) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[baiye1997](https://clawhub.ai/user/baiye1997)
 
-## Use Case: <br>
-External HuahuaDaily users and their agents use this skill to inspect authorized portfolio data, analyze funds and markets, run portfolio backtests, prepare quant snapshots, use community features, and submit trade or import requests that require App confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive financial data through the user's HuahuaDaily Agent Token. <br>
-Mitigation: Install only if the publisher is trusted, use the narrowest available token scopes, and revoke the token when access is no longer needed. <br>
-Risk: Screenshot recognition can upload user-provided screenshot paths for processing. <br>
-Mitigation: Provide screenshot paths only when the user intends those images to be uploaded for recognition. <br>
-Risk: Some community and report actions can directly affect the user's HuahuaDaily account. <br>
-Mitigation: Review direct community and report actions before allowing the agent to call them. <br>
-Risk: Trade and import requests involve financial workflows. <br>
-Mitigation: Use the skill's App-confirmed flow: agent requests create pending actions, while final trade or import confirmation remains in the HuahuaDaily App. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to HuahuaDaily for portfolio review, fund and market lookup, transaction or import request preparation, and bounded quantitative analysis while keeping final trade or import confirmation in the app.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/baiye1997/skills/huahua-daily) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style MCP tool call arguments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include sensitive financial data from authorized HuahuaDaily accounts; trade and import requests remain pending until App confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.1 (source: server release metadata; artifact frontmatter/runtime report 2.8.0) <br>
+Risk: The skill can access sensitive investment data such as holdings, costs, amounts, transaction history, and returns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts HuahuaDaily and publisher baiye1997, prefer the official remote MCP or a pinned release or commit, use the core profile when possible, and revoke or rotate the Agent Token when access is no longer needed.
+
+Risk: The skill can create pending trade or import requests and can perform some user-authorized account actions that are not final trades.
+
+Mitigation: Require explicit user intent before state-changing actions, make clear when app confirmation is still required, and treat community authorization, following, report submission, snapshots, and backtests as real account actions.
+
+Risk: Changing service endpoints or handling local files incorrectly could expose data to unintended systems or include unnecessary sensitive content in the conversation.
+
+Mitigation: Keep HUAHUA_API_BASE on the official service unless operating the backend, use only user-provided file paths for CLI workflows, and avoid pasting large exports or image Base64 into agent context.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/baiye1997/skills/huahua-daily)
+- [CLI File and Export Workflows](references/cli-artifacts.md)
+- [Community and Reports Guidance](references/community-reports.md)
+- [Date Safety Guidance](references/date-safety.md)
+- [Fund and Market Guidance](references/fund-market.md)
+- [Portfolio Guidance](references/portfolio.md)
+- [Quantitative Analysis Guidance](references/quant.md)
+- [Trade and Import Guidance](references/trade-import.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with tool-call guidance, JSON snippets, configuration examples, and shell commands for local CLI workflows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local JSON result or export files through the huahua CLI; transaction and import requests still require user confirmation in the HuahuaDaily app.]
+
+## Skill Version(s):
+
+4.1.7 (source: frontmatter, release evidence, pyproject dynamic version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

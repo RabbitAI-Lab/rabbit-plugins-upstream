@@ -17,6 +17,9 @@ Check every item and name affected slots.
 | Gate | Requirement |
 |---|---|
 | Scope | Requested deliverables and A+ eligibility are explicit |
+| Module count | Distinct A+ module IDs do not exceed 5 for Basic / Standard or 7 for Premium; paired assets count once |
+| Module specification | Named module and dimension source recorded; Full Image desktop minimum 1464x600 and mobile minimum 600x450 checked independently |
+| Alternative text | Every required device field has factual alternative text; Premium Full Image requires both desktop and mobile |
 | Facts | Every exact claim maps to an allowed evidence label |
 | Roles | Every slot has one primary decision role |
 | Coverage | Important purchase questions are covered without padding |
@@ -78,6 +81,8 @@ Mark the set `NEEDS_REVISION` regardless of score when any required image has:
 - Unsupported measurable claim or certification.
 - MAIN compliance violation.
 - Wrong delivery dimensions.
+- A+ module count exceeds the tier limit, or an export falls below either required pixel dimension.
+- Missing required mobile asset or alternative-text field.
 - Unreadable or incorrect required copy.
 - Missing required slot.
 - Desktop/mobile semantic mismatch.
@@ -108,4 +113,3 @@ Return:
 4. Weighted score.
 5. Required revisions in priority order.
 6. Overall status: `QUALIFIED`, `NEEDS_REVISION`, or `BLOCKED`.
-

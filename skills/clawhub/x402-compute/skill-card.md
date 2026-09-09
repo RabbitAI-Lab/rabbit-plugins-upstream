@@ -1,48 +1,67 @@
-## Description: <br>
-x402 Compute helps agents browse, provision, manage, resize, extend, and destroy Singularity Cloud Network GPU/VPS instances, AI Machines, SGL Grid inference, and node-operator workflows using x402, MPP, or preloaded credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+x402 Compute helps agents browse, provision, manage, and retire Singularity Cloud Network compute resources, AI machines, grid inference, hosted agent pods, processors, datasets, and encrypted agent backups using x402 or API-key based workflows.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-Developers and operators use this skill to provision paid GPU/VPS compute, deploy private OpenAI-compatible LLM endpoints, consume SGL Grid inference, or run grid nodes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend wallet funds and manage cloud servers. <br>
-Mitigation: Use a dedicated low-balance wallet, confirm spend and target instance before execution, and avoid unattended confirmation flags unless the cost and lifecycle action are known. <br>
-Risk: The skill handles sensitive wallet keys, API keys, and root-access material. <br>
-Mitigation: Keep secrets out of logs, prefer SSH keys over password fallback, delete any one-time password files immediately, and scope API keys to the intended workflow. <br>
-Risk: Runtime installers or dependency changes can introduce supply-chain exposure. <br>
-Mitigation: Pin or review dependencies and inspect the node installer before running remote install commands. <br>
+## Use Case:
 
+External developers and agent operators use this skill to manage GPU or VPS instances, deploy private OpenAI-compatible endpoints or hosted agents, run grid inference, publish paid processors, buy datasets, and back up or migrate agents. The skill is intended for workflows where an agent may propose or execute commands that affect cloud resources, wallet-backed payments, reusable management keys, hosted agents, and backups.
 
-## Reference(s): <br>
-- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute) <br>
-- [x402 Compute Cloud App](https://cloud.x402compute.cc) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute) <br>
-- [AI Machines Reference](references/ai-machines.md) <br>
-- [x402Compute API Reference](references/api-reference.md) <br>
-- [SGL Grid Node Operator Reference](references/node-operator.md) <br>
-- [OpenWallet / OWS Reference](references/openwallet-ows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, environment-variable guidance, API request examples, and operational checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands or configuration that manage paid cloud resources, wallet-backed payments, API keys, SSH access, and server lifecycle actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can affect cloud resources, wallet-backed payments, reusable management keys, hosted agent deployment, and agent backups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review every provisioning, deletion, backup, restore, pod action, service-install command, and payment-bearing request before execution.
+
+Risk: The skill uses sensitive wallet keys and management credentials for signing and API access.
+
+Mitigation: Use a dedicated low-balance wallet, protect COMPUTE_API_KEY and signing keys, and avoid passing secrets on command lines.
+
+Risk: The security evidence flags unsafe install and credential-handling patterns.
+
+Mitigation: Prefer SSH keys over password fallback, avoid pipe-to-shell installation without independent verification, and pin dependencies in a controlled environment.
+
+## Reference(s):
+
+- [x402 Compute documentation](https://docs.x402layer.cc/agentic-access/x402-compute)
+- [x402 Compute cloud app](https://cloud.x402compute.cc)
+- [ClawHub skill listing](https://clawhub.ai/ivaavimusic/skills/x402-compute)
+- [x402Compute API Reference](references/api-reference.md)
+- [AI Machines - One-Click GPU Running an LLM](references/ai-machines.md)
+- [Agent Pods - deploy and drive an always-on hosted agent](references/agent-pods.md)
+- [SGL Grid - Provide Compute](references/node-operator.md)
+- [SGL Processors](references/processors.md)
+- [Datasets - buy fine-tuning data with a wallet](references/datasets.md)
+- [Agent Vault - encrypted agent backup and migration](references/agent-vault.md)
+- [OpenWallet / OWS for x402-compute](references/openwallet-ows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, Python, curl, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include commands that call external compute, wallet, payment, processor, dataset, and backup services; review before execution.]
+
+## Skill Version(s):
+
+1.26.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

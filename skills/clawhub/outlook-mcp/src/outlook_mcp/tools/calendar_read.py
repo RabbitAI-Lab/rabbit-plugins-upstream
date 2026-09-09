@@ -7,6 +7,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from outlook_mcp.pagination import apply_pagination, build_request_config, wrap_nextlink
+from outlook_mcp.tools._recurrence import serialize_recurrence
 from outlook_mcp.validation import sanitize_output, validate_datetime, validate_graph_id
 
 
@@ -28,13 +29,13 @@ def _compute_calendar_range(
     tz = ZoneInfo(timezone)
 
     if after:
-        start_utc = validate_datetime(after)
+        start_utc = validate_datetime(after, timezone)
     else:
         now_local = datetime.now(tz)
         start_utc = now_local.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     if before:
-        end_utc = validate_datetime(before)
+        end_utc = validate_datetime(before, timezone)
     else:
         now_local = datetime.now(tz)
         end_local = now_local + timedelta(days=days)
@@ -65,6 +66,13 @@ def _format_event_summary(event: Any) -> dict:
     if event.end:
         end_str = f"{event.end.date_time} ({event.end.time_zone})"
 
+    # `type` distinguishes a seriesMaster from a singleInstance / occurrence /
+    # exception. Without it a listing cannot tell a recurring event from a
+    # one-off without fetching each one.
+    event_type = ""
+    if event.type is not None:
+        event_type = event.type.value if hasattr(event.type, "value") else str(event.type)
+
     return {
         "id": event.id,
         "subject": sanitize_output(event.subject or "(no subject)"),
@@ -77,6 +85,7 @@ def _format_event_summary(event: Any) -> dict:
         "organizer": sanitize_output(organizer_name),
         "response_status": response,
         "is_online": bool(event.is_online_meeting),
+        "type": event_type,
     }
 
 
@@ -113,17 +122,13 @@ def _format_event_detail(event: Any) -> dict:
     if event.online_meeting and event.online_meeting.join_url:
         online_meeting_url = event.online_meeting.join_url
 
-    recurrence = None
-    if event.recurrence:
-        recurrence = str(event.recurrence)
-
     return {
         **summary,
         "organizer": organizer,
         "body": body,
         "attendees": attendees,
         "online_meeting_url": online_meeting_url,
-        "recurrence": recurrence,
+        "recurrence": serialize_recurrence(event.recurrence),
         "categories": list(event.categories or []),
     }
 
@@ -133,7 +138,9 @@ def _format_event_concise(event: Any) -> dict:
 
     Keeps: id, subject, start, end, location, is_all_day, is_organizer,
     is_online_meeting, attendees_count. Drops: body, organizer (object),
-    response_status, categories, full attendees list.
+    response_status, categories, full attendees list, and `type` — concise
+    mode is for day-at-a-glance scans where the series/one-off distinction
+    isn't worth the tokens; use the normal listing when it is.
     """
     start_str = ""
     if event.start:

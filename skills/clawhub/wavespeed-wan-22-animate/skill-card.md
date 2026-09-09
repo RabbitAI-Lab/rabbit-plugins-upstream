@@ -1,42 +1,63 @@
-## Description: <br>
-Animate characters from images using driving videos with WaveSpeed AI's Wan 2.2 Animate model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Animates characters from images using driving videos with WaveSpeed AI's Wan 2.2 Animate model, supporting animate and replace modes with outputs up to 120 seconds at 480p or 720p.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to generate WaveSpeed AI calls that animate a character from an image with a driving video, either by transferring motion or replacing the video subject. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using this skill can send selected prompts, images, videos, or media URLs to WaveSpeed AI and may incur generation costs. <br>
-Mitigation: Use a trusted WaveSpeed account, avoid sensitive media unless provider terms are acceptable, and monitor API usage. <br>
-Risk: API keys may be exposed if copied into source files, prompts, or logs. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret manager and avoid committing credentials. <br>
-Risk: Untrusted media URLs can introduce privacy or content-handling risk. <br>
-Mitigation: Use trusted image and video sources and validate URLs before sending them to the provider. <br>
+## Use Case:
 
+External users, developers, and creative operators use this skill to generate guidance and commands for animating a still character image from a driving video or replacing a video subject with an image character through WaveSpeed AI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-wan-22-animate) <br>
-- [WaveSpeed API keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to produce WaveSpeed API usage examples, parameter guidance, and security notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Images, videos, prompts, and generated outputs may be uploaded to and processed by WaveSpeed AI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that the user has permission to process, review the provider's data terms, and avoid confidential, biometric, regulated, or proprietary media unless approved.
+
+Risk: The skill relies on third-party npm CLI or MCP tooling for execution.
+
+Mitigation: Install the tools only in environments where third-party CLI code is acceptable, avoid running them as root, and keep authentication scoped to the intended WaveSpeed account.
+
+Risk: API credentials could be exposed if copied into chat or commands are mishandled.
+
+Mitigation: Use `wavespeed login` or `WAVESPEED_API_KEY` in the environment, and do not ask users to paste API keys into chat.
+
+Risk: Untrusted or unintended media URLs could be submitted to the service.
+
+Mitigation: Pass only user-provided media URLs or outputs from previous trusted runs, and keep model inputs limited to documented parameters.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-wan-22-animate)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed access key page](https://wavespeed.ai/accesskey)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with bash command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include CLI commands, MCP tool guidance, model parameter choices, pricing notes, and output URL handling.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence; artifact frontmatter reports 2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

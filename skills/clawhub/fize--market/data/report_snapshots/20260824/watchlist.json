@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "dataset": "watchlist_data",
+  "target_date": "20260824",
+  "source": "local watchlist + AKShare.stock_zh_a_hist",
+  "retrieved_at": "2026-08-26T11:50:09+08:00",
+  "status": "ready",
+  "checks": [
+    {
+      "name": "all_stocks_represented",
+      "passed": true,
+      "detail": "配置 1，返回 1 个状态"
+    }
+  ],
+  "data": {
+    "configured": true,
+    "ready_count": 0,
+    "unavailable_count": 1,
+    "stocks": {
+      "000001": {
+        "status": "provider_error",
+        "error": "bad kline",
+        "available_rows": 0,
+        "kline": [],
+        "technical": []
+      }
+    }
+  },
+  "primary_provider": "iwencai",
+  "provider_used": "akshare",
+  "fallback": true,
+  "fallback_reason": "schema invalid",
+  "warnings": [
+    {
+      "code": "IWENCAI_FALLBACK",
+      "message": "问财数据获取失败，当前已整批降级使用 AKShare：schema invalid"
+    }
+  ]
+}

@@ -1,50 +1,71 @@
-## Description: <br>
-Google Meet API integration with managed OAuth for creating meeting spaces, listing conference records, and managing meeting participants. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Meet API integration with managed OAuth for creating meeting spaces, listing conference records, and managing meeting participants through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation agents use this skill to access Google Meet through Maton-managed OAuth, including meeting spaces, conference records, participants, recordings, and transcripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Google Meet meeting data through Maton-managed OAuth, including participants, recordings, and transcripts. <br>
-Mitigation: Install only when Maton is trusted to broker OAuth access, keep MATON_API_KEY private, and retrieve meeting data only with a legitimate need and appropriate consent. <br>
-Risk: Multiple connected Google accounts can cause requests to target the wrong account. <br>
-Mitigation: Select the intended connection explicitly with the Maton-Connection header when more than one Google Meet connection is available. <br>
-Risk: Create, update, delete, or conference-ending operations can change Google Meet resources. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing any write operation. <br>
+## Use Case:
 
+Developers and agent operators use this skill to access Google Meet resources through Maton-managed OAuth, including meeting spaces, conference records, participant data, recordings, and transcripts. It is intended for read-first API workflows with explicit confirmation before new connections or write operations.
 
-## Reference(s): <br>
-- [ClawHub Google Meet skill page](https://clawhub.ai/byungkyu/skills/google-meet) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Google Meet API overview](https://developers.google.com/meet/api/reference/rest) <br>
-- [Google Meet spaces reference](https://developers.google.com/meet/api/reference/rest/v2/spaces) <br>
-- [Google Meet conference records reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords) <br>
-- [Google Meet participants reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.participants) <br>
-- [Google Meet recordings reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.recordings) <br>
-- [Google Meet transcripts reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.transcripts) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and a MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can access Google Meet account data through a Maton gateway connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after confirming trust in Maton and connect only the Google Meet account needed for the task.
+
+Risk: Long-lived API keys can be exposed through environment variables, logs, command history, or child processes.
+
+Mitigation: Prefer OAuth login, avoid printing or persisting credentials, and rotate any key that was exposed.
+
+Risk: Write operations or connection changes can modify meeting spaces or account state.
+
+Mitigation: Default to read and list calls, verify the target account and resource, and require explicit user approval before POST, PUT, PATCH, DELETE, or connection creation.
+
+Risk: Multiple Maton profiles or Google Meet connections can route a request to the wrong account.
+
+Mitigation: Specify the intended profile or connection when more than one exists and confirm the target before writes.
+
+## Reference(s):
+
+- [ClawHub Google Meet Skill](https://clawhub.ai/byungkyu/skills/google-meet)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Meet API Overview](https://developers.google.com/meet/api/reference/rest)
+- [Google Meet Spaces](https://developers.google.com/meet/api/reference/rest/v2/spaces)
+- [Google Meet Conference Records](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords)
+- [Google Meet Participants](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.participants)
+- [Google Meet Recordings](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.recordings)
+- [Google Meet Transcripts](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.transcripts)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and Python or JavaScript code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected Google Meet account; Google Meet and Maton rate limits apply.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

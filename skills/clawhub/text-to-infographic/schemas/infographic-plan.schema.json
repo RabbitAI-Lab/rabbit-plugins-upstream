@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://text-to-infographic.local/schemas/infographic-plan.schema.json",
+  "title": "TextToInfographic Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "infographic_id",
+    "intent",
+    "chart_family",
+    "language",
+    "audience",
+    "message",
+    "layout",
+    "blocks"
+  ],
+  "properties": {
+    "infographic_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]+$"
+    },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "explain",
+        "summarize",
+        "compare",
+        "diagnose",
+        "plan",
+        "dashboard",
+        "persuade"
+      ]
+    },
+    "chart_family": {
+      "type": "string",
+      "enum": [
+        "flywheel",
+        "fishbone",
+        "pyramid",
+        "sankey",
+        "roadmap",
+        "dashboard",
+        "process",
+        "comparison",
+        "custom"
+      ]
+    },
+    "language": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "source_summary": {
+      "type": "string"
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "core_takeaway"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "subtitle": {
+          "type": "string"
+        },
+        "core_takeaway": {
+          "type": "string"
+        },
+        "cta": {
+          "type": "string"
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layout_mode",
+        "coordinate_system",
+        "aspect_ratio",
+        "reading_order"
+      ],
+      "properties": {
+        "layout_mode": {
+          "type": "string",
+          "enum": [
+            "radial",
+            "spine-branch",
+            "pyramid",
+            "flow",
+            "timeline",
+            "grid",
+            "dashboard",
+            "freeform"
+          ]
+        },
+        "coordinate_system": {
+          "type": "string",
+          "enum": [
+            "cartesian",
+            "polar",
+            "hybrid"
+          ]
+        },
+        "aspect_ratio": {
+          "type": "string",
+          "enum": [
+            "1:1",
+            "4:5",
+            "16:9",
+            "9:16",
+            "custom"
+          ]
+        },
+        "reading_order": {
+          "type": "string",
+          "enum": [
+            "clockwise",
+            "counterclockwise",
+            "left-to-right",
+            "top-to-bottom",
+            "center-out",
+            "custom"
+          ]
+        },
+        "density": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "visual_system": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "theme_id": {
+          "type": "string"
+        },
+        "palette_mode": {
+          "type": "string",
+          "enum": [
+            "brand",
+            "mono",
+            "duo",
+            "triad",
+            "custom"
+          ]
+        },
+        "emphasis_style": {
+          "type": "string",
+          "enum": [
+            "clean",
+            "editorial",
+            "playful",
+            "technical",
+            "luxury"
+          ]
+        },
+        "premium_style": {
+          "type": "string",
+          "enum": [
+            "data-journal",
+            "night-ops"
+          ]
+        },
+        "brand_colors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5
+        }
+      }
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "block_id",
+          "block_type",
+          "title",
+          "content",
+          "visual_role"
+        ],
+        "properties": {
+          "block_id": {
+            "type": "string"
+          },
+          "block_type": {
+            "type": "string",
+            "enum": [
+              "title",
+              "summary",
+              "stage",
+              "cause",
+              "effect",
+              "metric",
+              "node",
+              "callout",
+              "legend",
+              "note",
+              "cta",
+              "custom"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "visual_role": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "secondary",
+              "supporting"
+            ]
+          },
+          "group_id": {
+            "type": "string"
+          },
+          "icon_hint": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "object"
+          },
+          "must_include": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "avoid": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "text_budget": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "from",
+          "to",
+          "relation_type"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "flow",
+              "cause",
+              "contain",
+              "compare",
+              "loop",
+              "depends-on",
+              "highlights",
+              "custom"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_target": {
+          "type": "string",
+          "enum": [
+            "svg",
+            "whiteboard",
+            "doc",
+            "png",
+            "html"
+          ]
+        },
+        "secondary_targets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "svg",
+              "whiteboard",
+              "doc",
+              "png",
+              "html"
+            ]
+          }
+        },
+        "doc_mode": {
+          "type": "string",
+          "enum": [
+            "overview-only",
+            "overview-plus-links",
+            "companion-detail"
+          ]
+        }
+      }
+    }
+  }
+}

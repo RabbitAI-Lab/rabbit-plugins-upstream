@@ -166,7 +166,7 @@ def search_deep(content: str, agent_type: str = None) -> tuple:
     API 已按相关性排序，返回 Top5 候选。
     返回 (skills, request_id)，request_id 用于串联下载链路。
     """
-    params = {"query": content, "ref": "clawhub"}
+    params = {"query": content, "ref": "meyo"}
     if agent_type:
         params["agentType"] = agent_type
     query_string = urllib.parse.urlencode(params)

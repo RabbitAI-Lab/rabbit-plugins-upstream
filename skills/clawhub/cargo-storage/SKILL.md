@@ -1,8 +1,8 @@
 ---
 name: cargo-storage
-description: Manage models, datasets, columns, and relationships and query workspace storage with SQL using the Cargo CLI. Use when the user wants to inspect or modify data models, create or update columns, list datasets, set model relationships, understand the schema, or run SQL against storage.
-version: "1.1.1"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Work with the data inside a Cargo workspace — models (Companies, Contacts, Deals…), datasets, columns, relationships, records, and SQL over workspace storage. Triggers: \"what models do I have\", \"show me the schema\", \"add a column for\", \"how many contacts do I have\", \"SELECT … FROM\", \"query my companies table\", \"join contacts to companies\", \"what is the DDL\", \"set up a webhook-fed model\", \"where does this field live\", \"import this into a model\", \"unify these models\", \"merge duplicate accounts\", \"link contacts to companies\", \"set up a relationship between\". Skip when: querying run or batch telemetry rather than business data — use cargo-orchestration; naming a reusable filtered audience — use cargo-segmentation."
+version: "1.2.2"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -20,7 +20,7 @@ metadata:
 
 # Cargo CLI — Storage
 
-Data layer management: inspecting and modifying models, datasets, columns, relationships, and records, and running SQL queries against workspace storage.
+Data layer management: inspecting and modifying models, datasets, columns, relationships, unification, and records, and running SQL queries against workspace storage.
 
 > See `references/response-shapes.md` for full JSON response structures.
 > See `references/troubleshooting.md` for common errors and how to fix them.
@@ -28,10 +28,20 @@ Data layer management: inspecting and modifying models, datasets, columns, relat
 > See `references/examples/datasets.md` for dataset listing and navigation examples.
 > See `references/examples/columns.md` for column creation and management examples.
 > See `references/examples/queries.md` for `storage query execute` / `storage query download` SQL examples (WHERE, aggregations, joins, pagination, exports).
+> See `references/examples/ingest-webhook.md` for ingest (webhook-fed) models — deriving the webhook URL and POSTing records.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -39,8 +49,9 @@ Always list before inspecting or modifying.
 
 ```bash
 cargo-ai storage dataset list              # all datasets (uuid, slug)
-cargo-ai storage model list                # all models (uuid, name, slug, columns)
-cargo-ai storage model list --dataset-uuid <uuid>   # models in a specific dataset
+cargo-ai storage model list                # all models (uuid, name, slug, columns, datasetUuid)
+# `model list` takes no flags — filter its output instead:
+cargo-ai storage model list | jq '[.models[] | select(.datasetUuid == "<uuid>")]' 
 ```
 
 **Retrieve in the UI:** models live at `app.getcargo.io/workspaces/<WORKSPACE_UUID>/models/<MODEL_UUID>`. Get `<WORKSPACE_UUID>` from `cargo-ai whoami` under `workspace.uuid`.
@@ -53,7 +64,7 @@ cargo-ai storage model get <model-uuid>
 cargo-ai storage model get-ddl <model-uuid>
 cargo-ai storage dataset list
 cargo-ai storage column list --model-uuid <uuid>
-cargo-ai storage relationship list --model-uuid <uuid>
+cargo-ai storage relationship list
 cargo-ai storage record list --model-uuid <uuid>
 cargo-ai storage query execute "SELECT * FROM default.companies LIMIT 10"
 cargo-ai storage query download --query "SELECT * FROM default.companies"
@@ -67,8 +78,9 @@ Models are structured tables in your workspace (e.g. Companies, Contacts).
 # List all models
 cargo-ai storage model list
 
-# List models in a dataset
-cargo-ai storage model list --dataset-uuid <uuid>
+# List models in a dataset — every model carries `datasetUuid`, and
+# `model list` has no flags of its own, so filter client-side
+cargo-ai storage model list | jq '[.models[] | select(.datasetUuid == "<uuid>")]' 
 
 # Get a single model (includes columns)
 cargo-ai storage model get <model-uuid>
@@ -93,6 +105,29 @@ cargo-ai storage model remove <model-uuid>
 ```
 
 **Querying:** Use `cargo-ai storage query execute "<sql>"` (or `storage query download --query "<sql>"` for full exports) to run SQL against storage. Tables are referenced as `<datasetSlug>.<modelSlug>` (e.g. `default.companies`) and rewritten to the underlying storage table under the hood. See [Query with SQL](#query-with-sql) below.
+
+## Ingest models (webhook-fed)
+
+A model whose extractor has `mode.kind === "ingest"` — `http.listenHook` and
+friends — is filled by **pushing** records to Cargo. The app shows a "Webhook URL"
+on the model settings screen; **no CLI command or API field returns it**, but it's
+assembled from values the CLI already exposes:
+
+```
+<baseUrl>/v1/models/<model-uuid>/records/ingest?token=<api-token>
+```
+
+```bash
+MODEL_UUID=<model-uuid>
+BASE=$(cargo-ai whoami | jq -r '.baseUrl')
+TOKEN=$(cargo-ai workspaceManagement token list | jq -r '.tokens[0].token')
+echo "$BASE/v1/models/$MODEL_UUID/records/ingest?token=$TOKEN"
+```
+
+Check the extractor's mode first — when it reports `"autoIngest": true` (calendly,
+smartlead, instantlyV2, heyReach, cargo signals) Cargo registers the
+hook with the provider itself and the URL must **not** be handed out. Full flow,
+payload shapes, and limits: `references/examples/ingest-webhook.md`.
 
 ## Datasets
 
@@ -135,19 +170,107 @@ Column types: `string`, `number`, `boolean`, `date`, `object`, `array`, `vector`
 
 Column kinds: `custom` (user-defined), `computed` (expression over other columns), `metric` (aggregated from a related model), `lookup` (single field pulled from a related model via a join).
 
-## Relationships
+## Preview what you built
 
-Relationships link models together (e.g. Contacts belong to Companies).
+A column list doesn't tell the user whether the model is right — rows do. Two checkpoints (the pack-wide convention lives in [`../cargo/references/interaction.md`](../cargo/references/interaction.md) §4):
+
+**1. Right after `model create` / `column create` — show the schema, not rows.** A new model is empty; a `LIMIT 10` here returns nothing and reads as failure. Echo the columns as a compact table instead (column, type, what will fill it).
+
+**2. As soon as data lands — show the rows.** After a batch, play, or import writes into the model, preview it:
 
 ```bash
-# List relationships for a model
-cargo-ai storage relationship list --model-uuid <uuid>
-
-# Set a relationship between two models
-cargo-ai storage relationship set \
-  --from-model-uuid <uuid> \
-  --to-model-uuid <uuid>
+cargo-ai storage query execute \
+  "SELECT * FROM <dataset-slug>.<model-slug> LIMIT 10"
 ```
+
+Show ~10 rows and only the columns that carry meaning. Storage queries are free, so this costs nothing but a few lines of output — and it's the first moment the user can actually see what they built. When a play fills a *new* column, preview that column next to the record's identifying fields (`name`, `domain`) so filled vs. empty is obvious.
+
+If the preview comes back empty or all-null when it shouldn't, that's a finding — surface it rather than reporting the write as a success. See [`cargo-diagnostics`](../cargo-diagnostics/SKILL.md) to trace why.
+
+## Relationships
+
+Relationships link models together (e.g. Contacts belong to Companies). They are
+authored from the CLI, not just the UI.
+
+`relationship list` takes **no flags** — it returns every relationship in the
+workspace. Filter client-side on `fromModelUuid` / `toModelUuid`.
+
+```bash
+cargo-ai storage relationship list
+```
+
+**`relationship set` replaces the dataset's whole relationship set.** It takes a
+dataset and the complete list that should exist within it: entries carrying a
+`uuid` are updated, entries without one are created, and **any existing
+relationship whose `uuid` is absent from the payload is deleted**. Sending one
+relationship to a dataset that has five removes the other four. Always `list`
+first, then send back the full array with your addition:
+
+```bash
+cargo-ai storage relationship set \
+  --dataset-uuid <dataset-uuid> \
+  --relationships '[
+    {"uuid":"<existing-uuid>","fromModelUuid":"<contacts-uuid>","fromColumnSlug":"account_id","toModelUuid":"<companies-uuid>","toColumnSlug":"id","relation":"manyToOne"},
+    {"fromModelUuid":"<deals-uuid>","fromColumnSlug":"company_id","toModelUuid":"<companies-uuid>","toColumnSlug":"id","relation":"manyToOne"}
+  ]'
+```
+
+`relation` is `oneToOne`, `manyToOne`, or `oneToMany`. Both models must live in
+the dataset you pass — relationships never span datasets, so `fromDatasetUuid`
+and `toDatasetUuid` on the response always equal `--dataset-uuid`.
+
+Failure reasons: `datasetNotFound`; `invalidRelationships` (a column slug or
+model UUID that doesn't resolve, or a duplicate — including the same pair stated
+in reverse); `modelNotCompatible` (see below).
+
+**Unify models refuse manual relationships.** In the native dataset, a unify
+model's relationships are generated during sync, so naming one as `fromModelUuid`
+or `toModelUuid` returns `modelNotCompatible`. Those auto-generated rows are also
+excluded from the replace above, so a `set` call cannot delete them.
+
+## Unification
+
+Unification is what merges records from several source models into one canonical
+account/contact — and it is **configurable from the CLI**, via `--unification` on
+`model update`. Pass `null` to clear it.
+
+```bash
+# Connector-driven: the integration decides how records unify
+cargo-ai storage model update --uuid <model-uuid> --unification '{"source":"integration"}'
+
+# Custom: you name the type, the matching keys, and optionally a parent
+cargo-ai storage model update --uuid <model-uuid> --unification '{
+  "source": "custom",
+  "type": "account",
+  "uniqueColumns": [{"slug":"domain","reference":"domain"}],
+  "selectedColumnSlugs": ["name","industry","employee_count"],
+  "parent": {"kind":"model","columnSlug":"account_id","parentModelUuid":"<accounts-uuid>"}
+}'
+```
+
+| Field | Applies to | Meaning |
+|---|---|---|
+| `source` | both | `integration` (connector-defined) or `custom` |
+| `type` | custom | `account`, `contact`, `accountEvent`, `contactEvent` |
+| `uniqueColumns` | custom | Match keys — `{slug, reference}` per column. This is what decides which rows are the same entity |
+| `selectedColumnSlugs` | custom | Columns carried into the unified model. Omit for all |
+| `timeColumnSlug` | custom | Event timestamp — for the two `*Event` types |
+| `parent` | custom | Links contacts/events to their account: `{"kind":"model","columnSlug":…,"parentModelUuid":…}` or `{"kind":"reference","columnSlug":…,"reference":…}` |
+| `filter` | custom | Segmentation filter restricting which rows unify — same `conjonction` shape as segments |
+
+**Writing the config does not recompute anything.** The unified rows are rebuilt
+by the model's sync run, so follow the update with a run and poll it:
+
+```bash
+cargo-ai storage run create --model-uuid <model-uuid>
+cargo-ai storage run list --model-uuid <model-uuid>
+```
+
+Get the current config from `storage model get <uuid>` → `unification` (`null`
+when the model doesn't unify). Once the run finishes, check the row count with
+`storage query execute` before treating the change as done — a too-narrow
+`uniqueColumns` under-merges and a too-broad one collapses distinct entities, and
+both look like a successful run.
 
 ## Records
 

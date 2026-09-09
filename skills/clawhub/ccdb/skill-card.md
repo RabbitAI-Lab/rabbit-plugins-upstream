@@ -1,44 +1,56 @@
-## Description: <br>
-ccdb helps agents query Carbonstop CCDB carbon emission factor data through the pinned carbonstop-ccdb CLI for keyword search, structured JSON retrieval, and multi-keyword comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Carbonstop CCDB helps agents search, compare, and match carbon emission factors for materials, energy, transport, packaging, food, product carbon footprint, enterprise carbon accounting, and lifecycle assessment tasks.
 
-## Publisher: <br>
-[lijihua2017](https://clawhub.ai/user/lijihua2017) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[carbonstop-official](https://clawhub.ai/user/carbonstop-official)
 
-## Use Case: <br>
-Developers and sustainability analysts use this skill to find carbon emission factors by keyword, region, or year, then compare factors or use structured results in carbon calculations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs a pinned npm CLI and queries an external CCDB API. <br>
-Mitigation: Run the CLI in a sandbox where possible and verify the npm package version or registry hash before use. <br>
-Risk: Emission factors can be incorrect for a calculation if the wrong region, year, unit, or source is selected. <br>
-Mitigation: Confirm the intended region, year, unit, and source before using any returned factor in carbon accounting or compliance workflows. <br>
-Risk: Formatted CLI output may be less reliable for arithmetic than structured records. <br>
-Mitigation: Use JSON output for calculations and inspect units before multiplying by activity data. <br>
+## Use Case:
 
+External sustainability, lifecycle assessment, product carbon footprint, and enterprise carbon accounting practitioners use this skill to guide CCDB CLI setup, authentication, emission factor lookup, detail review, and factor suitability comparisons.
 
-## Reference(s): <br>
-- [ClawHub ccdb skill page](https://clawhub.ai/lijihua2017/ccdb) <br>
-- [carbonstop-ccdb npm package](https://www.npmjs.com/package/carbonstop-ccdb) <br>
-- [Carbonstop CCDB CLI source](https://github.com/carbonstop/skills/tree/main/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs pinned npx carbonstop-ccdb@1.0.1; requires Node.js 18 or newer and external CCDB API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.6 (source: server release metadata) <br>
+Risk: The skill directs users to install a third-party CLI globally, which can modify the user's Node.js tool environment and inherit that environment's trust boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated environment where possible, prefer a pinned reviewed ccdb-cli version, and verify checksums or signatures before installation.
+
+Risk: The skill supports API key authentication and could expose credentials if users paste secrets into chat or command arguments.
+
+Mitigation: Inject API keys through controlled secret or environment configuration and avoid printing, storing, or passing credentials in chat-visible commands.
+
+## Reference(s):
+
+- [ClawHub ccdb Skill Page](https://clawhub.ai/carbonstop-official/skills/ccdb)
+- [CCDB CLI Repository](https://github.com/carbonstop/ccdb-cli)
+- [CCDB CLI Configuration](https://github.com/carbonstop/ccdb-cli/blob/main/docs/CONFIGURATION.md)
+- [CCDB CLI Latest Release](https://github.com/carbonstop/ccdb-cli/releases/latest)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with CLI commands, JSON command examples, links, and concise factor-selection rationale.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include CCDB factor links, authentication status guidance, troubleshooting notes, and cautions for restricted values or credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,58 @@
-## Description: <br>
-Prepare Dataify builder requests for the x.com scraper family rooted at twitter_profile_by-profileurl, including tool selection, saved parameter lookup, and generation of a scraperapi.dataify.com/builder curl request that uses DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect an X/Twitter profile from a known profile URL. Do not use for posts, keyword search, or arbitrary X URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to prepare authenticated Dataify builder curl requests for x.com scraping tools after choosing one supported tool and supplying any required spider parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DATAIFY_API_TOKEN can grant authenticated access to Dataify's scraper builder if exposed. <br>
-Mitigation: Treat the token as a secret, use a credential manager or session-scoped environment variable on shared machines, and avoid pasting token values into shared logs or prompts. <br>
-Risk: The generated curl command authenticates to scraperapi.dataify.com and submits the selected spider parameters. <br>
-Mitigation: Review the generated command, endpoint, selected tool, and spider_parameters before running it. <br>
+## Use Case:
 
+External users and developers use this skill to collect X/Twitter profile data from a known profile URL through Dataify and receive the completed result. It is not intended for posts, keyword search, or arbitrary X URLs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-twitter-profile-by-profileurl) <br>
-- [Dataify publisher profile](https://clawhub.ai/user/dataify-server) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
-- [Tool parameter catalog](references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash or PowerShell commands and generated curl requests] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated requests include spider_name, spider_id, spider_parameters, spider_errors, file_name, and an Authorization header that references DATAIFY_API_TOKEN.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence release.version) <br>
+Risk: The security verdict is suspicious because the skill exposes broader scraping modes than the stated profile-URL purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected Dataify tool before execution and use the profile-URL mode only unless the user explicitly requests another supported mode.
+
+Risk: The skill requires a Dataify API token and submits scraping jobs to Dataify.
+
+Mitigation: Provide the token only through the environment, avoid persistent token storage on shared or synced machines, and do not paste the token into chat.
+
+Risk: The security guidance identifies import-path and query-string token handling concerns.
+
+Mitigation: Prefer a release that removes the external import path and query-string token use before deploying in higher-trust environments.
+
+## Reference(s):
+
+- [Tool parameter catalog](references/tool-params.json)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-twitter-profile-by-profileurl)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and may submit paid Dataify scraping jobs.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -12,7 +12,10 @@
 // document order. Transitions are NOT written here — the transitions injector
 // mutates this file afterward (data-start/duration/track-index + GSAP).
 //
-// Track lanes (same-track time-overlap is illegal — lint timeline_track_too_dense):
+// Track lanes. Same-track time-overlap is this workflow's own assembly convention,
+// not a framework rule: the render never reads data-track-index, and no lint rule
+// checks overlap (timeline_track_too_dense counts elements per lane for readability).
+// The convention exists because the frame injector below ping-pongs 0/1 for overlaps:
 //   1      frame sub-comp clips (sequential; the injector 0/1-ping-pongs for overlaps)
 //   2      captions sub-comp clip (full-duration overlay, on top of frames)
 //   10     per-frame voice <audio>
@@ -64,6 +67,9 @@ const flag = (name, def) => {
   const i = argv.indexOf(`--${name}`);
   return i >= 0 && i + 1 < argv.length ? argv[i + 1] : def;
 };
+// Deliberate escape from the bgm_pending refusal below — for previewing while a detached
+// generate is still running. Off by default so a silent film can't ship by accident.
+const allowPendingBgm = argv.includes("--allow-pending-bgm");
 function die(msg) {
   console.error(`✗ assemble-index.mjs: ${msg}`);
   process.exit(1);
@@ -79,7 +85,7 @@ function ensureBgmCovers(relPath, hyperframesDir, total) {
   const abs = join(hyperframesDir, relPath);
   const probe = spawnSync(
     "ffprobe",
-    ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", abs],
+    ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", "--", abs],
     { encoding: "utf8" },
   );
   if (probe.status !== 0) return { looped: false, short: false, reason: "ffprobe unavailable" };
@@ -213,7 +219,7 @@ function guardFrame(html, label) {
     for (let i = 1; i < list.length; i++) {
       if (list[i].start < list[i - 1].end - EPS) {
         errors.push(
-          `${label}: clips on track ${track} overlap (one ends at ${r3(list[i - 1].end)}s, the next starts at ${r3(list[i].start)}s) — same-track time-overlap causes a render conflict. Put them on distinct data-track-index lanes or fix their windows.`,
+          `${label}: clips on track ${track} overlap (one ends at ${r3(list[i - 1].end)}s, the next starts at ${r3(list[i].start)}s). This workflow's injector assumes one clip per lane at a time. The render itself tolerates the overlap; put them on distinct data-track-index lanes or fix their windows.`,
         );
         break; // one report per track is enough
       }
@@ -355,7 +361,14 @@ let audio = { bgm: null, voices: [], sfx: [] };
 if (existsSync(audioMetaPath)) {
   try {
     const parsed = JSON.parse(readFileSync(audioMetaPath, "utf8"));
-    audio = { bgm: parsed.bgm ?? null, voices: parsed.voices ?? [], sfx: parsed.sfx ?? [] };
+    // bgm_pending rides along: without it this step cannot tell a detached generate that has
+    // not landed yet from a film that is silent by design, and it would build the silent one.
+    audio = {
+      bgm: parsed.bgm ?? null,
+      bgm_pending: !!parsed.bgm_pending,
+      voices: parsed.voices ?? [],
+      sfx: parsed.sfx ?? [],
+    };
   } catch (e) {
     die(`audio_meta.json parse: ${e.message}`);
   }
@@ -437,6 +450,20 @@ if (audio.bgm?.path) {
   } else {
     anomalies.push(`bgm ${audio.bgm.path} not on disk — skipped`);
   }
+} else if (audio.bgm_pending) {
+  // The distinction the flag exists to make. A warning is not enough: assemble is re-run on
+  // rework long after the audio step's own warning scrolled past, and it would happily build a
+  // silent film from a snapshot whose JSON says the bed is still generating.
+  if (!allowPendingBgm) {
+    die(
+      "audio_meta.json says bgm_pending — the music bed is still generating and is NOT in this " +
+        "assembly. Wait for the track, re-run the audio step, then assemble again. To assemble a " +
+        "deliberately silent preview anyway, pass --allow-pending-bgm.",
+    );
+  }
+  anomalies.push(
+    "bgm still generating (bgm_pending) — assembled without a bed per --allow-pending-bgm",
+  );
 }
 
 // (track 2) captions — captions.mjs writes this or legally skips; key off existence.

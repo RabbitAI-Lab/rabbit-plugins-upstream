@@ -1,46 +1,67 @@
-## Description: <br>
-fal.ai API integration with managed API key authentication for running AI models for image generation, video generation, audio processing, and related fal.ai workloads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+fal.ai API integration through Maton for running AI models such as image generation, video generation, upscaling, transcription, and audio workflows with managed authentication.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to call fal.ai queue endpoints through Maton-managed authentication for image generation, video creation, image upscaling, text-to-speech, transcription, and other model inference tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts, media URLs, and model parameters to external Maton and fal.ai service boundaries. <br>
-Mitigation: Avoid sending sensitive prompts or media unless the user accepts those service boundaries. <br>
-Risk: MATON_API_KEY and returned connection or session URLs can grant access to managed API connections. <br>
-Mitigation: Keep credentials and connection URLs private, and avoid pasting them into shared logs or transcripts. <br>
-Risk: The documented workflows include state-changing actions such as creating, deleting, and canceling connections or model requests. <br>
-Mitigation: Review those actions with the user before running them. <br>
+## Use Case:
 
+Developers and external users use this skill to submit, monitor, cancel, and retrieve fal.ai model inference jobs through Maton-managed authentication. It is suited for agent workflows that generate images or video, upscale images, transcribe or synthesize audio, and call other fal.ai queue endpoints.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/fal-ai-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [fal.ai Documentation](https://fal.ai/docs) <br>
-- [fal.ai Model Gallery](https://fal.ai/models) <br>
-- [fal.ai Queue API Reference](https://fal.ai/docs/model-endpoints/queue) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, bash, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a configured fal.ai connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can submit billable fal.ai model requests through a connected Maton account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the model, payload, target connection, and expected effect before submitting inference or other write requests.
+
+Risk: The API passthrough can reach endpoints beyond the examples when the connected account is authorized for them.
+
+Mitigation: Default to read and list calls, use the intended fal.ai endpoint path explicitly, and require user approval for every POST, PUT, PATCH, or DELETE request.
+
+Risk: Raw API-key fallback increases exposure if the CLI cannot be used.
+
+Mitigation: Prefer OAuth through the Maton CLI; when raw HTTP is unavoidable, keep the key in the process environment only, never print or persist it, and send it only to api.maton.ai.
+
+Risk: API responses may include user prompts, generated media URLs, request identifiers, or other sensitive task data.
+
+Mitigation: Return only the fields needed for the user task and avoid logging or storing full raw responses unless the user explicitly requests it.
+
+## Reference(s):
+
+- [fal.ai Documentation](https://fal.ai/docs)
+- [fal.ai Model Gallery](https://fal.ai/models)
+- [fal.ai Queue API Reference](https://fal.ai/docs/model-endpoints/queue)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce API request payloads, polling guidance, connection-management steps, and concise result summaries.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

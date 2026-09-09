@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.1 — 2026-09-08
+
+Registry-only release: the ClawHub display name is `mumo` again (the 0.6.0 publish omitted `--name`, and the CLI derived "Mumo Openclaw" from the folder). No skill content changes.
+
+## 0.6.0 — 2026-09-08
+
+Coordinated client release rendered from the mumo-mcp 0.6.0 baseline.
+
+- `SKILL.md`: `share_session` in the tools table (OpenClaw sets no tool allowlist, so the tool was already reachable — this is the documentation catching up); `wait_for_round` one-id form; intro names the current model families and the typed cross-model reactions.
+- `references/operating-notes.md` re-synced with the baseline.
+- README tool list and intro updated.
+
+## 0.5.0 — 2026-07-04
+
+Reaction-visibility model + per-round Takeaway.
+
+- New "Reactions are in the ledger, responses are on the record" section: participants never see each other's reactions — each model weaves its own prior reactions into its next response, and the claim map is the moderator's privileged preview. Moderator snippets are the one path that puts ledger content directly in front of the panel.
+- Pacing note in "When to continue": positions develop across rounds — a reaction gets woven into the next round's prose, which draws reactions of its own a round later.
+- Takeaway: `takeaway: true` (create + append) generates `round_takeaway` (`bottom_line` + `items[]`), the per-round summary. New `references/takeaway.md` (replaces `references/recap.md`).
+
 ## 0.4.0 — 2026-06-19
 
 Skill triggering + prompt-voice updates.

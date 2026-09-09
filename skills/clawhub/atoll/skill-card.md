@@ -1,45 +1,69 @@
-## Description: <br>
-Atoll helps agents interact with Atoll project management through CLI, API, and MCP guidance for tasks, projects, goals, KPIs, initiatives, milestones, comments, members, teams, labels, dependencies, automation, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Atoll for project, issue, goal, KPI, initiative, milestone, comment, dependency, runner, and workflow operations. Activate for Atoll planning, execution, project-management, local-runner, or integration requests.
 
-## Publisher: <br>
-[doubledipcode](https://clawhub.ai/user/doubledipcode) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[doubledipcode](https://clawhub.ai/user/doubledipcode)
 
-## Use Case: <br>
-Developers, teams, and external agents use Atoll to orient on project state, manage tasks and comments, and keep goals, KPIs, initiatives, and milestones synchronized through the CLI, HTTP API, or MCP server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through creating, updating, commenting on, archiving, and in some roles deleting Atoll business data. <br>
-Mitigation: Create least-privilege Atoll agent keys scoped to the intended org and project, and review admin, billing, webhook, automation, and permanent-delete actions before execution. <br>
-Risk: Prompts, comments, issue descriptions, or draft files could accidentally expose API keys, bearer tokens, cookies, or other secret values. <br>
-Mitigation: Keep secrets out of model-visible text, use secret references for integrations, and rotate any credential that was pasted into chat or generated artifacts. <br>
-Risk: Direct CLI or API operations may change project-management records immediately when run with valid credentials. <br>
-Mitigation: Start with read-only orientation commands, use dry-run options where available, and require explicit human review for bulk changes, admin-scoped operations, and permanent deletion. <br>
+## Use Case:
 
+Developers and external agent users use this skill to connect an agent to Atoll for planning and project-management workflows, including issue, goal, KPI, initiative, milestone, runner, and workflow operations.
 
-## Reference(s): <br>
-- [Atoll Skill on ClawHub](https://clawhub.ai/doubledipcode/skills/atoll) <br>
-- [Atoll API Endpoint Reference](references/api-endpoints.md) <br>
-- [Atoll API Field Reference](references/api-fields.md) <br>
-- [Atoll API Base URL](https://atollhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline bash, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Atoll API calls and CLI commands that affect project-management data when executed with credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can guide agents through Atoll project-management, runner, inbox, integration, billing, deletion, and admin workflows that may change external state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Atoll access is intended, use least-privileged profiles or OAuth grants, and keep high-impact actions limited to trusted, user-directed workflows.
+
+Risk: Atoll API keys, OAuth context, prompts, logs, local paths, or other sensitive payloads could be exposed if copied into commands, chats, comments, tickets, scripts, or attention requests.
+
+Mitigation: Store credentials only in approved local configuration or environment variables, avoid pasting real keys into shared content, and keep attention requests, comments, evidence, and feedback free of sensitive data.
+
+Risk: Ambiguous state-changing operations or retries could duplicate work or apply changes against stale workflow state.
+
+Mitigation: Resolve actor, organization, project, and workflow state from live data; make the smallest required write; read back the changed resource; and verify the stored and user-visible result.
+
+## Reference(s):
+
+- [Atoll skill page](https://clawhub.ai/doubledipcode/skills/atoll)
+- [Atoll base URL](https://atollhq.com)
+- [Authentication and profiles](references/authentication-and-profiles.md)
+- [CLI operations](references/cli-operations.md)
+- [Local runner](references/local-runner.md)
+- [Strategy and heartbeat](references/strategy-and-heartbeat.md)
+- [Execution and human attention](references/execution-and-attention.md)
+- [Integrations and advanced API use](references/integrations-and-api.md)
+- [Platform rules](references/platform-rules.md)
+- [Atoll API Endpoint Reference](references/api-endpoints.md)
+- [Atoll API Field Reference](references/api-fields.md)
+- [Atoll MCP endpoint](https://atollhq.com/mcp)
+- [Atoll OAuth protected resource metadata](https://atollhq.com/.well-known/oauth-protected-resource)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline commands, JSON examples, and API or CLI references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Atoll API calls, Atoll CLI commands, and configuration snippets; state-changing guidance requires readback verification.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

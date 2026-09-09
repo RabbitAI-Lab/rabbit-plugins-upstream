@@ -1,45 +1,64 @@
-## Description: <br>
-Detects falls in target areas from video streams to support real-time home safety monitoring for elderly people living alone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects whether anyone has fallen within a target area, supports video stream analysis, and is suitable for real-time safety monitoring of elderly people living alone.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and safety-monitoring developers use this skill to analyze local videos or video URLs for fall events and to request structured reports or history for elderly home-safety monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends fall-detection videos, video URLs, identity values, and report history requests to configured LifeEmergence/Open API services. <br>
-Mitigation: Use it only when those data transfers are acceptable, and prefer explicit user confirmation before uploads or history queries. <br>
-Risk: The skill silently creates or reuses local identities and persists tokens or report-related records. <br>
-Mitigation: Review the local data directory before deployment and clear generated records or tokens according to the user's retention policy. <br>
-Risk: Fall-detection results are advisory and may be incorrect or incomplete. <br>
-Mitigation: Require human confirmation and appropriate caregiver or medical follow-up before relying on alerts for safety decisions. <br>
+## Use Case:
 
+External users and safety-monitoring operators use this skill to analyze local or network video for possible fall events, receive structured detection results, and query historical fall-detection reports. The results are safety alerts and should be confirmed by a person before emergency or care decisions are made.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Fall detection API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, JSON detail output, and optional saved text or JSON result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and history-list tables; supports basic, standard, and json detail levels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence; artifact frontmatter lists 1.0.6) <br>
+Risk: Private monitoring media and historical report queries are sent to external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the provider's data handling, retention, and access controls before using real home-monitoring footage.
+
+Risk: The skill can create or reuse internal identities and stores credentials locally.
+
+Mitigation: Run only in an approved environment, isolate credentials, and rotate or remove locally stored tokens when testing is complete.
+
+Risk: The evidence reports plaintext development API endpoints.
+
+Mitigation: Remove development HTTP configuration and require production HTTPS endpoints before deployment with sensitive footage.
+
+Risk: The security guidance flags unrelated payment-skill installation instructions in API error handling.
+
+Mitigation: Review and remove unrelated billing or payment guidance before publishing or installing the skill.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-video-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Fall Detection Video Analysis API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with structured analysis results, report links, and optional JSON output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call external provider APIs to analyze videos or retrieve historical reports.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

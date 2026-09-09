@@ -1,54 +1,64 @@
-## Description: <br>
-Build or customize an owner-only proactive companion system with a cyber-girlfriend persona, Markdown private-life context, lightweight relationship memory, and OpenClaw presence cron delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build or customize an owner-only proactive companion system with a cyber-girlfriend persona, Markdown private-life context, lightweight relationship memory, and OpenClaw presence cron delivery.
 
-## Publisher: <br>
-[kasanuowa](https://clawhub.ai/user/kasanuowa) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kasanuowa](https://clawhub.ai/user/kasanuowa)
 
-## Use Case: <br>
-External users and agent operators use this skill to configure an owner-only proactive companion that maintains persona, daily schedule, and relationship-memory files, wires OpenClaw delivery cron jobs, and validates setup or upgrades. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent proactive messaging may send content on a schedule to the wrong route or at undesired times. <br>
-Mitigation: Preview cron payloads and delivery channel, account, target, quiet hours, and pacing before enabling; keep a documented pause or removal path. <br>
-Risk: The skill requires sensitive delivery credentials or OAuth-backed runtime access. <br>
-Mitigation: Keep secrets in local configuration or environment variables, never in published defaults, and confirm the sender account before use. <br>
-Risk: Setup can read local owner context such as USER.md, session history, config files, and companion state. <br>
-Mitigation: Confirm the exact files to be read or written and import only stable identity fields needed for the owner-only companion. <br>
-Risk: Configurable healthcheck, jobs-list, and state-commit commands can execute local shell commands. <br>
-Mitigation: Review configured commands before installation and run validation in preview or dry-run mode where available. <br>
-Risk: Daily schedule and presence writing may use public web search. <br>
-Mitigation: Enable web search only after confirming that public-web lookup is acceptable for the companion's configured context. <br>
+## Use Case:
 
+External users and developers use this skill to set up an owner-only proactive companion that maintains persona and daily-life context, schedules presence messages, and delivers text or optional media through a configured OpenClaw route.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/kasanuowa/cyber-girlfriend) <br>
-- [Standard Init / Upgrade Flow](references/standard-init-upgrade-flow.md) <br>
-- [Configuration](references/configuration.md) <br>
-- [Turn Contract](references/contract-schema.md) <br>
-- [First-Time Setup Guide](references/first-time-setup.md) <br>
-- [Presence Integration](references/presence-integration.md) <br>
-- [Private Life Layer](references/private-life-layer.md) <br>
-- [Required Events And Cron](references/required-events-and-cron.md) <br>
-- [Script Contract Migration](references/script-contract-v2-migration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with JSON configuration examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local setup or upgrade guidance for OpenClaw-based proactive companion delivery.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: frontmatter and server release evidence) <br>
+Risk: Scheduled outbound companion messages or media may be sent to a configured owner target.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the delivery channel, sender account, cron schedules, pacing, and quiet hours before enabling delivery; require explicit confirmation before the first verification message.
+
+Risk: The skill can create local state and use local OpenClaw or WeChat session or credential data for delivery.
+
+Mitigation: Keep runtime-specific values in local configuration or environment variables, maintain owner-only scope, and validate the install before use.
+
+Risk: WeChat fallback behavior may retry delivery when a configured channel cannot be resolved.
+
+Mitigation: Review the fallback route before enabling it and use the reversible pause path when outbound delivery should stop without deleting local state.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/kasanuowa/skills/cyber-girlfriend)
+- [Standard Init Upgrade Flow](references/standard-init-upgrade-flow.md)
+- [Configuration](references/configuration.md)
+- [Contract Schema](references/contract-schema.md)
+- [First-Time Setup Guide](references/first-time-setup.md)
+- [Presence Integration](references/presence-integration.md)
+- [Required Events And Cron](references/required-events-and-cron.md)
+- [Private Life Layer](references/private-life-layer.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with JSON configuration, shell commands, and local Markdown state files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local companion state and schedule recurring OpenClaw jobs after owner confirmation.]
+
+## Skill Version(s):
+
+2.2.0 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

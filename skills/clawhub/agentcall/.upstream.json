@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agentcall",
   "slug": "agentcall",
   "ownerHandle": null,
-  "version": "2.12.0",
-  "updatedAt": 1781142207267,
-  "contentHash": "f71f55d29d36d016707f4cb20df937220722b5f14461cf074789a68a82b19c50",
-  "fetchedAt": "2026-07-26T18:29:53.540Z"
+  "version": "2.13.1",
+  "updatedAt": 1788890596674,
+  "contentHash": "8bc9e1746704ad1144710e8298c246fb058068120338ba5415b8b21a81e2f5ce",
+  "fetchedAt": "2026-09-09T12:27:41.260Z"
 }

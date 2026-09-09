@@ -1,42 +1,59 @@
-## Description: <br>
-Post errands using natural language, track status, review submissions, and automate USDC payments through the ErrandAI task marketplace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Send a real person to a physical place in Seoul (Gangnam area) to check, photograph, verify, queue, or pick something up, and get GPS+photo evidence back.
 
-## Publisher: <br>
-[ChloePark85](https://clawhub.ai/user/ChloePark85) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chloepark85](https://clawhub.ai/user/chloepark85)
 
-## Use Case: <br>
-OpenClaw users can use this skill to create, track, and review paid errands for human workers through ErrandAI. It supports tasks such as photography, product verification, price research, translation, research, delivery, and general custom errands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create paid errands and approve submissions that release USDC without a clear confirmation guardrail. <br>
-Mitigation: Require manual confirmation outside the skill before posting paid errands or approving submissions, and avoid auto-approval or scheduled paid workflows unless spending limits and audit controls are in place. <br>
-Risk: A misconfigured ErrandAI API endpoint could send credentials or payment-related actions to an unintended service. <br>
-Mitigation: Keep ERRANDAI_API_URL pointed at the official ErrandAI service and use a scoped or revocable API key where possible. <br>
+## Use Case:
 
+External users and agents use this skill to check coverage, quote, and dispatch paid physical errands in supported Seoul areas after explicit user price confirmation. It is suited for on-site checks, photos, queue checks, pickups, and fact verification with GPS and photo evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ChloePark85/errand-ai) <br>
-- [ErrandAI documentation](https://docs.errand.be) <br>
-- [ErrandAI dashboard](https://errand.be/dashboard) <br>
+### Deployment Geography for Use:
 
+South Korea (Seoul: Gangnam-gu, Seocho-gu, Seongsu and Seongdong-gu)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown] <br>
-**Output Format:** [Markdown-formatted status, confirmation, error, and review messages.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger ErrandAI API actions that create paid errands or approve submitted work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact manifest) <br>
+Risk: The skill can initiate paid physical errands involving real workers and prepaid account balance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the total price, reward, and refund conditions before dispatching.
+
+Risk: Physical errands may involve privacy, legality, address accuracy, or inappropriate photo and pickup requests.
+
+Mitigation: Review every mission for legality, privacy, address accuracy, total price, reward, expiry, and requested evidence before approving dispatch.
+
+Risk: Service coverage is limited to specific Seoul areas and may have no reachable workers at a requested location.
+
+Mitigation: Run the free coverage check before quoting or dispatching and tell the user plainly when no worker is reachable.
+
+## Reference(s):
+
+- [Errand homepage](https://errand.be)
+- [ClawHub skill page](https://clawhub.ai/chloepark85/skills/errand-ai)
+- [Publisher profile](https://clawhub.ai/user/chloepark85)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, JSON]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ERRANDAI_API_KEY for paid dispatches; coverage checks and quotes can be performed before authentication.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

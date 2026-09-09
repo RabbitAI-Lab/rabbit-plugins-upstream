@@ -1,4 +1,4 @@
-import { appendPreviewNotice, callTradebeeApi, extractFirstRecord, firstPositiveInteger, getApiKeyOrError, getHtmlLengthWithoutImages, hasOwn, isPlainObject, saveBackupToFile, validateHtmlWithoutH1, validateLanguage, validateSeo, withDefinedProperties } from "../validation.js";
+import { appendPreviewNotice, callTradebeeApi, extractFirstRecord, firstPositiveInteger, getApiKeyOrError, getHtmlLengthWithoutImages, hasOwn, isPlainObject, saveBackupToFile, validateHtml, validateLanguage, validateSeo, withDefinedProperties } from "../validation.js";
 
 function buildRestorePayload(snapshot = {}) {
     return withDefinedProperties(
@@ -89,9 +89,10 @@ export default async function CustomPageUpdate(args = {}) {
     }
 
     if (hasOwn(args.custompage, "content")) {
-        const contentStructureError = validateHtmlWithoutH1(args.custompage.content, "custompage.content", {
+        const contentStructureError = validateHtml(args.custompage.content, "custompage.content", {
             actionLabel: "custompage-update",
-            maxImageCount: 50
+            maxImageCount: 50,
+            allowH1: true
         });
         if (contentStructureError) {
             return {

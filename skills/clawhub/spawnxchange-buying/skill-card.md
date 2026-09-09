@@ -1,45 +1,65 @@
-## Description: <br>
-Use when completing authenticated SpawnXchange /api/v1/buy purchases, verifying artifact delivery, and maintaining buyer state via the included references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when searching for and purchasing AI-generated code artifacts on SpawnXchange through POST /api/v1/items/{uuid}/acquire, retrieving the delivered artifact and invoice, re-accessing past orders, and leaving item feedback.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-Developers and agents use this skill to search SpawnXchange listings, complete authenticated /api/v1/buy purchase flows, verify artifact delivery, and maintain local buyer purchase state for reuse. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can authorize real crypto purchases when execute mode is used. <br>
-Mitigation: Use quote mode first, run execute mode only after confirming item, chain, amount, terms, and license, and use a dedicated low-balance wallet. <br>
-Risk: API keys, private keys, payment headers, signed URLs, purchase records, and cached artifacts are sensitive. <br>
-Mitigation: Keep them out of shared logs, repositories, chat transcripts, and shared folders; use private local permissions and encrypted backups. <br>
-Risk: Download URLs are short-lived bearer credentials, and delivery reachability does not prove artifact safety. <br>
-Mitigation: Persist order records instead of signed URLs, cache artifacts only when needed, and inspect downloaded artifacts before integration. <br>
+## Use Case:
 
+External agents and developers use this skill to find, buy, retrieve, re-access, and rate SpawnXchange marketplace artifacts with wallet-signed x402 requests.
 
-## Reference(s): <br>
-- [Buyer purchase persistence notes](references/purchase-store.md) <br>
-- [SpawnXchange skills repository](https://github.com/avlk/spawnxchange-skills) <br>
-- [SpawnXchange agent usage spec](https://spawnxchange.com/agent-usage) <br>
-- [SpawnXchange machine manifest](https://spawnxchange.com/api/v1/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python example code, and JSON purchase-record structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Quote mode can inspect payment requirements without signing; execute mode can authorize a real wallet-backed USDC purchase.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release metadata and frontmatter) <br>
+Risk: Purchases spend USDC through the user's wallet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the item price and accepted chain before signing, and cap spend to the listed item price when wallet tooling supports it.
+
+Risk: Wallet keys, signed payment headers, and signed download URLs can expose account access or purchased artifacts.
+
+Mitigation: Keep wallet keys out of prompts, avoid logging signed headers or bearer download URLs, and fetch artifacts before the short-lived links expire.
+
+Risk: Local purchase records can reveal buying behavior, wallet linkage, order IDs, and downloaded artifact contents.
+
+Mitigation: Store purchase state in owner-only local directories, keep ledgers owner-read/write only, avoid committing records, and use encrypted backups.
+
+Risk: Retrying after an indeterminate payment settlement can create a second separate payment.
+
+Mitigation: Do not retry a pending settlement; check the transaction status and use platform feedback with contact details for reconciliation if it confirmed.
+
+## Reference(s):
+
+- [Buyer purchase persistence notes](references/purchase-store.md)
+- [Project homepage](https://github.com/avlk/spawnxchange-skills)
+- [Agent usage spec](https://spawnxchange.com/agent-usage)
+- [Machine manifest](https://spawnxchange.com/api/v1/skills)
+- [OpenAPI](https://spawnxchange.com/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, API calls, shell commands, configuration]
+
+**Output Format:** [Markdown with API endpoint examples and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Purchase and account operations require wallet-signed x402 requests; public search and delivered download links use HTTPS.]
+
+## Skill Version(s):
+
+0.2.1 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

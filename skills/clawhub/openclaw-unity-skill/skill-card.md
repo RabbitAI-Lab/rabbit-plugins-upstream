@@ -1,46 +1,56 @@
-## Description: <br>
-Control Unity Editor via OpenClaw Unity Plugin for scene management, GameObject and Component manipulation, debugging, input simulation, Play mode control, package operations, tests, and explicit C# execution in trusted local projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Controls the Unity Editor through OpenClaw for scene inspection, GameObject and component changes, debugging, input simulation, Play mode control, package and asset operations, and explicitly gated C# execution.
 
-## Publisher: <br>
-[tomleelive](https://clawhub.ai/user/tomleelive) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache License 2.0 <br>
+## Publisher:
 
+[tomleelive](https://clawhub.ai/user/tomleelive)
 
-## Use Case: <br>
-Unity developers and game teams use this skill to inspect, modify, debug, and test Unity Editor projects through OpenClaw workflows and a local Unity bridge. It is best suited for trusted, version-controlled local projects where users can review project-changing commands before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run C# and perform broad Unity project-changing actions, including deletes, saves, package installs, batch actions, and keyboard or mouse simulation. <br>
-Mitigation: Use only in trusted, local, version-controlled Unity projects and review high-impact commands before they run. <br>
-Risk: The Unity/OpenClaw bridge exposes editor automation over a local connection. <br>
-Mitigation: Keep the bridge limited to a trusted local environment and do not expose it beyond localhost or trusted networks. <br>
-Risk: Project changes may cause data loss or project corruption if commands are incorrect. <br>
-Mitigation: Keep backups or source control ready before automation sessions and confirm destructive operations with the user. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect, automate, debug, and test Unity projects through OpenClaw-connected Unity Editor tooling. It is intended for trusted local Unity projects where read-only inspection is routine and project-changing actions require explicit operator opt-in and per-call confirmation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tomleelive/skills/openclaw-unity-skill) <br>
-- [Skill Homepage](https://github.com/TomLeeLive/openclaw-unity-skill) <br>
-- [OpenClaw Unity Plugin](https://github.com/TomLeeLive/openclaw-unity-plugin) <br>
-- [OpenClaw Docs](https://docs.openclaw.ai) <br>
-- [Unity Plugin Tools Reference](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands and JSON tool parameters; Unity tool responses are returned as JSON-formatted text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce project-changing Unity commands through the OpenClaw Unity bridge; users should review destructive or code-running actions before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Project-provided custom tools with read-like names may be treated as read-only even if they mutate a Unity project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in trusted, version-controlled Unity projects and review project-registered custom tools before relying on their classification.
+
+Risk: Unity Editor automation and C# execution can change scenes, assets, packages, settings, or project files.
+
+Mitigation: Keep destructive operations disabled unless needed, review C# before execution, require user approval for project-changing calls, and use dryRun previews when available.
+
+## Reference(s):
+
+- [Openclaw Unity Skill on ClawHub](https://clawhub.ai/tomleelive/skills/openclaw-unity-skill)
+- [Unity Plugin Tools Reference](references/tools.md)
+- [OpenClaw Unity Plugin Repository](https://github.com/TomLeeLive/openclaw-unity-plugin)
+- [OpenClaw Docs](https://docs.openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline commands, code snippets, configuration examples, and Unity tool-call examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run recommendations and confirmation requirements for project-changing Unity Editor actions.]
+
+## Skill Version(s):
+
+1.7.0 (source: release metadata, SKILL.md frontmatter, extension/package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

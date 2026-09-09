@@ -1,46 +1,61 @@
-## Description: <br>
-Systematic root-cause debugging with verification for errors, stack traces, broken tests, flaky tests, regressions, and unexpected behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Systematic root-cause debugging with verification for errors, stack traces, broken tests, flaky tests, regressions, and other failures.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to debug software failures by reproducing issues, forming evidence-grounded hypotheses, tracing root causes, and verifying fixes with tests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide an agent to run local tests and debugging commands. <br>
-Mitigation: Review commands before execution and run them only in the intended workspace or project context. <br>
-Risk: Diagnostic reports can expose local paths, username, git remote URL, and repository metadata. <br>
-Mitigation: Review and redact diagnostic reports before sharing them outside the workspace. <br>
+## Use Case:
 
+Developers and engineers use this skill to reproduce failures, evaluate competing root-cause hypotheses, make narrow repairs when authorized, and report verification evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-debugging) <br>
-- [Specification](SPEC.md) <br>
-- [Analysis of Competing Hypotheses](references/competing-hypotheses.md) <br>
-- [Defense-in-Depth Validation](references/defense-in-depth.md) <br>
-- [Root Cause Tracing](references/root-cause-tracing.md) <br>
-- [Specialized Debugging Patterns](references/specialized-patterns.md) <br>
-- [Diagnostic collection script](scripts/collect-diagnostics.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce debug reports, diagnostic commands, and verification steps; optional diagnostics can generate a local Markdown report containing environment and repository metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Diagnostic reports and pasted probe output may contain local system, repository, path, username, hostname, IP address, token, customer data, SQL fragment, or environment details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and redact diagnostic reports and command output before sharing them in chat, bug reports, or external searches.
+
+Risk: The bundled diagnostic script can collect system information, Git state, remotes, working directory, runtime versions, package managers, and selected environment values.
+
+Mitigation: Run diagnostics only within the caller's authority and treat generated reports as sensitive until reviewed.
+
+## Reference(s):
+
+- [Baselines and diagnostic data](references/baseline-and-data-handling.md)
+- [Reproduction and investigation](references/reproduction-and-investigation.md)
+- [Root Cause Tracing](references/root-cause-tracing.md)
+- [Analysis of Competing Hypotheses](references/competing-hypotheses.md)
+- [Defense-in-Depth Validation](references/defense-in-depth.md)
+- [Repair, escalation, and diagnostic traps](references/repair-and-escalation.md)
+- [Specialized Debugging Patterns](references/specialized-patterns.md)
+- [Diagnostic collection script](scripts/collect-diagnostics.sh)
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-debugging)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands]
+
+**Output Format:** [Markdown debug report with evidence, verification results, and inline commands or code when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include the seven-field debug report: SYMPTOM, ROOT CAUSE, FIX, EVIDENCE, REGRESSION, RELATED, and STATUS.]
+
+## Skill Version(s):
+
+4.5.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

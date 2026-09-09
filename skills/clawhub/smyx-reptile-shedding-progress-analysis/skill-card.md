@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes reptile enclosure images or videos to classify shedding phase, identify stuck-shed risk signals, and return care-oriented recommendations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes reptile enclosure images or videos to classify shedding phase, identify stuck-shed risk signs around body and eyes, and return care recommendations and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and developers use this skill to submit reptile images, videos, or media URLs for shedding-stage analysis, stuck-shed risk screening, and history/report review. It is intended to support care decisions, not to provide veterinary diagnosis or prescribe treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile images, videos, or media URLs are sent to a third-party cloud service and report history is queried from that service. <br>
-Mitigation: Use only media appropriate for third-party processing, avoid private household details, and confirm the cloud retention model is acceptable before installation. <br>
-Risk: The skill creates or reuses an internal identity and stores service tokens in the workspace data directory. <br>
-Mitigation: Run in a workspace where local token storage is acceptable and remove stored credentials when the skill is no longer needed. <br>
-Risk: Outputs can influence reptile care decisions but are not veterinary diagnoses. <br>
-Mitigation: Treat the analysis as care guidance and consult a reptile veterinarian for persistent stuck shed, eye-cap issues, injury, infection concerns, or other serious symptoms. <br>
+## Use Case:
 
+External reptile keepers, breeders, enclosure operators, and developers use this skill to review reptile images or videos for shedding progress, stuck-shed warning signs, and care guidance. It can also query prior shedding reports when report history is requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-shedding-progress-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with report links and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload local media or submit media URLs to a third-party cloud API, poll for analysis results, and query cloud report history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact SKILL.md frontmatter reports 1.0.6) <br>
+Risk: The skill sends reptile images or videos, identity values, and report history to provider services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted, disclose remote upload and account-history behavior to users, and require confirmation before transmitting local media or querying account history.
+
+Risk: The security review reports plaintext token storage or token transmission patterns that need review.
+
+Mitigation: Review or fix credential handling before deployment, prefer production HTTPS endpoints, and avoid plaintext token storage.
+
+Risk: Visual shedding assessments can be unreliable when image quality, camera angle, lighting, species context, or health context is inadequate.
+
+Mitigation: Gate use on appropriate image quality and species context, present results as visual guidance only, and direct serious or persistent stuck-shed concerns to a qualified reptile veterinarian.
+
+## Reference(s):
+
+- [API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-reptile-shedding-progress-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown or JSON analysis report with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include shedding phase, alert level, visual observations, recommended actions, disclaimers, and history-table links.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

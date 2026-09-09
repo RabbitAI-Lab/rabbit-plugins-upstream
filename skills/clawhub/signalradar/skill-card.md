@@ -1,47 +1,60 @@
-## Description: <br>
-SignalRadar monitors Polymarket prediction markets for probability changes and sends alerts when thresholds are crossed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SignalRadar monitors Polymarket prediction markets for probability changes and sends alerts when configured thresholds are crossed.
 
-## Publisher: <br>
-[vahnxu](https://clawhub.ai/user/vahnxu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vahnxu](https://clawhub.ai/user/vahnxu)
 
-## Use Case: <br>
-External users and developers use SignalRadar to discover, add, monitor, and review Polymarket markets, manage alert thresholds and schedules, and route notifications through webhook, file, or OpenClaw delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill writes local SignalRadar state, including watchlists, baselines, event logs, and routing details. <br>
-Mitigation: Review the configured data directory before installation and manage settings through the skill CLI rather than editing state files directly. <br>
-Risk: Adding markets may create recurring cron or OpenClaw scheduled monitoring jobs. <br>
-Mitigation: Check schedule status after setup and use the schedule disable command to stop background runs when monitoring is no longer wanted. <br>
-Risk: Webhook alerts can reveal which prediction markets a user monitors. <br>
-Mitigation: Configure only trusted webhook URLs and review delivery settings before enabling background push. <br>
-Risk: The skill contacts Polymarket services to fetch market data. <br>
-Mitigation: Install only in environments where external access to Polymarket is acceptable and expected. <br>
+## Use Case:
 
+External users and developers use this skill to track selected Polymarket markets, inspect current monitor state, discover relevant markets, and receive threshold-based alerts through configured delivery channels.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vahnxu/skills/signalradar) <br>
-- [Configuration Reference](references/config.md) <br>
-- [Operations Reference](references/operations.md) <br>
-- [Runtime Protocol Reference](references/protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local SignalRadar state, monitor schedules, baselines, and delivery metadata through the skill CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Background monitoring can create a recurring scheduler entry that keeps running after the session ends.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Leave schedule.auto_enable unset or false unless background checks are wanted, and remove persistence with the skill's schedule disable command.
+
+Risk: Webhook delivery can send watched market questions and probability changes to a user-configured third-party endpoint.
+
+Mitigation: Use only trusted HTTPS webhook endpoints and keep webhook URLs private because they act as bearer credentials.
+
+Risk: Stored OpenClaw routing or scheduled delivery state can persist locally.
+
+Mitigation: Use schedule clear-route to remove stored OpenClaw routing and review the local SignalRadar data directory when uninstalling.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/vahnxu/skills/signalradar)
+- [SignalRadar Configuration Reference](artifact/references/config.md)
+- [SignalRadar Runtime Protocol Reference](artifact/references/protocol.md)
+- [SignalRadar Operations Reference](artifact/references/operations.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local configuration, watchlist, baseline, event log, and scheduler state through the skill CLI when the user authorizes those actions.]
+
+## Skill Version(s):
+
+1.5.8 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

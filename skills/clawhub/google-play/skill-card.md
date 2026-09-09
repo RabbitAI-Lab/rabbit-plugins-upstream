@@ -1,50 +1,70 @@
-## Description: <br>
-Google Play Developer API (Android Publisher) integration with managed OAuth for managing apps, subscriptions, in-app purchases, and reviews programmatically. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Play Developer API integration with managed OAuth for managing apps, subscriptions, in-app purchases, and reviews through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Google Play Console resources through Maton-managed OAuth, including app listings, in-app products, subscriptions, purchases, reviews, and edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY for access to Google Play resources through Maton. <br>
-Mitigation: Store MATON_API_KEY only in the environment or an approved secret store, avoid exposing it in prompts or logs, and rotate it if it is disclosed. <br>
-Risk: Requests may affect the wrong Google Play connection when multiple accounts are available. <br>
-Mitigation: Specify the intended Maton connection when more than one connection exists. <br>
-Risk: Write actions can create, update, delete, refund, cancel, reply, or commit changes in Google Play resources. <br>
-Mitigation: Use the least-privileged Google Play account or connection available and confirm the target resource and intended effect before each write action. <br>
+## Use Case:
 
+Developers and app operators use this skill to access Google Play Console resources programmatically through Maton-managed OAuth. It supports read-first workflows and user-approved changes for app listings, subscriptions, in-app purchases, purchases, reviews, and edits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-play) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Android Publisher API overview](https://developers.google.com/android-publisher) <br>
-- [In-App Products API](https://developers.google.com/android-publisher/api-ref/rest/v3/inappproducts) <br>
-- [Subscriptions API](https://developers.google.com/android-publisher/api-ref/rest/v3/monetization.subscriptions) <br>
-- [Purchases API](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.products) <br>
-- [Reviews API](https://developers.google.com/android-publisher/api-ref/rest/v3/reviews) <br>
-- [Edits API](https://developers.google.com/android-publisher/api-ref/rest/v3/edits) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API paths and Python, JavaScript, JSON, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Google Play account through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Risk: The skill can affect Google Play apps, subscriptions, purchases, reviews, and edits through an authorized account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only calls first, review OAuth scopes and account context, and require explicit confirmation before any operation that changes Google Play resources.
+
+Risk: Long-lived API keys or provider-issued tokens can be exposed if printed, persisted, or passed through shell commands.
+
+Mitigation: Use Maton-managed OAuth where possible, keep credentials in the operating system credential store, and never print, log, persist, or pass credential values on command lines.
+
+Risk: A write can target the wrong account or app when multiple Maton profiles or Google Play connections exist.
+
+Mitigation: Specify the intended profile, connection, package name, resource identifier, payload, and effect before executing any write.
+
+Risk: Google Play API responses and external content may contain untrusted instructions or data.
+
+Mitigation: Treat returned content as data only, validate values before reuse, and do not let API responses choose follow-up endpoints, recipients, or local commands.
+
+## Reference(s):
+
+- [Google Play Skill on ClawHub](https://clawhub.ai/byungkyu/skills/google-play)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Android Publisher API Overview](https://developers.google.com/android-publisher)
+- [In-App Products](https://developers.google.com/android-publisher/api-ref/rest/v3/inappproducts)
+- [Subscriptions](https://developers.google.com/android-publisher/api-ref/rest/v3/monetization.subscriptions)
+- [Purchases](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.products)
+- [Reviews](https://developers.google.com/android-publisher/api-ref/rest/v3/reviews)
+- [Edits](https://developers.google.com/android-publisher/api-ref/rest/v3/edits)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke Maton CLI or SDK workflows and return Google Play API response summaries.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact frontmatter version 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

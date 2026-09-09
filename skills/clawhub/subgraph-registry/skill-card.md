@@ -1,45 +1,65 @@
-## Description: <br>
-Discover and filter 15,500+ The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call and no API key required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Same abilities as graphops/subgraph-mcp with better discovery: search classified subgraphs, see real 30-day query volume on every hit, and opt in to schema or execute tools under the official tool names.
 
-## Publisher: <br>
-[paulieb14](https://clawhub.ai/user/paulieb14) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[paulieb14](https://clawhub.ai/user/paulieb14)
 
-## Use Case: <br>
-Developers and agents use this MCP server to discover, rank, and inspect The Graph subgraphs before querying them. It returns structured subgraph metadata, schema details, reliability signals, query instructions, and x402 or legacy gateway URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill returns x402 query links that can lead to paid wallet transactions if an agent follows them with signing authority. <br>
-Mitigation: Require explicit approval before signing x402 payments or using wallet credentials, and limit autonomous use of query_url_x402 links. <br>
-Risk: The runtime may download verified registry or model assets. <br>
-Mitigation: Pin the npm package version, allow network access only to approved sources, and keep registry hash verification enabled. <br>
-Risk: Optional HTTP/SSE mode exposes local endpoints when enabled. <br>
-Mitigation: Use stdio by default, and enable HTTP/SSE only in trusted or firewalled environments. <br>
+## Use Case:
 
+Developers and agents use this MCP server to discover reliable The Graph subgraphs before querying them. It helps select subgraphs by network, protocol type, schema details, contract address, query volume, and reliability, with opt-in GraphQL execution when the caller supplies a Graph Studio key.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry) <br>
-- [Project homepage](https://github.com/PaulieB14/subgraph-registry) <br>
-- [The Graph](https://thegraph.com) <br>
-- [x402 client package](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, API calls, configuration, guidance] <br>
-**Output Format:** [MCP tool responses and optional HTTP JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns subgraph classifications, reliability scores, schema details, query URLs, pricing manifests, and query guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.19 (source: package.json, server.json, ClawHub release evidence) <br>
+Risk: Optional HTTP/SSE mode can expose unauthenticated endpoints that may use the operator's Graph API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use default stdio or loopback-only HTTP for local use; do not expose --http or --http-only on shared networks with THE_GRAPH_STUDIO_API_KEY, GRAPH_STUDIO_API_KEY, or GATEWAY_API_KEY set unless an authenticating proxy is in front.
+
+Risk: semantic_search_subgraphs may need network access if the bundled ONNX model is missing.
+
+Mitigation: Bundle or pre-cache the model for offline deployments, or avoid semantic_search_subgraphs in strictly offline runtimes.
+
+Risk: Bypassing registry.db hash verification can allow a modified local registry to load.
+
+Mitigation: Do not set SUBGRAPH_REGISTRY_SKIP_VERIFY=1 in agent-runtime defaults; keep the package-pinned registry hash check enabled.
+
+Risk: External x402 queries can spend USDC if a caller posts to the returned x402 URL with a funded signing client.
+
+Mitigation: Require an explicit payment policy before using x402 clients, and prefer the keyed gateway route when the operator already has Graph Studio credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry)
+- [Project homepage](https://github.com/PaulieB14/subgraph-registry)
+- [MCP server manifest](artifact/server.json)
+- [OpenAPI specification](artifact/openapi.yaml)
+- [The Graph Studio API keys](https://thegraph.com/studio/apikeys/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Code, Configuration, Guidance]
+
+**Output Format:** [MCP tool responses with JSON payloads, schema text, GraphQL examples, and concise guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Discovery tools use the local registry; execute and live schema tools require caller-provided Graph gateway credentials.]
+
+## Skill Version(s):
+
+0.10.1 (source: evidence.release.version, artifact/package.json, artifact/server.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

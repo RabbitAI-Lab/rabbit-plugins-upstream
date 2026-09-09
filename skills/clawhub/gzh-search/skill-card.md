@@ -1,42 +1,58 @@
-## Description: <br>
-公众号搜索爬虫 searches WeChat public-account articles by keyword, shows ranked terminal results, exports CSV files, and can generate an interactive HTML report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+公众号搜索爬虫通过关键词搜索近 30 天内的微信公众号文章，在终端展示结果并导出 CSV 和交互式 HTML 报告。
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-External users, analysts, content strategists, and researchers use this skill to search recent WeChat public-account articles for market topics, competitor content, trend tracking, source discovery, and report-ready exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated HTML reports may expose the user's RedFox API key. <br>
-Mitigation: Use a dedicated low-limit key, avoid sharing or syncing generated HTML files, prefer --csv-only when an HTML report is unnecessary, and rotate the key if a report was shared. <br>
-Risk: The skill runs a local API proxy while serving the report. <br>
-Mitigation: Keep the local server bound to localhost, stop it when finished, and avoid running it on shared or untrusted machines. <br>
+## Use Case:
 
+Industry researchers, content creators, and competitive analysts use this skill to search recent WeChat public account articles by keyword, review ranked article metrics, and export data for trend, content, and competitor analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/gzh-search) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFox WeChat article search API endpoint](https://redfox.hk/story/api/gzhData/searchArticle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, CSV, HTML] <br>
-**Output Format:** [Terminal text with CSV files and optional interactive HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a RedFox API key; generated HTML reports may embed the API key and use a local API proxy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The interactive HTML report starts an unsecured local proxy that can use the configured RedFox API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a revocable RedFox API key, prefer --csv-only when interactive search is unnecessary, and stop the local server promptly after use.
+
+Risk: The security summary identifies unsafe HTML generation risks in the interactive report path.
+
+Mitigation: Review generated HTML before sharing it, avoid sensitive search terms, and treat report contents as untrusted until the publisher hardens HTML escaping.
+
+Risk: The security guidance calls out wildcard CORS and missing proxy authentication.
+
+Mitigation: Run the proxy only on trusted local machines and prefer a future release that adds proxy authentication and narrows CORS.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/gzh-search)
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files]
+
+**Output Format:** [Terminal text with generated CSV files and interactive HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires REDFOX_API_KEY; use --csv-only when an interactive HTML report is not needed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

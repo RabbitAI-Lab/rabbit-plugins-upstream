@@ -1,39 +1,60 @@
-## Description: <br>
-Multi-layer memory system for LLM agents with daily memory, mesh edges, fuzzy search, auto-summarization, logging, and compliance checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Memory system for AI agents on OpenClaw-like hosts. File-based multi-layer memory: fresh daily layer (5-day rotation), mesh graph, auto-log of every exchange, cross-layer grep search, compliance check, crash-gap recovery from session transcripts, automation-registry lookup. Search before answering, log after answering. Local-first, $0 to run, survives restarts.
 
-## Publisher: <br>
-[mozz0](https://clawhub.ai/user/mozz0) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mozz0](https://clawhub.ai/user/mozz0)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add persistent memory workflows that record, relate, search, summarize, and check agent memory across sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory workflows may record or search sensitive workspace data if connected to external project tools without review. <br>
-Mitigation: Review the referenced external project and configure memory storage, retention, and search behavior before using it with sensitive data. <br>
+## Use Case:
 
+Developers and agent operators use this skill to give OpenClaw-like agents persistent local memory across sessions. It supports searching prior context, logging meaningful exchanges, maintaining a lightweight memory graph, checking memory health, and recovering gaps from local transcript records.
 
-## Reference(s): <br>
-- [MeshMorize ClawHub release](https://clawhub.ai/mozz0/josh-learns) <br>
-- [MeshMorize project link from artifact](https://github.com/mozz0/MeshMorize) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command and configuration references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code is included in the submitted artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.2 (source: server-resolved release evidence) <br>
+Risk: The skill persistently records agent conversations as searchable plaintext local memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for users who explicitly want persistent local memory; avoid logging secrets, redact sensitive content, and keep memory directories out of public repositories.
+
+Risk: Transcript recovery and automation-registry lookup can expose privileged local conversation or reminder data.
+
+Mitigation: Require explicit user approval before using those workflows, use a private temporary directory, avoid verbatim replay by default, redact secrets, and delete copied databases immediately.
+
+Risk: The security guidance flags memcheck for shell=True and untrusted PATH execution.
+
+Mitigation: Fix memcheck to avoid shell=True and resolve trusted command paths before deploying it in a shared or sensitive environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mozz0/skills/josh-learns)
+- [README.md](README.md)
+- [SKILL.md](SKILL.md)
+- [LICENSE](LICENSE)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown instructions with inline shell commands and Python utilities that create or update local Markdown and JSON memory files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill produces local filesystem changes under the configured agent workspace, including daily logs, fresh context files, checkpoints, decision records, and a mesh graph.]
+
+## Skill Version(s):
+
+4.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
