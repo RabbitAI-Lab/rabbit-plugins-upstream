@@ -1,44 +1,56 @@
-## Description: <br>
-Searches the ElevenLabs voice library by keyword, source, and category, returning playable previews for matched voices before TTS selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches the ElevenLabs voice library by keyword, source, and category and returns playable previews so agents can help users choose voices before text-to-speech generation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to search dLazy's hosted ElevenLabs voice search service and choose candidate voices with previewable results before text-to-speech work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and filters are sent to the hosted dLazy API. <br>
-Mitigation: Use the skill for voice search terms and filters, and avoid sending sensitive text as search prompts. <br>
-Risk: The skill uses a saved or environment-provided dLazy API key. <br>
-Mitigation: Install and run it only where storing or passing a dLazy API key is acceptable, and rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: The artifact contains stale generic output and media-upload documentation that may not reflect this command's actual behavior. <br>
-Mitigation: Treat those sections as generic CLI boilerplate and rely on the elevenlabs-search command help and returned JSON for command-specific behavior. <br>
+## Use Case:
 
+Developers, creators, and external agent users can use this skill to search ElevenLabs voice options by descriptor, source, and category before selecting a voice for TTS workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-search) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [JSON CLI result with command and authentication guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and network access to api.dlazy.com and files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server evidence release.version and skill frontmatter) <br>
+Risk: The skill uses a pinned third-party npm CLI and sends prompts and search parameters to dLazy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the on-demand npx invocation, review the pinned package before use, and use a revocable dLazy API key.
+
+Risk: The documentation includes broader upload and download behavior beyond basic voice-library search.
+
+Mitigation: Avoid passing local file paths unless the command specifically requires them and review generated URLs or saved files before reuse.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-search)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI responses containing voice search results and preview URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key and uses the pinned @dlazy/cli package version declared by the skill metadata.]
+
+## Skill Version(s):
+
+1.3.13 (source: server release evidence; artifact frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

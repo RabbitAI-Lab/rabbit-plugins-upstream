@@ -15,32 +15,34 @@
 
 ### Run Report
 ```bash
-POST /google-analytics-data/v1beta/properties/{propertyId}:runReport
-Content-Type: application/json
-
+maton api -X POST '/google-analytics-data/v1beta/properties/{propertyId}:runReport' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "dateRanges": [{"startDate": "30daysAgo", "endDate": "today"}],
   "dimensions": [{"name": "city"}],
   "metrics": [{"name": "activeUsers"}]
 }
+EOF
 ```
 
 ### Run Realtime Report
 ```bash
-POST /google-analytics-data/v1beta/properties/{propertyId}:runRealtimeReport
-Content-Type: application/json
-
+maton api -X POST '/google-analytics-data/v1beta/properties/{propertyId}:runRealtimeReport' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "dimensions": [{"name": "country"}],
   "metrics": [{"name": "activeUsers"}]
 }
+EOF
 ```
 
 ### Batch Run Reports
 ```bash
-POST /google-analytics-data/v1beta/properties/{propertyId}:batchRunReports
-Content-Type: application/json
-
+maton api -X POST '/google-analytics-data/v1beta/properties/{propertyId}:batchRunReports' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "requests": [
     {
@@ -55,11 +57,12 @@ Content-Type: application/json
     }
   ]
 }
+EOF
 ```
 
 ### Get Metadata (available dimensions/metrics)
 ```bash
-GET /google-analytics-data/v1beta/properties/{propertyId}/metadata
+maton api '/google-analytics-data/v1beta/properties/{propertyId}/metadata'
 ```
 
 ## Common Report Examples
@@ -138,6 +141,7 @@ GET /google-analytics-data/v1beta/properties/{propertyId}/metadata
 ## Notes
 
 - Authentication is automatic - the router injects the OAuth token
+- **Automatic auth means reports run against the user's live Google Analytics properties**, including any the connected Google user can reach on behalf of clients or other teams. Confirm the property ID with the user before reporting, and treat returned rows as real visitor data - user IDs, locations, and device details are personal data, so summarize rather than dumping raw rows.
 - Property IDs are numeric (e.g., `521310447` from URL `p521310447`)
 - GA4 properties only (Universal Analytics not supported)
 - Use metadata endpoint to discover available dimensions/metrics

@@ -1,41 +1,58 @@
-## Description: <br>
-Generate and edit images using Google's Nano Banana 2 model via WaveSpeed AI, including text-to-image, multi-image editing, flexible aspect ratios, up to 4K output, multilingual text rendering, and camera-style prompt controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images using Google's Nano Banana 2 model via WaveSpeed AI, including text-to-image generation and natural-language edits with flexible aspect ratios, up to 4K resolution, multilingual text rendering, and camera-style controls.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent for WaveSpeed AI setup, JavaScript examples, and usage guidance for generating images from prompts or editing uploaded or URL-based images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WaveSpeed API keys can be exposed if hardcoded or committed. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or secret management, and avoid placing credentials in source files. <br>
-Risk: WaveSpeed image generation and editing requests may incur provider usage charges. <br>
-Mitigation: Use the service deliberately with an account intended for billing, and review resolution-specific costs before high-volume use. <br>
-Risk: Prompts and uploaded images are shared with the WaveSpeed AI service. <br>
-Mitigation: Only upload images and prompts that are appropriate to share with that provider, and validate image URLs before sending requests. <br>
+## Use Case:
 
+Developers and agent users use this skill to generate new images from prompts or edit existing images through WaveSpeed's CLI or MCP tooling. It is suited for workflows that need controllable image outputs, multiple aspect ratios, selectable resolution, and prompt-driven image transformations.
 
-## Reference(s): <br>
-- [WaveSpeed API key access](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with JavaScript and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes model IDs, parameter tables, aspect ratio options, pricing notes, prompt tips, and security constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Installing or running unpinned npm or npx packages can introduce ordinary supply-chain exposure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the WaveSpeed CLI or MCP package and version before use, and avoid running npm or npx with administrator privileges.
+
+Risk: Prompts, image URLs, and uploaded local images are sent to WaveSpeed for image generation or editing.
+
+Mitigation: Upload only images and URLs intended for WaveSpeed processing, and prefer a revocable WaveSpeed key where possible.
+
+Risk: API credentials can be exposed if copied into chat or stored carelessly.
+
+Mitigation: Use wavespeed login or the WAVESPEED_API_KEY environment variable instead of sharing keys in conversation.
+
+## Reference(s):
+
+- [WaveSpeed MCP Server](https://github.com/WaveSpeedAI/mcp-server)
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-nano-banana-2)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with bash command examples, parameter guidance, and output URL handling notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide use of WaveSpeed CLI or MCP calls and handling of generated image URLs or downloaded files.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

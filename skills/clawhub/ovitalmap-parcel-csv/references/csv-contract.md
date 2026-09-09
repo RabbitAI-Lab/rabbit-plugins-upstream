@@ -6,11 +6,18 @@ Do not change this contract without an explicit migration request.
 
 - Encoding: UTF-8, comma-separated, no BOM.
 - Directory: `ovitalmap_exports/{CC}/`.
-- Single parcel: `{parcelCode}_{YYYYMMDD_HHMMSS}_{vertices|boundary}.csv`.
-- Multi-parcel batch: `{CC}_batch_N{count}_{YYYYMMDD_HHMMSS}_{vertices|boundary}.csv`.
-- Same-second collisions append `_02`, `_03`, and so on before the type suffix.
+- Every generated file contains exactly one parcel.
+- Default boundary export: `{parcelCode}_{YYYYMMDD_HHMMSS}.csv`.
+- Explicit vertex export: `{parcelCode}_{YYYYMMDD_HHMMSS}_vertices.csv`.
+- Same-second collisions append `_02`, `_03`, and so on before `.csv` or `_vertices.csv`.
 
-Filenames describe the export; CSV rows retain each parcel's actual code. Archive names remain `{CC}_parcels.csv` and `master.csv`.
+For multiple parcels, generate files in submitted `parcel_ref` order and do not combine them. Archive names remain `{CC}_parcels.csv` and `master.csv`.
+
+The export modes are:
+
+- `boundary` (default): boundary file only.
+- `vertices`: vertex file only, and only after an explicit user request.
+- `both`: both files, only after an explicit user request for both.
 
 ## Vertex CSV (顶点表)
 
@@ -28,7 +35,7 @@ Exact headers:
 - 图标样式: `1`.
 - Comment: `提供者:{provider} 归档日期:{YYYY-MM-DD}` and, when present, ` 地籍号:{cadastre_code}`.
 
-## Boundary CSV (边界表)
+## Boundary CSV
 
 Exact headers:
 

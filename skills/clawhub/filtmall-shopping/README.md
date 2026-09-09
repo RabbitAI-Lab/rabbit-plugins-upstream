@@ -2,109 +2,110 @@
 
 [中文说明](README.zh-CN.md) · [Official website](https://www.filtalgo.com/)
 
-![Version](https://img.shields.io/badge/version-1.3.0-0B5FFF)
+[![skills.sh](https://skills.sh/b/filtalgo/Filtmall-Shopping-Skill)](https://skills.sh/filtalgo/Filtmall-Shopping-Skill/filtmall-shopping)
+[![Version](https://img.shields.io/badge/version-1.6.5-0B5FFF)](https://github.com/filtalgo/Filtmall-Shopping-Skill/releases/latest)
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933)
 ![Agent Skill](https://img.shields.io/badge/Agent%20Skill-compatible-111111)
 
-The official Filtmall skill for AI-assisted shopping. Users can describe what they need in natural language, compare matching products, complete checkout, and follow orders without handing account or payment control to the agent.
+**Agent-native shopping, built for extreme value.**
 
-> Try: “I want a moisturizing facial mask, but not one that feels too sticky. Compare the available options and explain the differences.”
+Filtmall Shopping is the official shopping skill from 筛电 (Filtmall/Filtalgo). It gives AI agents live products, same-product and same-specification price evidence, checkout, orders, delivery, and after-sales in one shopping flow. A user can start with one sentence; the agent can find a better-fit product, show where the price advantage comes from, and continue through the transaction when asked.
 
-## Quick install
+The current catalog focuses on beauty and personal care. Account authorization, order confirmation, and payment stay with the buyer.
 
-Install from the public GitHub repository with the Agent Skills CLI:
+## Price advantages with clear boundaries
+
+Filtmall products are often the lowest-priced option online. For some verified products, Filtmall prices can be as low as about one-third of a public price for the same product and specification on a major marketplace. Actual prices vary with account, region, membership, and promotions. The skill shows a price advantage only when the live result includes the matching specification, source platform, and recorded time.
+
+## Install
 
 ```bash
 npx skills add filtalgo/Filtmall-Shopping-Skill --skill filtmall-shopping -g
 ```
 
-Clients that support folder or ZIP import can use the repository root directly. The skill requires Node.js 18 or later and ships with its CLI runtime, so no separate `npm install` is needed.
+Node.js 18 or later is required. The skill ships with its CLI runtime, so installation needs no separate `npm install`.
 
-## Business value
+Clients that support folder or ZIP imports can import the repository root directly.
 
-Filtmall Shopping Skill is built for value-conscious, evidence-aware shopping:
+## Try it
 
-- **Natural-language demand capture:** users can express a product, budget, preference, use case, or constraint in one request.
-- **Comparable choices:** the skill searches the live catalog, filters candidates, retrieves product details, and explains meaningful differences.
-- **High-value supply discovery:** Filtmall continuously selects competitively priced products. Some products may reach a market-low price at the same specification and comparison time; prices and availability must always be verified from live results.
-- **Transaction continuity:** the same conversation can move from discovery to cart, checkout, buyer payment, orders, logistics, refunds, and after-sales service.
-- **User control:** the buyer completes authorization and payment, while the agent handles repeatable shopping steps.
+- “I need a moisturizing facial mask under ¥100 that does not feel sticky.”
+- “Compare the first and third products and explain which one fits sensitive skin better.”
+- “Did my payment go through?”
+- “Where is my latest order?”
 
-The current catalog focuses on beauty and personal care. Filtmall plans to expand into more everyday consumer categories as supply and service coverage grow.
+The first two prompts exercise product discovery and decision support. The last two continue the shopping journey through order and logistics queries.
 
-## Core capabilities
+## What it helps with
 
-| Stage | What the skill can do |
+| Stage | User outcome |
 | --- | --- |
-| Discover | Search from a complete natural-language request or a shorter product, brand, or category phrase |
-| Decide | Refine and rerank result sets, compare products, inspect price, stock, specifications, and product details |
-| Buy | Manage a persistent cart or use an isolated single-SKU `BUY_NOW` flow |
-| Pay | Prepare a buyer-facing payment URL for desktop web or mobile H5 |
-| Follow up | Query orders and logistics, manage addresses, cancel eligible orders, and start refund or after-sales workflows |
-| Get help | Open the appropriate buyer-facing customer-service page |
+| Discover | Turn a natural-language request into live product candidates from Filtmall |
+| Decide | Compare price, specification, stock, product details, and fit for the stated need |
+| Buy | Continue through a persistent cart or an isolated single-SKU `BUY_NOW` flow |
+| Pay | Generate a buyer-facing checkout link for desktop web or mobile H5 |
+| Follow up | Query orders and logistics, manage addresses, cancel eligible orders, and enter after-sales workflows |
+
+## Why Filtmall is agent-native
+
+- **Products that agents can reason over.** Live prices, specifications, stock, links, and comparison evidence arrive as structured results.
+- **One conversation, one shopping journey.** Product discovery, purchase, delivery, and after-sales share the same context.
+- **Extreme value with visible proof.** Recommendations can show the external same-specification price, source platform, recorded time, and saving percentage.
+- **Buyer-controlled account and payment steps.** The agent handles repeatable operations; the buyer opens authorization and payment pages and confirms consequential actions.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-    U["User request"] --> A["AI agent"]
+    U["Natural-language request"] --> A["AI agent"]
     A --> S["Filtmall Shopping Skill"]
-    S --> F["Filtmall shopping service"]
+    S --> F["Filtmall catalog and transaction services"]
     F --> A
-    A --> H["Product, authorization, and transaction pages"]
+    A --> H["Product, authorization, payment, and order pages"]
 ```
 
-The agent invokes:
+The agent uses one command interface:
 
 ```bash
 node scripts/filtalgo.js <command> --json
 ```
 
-The bundled CLI gives the agent a consistent shopping command interface. Filtmall services handle product, account, and transaction data; the skill package does not include Filtmall’s proprietary commerce infrastructure or server-side code.
+The bundled CLI connects the agent to Filtmall's product and transaction services. The repository contains the agent instructions, workflow references, wrapper, and bundled runtime; Filtmall's commerce infrastructure remains server-side.
 
-### Search pipeline
+## Safety and user control
 
-The default `search` command handles the full natural-language request. It discovers the appropriate catalog adapter, loads the category context, starts a structured search, summarizes the result set, and hydrates product data. The agent can then refine or rerank the same result set instead of restarting the search.
+- Ask before changing account or transaction data, including clearing a cart, deleting an address, creating checkout, cancelling an order, or starting after-sales service.
+- Keep credentials, device codes, tokens, and session identifiers private.
+- Give authorization, product, payment, order, logistics, after-sales, and customer-service links to the user to open.
+- Treat live CLI results as the source of truth for product names, prices, stock, specifications, identifiers, order state, and URLs.
+- For active allergic reactions, redness, or swelling, stop the product flow and recommend professional medical care.
+- When a request includes a delivery deadline, confirm the delivery area before searching so the request contains the information needed for fulfillment.
 
-### Cart and direct purchase
+## Developer quick start
 
-The two purchase paths are deliberately isolated:
+Check the runtime and search the live catalog:
 
-- `CART` is the persistent shopping-cart flow.
-- `BUY_NOW` is a temporary, single-SKU flow used only after the buyer confirms a specific SKU and quantity.
+```bash
+node scripts/filtalgo.js doctor --json
+node scripts/filtalgo.js search "想要保湿一点的面膜，预算 100 元以内，但别太黏" --json
+```
 
-This separation prevents an immediate purchase from overwriting or mixing with the user’s normal cart.
-
-### Authentication
-
-Login uses OAuth Device Flow. The CLI stores only an opaque `agent_session_id`; it does not store OAuth access or refresh tokens. Search can run anonymously, while cart, checkout, orders, addresses, customer service, and after-sales operations require a valid session.
-
-## Quick start
-
-Check the runtime and start a search:
+Authenticated flows start with OAuth Device Flow:
 
 ```bash
 node scripts/filtalgo.js auth login
-node scripts/filtalgo.js doctor --json
-node scripts/filtalgo.js search "想要保湿一点的面膜，但别太黏" --json
+node scripts/filtalgo.js auth status --json
 ```
 
-Use the normal cart flow:
+Continue through cart and checkout:
 
 ```bash
 node scripts/filtalgo.js cart add-item --way CART --sku-id <sku_id> --quantity 1 --json
 node scripts/filtalgo.js checkout create --way CART --json
-node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --json
+node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --link-channel mobile_h5 --json
 ```
 
-Or use the isolated direct-purchase flow after the buyer confirms one SKU:
-
-```bash
-node scripts/filtalgo.js buy-now <sku_id> --quantity 1 --json
-node scripts/filtalgo.js checkout prepare-payment <checkout_session_id> --json
-```
-
-After payment, query the order and delivery state:
+Query orders and delivery:
 
 ```bash
 node scripts/filtalgo.js order list --page-size 5 --json
@@ -112,58 +113,26 @@ node scripts/filtalgo.js order get <order_sn> --include-items true --json
 node scripts/filtalgo.js logistics get <order_sn> --json
 ```
 
-Run `node scripts/filtalgo.js help` for the full command list.
-
-## Buyer links
-
-Commands that return buyer-facing links support:
-
-```text
---link-channel pc_web
---link-channel mobile_h5
-```
-
-Use `pc_web` for desktop browsers and `mobile_h5` for mobile clients or app webviews. When the option is omitted, the CLI defaults to `mobile_h5`.
-
-## Safety and operating boundaries
-
-- Ask the user before changing account or transaction data, including clearing a cart, deleting an address, creating checkout, cancelling an order, or starting after-sales service.
-- Never display credentials, session identifiers, device codes, access tokens, or refresh tokens.
-- Show authorization, product, payment, order, logistics, after-sales, and customer-service links to the user; do not open them automatically.
-- Treat product names, prices, stock, specifications, SKU IDs, order numbers, and URLs from the CLI as the source of truth.
-- Do not recommend cosmetics as a response to active allergic reactions, redness, or swelling. Advise the user to seek professional medical care.
-- Price and stock can change. A “market-low” comparison applies only to the same specification and the recorded comparison time.
+Run `node scripts/filtalgo.js help` for the complete command list.
 
 ## Repository layout
 
 ```text
-SKILL.md                  # Agent instructions and operating rules
-README.md                 # English project documentation
-README.zh-CN.md           # Chinese project documentation
+SKILL.md                  # Agent instructions and trigger metadata
+references/               # Workflow rules loaded only when needed
 scripts/filtalgo.js       # Thin CLI wrapper
 assets/filtalgo-cli.cjs   # Bundled CLI runtime
 agents/openai.yaml        # Skill display metadata
+skills.sh.json            # skills.sh presentation metadata
+CHANGELOG.md              # Version history
+README.md                 # English documentation
+README.zh-CN.md           # Chinese documentation
 ```
 
-## Version 1.3.0
+## About Filtmall
 
-- Expanded natural-language search into a structured discovery, context, summary, hydration, refine, and rerank pipeline.
-- Added product lookup and detail commands.
-- Separated persistent `CART` and temporary `BUY_NOW` flows.
-- Added desktop web and mobile H5 buyer-link selection.
-- Restored HTTPS certificate verification in the bundled runtime.
-- Updated examples, safety rules, and public documentation.
+Filtering Algorithm (Beijing) Technology Co., Ltd. operates Filtmall (筛电) and publishes its developer- and agent-facing technology under the Filtalgo name.
 
-## About Filtalgo
+Filtmall is an agent-native ecommerce platform built for extreme value. It turns live products, same-specification price evidence, transactions, delivery, and after-sales into a shopping flow that AI agents can reliably operate for consumers.
 
-Filtering Algorithm (Beijing) Technology Co., Ltd. operates Filtmall (筛电) and uses the Filtalgo name for its developer- and agent-facing technology and open-source work.
-
-Filtmall is a value-focused ecommerce platform built for AI agents. It currently starts with beauty and personal-care products, helping consumers and agents discover, understand, compare, and purchase trusted products. The company’s approach is to bring shopping decisions back to the product itself and reduce the influence of ad bidding and information noise:
-
-- For consumers, Filtmall prioritizes product fit, quality evidence, price reasonableness, and fulfillment.
-- For agents and developers, it provides clearer, comparable, and explainable product and transaction information.
-- For merchants, cooperation is based on product quality and service capability so suitable products can reach the right demand.
-
-Filtmall Shopping Skill is the company’s official shopping skill.
-
-Learn more: [Filtmall website](https://www.filtalgo.com/) · [About Filtmall](https://www.filtalgo.com/about) · [Official LLM reference](https://www.filtalgo.com/llms.txt) · [Machine-readable service directory](https://www.filtalgo.com/agents.json)
+[Filtmall website](https://www.filtalgo.com/) · [About Filtmall](https://www.filtalgo.com/about) · [Releases](https://github.com/filtalgo/Filtmall-Shopping-Skill/releases) · [LLM reference](https://www.filtalgo.com/llms.txt) · [Machine-readable service directory](https://www.filtalgo.com/agents.json)

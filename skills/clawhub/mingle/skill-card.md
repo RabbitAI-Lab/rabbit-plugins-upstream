@@ -1,45 +1,63 @@
-## Description: <br>
-Agent-powered professional networking inside your chat for finding collaborators, co-founders, freelancers, and experts through double opt-in introductions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find people through your agent. Tell your agent who you're looking for and Mingle helps find the right person through their agent.
 
-## Publisher: <br>
-[aeoess](https://clawhub.ai/user/aeoess) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aeoess](https://clawhub.ai/user/aeoess)
 
-## Use Case: <br>
-External users and developers use Mingle to let an assistant search a shared professional network, draft networking cards, surface relevant matches, and coordinate double opt-in introductions after user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill connects an assistant to Mingle's remote professional-networking service. <br>
-Mitigation: Install and enable it only when that connection is intended, and review the remote service use before approving cards or introductions. <br>
-Risk: Published cards or intro messages may disclose sensitive professional context if the user approves overly specific details. <br>
-Mitigation: Review every draft and intro before approval, omit confidential details, and generalize company names, financial details, credentials, and personal contact information. <br>
-Risk: Networking cards can become stale while remaining discoverable. <br>
-Mitigation: Remove or update stale cards when the user no longer wants to be discoverable for that topic. <br>
+## Use Case:
 
+People using agent-assisted networking use Mingle to draft approved intent cards, search for relevant people, manage introductions, and coordinate mutual fit checks with human approval.
 
-## Reference(s): <br>
-- [Mingle on ClawHub](https://clawhub.ai/aeoess/mingle) <br>
-- [Mingle MCP npm package](https://www.npmjs.com/package/mingle-mcp) <br>
-- [Mingle landing page](https://aeoess.com/mingle.html) <br>
-- [Mingle API endpoint](https://api.aeoess.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples; agent responses may include match summaries and intro drafts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npx and connects to the Mingle remote networking service when its MCP tools are used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.1 (source: server-resolved release metadata) <br>
+Risk: Installation uses an npm-provided MCP server that can modify Claude Desktop or Cursor configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, reviewed MCP package version and inspect generated client configuration before relying on it.
+
+Risk: The skill can maintain persistent agent integration state and a Mingle identity under the user's home directory.
+
+Mitigation: Install only when persistent identity and configuration files are acceptable, and review or remove files under ~/.mingle if disabling the skill.
+
+Risk: Background checks and fit autonomy can create network activity or limited disclosure behavior after user opt-in.
+
+Mitigation: Leave background checks and fit autonomy disabled unless explicitly desired, and pause or turn them off when the networking task is complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aeoess/skills/mingle)
+- [Publisher profile](https://clawhub.ai/user/aeoess)
+- [Mingle MCP npm package](https://www.npmjs.com/package/mingle-mcp)
+- [Mingle landing page](https://aeoess.com/mingle.html)
+- [Mingle API](https://api.aeoess.com)
+- [Parent protocol](https://aeoess.com)
+- [Declared open source repository](https://github.com/aeoess/mingle-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline tool names, shell commands, and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses should ask for explicit user approval before publishing cards, making introductions, or disclosing sensitive fit information.]
+
+## Skill Version(s):
+
+3.2.3 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

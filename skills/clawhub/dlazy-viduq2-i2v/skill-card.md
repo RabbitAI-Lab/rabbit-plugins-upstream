@@ -1,45 +1,64 @@
-## Description: <br>
-Convert static images into dynamic videos using the Vidu Q2 image-to-video model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+图生视频 Vidu Q2 converts static images into dynamic videos using the dLazy-hosted Vidu Q2 image-to-video model.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to invoke dLazy's Vidu Q2 image-to-video CLI, supplying prompts and source images to generate hosted video outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, parameters, and media files are sent to dLazy services for generation. <br>
-Mitigation: Confirm the user is comfortable sending the selected inputs to dLazy before invoking the CLI. <br>
-Risk: A dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY when persistent storage is not desired, and rotate or revoke keys from the dLazy dashboard when they are no longer needed. <br>
-Risk: A global CLI installation persists on the system. <br>
-Mitigation: Prefer the pinned npx invocation when a non-persistent CLI execution is sufficient. <br>
+## Use Case:
 
+Developers, creators, and external agents use this skill to invoke dLazy's Vidu Q2 image-to-video CLI for generating videos from reference images, prompts, frame controls, aspect ratio, resolution, and optional async or save behavior.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted result URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Use of a third-party hosted service sends prompts and generation parameters to dLazy's API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only if dLazy's hosted service is acceptable for the intended data and use case.
+
+Risk: Local image, video, or audio paths supplied to media fields may be uploaded to dLazy media storage for model processing.
+
+Mitigation: Confirm before uploading private or sensitive media, and avoid submitting content that should not leave the local environment.
+
+Risk: The dLazy API key may be stored in local CLI configuration or supplied through an environment variable.
+
+Mitigation: Use least-privileged credential handling, avoid exposing the key in logs or shell history, and rotate or revoke it when no longer needed.
+
+Risk: The skill can be installed as a global npm package, which persists a CLI on the system.
+
+Mitigation: Prefer npx or another least-privileged install path when possible, and avoid sudo for installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide API-key setup, dry runs, asynchronous polling, and saving generated media URLs or files.]
+
+## Skill Version(s):
+
+1.3.14 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

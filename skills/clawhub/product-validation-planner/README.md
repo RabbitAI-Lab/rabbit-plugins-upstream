@@ -2,20 +2,18 @@
 
 ## Requirement
 
-Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 2 source families, so it represents broader demand rather than a single isolated request.
 
 Audience: solo founders, product managers, makers, and small teams who need to test whether a product idea is worth building before spending heavily
 
 Category: `business-and-operations`
 
-Demand score: 100/100
+Demand score: 90/100
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 2 source families.
 
 ## Evidence
 
-- hacker-news-ask-hn: [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues: [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
 - segmentfault-search: [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search: [javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search: [typescript](https://segmentfault.com/t/typescript)
@@ -23,9 +21,11 @@ Evidence coverage: 12 signals across 3 source families.
 - segmentfault-search: [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
 - segmentfault-search: [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
 - segmentfault-search: [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues: [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues: [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search: [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- csdn-search: [debugging-and- validation](https://wenku.csdn.net/doc/62or4vx1j7?ops_request_misc=elastic_search_misc&request_id=b038181a18944039936d3fb0c2c26fce&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-2-62or4vx1j7-null-null.142^v102^pc_search_result_base2&utm_term=product%20idea%20validation)
+- csdn-search: [网上购物商城系统 基于Springboot和Mysql的网上购物商城系统代码 ，包括程序，中文注释，配置说明操作步骤](https://wenku.csdn.net/doc/4zykz1ajdn?ops_request_misc=elastic_search_misc&request_id=b038181a18944039936d3fb0c2c26fce&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-4-4zykz1ajdn-null-null.142^v102^pc_search_result_base2&utm_term=product%20idea%20validation)
+- csdn-search: [springboot在线商城系统源码 idea 开发mysql数据库源码和论文 不包含答疑 和调试服务](https://wenku.csdn.net/doc/7sosvvskan?ops_request_misc=elastic_search_misc&request_id=b038181a18944039936d3fb0c2c26fce&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-5-7sosvvskan-null-null.142^v102^pc_search_result_base2&utm_term=product%20idea%20validation)
+- csdn-search: [BackEnd-Project:项目Java潜水员](https://wenku.csdn.net/doc/1h5kb7dz1i?ops_request_misc=elastic_search_misc&request_id=b038181a18944039936d3fb0c2c26fce&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-6-1h5kb7dz1i-null-null.142^v102^pc_search_result_base2&utm_term=product%20idea%20validation)
+- csdn-search: [Java课程设计超市订单管理系统源码+sql数据库.zip](https://wenku.csdn.net/doc/gb6yochoiy?ops_request_misc=elastic_search_misc&request_id=b038181a18944039936d3fb0c2c26fce&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-7-gb6yochoiy-null-null.142^v102^pc_search_result_base2&utm_term=product%20idea%20validation)
 
 ## How This Skill Meets The Requirement
 

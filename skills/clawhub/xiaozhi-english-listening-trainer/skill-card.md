@@ -1,41 +1,59 @@
-## Description: <br>
-Generates personalized English listening practice materials matched to a learner's vocabulary, interests, and sticking points, with fallback guidance when audio or persistent memory features are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语听力训练：按你的词汇量和兴趣生成一段听力材料，练完帮你定位卡在哪一层。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English-learning assistants use this skill to create level-appropriate listening passages, comprehension checks, vocabulary notes, and follow-up coaching based on learner profiles and interests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read or update learner profiles, vocabulary records, listening history, reminders, and reports without clearly documented opt-in controls. <br>
-Mitigation: Review before installation, require explicit learner or guardian consent, and confirm how stored vocabulary, reminders, and progress history can be viewed, disabled, or deleted. <br>
-Risk: The skill's true listening workflow depends on audio generation, speed control, and persistent memory that may not be available in every agent environment. <br>
-Mitigation: Tell learners when audio or memory features are unavailable and use the documented text-based fallback only as a temporary comprehension exercise. <br>
+## Use Case:
 
+External learners use this skill to generate level-appropriate English listening passages based on vocabulary level and interests, then practice comprehension through listening, summary, transcript comparison, and targeted follow-up. It supports upper-primary and middle-school listening practice, including new-word capture and listening profile updates when consent controls are enforced.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer) <br>
-- [Listening topic templates and material generation guide](references/listening-topic-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style tutoring responses with listening passages, vocabulary notes, comprehension questions, diagnostics, and progress summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on platform TTS, speed control, learner-profile memory, and reminder capabilities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill may read or write a child's saved learning, interest, oral, or vocabulary profile without clearly requiring consent checks at each access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before deployment, confirm speaker identity, profileEnabled, guardian requirements, and crossSkillSharing are enforced before any profile read or write.
+
+Risk: Personalization based on saved profiles can expose more student information than needed for a listening exercise.
+
+Mitigation: If platform consent controls are not enforced, run the skill with current-session information only or ask the student to choose the topic manually.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer)
+- [listening-topic-templates.md](references/listening-topic-templates.md)
+- [english-error-dimension-table.md](shared/english-error-dimension-table.md)
+- [vocab.md](shared/vocab.md)
+- [platform-conventions.md](shared/platform-conventions.md)
+- [crisis-exception.md](shared/crisis-exception.md)
+- [crisis-referral-protocol.md](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown and conversational text with structured handoff snippets when profiles or vocabulary records are updated]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces listening passages, vocabulary notes, comprehension questions, targeted feedback, progress summaries, and consent-gated profile or vocabulary handoffs.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

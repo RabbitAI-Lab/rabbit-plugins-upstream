@@ -82,10 +82,51 @@ LEVELS = {
 }
 
 
+# ── Untrusted-text hardening ─────────────────────────────────────────────────
+# Every argument this script prints — command, purpose, result, warning, action —
+# can carry text the agent did not write: the stdout of a command, a filename from
+# a cloned repo, an error message from a remote server. Printed raw, a string like
+# "\x1b[2K\rSAFE: read-only" repaints the line above and turns a CRITICAL banner
+# into a green one. A security display that can be forged by its own input is
+# worse than no display, so the input is stripped before any colour is applied.
+
+# ESC ] ... (BEL | ST)  — OSC strings: window title, OSC-8 hyperlinks
+_OSC = r'\x1B\][^\x07\x1B]*(?:\x07|\x1B\\)?'
+# ESC P/X/^/_ ... ST    — DCS / SOS / PM / APC strings
+_DCS = r'\x1B[PX^_][^\x1B]*(?:\x1B\\)?'
+# ESC [ ... final byte  — CSI: colour, cursor movement, line erase
+_CSI = r'\x1B\[[0-?]*[ -/]*[@-~]'
+# Any other two-byte escape, and a bare/truncated trailing ESC
+_ESC = r'\x1B[@-Z\\-_]|\x1B'
+_ANSI_RE = re.compile('|'.join((_OSC, _DCS, _CSI, _ESC)))
+
+# C0 + DEL + C1. \n is kept only where a caller asks for it (line counting).
+_CTRL_ALL = re.compile(r'[\x00-\x1F\x7F-\x9F]')
+_CTRL_KEEP_NL = re.compile(r'[\x00-\x09\x0B-\x1F\x7F-\x9F]')
+
+
 def strip_ansi(text: str) -> str:
-    """Remove ANSI escape codes from text for length calculation."""
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-    return ansi_escape.sub('', text)
+    """Remove ANSI/OSC/DCS escape sequences from text."""
+    return _ANSI_RE.sub('', text)
+
+
+def sanitize(text, keep_newlines: bool = False, max_len: int = 800):
+    """
+    Make attacker-influenced text safe to print inside a coloured report.
+
+    Removes escape sequences and control characters, so the argument cannot
+    recolour the report, erase or reposition lines, set the window title, or
+    smuggle a hyperlink. Length is capped so a huge argument cannot scroll the
+    real banner off the screen.
+    """
+    if text is None:
+        return None
+    out = str(text).replace('\t', ' ')
+    out = _ANSI_RE.sub('', out)
+    out = (_CTRL_KEEP_NL if keep_newlines else _CTRL_ALL).sub('', out)
+    if len(out) > max_len:
+        out = out[:max_len - 1] + '…'
+    return out
 
 
 def summarize_output(output: str, max_chars: int = 80) -> str:
@@ -136,11 +177,22 @@ def format_command(
     4. Warning/Action (optional)
     """
     if level not in LEVELS:
-        print(f"Error: Unknown level '{level}'. Use: {', '.join(LEVELS.keys())}", file=sys.stderr)
+        # `level` is argv too — never echo it back unsanitized.
+        print(f"Error: Unknown level '{sanitize(level, max_len=40)}'. "
+              f"Use: {', '.join(LEVELS.keys())}", file=sys.stderr)
         sys.exit(1)
 
     config = LEVELS[level]
-    
+
+    # Everything below is printed. Strip escapes and control characters FIRST,
+    # so no argument can forge the banner it is displayed inside. Newlines
+    # survive in `result` only long enough for summarize_output() to count them.
+    command = sanitize(command)
+    purpose = sanitize(purpose)
+    warning = sanitize(warning)
+    action = sanitize(action)
+    result = sanitize(result, keep_newlines=True, max_len=20000)
+
     # Determine result icon and color
     result_clean = result.strip() if result else ""
     if result_clean.startswith('✓') or result_clean.startswith('✔'):
@@ -156,6 +208,9 @@ def format_command(
         result_icon = '✓'
         result_color = Colors.BRIGHT_GREEN
         result_text = summarize_output(result_clean)
+
+    # Collapse the chosen result line back to a single sanitized line.
+    result_text = sanitize(result_text)
 
     # Line 1: Level + Command
     level_str = f"{config['name']}: {config['desc'].upper()}"

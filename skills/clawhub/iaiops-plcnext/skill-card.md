@@ -1,40 +1,57 @@
-## Description: <br>
-PLCnext and virtualized-PLC edition of iaiops that guides agents through read-first OPC-UA and Modbus diagnostics, cross-protocol analysis, and industrial data workflows for Phoenix Contact PLCnext environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PLCnext/vPLC packaging edition of iaiops for reading PLCnext Control data over built-in OPC-UA and Modbus-TCP servers and routing it into existing diagnostic, downtime, predictive-maintenance, OEE, alarm, baseline, compliance, and program-analysis workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and industrial automation engineers use this skill to route agents toward read-first PLCnext Control and vPLC diagnostics over built-in OPC-UA and Modbus-TCP services. It is suited for connection diagnosis, dataflow triage, downtime root cause analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows using existing iaiops tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unintended access to PLCnext endpoints or operational data destinations. <br>
-Mitigation: Before installation or use, confirm the iaiops MCP tools are configured only for intended PLCnext endpoints and that export, historian, streaming, baseline, and alias-map destinations are approved for the operational data involved. <br>
-Risk: Write-capable profiles could enable controlled changes outside this read-first edition. <br>
-Mitigation: Keep write-capable profiles disabled unless controlled changes are explicitly required; when enabled, apply the documented approval, dry-run, undo, and change-management controls. <br>
+## Use Case:
 
+Developers and plant engineers use this skill to route PLCnext Control or virtual PLC tasks through existing OPC-UA and Modbus read, diagnostic, alarm, downtime, OEE, baseline, compliance, and program-analysis workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with tool names and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first PLCnext OPC-UA and Modbus workflow guidance; no new connector or PLCnext vendor SDK is introduced by the skill text.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: The claimed read-only scope conflicts with listed export, stream publish, UNS publish, and historian-push capabilities that may move operational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify which underlying iaiops tools are enabled before deployment, and restrict export, publish, and historian paths unless destinations and data-handling rules are approved.
+
+Risk: Use against unauthorized PLCnext or virtual PLC systems could expose plant data or operational context.
+
+Mitigation: Use the skill only with authorized PLCnext/vPLC systems and approved OPC-UA or Modbus endpoints.
+
+Risk: Operational instructions are primarily in Chinese, which can lead to review or configuration mistakes for teams that cannot read them accurately.
+
+Mitigation: Require an accurate translation or a qualified Chinese-language reviewer before installation and plant use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline tool names and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include operational diagnostics, data-quality findings, baseline checks, advisory matches, program-analysis summaries, and configuration guidance.]
+
+## Skill Version(s):
+
+0.27.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -33,37 +33,36 @@ SCRIPT_ID = 'openclaw-workspace-theme-script'
 LEGACY_STYLE_IDS = ['openclaw-custom-theme']
 LEGACY_SCRIPT_IDS = ['openclaw-custom-theme-script']
 DEFAULT_ASSISTANT_NAMEPLATE = '菠萝包 // BOLO BAO'
-HELPER_NAMEPLATE = '消息助手 helper'
 
 THEME_ASSET_NAMES = (
     'bao-dream.gif',
     'chat-bg-cyberpunk.jpg',
-    'avatar1.png',
     'avatar2.png',
     'header.png',
-    'history-avatar.png',
 )
 OBSOLETE_THEME_ASSET_NAMES = (
+    'avatar1.png',
+    'history-avatar.png',
     'tool-avatar.gif',
     'pineapple-bun-breathe.gif',
+)
+OBSOLETE_ENCODED_THEME_ASSET_NAMES = (
+    'avatar1.png.txt',
+    'history-avatar.png.txt',
 )
 ENCODED_THEME_ASSET_TARGETS = {
     'bao-dream.gif.txt': Path('assets/bao-dream.gif'),
     'chat-bg-cyberpunk.jpg.txt': Path('assets/chat-bg-cyberpunk.jpg'),
-    'avatar1.png.txt': Path('assets/avatar1.png'),
     'avatar2.png.txt': Path('assets/avatar2.png'),
     'header.png.txt': Path('assets/header.png'),
-    'history-avatar.png.txt': Path('assets/history-avatar.png'),
     'dreaming-bg.png.txt': Path('dreaming-bg.png'),
 }
 ENCODED_THEME_ASSET_SHA256 = {
-    'avatar1.png.txt': '65986debde8be612d3b25fcc75f8359a613149ffe21dba400340a89f543bfbba',
     'avatar2.png.txt': '5858eeee0e1e13fbb9ca8df6759a920925ea7dc4f71fad414d975e765cbed81a',
     'bao-dream.gif.txt': 'd3efa2c7e71de23a28146b049cc59925508fd61ceab229292579559bd2adbff9',
     'chat-bg-cyberpunk.jpg.txt': '7ad9040c1d4ac2e58c1c9e90995706744ef41c82367aed807a7e36838e78248c',
     'dreaming-bg.png.txt': 'b73b594c9ec611465d9fa186f518726992962a498d40448b2ab606e21636437d',
     'header.png.txt': '4e9dbc48f8ffe7d3fe4e1d7958a84b17da1ef66e7c0230fb0471b5697c7a4df7',
-    'history-avatar.png.txt': '356b2a53f7ae2696996c490a13ddee5c9ce37343aff96c801b310e3ccc37b06a',
 }
 FALLBACK_ASSET_BUNDLE_URL = (
     'https://clawhub.ai/api/v1/download?slug=cyberpunk-theme&version=1.0.21'
@@ -72,8 +71,6 @@ FALLBACK_ENCODED_ASSET_PREFIX = 'assets/theme/encoded-assets/'
 FALLBACK_ASSET_BUNDLE_MAX_BYTES = 20 * 1024 * 1024
 SLOT_TARGETS = {
     'assistant_avatar': Path('assets/avatar2.png'),
-    'tool_avatar': Path('assets/avatar1.png'),
-    'help_avatar': Path('assets/history-avatar.png'),
     'user_avatar': Path('assets/header.png'),
     'chat_background': Path('assets/chat-bg-cyberpunk.jpg'),
     'dream_avatar': Path('assets/bao-dream.gif'),
@@ -84,8 +81,6 @@ CONFIG_KEY_ALIASES = {
     'workspace': ('workspace', 'workspacePath'),
     'dist_dir': ('dist_dir', 'distDir'),
     'assistant_avatar': ('assistant_avatar', 'assistantAvatar'),
-    'tool_avatar': ('tool_avatar', 'toolAvatar'),
-    'help_avatar': ('help_avatar', 'helpAvatar', 'history_avatar', 'historyAvatar', 'other_avatar', 'otherAvatar'),
     'user_avatar': ('user_avatar', 'userAvatar'),
     'chat_background': ('chat_background', 'chatBackground'),
     'dream_avatar': ('dream_avatar', 'dreamAvatar'),
@@ -180,7 +175,6 @@ def build_runtime_theme_css(css_source: str, workspace: Path) -> str:
     vars_block = (
         ':root {\n'
         f'  --oc-assistant-nameplate: "{css_string(assistant_nameplate)}";\n'
-        f'  --oc-helper-nameplate: "{css_string(HELPER_NAMEPLATE)}";\n'
         '}\n\n'
     )
     return vars_block + css_source
@@ -198,8 +192,6 @@ def parse_args() -> argparse.Namespace:
         help='control-ui dist directory',
     )
     parser.add_argument('--assistant-avatar', type=Path, help='Override main assistant portrait')
-    parser.add_argument('--tool-avatar', type=Path, help='Override tool portrait')
-    parser.add_argument('--help-avatar', type=Path, help='Override help/history portrait')
     parser.add_argument('--user-avatar', type=Path, help='Override user portrait')
     parser.add_argument('--chat-background', type=Path, help='Override chat background image')
     parser.add_argument('--dream-avatar', type=Path, help='Override dream avatar image')
@@ -252,8 +244,6 @@ def merge_config_into_args(args: argparse.Namespace, config: dict[str, object]) 
 
     for attr in (
         'assistant_avatar',
-        'tool_avatar',
-        'help_avatar',
         'user_avatar',
         'chat_background',
         'dream_avatar',
@@ -280,8 +270,6 @@ def validate_override(path: Path | None, label: str) -> Path | None:
 def resolve_slot_overrides(args: argparse.Namespace) -> dict[str, Path | None]:
     return {
         'assistant_avatar': validate_override(args.assistant_avatar, 'assistant avatar'),
-        'tool_avatar': validate_override(args.tool_avatar, 'tool avatar'),
-        'help_avatar': validate_override(args.help_avatar, 'help avatar'),
         'user_avatar': validate_override(args.user_avatar, 'user avatar'),
         'chat_background': validate_override(args.chat_background, 'chat background'),
         'dream_avatar': validate_override(args.dream_avatar, 'dream avatar'),
@@ -305,6 +293,10 @@ def backup_existing_theme(workspace: Path, theme_dir: Path, apply_script: Path) 
 def install_theme_sources(theme_dir: Path, overridden_targets: set[Path] | None = None) -> None:
     theme_dir.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(DEFAULT_THEME_DIR, theme_dir, dirs_exist_ok=True)
+    for name in OBSOLETE_THEME_ASSET_NAMES:
+        (theme_dir / 'assets' / name).unlink(missing_ok=True)
+    for name in OBSOLETE_ENCODED_THEME_ASSET_NAMES:
+        (theme_dir / 'encoded-assets' / name).unlink(missing_ok=True)
     restore_encoded_theme_assets(theme_dir, skip_targets=overridden_targets)
 
 
@@ -330,7 +322,7 @@ def download_fallback_encoded_theme_assets(encoded_names: list[str]) -> dict[str
 
     request = urllib.request.Request(
         FALLBACK_ASSET_BUNDLE_URL,
-        headers={'User-Agent': 'cyberpunk-theme-installer/1.0.22'},
+        headers={'User-Agent': 'cyberpunk-theme-installer/1.0.24'},
     )
     print('- downloading verified default asset bundle from ClawHub 1.0.21')
     try:
@@ -424,16 +416,15 @@ SCRIPT_ID = 'openclaw-workspace-theme-script'
 LEGACY_STYLE_IDS = ['openclaw-custom-theme']
 LEGACY_SCRIPT_IDS = ['openclaw-custom-theme-script']
 DEFAULT_ASSISTANT_NAMEPLATE = '菠萝包 // BOLO BAO'
-HELPER_NAMEPLATE = '消息助手 helper'
 THEME_ASSET_NAMES = (
     'bao-dream.gif',
     'chat-bg-cyberpunk.jpg',
-    'avatar1.png',
     'avatar2.png',
     'header.png',
-    'history-avatar.png',
 )
 OBSOLETE_THEME_ASSET_NAMES = (
+    'avatar1.png',
+    'history-avatar.png',
     'tool-avatar.gif',
     'pineapple-bun-breathe.gif',
 )
@@ -502,7 +493,6 @@ def build_runtime_theme_css(css_source: str) -> str:
     vars_block = (
         ':root {\\n'
         f'  --oc-assistant-nameplate: "{css_string(assistant_nameplate)}";\\n'
-        f'  --oc-helper-nameplate: "{css_string(HELPER_NAMEPLATE)}";\\n'
         '}\\n\\n'
     )
     return vars_block + css_source

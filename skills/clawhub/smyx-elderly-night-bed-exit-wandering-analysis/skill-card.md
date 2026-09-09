@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes night-vision bedroom or hallway media to detect elderly bed-exit duration, wandering behavior, and threshold-based alert information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed night-vision bedroom or hallway camera footage to detect elderly bed-exit duration, wandering behavior, and threshold-based alerts for caregivers.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Caregiving teams, nursing-home operators, and smart-home integrators use this skill to analyze authorized night-bedroom or hallway media for prolonged bed exits and wandering alerts. The skill outputs behavioral statistics and alerts, not medical diagnoses or care instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive night-bedroom video or URLs may be processed by the configured remote service. <br>
-Mitigation: Use only authorized media with informed consent from monitored people or guardians, and confirm the remote service is appropriate for the deployment. <br>
-Risk: The skill may silently create or reuse an account identity and store access tokens in the workspace. <br>
-Mitigation: Run it only in controlled workspaces, restrict access to generated tokens and reports, and rotate or remove stored credentials when access is no longer needed. <br>
-Risk: Outputs are behavioral alerts and may be incorrect or incomplete for urgent safety events. <br>
-Mitigation: Require caregiver review and immediate human verification for suspected falls, wandering away, or other emergencies. <br>
+## Use Case:
 
+External care teams, nursing-home operators, and home-care developers use this skill to analyze night-vision bedroom or hallway footage for bed-exit duration, wandering behavior, and threshold-based alerts. The skill provides behavior statistics and alerts, not medical diagnosis or care instructions.
 
-## Reference(s): <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json] <br>
-**Output Format:** [Markdown report text with JSON analysis content and optional report link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save the report text to a caller-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter lists 1.0.4) <br>
+Risk: The security evidence flags sensitive bedroom-video cloud analysis with broad automatic identity, credential persistence, and under-scoped network behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after the publisher documents what footage and report data are sent to remote services, obtains explicit consent for video upload and history retrieval, and limits the skill to trusted destinations.
+
+Risk: The security guidance says the release configuration must require HTTPS and restrict trusted destinations.
+
+Mitigation: Use only HTTPS service endpoints in release configuration and block local, test, or plaintext HTTP destinations before deployment.
+
+Risk: The security guidance warns against storing tokens in a shared plaintext database.
+
+Mitigation: Store tokens in a protected credential store and rotate any credentials that may have been persisted by earlier runs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-night-bed-exit-wandering-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json]
+
+**Output Format:** [Markdown text with structured JSON analysis and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bed-exit events, total bed-exit duration, wandering detection, alert level, alert message, and report export links.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence; artifact frontmatter reports 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

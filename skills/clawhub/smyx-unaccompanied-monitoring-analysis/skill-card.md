@@ -1,47 +1,63 @@
-## Description: <br>
-Determines when elderly people living alone have no interaction or visitors for extended periods, and actively pushes care reminders to family members, suitable for remote care scenarios for elderly people living alone at home. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Determines when elderly people living alone have no interaction or visitors for extended periods, and actively pushes care reminders to family members, suitable for remote care scenarios for elderly people living alone at home.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Care teams, family caregivers, and agents supporting elder-care workflows use this skill to analyze home monitoring images, videos, or URLs for extended periods without interaction or visitors and to retrieve related cloud report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private elder-care photos, videos, or supplied URLs are sent to LifeEmergence cloud services for analysis. <br>
-Mitigation: Use only with explicit consent from monitored people and caregivers, and verify the provider's data handling, retention, and access policies before deployment. <br>
-Risk: Cloud report history can be queried and may reveal sensitive home-care monitoring records. <br>
-Mitigation: Limit installation and use to trusted agents and accounts with a legitimate care workflow need, and review access controls for report history before enabling the skill. <br>
-Risk: The skill may silently create or reuse an identity and store tokens locally. <br>
-Mitigation: Avoid use where account binding must be explicitly confirmed by the user, and review local token storage and identity reuse behavior before production use. <br>
-Risk: Analysis results are care reminders and may be incomplete or inaccurate. <br>
-Mitigation: Treat outputs as decision support only and require human follow-up for elder safety, urgent care, or professional nursing decisions. <br>
+## Use Case:
 
+External caregivers, family members, and elder-care platform operators use this skill to analyze home monitoring images or videos for prolonged absence of interaction or visitors and to retrieve historical monitoring reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-unaccompanied-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Unaccompanied monitoring API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text with structured analysis results, report-list output, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can optionally write the returned report text to a local output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.9) <br>
+Risk: Private monitoring images or videos may be sent to the Lifeemergence backend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit consent and approved media sources; confirm the configured backend endpoint before execution.
+
+Risk: The skill can create or reuse an internal identity and store authentication tokens in the workspace.
+
+Mitigation: Run in a controlled workspace, review local credential storage, and rotate or remove stored tokens when access is no longer needed.
+
+Risk: Default or helper configuration may allow HTTP or non-production API endpoints.
+
+Mitigation: Restrict outbound requests to approved HTTPS production hosts before deployment.
+
+Risk: Monitoring results are care reminders and may be incorrect or incomplete.
+
+Mitigation: Use results as prompts for human follow-up, not as a replacement for direct visits, emergency response, or professional care.
+
+## Reference(s):
+
+- [API 接口文档](artifact/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-unaccompanied-monitoring-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text with structured JSON analysis and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can output current analysis results, saved result files, or historical report listings from the Lifeemergence API.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence; artifact frontmatter reports 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

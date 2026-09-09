@@ -102,6 +102,9 @@ Agent group and icon metadata can live in `~/.config/bark-notify-agents.json`:
 }
 ```
 
+Configure WorkBuddy in the local agent metadata with the `WorkBuddy` group and
+the server-hosted icon URL shown in the example configuration.
+
 The icon must be a URL reachable by the receiving iOS device. Common hosting
 choices include GitHub Pages, Cloudflare Pages, S3/R2, nginx, Caddy, or jsDelivr.
 When neither `--icon` nor an agent icon is configured, the skill uses the Agent
@@ -124,6 +127,7 @@ script relative to the skill directory:
 python3 scripts/bark-notify.py "Title" "Body"
 python3 scripts/bark-notify.py --agent codex --level active "Build finished" "Codex completed the requested task"
 python3 scripts/bark-notify.py --agent codex --level active "Milestone reached" "The first migration finished"
+python3 scripts/bark-notify.py --agent workbuddy --level active "Build finished" "WorkBuddy task completed"
 python3 scripts/bark-notify.py --ping
 python3 scripts/bark-notify.py --doctor
 python3 scripts/bark-notify.py --dry-run --agent codex --level active "Build finished" "Ready"

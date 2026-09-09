@@ -2,10 +2,11 @@
 name: dcc-mcp-creator
 description: >-
   Infrastructure skill - guide developers and agents through creating or
-  modernizing a full DCC-MCP adapter for Nuke, Blender, 3ds Max, Unreal,
-  ZBrush, Houdini, Maya, and custom studio tools. Use when building server,
-  dispatcher, gateway, packaging, and runtime integration. Not for authoring
-  individual SKILL.md tool packages - use dcc-mcp-skills-creator.
+  modernizing a DCC-MCP adapter or standalone internal MCP service for Nuke,
+  Blender, 3ds Max, Unreal, ZBrush, Houdini, Maya, and custom studio systems.
+  Use when building server, dispatcher, gateway, packaging, and runtime
+  integration. Not for authoring individual SKILL.md tool packages - use
+  dcc-mcp-skills-creator.
 license: MIT-0
 allowed-tools: Bash Read Write Edit
 metadata:
@@ -13,27 +14,46 @@ metadata:
     dcc: python
     layer: infrastructure
     compatibility: "dcc-mcp-core 0.17+, Python 3.7+"
-    version: "0.19.79"  # x-release-please-version
+    version: "0.19.100"
     search-hint: >-
       create DCC MCP adapter, Nuke MCP, DccServerBase, HostExecutionBridge,
       dispatcher, readiness, resources, gateway, Blender, 3ds Max, Unreal,
-      ZBrush, Houdini, Maya, chunked main-thread jobs, cooperative cancellation
-    tags: "adapter-development, host-runtime, dispatcher, gateway, nuke, blender, 3dsmax, unreal, zbrush"
+      ZBrush, Houdini, Maya, standalone internal MCP service, private intranet,
+      non-DCC server, chunked main-thread jobs, cooperative cancellation
+    tags: "adapter-development, internal-mcp-service, standalone, host-runtime, dispatcher, gateway, nuke, blender, 3dsmax, unreal, zbrush"
     skill-reference-docs:
       - "references/*.md"
   openclaw:
-    homepage: https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp-creator/SKILL.md
+    homepage: https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp-creator/SKILL.md
 ---
 
 # DCC-MCP Creator
 
-Use this skill when you are creating a new DCC-MCP adapter or modernizing an
-existing adapter repository: server composition, host-thread dispatch,
+Use this skill when you are creating a new DCC-MCP adapter, modernizing an
+existing adapter repository, or exposing a private non-DCC studio system as a
+standalone MCP service: server composition, host-thread dispatch,
 sidecar/gateway wiring, readiness, resources, project state, diagnostics,
-install lifecycle, or cross-DCC verification.
+install lifecycle, or cross-DCC verification. A local folder, intranet source
+tree, or private monorepo is sufficient; GitHub is not a runtime requirement.
 
 For individual skill packages (`SKILL.md`, `tools.yaml`, scripts, groups, and
 skill taxonomy), load `dcc-mcp-skills-creator` instead.
+
+## Install and Route
+
+Install the published
+[`@loonghao/dcc-mcp-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-creator)
+package, then start a new agent turn:
+
+```bash
+openclaw skills install @loonghao/dcc-mcp-creator
+npx --yes clawhub@0.23.1 install @loonghao/dcc-mcp-creator
+```
+
+Use [`dcc-mcp`](https://clawhub.ai/loonghao/skills/dcc-mcp) to operate an
+existing DCC. Use
+[`dcc-mcp-skills-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator)
+when only a DCC-specific Skill package is needed.
 
 ## CLI-First Control Path
 
@@ -41,8 +61,11 @@ Use the `dcc-mcp` skill and `dcc-mcp-cli` for discovery, validation, and live
 DCC control whenever the agent can run shell commands. If the CLI is missing,
 follow the consent-gated official installation instructions in `dcc-mcp`.
 Before long-lived validation, run `dcc-mcp-cli update check`; use
-`dcc-mcp-cli update apply` to stage the latest CLI for the next launch. This
-does not replace a running server binary.
+`dcc-mcp-cli update apply` to verify and stage the latest CLI for the next
+launch. Apply-time verification is installation-bound and legacy unsigned
+staging is quarantined. Official update manifests additionally require the
+release workflow's detached Sigstore provenance. This does not replace a running server binary; update
+the server from its exact target environment. Gateway Admin is check-only.
 
 ## Runtime Vocabulary
 
@@ -57,22 +80,33 @@ does not replace a running server binary.
 
 ## Fast Workflow
 
-1. Run `dcc-mcp-cli dcc-types` before creating a repository. If the DCC type is
-   already cataloged, improve that adapter instead of creating a duplicate.
-   Custom types remain supported; add the new adapter to `dcc-mcp-catalog.yml`
-   and the compatibility matrix in the same core PR.
-2. Classify the host integration:
+1. Classify the ownership boundary before creating files:
+   - Public DCC adapter: run `dcc-mcp-cli dcc-types`; improve an existing
+     adapter instead of creating a duplicate. Add a genuinely new public
+     adapter to `dcc-mcp-catalog.yml` and the compatibility matrix. A pip
+     install entry requires the released universal wheel's exact HTTPS URL,
+     catalog version, and SHA-256; omit install metadata until it is published.
+   - Private non-DCC service: work in the supplied local or intranet project,
+     keep its stable custom service id private, and do not require a GitHub
+     repository, public catalog entry, issue, or release. Use a studio-owned
+     catalog only when operators need `dcc-mcp-cli install` plans.
+   - Skill package only: switch to `dcc-mcp-skills-creator`.
+2. Classify the runtime integration:
    - Embedded Python host: Blender, 3ds Max Python, Houdini, Maya, Nuke.
    - External bridge host: ZBrush, Photoshop, Unity, custom tools.
    - Game/editor host with mixed Python or C++ bridge: Unreal, Unity.
+   - Standalone internal service: no host bridge; use inline execution for
+     ordinary service/file/API tools and keep every tool typed.
 3. Read the relevant reference:
    - [ADAPTER_WORKFLOW.md](references/ADAPTER_WORKFLOW.md) for the build path.
+   - [INTERNAL_SERVICE_WORKFLOW.md](references/INTERNAL_SERVICE_WORKFLOW.md) for a private non-DCC service with no public repository requirement.
    - [HOST_PATTERN_MATRIX.md](references/HOST_PATTERN_MATRIX.md) for host-specific wiring.
    - [CORE_ESCALATION_CHECKLIST.md](references/CORE_ESCALATION_CHECKLIST.md) before adding adapter-local glue.
     - [TESTING_AND_RELEASE.md](references/TESTING_AND_RELEASE.md) before validating or publishing.
     - **Python 3.7 policy**: native py37 is an LTS profile with no automatic calendar expiry. Verify the aggregate Python 3.7 gate is green and `requires-python = ">=3.7"` is unchanged before any release. `py37-lite` fallback does NOT satisfy release gates. Removal requires an accepted superseding ADR, a major release, and at least 180 days of notice.
     - [docs/guide/gateway.md](../../docs/guide/gateway.md) for gateway daemon lifecycle details.
     - [docs/guide/adapter-install-lifecycle.md](../../docs/guide/adapter-install-lifecycle.md) for sidecar launch/readiness details.
+    - [docs/guide/adapter-install-sop.md](../../docs/guide/adapter-install-sop.md) for the adapter-owned install, status, verify, uninstall, and upgrade contract.
     - [docs/guide/adapter-release-checklist.md](../../docs/guide/adapter-release-checklist.md) for release train compliance.
     - [docs/guide/new-adapter-onboarding.md](../../docs/guide/new-adapter-onboarding.md) for new adapter scaffolding.
     - [docs/guide/adapter-compatibility-matrix.md](../../docs/guide/adapter-compatibility-matrix.md) for the per-DCC compatibility table.
@@ -82,43 +116,93 @@ does not replace a running server binary.
    - Standard sidecar: pass `watch_pid=current_dcc_pid`; core publishes the sidecar owner and bound host as separate liveness signals.
    - Other out-of-process adapter: pass `dcc_pid=current_dcc_pid` so `McpHttpConfig.host_pid` binds discovery to the DCC lifetime.
    - Standalone/headless service: pass `instance_type="standalone"`, leave `dcc_pid` unset, and do not bind it to an optional GUI process. Runtime identity is independent from `standalone_main_thread`, which controls tool execution only.
-5. Route host API calls through `HostExecutionBridge`; do not hand-roll a second script executor.
-6. Keep DCC identity data-driven: `dcc_name`, `server_name`, env-var prefix, skill names, and gateway metadata.
+5. Route host API calls through `HostExecutionBridge`; do not hand-roll a second script executor. Standalone services with no host-thread boundary should keep the default inline execution path.
+   For file-backed typed `main(**params)` execution, publish mapping annotations
+   only when their keys are strings (`Dict[str, V]`). Validate the requested
+   SHA-256, derived schema, and structured params before materializing inline
+   source; an invalid request must leave no script or sidecar file behind.
+6. Keep service identity data-driven: `dcc_name`/custom service id, `server_name`, env-var prefix, skill names, and gateway metadata.
    Leave the instance port unset so core resolves `DCC_MCP_<DCC>_PORT` or asks the OS for a free port.
 7. Use core helpers for skill discovery, `MinimalModeConfig`, project tools, resources, diagnostics, context snapshots, install lifecycle, and gateway failover before writing adapter-local wrappers. Python `DccServerBase.collect_skill_search_paths()` includes marketplace-installed skills under `~/.dcc-mcp/marketplace/<dcc>` (or `DCC_MCP_MARKETPLACE_INSTALL_ROOT/<dcc>`) when the directory exists, so adapters should not add a second marketplace path convention. Hermetic adapter tests should set `DCC_MCP_DISABLE_DEFAULT_SKILL_PATHS=1`; this excludes implicit local/platform defaults, marketplace installs, and Admin custom paths while explicit, bundled, and environment-provided skill paths remain active.
-   - For Windows visual UI fallback, reuse the bundled `ui-control` skill and the
-     isolated `dcc-mcp-ui-control-host.exe`; do not instantiate
-     `ComputerUseSession` or add adapter-local screenshot/`SendInput` wrappers.
-     Keep `ui_control__snapshot` and `ui_control__act` in the same long-lived adapter
-     process so one thin named-pipe client retains the opaque host capability.
-     Preserve `capture_provenance` when snapshots or recordings become
-     evidence. Native Windows pixels require
-     `backend=windows-ui-control-host` and `pixels_captured=true`; use one
-     logical UI Control `session_id` plus one stable gateway
-     `agent_context.session_id` for attributable acceptance runs.
-     The per-logon-session host owns the screenshot/UIA observations, visible
-     banner, Esc stop token, input owner, confirmation, and native input.
-     `ui-control` declares `requires_in_process: true` while keeping
+   `DccServerBase` also owns `DiagnosticRuntimeState`; do not add adapter-level
+   recorder, sandbox, screenshot-capturer, dispatcher, server, or instance-context
+   globals. Standalone registration code may inject one state into both
+   diagnostic registration helpers.
+   It also owns `feedback_store`, `script_execution_context`, and
+   `checkpoint_store`; inject them into core helpers instead of creating
+   adapter-level feedback buffers, persistent exec namespaces, or default stores.
+   Adapters that expose `execute_python` should capability-gate cheap scene-state
+   evidence by registering one host-owned callback with
+   `register_state_digest_provider(..., context=server.script_execution_context)`.
+   The callback returns `SceneStats` or its mapping shape (`object_count`,
+   `vertex_count`, `has_mesh`, optional `extra`). Run scripts through
+   `execute_with_state_digest(...)`; its native transaction pins that exact
+   provider for both observations and returns public `SceneDigestSnapshot`
+   values. A script cannot replace the provider used by its active transaction
+   or poison the next transaction through `ScriptExecutionContext`. Pass both
+   snapshots to `ScriptExecutionResult.from_value(...)`. Core bounds and redacts
+   the payload, computes a deterministic fingerprint, and fails closed when the
+   provider is absent, raises, returns malformed data, or supplies a mismatched
+   fingerprint.
+   Digest change proves only that observed state changed; leave `verified`
+   omitted/false unless an adapter-owned postcondition verifies the claimed
+   effect. Never turn contract-test evidence into a real-host success claim.
+   The fingerprint and truncation marker detect deterministic corruption; they
+   are not authentication, authorization, or proof of host identity. Core does
+   not expose a Python secret, signing oracle, signed wire tag, or native factory
+   that turns caller-supplied bytes into authenticated evidence. The adapter
+   registers the provider before the native transaction starts, but that does
+   not establish cryptographic authenticity; semantic verification remains
+   adapter-owned. Pure-Python runtimes without that boundary fail closed with
+   `scene_digest_custody_unavailable`. Mapping
+   values beyond the bounded observation budget use a fixed sentinel, keeping
+   equivalent provider mappings deterministic without unbounded reads.
+   Core does not auto-register or advertise an `execute_python` route. Gate
+   adapter discovery and route registration on successful provider
+   registration, and expose `unavailable/provider_missing` when
+   `capture_state_digest(...)` reports no provider.
+   If the script raises `Exception` or `BaseException`, the transaction performs
+   after-state readback first. Catch `SceneDigestExecutionError` and pass its
+   `cause`, snapshots, and `readback_error` to
+   `ScriptExecutionResult.from_exception(...)`.
+   A failed after-readback after a mutating script is explicitly
+   `indeterminate=true` with `verified=false`; preserve the before snapshot and
+   never retry it as if no side effect occurred.
+   Core persists gateway-accepted feedback under
+   `<registry_dir>/feedback/<dcc>-<pid>.jsonl` with bounded rotation and
+   session-end syncing. Treat `feedback_persistence_failed` as a real degraded
+   result; never add an adapter-local success fallback.
+   - For native visual UI fallback, reuse the bundled `ui-control` skill with
+     standalone `dcc-cua` 0.4.0 or newer; do not add adapter-local capture,
+     accessibility, or raw-input wrappers. Keep stateful UI calls in one
+     long-lived adapter process so each logical session retains its persistent
+     CUA bridge and window capability. Preserve `capture_provenance` with
+     evidence. The shared CUA Host owns platform accessibility, capture,
+     banner/border/cursor markers, Escape interruption, input serialization,
+     and recording. `ui-control` remains `requires_in_process: true` with
      `affinity: any`; register `HostExecutionBridge` before skill loading.
-     Never weaken this into per-call subprocess execution or route it onto a
-     blocked DCC UI thread.
-     A minimized or hidden exact HWND is recovered only through the host-owned
-     `get_window_state` / `restore_window` / `show_window` /
-     `activate_window` actions. They need no snapshot, must retain the existing
-     capability-bound PID/HWND, and must never become desktop discovery or
-     adapter-local Win32/input fallbacks.
    - Keep structured DCC skills, host APIs, and adapter scripts ahead of
      `ui-control`. Agents should make an explicit, agent-directed transition into the scoped
      `snapshot` → one `act` → `snapshot` loop only when an operation is
      unsupported, no suitable tool exists, or semantic UI Automation cannot
      reach the required control. Re-observe after every action.
-   - Keep raw pointer and keyboard input operator-controlled. The adapter may
-     document `DCC_MCP_COMPUTER_USE_ALLOW_RAW_INPUT`, but it must not enable the
-      ceiling itself. Before raw input can start, the adapter/operator must set
-      `DCC_MCP_UI_CONTROL_UIA_PROCESS_ID` or `DCC_MCP_UI_CONTROL_UIA_WINDOW_HANDLE` to
-      the adapter's own DCC target; request scope may only narrow that trusted
-      PID/HWND. Require a visible unlocked desktop and matching Windows
-      integrity level, preserve the click-through border/banner/pointer feedback, and preserve
+   - For native application menu bars, route an explicit `menu_path` through
+     `ui_control__act(action="invoke_menu")` when semantic click or Alt-mnemonic
+     delivery cannot prove that a Qt popup opened. Require the negotiated
+     `native_menu_path` Host capability, honor `verification_required`, and
+     re-observe the exact window before another mutation.
+   - Raw pointer and keyboard input are enabled by default only inside the
+     adapter/operator-bound DCC scope. Operators may set
+     `DCC_MCP_CUA_ALLOW_RAW_INPUT=false` to disable that runtime ceiling; the
+     adapter must not override this choice. Populate `DccServerOptions` with
+     the adapter's DCC PID and, when available, its current window title or
+     handle; Core injects that trusted scope into in-process `ui-control` calls.
+     Dedicated servers may instead use `DCC_MCP_UI_CONTROL_PROCESS_ID` or
+     `DCC_MCP_UI_CONTROL_WINDOW_HANDLE` operator overrides. Request scope may
+     only narrow that trusted PID/HWND, including a title constraint for one
+     window inside a multi-window process. Require a visible unlocked desktop
+     and matching Windows integrity level, preserve the click-through
+     border/banner/pointer feedback, and preserve
       `user_interrupted` without automatic retry, `session_id` changes, or fallback. Once Esc stops an
       session, only `ui_control__snapshot(resume_computer_use=true)` may request a
       resume, and the isolated host must still obtain trusted user confirmation
@@ -131,15 +215,11 @@ does not replace a running server binary.
       `intent` may only raise the native host's independent UIA/input
       classification. Do not introduce a model-supplied `confirmed`/`approved`
       flag or environment bypass.
-   - For plug-in setup outside a window, reuse
-     `ui_control__system_operation` instead of adding adapter-local PowerShell,
-     `reg.exe`, `mklink`, or generic file-system tools. The host catalog named
-     by `DCC_MCP_UI_CONTROL_SYSTEM_GRANTS_FILE` is operator-owned, and the
-     adapter selects only its grant id through
-     `DCC_MCP_UI_CONTROL_SYSTEM_GRANT_ID`. Keep operations exact, typed,
-     idempotent, confirmation-gated, and free of credentials. Do not treat
-     `elevation_required` as permission to automate UAC or another shell path.
 8. Use CLI profiles (`dcc-mcp-cli gateway ...`, `list/search/describe/call`) as the user UX; treat `dcc-mcp-server` modes as runtime plumbing. Read `docs/guide/gateway.md` before changing daemon, guardian, sentinel, registry, or idle-timeout behavior.
+   Gateway discovery reuses a recent capability snapshot across adjacent
+   queries. Route adapter catalog changes through the existing
+   load/reload/unload contracts that force a refresh; never depend on every
+   search polling the full backend catalog.
    `gateway://instances` is agent-safe by default and returns only live,
    routable rows. Use `?include_stale=true`, `?include_dead=true`, or
    `?view=all` only for explicit diagnosis; never route a call from those
@@ -147,8 +227,22 @@ does not replace a running server binary.
    Once an instance is selected, reuse `gateway://instances/{instance_id}` or
    `GET /v1/instances/{instance_id}/context` for live process/machine
    performance, scene/documents, loaded skills, and canonical follow-up routes.
-9. Use `dcc_mcp_core.install_lifecycle.build_sidecar_command(...)` / `launch_sidecar(...)` for sidecar startup and readiness. Read `docs/guide/adapter-install-lifecycle.md` before changing host RPC, dispatch readiness, launch stdio, `watch_pid`, or `instance_id` handling.
+   These reads fetch the backend context on demand, but scene freshness remains
+   adapter-owned: publish changes from a host event/main-thread callback with
+   `DccServerBase.update_gateway_metadata(...)`, and publish rich snapshots with
+   `set_scene_resource(...)`. Never claim scene awareness when the adapter has
+   not installed a publisher; `scene=null` / `no_scene_published` is explicit.
+   For agent observability, read `gateway://experiments/{experiment_id}` for
+   runs, Session DAG links, metrics, and Judge evidence; read
+   `gateway://governance` for the effective policy boundary. Keep Admin memory
+   deletion controls out of agent-readable resources.
+9. Use `dcc_mcp_core.deployment.build_sidecar_command(...)` / `launch_sidecar(...)` for library-driven sidecar startup and readiness. Installer subprocesses should use `dcc-mcp-install-lifecycle`; `dcc_mcp_core.install_lifecycle` and `python -m dcc_mcp_core.install_lifecycle` remain compatibility aliases. Read `docs/guide/adapter-install-lifecycle.md` before changing host RPC, dispatch readiness, launch stdio, `watch_pid`, or `instance_id` handling.
+   - Adapter-owned lifecycle commands must follow `docs/guide/adapter-install-sop.md`. Consume `load_install_sop_schema()` and `INSTALL_EXIT_CODES` from `dcc_mcp_core.deployment`; do not invent adapter-local result shapes or exit-code mappings.
    - The sidecar MCP listener is dispatch-only. A py37-lite factory can expose local skill metadata, but it cannot advertise or activate declarative skills through the gateway. Require a native py37 wheel for that path, or provide a separate discovery MCP URL; never report lite `load_skill` success without an executable catalog.
+   - Wrap the outer adapter import/start block with `capture_bootstrap_errors(...)`; it is stdlib-only, records pre-MCP failures, and re-raises for the DCC's native error UI. `DccServerBase` already captures Python error logs and uncaught exceptions into the shared log plus `output://` / `events://`. Forward host-native console callbacks with `server.report_host_error(...)`; do not replace global stdout/stderr or add an adapter-local error store.
+   - For DCC-Link IPC upgrades, deploy readers that accept current version 1 and legacy version 0 before switching writers to the default versioned frame. Use `DccLinkFrame(..., version=0)` only during that compatibility window, preserve an incoming frame's version in its reply, and treat `unsupported DCC-Link protocol version` as an explicit peer-upgrade failure rather than retrying body decoding.
+   - Preserve one caller-generated request id across every execution hop. JSON-RPC responses must echo `id`; commandPort-style sidecar responses must echo top-level `request_id`; gateway REST responses must echo `X-Request-ID`. Never replace an explicit response id with the current request id, because that can disguise a stale response. Treat a missing or mismatched echo as `transport desync`, fail closed, and regression-test a slow call followed by fast calls on the same connection.
+   - Registry producers must write `ServiceEntry.schema_version` using `SERVICE_ENTRY_SCHEMA_VERSION`; rows with no field are legacy version 0. Consumers may read legacy/current rows but must reject a higher schema version without quarantining, deleting, or rewriting `services.json`. Treat that error as an explicit peer-upgrade requirement, not as corrupt JSON.
 10. Pass `instance_id` to sidecar launch helpers only when it is a real UUID for the DCC service. During early startup, omit it or pass `None`; `build_sidecar_command()` rejects cosmetic values such as `"unknown"` with `success=false` and `reason="invalid_instance_id"` so adapters do not spawn a child that can only fail with a CLI argument error.
     After `DccServerBase.start()`, use `server.instance_id` when adapter UI or
     sidecar wiring needs the canonical FileRegistry identity. It is the exact
@@ -157,11 +251,28 @@ does not replace a running server binary.
     generate a replacement UUID.
 11. Adapter supervisors that must stop the sidecar on plugin unload should call `launch_sidecar(..., return_process=True, detached=False)` instead of reimplementing `subprocess.Popen`; keep `return_process=False` for CLI/JSON paths because the process handle is not serializable.
 12. If the adapter cannot share the gateway `FileRegistry`, register remotely through `POST /v1/instances/register`, refresh with `/heartbeat`, and deregister on shutdown; the gateway will expose the row as `source: "http"` in `gateway://instances` / `GET /v1/instances`, preserve `instance_short` and `mcp_url`, and route it through the same `live_instances` contract.
-13. For same-LAN convenience discovery, build with `mdns` and pair adapter-side `--advertise-mdns` with gateway-side `--discover-mdns`; treat this as a multicast discovery hint only, keep auth/TLS policy explicit, and prefer HTTP registration or relay for routed/subnet-crossing production deployments.
+    Remote registrations are untrusted input: health and capability refresh
+    only use policy-allowed, identity-matching HTTP(S) endpoints with no
+    query credentials or URL userinfo; redirects are not followed, and
+    private/link-local targets (including IPv4-mapped IPv6 literals) and DNS
+    names are rejected for periodic outbound probes. Gateway health and
+    reliability totals count only registrations accepted by that same dispatch
+    predicate; rejected registrations are reported separately and cannot
+    shadow a safe backend during DCC-type routing. Public literal IPv6
+    registrations keep an unbracketed canonical host identity; brackets belong
+    only to serialized URLs. Adapters must not copy a bracketed URL host into
+    `ServiceEntry.host` or compare raw URL text across discovery and dispatch.
+13. Keep the gateway's secondary listener on its default loopback host. Opt into LAN access only with an explicit `--remote-host 0.0.0.0` or concrete LAN IP; for same-LAN convenience discovery, build with `mdns` and pair adapter-side `--advertise-mdns` with gateway-side `--discover-mdns`. Treat mDNS as a multicast discovery hint only, keep auth/TLS policy explicit, and prefer HTTP registration or relay for routed/subnet-crossing production deployments.
 14. For NAT or routed-subnet deployments, run the tunnel agent with stable `instance_id`, `capabilities_fingerprint`, `adapter_version`, and `scene` metadata, then configure the standalone gateway with `--relay-source ADMIN_URL=PUBLIC_BASE_URL`; the gateway will expose active tunnels as `source: "relay"` rows with relay details in `source_meta` after probing `/v1/healthz` through `<PUBLIC_BASE_URL>/tunnel/<tunnel_id>/mcp`.
-15. Preserve gateway caller attribution when adding adapter wrappers or admin/debug routes: let MCP `initialize.params.clientInfo`, MCP `_meta.agent_context`, REST `meta.agent_context`, `x-dcc-mcp-*` headers, and safe `User-Agent` fallbacks flow through core rather than logging raw prompts or local machine data.
+15. Preserve gateway caller attribution when adding adapter wrappers or admin/debug routes: let legacy MCP `initialize.params.clientInfo`, MCP `_meta.agent_context`, REST `meta.agent_context`, `x-dcc-mcp-*` headers, and safe `User-Agent` fallbacks flow through core rather than logging raw prompts or local machine data.
+    The opt-in MCP 2026 path uses `server/discover` and namespaced per-request
+    metadata instead of a legacy initialize session. Consume Core's shared
+    protocol types and routing; do not copy wire envelopes into adapters or
+    Skills. Keep CLI+REST as the agent default. Before enabling a new protocol,
+    follow the [protocol compatibility gates](references/TESTING_AND_RELEASE.md#protocol-compatibility-gates)
+    against the exact installed artifact; a version label alone is insufficient.
 16. For lifecycle/memory/telemetry policy, use `register_lifecycle_hooks(...)`, `search_skills(..., session_id=...)`, `dispatch_session_start(...)`, `dispatch_before_tool_call(...)`, `dispatch_after_tool_call(...)`, and `dispatch_session_end(...)`; pair `MemoryRecorder(InMemoryMemoryStore()).install(hooks)` with those hooks when adapters need bounded memory summaries, failed-pattern avoidance, or session compaction. Memory injection is conservative and budgeted by default: search receives compact ranking hints, tool calls receive memory only when it matches the current `tool_name`, and session-start injection is opt-in. Use `SqliteMemoryStore()` only when longterm patterns should be durable, operator-managed in the Admin Memory tab, and included in memory hit-rate observability; disable the recorder for privacy-sensitive deployments. Open a focused core issue/RFC only when those public hooks cannot express the adapter boundary.
-17. Add one executable smoke path: unit tests for construction plus either headless DCC, mock dispatcher MCP calls, gateway REST replay, mDNS same-LAN discovery smoke, relay-source smoke, or `just idle-memory-smoke` for standalone server idle/regression checks.
+17. Add one executable smoke path: unit tests for construction plus either headless DCC, mock dispatcher MCP calls, gateway REST replay, mDNS same-LAN discovery smoke, relay-source smoke, the open-source MCP Inspector for a loopback internal service, or `just idle-memory-smoke` for standalone server idle/regression checks.
 18. For gateway/admin observability, surface explicit state instead of silent zeroes: traffic panels should report disabled, unavailable, filtered, or genuine no-traffic states; skill panels should distinguish discovered, loaded, searched, selected, called, failed, and low-adoption skills; and admin-facing frames/paths should stay metadata-only or aliased unless an operator explicitly configures a private raw sink. Keep `ServiceEntry.version` as the DCC application version; use core-published `dcc_mcp_server_version` and `dcc_mcp_instance_type=gui|standalone` metadata for server regression and runtime-shape diagnostics instead of overloading DCC or adapter versions.
 19. Preserve workflow observability: adapter calls should carry request, parent, trace, session, DCC, transport, and artifact/validation metadata so the Admin workflow graph can show Intent → Discovery → Skill Load → Tool Calls → Fallbacks → Artifacts → Validation → Report without raw log reading.
 20. Preserve bounded `agent_context` task/session/turn metadata and artifact/validation-friendly tool names so Admin task outcomes can group workflows, calls, deliverables, and checks without reading raw payloads or local paths.
@@ -169,9 +280,16 @@ does not replace a running server binary.
     `agent_context.session_id`, keep UI Control logical ids connection/caller
     scoped, and write only redacted recording projections to existing
     `session_events`. Do not add adapter-local recorder state, a second
-    database, or a replay authority flag. Generated workflows re-resolve
-    current tools and schemas; semantic UI replay resolves fresh control ids;
-    raw/visual fallback requires exact-window calibration and drift guards.
+    database, or a replay authority flag. Persist calls incrementally; after a
+    gateway restart, project unfinished recordings as `interrupted` without
+    restoring capture authority. Generated workflows re-resolve current tools
+    and schemas; semantic UI replay resolves fresh control ids; raw/visual
+    fallback requires exact-window calibration and drift guards.
+22. Record reproducible experiment definitions, run states, Session DAG links,
+    metrics, and judge evidence through the gateway `/v1/experiments` APIs.
+    Reuse `session_events`, workflow/recording identifiers, and artifact
+    references; do not add adapter-local experiment storage or treat judge
+    output as approval authority.
 
 ## Chunked Main-Thread Jobs
 
@@ -195,6 +313,11 @@ return bake_frames()
 - Declare `execution: async`, `affinity: main`, and
   `job_strategy: chunked`. The bridge rejects a declared chunked tool that
   returns a monolithic value.
+- Any operation that can exceed the caller's synchronous timeout must return a
+  job envelope. Declare `execution: async` and provide a realistic positive
+  `timeout_hint_secs`; Core routes the execution declaration through
+  `JobManager`. A timeout hint only sizes client/runtime budgets and never
+  promotes an `execution: sync` tool to an async job.
 - Yield one bounded host-API callable per step. A returned string becomes the
   progress message.
 - `submit_chunked_runner()` advances at most one step per host pump tick, so
@@ -220,6 +343,22 @@ would be unsafe.
 - Keep registry heartbeat and HTTP readiness independent of the DCC main
   thread. A readiness/transport timeout marks the instance `unreachable`; it
   must not erase a row whose owner lock/PID or remote TTL is still valid.
+- Keep HTTP body limits, trusted-proxy depth, and request-rate windows on the
+  owning `GatewayState` (`GatewayIngressState`). Embedded adapters may host
+  more than one gateway in a process, so process-global lazy counters or env
+  snapshots are not a valid isolation boundary.
+- Keep backend retry policy and circuit observations on the same owning
+  `GatewayState` through `GatewayResilienceState`. Pass that state through
+  backend discovery and dispatch calls; never use a process-global circuit
+  table, because one embedded gateway must not open another gateway's backend.
+- Pass the complete `McpHttpConfig.features` snapshot into HTTP runtime state
+  with `ServerStateBuilder::with_features`. Do not copy capability booleans
+  into loose `ServerState` fields; config and runtime routing must read the
+  same `FeatureFlags` source.
+- In Rust async gateway/adapter code, share `Arc<FileRegistry>` directly and
+  call its `*_async` methods. `FileRegistry` is already internally synchronized;
+  an outer `RwLock` adds no safety and holding an async guard across its
+  flock/fsync transaction blocks the runtime.
 - Treat owner lock/PID death or remote TTL expiry as crash evidence. After a
   crash, the adapter cannot reconnect until the DCC or sidecar starts again.
 - Preserve stable `dcc_type`, scene/project metadata, and adapter identity so
@@ -228,7 +367,73 @@ would be unsafe.
 - Enable core job persistence. On restart, in-flight core jobs become
   `interrupted` and remain queryable through the replacement instance's
   `jobs_get_status`; adapter-owned isolated jobs need their own durable status
-  tool when they outlive the request transport.
+  tool when they outlive the request transport. If the worker can outlive the
+  DCC/sidecar process, that status tool must be owned by the worker/service or
+  another independently live control process; gateway restart alone cannot
+  recreate an API whose owner exited.
+- A bounded SQLite shutdown may return before an in-flight statement has
+  quiesced. Core closes the old handle immediately but retains its physical
+  ownership lease until every admitted operation exits; do not start a
+  replacement owner until acquisition succeeds. Never bypass the lease or
+  reuse a second path alias to the same database.
+- Read `job_persistence` from the server `/health` payload before claiming
+  durable job history. `degraded` means recent writes failed; `disabled` means
+  the manager latched repeated failures and is serving jobs from memory only.
+  `last_error_kind` is a stable category (`readonly`, `wal`, `busy`,
+  `disk_full`, `decode`, `feature_disabled`, `retention_prune_failed`,
+  `server_shutdown`, or `backend`) for diagnostics.
+  Do not expose backend messages or filesystem paths from that status.
+  Gateway `/admin/api/health` and `/v1/debug/health` aggregate the same
+  payload-safe state per registered backend; `unavailable` means the backend
+  did not answer the bounded admin read.
+  A `retention_prune_failed` latch recovers only after a real backend prune
+  succeeds. An empty cleanup is a no-op and must leave that health state
+  disabled because it did not verify storage recovery.
+  `job_retention_hours` is opt-in startup pruning of terminal rows only;
+  leave it unset when retention ownership is not established.
+- Make every adapter-owned launch return its durable `job_id` and one canonical
+  status (`pending`, `running`, `completed`, `failed`, `cancelled`, or
+  `interrupted`). Declare its status tool in `next-tools.on-success`. Automatic
+  CLI waiting is allowed only when that poller is `execution: sync`, marks both
+  `read_only_hint` and `idempotent_hint` true, and declares a string `job_id` as
+  its only required input. Every other input must be optional and safe when
+  omitted. The poller must query exactly that ID and return authoritative progress; an
+  unknown ID is an explicit error, never permission to mint a replacement job.
+
+## Failure Analysis and Bug Routing
+
+Reproduce through `dcc-mcp` and keep one gateway session id. Run
+`dcc-mcp-cli doctor`, then `dcc-mcp-cli stats --status failure --session-id
+<session-id>`; preserve the failed call's `request_id`, trace/job ids, adapter
+version, DCC version, readiness fields, and the smallest safe reproduction.
+Use `/v1/debug/issue-reports/<request_id>` for the public-safe issue body and
+review any `?mode=raw` export locally before sharing it.
+The bundled error report binds persisted-job diagnostics to the exact current
+instance key. If that database is absent, report persistence as unavailable;
+never glob a sibling instance or fall back to another process's database.
+It likewise binds rolling-log diagnostics to the current DCC process PID; if
+that exact log is absent, report logging as unavailable instead of selecting a
+same-DCC sibling log.
+
+Report adapter-owned dispatch, host-thread, readiness, packaging, or install
+bugs in the adapter repository. Escalate shared CLI, gateway, protocol, or core
+contract failures to `dcc-mcp-core`. Tool schema/script/workflow defects belong
+to the owning Skill and `dcc-mcp-skills-creator`. Record runtime feedback with
+the gateway-owned `dcc-mcp-cli feedback` command so the report remains possible
+after an adapter or DCC process exits; include the last known instance,
+request, and job ids. Instance-level `dcc_feedback__report` is the live-adapter
+Finding v1 entry point. Core must register it so runtime DCC/adapter/core/host
+versions, OS, instance id, fingerprint, and conservative redaction status are
+auto-filled; adapters must not accept agent claims for those fields or add an
+adapter-specific action/local-success fallback. Open an external issue only
+with user authorization.
+
+Core persists accepted adapter reports under the shared registry and exposes
+them through `dcc-mcp-cli feedback list|export` / `GET /admin/api/feedback`.
+Adapters must use `DccServerBase`'s instance-owned `FeedbackStore`; do not add a
+second adapter-local log, aggregation endpoint, or delete-then-copy rotation.
+The gateway query is bounded, deduplicates by feedback id, and fails explicitly
+when filesystem reads or scan limits prevent a complete result.
 
 ## Example: New Nuke Adapter
 
@@ -243,6 +448,40 @@ bundled as default skills. Then scaffold the adapter around core primitives:
 - Core project, readiness, resource, diagnostics, and gateway helpers before adapter-local glue.
 - `dcc-mcp-skills-creator` for the first `nuke-*` skill packages.
 
+## Example: Private Non-DCC Service
+
+When asked to expose an internal asset, render-farm, review, or production
+service, stay in the supplied private project and start with
+[`examples/remote-server`](../../examples/remote-server). It is a standalone
+service despite the historical directory name: it binds to loopback for local
+development, discovers a bundled example Skill, and needs no DCC process or GitHub
+repository.
+
+- Use a stable custom identifier such as `studio-assets`; do not pretend it is
+  Maya or another cataloged DCC.
+- Pass `instance_type="standalone"`, leave `dcc_pid` unset, and use inline
+  execution unless a real external host boundary exists.
+- Validate the Skill, start the service, then exercise `tools/list`,
+  `tools/call`, resources, and errors with the official open-source MCP
+  Inspector before testing gateway discovery.
+- Keep development on loopback. Intranet exposure requires operator-owned
+  TLS, authentication, firewall policy, secret storage, and audit controls.
+- Package through the owner's existing wheel, archive, container, Rez, or
+  private registry workflow. Do not create or publish a public repository
+  unless the user explicitly requests it.
+
+## Cross-DCC Asset Sync
+
+When an adapter publishes an evolving file to another local or remote DCC, use
+Core's `AssetSyncRevision` and `FileAssetSyncStore` contract. Keep absolute
+paths process-local: public tools accept a relative source name, while both the
+source root and consumer destination root come from operator configuration.
+Validate format and size before publishing, pass `expected_head_revision` for
+optimistic conflict detection, and materialize only beneath the consumer-owned
+root. The adapter owns its native import, canvas, refresh, or watch behavior;
+Core owns only the path-free revision manifest, content-addressed object, and
+conflict/materialization rules. See `docs/guide/asset-sync.md` and ADR-021.
+
 ## Non-Negotiables
 
 - Do not touch a DCC API from a Tokio/HTTP worker thread.
@@ -250,4 +489,5 @@ bundled as default skills. Then scaffold the adapter around core primitives:
 - Do not reach into `server._server` unless no public core API exists; if you must, file a core issue and keep the adapter shim small.
 - Do not create Maya-only abstractions in shared core or adapter templates.
 - Do not expose raw script execution as the primary user workflow when a typed skill can cover the task.
+- Do not require GitHub, a public catalog entry, or public issue tracking for a private internal service.
 - Do not publish local paths, private machine names, or source-attribution markers in public issues or PR text.

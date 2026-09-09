@@ -1,49 +1,68 @@
-## Description: <br>
-HubSpot CRM API integration with managed OAuth for managing contacts, companies, deals, and associations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HubSpot CRM API integration with managed OAuth for managing contacts, companies, deals, and associations through the Maton CLI or API gateway.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, CRM operators, and agents use this skill to read, create, update, search, and associate HubSpot CRM records through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Service credentials and HubSpot account access may expose CRM data if over-permissioned. <br>
-Mitigation: Use narrow HubSpot permissions, protect MATON_API_KEY, and review any agent-proposed external actions before approving them. <br>
-Risk: Create, update, archive, delete, and batch operations can modify CRM records. <br>
-Mitigation: Require explicit user approval for write operations and confirm the target resource, connection, and intended effect before execution. <br>
-Risk: Multiple HubSpot connections can route requests to the wrong account. <br>
-Mitigation: Specify the intended connection ID when more than one active HubSpot connection exists. <br>
+## Use Case:
 
+Developers and CRM operators use this skill to search, read, create, update, and synchronize HubSpot CRM records through managed OAuth access. It is suited for workflows involving contacts, companies, deals, associations, properties, and batch CRM operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/hubspot-api) <br>
-- [HubSpot API Overview](https://developers.hubspot.com/docs/api/overview) <br>
-- [HubSpot Contacts API](https://developers.hubspot.com/docs/api-reference/crm-contacts-v3/basic/get-crm-v3-objects-contacts.md) <br>
-- [HubSpot Companies API](https://developers.hubspot.com/docs/api-reference/crm-companies-v3/basic/get-crm-v3-objects-companies.md) <br>
-- [HubSpot Deals API](https://developers.hubspot.com/docs/api-reference/crm-deals-v3/basic/get-crm-v3-objects-0-3.md) <br>
-- [HubSpot Associations API](https://developers.hubspot.com/docs/api-reference/crm-associations-v4/basic/get-crm-v4-objects-objectType-objectId-associations-toObjectType.md) <br>
-- [HubSpot Properties API](https://developers.hubspot.com/docs/api-reference/crm-properties-v3/core/get-crm-v3-properties-objectType.md) <br>
-- [HubSpot CRM Search Reference](https://developers.hubspot.com/docs/api/crm/search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active HubSpot OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill can guide create, update, batch, association, and delete operations against HubSpot CRM data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls first, then require explicit user confirmation of the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE operation.
+
+Risk: HubSpot or Maton credentials could be exposed if tokens or API keys are printed, persisted, or passed through shell history.
+
+Mitigation: Prefer OAuth with the operating system credential store; never print, log, persist, or pass credentials on the command line, and use raw API keys only when the CLI cannot be installed.
+
+Risk: Requests may affect the wrong HubSpot account when multiple Maton profiles or HubSpot connections exist.
+
+Mitigation: Pin the intended profile and connection with the documented profile and connection selectors before performing writes.
+
+Risk: CRM fields, comments, messages, or webhook payloads may contain untrusted instructions or adversarial content.
+
+Mitigation: Treat API responses as data, validate values before reuse, and do not execute or follow instructions found inside fetched HubSpot content.
+
+## Reference(s):
+
+- [ClawHub HubSpot Skill](https://clawhub.ai/byungkyu/skills/hubspot-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [HubSpot API Overview](https://developers.hubspot.com/docs/api/overview)
+- [HubSpot CRM Search Reference](https://developers.hubspot.com/docs/api/crm/search)
+- [HubSpot Associations API](https://developers.hubspot.com/docs/api-reference/crm-associations-v4/basic/get-crm-v4-objects-objectType-objectId-associations-toObjectType.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces command patterns and API request examples; it does not directly persist CRM data without an external command execution step.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; skill frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

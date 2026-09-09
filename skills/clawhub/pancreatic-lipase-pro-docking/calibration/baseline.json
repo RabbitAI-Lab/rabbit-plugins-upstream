@@ -1,0 +1,23 @@
+{
+  "created": "2026-09-06T14:19:06+00:00",
+  "site": "catalytic_triad",
+  "precision": "fast",
+  "ligands": {
+    "ibuprofen": "CC(C)Cc1ccc(cc1)C(C)C(=O)O",
+    "caffeine": "Cn1c(=O)c2c(ncn2C)n(C)c1=O"
+  },
+  "scores": {
+    "caffeine": -6.679,
+    "ibuprofen": -7.4
+  },
+  "env": {
+    "python": "3.11.16",
+    "platform": "Linux-6.1.158+-x86_64-with-glibc2.41",
+    "vina": "AutoDock Vina f458505-mod",
+    "vina_path": "/home/user/out/plenv/bin/vina",
+    "rdkit": "2026.03.1",
+    "meeko": "0.8.0",
+    "numpy": "2.4.6"
+  },
+  "note": "Baseline for drift detection. Regenerate deliberately, never to silence a failing selfcheck."
+}

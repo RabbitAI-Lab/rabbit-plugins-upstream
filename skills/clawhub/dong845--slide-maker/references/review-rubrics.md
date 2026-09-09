@@ -31,6 +31,29 @@ These criteria are grounded in established presentation research, not invented:
 
 ---
 
+## How much of this file to read
+
+Read the **Universal rubric** below in full — it is the bar for every deck.
+
+Then read **exactly one** of the per-purpose sections near the end (Progress / Work status /
+Conference talk / Job talk / Stakeholder / Pitch / Defense / Teaching / Poster): the one that
+matches this deck's stated purpose. The other eight describe decks you are not reviewing.
+
+**Skip `## Finding-level cross-validation` unless the tier is `thorough`** — it is high-stakes
+only, and at `fast` / `standard` nothing dispatches it.
+
+Measured: the per-purpose sections are ~2.9k tokens and the cross-validation section ~1.2k, so
+scoping this file saves ~4k per critic — small on its own, but a critic's standing reference
+load is ~62.6k tokens and every lens on every round pays it again. See
+`references/critic-panel.md` for the full cost breakdown and for what is NOT safe to cut.
+
+**This instruction now has a gate.** The review declares `rubric_overlay` — which one of the nine
+you applied — and `validate_review.py` rejects a review that omits it, invents a name, or says a
+bare `none` (`none — <reason>` is legitimate for a deck none of the nine fits). Until that field
+existed this section was pure prose, and the cost of ignoring it was never the tokens: a critic
+that reads the WRONG overlay reviews a job talk against the pitch bar and returns a confident
+verdict either way. Naming the overlay is what makes that mistake visible.
+
 ## Universal rubric
 > **Skim test (decide-goal decks):** before scoring dimensions, read ONLY the slide titles plus
 > slides 1–2, for ~90 seconds. Can you state the recommendation and the exact ask? If not, that
@@ -275,13 +298,46 @@ Score each dimension; cite specific slides.
    name from the canvas alone: no label at first appearance, not figurative enough to read unaided,
    and no on-canvas legend (`agents/slide-design.md` §1 STRANGER TEST) — describe what a stranger
    would call the shape vs what the plan says it means, and require a label/legend at the cover
-   appearance; **logo missing or unevidenced on a single-entity deck** — the deck's subject is one
+   appearance **or its REMOVAL, which is the better call whenever the only way to keep the device is
+   to caption it** (a motif needing a sentence to earn its place has answered the question). FOUR
+   tells, each measured on a shipped deck: a stated reading that DEFERS (*"they get it by slide 9"*) is not a reading — it
+   concedes the device is opaque where it first appears; and a device sitting in a slot whose meaning
+   is already spoken for (a thin rule low on the page = divider/footer, a side strip = sidebar, a
+   corner mark = chrome) reads as that slot, not as the intent, however the plan describes it.
+   🔴 **A THIRD tell, and it is the one that survives every per-page check: ONE FORM carrying TWO
+   MEANINGS deck-wide.** Walk the repeated forms (rules, bands, columns, corner marks) and write the
+   single thing each means; two entries against one form is the finding, because each reading is
+   correct on its own page and only the pair is wrong — measured twice, on two decks, both times
+   surfacing as the user asking what the device meant. **A FOURTH: a motif that only RECURS.** The
+   plan's `motif generates:` line names three things the motif produces besides itself (background ·
+   markers · one PAGE whose geometry IS the motif — not necessarily a diagram, and a recorded
+   `none — <reason>` beats an invented artifact); two "nothing obvious" answers means the deck is
+   wearing an ornament on a schedule, and **on branch (c) — where the motif IS the visual design —
+   that is a major, not a minor.** Do NOT raise it on a deck carrying its carve: `boldness:
+   conservative` answers the triple with its `deliberately restrained` clause, a 1–2 slide tiny ask
+   skips it, and on a registered/provided template the device is the TEMPLATE's — judge only what the
+   deck ADDED, never the borrowed identity (`agents/slide-design.md` §1; raising a finding against a
+   look the user already approved is the reviewer re-litigating an approved decision).
+   **Weigh this axis in that order:
+   does it MEAN something · does it run the whole deck · does it generate · does it read unaided ·
+   is it fresh.** Novelty is last on purpose: a beautiful device nobody can decode is the failure
+   this section exists to catch, and clarity is a floor here rather than a dimension to trade against
+   the others; **logo missing or unevidenced on any deck that names a real entity** — the deck's subject is one
    company / product / brand / institution (stakeholder readout, pitch, org report) yet no official
-   logo appears on the cover and the plan's `logo plan:` line carries no evidence token
+   logo appears on the cover, **OR a slide whose FORM is a roster of named real entities carries a
+   generic placeholder glyph — a coloured square, a repeated stock icon — where each entity's mark
+   belongs, or declares an `entity marks:` count the render does not show**; and the plan's
+   `logo plan:` line carries no evidence token
    (`official asset — <source>` / `searched, none found → designed wordmark (flagged)` / `n/a — <reason>`) —
    the slide-design LOGO PRINCIPLE's situation table is the reference: name which row the deck
    matches and what the row's default demanded (a typeset wordmark with no recorded search is the
-   documented failure mode, not a pass); **sourced/generated image off-contract (REFERENT RULE)** —
+   documented failure mode, not a pass). **Carve — do NOT raise this on a THIRD-PARTY ASSESSMENT**:
+   when the deck is about an entity but not from it and carries what that entity would not publish
+   about itself (open recalls, a "first but not unique" correction, a limitations page), `n/a —
+   third-party assessment` is the row's correct answer and an absent logo is the finding avoided,
+   not the finding. Raise the INVERSE there: a third-party assessment wearing the subject's livery
+   is a misattribution of authorship and rates the same as an unsourced claim;
+   **sourced/generated image off-contract (REFERENT RULE)** —
    a content image whose source class fights its subject's referent per
    `references/image-generation.md` "Sourced real imagery": a generated image **passed off as
    photographic reality** of a real-and-specific subject (a named place, real product, real person)
@@ -293,8 +349,11 @@ Score each dimension; cite specific slides.
    never verified against its caption/geotag, a **watermarked** sourced image (a stock-preview
    overlay, photographer stamp, or site logo — or crop/blur/inpaint traces where a mark was hidden:
    a watermark is an unlicensed-preview tell, and removing it is license circumvention, not
-   cleanup), an image row with no source token from that section's
-   grammar, a required credit missing, photographic supplements stacked onto an abstract subject
+   cleanup), **a clinical/medical image showing a burned-in patient identifier** (name, MRN,
+   accession, DOB, study date, institution — check the edges and any overlay strip, not the
+   middle; the fix is a de-identified export, never a crop or blur over the mark, and this is
+   a MAJOR the moment the deck leaves the room), an image row with no source token from that
+   section's grammar, a required credit missing, photographic supplements stacked onto an abstract subject
    that native forms should carry — and on photo-friendly topics, wall-to-wall photos where the
    opt-in discipline should have held; **identity-propagation break (generated-template branch)** —
    the generated identity lives only in the background: native type off-register (a neo-grotesque
@@ -328,8 +387,19 @@ Score each dimension; cite specific slides.
    slides (adjacent slides not differing on density / colour mode / protagonist); and a **WOW that isn't
    memorable** — a hero beat that is merely a *large* element, not one that contrasts with its neighbours
    and stays memorable after the deck is closed. **DISTINCTIVENESS (the upward axis — blandness is a
-   defect, not just brokenness):** the contract card carries a `boldness:` dial + a declared `signature
-   move:`. Flag when **the signature move didn't land** — it was sanded back to the safe catalogue
+   defect, not just brokenness):** the contract card carries a **`concept:`** line, a `boldness:` dial
+   and a declared `signature move:`.
+   **CONCEPT first, because it is the widest question and the newest one.** The card names what this
+   deck's idea is a PICTURE of. Ask whether the BUILT deck looks like that picture: is the concept
+   visible in the motif, the colour logic, the cover AND at least one diagram? A concept that reached
+   only the cover **decorated**; it did not govern. Report `carried: <how>` or
+   `nominal: <what you see instead>`, and **a page you could re-title for a different concept without
+   noticing is nominal** — that is the finding, and it is not the same finding as a sanded signature
+   move. The move is one scoped RISK; the concept is what the whole deck is a picture of, and a deck
+   can land the move while the concept never arrives. Severity follows the same dial rule as the rest
+   of this axis (MAJOR at most at `conservative`/`balanced+`), and it stands down entirely when no
+   concept was declared — an external or redesign deck has none.
+   Then the move itself: Flag when **the signature move didn't land** — it was sanded back to the safe catalogue
    ("a big number / a nice gradient / a full-bleed photo" is NOT a signature move), and, at
    `boldness: balanced+` or higher, when the honest answer to *"what's the one thing a viewer remembers
    tomorrow?"* is **"a clean competent deck"** (forgettableness is itself the finding). Hold this to the

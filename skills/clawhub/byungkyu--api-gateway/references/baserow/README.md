@@ -26,104 +26,122 @@
 
 ### List Rows
 ```bash
-GET /baserow/api/database/rows/table/{table_id}/?user_field_names=true
+maton api '/baserow/api/database/rows/table/{table_id}/?user_field_names=true'
 ```
 
 ### Get Row
 ```bash
-GET /baserow/api/database/rows/table/{table_id}/{row_id}/
+maton api '/baserow/api/database/rows/table/{table_id}/{row_id}/'
 ```
 
 ### Create Row
 ```bash
-POST /baserow/api/database/rows/table/{table_id}/
-Content-Type: application/json
-
+maton api -X POST '/baserow/api/database/rows/table/{table_id}/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "field_123": "value"
 }
+EOF
 ```
 
 ### Update Row
 ```bash
-PATCH /baserow/api/database/rows/table/{table_id}/{row_id}/
-Content-Type: application/json
-
+maton api -X PATCH '/baserow/api/database/rows/table/{table_id}/{row_id}/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "field_123": "updated value"
 }
+EOF
 ```
 
 ### Delete Row
 ```bash
-DELETE /baserow/api/database/rows/table/{table_id}/{row_id}/
+maton api '/baserow/api/database/rows/table/{table_id}/{row_id}/' -X DELETE
 ```
 
 ### Batch Create Rows
 ```bash
-POST /baserow/api/database/rows/table/{table_id}/batch/
-Content-Type: application/json
-
+maton api -X POST '/baserow/api/database/rows/table/{table_id}/batch/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "items": [
     {"field_123": "value1"},
     {"field_123": "value2"}
   ]
 }
+EOF
 ```
 
 ### Batch Update Rows
 ```bash
-PATCH /baserow/api/database/rows/table/{table_id}/batch/
-Content-Type: application/json
-
+maton api -X PATCH '/baserow/api/database/rows/table/{table_id}/batch/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "items": [
     {"id": 1, "field_123": "updated1"},
     {"id": 2, "field_123": "updated2"}
   ]
 }
+EOF
 ```
 
 ### Batch Delete Rows
 ```bash
-POST /baserow/api/database/rows/table/{table_id}/batch-delete/
-Content-Type: application/json
-
+maton api -X POST '/baserow/api/database/rows/table/{table_id}/batch-delete/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "items": [1, 2, 3]
 }
+EOF
 ```
 
 ### List Fields
 ```bash
-GET /baserow/api/database/fields/table/{table_id}/
+maton api '/baserow/api/database/fields/table/{table_id}/'
 ```
 
 ### List All Tables
 ```bash
-GET /baserow/api/database/tables/all-tables/
+maton api '/baserow/api/database/tables/all-tables/'
 ```
 
 ### Move Row
 ```bash
-PATCH /baserow/api/database/rows/table/{table_id}/{row_id}/move/?before_id={row_id}
+maton api -X PATCH '/baserow/api/database/rows/table/{table_id}/{row_id}/move/?before_id={row_id}'
 ```
 
 ### Upload File via URL
 ```bash
-POST /baserow/api/user-files/upload-via-url/
-Content-Type: application/json
-
+maton api -X POST '/baserow/api/user-files/upload-via-url/' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "url": "https://example.com/image.png"
 }
+EOF
 ```
 
 ### Upload File (Multipart)
 ```bash
-POST /baserow/api/user-files/upload-file/
-Content-Type: multipart/form-data
+# `maton api` sends a body verbatim but does not build a multipart envelope: assemble it
+# first, then hand the result to --input. Nothing here handles a credential — the CLI injects it.
+FILE=/path/to/file.png            # exactly the path the user gave, never a discovered one
+BOUNDARY="maton-$$"
+{
+  printf -- '--%s\r\nContent-Disposition: form-data; name="file"; filename="%s"\r\nContent-Type: application/octet-stream\r\n\r\n' "$BOUNDARY" "$(basename "$FILE")"
+  cat "$FILE"
+  printf -- '\r\n'
+  printf -- '--%s--\r\n' "$BOUNDARY"
+} > /tmp/baserow-upload.body
+
+maton api -X POST '/baserow/api/user-files/upload-file/' \
+  -H "Content-Type: multipart/form-data; boundary=$BOUNDARY" \
+  --input /tmp/baserow-upload.body
 ```
 
 ## Query Parameters

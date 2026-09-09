@@ -495,3 +495,32 @@ Draw colored blocks connected by arrows, with optional group boxes and annotatio
 - `annotations` (array): Free-text labels at arbitrary positions:
   - `text`, `x`, `y`: Content and position
   - `fontsize`, `color`, `weight`, `ha`, `va` (optional): Styling
+
+
+## PRISMA 流程图（`-t prisma`，v2.1.0 新增）
+
+PRISMA 2020 系统综述流程图。必需字段：`records_identified`、`studies_included`。
+
+```json
+{
+  "records_identified": 128,
+  "duplicates_removed": 23,
+  "records_screened": 105,
+  "records_excluded": 61,
+  "reports_sought": 44,
+  "reports_not_retrieved": 3,
+  "reports_assessed": 41,
+  "exclusion_reasons": {"Wrong population": 5, "Wrong intervention": 7, "No usable data": 4},
+  "studies_included": 25,
+  "lang": "en"
+}
+```
+
+规则：
+- 中间字段可省略，自动按流水线推导（screened = identified − duplicates，sought = screened −
+  excluded，assessed = sought − not_retrieved）。
+- **自洽性闸门**：显式给出的数字必须与推导一致，`exclusion_reasons` 合计 + `studies_included`
+  必须等于 `reports_assessed`，否则 ERROR（exit 1）拒绝出图。
+- `lang: "zh"` 输出中文标准措辞（识别/筛选/纳入）；`exclusion_reasons` 的键始终按你给的内容
+  原样渲染（中英文均可）。
+- 数值为 0 且未显式给出的侧盒自动省略。

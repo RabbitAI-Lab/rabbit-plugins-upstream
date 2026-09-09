@@ -1,40 +1,60 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent run Feynman-style learning checks that ask students to explain, give examples, answer why, transfer concepts, and report mastery level and sticking point.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+Students, tutors, and education agents use this skill to test whether a learner truly understands a concept after studying, solving a problem, reviewing an AI answer, or preparing to teach someone else. The skill produces a concise mastery assessment and next-step guidance rather than new instruction or a practice set.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Cross-skill handoff behavior is loose enough to warrant review before installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate every handoff against the bundled handover schema, restrict recipients to the intended learning DNA or reminder skill, and send only minimal mastery fields after crossSkillSharing or reminderConsent is present.
+
+Risk: Student frustration or safety-related language can appear during tutoring and may exceed the learning workflow.
+
+Mitigation: Run the crisis-signal check before tutoring fallback behavior, stop the learning flow when a crisis signal is present, and follow the bundled crisis referral protocol.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Feynman dialogue patterns](artifact/references/feynman-dialogue-patterns.md)
+- [Feynman 4+1 jump state machine](artifact/references/feynman-5jump-statemachine.md)
+- [Mastery vocabulary](artifact/shared/vocab.md)
+- [Grade band parameters](artifact/shared/grade-bands.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+- [Learning DNA profile schema](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+- [Handover protocol schema](https://xiaozhi-skills.openclaw.dev/schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown-style tutoring dialogue and structured assessment text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a mastery level, sticking point, next-step suggestion, optional minimal profile writeback data, or optional reminder handoff when consent is present.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

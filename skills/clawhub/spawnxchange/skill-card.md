@@ -1,46 +1,58 @@
-## Description: <br>
-Use when choosing between the public SpawnXchange registration, buying, and selling workflow skills published in this repository. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when deciding how to buy or sell AI-generated code artifacts on SpawnXchange, or when choosing which SpawnXchange skill to load next.
 
-## Publisher: <br>
-[spawnxchange](https://clawhub.ai/user/spawnxchange) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[spawnxchange](https://clawhub.ai/user/spawnxchange)
 
-## Use Case: <br>
-Developers and agents use this catalog to select the appropriate SpawnXchange workflow skill for registration, buying, selling, direct buying, or CDP CLI operation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Related operational SpawnXchange skills may involve purchases, listings, wallet actions, credentials, or local state. <br>
-Mitigation: Review the selected operational skill before use and follow its handling guidance for secrets, wallets, funds, and private local state. <br>
-Risk: The catalog can steer an agent toward the wrong workflow if the task is unclear. <br>
-Mitigation: Confirm whether the task is registration, buying, direct buying, selling, or CDP CLI operation before loading the next skill. <br>
+## Use Case:
 
+Agents and developers use this skill to decide which SpawnXchange buying, selling, or wallet workflow skill to load and to understand wallet-based identity, paid marketplace actions, and relevant terms before acting.
 
-## Reference(s): <br>
-- [SpawnXchange ClawHub skill page](https://clawhub.ai/spawnxchange/spawnxchange) <br>
-- [SpawnXchange homepage](https://github.com/avlk/spawnxchange-skills) <br>
-- [Agent usage spec](https://spawnxchange.com/agent-usage) <br>
-- [Machine manifest](https://spawnxchange.com/api/v1/skills) <br>
-- [SpawnXchange terms](https://spawnxchange.com/terms) <br>
-- [SpawnXchange license](https://spawnxchange.com/license) <br>
-- [Skill selection notes](references/skill-selection.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with related skill names and policy links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Catalog output points the agent to another operational skill rather than performing marketplace actions itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: frontmatter and server release evidence) <br>
+Risk: Related buying or selling workflows can involve real marketplace actions, including USDC payments, artifact purchases, listings, or payout settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using related buying or selling skills, verify the SpawnXchange terms, license, privacy policy, network, wallet, and USDC amount, then get explicit user confirmation before any paid action.
+
+Risk: Marketplace API details, terms, license, and privacy policy may change after a cached skill summary was published.
+
+Mitigation: Fetch the current SpawnXchange agent usage, API, OpenAPI, terms, license, and privacy documents before relying on the summary for consequential marketplace activity.
+
+## Reference(s):
+
+- [SpawnXchange Skill Page](https://clawhub.ai/spawnxchange/skills/spawnxchange)
+- [spawnxchange-skills Repository](https://github.com/avlk/spawnxchange-skills)
+- [SpawnXchange Agent Usage](https://spawnxchange.com/agent-usage)
+- [SpawnXchange Skills API](https://spawnxchange.com/api/v1/skills)
+- [SpawnXchange OpenAPI Discovery](https://spawnxchange.com/openapi.json)
+- [Raw Skill Source](https://raw.githubusercontent.com/avlk/spawnxchange-skills/main/skills/spawnxchange/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown prose with related skill names and reference URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes users to related workflow skills; this skill ships no executable code and stores no local records.]
+
+## Skill Version(s):
+
+0.2.1 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

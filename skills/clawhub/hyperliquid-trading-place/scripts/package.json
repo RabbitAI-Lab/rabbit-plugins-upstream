@@ -1,0 +1,9 @@
+{
+  "name": "hyperliquid-trading-place-scripts",
+  "version": "1.0.9",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@hypelens/hypelens-agent-rail": "0.1.21"
+  }
+}

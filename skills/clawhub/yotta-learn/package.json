@@ -1,0 +1,38 @@
+{
+  "name": "@yottameta/yotta-learn",
+  "version": "0.1.4",
+  "description": "Yuanxi — a cross-agent learning-loop skill: captures mistakes, corrections and insights as reusable .learnings/ entries for later sessions and skill improvement. Triggers on command failure / user correction / a better approach / a missing capability / an external-interface failure / stale knowledge / a need to capture experience. Boundaries: never records private/sensitive info unless explicitly requested; never auto-modifies system files.",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "yotta-learn",
+    "learning",
+    "self-improvement",
+    "memory",
+    "yottaskills"
+  ],
+  "files": [
+    "SKILL.md",
+    "LICENSE",
+    "NOTICE",
+    "README.md",
+    "CHANGELOG.md",
+    "install.sh",
+    "references",
+    "scripts",
+    "hooks",
+    "assets",
+    "bin",
+    "README.zh-CN.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YottaMeta/yotta-learn.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "yotta-learn": "bin/install.js"
+  }
+}

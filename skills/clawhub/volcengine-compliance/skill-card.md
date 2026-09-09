@@ -1,51 +1,62 @@
-## Description: <br>
-Volcengine Compliance helps agents recommend Volcengine Config compliance baselines, summarize current compliance posture, and guide custom Rego rule creation when built-in baselines do not cover a request. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents recommend Volcengine Config compliance baselines, summarize current compliance findings across built-in and custom rules, and draft custom Rego audit rules when built-in coverage is insufficient.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers, cloud security teams, and compliance operators use this skill to select Volcengine compliance baselines, review account compliance reports, and prepare custom Config rules for uncovered checks. Write actions are limited to user-confirmed baseline deployment, recorder enablement, or custom rule registration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed write actions can change Volcengine account state by deploying conformance packs, enabling the configuration recorder, or registering custom rules. <br>
-Mitigation: Use dry-run output first, explain the intended account changes to the user, and require explicit confirmation before adding --confirm or registering rules. <br>
-Risk: Generated compliance reports and local artifacts may contain sensitive account inventory details. <br>
-Mitigation: Store report files only in trusted locations, protect or delete them after review, and redact resource identifiers before sharing outside the intended audience. <br>
-Risk: Cloud credentials or session tokens may be exposed if copied into reports, command output, or user-facing summaries. <br>
-Mitigation: Never print AK, SK, Authorization headers, or session tokens; use scoped credentials and rely on the Volcengine CLI authentication path. <br>
-Risk: Custom Rego rules can produce misleading compliance results when resource schemas or field values are guessed. <br>
-Mitigation: Resolve supported resource types, inspect schema or real resource snapshots, test representative compliant and non-compliant cases, and rely on server-side compilation before registration. <br>
-Risk: Compliance overviews may be incomplete while the recorder is disabled or asynchronous evaluation is still pending. <br>
-Mitigation: Confirm recorder status and rerun overview after rules or conformance packs have had time to evaluate resources. <br>
+## Use Case:
 
+Developers, cloud engineers, and compliance operators use this skill to inspect Volcengine accounts for compliance posture, choose relevant built-in conformance-pack templates, and prepare custom audit rules for gaps. It separates reporting from remediation and requires confirmation before cloud-side writes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-compliance) <br>
-- [Authentication and prerequisites](references/auth.md) <br>
-- [Compliance recommendation](references/recommend.md) <br>
-- [Compliance overview](references/overview.md) <br>
-- [Deploying compliance packs](references/apply.md) <br>
-- [Writing custom Config rules](references/writing-config-rules.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown and JSON guidance, with optional generated Markdown, CSV, and JSON compliance report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Recommendation and overview paths are read-only; deployment, recorder enablement, and custom rule registration require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can use a Volcengine CLI session or VOLCENGINE_* credentials to inspect account compliance data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Config permissions, run it only in trusted environments, and avoid exposing generated reports.
+
+Risk: Confirmed write operations can create conformance packs, enable the recorder, or register custom audit rules.
+
+Mitigation: Start with recommend or overview, review dry-run output, and allow --confirm only when the intended account change is clear.
+
+Risk: Compliance outputs may include account IDs, resource IDs, regions, and annotations.
+
+Mitigation: Store reports in controlled locations and redact identifiers before sharing outside the intended audience.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-compliance)
+- [Compliance recommendation guide](references/recommend.md)
+- [Compliance overview guide](references/overview.md)
+- [Conformance pack deployment guide](references/apply.md)
+- [Authentication and prerequisites](references/auth.md)
+- [Custom rule authoring guide](references/writing-config-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, plus generated Markdown, CSV, and JSON compliance report files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only recommendation and overview commands are available; conformance-pack deployment, recorder enablement, and custom rule registration require explicit confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

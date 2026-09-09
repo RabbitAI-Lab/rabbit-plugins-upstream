@@ -11,7 +11,7 @@ installer:
   package: vmware-vks
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["VMWARE_VKS_CONFIG"],"bins":["vmware-vks"],"config":["~/.vmware-vks/config.yaml","~/.vmware-vks/.env"]},"optional":{"env":["VMWARE_VKS_<TARGET>_PASSWORD","VMWARE_VKS_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_VKS_CONFIG","homepage":"https://github.com/zw008/VMware-VKS","emoji":"☸️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"env":["VMWARE_VKS_CONFIG"],"bins":["vmware-vks"],"config":["~/.vmware-vks/config.yaml","~/.vmware-vks/.env"]},"optional":{"env":["VMWARE_VKS_<TARGET>_PASSWORD","VMWARE_VKS_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_VKS_CONFIG","homepage":"https://github.com/vmware-skills/VMware-VKS","emoji":"☸️","os":["macos","linux"]}}
 compatibility: >
   vmware-policy auto-installed as Python dependency (provides @vmware_tool decorator and audit logging). All write operations audited to ~/.vmware/audit.db (SQLite, via vmware-policy) with a local JSON-Lines mirror at ~/.vmware-vks/audit.log.
   Credentials: Each vCenter target requires a per-target password env var in ~/.vmware-vks/.env following the pattern VMWARE_VKS_<TARGET_NAME_UPPER>_PASSWORD (e.g., target "vcenter-01" → VMWARE_VKS_VCENTER_01_PASSWORD). Passwords are never logged, never echoed, never included in audit entries. Kubeconfig tokens returned by get_supervisor_kubeconfig and get_tkc_kubeconfig are short-lived vCenter session tokens, not persistent credentials.
@@ -19,12 +19,12 @@ compatibility: >
 
 # VMware VKS
 
-> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/zw008/VMware-VKS](https://github.com/zw008/VMware-VKS) under the MIT license.
+> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/vmware-skills/VMware-VKS](https://github.com/vmware-skills/VMware-VKS) under the MIT license.
 
-AI-powered VMware vSphere Kubernetes Service (VKS) management — 20 MCP tools.
+AI-powered VMware vSphere Kubernetes Service (VKS) management — 23 MCP tools.
 
 > Requires vSphere 8.x+ with Workload Management enabled.
-> **Companion skills**: [vmware-aiops](https://github.com/zw008/VMware-AIops) (VM lifecycle), [vmware-monitor](https://github.com/zw008/VMware-Monitor) (monitoring), [vmware-storage](https://github.com/zw008/VMware-Storage) (storage), [vmware-nsx](https://github.com/zw008/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/zw008/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/zw008/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/zw008/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/zw008/VMware-Harden) (compliance baselines).
+> **Companion skills**: [vmware-aiops](https://github.com/vmware-skills/VMware-AIops) (VM lifecycle), [vmware-monitor](https://github.com/vmware-skills/VMware-Monitor) (monitoring), [vmware-storage](https://github.com/vmware-skills/VMware-Storage) (storage), [vmware-nsx](https://github.com/vmware-skills/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/vmware-skills/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/vmware-skills/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/vmware-skills/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/vmware-skills/VMware-Harden) (compliance baselines).
 > | [vmware-pilot](../vmware-pilot/SKILL.md) (workflow orchestration) | [vmware-policy](../vmware-policy/SKILL.md) (audit/policy)
 
 ## What This Skill Does
@@ -34,6 +34,7 @@ AI-powered VMware vSphere Kubernetes Service (VKS) management — 20 MCP tools.
 | **Supervisor** | Compatibility check, status, storage policies | 3 |
 | **Namespace** | List, get, create with quotas, update, delete with TKC guard, VM classes | 6 |
 | **TKC Clusters** | List, get, versions, create, scale, upgrade, delete with workload guard | 7 |
+| **VM Service** | VM snapshots, VM groups + bootOrder, VM multi-NIC readout (vm-operator CRDs, read-only) | 3 |
 | **Access** | Supervisor kubeconfig, TKC kubeconfig, Harbor registry, storage usage | 4 |
 
 ## Quick Install
@@ -143,7 +144,7 @@ Supervisor Cluster → vSphere Namespaces → TanzuKubernetesCluster
 | Cloud models (Claude, GPT-4o) | Either | MCP gives structured JSON I/O |
 | Automated pipelines | **MCP** | Type-safe parameters, structured output |
 
-## MCP Tools (20 — 13 read, 7 write)
+## MCP Tools (23 — 15 read, 8 write)
 
 All accept optional `target` parameter to specify a named vCenter.
 
@@ -171,8 +172,11 @@ to be guessed from the row count. These three read their collection in one un-pa
 | | `scale_tkc_cluster` | Write |
 | | `upgrade_tkc_cluster` | Write |
 | | `delete_tkc_cluster` | Write |
+| **VM Service** | `list_vm_snapshots` | Read |
+| | `list_vm_groups` | Read |
+| | `list_vm_network_interfaces` | Read |
 | **Access** | `get_supervisor_kubeconfig` | Read |
-| | `get_tkc_kubeconfig` | Read |
+| | `get_tkc_kubeconfig` | Write |
 | | `get_harbor_info` | Read |
 | | `list_namespace_storage_usage` | Read |
 
@@ -234,9 +238,13 @@ List policies first: `vmware-vks supervisor storage-policies`, then pass the **P
 
 Check Supervisor events in vCenter. Common causes: insufficient resources on ESXi hosts, network issues with NSX-T, or storage policy not available on target datastore.
 
+### Every REST tool returns 401
+
+vCenter keeps two independent session stores, and this skill uses both. Namespace, storage-policy and Supervisor-status tools call the vSphere Automation REST API under `/api`, which authenticates with a session id from `POST https://<vcenter>/api/session` (HTTP Basic on that one call, then the id in a `vmware-api-session-id` header). The pyVmomi SOAP session under `/sdk` is a different store and its key is rejected there — sending it produced a 401 on every REST tool. A 401 is refreshed automatically once; if it persists, check whether a proxy between you and vCenter strips the `vmware-api-session-id` header. A **403**, not a 401, is what an account short of Workload Management permissions gets.
+
 ### Validating Supervisor auth (POST /wcp/login)
 
-Supervisor/TKC Kubernetes auth uses a JWT obtained from `POST https://<vcenter>/wcp/login` (HTTP Basic → JSON `session_id` bearer token), not the pyVmomi SOAP session key. To validate this end-to-end against your real Supervisor, run:
+Supervisor/TKC Kubernetes auth uses a JWT obtained from `POST https://<vcenter>/wcp/login` (HTTP Basic → JSON `session_id` bearer token), not the pyVmomi SOAP session key, and not the `/api/session` id above either — three separate credentials. To validate this end-to-end against your real Supervisor, run:
 
 ```bash
 vmware-vks preflight-auth [--target <name>]
@@ -290,4 +298,4 @@ vmware-policy is automatically installed as a dependency — no manual setup nee
 
 ## License
 
-MIT — [github.com/zw008/VMware-VKS](https://github.com/zw008/VMware-VKS)
+MIT — [github.com/vmware-skills/VMware-VKS](https://github.com/vmware-skills/VMware-VKS)

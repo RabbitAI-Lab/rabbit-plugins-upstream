@@ -1,44 +1,64 @@
-## Description: <br>
-Audio search tool that searches Pixabay Music and returns royalty-free track URLs and metadata for background music selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Pixabay Music through dLazy and returns royalty-free track URLs and metadata for selecting background music.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Agents and developers use this skill to search for royalty-free background music with short style keywords, then return candidate audio URLs and metadata for selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence flags the skill for review because it uses a dLazy API key and a general-purpose dLazy CLI. <br>
-Mitigation: Review the skill before installing, prefer the pinned npx @dlazy/cli@1.2.3 search_audio command, and use only the intended search_audio options. <br>
-Risk: Passing local files or @path-style input can send that data to dLazy. <br>
-Mitigation: Avoid local file inputs and @path references unless the user explicitly intends to share that data with dLazy. <br>
-Risk: Using --save downloads a returned audio URL to the local filesystem. <br>
-Mitigation: Use --save only when the user explicitly wants to download an audio result and has chosen an appropriate destination path. <br>
+## Use Case:
 
+External users and developers use this skill to search for royalty-free background music with short English style keywords and receive track URLs and metadata for selection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-audio) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [npm package @dlazy/cli](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [JSON command output with audio result metadata and URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; supports query, duration, result count, async, dry-run, and save options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Installing the dLazy CLI globally persists a third-party package and binary on the user's system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI source or npm package before use, and prefer the pinned npx invocation when a global install is not needed.
+
+Risk: Authentication stores a dLazy API key in the user's local CLI configuration or accepts it through an environment variable.
+
+Mitigation: Use scoped organization keys, protect the local config, and rotate or revoke keys from the dLazy dashboard when access changes.
+
+Risk: Passing local files to dLazy media fields can upload those files to dLazy-hosted storage.
+
+Mitigation: Only pass local file paths when upload is intended, and avoid including sensitive files in skill invocations.
+
+Risk: The artifact includes some generic CLI examples that may not match the search_audio command's documented query flag.
+
+Mitigation: Use `dlazy search_audio -h` and the documented `--query` form before invoking the command.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-audio)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result envelopes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; searches work best with 2-3 short English style keywords.]
+
+## Skill Version(s):
+
+1.3.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -14,8 +14,9 @@
  *   - ⚠️ claw-state/weixin/ 的 cursor 文件内嵌 bot 凭证镜像，切勿将其纳入分享 / 备份 / 提交。
  *
  * 【context_token 策略 — 文本默认空，媒体才取 cursor buf】
- *   - 文本推送：context_token 默认【空串】即可发送，无需读 cursor、无需激活。
- *       这也是为什么会话闲置十几小时后文本仍能推送——空 token 对文本长期有效。
+ *   - 文本推送：context_token 默认【空串】（会话存活时即可发送）。
+ *       ⚠️ 2026-08-28 实测：会话过期后连空 token 文本也会 ret:-2 "prepare failed"，
+ *       服务端校验的是用户侧下行会话（约 1 天无用户消息即过期），协议内无自激活手段。
  *   - 媒体推送（图片/文件/视频）：【必须】带非空 context_token，
  *       唯一来源 = claw-state/weixin 下 <ACCOUNT_ID>_im.bot.cursor.json 的 get_updates_buf。
  *   - get_updates_buf 是一个【base64 字符串】，用法极其严格：

@@ -34,6 +34,7 @@ critic treats a recorded guard deviation like the stylized-illustration deviatio
 not a register break.
 """
 import sys as _sys
+import warnings
 from pptx.dml.color import RGBColor
 def C(h): return RGBColor.from_string(h)
 
@@ -44,6 +45,7 @@ _KAITI = "Kaiti SC" if _sys.platform == "darwin" else "KaiTi"
 
 PRESETS = {
     "glassmorphism": {
+        "radius": 1.4, "rule_w": 1.0,   # structural tokens — see deckkit.set_geometry
         "mood": "premium dark UI / tech — depth, light, frosted glass",
         "bg": C("0A0E27"), "ink": C("F2F5FC"), "muted": C("AEB7CC"),
         "accents": [C("5B8DEF"), C("3DDDFC"), C("A26BFA"), C("FB7185"), C("4ADE80")],
@@ -58,6 +60,7 @@ PRESETS = {
         "when": "launches, product/tech talks, dashboards, design-forward decks. NEEDS a dark base.",
     },
     "swiss": {
+        "radius": 0.0, "rule_w": 0.6,   # structural tokens — see deckkit.set_geometry
         "mood": "International Typographic Style — grid, restraint, one red",
         "bg": C("FFFFFF"), "ink": C("111111"), "muted": C("777777"),
         "accents": [C("E2231A")], "font": "Arial", "display": "Arial", "mono": "Consolas",
@@ -71,6 +74,7 @@ PRESETS = {
         "when": "research, design, editorial, defense, any minimal/typographic register.",
     },
     "editorial_paper": {
+        "radius": 0.3, "rule_w": 0.6,   # structural tokens — see deckkit.set_geometry
         "mood": "luxury magazine — warm paper, serif, gold, big photography",
         "bg": C("FAF6EE"), "ink": C("1C1A17"), "muted": C("8A8275"),
         "accents": [C("B58A2E"), C("CBB46A")], "font": "Arial", "display": "Georgia", "mono": "Consolas",
@@ -86,6 +90,7 @@ PRESETS = {
         "when": "brand, portfolio, award, culture/lifestyle, showcase — tone over data density.",
     },
     "editorial_report": {
+        "radius": 0.4, "rule_w": 0.7,   # structural tokens — see deckkit.set_geometry
         "mood": "serious dark briefing — FT/Bloomberg gravitas, one-red discipline",
         "bg": C("0E0E12"), "ink": C("ECECEF"), "muted": C("8C8C97"),
         "accents": [C("E0392B"), C("D9A441")], "font": "Arial", "display": "Georgia", "mono": "Consolas",
@@ -101,6 +106,7 @@ PRESETS = {
         "when": "market/landscape reports, investor/strategy briefings, thought-leadership.",
     },
     "risograph": {
+        "radius": 0.4, "rule_w": 1.3,   # structural tokens — see deckkit.set_geometry
         "mood": "indie print zine — riso in 2 inks + the navy neutral, halftone, hard offset shadows",
         "bg": C("F3ECD9"), "ink": C("1B2A4A"), "muted": C("6B7280"),
         "accents": [C("FF4D8D"), C("F5B301"), C("1B2A4A")], "font": "Arial", "display": "Arial Black",
@@ -114,6 +120,7 @@ PRESETS = {
         "when": "culture, marketing, teaching, launch — audiences that reward personality.",
     },
     "memphis": {
+        "radius": 1.6, "rule_w": 1.2,   # structural tokens — see deckkit.set_geometry
         "mood": "80s-90s New Wave — bold, playful, chaotic-geometric",
         "bg": C("FCF2D8"), "ink": C("1A1A17"), "muted": C("9A9384"),
         "accents": [C("F76302"), C("0548C5"), C("E2342B"), C("1B7A3D"), C("F6BE1A")],
@@ -127,6 +134,7 @@ PRESETS = {
         "when": "events, festivals, launches, culture decks wanting energy.",
     },
     "brutalist": {
+        "radius": 0.0, "rule_w": 3.0,   # structural tokens — see deckkit.set_geometry
         "mood": "brutalist newspaper / annual report — heavy rules, raw type, ink-red-white",
         "bg": C("FFFFFF"), "ink": C("111111"), "muted": C("3A3A3A"),
         "accents": [C("C8102E")], "font": "Arial", "display": "Arial Black", "mono": "Consolas",
@@ -141,6 +149,7 @@ PRESETS = {
         "when": "annual report, manifesto, data-journalism with attitude, bold tech/culture decks.",
     },
     "blueprint": {
+        "radius": 0.0, "rule_w": 0.6,   # structural tokens — see deckkit.set_geometry
         "mood": "engineering / academic blueprint — schematic line-work on deep navy, one warm accent",
         "bg": C("0A1B38"), "ink": C("EAF2FF"), "muted": C("8FA6C4"),
         "accents": [C("46B4E8"), C("F1764E")], "font": "Arial", "display": "Arial", "mono": "Consolas",
@@ -156,6 +165,7 @@ PRESETS = {
         "when": "technical/method talks, architecture, agents/AI/engineering, paper-reading decks.",
     },
     "ink_wash": {
+        "radius": 0.0, "rule_w": 0.5,   # structural tokens — see deckkit.set_geometry
         "mood": "Chinese ink editorial (藏拙) — warm paper, ink black, one seal red, KaiTi serif",
         "bg": C("F5F1E8"), "ink": C("1A1A1A"), "muted": C("8B8680"),
         "accents": [C("A52A2A"), C("5C5852")], "font": "Hiragino Sans GB", "display": _KAITI, "mono": "Consolas",
@@ -171,6 +181,7 @@ PRESETS = {
         "when": "Chinese cultural / literary / brand / humanities decks; any 中文 editorial register.",
     },
     "eastern_traditional": {
+        "radius": 0.0, "rule_w": 0.7,   # structural tokens — see deckkit.set_geometry
         "mood": "Eastern traditional-colour narrative — warm paper, ochre-gold + sage, KaiTi",
         "bg": C("F7F2E8"), "ink": C("3A3530"), "muted": C("7A7068"),
         "accents": [C("C99E62"), C("6F8F75"), C("A52A2A")], "font": "Hiragino Sans GB", "display": _KAITI, "mono": "Consolas",
@@ -186,6 +197,7 @@ PRESETS = {
         "when": "traditional-culture, heritage, colour/material, plant-dye, museum/exhibition CN decks.",
     },
     "consulting": {
+        "radius": 0.8, "rule_w": 1.0,   # structural tokens — see deckkit.set_geometry
         "mood": "top-tier (MBB) strategy deck — white, action titles, navy insight banners, semantic 5-colour",
         "bg": C("FFFFFF"), "ink": C("1A2B45"), "muted": C("5A6B82"),
         "accents": [C("1A2B45"), C("1F8A70"), C("C9A227"), C("C0492E"), C("64748B")],
@@ -207,6 +219,7 @@ PRESETS = {
         "when": "strategy proposals, board/exec readouts, consulting, business cases.",
     },
     "dark_tech": {
+        "radius": 1.0, "rule_w": 1.0,   # structural tokens — see deckkit.set_geometry
         "mood": "calm near-black engineering — semantic accents on navy, white 'diagram islands', mono brand",
         "bg": C("0C1320"), "ink": C("E8EDF5"), "muted": C("8A96AC"),
         "accents": [C("4F9CF5"), C("33C2A6"), C("F2A33C"), C("E0556E"), C("A98BF0")],
@@ -224,6 +237,7 @@ PRESETS = {
         "when": "AI/ML, infra, agents, developer-tool, eng-blog and safety decks (dark, technical).",
     },
     "luxury_dark": {
+        "radius": 0.4, "rule_w": 0.6,   # structural tokens — see deckkit.set_geometry
         "mood": "dark luxury editorial — near-black, ONE metallic accent, photography supplies the colour",
         "bg": C("0A0A0A"), "ink": C("F5F0EB"), "muted": C("9E9690"),
         "accents": [C("C9A96E"), C("8B7355")], "font": "Arial", "display": "Georgia", "mono": "Consolas",
@@ -239,6 +253,7 @@ PRESETS = {
         "when": "fashion, luxury brand, premium product, gallery/awards — tone over data.",
     },
     "museum_memorial": {
+        "radius": 0.2, "rule_w": 0.6,   # structural tokens — see deckkit.set_geometry
         "mood": "midnight-navy memorial / exhibition — brass-gold accents, archival duotone, serif gravitas",
         "bg": C("0E1A2B"), "ink": C("ECE6D8"), "muted": C("8B93A3"),
         "accents": [C("C5A253"), C("6E8CA8")], "font": "Arial", "display": "Georgia", "mono": "Consolas",
@@ -254,6 +269,7 @@ PRESETS = {
         "when": "memorial, history/heritage, museum exhibition, biography, retrospective decks.",
     },
     "bauhaus": {
+        "radius": 0.0, "rule_w": 2.6,   # structural tokens — see deckkit.set_geometry
         "mood": "Bauhaus modernism — the primitive triad (circle/square/triangle) as the layout's "
                 "structural actors, primary red/yellow/blue on white, lowercase geometric sans.",
         "bg": [245, 243, 238], "ink": [26, 26, 26], "muted": [110, 108, 102],
@@ -271,6 +287,7 @@ PRESETS = {
         "when": "design, architecture, education, modernist brand, a bold geometric register.",
     },
     "midcentury": {
+        "radius": 1.8, "rule_w": 0.8,   # structural tokens — see deckkit.set_geometry
         "mood": "Mid-century modern — warm harvest palette + atomic/starburst/boomerang motifs, "
                 "1950s-60s optimism; geometric-humanist type.",
         "bg": [244, 237, 221], "ink": [42, 37, 30], "muted": [120, 108, 90],
@@ -289,6 +306,7 @@ PRESETS = {
         "when": "culture, retro brand, lifestyle, a warm optimistic register; anything Eames-era.",
     },
     "terminal": {
+        "radius": 0.0, "rule_w": 1.0,   # structural tokens — see deckkit.set_geometry
         "mood": "Terminal / monospace — phosphor-on-black CRT: fixed-width type throughout, a "
                 "command-line register for engineers.",
         "bg": [10, 15, 10], "ink": [200, 240, 200], "muted": [90, 130, 90],
@@ -306,6 +324,7 @@ PRESETS = {
         "when": "developer-tool, CLI/infra, hacker/CTF, an eng-blog or release-notes register.",
     },
     "synthwave": {
+        "radius": 0.6, "rule_w": 1.2,   # structural tokens — see deckkit.set_geometry
         "mood": "Synthwave / Outrun — retro-futurist neon: a receding perspective grid to a horizon, "
                 "sunset gradient, glow. Vivid and high-contrast.",
         "bg": [18, 12, 38], "ink": [240, 235, 255], "muted": [150, 130, 190],
@@ -327,14 +346,170 @@ PRESETS = {
 }
 
 
+
+# ── FORBIDS — the machine-checkable half of each `guard` ─────────────────────────────────────
+#
+# `guard` is prose written for the author, and prose is satisfiable by intending to satisfy it.
+# Measured: the same content under 18 different `presets.apply()` calls produced 18 pages that
+# differed only in ground colour, corner radius and rule weight — memphis without its coloured
+# header bands, bauhaus without a primitive, glassmorphism without a glass card. Declaring a
+# register and shipping its palette is the "只是一些颜色的搭配就说使用了这个模板" failure, and
+# nothing measured it: `check_register_pixels.py` says in its own docstring that it judges COLOUR
+# IDENTITY only.
+#
+# So each preset names the SHAPE-LEVEL prohibitions a machine can settle. Deliberately narrow: a
+# check that fires on lawful composition teaches the reflex to waive it, so this covers only
+# properties that are read straight off the OOXML and need no judgement of taste.
+#
+#   rounded             a shape whose prstGeom is a rounded family (roundRect, round2SameRect…)
+#   gradient            a gradFill anywhere on the shape
+#   soft-shadow         shadow.inherit left True — the theme's soft shadow, never switched off
+#   proportional-face   any run in a face outside the mono whitelist
+#   confetti            more than ONE oversized primitive (>=6% of the canvas)
+#
+# What is NOT here is as deliberate: "photography carries all the colour", "no diagrams straight
+# on the navy", "titles must be full-sentence conclusions" are all real rules in `guard` and none
+# of them is decidable from the file without judging meaning. They stay prose, and the checker
+# reports which registers it could not check rather than implying silence is a pass.
+FORBIDS = {
+    "swiss":         ("rounded", "gradient", "soft-shadow"),
+    "brutalist":     ("rounded", "soft-shadow"),
+    "risograph":     ("gradient", "soft-shadow"),
+    "bauhaus":       ("gradient", "confetti", "soft-shadow"),
+    "terminal":      ("proportional-face",),
+    "ink_wash":      ("rounded", "gradient"),
+    "blueprint":     ("rounded",),
+}
+
+
+def panel(name):
+    """The register's PANEL fill — the ground, nudged toward its ink.
+
+    `TINT` is what `callout()` and `table()` fill with, and it was never re-themed, so every
+    register drew deckkit's pale blue: on the eight dark registers that is a light-blue card on a
+    near-black page. Deriving it from the register's own two colours keeps it in the register by
+    construction, which hand-picking eighteen values would not — and it stays correct if a
+    preset's bg or ink is ever retuned.
+
+    The step is small on purpose (12% toward the ink): a panel has to separate from the ground
+    without competing with the content on it. Verified across all 18 registers to sit clear of the
+    ground and still carry the register's ink above the 4.5:1 body floor.
+    """
+    p = PRESETS[name]
+    bg, ink = _rgb(p["bg"]), _rgb(p["ink"])
+    return tuple(int(round(b + (i - b) * 0.12)) for b, i in zip(bg, ink))
+
+
+def apply(name):
+    """Apply a preset's COLOUR and its STRUCTURE in one call, then return the preset dict.
+
+    Before the structural tokens existed a preset was 5 colours, 5 font names and 3 English
+    sentences — and the sentences ("NO rounded corners", "hairline rules", "THICK black
+    rules/borders") were the part that made a register look like itself, and the part nothing
+    implemented. Honouring them meant abandoning the component library and hand-rolling with
+    box(), because 55 components pass round=True with no caller-side switch. Now they are data:
+
+        import presets, deckkit as dk
+        p = presets.apply("brutalist")      # palette + fonts + hard edges + thick rules
+
+    Returns the preset so the caller can still read `surface` / `guard` / `image_prompt`, which
+    stay prose on purpose — they are art direction, not geometry.
+
+    It also sets the GROUND. It did not, and that was the third half-application in a row: the
+    preset carried `bg`, `apply()` returned it, and NOTHING painted it. 8 of the 18 registers are
+    dark, so a caller doing exactly what this docstring said got the register's light ink on a
+    white canvas — measured on `dark_tech`, body text at 1.18:1, surfaced only by the render lint,
+    one build->render->diagnose round trip after the fact was already known. `set_ground` exists
+    because `apply()` runs before any slide does, so it cannot call `slide_background()` itself.
+    """
+    import deckkit as dk
+
+    # 🔴 A preset's FACE is a name, and a name that is not installed is measured in a substitute —
+    # which is worst precisely where the register is typographic. Measured: `terminal` declares
+    # Consolas, absent from macOS, so every fixed-width measurement in a mono register would have
+    # been computed in a proportional fallback. deckkit already knows how to ask; apply() did not.
+    _pre = PRESETS.get(name) or {}
+    _seen = set()
+    for _slot in ("font", "display", "mono"):
+        _face = _pre.get(_slot)
+        if not _face or _face in _seen:
+            continue                              # one warning per FACE, not per slot
+        _seen.add(_face)
+        try:
+            if dk._font_substituted(_face):
+                warnings.warn(
+                    "presets.apply({!r}): the preset's {} face {!r} is NOT installed on this "
+                    "machine, so every measurement in it falls back to a metric-incompatible "
+                    "substitute. Set an installed face after apply() — dk.FONT = dk.MONO = "
+                    "'<installed>' — or run deckkit.use_platform_fonts().".format(
+                        name, _slot, _face),
+                    stacklevel=2)
+        except Exception:
+            pass                                  # a font probe must never break a build
+    p = preset(name)
+    # 🔴 The SEMANTIC SLOTS, not just the accent cycle. `apply()` used to pass `deep`, `slate` and
+    # `accents` and nothing else, so BLUE, TEAL, MAGENTA and TINT kept deckkit's own defaults on
+    # every register — and those four are what 33 component signatures default to. Measured: after
+    # `apply("terminal")`, a `callout()` on a black-and-phosphor deck came out with a #E3004F
+    # magenta rule on a #EAF3FA pale-blue panel. The remap machinery in `set_palette` was working
+    # perfectly; it was simply never told the register's colours.
+    #
+    # MAGENTA is the highlight slot (21 component signatures default to it), BLUE the primary and
+    # TEAL the secondary. A register's accents are ordered by intent, so they map straight on; a
+    # register with fewer accents reuses its primary rather than inventing a hue.
+    _acc = list(p["accents"]) or [p["ink"]]
+    dk.set_palette(deep=p["ink"], slate=p["muted"], accents=list(p["accents"]),
+                   magenta=_acc[0], blue=_acc[1 % len(_acc)], teal=_acc[2 % len(_acc)],
+                   tint=panel(name),
+                   font=p["font"], display=p["display"], mono=p["mono"],
+                   eafont=p["ea"], eadisplay=p["ea_display"])
+    dk.set_geometry(radius=p["radius"], rule_w=p["rule_w"])
+    dk.set_ground(ground(name))
+    return p
+
+
+def ground(name):
+    """A preset's background as an RGBColor — the colour `apply()` hands to `deckkit.set_ground`."""
+    return preset(name)["bg"]
+
+
+_COLOUR_KEYS = ("bg", "ink", "muted")
+
+
+def _rgb(v):
+    """One colour, however the table wrote it -> RGBColor."""
+    if isinstance(v, RGBColor):
+        return v
+    if isinstance(v, (list, tuple)):
+        return RGBColor(*(int(c) for c in v))
+    h = str(v).lstrip("#")
+    return RGBColor(*(int(h[i:i + 2], 16) for i in (0, 2, 4)))
+
+
 def preset(name):
     """Return a COPY of the named preset dict (palette as RGBColor, fonts, surface + image-prompt
-    guidance). Raises KeyError on an unknown name — see names()."""
+    guidance). Raises KeyError on an unknown name — see names().
+
+    NORMALISES every colour, because the docstring's "palette as RGBColor" was not true. The table
+    is hand-written and the four registers added last — `bauhaus`, `midcentury`, `terminal`,
+    `synthwave` — wrote every colour as a plain `[r, g, b]` list while the first fourteen wrote
+    RGBColor. Nothing coerced them, so the documented usage
+
+        p = presets.apply("bauhaus"); dk.text(s, ..., [[(t, 13, p["accents"][0], True, False)]])
+
+    raised `ValueError: assigned value must be type RGBColor` on 4 of 18 registers and worked on
+    the other 14 — the worst shape for a bug, since it looks like the caller's mistake. `bg` had
+    the same split. Normalising HERE means the table stays writable in whichever notation suits
+    an entry and every consumer gets one type.
+    """
     if name not in PRESETS:
         raise KeyError(f"unknown preset '{name}'; choose from {list(PRESETS)}")
     p = PRESETS[name]
     out = dict(p)
-    out["accents"] = list(p["accents"])
+    out["accents"] = [_rgb(a) for a in p["accents"]]
+    for k in _COLOUR_KEYS:
+        if k in out:
+            out[k] = _rgb(out[k])
     return out
 
 

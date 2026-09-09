@@ -1,4 +1,51 @@
 ---
+slug: invassistant
+displayName: InvAssistant
+description: >
+  Multi-asset investment portfolio management framework with A/B/C asset-class differentiated rules,
+  7 red-line portfolio risk controls, and 4-factor QMS quality scoring.
+  Covers US, A-share (China), and HK stocks with disciplined entry/exit logic.
+  中文摘要：多资产投资组合管理框架——A/B/C 类资产差异化规则、7 条红线组合风险控制、四因
+  子质量管理，覆盖美股/A股/港股的纪律化进出场逻辑。触发词：投资组合管理、持仓复盘、
+  风险红线检查、仓位规则.
+description_zh: "多资产投资组合管理框架：A/B/C 类资产差异化规则、7 条红线组合风险控制、四因子质量管理；覆盖美股、A 股、港股，纪律化进出场逻辑。"
+version: "2.3.10"
+read_when:
+  - "User requests portfolio review, A/B/C asset classification, or 7-red-line risk check for their holdings"
+  - "User asks about entry/exit logic for US stocks, A-shares (China), or HK stocks under the framework"
+  - "User requests QMS (quality scoring) evaluation of a stock candidate"
+  - "User asks about portfolio risk controls, warning lines, or position sizing rules"
+  - "User wants to log a trade or review trade history against the framework"
+not_for:
+  - "Real-time trading signals or market timing predictions"
+  - "Specific stock buy/sell recommendations without portfolio context"
+  - "Tax, legal, or regulatory advice — this is a portfolio management framework, not financial advice"
+  - "Analysis of assets outside US / A-share / HK stocks (crypto, commodities, fixed income) without adaptation"
+
+
+allowed-tools:
+  - read_file
+  - write_to_file
+  - replace_in_file
+  - execute_command
+disable: false
+metadata:
+  openclaw:
+    requires:
+      bins:
+        - python3
+      env: []
+    tags:
+      - investment
+      - trading
+      - portfolio
+      - stock
+      - finance
+      - us-stock
+      - a-share
+      - hk-stock
+      - risk-control
+---
 name: invassistant
 description: >
   Multi-asset investment portfolio management framework with A/B/C asset-class differentiated rules,
@@ -30,8 +77,10 @@ metadata:
 
 # InvAssistant
 
-> Multi-asset investment portfolio management framework — current version v2.1.2 (2026-06-06).
+> Multi-asset investment portfolio management framework — current version v2.3.10 (2026-09-08).
 > Core philosophy: portfolio before stock-picking, discipline before inspiration. Rules are guardrails, not cages.
+
+> ⚠️ **Risk Warning**: This is a decision-support framework, not financial advice. AI guidance is probabilistic; all action triggers — including rule-based alerts and entry thresholds — require human review before any execution. Author assumes no liability for trading losses.
 
 ---
 
@@ -170,7 +219,17 @@ QMS = 0.35 × Earnings Trend
 
 ---
 
-## 9. Data Sources
+## 9. Output Format
+
+Portfolio reviews and risk checks produce:
+- **Structured review report** — A/B/C classification table, red-line pass/fail flags, position-sizing check, QMS scores for candidates
+- **Action list** — framework-compliant observations (never directives): what to watch, what violates a rule, what needs human decision
+- **Data-source annotations** — each number carries its source and timestamp; unsourced values are marked
+
+
+---
+
+## 10. Data Sources
 
 | Data Type | Primary | Fallback |
 |-----------|---------|----------|
@@ -183,7 +242,7 @@ QMS = 0.35 × Earnings Trend
 
 ---
 
-## 10. Common Mistakes
+## 11. Common Mistakes
 
 | # | Mistake | Fix |
 |---|---------|-----|
@@ -192,6 +251,63 @@ QMS = 0.35 × Earnings Trend
 | P3 | Cross-market strategy pushed to sub-pages | Cross-market → main page; specific rules → sub-page |
 | P4 | LaTeX `$xxx` swallows first digit | Use `US$` / `HK$` / `¥` / `\$` |
 | P5 | Wrong code block language (`'plain'`) | Must use `'plain text'` (with space) |
+| P6 | Adopting a capital plan without running the consistency audit (§12) | Run A1-A5 before adopting any multi-sleeve plan |
+| P7 | Writing a threshold on a metric without pinning its caliber (§12 A5) | Name the adopted caliber and list the banned ones in the rule file |
+
+---
+
+## 12. Capital Plan Consistency Audit
+
+Run these checks before adopting any multi-sleeve capital plan (account-level targets, DCA schedules, subtype caps). All of them caught real defects on first use; all are arithmetic, not judgment — detect them by computing, not by reading.
+
+| # | Check | Failure signature | Detection |
+|---|-------|-------------------|-----------|
+| A1 | **Fixed-amount vs percentage cap** | A fixed monthly split silently breaches a percentage cap partway through the horizon | `monthly_amount × horizon > cap_remaining` for any sleeve |
+| A2 | **Target attainability** | The headline target is unreachable under currently active constraints (frozen / blocked sleeves) | `Σ deployable across OPEN sleeves only < required deployment` |
+| A3 | **Label vs look-through exposure** | Subtype labels understate true industry concentration; ETF holdings carry hidden weights | `direct_holding + Σ(ETF_value × constituent_weight)` vs cap |
+| A4 | **Drag vs protection breakeven** | "Idle cash is waste" conclusions ignore the option value given up | `p* = annual_drag_eliminated / protection_given_up` |
+| A5 | **Metric caliber pinned** | A rule fires off a metric whose caliber is undefined, so conflicting published values are interchangeable | See A5 below |
+
+**A1 fix**: allocate by remaining gap to cap, recomputed monthly — never by fixed amount. A fixed amount and a percentage cap are mathematically inconsistent whenever prices move.
+
+**A2 fix**: state cash targets as two stages — a transitional range that is actually reachable with the sleeves open today, and the strategic range that becomes reachable on a stated trigger. Writing an unreachable target puts the rule in violation from day one.
+
+**A3 fix**: set a look-through industry cap that takes precedence over the subtype label cap. Re-test before every new position, since adding a direct holding and growing an ETF sleeve compound.
+
+**A4 fix**: report the breakeven probability, not the drag alone. Drag is certain and annual; protection is contingent and only pays on drawdown. A drag of 0.1% p.a. is not worth buying with concentration risk.
+
+### A5 — Pin the caliber of every threshold metric
+
+If a rule says "yield < X triggers Y" without defining how yield is measured, the rule is undefined, not implemented. Published values for the same instrument routinely differ by 2x. Worked example on a dividend ETF — four circulating figures, four different calibers:
+
+| Figure | Caliber | Verdict |
+|---|---|---|
+| 2.44% | Year-to-date distributions ÷ price. **Not annualised**; at mid-year only half of the year's four payments are counted, so it understates at every mid-year point | Ban |
+| 4.34% | Trailing four actual distributions ÷ current price | **Adopt** |
+| 4.88% | Index yield, rolling, pre-tax, before fund fees | Ban |
+| 4.93% | Index yield, index-provider periodic-review basis — updated once a year, denominator is a lagged average market cap | Ban |
+
+**A5 procedure**: enumerate every published value with its caliber; adopt the one that measures what the holder actually receives; write the adopted caliber and the banned calibers into the rule file itself. Then apply A5 to the *other* side of the comparison too — a yield-vs-bond threshold also needs the bond yield pinned (curve yield vs on-the-run yield vs third-party quote differ by 5-15bp), and stale reference rates silently inflate the buffer.
+
+Two follow-on habits that A5 surfaced:
+
+- **Reconstruct suspicious figures before trusting or discarding them.** Back-solving `dividends ÷ yield` gave an implied price of 1.4344 against an actual NAV of 1.4522, which identified the caliber definitively. A number you cannot reconstruct is a number you have not checked.
+- **Check whether the payout is contractually guaranteed.** Distributions may be conditional (e.g. fund contract requiring excess return over the benchmark before any distribution). A conditional payout makes the yield a binary variable — it can go to zero — which no continuous threshold handles. Track it as a separate monitoring item.
+
+**Related — DCA stop/resume**: model DCA as a state machine (ACTIVE / PAUSED / STOPPED / FROZEN / BLOCKED) with explicit downgrade and upgrade conditions. **Downgrades may be automatic; upgrades must require human confirmation.** An auto-resume buys back right after a rebound, which is a systematic momentum-chasing switch. Also separate "plan completed" (position count reached — resume needs a new plan) from "risk halt" (cap breached — resume when the ratio falls back); treating both as one frozen state loses the distinction.
+
+Give a thin threshold buffer a false-trigger guard (require two consecutive confirmations) plus a fast path for genuine deterioration (a single large move suspends immediately). Pausing inflows is cheap; breaking DCA continuity is not, since continuity is the point of DCA.
+
+---
+
+## Reference Files
+
+| File | Use when |
+|------|----------|
+| `references/a_share_strategy.md` | A-share selection and DCA rules |
+| `references/us_stock_strategy.md` | US/HK position management |
+| `references/risk_control_and_overrides.md` | Red lines, macro levels, override procedure |
+| `references/candidate_admission_gates.md` | **Promoting a candidate to watchlist** — G0-G5 gates, S6 dividend-yield water level, look-through industry cap. Read before any "add to watchlist" request. |
 
 ---
 
@@ -199,6 +315,10 @@ QMS = 0.35 × Earnings Trend
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v2.3.9 | 2026-09-07 | Add §12 Capital Plan Consistency Audit (A1-A5) + P6/P7; candidate admission gates reference (G0-G5, look-through cap); restore Risk Warning & Output Format from ClawHub 2.3.8 |
+| v2.3.10 | 2026-09-08 | Add not-individualized-advice disclaimer to risk_control_and_overrides.md (scanner finding) |
+| v2.3.3 | 2026-08-07 | Sync SKILL.md version declaration with ClawHub package metadata |
+| v2.3.2 | 2026-06-06 | Fix display name (remove Clean suffix) |
 | v2.1.2 | 2026-06-06 | Audit cleanup: bilingual README, remove legacy files |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |
 | v2.1 | 2026-05-18 | A/B/C asset classification; 7 red lines; 4-factor QMS; trailing stop removed from A-class |

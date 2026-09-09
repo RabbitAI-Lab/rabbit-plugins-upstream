@@ -1,50 +1,69 @@
-## Description: <br>
-凭 App Key 调用百炼®标书开放 API，完成招标文件智能解读、分包抽取、成品投标文件生成和可选合规审查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uploads tender and bid documents to the 百炼标书 cloud API so an agent can interpret tender requirements, generate bid-document drafts, review bid compliance risks, and compare bid files for similarity signals.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and business proposal teams use this skill to process local tender documents, generate editable bid documents, and review bid files for compliance risks through the BaiLian bid-document service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, and personal information and are uploaded to the BaiLian service for processing. <br>
-Mitigation: Use the skill only after the user understands and consents to the upload, and submit only intended local files. <br>
-Risk: The App Key controls access to billable account credits and is stored locally. <br>
-Mitigation: Keep config.json private, avoid pasting the App Key into chat, and do not share links that contain App Key or bind_key parameters. <br>
-Risk: Bid-document generation consumes account credits. <br>
-Mitigation: Check the account balance before submitting generation jobs and confirm the user expects credit usage. <br>
-Risk: Optional endpoint overrides could route traffic away from the production BaiLian API. <br>
-Mitigation: Review ZCM_BASE before use and leave it unset when production API routing is required. <br>
-Risk: Generated bid documents and compliance reports may require business and legal review before use. <br>
-Mitigation: Treat generated files and risk findings as drafting and review aids, and have qualified staff verify final submissions. <br>
+## Use Case:
 
+External bidding teams and proposal developers use this skill to analyze tender files, produce .docx bid drafts, check bid submissions for compliance risks, and compare 2-3 bid documents for similarity or duplication signals before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-review-pro) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [BaiLian bid-document service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage guide](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance, progress text, JSON results, .docx bid documents, and HTML or Word reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include local absolute file paths for generated reports and bid documents.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: release evidence) <br>
+Risk: Tender and bid documents can contain sensitive commercial, pricing, and personal information and are uploaded to the vendor cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only files the user is authorized to process, obtain explicit consent before upload, and avoid using the skill for documents that cannot be shared with the vendor service.
+
+Risk: The skill uses a paid API-key account, and exposed API keys, SMS codes, phone numbers, or key-bearing links could compromise the account.
+
+Mitigation: Have users configure credentials themselves, never paste or repeat keys in chat, and share only non-credential platform URLs.
+
+Risk: Security evidence flags unsafe report filename handling and broad output paths until filename containment is fixed.
+
+Mitigation: Avoid custom report basenames or broad output directories, keep generated files under the declared output folder, and review paths before opening or sharing reports.
+
+Risk: Security evidence notes under-disclosed local persistence, including possible state under ~/.zcm.
+
+Mitigation: Review local state locations during installation and cleanup, and remove local credentials or cached state when the skill is no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-review-pro)
+- [百炼标书 platform](https://biaoshu.zhiliaobiaoxun.com/)
+- [API dispatcher](references/api.md)
+- [Authentication, jobs, and billing API](references/api-auth.md)
+- [Tender interpretation and bid-document generation API](references/api-bid-workflow.md)
+- [Bid compliance review API](references/api-compliance.md)
+- [Bid duplication review API](references/api-duplicate.md)
+- [Knowledge-base fields](references/knowledge-fields.md)
+- [Usage guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries with JSON results, local HTML/Word reports, .docx bid-document files, configuration guidance, and short-lived download links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include risk labels, evidence excerpts, report file paths, progress updates, and paid-account usage guidance.]
+
+## Skill Version(s):
+
+3.1.0 (source: server release evidence and scripts/zcm_lib/cli.py)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

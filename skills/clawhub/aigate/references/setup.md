@@ -1,14 +1,16 @@
 # aigate setup
 
-Accurate to the aigate `README.md` / `docker-compose.yml` / `.env.example` at time of writing. Re-check those files if this drifts.
+Accurate to the aigate `README.md` / `docker-compose.yml` / `.env.example` at time of writing. Re-check those files if this drifts. `.env` and `docker-compose.override.yml` are the operator's local files and are gitignored.
 
 ## Bring-up
 
 ```bash
 git clone https://github.com/psyb0t/aigate
 cd aigate
-cp .env.example .env
+make bootstrap   # creates .env from .env.example (any target does this)
 # edit .env — see "Required env" below, then flip service flags to 1
+# .env is gitignored. docker-compose.yml is tracked, so put compose changes in
+# docker-compose.override.yml, which is gitignored and merges last
 make limits      # writes .env.limits sized to this machine's RAM/swap/CPU
 make run-bg      # start detached
 # or: make run   # start in foreground with logs
@@ -35,7 +37,7 @@ Core, always needed regardless of which optional services you enable:
 
 | Variable | Purpose |
 | --- | --- |
-| `AIGATE_TOKEN` | Master bearer token. Every per-service token below defaults to this value when left unset — one token authenticates against LiteLLM, claudebox, pibox-zai, predictalot, mcp_tools, stealthy-auto-browse, hybrids3, telethon, audiolla, flickies. Override a specific `*_AUTH_TOKEN` / `*_API_TOKEN` var to scope that service separately. |
+| `AIGATE_TOKEN` | Master bearer token. Every per-service token below defaults to this value when left unset — one token authenticates against LiteLLM, claudebox, pibox-zai, predictalot, mcp_tools, stealthy-auto-browse, hybrids3, telethon, audiolla, flickies, talkies, talkies-cuda. Override a specific `*_AUTH_TOKEN` / `*_API_TOKEN` var to scope that service separately. |
 | `LITELLM_MASTER_KEY` | Optional override; defaults to `AIGATE_TOKEN` when unset. |
 | `POSTGRES_DB` / `POSTGRES_USER` / `POSTGRES_PASSWORD` / `DATABASE_URL` | LiteLLM's key/usage/budget store. |
 | `REDIS_PASSWORD` | LiteLLM response cache + rate limiting + proxq job queue (DB 1). |
@@ -66,7 +68,7 @@ Per-service keys/tokens only matter once you flip that service's flag to `1`. Ev
 LiteLLM regenerates its config on every `make run`/`make run-bg`, including only enabled providers. Fallback chains (`litellm/config/fallbacks.json`) are priority-ordered and filtered to what's actually enabled:
 
 1. Free cloud (Groq, Cerebras, OpenRouter, HuggingFace, Mistral, Cohere) — rate-limited/capped, not unlimited.
-2. Flat-rate (claudebox, pibox-zai) — costs the subscription, no extra per-call charge.
+2. Subscription (claudebox, pibox-zai) — no per-token billing, but the allowance is metered.
 3. Pay-per-token (Anthropic, OpenAI) — real money per token.
 4. Local (Ollama, talkies, sd.cpp, vLLM, llama.cpp) — no external limits, bounded only by local hardware.
 

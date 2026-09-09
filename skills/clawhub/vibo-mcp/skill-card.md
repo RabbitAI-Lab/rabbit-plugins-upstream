@@ -1,42 +1,51 @@
-## Description: <br>
-Access Vibo event music planning through an MCP server for events, timelines, song requests, playlists, guest activity, and connected music exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+vibo-mcp lets agents access Vibo event music planning through MCP to inspect events, timelines, song requests, playlists, and exports, and to perform confirm-gated updates.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and event hosts use this skill to let an agent inspect and manage Vibo event music planning, including timeline sections, requested songs, playlists, guest participation, and Spotify or Apple Music exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can depend on Vibo passwords, access tokens, refresh tokens, or captured browser sessions. <br>
-Mitigation: Keep `.mcp.json`, environment variables, and `~/.vibo-mcp/session.json` private, avoid committing them, and rotate Vibo credentials or sessions if exposed. <br>
-Risk: Write tools can modify event songs, comments, sections, guests, notifications, and connected music exports. <br>
-Mitigation: Review dry-run previews first and only rerun mutating tools with `confirm: true` when the proposed change is intended. <br>
+## Use Case:
 
+External users and event planners use this skill to let an agent work with Vibo event music plans, including timelines, song requests, playlists, guest participation, and music-service exports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp) <br>
-- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp) <br>
-- [Vibo](https://vibodj.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with JSON configuration snippets, tool guidance, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP tool calls that read or mutate Vibo account and event data; mutating tools are described as confirm-gated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: The skill asks users to run an unpinned remote MCP package while supplying reusable Vibo credentials or captured session tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, audited vibo-mcp version, store credentials or tokens in a secret manager where possible, keep MCP configuration and session files out of source control, restrict file permissions, and rotate tokens if the machine or repository is shared or compromised.
+
+## Reference(s):
+
+- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp)
+- [Vibo](https://vibodj.com)
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Mutating Vibo operations are documented as confirm-gated; compact responses strip media fields by default for selected read tools.]
+
+## Skill Version(s):
+
+1.8.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -33,11 +33,12 @@ description: >-
 |---|---|---|
 | SECS/GEM · SECS-II · HSMS · 半导体/显示 fab · wafer · panel · MES equipment · SVID/ECID · recipe | **iaiops-fab** | `IAIOPS_MCP=fab` / `iaiops-mcp-fab` |
 | 离散制造产线 · PLC（S7/S7-1200/1500 · 三菱/MELSEC · Allen-Bradley/ControlLogix/CompactLogix · Omron/FINS/SYSMAC CS/CJ/CP/NX）· Modbus · EtherCAT/CoE/SOEM · PROFINET/DCP · MTConnect/CNC 机床 · Sparkplug B/UNS | **iaiops-factory** | `IAIOPS_MCP=factory` / `iaiops-mcp-factory` |
-| 流程工业（化工/制药/食品饮料）· HART/HART-IP · 变送器/阀门定位器 · 过程仪表 · DCS 旁路读取 | **iaiops-process** | `IAIOPS_MCP=process` / `iaiops-mcp-process`（有 UNS 时 `IAIOPS_MCP=process,sparkplug`） |
+| 流程工业（化工/食品饮料/原料药合成）· HART/HART-IP · 变送器/阀门定位器 · 过程仪表 · DCS 旁路读取 | **iaiops-process** | `IAIOPS_MCP=process` / `iaiops-mcp-process`（有 UNS 时 `IAIOPS_MCP=process,sparkplug`） |
 | BACnet/BACnet-IP · HVAC/暖通 · BMS/楼宇自控 · 厂务/facility · Who-Is · TrendLog | **iaiops-building** | `IAIOPS_MCP=building` / `iaiops-mcp-building` |
 | 水处理/水厂 · pH · 浊度/turbidity · 电导率/conductivity · 加药/dosing · 泵站/pump station · 曝气 | **iaiops-water** | `IAIOPS_MCP=water` / `iaiops-mcp-water` |
 | 仓储/物流中心 · 输送线/conveyor · 分拣/sorter · AGV/AMR · WMS/WCS · 托盘/穿梭车 · 物料搬运 | **iaiops-warehouse** | `IAIOPS_MCP=warehouse` / `iaiops-mcp-warehouse` |
 | 医院设施/clinical facility · 负压/正压隔离病房 · 医用气体 · 手术室环境 · 医疗 BMS | **iaiops-clinical** | `IAIOPS_MCP=clinical` / `iaiops-mcp-clinical` |
+| 制药/药厂 · GMP · 洁净室/洁净区 · Annex 1 · 压差梯度/pressure cascade · grade A/B/C/D · 尘埃粒子 · EMS/环境监测 · PW/WFI/纯化水/注射用水 · TOC · 生物反应器 · 冻干机 · 灌装线 · CSV/IQ/OQ · Annex 11 · Part 11 · 数据完整性/ALCOA | **iaiops-pharma** | `IAIOPS_MCP=pharma` / `iaiops-mcp-pharma` |
 | 光伏/PV · 逆变器/inverter · 组串/string · 风电/风机 · 场站 SCADA · 新能源电站 | **iaiops-renewables** | `IAIOPS_MCP=renewables` / `iaiops-mcp-renewables` |
 | Phoenix Contact PLCnext / vPLC（虚拟化 PLC，走内建 OPC-UA + Modbus-TCP） | **iaiops-plcnext** | `IAIOPS_MCP=plcnext` / `iaiops-mcp-plcnext` |
 | IO-Link · IO-Link master · IODD · 智能传感器/executor 参数 · pdin · ISDU（主站 JSON/REST 接口，只读） | **iaiops-factory**（楼宇传感器场景 **iaiops-building**） | `IAIOPS_MCP=factory` / 单协议 `IAIOPS_MCP=iolink` / `iaiops-mcp-iolink` |
@@ -76,11 +77,43 @@ monitor-direction only。**不要**尝试用本 server 的 profile 覆盖能源�
   `mc_write_words`、`fins_write_words`、`mqtt_publish`、`eip_write_tag`、`ethercat_write_sdo`、
   `ethercat_set_state`、`profinet_dcp_set`、`bacnet_write_property`、`bas_command`）全部
   `risk=HIGH`、默认 `dry_run=True`、捕获改前值供 undo（`bas_command` 另对生命安全点一律拒绝）。
+  这 10 个是**设备**写。写历史库/时序库那类不改变现场状态的写另计，
+  由 edition skill 逐个列明 —— 别把「10」当成全部写面。
 - **审批**：真实写入需具名审批人 —— CLI `iaiops approve` 双重确认后才放行。
 - **未经授权绝不写生产控制系统**；AI 结论仅 advisory，引用真实信号出处，宁可
   `insufficient_evidence` 不臆测。
 - 各协议的验证状态（✅ 已自测 / 待核实）见 edition skill 的支持版本矩阵，
   标 `待核实` 的不得当既成事实。
+
+## 先回答「这个站能干什么」，再谈干（0.24.0）
+
+路由到 edition **之前**，这两条不分行业、任何现场都先跑，而且**零联网**：
+
+- `iaiops readiness` ——「这个站点今天能跑哪些场景、每个缺口还差什么」，
+  按「补上它能解锁多少」排序。它**只报告，绝不代填**。
+- `iaiops investigate plan` ——「真出事时能走到那八步里的第几步」。缺口分两种，别混：
+  **你还没供**（会直接给出该跑的命令）与 **产品供不了**（标 `not_yet_expressible`）。
+  这两个把人送去完全不同的地方。
+
+对一个**已经过去的**窗口逐步走完并留档：`iaiops investigate open|show|list`。
+不碰设备 —— 窗口已经过去，证据就是当时采到的。三条都能 `--report x.html`
+出可转发的自包含文件。
+
+两步需要**人先声明**，agent 不许代答：
+
+- `iaiops relations declare` —— 产线上下游。D25：线上下游共现是必然，
+  从时间推不出因果，所以只能声明。
+- `iaiops knowledge mount` —— ISO 14224 故障机理库，**可排除、绝不确认**；
+  库里没有这条原因返回 `nothing_known`，**那不是「无异议」**。
+
+**点表语义（`role:`）只能人给** —— 哪个位号是产量计数器是工艺知识，猜错会得出一个
+看着合理的 OEE，比报错更糟（D16）。输入口是 `iaiops tags export|apply|page`：
+导出的 `role` 列是**空的**，哪怕紧挨着一个叫 `GoodPartsCounter` 的位号。
+**这一层故意没有 MCP 工具 —— 让 agent 填 role 列正是 D16 禁止的那个猜测。**
+遇到它，把表交给现场的人，不要自己填。
+
+以上除 tags 外都是**双前端**：CLI 与 MCP 同一个引擎。对应的 MCP 工具名由
+edition skill 列明（本 skill 是路由，不带工具表）。
 
 ## Setup（各 edition 相同）
 

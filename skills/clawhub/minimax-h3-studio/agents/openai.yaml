@@ -1,0 +1,4 @@
+interface:
+  display_name: "MiniMax H3 Studio"
+  short_description: "整合九种 H3 创作能力，支持中文提示词、动画、广告、音乐与纸艺视频制作"
+  default_prompt: "使用 $minimax-h3-studio，根据我的需求选择对应流程，输出全中文结构的提示词；涉及角色时逐个独立描述，方便修改。"

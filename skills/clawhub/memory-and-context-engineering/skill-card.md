@@ -1,49 +1,67 @@
-## Description: <br>
-AGI记忆模组 is an always-on agent memory and context-engineering skill that provides selection, compression, retrieval, state tracking, memory, and cognitive-model support for agent interactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AGI记忆模组 provides an always-on agent memory and context engineering layer for selection, compression, retrieval, state tracking, and cross-session memory.
 
-## Publisher: <br>
-[kiwifruit13](https://clawhub.ai/user/kiwifruit13) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifruit13](https://clawhub.ai/user/kiwifruit13)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add persistent memory, context reconstruction, compression, retrieval, conflict handling, and task-state support to conversational agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+GPL-3.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist and reuse conversation-derived profiles and credentials. <br>
-Mitigation: Install only when an always-on cross-session memory layer is intended, require explicit user consent, and define clear retention and deletion procedures before use. <br>
-Risk: Credential handling and master-key export need review before deployment. <br>
-Mitigation: Review or disable credential_manager and master-key export, restrict storage to a dedicated directory, and secure Redis if Redis storage is enabled. <br>
-Risk: Emotional, identity, or personality profiling may be enabled by the memory behavior. <br>
-Mitigation: Remove profiling behavior or make it explicitly opt-in before activating the skill. <br>
+## Use Case:
 
+Developers and agent builders use this skill to add persistent memory and context management to agents. It supports context selection, compression, retrieval, state tracking, conflict handling, and cross-session memory when explicit consent and storage controls are in place.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kiwifruit13/skills/memory-and-context-engineering) <br>
-- [Architecture Overview](artifact/references/architecture_overview.md) <br>
-- [Architecture Execution Model](artifact/references/architecture_execution_model.md) <br>
-- [Usage Guide](artifact/references/usage_guide.md) <br>
-- [API Reference](artifact/references/api_reference.md) <br>
-- [Privacy Guide](artifact/references/privacy_guide.md) <br>
-- [Encryption Guide](artifact/references/encryption_guide.md) <br>
-- [Context Compaction Rules](artifact/references/context_compaction_rules.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs guide an agent in using local Python modules for memory storage, context orchestration, compression, retrieval, privacy, and optional Redis integration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The skill can run as an always-on memory layer and persist interaction history or inferred user traits across sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user consent, document retention settings, and disable categories such as emotional or psychometric profiling unless they are required.
+
+Risk: Broad local and Redis-backed storage can retain sensitive user data longer than intended.
+
+Mitigation: Use a dedicated storage directory and Redis endpoint with strict permissions, retention limits, encryption, and deletion/export controls.
+
+Risk: Credential management and unsafe key or temporary-file handling may expose secrets.
+
+Mitigation: Remove or isolate credential handling, replace unsafe key and temporary-file flows, and review secrets handling before deployment.
+
+Risk: Hard-coded external health checks or network behavior can create unexpected outbound connections.
+
+Mitigation: Block the external health check by default and require an explicit egress review before enabling network access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kiwifruit13/skills/memory-and-context-engineering)
+- [Architecture overview](references/architecture_overview.md)
+- [Dual-track architecture overview](references/dual_track_architecture_overview.md)
+- [Usage guide](references/usage_guide.md)
+- [Privacy guide](references/privacy_guide.md)
+- [Encryption guide](references/encryption_guide.md)
+- [API reference](references/api_reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown, Python code snippets, shell commands, and structured memory or context records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include retrieved context, compressed summaries, memory records, configuration guidance, and integration code.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

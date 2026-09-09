@@ -1,42 +1,59 @@
-## Description: <br>
-Discover Azure-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived Azure credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discovers Azure-hosted AI agent and MCP-relevant assets from an operator-controlled Azure environment, emits canonical agent-bom inventory JSON, and can scan that inventory without giving agent-bom long-lived Azure credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and cloud security engineers use this skill to inventory Azure OpenAI, Container Apps, AKS, Functions, ML, and related agentic Azure infrastructure as canonical agent-bom inventory. It supports discovery-first workflows that can optionally scan the resulting local inventory when the operator asks for findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Azure identity configuration and token-cache files when using the operator's existing Azure credential chain. <br>
-Mitigation: Use a read-only Azure account or scoped service principal, avoid environments where Azure token-cache access is not acceptable, and do not paste or print secrets. <br>
-Risk: Inventory output can describe Azure resources and service metadata. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+## Use Case:
 
+Developers, cloud engineers, and security reviewers use this skill to inventory Azure OpenAI, Container Apps, AKS, Functions, Azure ML, and related agentic Azure infrastructure as canonical agent-bom inventory. It supports discover-only collection with optional local scanning when the operator asks for findings.
 
-## Reference(s): <br>
-- [agent-bom homepage](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-azure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON inventory guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-reviewed commands and guidance for writing canonical local inventory JSON and optional agent-bom scan findings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill uses Azure credentials to discover cloud resources, so an overly broad or unintended identity could expose more inventory than the operator intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an operator-controlled read-only Azure identity, confirm the subscription before discovery, and prefer Azure CLI, workload identity, managed identity, or short-lived service principal credentials.
+
+Risk: Long-lived secrets or token values could be exposed if copied into prompts, terminal output, or generated files.
+
+Mitigation: Do not ask users to paste client secrets, do not print credential values, and rely on the operator environment's Azure identity chain.
+
+Risk: Inventory may be written to an unintended location or scanned before the operator has approved the output.
+
+Mitigation: Write inventory only to an operator-selected path and run the optional agent-bom scan only when the operator explicitly requests findings.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/msaad00/skills/agent-bom-discover-azure)
+- [agent-bom GitHub Repository](https://github.com/msaad00/agent-bom)
+- [agent-bom PyPI Project](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON inventory outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local, operator-selected inventory JSON and optional JSON scan findings; credential-like values are expected to be redacted before persistence or export.]
+
+## Skill Version(s):
+
+0.103.2 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

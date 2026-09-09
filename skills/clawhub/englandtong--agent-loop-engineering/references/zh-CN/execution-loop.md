@@ -1,102 +1,72 @@
-# 执行循环
+# 执行循环 2.1
 
-## Loop 开始
+## 启动或恢复
 
-只读取当前需要的最小内容：
+1. 解析项目根目录和 Docs 目录的真实路径。
+2. 读取 `Docs/ACTIVE_PACKET.md`。
+3. 校验 authority fingerprint 与写入边界。
+4. 只读唯一当前动作、受影响源码/测试、验证配置和最近三条 Loop。
+5. 确认没有已触发的停止条件。
 
-1. `Docs/ACTIVE_PACKET.md`；
-2. 当前阶段、验收标准或下一步链接的文件；
-3. 相关 manifest 和验证命令；
-4. 仅在需要时读取最近 3–5 条 Loop 记录。
+没有 Packet 时先做 Legacy Bootstrap。旧状态互相冲突时不得执行。
 
-开始前确认：
+## Controller 阶段派发
 
-- contract version 可支持；
-- `goal_readiness` 是 `Ready for Execution`；
-- `execution_state` 是 `Ready`、`In Progress` 或已授权的 `Needs Fix`；
-- `alignment_state` 不是全局偏离或需要 Owner 复核；
-- 只有一个下一步；
-- 没有已经触发的停止条件。
+Controller 设置一个与验收项相连的阶段结果，不创建阶段文件。该结果必须位于范围内，明确预期证据，并且可逆或有恢复路径。
 
-## 选择有边界动作
+只有以下条件同时满足才自动继续：fingerprint 未变、对齐为 `Aligned`、下一阶段已授权、有真实进展、没有 Owner 或安全门禁。
 
-一个 Loop 动作必须：
-
-- 能在当前阶段内完成；
-- 改变一个连贯行为；
-- 关联至少一个验收标准；
-- 有预期验证结果；
-- 可回退，或已有明确恢复方案。
-
-如果不能用一句话解释它如何推进期望结果，停止并进行方向对齐。
-
-## 实现
-
-- 编辑前先检查项目已有模式；
-- 优先最小而完整的垂直切片；
-- 保留用户的无关修改；
-- 避免推测式抽象和无关清理；
-- 不修改受保护文件；
-- 新发现的范围需求记录为 idea 或 blocker，不能自动扩展。
-
-## 验证
-
-先运行最窄而有用的检查，再逐步扩大：
-
-1. 针对性测试或复现；
-2. 相关 typecheck、build、lint；
-3. 受影响回归；
-4. 功能或用户流程；
-5. 要求时检查目标环境。
-
-记录命令、退出码、精简结果、时间和证据路径。
-
-## 评估
-
-- `In Progress`：仍有安全、明确的下一步；
-- `Ready for Review`：授权实现完成，证据足以送交 QA；
-- `Needs Fix`：授权范围内仍有可执行缺陷；
-- `Blocked`：硬门禁或缺少权限；
-- `Invalid State`：状态冲突或缺少授权。
-
-在第 3、6、10 阶段记录：
+## Developer Loop
 
 ```text
-用户可感知变化：
-Target / Acceptance 关联：
-范围或假设偏差：
-反对过早完成的证据：
-建议的对齐结论：
+选择一个完整行为
+  -> 检查现有模式
+  -> 复现或建立基线
+  -> 在 write_scope 内实现
+  -> 聚焦自动检查
+  -> 行为变化时做功能检查
+  -> 受影响回归
+  -> 审查 diff 与证据
 ```
 
-## 进展与失败预算
+优先完成垂直切片。不得因为还有时间而增加推测性抽象、无关清理或新功能。
 
-以下至少一项才算进展：
+## 失败返修
 
-- 新的通过验证；
-- 失败范围缩小；
-- 有证据支持的新根因；
-- 完成授权行为；
-- 解决验收标准；
-- 有证据地降低重大风险。
+用失败命令、测试/验收项和主要错误生成稳定 `failure_signature`。再次尝试前至少要有一项进展增量：新根因证据、失败范围收窄、相关改动、新通过检查或被证伪假设。
 
-重复运行相同失败命令、重写计划或增加文档不算进展。
+相同 signature 连续两次无进展时进入 `Needs Fix` 或 `Blocked`。全量测试超时可分片诊断，但没有正式门禁变更时，分片不能作为终验。
 
-连续两次核心验证失败且无进展时：
+## 阶段审查
 
-1. 停止扩大实现；
-2. 汇总两次失败和根因证据；
-3. 有界诊断仍可继续时设置 `Needs Fix`，否则设置 `Blocked`；
-4. 建议重计划、处理环境或交 Owner 决策。
+Stage Reviewer 接收验收项、变更文件/diff、原始命令结果、功能证据和已知限制，不采信 Developer 希望得到的判定。
 
-## 阶段推进
+返回：`Passed`、`Needs Fix` 或 `Blocked`。Standard / Full 的 Stage Reviewer 不设置最终 `qa_decision`。
 
-只有满足以下条件才推进阶段：
+## 对齐
 
-- 阶段成果已完成或被正式替代；
-- 证据已记录；
-- 未隐藏未解决缺陷；
-- 下一阶段成果已获授权。
+每阶段记录：
 
-不能因为阶段编号变化就创建新 Work Order。
+```text
+用户可见变化：
+目标/验收项链接：
+范围或假设偏移：
+反对过早完成的证据：
+Continue / Needs Fix / Formal Alignment：
+```
 
+阶段 3、6、10 及 Skill 中的即时触发条件执行正式对齐。
+
+## Loop 记录
+
+每轮只追加一个精简 JSON 对象，使用 `record_version: "2.1"`，包含 role、result、progress_delta、evidence、failure_signature、stage_review、context_stats 和唯一 next_action。平台提供真实 Token 数据时才记录，不自行估算。
+
+## 终局状态
+
+- `Ready for Independent Acceptance`：新 Standard/Full 的实现与阶段证据完成；
+- `Needs Fix`：范围内仍有有界返修；
+- `Blocked`：硬门禁或权限不足；
+- `Invalid State`：当前权限或状态冲突；
+- `Locally Compliant, Globally Misaligned`：局部通过但已不服务原目标。
+
+旧 Layered Standard / Full Packet 中，应把 `Ready for Review` 规范化为 `Ready for Independent Acceptance`；两者都不是 Accepted。

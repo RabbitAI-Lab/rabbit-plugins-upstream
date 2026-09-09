@@ -1,50 +1,60 @@
-## Description: <br>
-Use when the user asks to analyze, consult, setup, manage, configure, or design a Volcengine Landing Zone, including organization, accounts, finance, identity, cloudtrail, or network infrastructure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user asks to analyze, consult, setup, manage, configure, or design a Volcengine Landing Zone, including organization, accounts, finance, identity, cloudtrail, or network infrastructure.
 
-## Publisher: <br>
-[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[volc-sdk-team](https://clawhub.ai/user/volc-sdk-team)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to design, prepare, and execute Volcengine Landing Zone workflows for organization, account setup, finance, identity, logging, networking, account baselines, and failure recovery. It supports both read-only consulting and confirmed cloud changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform cloud account, billing, identity, logging, and network changes. <br>
-Mitigation: Proceed only after reviewing phase impact summaries and giving explicit confirmation for each write phase. <br>
-Risk: The workflow may save a newly generated administrator password or login information into a local Markdown file. <br>
-Mitigation: Keep the workspace private, do not commit or share generated output files, rotate the initial password immediately after first login, and delete the password file when it is no longer needed. <br>
-Risk: Cloud credentials are required for Volcengine CLI and Terraform operations. <br>
-Mitigation: Use the selected supported credential path, keep secrets out of chat and repository files, and refresh or rotate credentials if preflight reports missing, expired, or invalid authentication. <br>
+## Use Case:
 
+Cloud platform engineers and operations teams use this skill to plan, set up, and manage Volcengine landing-zone foundations across organization structure, account finance relationships, identity, centralized logging, networking, account creation, and baseline application.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/volc-sdk-team/skills/volcengine-landing-zone) <br>
-- [Display Protocol](references/display-protocol.md) <br>
-- [Preflight Checks](references/preflight-checks.md) <br>
-- [Landing Zone Setup Guide](references/landing-zone-setup/guidebook.md) <br>
-- [Account Factory Workflow](references/account-factory/guidebook.md) <br>
-- [Failure Recovery Workflow](references/failure-recovery.md) <br>
-- [Account Factory Baseline Schema](references/account-factory/baseline.schema.json) <br>
-- [Volcengine CLI README](https://github.com/volcengine/volcengine-cli/blob/master/README.MD) <br>
-- [Volcengine Terraform Provider README](https://github.com/volcengine/terraform-provider-volcenginecc) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown responses with shell commands, configuration snippets, JSON/Terraform files, and local HTML or Markdown review artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Cloud-changing actions are gated by explicit confirmations; sensitive outputs are handled as local files rather than pasted into chat.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.8.1) <br>
+Risk: The skill can guide high-impact cloud operations across Volcengine organization, account, identity, logging, and network resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for Volcengine landing-zone operation, use least-privileged credentials for the selected phase, review confirmations carefully, and verify account and region targets before approving writes.
+
+Risk: Workspace outputs may include sensitive administrator login information and initial password material.
+
+Mitigation: Treat generated workspace outputs as sensitive until the password is changed and the files are removed or otherwise secured.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/volc-sdk-team/skills/volcengine-landing-zone)
+- [Volcengine Landing Zone Setup Guide](references/landing-zone-setup/guidebook.md)
+- [Preflight Checks](references/preflight-checks.md)
+- [Account Factory Workflow](references/account-factory/guidebook.md)
+- [Failure Recovery](references/failure-recovery.md)
+- [Account Factory Baseline Schema](references/account-factory/baseline.schema.json)
+- [Volcengine CLI README](https://github.com/volcengine/volcengine-cli/blob/master/README.MD)
+- [Volcengine Terraform Provider README](https://github.com/volcengine/terraform-provider-volcenginecc)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, configuration snippets, generated workspace files, and HTML report artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce workspace-local execution files, login information, status artifacts, and summary reports during approved workflows.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

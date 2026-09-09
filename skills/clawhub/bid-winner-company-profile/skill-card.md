@@ -1,48 +1,66 @@
-## Description: <br>
-Helps agents produce traceable company due-diligence reports from bidding and award records, including bid history, performance evidence, partner and customer context, competitor landscape, and public-risk notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents produce Chinese company due-diligence reports from public bidding and procurement records, including bid history, performance evidence, customer and supplier relationships, competitors, public risk signals, and source links.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Business users, procurement teams, supplier-review teams, and agents use this skill to investigate a company's bidding history, performance evidence, fulfillment signals, partners, competitors, and public-risk context. It supports single-company reports and two-company comparisons with source links back to public announcements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a credentialed API and may create or persist a local trial account credential. <br>
-Mitigation: Prefer a user-provided ZLBX_API_KEY, require explicit consent before auto-registration, and never expose API keys in conversation or reports. <br>
-Risk: Generated reports may include signed no-login links, local HTML files, or business contact data. <br>
-Mitigation: Treat generated reports and signed links as sensitive, share them only with intended recipients, and use contact data only for legitimate and lawful business purposes. <br>
-Risk: Queries consume account credits and company-intelligence conclusions can be incomplete if public bidding data is missing or delayed. <br>
-Mitigation: Disclose estimated credit use before running, preserve source links and data-boundary notes, and review conclusions before relying on them for business decisions. <br>
+## Use Case:
 
+External business users, sales teams, procurement reviewers, and agents use this skill to assess a company from a bidding-history perspective. It supports single-company deep reports and two-company comparisons with traceable bid records and cited public-risk statements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-winner-company-profile) <br>
-- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Workflow guide](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration guide](references/auto-register.md) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, guidance] <br>
-**Output Format:** [Markdown reports in chat, with optional generated HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY; reports should include source links, data boundaries, and absolute paths for generated HTML files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Company-query data is sent to a third-party vendor API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data sharing is acceptable for the organization and avoid submitting sensitive company queries without approval.
+
+Risk: The skill handles API credentials and may use consent-based auto-registration with a stable hashed device identifier.
+
+Mitigation: Prefer a managed ZLBX_API_KEY secret or environment variable, and use auto-registration only after explicit user consent.
+
+Risk: Generated reports may contain signed source links and contact phone data.
+
+Mitigation: Review HTML and Markdown reports before sharing, avoid forwarding reports containing sk links, and request contact lookups only for legitimate business reasons.
+
+Risk: The report renderer writes local HTML files by default.
+
+Mitigation: Store generated reports in approved locations and remove files that contain sensitive company, contact, or signed-link data when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-winner-company-profile)
+- [Workflow guide](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Auto-registration flow](artifact/references/auto-register.md)
+- [Report template](artifact/references/report-template.md)
+- [Report renderer](artifact/scripts/render_report.py)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Chinese Markdown report plus optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based auto-registration; reports may include signed source links and contact fields returned by the vendor API.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

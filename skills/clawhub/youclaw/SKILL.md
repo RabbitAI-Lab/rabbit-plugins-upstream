@@ -1,12 +1,17 @@
 ---
 name: youclaw
-description: 有米云智能营销分析助手，深度拆解广告创意，挖掘品牌投放策略，支持创意策略讨论、营销策略探讨。触发：关键词 分析品牌, 品牌分析, 策略探索, 投放策略, 创意质询, 压力测试, 创意激发, 创意打磨；命令 /youclaw、/youmiyun、/creative-chat、/grill-chat、/grill-youclaw、/grill
+version: 1.2.2
+display_name: 有米云智能营销分析助手
+display_name_en: YouClaw Marketing Insight Assistant
+description: "有米云智能营销分析助手，深度拆解广告创意，挖掘品牌投放策略，支持创意策略讨论、营销策略探讨。触发：关键词 分析品牌, 品牌分析, 策略探索, 投放策略, 创意质询, 压力测试, 创意激发, 创意打磨；命令 /youclaw、/youmiyun、/creative-chat、/grill-chat、/grill-youclaw、/grill"
+description_zh: "有米云智能营销分析助手，对接有数AI，深度拆解广告创意、挖掘品牌投放策略，支持策略探索与创意质询、压力测试、创意打磨。触发：分析品牌/策略探索/投放策略/创意质询；命令 /youclaw、/creative-chat、/grill"
+description_en: "Youmi Cloud marketing analysis assistant powered by YouShu AI. Breaks down ad creatives, uncovers brand advertising strategies, and supports strategy exploration, creative grilling, stress testing and creative polishing. Trigger keywords: brand analysis, ad strategy; commands: /youclaw, /creative-chat, /grill"
 homepage: https://www.youcloud.com
 metadata:
   {
     "openclaw": {
       "slug": "youclaw",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "author": "youcloud",
       "emoji": "📊",
       "requires": {
@@ -104,6 +109,13 @@ Invoke-RestMethod @params | Select-Object -ExpandProperty output
   ```
 - 超时："还在分析中，稍后再问我结果或者再次请求。"
 - 其他错误："请求返回错误 (code={code})，请检查API Key权限、账号配额或联系客服"
+
+## 素材链接拼接模板
+当分析结果中包含素材 ID 时，按以下模板拼接为素材详情页链接，方便用户点击跳转查看视频/投放数据：
+
+- **拼接模板**：`https://console.youshu.youcloud.com/material/{{ID}}`
+- **用法**：将 `{{ID}}` 替换为实际素材 ID。例如素材 ID 为 `abc123`，拼接结果为 `https://console.youshu.youcloud.com/material/abc123`
+- **输出规范**：以 Markdown 链接形式呈现，例如 `[素材 abc123](https://console.youshu.youcloud.com/material/abc123)`，让用户可直接点击跳转
 
 ## 示例
 完整输入输出示例请看 [references/example.md](references/example.md)

@@ -1,44 +1,59 @@
-## Description: <br>
-Production-grade Microsoft 365 MCP server with delegated OAuth, multi-account support, pagination, rate limiting, and 43 tools covering email, calendar, contacts, OneDrive, Teams, tasks, and users. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Production-grade Microsoft 365 MCP server with delegated OAuth, multi-account support, pagination, rate limiting, and 46 tools covering email, calendar, contacts, OneDrive, Teams, tasks, and users.
 
-## Publisher: <br>
-[sam2kb](https://clawhub.ai/user/sam2kb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sam2kb](https://clawhub.ai/user/sam2kb)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent client to Microsoft 365 through a stdio MCP server with delegated OAuth. It supports email, calendar, contacts, OneDrive, Teams, tasks, and user-directory workflows while preserving per-user consent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Delegated Microsoft 365 access can expose private mail, files, calendars, contacts, Teams chats, tasks, and user data. <br>
-Mitigation: Install only when delegated Microsoft 365 access is appropriate for the configured account and prefer M365_MCP_READ_ONLY=true unless write actions are required. <br>
-Risk: Mutating tools can send, move, create, update, or delete real Microsoft 365 data. <br>
-Mitigation: Require explicit user confirmation for mutating tools in the MCP client before execution. <br>
-Risk: Local OAuth refresh and access tokens are sensitive secrets. <br>
-Mitigation: Protect the configured auth directory and revoke Microsoft account consent if token files or the device may be exposed. <br>
+## Use Case:
 
+Developers and teams use this skill to connect an MCP client to Microsoft 365 through delegated OAuth so agents can work with email, calendars, contacts, OneDrive, Teams, tasks, and user directory data.
 
-## Reference(s): <br>
-- [Project README](https://github.com/sam2kb/m365-mcp#readme) <br>
-- [ClawHub skill page](https://clawhub.ai/sam2kb/skills/m365-mcp) <br>
-- [Publisher profile](https://clawhub.ai/user/sam2kb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP client setup steps, environment-variable guidance, and consent-risk notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Delegated OAuth can expose private Microsoft 365 mail, files, calendars, contacts, Teams chats, tasks, and user data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only the delegated Microsoft Graph permissions needed for the intended workflow and review the connected account before installation.
+
+Risk: Mutating tools can send messages or change Microsoft 365 data.
+
+Mitigation: Require user confirmation for mutating tools and set M365_MCP_READ_ONLY=true when write access is not needed.
+
+Risk: Stored OAuth tokens can grant account access if the auth directory is exposed.
+
+Mitigation: Protect the auth directory, exclude it from sync and backups, and revoke Microsoft account consent if a token or device is compromised.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sam2kb/skills/m365-mcp)
+- [Project README](https://github.com/sam2kb/m365-mcp#readme)
+- [Publisher profile](https://clawhub.ai/user/sam2kb)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [MCP tool responses with Markdown setup guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18+, Azure Entra ID delegated Microsoft Graph permissions, and device-code OAuth.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

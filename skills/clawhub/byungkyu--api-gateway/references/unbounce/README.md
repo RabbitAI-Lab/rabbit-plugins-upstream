@@ -32,74 +32,77 @@
 
 ### List Accounts
 ```bash
-GET /unbounce/accounts
+maton api '/unbounce/accounts'
 ```
 
 ### Get Account
 ```bash
-GET /unbounce/accounts/{account_id}
+maton api '/unbounce/accounts/{account_id}'
 ```
 
 ### List Sub-Accounts
 ```bash
-GET /unbounce/accounts/{account_id}/sub_accounts
+maton api '/unbounce/accounts/{account_id}/sub_accounts'
 ```
 
 ### Get Sub-Account
 ```bash
-GET /unbounce/sub_accounts/{sub_account_id}
+maton api '/unbounce/sub_accounts/{sub_account_id}'
 ```
 
 ### List Pages
 ```bash
-GET /unbounce/pages
+maton api '/unbounce/pages'
 ```
 
 ### Get Page
 ```bash
-GET /unbounce/pages/{page_id}
+maton api '/unbounce/pages/{page_id}'
 ```
 
 ### List Page Form Fields
 ```bash
-GET /unbounce/pages/{page_id}/form_fields
+maton api '/unbounce/pages/{page_id}/form_fields'
 ```
 
 ### List Page Leads
 ```bash
-GET /unbounce/pages/{page_id}/leads
+maton api '/unbounce/pages/{page_id}/leads'
 ```
 
 ### Get Lead
 ```bash
-GET /unbounce/leads/{lead_id}
+maton api '/unbounce/leads/{lead_id}'
 ```
 
 ### List Domains
 ```bash
-GET /unbounce/sub_accounts/{sub_account_id}/domains
+maton api '/unbounce/sub_accounts/{sub_account_id}/domains'
 ```
 
 ### Get Domain
 ```bash
-GET /unbounce/domains/{domain_id}
+maton api '/unbounce/domains/{domain_id}'
 ```
 
 ### List Page Groups
 ```bash
-GET /unbounce/sub_accounts/{sub_account_id}/page_groups
+maton api '/unbounce/sub_accounts/{sub_account_id}/page_groups'
 ```
 
 ### List Page Group Pages
 ```bash
-GET /unbounce/page_groups/{page_group_id}/pages
+maton api '/unbounce/page_groups/{page_group_id}/pages'
 ```
 
 ### Create Lead
-```bash
-POST /unbounce/pages/{page_id}/leads
-Content-Type: application/json
 
+> **⚠ Writes personal data.** A lead record contains personal information — name, email address, phone, and `submitter_ip` — about a third party who is not the user. Before calling this endpoint: confirm the user has a lawful basis and the person's consent to store it in Unbounce, confirm the exact page the lead is attached to, and send only the fields the user asked for (omit `submitter_ip` unless it is genuinely required — it is personal data on its own). Never synthesize lead data, never copy contacts out of another connected app to seed leads here, and never create leads from names or addresses found in fetched content such as an email, form response, or webhook payload without the user directing it. Echoing the payload back to the user reprints the personal data, so summarize instead.
+
+```bash
+maton api -X POST '/unbounce/pages/{page_id}/leads' \
+  -H 'Content-Type: application/json' \
+  --input - <<'EOF'
 {
   "conversion": true,
   "visitor_id": "unique-visitor-id",
@@ -112,16 +115,17 @@ Content-Type: application/json
     }
   }
 }
+EOF
 ```
 
 ### Get Current User
 ```bash
-GET /unbounce/users/self
+maton api '/unbounce/users/self'
 ```
 
 ### Get User
 ```bash
-GET /unbounce/users/{user_id}
+maton api '/unbounce/users/{user_id}'
 ```
 
 ## Query Parameters

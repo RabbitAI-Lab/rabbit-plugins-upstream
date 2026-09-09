@@ -1,44 +1,58 @@
-## Description: <br>
-Swaps faces in images and videos using WaveSpeed AI with image and video face-swap endpoints and multi-face targeting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Swap faces in images and videos using WaveSpeed AI, with multi-face targeting and automatic lighting and skin tone adaptation for consented, lawful, non-deceptive edits.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-External users and developers use this skill to prepare WaveSpeed AI image or video face-swap requests, including selecting a target face when multiple people are present. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles highly sensitive likeness media and may be misused for impersonation, fraud, harassment, sexualized edits, or deceptive publication. <br>
-Mitigation: Use it only with media the user owns or has explicit permission to edit, and only when every identifiable person has consented. <br>
-Risk: Uploading sensitive photos or videos to WaveSpeed may create privacy, retention, deletion, and output-use obligations. <br>
-Mitigation: Check WaveSpeed privacy, retention, deletion, and output-use terms before uploading sensitive media. <br>
-Risk: Untrusted or unvalidated media URLs can expose the workflow to unsafe inputs. <br>
-Mitigation: Use trusted media sources, validate URLs before sending requests, and avoid loading untrusted user-provided media URLs. <br>
-Risk: The WaveSpeed API key could be exposed if hardcoded or committed. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret management system and do not commit it to source control. <br>
+## Use Case:
 
+External users and developers use this skill to guide consented face swaps in images or videos through WaveSpeed's CLI or MCP tools, including setup, parameter selection, price checks, and result retrieval.
 
-## Reference(s): <br>
-- [WaveSpeed API key access](https://wavespeed.ai/accesskey) <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-face-swapper) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes WaveSpeed model IDs, required API key setup, media URL guidance, target face selection, retry configuration, and error handling examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill uploads image or video media to WaveSpeed's cloud service, which can include identifiable likenesses.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for media the user has permission to edit and only when all identifiable people have consented to the face swap.
+
+Risk: Face swapping can be misused for impersonation, deception, harassment, sexual content, or edits involving minors.
+
+Mitigation: Refuse unclear or prohibited requests, including non-consensual likeness use, deceptive presentation, sexual or intimate material, and media involving children.
+
+Risk: Setup installs third-party npm tooling that can store authentication locally and API usage can incur charges.
+
+Mitigation: Use WaveSpeed login or environment-based authentication without asking for secrets in chat, verify sign-in status, and quote pricing before running paid jobs.
+
+## Reference(s):
+
+- [WaveSpeedAI Face Swapper on ClawHub](https://clawhub.ai/wavespeed/skills/wavespeed-face-swapper)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash commands and WaveSpeed model parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce WaveSpeed output URLs when commands or MCP tools are run.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

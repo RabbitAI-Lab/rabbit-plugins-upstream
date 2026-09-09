@@ -1,83 +1,39 @@
-# Goal Discovery
+# Goal Discovery 2.1
 
-Use when the user has a concept, pain point, direction, or desired result but does not know the implementation path.
+Use when the user knows a concept, pain, direction, or desired result but not the implementation path.
 
 ## Low-Burden Interview
 
-Ask at most three questions per round. Ask only questions that materially change:
+Ask at most three questions per round and only when answers materially change the desired outcome, beneficiary, minimum useful workflow, observable success, safety/privacy/data/cost boundary, or an expensive irreversible choice. Do not ask a non-technical user to select frameworks or architecture unless the choice changes user-visible tradeoffs.
 
-- desired outcome;
-- primary user or situation;
-- minimum useful workflow;
-- legal, privacy, safety, data, budget, or environment boundary;
-- observable success;
-- an expensive or irreversible choice.
+When the user does not know, provide two or three plain-language options, state the practical difference, recommend one reversible default, and label it as an AI assumption. Do not repeat facts already available in the conversation or repository.
 
-Do not ask the user to choose a framework, database, API style, hosting platform, test framework, or architecture unless that choice has a user-visible tradeoff.
+## Intent Model
 
-When the user says "I do not know":
+Separate desired outcome, beneficiary and situation, current problem, simplest useful result, known constraints, confirmed facts, AI inferences, and items to confirm. Never present an inference as fact.
 
-1. Give two or three plain-language options.
-2. Explain the practical difference in one sentence each.
-3. Recommend one default.
-4. Label the recommendation as an assumption that can be changed.
+Classify the requested evidence:
 
-Do not repeat questions already answered by the conversation, repository, or current project state.
+- Runtime behavior;
+- Contract/interface consistency;
+- Governance/process control;
+- Artifact presence and quality;
+- Mixed, with each criterion labeled.
 
-## Interpret The Request
-
-Restate the user's input using:
-
-```text
-Desired outcome:
-Who benefits:
-Current problem:
-Simplest useful result:
-Known constraints:
-Confirmed facts:
-AI inferences:
-Items to confirm:
-```
-
-Never present an inference as confirmed fact.
+For a Runtime goal, ask how a real user or operator will demonstrate success. A schema, typecheck, build, document, or screenshot alone is insufficient unless that is itself the requested artifact.
 
 ## Readiness Ladder
 
 | State | Required understanding | Next action |
 | --- | --- | --- |
-| `Concept` | Broad idea or pain point | Clarify outcome and beneficiary |
+| `Concept` | Broad idea or pain | Clarify outcome and beneficiary |
 | `Direction` | Outcome and primary use | Propose simplest useful workflow |
-| `Ready for Planning` | MVP boundary and success evidence | Size the goal |
-| `Ready for Execution` | Scope, acceptance, constraints, authority | Dispatch execution |
-| `Owner Decision Required` | Consequential choice cannot be inferred | Present options and stop on that decision |
+| `Ready for Planning` | MVP boundary and success evidence | Classify and size the goal |
+| `Ready for Execution` | Scope, acceptance, constraints, and authority | Dispatch one Packet |
+| `Owner Decision Required` | Consequential choice cannot be inferred | Consolidate options and stop |
 
-Do not block on reversible uncertainty. Record it and choose the safest low-cost default.
+Do not block on reversible uncertainty. Record the assumption and choose the safest low-cost default.
 
-## Intent Brief
+## Output
 
-Use `{baseDir}/templates/en/INTENT_BRIEF.md`. Keep it in chat by default. Persist one canonical copy only when the user asks, planning begins, or another agent needs a handoff.
-
-The brief must distinguish:
-
-- Must work now.
-- Useful later.
-- Explicitly out of scope.
-- Assumptions.
-- Evidence that would prove usefulness.
-
-## Recommend One Next Step
-
-End with one recommended action, why it is first, and what evidence it should produce. Choose one:
-
-- clarify one blocking decision;
-- observe the current workflow;
-- inspect an existing repository;
-- validate a user flow without code;
-- build a low-cost prototype;
-- define acceptance examples;
-- size the goal;
-- create the Active Packet;
-- begin authorized execution;
-- simplify, pause, or reject the idea because value or feasibility is weak.
-
-Do not give an undifferentiated backlog.
+Use `{baseDir}/templates/en/INTENT_BRIEF.md`. Keep it in chat unless planning begins, the user asks to persist it, or another agent needs a durable handoff. End with one recommended action, why it is first, and the evidence it should produce.

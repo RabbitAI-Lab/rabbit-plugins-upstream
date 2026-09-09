@@ -30,6 +30,8 @@ Cadence defaults by signal type:
 
 A saved play spends credits **every run, forever**. Before deploying, extend the [approval gate](../references/cost-discipline.md): state *per-run cost × cadence = monthly burn* ("~1.1 credits/run, weekly → ~4.4/month") and get an explicit yes on the recurring number, not just the one-off.
 
+Also open the [provider playbook](../provider-playbooks/) of **every paid node** and read its **Recurring use** section — it carries the provider-specific cadence default, the filter gate that keeps re-runs from re-billing already-enriched rows, and any extractor alternative that replaces the scheduled pull entirely.
+
 ## Path A — save as a tool with a cron trigger
 
 ```bash
@@ -46,15 +48,15 @@ cargo-ai orchestration node validate --nodes '[...start → action → end...]'
 # → { "outcome": "valid" }
 
 # 3. Deploy the graph to the tool's workflow
-cargo-ai orchestration draft-release update \
+cargo-ai orchestration release update-draft \
   --workflow-uuid <tool.workflowUuid> \
   --nodes '[...validated nodes...]'
-cargo-ai orchestration draft-release deploy \
+cargo-ai orchestration release deploy-draft \
   --workflow-uuid <tool.workflowUuid> \
   --nodes '[...validated nodes...]' \
   --form-fields 'null' \
   --description "v1 — saved from ad-hoc session run"
-# ⚠️ Never pass --version to draft-release deploy (shadowed by the global flag —
+# ⚠️ Never pass --version to release deploy-draft (shadowed by the global flag —
 #    prints the CLI version and exits WITHOUT deploying). Confirm with:
 cargo-ai orchestration release get-deployed --workflow-uuid <tool.workflowUuid>
 # → status must be "deployed"
@@ -88,7 +90,7 @@ cargo-ai orchestration play create \
 # → Extract play.uuid and play.workflowUuid
 # (check `play create --help` for the allowed change-kind values)
 
-# 2–3. Same as Path A: validate the node graph, draft-release update + deploy
+# 2–3. Same as Path A: validate the node graph, release update-draft + deploy-draft
 #      against <play.workflowUuid>, confirm with release get-deployed.
 
 # 4. Optional: scope + periodic re-evaluation
@@ -97,11 +99,14 @@ cargo-ai orchestration play update <play.uuid> \
   --limit 500 \
   --schedule '{...cron re-evaluation, for signals that decay...}'
 
-# 5. Pilot the play on a few records before enabling broadly
+# 5. Sample the play on 10–20 records before enabling it broadly
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"recordIds","modelUuid":"<model-uuid>","ids":["<one-record-id>"]}' \
+  --data '{"kind":"recordIds","modelUuid":"<model-uuid>","ids":["<id-1>","…","<id-15>"]}' \
   --wait-until-finished
+# → report credits spent + hit-rate, then ask before enrolling the full segment:
+#   state how many records it covers and what they cost. A play with a schedule
+#   re-bills that amount on every run — the estimate is per-run, not one-off.
 ```
 
 Play mechanics (batch data kinds, `playNotCompatible`, monitoring): [`../../cargo-orchestration/references/examples/plays.md`](../../cargo-orchestration/references/examples/plays.md).

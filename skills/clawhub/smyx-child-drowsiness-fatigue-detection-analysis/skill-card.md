@@ -1,47 +1,60 @@
-## Description: <br>
-Analyzes child or student facial video from a classroom, desk, or online learning setting to estimate drowsiness indicators such as eye closure, PERCLOS, nodding, eye-region glossiness changes, and a 0-100 fatigue score. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes classroom or desk-camera video of a child to estimate visual fatigue indicators such as PERCLOS, head nodding, eye-region changes, and a 0-100 fatigue score.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Parents, guardians, teachers, and administrators can use this skill to analyze child learning-area video and generate structured fatigue indicators, rest reminders, and report links. It is intended as a visual fatigue-assessment aid, not as medical diagnosis or sleep-disorder diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive child facial video can be uploaded or submitted to the configured cloud analysis service. <br>
-Mitigation: Use only with clear parent, guardian, school, or administrator consent, and require explicit opt-in before any upload or URL-based analysis. <br>
-Risk: The skill can silently create or reuse an account-linked identity and retrieve report history. <br>
-Mitigation: Deploy only where account-linked history retrieval is expected, disclosed to users, and limited to authorized administrators or guardians. <br>
-Risk: Local identity and token storage can expose account-linked access if the workspace is shared or poorly protected. <br>
-Mitigation: Store the workspace on protected local storage, restrict file permissions, and review retention and token-handling policies before installation. <br>
-Risk: Fatigue scores and reminders may be mistaken for clinical findings. <br>
-Mitigation: Present results as visual learning-support signals only, and avoid using the skill as medical diagnosis or sleep-disorder diagnosis. <br>
+## Use Case:
 
+External educators, parents, and classroom support workflows can use this skill to submit child learning-area media for structured fatigue and drowsiness assessment. It returns visual-only fatigue signals, rest guidance, and report links without presenting the result as a medical or sleep-disorder diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-drowsiness-fatigue-detection-analysis) <br>
-- [Child Drowsiness Fatigue Detection API Documentation](artifact/references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with fatigue metrics, event summaries, reminders, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video file input, video URL input, optional report-history listing, and optional output-file writing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: The skill handles highly sensitive child facial video and uploads media to cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with clear guardian consent, approved retention and deletion terms, and a deployment that protects media in transit and at rest.
+
+Risk: The security evidence reports an unsafe, under-scoped cloud workflow and plaintext development endpoints in the packaged defaults.
+
+Mitigation: Require a production HTTPS-only configuration and review all endpoint settings before real child media is processed.
+
+Risk: The skill silently creates or reuses an internal identity and stores tokens locally.
+
+Mitigation: Limit execution to trusted workspaces, protect local credential storage, and verify identity handling before enabling history lookups.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-drowsiness-fatigue-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with structured JSON-style fatigue analysis, history-list output, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save the returned report text to a caller-specified output file.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; SKILL.md frontmatter says 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

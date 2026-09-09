@@ -11,13 +11,15 @@ import json
 import random
 import re
 import sys
+from datetime import datetime, timedelta, timezone
+from html import unescape
 from typing import Optional
 
 import requests
 
 API_VERSION = "2025-06-18"
 SERVER_NAME = "wikipedia-mcp"
-SERVER_VERSION = "1.1.0"
+SERVER_VERSION = "1.1.12"
 
 # Wikipedia requires a descriptive User-Agent with contact info.
 USER_AGENT = (
@@ -62,6 +64,40 @@ DINOS = [
 
 
 # ---------------------------------------------------------------------------
+# Curated list of famous quotes — short, well-attributed, time-tested.
+# Each entry: (author, quote). The list is curated manually so attribution
+# is reliable and quote quality is high (verified famous lines, not
+# paraphrases). random.choice picks one per call. Adding entries is a
+# trivial code change — same pattern as the DINOS list above.
+# ---------------------------------------------------------------------------
+FAMOUS_QUOTES = [
+    ("Winston Churchill", "Success is not final, failure is not fatal: it is the courage to continue that counts."),
+    ("Albert Einstein", "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world."),
+    ("Mark Twain", "The two most important days in your life are the day you are born and the day you find out why."),
+    ("Mahatma Gandhi", "Be the change that you wish to see in the world."),
+    ("Martin Luther King Jr.", "The arc of the moral universe is long, but it bends toward justice."),
+    ("Abraham Lincoln", "Whatever you are, be a good one."),
+    ("Nelson Mandela", "Education is the most powerful weapon which you can use to change the world."),
+    ("Oscar Wilde", "Be yourself; everyone else is already taken."),
+    ("Confucius", "It does not matter how slowly you go as long as you do not stop."),
+    ("Voltaire", "I disapprove of what you say, but I will defend to the death your right to say it."),
+    ("Maya Angelou", "I've learned that people will forget what you said, people will forget what you did, but people will never forget how you made them feel."),
+    ("Steve Jobs", "Your time is limited, so don't waste it living someone else's life."),
+    ("Mother Teresa", "If you judge people, you have no time to love them."),
+    ("Dalai Lama", "Happiness is not something ready-made. It comes from your own actions."),
+    ("C.S. Lewis", "You can't go back and change the beginning, but you can start where you are and change the ending."),
+    ("Bob Marley", "Love the life you live. Live the life you love."),
+    ("John Lennon", "Life is what happens when you're busy making other plans."),
+    ("Laozi", "A journey of a thousand miles begins with a single step."),
+    ("Friedrich Nietzsche", "He who has a why to live can bear almost any how."),
+    ("Socrates", "The unexamined life is not worth living."),
+    ("Plato", "The beginning is the most important part of the work."),
+    ("Aristotle", "We are what we repeatedly do. Excellence, then, is not an act, but a habit."),
+    ("Jane Austen", "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife."),
+]
+
+
+# ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 _TAG_RE = re.compile(r"<[^>]+>")
@@ -99,7 +135,10 @@ def _summary_block(data: dict, fallback_title: str) -> str:
 # ---------------------------------------------------------------------------
 def search_wikipedia(query: str, limit: int = 5, lang: str = "en") -> str:
     """Search Wikipedia for articles matching a query."""
-    limit = max(1, min(int(limit), 20))
+    try:
+        limit = max(1, min(int(limit), 20))
+    except (TypeError, ValueError):
+        limit = 5  # fall back to default on garbage input
     params = {
         "action": "query",
         "list": "search",
@@ -196,6 +235,138 @@ def dino_fact(species: str = "", lang: str = "en") -> str:
     )
 
 
+def article_extract(title: str, lang: str = "en") -> str:
+    """Get a Wikipedia article's full plain-text extract by title (vs `summary`).
+
+    Uses the MediaWiki Action API `prop=extracts` with `explaintext=1` to return
+    the full article body as plain text — typically several paragraphs, much
+    longer than `summary`'s short extract. Complements `summary`: use `summary`
+    for the lead + thumbnail, `article_extract` when you want to read more
+    without parsing HTML.
+    """
+    params = {
+        "action": "query",
+        "prop": "extracts",
+        "explaintext": 1,
+        "exsectionformat": "plain",
+        "titles": title,
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    page = next(iter(pages.values()), {}) if pages else {}
+    # MediaWiki Action API returns 200 OK with a "missing" marker for
+    # non-existent pages rather than a 404 HTTP status. Detect that
+    # explicitly so users see the same "not found" message as `summary`.
+    if not page or "missing" in page:
+        return f"Article '{title}' not found on Wikipedia."
+    extract = (page.get("extract") or "").strip()
+    title_out = (page.get("title") or title) if page else title
+    if not extract:
+        return f"No extract available for '{title_out}'."
+    desktop_url = f"https://{lang}.wikipedia.org/wiki/{_slug(title_out)}"
+    return f"## {title_out}\n\n{extract}\n\n[Read more →]({desktop_url})"
+
+
+def article_sections(title: str, lang: str = "en") -> str:
+    """Get the table of contents (section headings) for a Wikipedia article.
+
+    Returns the structured section list from Wikipedia's parse API —
+    section number, heading text, nesting level, and anchor. Useful for
+    navigating long articles before committing to reading the whole body
+    via `article_extract`. Major articles (e.g. "World War II",
+    "Tyrannosaurus") can have 50KB+ of plain-text body; `article_sections`
+    gives you the TOC in a few hundred bytes so you can pick what to read
+    next. Sections are rendered as a numbered, indented markdown list —
+    indentation maps to Wikipedia's heading hierarchy (h2 = no indent,
+    h3 = 2 spaces, h4 = 4 spaces, etc.) so the structure is visible
+    without a tree widget.
+
+    Pairs naturally with `article_extract` (full body) and `summary`
+    (lead + thumbnail): use `summary` for the headline, `article_sections`
+    to browse the structure, `article_extract` when you want the full
+    read.
+    """
+    params = {
+        "action": "parse",
+        "page": title,
+        "prop": "sections",
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+
+    # MediaWiki parse API returns 200 OK with an `error` block for
+    # non-existent pages (code "missingtitle") rather than a 404 HTTP
+    # status. The error info wording varies ("The page you specified
+    # doesn't exist.", "Bad title ...", "missingtitle"), so check for
+    # the common "not found" indicators rather than relying on one
+    # string match. Surface the same friendly message as
+    # `summary` / `article_extract` / `categories` / `links`.
+    if "error" in data:
+        info = data.get("error", {}).get("info", "")
+        code = data.get("error", {}).get("code", "")
+        info_lc = info.lower()
+        if (
+            "missing" in info_lc
+            or "doesn't exist" in info_lc
+            or "does not exist" in info_lc
+            or "bad title" in info_lc
+            or code == "missingtitle"
+        ):
+            return f"Article '{title}' not found on Wikipedia."
+        return f"Could not fetch sections for '{title}': {info}"
+
+    parse = data.get("parse") or {}
+    title_out = parse.get("title", title) or title
+    sections = parse.get("sections") or []
+
+    if not sections:
+        # Articles with no section structure (rare — stubs, redirects)
+        # shouldn't be reported as errors; just acknowledge cleanly.
+        return (
+            f"**Sections in \"{title_out}\":**\n\n"
+            f"_(No sections found — article may be a stub or redirect.)_\n\n"
+            f"[View article]"
+            f"(https://{lang}.wikipedia.org/wiki/{_slug(title_out)})"
+        )
+
+    # toclevel is the visual hierarchy in Wikipedia's rendered TOC
+    # (1 = top-level h2, 2 = h3, etc.). Indent by 2 spaces per level
+    # minus 1 so top-level entries are flush-left.
+    out = f"**Sections in \"{title_out}\":** ({len(sections)} total)\n\n"
+    for sec in sections:
+        line = (sec.get("line") or "").strip()
+        if not line:
+            continue
+        toclevel = sec.get("toclevel", 1) or 1
+        try:
+            toclevel = max(1, min(int(toclevel), 4))
+        except (TypeError, ValueError):
+            toclevel = 1
+        indent = "  " * (toclevel - 1)
+        number = sec.get("number", "")
+        if number:
+            out += f"{indent}{number}. {line}\n"
+        else:
+            out += f"{indent}- {line}\n"
+
+    out += (
+        f"\n[View article]"
+        f"(https://{lang}.wikipedia.org/wiki/{_slug(title_out)})"
+    )
+    return out
+
+
 def featured_article(lang: str = "en") -> str:
     """Get today's Wikipedia Featured Article (great content hook)."""
     resp = _get(f"{_base(lang)}/feed/featured/{_today()}")
@@ -208,9 +379,575 @@ def featured_article(lang: str = "en") -> str:
     return _summary_block(data, fallback_title=data.get("title", "Featured Article"))
 
 
+def on_this_day(lang: str = "en", count: int = 5) -> str:
+    """Get historical events that happened on today's date from Wikipedia.
+
+    Returns a random sample of events from Wikipedia's "On This Day" feed
+    for the current UTC date. Pairs well with featured_article for daily
+    content hooks — e.g. "today in history" newsletter intros.
+    """
+    try:
+        count = max(1, min(int(count), 10))
+    except (TypeError, ValueError):
+        count = 5
+    today_mm_dd = datetime.now(timezone.utc).strftime("%m/%d")
+    resp = _get(f"{_base(lang)}/feed/onthisday/events/{today_mm_dd}")
+    if resp.status_code == 404:
+        return f"No 'on this day' events available for {lang}.wikipedia.org today."
+    resp.raise_for_status()
+    events = resp.json().get("events", [])
+    if not events:
+        return f"No historical events found for today on {lang}.wikipedia.org."
+
+    sample = random.sample(events, min(count, len(events)))
+    out = "**On this day:**\n\n"
+    for ev in sample:
+        year = ev.get("year", "?")
+        text = _strip_html(ev.get("text", ""))
+        out += f"- **{year}** — {text}\n"
+        pages = ev.get("pages", [])
+        if pages:
+            page_title = pages[0].get("title", "")
+            if page_title:
+                out += (
+                    f"  [Read on Wikipedia]"
+                    f"(https://{lang}.wikipedia.org/wiki/{page_title})\n"
+                )
+    return out
+
+
 def _today() -> str:
-    from datetime import datetime, timezone
     return datetime.now(timezone.utc).strftime("%Y/%m/%d")
+
+
+def image(title: str, lang: str = "en") -> str:
+    """Get just the lead image for a Wikipedia article (no summary text).
+
+    Returns both the 300px thumbnail URL and the full-resolution
+    original URL from Wikipedia's REST summary endpoint. Useful when
+    you want the article's image for embedding elsewhere (cards,
+    Telegram posts, slide decks, README hero images) without the
+    surrounding summary text — `summary` embeds the thumbnail inline,
+    but exposes only one URL and bundles it with prose. `image`
+    returns both URLs separately so downstream tools can fetch /
+    display at any size.
+
+    Returns a clean "no image available" message if the article has
+    no thumbnail or original image (many lists, disambiguation pages,
+    and stub articles don't).
+    """
+    resp = _get(f"{_base(lang)}/page/summary/{_slug(title)}")
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+
+    title_out = data.get("title", title)
+    thumb = (
+        data.get("thumbnail", {}).get("source", "")
+        if data.get("thumbnail") else ""
+    )
+    original = (
+        data.get("originalimage", {}).get("source", "")
+        if data.get("originalimage") else ""
+    )
+    desktop_url = (
+        data.get("content_urls", {}).get("desktop", {}).get("page", "#")
+    )
+
+    if not thumb and not original:
+        return (
+            f"No image available for '{title_out}' on {lang}.wikipedia."
+        )
+
+    out = f"## {title_out} — Lead Image\n\n"
+    if original:
+        out += f"**Original (full size):** {original}\n\n"
+    if thumb:
+        out += f"**Thumbnail (300px):** {thumb}\n\n"
+    out += f"![{title_out}]({original or thumb})\n\n"
+    out += f"[Read more →]({desktop_url})"
+    return out
+
+
+def links(title: str, limit: int = 20, lang: str = "en") -> str:
+    """List Wikipedia article links (outgoing internal links) from a page.
+
+    Returns the first N article titles that an article links to (the
+    "see also" network in raw form, no filtering by section). Useful
+    for graph-style discovery — e.g. given "Tyrannosaurus", see which
+    genera, paleontologists, formations, and anatomical terms it
+    references. Complements `categories` (taxonomy) and `search`
+    (text-based) — `links` shows what the article itself points to.
+    Filters to main namespace (ns=0) so talk/user/etc. don't pollute
+    the result.
+    """
+    try:
+        limit = max(1, min(int(limit), 50))
+    except (TypeError, ValueError):
+        limit = 20
+    params = {
+        "action": "query",
+        "prop": "links",
+        "titles": title,
+        "pllimit": limit,
+        "plnamespace": 0,
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    if not pages:
+        return f"No links found for '{title}'."
+
+    page = next(iter(pages.values()))
+    if page.get("missing") is not None:
+        return f"Article '{title}' not found on Wikipedia."
+    out_links = page.get("links", [])
+    if not out_links:
+        return f"No links found for '{page.get('title', title)}'."
+
+    page_title = page.get("title", title)
+    out = f"**Links from \"{page_title}\":**\n\n"
+    for lnk in out_links:
+        name = lnk.get("title", "").strip()
+        if name:
+            out += f"- {name}\n"
+    out += (
+        f"\n[View article]"
+        f"(https://{lang}.wikipedia.org/wiki/{_slug(page_title)})"
+    )
+    return out
+
+
+def categories(title: str, limit: int = 20, lang: str = "en") -> str:
+    """List Wikipedia categories for an article.
+
+    Returns the Wikipedia categories an article belongs to (e.g.
+    "Late Cretaceous dinosaurs", "Articles containing Latin-language text").
+    Useful for taxonomy-based discovery — finding related topics that
+    don't show up in text search. Hidden/maintenance categories are
+    filtered out so the result is high-signal.
+    """
+    try:
+        limit = max(1, min(int(limit), 50))
+    except (TypeError, ValueError):
+        limit = 20
+    params = {
+        "action": "query",
+        "prop": "categories",
+        "titles": title,
+        "cllimit": limit,
+        "clshow": "!hidden",
+        "clsort": "sortkey",
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    pages = data.get("query", {}).get("pages", {})
+    if not pages:
+        return f"No categories found for '{title}'."
+
+    # API returns pages as {pageid: {...}}; missing pages have id=-1
+    page = next(iter(pages.values()))
+    if page.get("missing") is not None or page.get("title", "") == "" and "categories" not in page:
+        return f"Article '{title}' not found on Wikipedia."
+    cats = page.get("categories", [])
+    if not cats:
+        return f"No categories found for '{page.get('title', title)}'."
+
+    page_title = page.get("title", title)
+    out = f"**Categories for \"{page_title}\":**\n\n"
+    for cat in cats:
+        # Strip "Category:" prefix for cleaner display
+        name = cat.get("title", "").replace("Category:", "", 1)
+        if name:
+            out += f"- {name}\n"
+    out += (
+        f"\n[View article]"
+        f"(https://{lang}.wikipedia.org/wiki/{_slug(page_title)})"
+    )
+    return out
+
+
+def pageviews(title: str, start: str = "", end: str = "", lang: str = "en") -> str:
+    """Get daily view counts for a Wikipedia article over a date range.
+
+    Uses Wikimedia's pageviews REST API (per-article, all-access, daily
+    granularity). Useful for popularity research, trending topics, and
+    historical interest — e.g. "how is X trending this week?" or
+    "what was the spike on date Y?".
+
+    Returns a markdown table with daily views, total, and daily average.
+    Default window is the last 7 days ending yesterday (UTC). The
+    article must have measurable traffic — very new or very niche
+    articles may return 404 from the pageviews API.
+    """
+    if not title or not title.strip():
+        return "Error: title is required."
+
+    # Validate lang (use SUPPORTED_LANGS so the URL is consistent and
+    # falls back to "en" rather than producing a 404 for typos).
+    lang = lang if lang in SUPPORTED_LANGS else "en"
+
+    # Default dates: 7-day window ending yesterday UTC.
+    if end == "":
+        end_dt = datetime.now(timezone.utc) - timedelta(days=1)
+        end = end_dt.strftime("%Y%m%d")
+    if start == "":
+        try:
+            end_dt = datetime.strptime(end, "%Y%m%d")
+        except ValueError:
+            return f"Error: end date must be in YYYYMMDD format (got '{end}')"
+        start = (end_dt - timedelta(days=6)).strftime("%Y%m%d")
+
+    try:
+        datetime.strptime(start, "%Y%m%d")
+        datetime.strptime(end, "%Y%m%d")
+    except ValueError:
+        return f"Error: dates must be in YYYYMMDD format (got start='{start}', end='{end}')"
+
+    if start > end:
+        return f"Error: start date {start} is after end date {end}"
+
+    encoded_title = _slug(title)
+    # Pageviews API is a cross-wiki metric hosted centrally on wikimedia.org,
+    # not on the per-language wiki. Use wikimedia.org as the base regardless
+    # of `lang`; the language-specific project (e.g. "en.wikipedia") lives in
+    # the URL path, not the host.
+    url = (
+        f"https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/"
+        f"{lang}.wikipedia/all-access/user/{encoded_title}/daily/{start}00/{end}00"
+    )
+
+    try:
+        resp = _get(url)
+    except requests.RequestException as e:
+        return f"Error fetching pageviews: {e}"
+
+    if resp.status_code == 404:
+        return (
+            f"No pageviews data found for '{title}' in {lang}.wikipedia "
+            f"between {start} and {end}. Article may not exist or have "
+            f"insufficient history."
+        )
+    if resp.status_code != 200:
+        return f"Error: pageviews API returned {resp.status_code} for '{title}'."
+
+    data = resp.json()
+    items = data.get("items", [])
+
+    if not items:
+        return f"No pageviews found for '{title}' in {lang} between {start} and {end}."
+
+    total = sum(item["views"] for item in items)
+    avg = total // len(items) if items else 0
+
+    page_title = items[0].get("article", title).replace("_", " ")
+
+    out = f'**Pageviews for "{page_title}"** ({lang}.wikipedia)\n\n'
+    out += f"**Period:** {start} → {end} ({len(items)} days)  \n"
+    out += f"**Total views:** {total:,}  |  **Daily average:** {avg:,}\n\n"
+    out += "| Date | Views |\n"
+    out += "|------|------:|\n"
+
+    for item in items:
+        ts = item["timestamp"]
+        date_str = f"{ts[:4]}-{ts[4:6]}-{ts[6:8]}"
+        out += f"| {date_str} | {item['views']:,} |\n"
+
+    out += f"\n[View article](https://{lang}.wikipedia.org/wiki/{encoded_title})"
+    return out
+
+
+def news(lang: str = "en", limit: int = 5) -> str:
+    """Get current events from Wikipedia's Main Page 'In the news' section.
+
+    Returns today's curated list of recent notable events from the Main
+    Page (Wikipedia's editorially-updated current-events feed). Pairs with
+    `featured_article` (today's long-form pick) and `on_this_day`
+    (historical) — `news` covers the present tense. The Main Page is
+    rendered server-side, then the 'In the news' block is parsed out of
+    the HTML so bold + linked article titles become Markdown.
+    """
+    try:
+        limit = max(1, min(int(limit), 10))
+    except (TypeError, ValueError):
+        limit = 5
+
+    params = {
+        "action": "parse",
+        "page": "Main_Page",
+        "prop": "text",
+        "format": "json",
+        "origin": "*",
+    }
+    resp = _get(_wiki(lang), params=params)
+    resp.raise_for_status()
+    data = resp.json()
+
+    if "error" in data:
+        return f"Could not fetch news for {lang}.wikipedia.org today."
+
+    html = data.get("parse", {}).get("text", {}).get("*", "")
+    if not html:
+        return f"No news available for {lang}.wikipedia.org today."
+
+    # The Main Page renders "In the news" as a sibling <h2> + <div> block:
+    # <h2 id="mp-itn-h2">In the news</h2>
+    # <div id="mp-itn">...<ul><li>event text with links</li>...</ul></div>
+    # Grab everything between that h2 and the next h2 in the page.
+    m = re.search(
+        r'<h2[^>]*id="mp-itn-h2"[^>]*>.*?</h2>(.*?)<h2',
+        html,
+        re.DOTALL,
+    )
+    if not m:
+        return f"No 'In the news' section found on {lang}.wikipedia.org today."
+
+    block = m.group(1)
+    items = re.findall(r"<li>(.*?)</li>", block, re.DOTALL)
+    if not items:
+        return f"No news items found on {lang}.wikipedia.org today."
+
+    sample = items[:limit]
+    out = "**In the news:**\n\n"
+    for item in sample:
+        # Bold-linked article: <b><a href="/wiki/Title">Name</a></b>
+        # Render as **[Name](url)** so the main subject stands out.
+        md = re.sub(
+            r'<b>\s*<a[^>]+href="/wiki/([^"#]+)"[^>]*>([^<]+)</a>\s*</b>',
+            lambda mm: f'**[{mm.group(2)}](https://{lang}.wikipedia.org/wiki/{mm.group(1)})**',
+            item,
+        )
+        # Plain wiki links: [Name](url)
+        md = re.sub(
+            r'<a[^>]+href="/wiki/([^"#]+)"[^>]*>([^<]+)</a>',
+            lambda mm: f'[{mm.group(2)}](https://{lang}.wikipedia.org/wiki/{mm.group(1)})',
+            md,
+        )
+        # Italics (e.g. "(pictured)") stay as *text*
+        md = re.sub(r"<i>([^<]*)</i>", r"*\1*", md)
+        # Strip any remaining tags
+        md = re.sub(r"<[^>]+>", "", md)
+        md = unescape(md)
+        md = re.sub(r"\s+", " ", md).strip()
+        if md:
+            out += f"- {md}\n"
+
+    out += f"\n[Wikipedia Main Page](https://{lang}.wikipedia.org/wiki/Main_Page)"
+    return out
+
+
+def top_reads(date: str = "", limit: int = 10, lang: str = "en") -> str:
+    """Get the most-read articles on Wikipedia for a given date.
+
+    Uses Wikimedia's top-pageviews endpoint (all-access, daily) to
+    return the top-N most-viewed articles on a language Wikipedia for a
+    single day. Default date is yesterday UTC — today's data is
+    typically not yet finalized, so defaulting to yesterday reliably
+    returns a populated list.
+
+    Filters out non-content namespaces (Main_Page, Special:Search,
+    Portal:Current_events, Wikipedia:*, Talk:*, etc.) so the result is
+    real articles only. Useful for "what's trending on Wikipedia"
+    research and daily content hooks — pairs with `pageviews` (which is
+    per-article over a range) for trending-vs-popular comparisons.
+
+    Returns a markdown table: rank, article title (linked), and view
+    count for the day.
+    """
+    lang = lang if lang in SUPPORTED_LANGS else "en"
+
+    if date == "":
+        date = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y%m%d")
+
+    try:
+        dt = datetime.strptime(date, "%Y%m%d")
+    except ValueError:
+        return f"Error: date must be in YYYYMMDD format (got '{date}')"
+
+    # Pageviews API is cross-wiki; lang is in the path, not the host.
+    url = (
+        f"https://wikimedia.org/api/rest_v1/metrics/pageviews/top/"
+        f"{lang}.wikipedia/all-access/{dt.year:04d}/{dt.month:02d}/{dt.day:02d}"
+    )
+
+    try:
+        resp = _get(url)
+    except requests.RequestException as e:
+        return f"Error fetching top-reads: {e}"
+
+    if resp.status_code == 404:
+        return f"No top-reads data found for {lang}.wikipedia on {date}."
+    if resp.status_code != 200:
+        return f"Error: pageviews API returned {resp.status_code} for {date}."
+
+    data = resp.json()
+    items = data.get("items", [])
+    if not items:
+        return f"No top-reads found for {lang}.wikipedia on {date}."
+
+    all_articles = items[0].get("articles", [])
+    if not all_articles:
+        return f"No top-reads found for {lang}.wikipedia on {date}."
+
+    # Filter out non-content namespaces so users get real articles, not
+    # Wikipedia infrastructure pages. The top-reads feed always ranks
+    # Main_Page #1 (millions of daily views), Special:Search #2 (the
+    # search bar), and Wikipedia:Featured_pictures high — these are
+    # useful as raw telemetry but useless as content hooks.
+    SKIP_PREFIXES = (
+        "Main_Page", "Special:", "Wikipedia:", "Portal:", "Help:",
+        "Talk:", "Template:", "Category:", "MediaWiki:", "User:",
+        "File:", "Draft:", "Module:",
+    )
+    filtered = [
+        a for a in all_articles
+        if not any(a["article"].startswith(p) for p in SKIP_PREFIXES)
+    ]
+
+    try:
+        limit = max(1, min(int(limit), 50))
+    except (TypeError, ValueError):
+        limit = 10
+
+    sample = filtered[:limit]
+    if not sample:
+        return f"No top-reads articles found for {lang}.wikipedia on {date} (after filtering)."
+
+    pretty_date = f"{date[:4]}-{date[4:6]}-{date[6:8]}"
+    out = f"**Top reads on {lang}.wikipedia — {pretty_date}:**\n\n"
+    out += "| Rank | Article | Views |\n"
+    out += "|------|---------|------:|\n"
+
+    for art in sample:
+        title = art["article"].replace("_", " ")
+        rank = art.get("rank", "?")
+        views = art.get("views", 0)
+        slug = art["article"]
+        out += (
+            f"| {rank} | [{title}]"
+            f"(https://{lang}.wikipedia.org/wiki/{slug}) "
+            f"| {views:,} |\n"
+        )
+
+    out += (
+        f"\n[View full list]"
+        f"(https://wikimedia.org/api/rest_v1/metrics/pageviews/top/"
+        f"{lang}.wikipedia/all-access/{dt.year:04d}/{dt.month:02d}/{dt.day:02d})"
+    )
+    return out
+
+
+def media_list(title: str, limit: int = 25, lang: str = "en") -> str:
+    """List all media (images, videos, audio) used in a Wikipedia article.
+
+    Returns a structured markdown list of every media item the article
+    uses — not just the lead thumbnail. Each entry shows the media type
+    (image / video / audio), the file title on Wikimedia Commons, an
+    optional caption (plain text, with HTML stripped), and the
+    thumbnail URL at the smallest scale. Lead media is marked with a
+    trophy so callers can skip it when they already have it via `image`.
+
+    Complements `image` (which returns only the lead thumbnail + original
+    URLs in a text block) — `media_list` is for callers that want the
+    full inventory: gallery generation, fact-checking images cited in
+    an article, slide decks, content audits. Uses Wikipedia's REST
+    `/page/media-list` endpoint which returns structured JSON, no HTML
+    parsing required.
+
+    `limit` clamps the number of items returned (default 25, max 100).
+    Wikipedia articles can easily have 50+ media items — raise the limit
+    if you need the full set, or keep the default to keep responses
+    concise.
+    """
+    try:
+        limit = max(1, min(int(limit), 100))
+    except (TypeError, ValueError):
+        limit = 25
+    resp = _get(f"{_base(lang)}/page/media-list/{_slug(title)}")
+    if resp.status_code == 404:
+        return f"Article '{title}' not found on Wikipedia."
+    resp.raise_for_status()
+    data = resp.json()
+    items = data.get("items", [])
+    if not items:
+        return f"No media found for '{title}' on {lang}.wikipedia."
+
+    sample = items[:limit]
+    out = (
+        f"**Media in \"{title}\":** "
+        f"({len(items)} total, showing {len(sample)})\n\n"
+    )
+    for item in sample:
+        file_title = item.get("title", "Unknown")
+        media_type = item.get("type", "media")
+        is_lead = item.get("leadImage", False)
+        lead_marker = " 🏆 (lead)" if is_lead else ""
+        caption = ""
+        cap = item.get("caption")
+        if isinstance(cap, dict):
+            caption = (cap.get("text") or "").strip()
+        elif isinstance(cap, str):
+            caption = cap.strip()
+        srcset = item.get("srcset", []) or []
+        thumb_url = ""
+        if srcset:
+            thumb_url = srcset[0].get("src", "")
+            # Protocol-relative URLs ("//upload.wikimedia.org/...") need
+            # an explicit scheme so MCP clients can resolve them.
+            if thumb_url.startswith("//"):
+                thumb_url = "https:" + thumb_url
+
+        out += f"- **{file_title}**{lead_marker}\n"
+        out += f"  Type: {media_type}\n"
+        if caption:
+            cap_display = caption[:200] + ("..." if len(caption) > 200 else "")
+            out += f"  Caption: {cap_display}\n"
+        if thumb_url:
+            out += f"  Thumbnail: {thumb_url}\n"
+        out += "\n"
+
+    desktop_url = f"https://{lang}.wikipedia.org/wiki/{_slug(title)}"
+    out += f"[View article]({desktop_url})"
+    return out
+
+
+def quote(lang: str = "en") -> str:
+    """Get a random notable quote from a curated list of famous authors.
+
+    Returns a randomly selected quote (author + attribution) from a
+    curated list of 23 well-known authors spanning philosophers,
+    scientists, statesmen, writers, and activists (Churchill, Einstein,
+    Twain, Gandhi, Mandela, Wilde, Angelou, Jobs, Lennon, Socrates,
+    etc.). Quotes are short, time-tested, and well-attributed — the
+    same approach as `dino_fact`'s DINOS list (high-quality curated
+    data, no scraping fragility). Useful for daily content hooks,
+    social posts, newsletter intros, and any place where a pithy
+    quotation adds weight to a message. Pairs with `did_you_know`
+    (random encyclopedia fact) and `dino_fact` (random dino fact) for
+    variety in "today's trivia" outputs.
+
+    The `lang` parameter is accepted for API consistency with the
+    other tools but is currently English-only — the curated list is
+    English. Non-English values are accepted without error and still
+    return English quotes. Multi-language quote support via Wikiquote
+    is a possible future iteration.
+    """
+    author, text = random.choice(FAMOUS_QUOTES)
+    return (
+        f'💬 **"{text}"**\n\n'
+        f"— *{author}*"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -315,6 +1052,44 @@ TOOLS = [
         },
     },
     {
+        "name": "article_extract",
+        "description": (
+            "Get a Wikipedia article's full plain-text extract by title — "
+            "much longer than `summary` (typically several paragraphs). "
+            "Returns plain text (no HTML). Complements `summary`: use it "
+            "when the summary is too brief and you want a fuller reading."
+        ),
+    },
+    {
+        "name": "article_sections",
+        "description": (
+            "Get the table of contents (section headings) for a Wikipedia "
+            "article — section number, heading text, and nesting level. "
+            "Useful for navigating long articles before committing to the "
+            "full body via `article_extract`. Major articles can have "
+            "50KB+ of body text; `article_sections` gives the TOC in a "
+            "compact numbered list so callers can pick what to read next. "
+            "Pairs with `summary` (lead), `article_sections` (structure), "
+            "`article_extract` (full body)."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
         "name": "featured_article",
         "description": "Get today's Wikipedia Featured Article — a curated long-form pick, perfect for content hooks",
         "inputSchema": {
@@ -323,6 +1098,280 @@ TOOLS = [
                 "lang": {
                     "type": "string",
                     "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+        },
+    },
+    {
+        "name": "on_this_day",
+        "description": (
+            "Get historical events that happened on today's date (UTC) "
+            "from Wikipedia's 'On This Day' feed. Returns a random sample "
+            "of events with year + description + Wikipedia link — great "
+            "daily content hook alongside featured_article."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+                "count": {
+                    "type": "integer",
+                    "description": "Number of events to return (default 5, max 10)",
+                    "default": 5,
+                },
+            },
+        },
+    },
+    {
+        "name": "categories",
+        "description": (
+            "List Wikipedia categories an article belongs to. Useful for "
+            "taxonomy-based discovery — finding related topics that don't "
+            "appear in text search. Hidden/maintenance categories are filtered out."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max categories to return (default 20, max 50)",
+                    "default": 20,
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "links",
+        "description": (
+            "List outgoing Wikipedia links from an article (the article "
+            "network in raw form). Useful for graph-style discovery — "
+            "given 'Tyrannosaurus', see which genera, paleontologists, "
+            "formations, and anatomical terms it references. Filters to "
+            "main namespace so talk/user/etc. don't pollute the result."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max links to return (default 20, max 50)",
+                    "default": 20,
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "pageviews",
+        "description": (
+            "Get daily view counts for a Wikipedia article over a date range "
+            "(popularity research, trending topics, historical interest). "
+            "Uses Wikimedia's pageviews REST API. Default window is the "
+            "last 7 days ending yesterday UTC. Returns total + daily average "
+            "+ markdown table of daily views."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "start": {
+                    "type": "string",
+                    "description": "Start date in YYYYMMDD (default: 7 days before end)",
+                },
+                "end": {
+                    "type": "string",
+                    "description": "End date in YYYYMMDD (default: yesterday UTC)",
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "news",
+        "description": (
+            "Get current events from Wikipedia's Main Page 'In the news' "
+            "section — the editorially-curated list of recent notable "
+            "events. Pairs with featured_article (today's long-form pick) "
+            "and on_this_day (historical) — news covers the present tense. "
+            "Bold-linked article titles become Markdown so the main "
+            "subject of each event stands out."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max events to return (default 5, max 10)",
+                    "default": 5,
+                },
+            },
+        },
+    },
+    {
+        "name": "image",
+        "description": (
+            "Get just the lead image for a Wikipedia article — "
+            "returns both the 300px thumbnail URL and the full-resolution "
+            "original URL from Wikipedia's REST summary endpoint. "
+            "Useful when you want the article's image for embedding "
+            "elsewhere (cards, Telegram posts, slide decks, README "
+            "hero images) without the surrounding summary text. "
+            "`summary` embeds the thumbnail inline; `image` exposes "
+            "both URLs separately so downstream tools can fetch / "
+            "display at any size. Returns a clean message if the "
+            "article has no image."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "top_reads",
+        "description": (
+            "Get the most-read articles on Wikipedia for a given date. "
+            "Uses Wikimedia's top-pageviews endpoint (all-access, daily). "
+            "Default date is yesterday UTC (today's data is typically "
+            "not yet finalized). Filters out non-content namespaces "
+            "(Main_Page, Special:Search, Portal:Current_events, "
+            "Wikipedia:*, etc.) so the result is real articles only. "
+            "Pairs with `pageviews` (per-article over a range) for "
+            "trending-vs-popular comparisons — top_reads answers "
+            "'what is everyone reading right now' while pageviews "
+            "answers 'how is this specific article trending'."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "description": "Date in YYYYMMDD (default: yesterday UTC)",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max articles to return (default 10, max 50)",
+                    "default": 10,
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+        },
+    },
+    {
+        "name": "media_list",
+        "description": (
+            "List all media (images, videos, audio) used in a Wikipedia "
+            "article — not just the lead thumbnail. Returns a structured "
+            "markdown list: file title, type (image/video/audio), caption, "
+            "and thumbnail URL. Lead media is marked so callers can skip "
+            "it when they already have it via `image`. Uses Wikipedia's "
+            "REST `/page/media-list` endpoint (structured JSON, no HTML "
+            "parsing). Pairs with `image` (lead only) — use `image` for "
+            "the headline thumbnail, `media_list` for the full inventory "
+            "(gallery generation, fact-checking, slide decks, audits). "
+            "`limit` clamps the number of items (default 25, max 100)."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "description": "Article title (e.g. 'Tyrannosaurus' or 'Albert_Einstein')",
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "Max media items to return (default 25, max 100)",
+                    "default": 25,
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en')",
+                    "default": "en",
+                    "enum": list(SUPPORTED_LANGS),
+                },
+            },
+            "required": ["title"],
+        },
+    },
+    {
+        "name": "quote",
+        "description": (
+            "Get a random notable quote from a curated list of famous "
+            "authors (Churchill, Einstein, Twain, Gandhi, Mandela, Wilde, "
+            "Angelou, Jobs, Lennon, Socrates, etc.). Returns a short, "
+            "time-tested quotation with author attribution. Pairs with "
+            "did_you_know (random encyclopedia fact) and dino_fact (random "
+            "dino fact) for variety in 'today's trivia' outputs — great "
+            "for daily content hooks, social posts, newsletter intros. "
+            "Currently English-only (curated list); the `lang` parameter "
+            "is accepted for API consistency but non-English values still "
+            "return English quotes."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "lang": {
+                    "type": "string",
+                    "description": "Wikipedia language code (default 'en'). Currently English-only; non-English values fall back to English.",
                     "default": "en",
                     "enum": list(SUPPORTED_LANGS),
                 },
@@ -345,6 +1394,28 @@ def _call_tool(name: str, args: dict) -> str:
         return dino_fact(**args)
     if name == "featured_article":
         return featured_article(**args)
+    if name == "article_extract":
+        return article_extract(**args)
+    if name == "article_sections":
+        return article_sections(**args)
+    if name == "on_this_day":
+        return on_this_day(**args)
+    if name == "categories":
+        return categories(**args)
+    if name == "links":
+        return links(**args)
+    if name == "pageviews":
+        return pageviews(**args)
+    if name == "news":
+        return news(**args)
+    if name == "top_reads":
+        return top_reads(**args)
+    if name == "image":
+        return image(**args)
+    if name == "media_list":
+        return media_list(**args)
+    if name == "quote":
+        return quote(**args)
     return f"Unknown tool: {name}"
 
 

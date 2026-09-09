@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/heart-of-light/schemas/feedback-v1.json",
+  "title": "Heart of Light feedback entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "created_at", "dimension", "score", "note"],
+  "properties": {
+    "schema": {"const": "heart-of-light.feedback.v1"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "dimension": {"enum": ["truth", "care", "justice", "humility", "verification", "peace", "craft", "autonomy"]},
+    "score": {"type": "number", "minimum": 0, "maximum": 1},
+    "note": {"type": "string", "maxLength": 1000}
+  }
+}

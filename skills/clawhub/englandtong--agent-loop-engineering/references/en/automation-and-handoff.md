@@ -1,62 +1,31 @@
-# Automation And Handoff
+# Automation And Handoff 2.1
 
 ## Runner Contract
 
-An outer runner may invoke one bounded loop repeatedly.
+An outer runner may invoke one bounded loop repeatedly. Each run acquires one writer lock, reloads state, validates authority/fingerprint/budgets, executes one role phase, appends one record, releases the lock, and stops on terminal or invalid state.
 
-Each run must:
+It must not construct scope, answer Owner gates, retry an unchanged failure indefinitely, accept Standard/Full work, or hide failed verification.
 
-1. acquire a single-writer lock;
-2. load state from disk;
-3. validate authorization and budgets;
-4. execute one loop;
-5. append a loop record;
-6. release the lock;
-7. stop on any state other than `In Progress`.
+## Role Rotation
 
-The runner must not:
+The same agent may rotate Controller, Developer, and Stage Reviewer when `acceptance_mode: Layered`, but each phase uses only its needed artifacts:
 
-- construct new scope;
-- auto-answer Owner decisions;
-- retry the same failure indefinitely;
-- run concurrent writers;
-- accept governed work;
-- hide failed verification.
+- Controller: target projection, criteria, constraints, current evidence.
+- Developer: authorized stage, relevant source/tests, verification commands.
+- Stage Reviewer: criteria, diff, raw results, functional evidence, limits.
+
+Stage Reviewer writes `stage_review`, not final QA acceptance. Independent QA must be another agent/task or human and receive task-local evidence.
 
 ## Budgets
 
-Enforce:
-
-- maximum ten stages;
-- stage time ceiling by size;
-- two consecutive core failures without progress;
-- context file/size budget;
-- optional cost or tool-call budget.
-
-Budget exhaustion is a stop, not evidence of completion.
+Enforce stage/time ceiling, two no-progress failures per signature, context profile, single next action, and optional tool/cost budget. A budget stop is not completion.
 
 ## Handoff
 
-Prefer the Active Packet plus loop log over a new handoff file. Create a separate handoff only when a different team/agent cannot safely resume from those files.
+Prefer Active Packet plus Loop Runs. Create a separate handoff only for a real cross-team boundary that cannot safely resume from them.
 
-A handoff must include:
-
-- packet ID and stage;
-- current execution and alignment states;
-- last useful change;
-- verification passed and failed;
-- root cause when known;
-- files changed;
-- blockers and Owner decisions;
-- exactly one next action;
-- evidence paths.
-
-Do not include a transcript or hidden reasoning.
+A handoff contains packet/stage, current states, progress delta, passing/failing checks, root cause, changed files, blockers, Owner decisions, one next action, and evidence paths. It excludes transcript and hidden reasoning.
 
 ## Multiple Agents
 
-- Use one writer at a time.
-- Give each agent a disjoint Work Order when parallel work is necessary.
-- Merge and integration require a separate authorized stage.
-- A reviewer should receive raw task artifacts and evidence, not the Developer's desired verdict.
-- Do not let one agent silently switch from Developer to QA in governed work.
+Use one writer per packet. Parallel agents need disjoint Work Orders and an authorized integration stage. Reviewers receive raw artifacts, not the desired verdict.

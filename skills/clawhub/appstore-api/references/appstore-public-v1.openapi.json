@@ -1,0 +1,1557 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ReplyNodes App Store Public Reads",
+    "version": "v1",
+    "summary": "Read-only App Store API for iOS app metadata and ASO research through the ReplyNodes prepaid-credit fetcher.",
+    "description": "Machine-readable specification for the supported public App Store read capabilities of the ReplyNodes fetcher domain.\n\nSurface status:\n- All nine reviewed public read methods are exposed as stable capability identifiers in the manifest: app, list, search, developer, privacy, suggest, similar, reviews, and ratings.\n- Each route uses the provider method name and exact option names; app-shaped results are normalized into the public App contract and raw provider records never cross the public gateway.\n- No availability, uptime, latency, or success-rate figure is claimed; example payloads are illustrative fixtures.\n- Package access uses prepaid credits only: one long-lived fetcher key is sent as Authorization: Bearer YOUR_FETCHER_KEY\n\nRead-only guarantees:\n- Every cataloged operation is an HTTP GET capability over public application data only.\n- No purchase, review-submission, account, login, or any other write or authenticated capability exists in this domain, now or later; it is excluded by policy rather than by configuration.\n- Operations can only be disabled at runtime (APPSTORE_FETCHER_DISABLED_OPERATIONS kill switch), never enabled beyond this matrix.\n- No request path carries or accepts credentials, keys, or login material of any kind; the read layer performs public reads server-side.\n- Only public platform data is returned; counters, scores, and prices are null when the source omits them - zeros are never fabricated - and unknown upstream fields are dropped.\n\nGenerated from services/social-data-skills/catalog/catalog_appstore.json (#16); do not edit by hand."
+  },
+  "servers": [
+    {
+      "url": "https://api.replynodes.com",
+      "description": "Use https://api.replynodes.com as the ReplyNodes fetcher gateway base URL."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "appstore",
+      "description": "Public App Store read operations."
+    }
+  ],
+  "paths": {
+    "/v1/appstore/apps/{id}": {
+      "get": {
+        "operationId": "app",
+        "summary": "Look up one public App Store application",
+        "description": "Look up one public App Store application. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric track id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "description": "Bundle id fallback.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ratings",
+            "in": "query",
+            "required": false,
+            "description": "Include ratings information.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/list": {
+      "get": {
+        "operationId": "list",
+        "summary": "List applications from a storefront collection",
+        "description": "List applications from a storefront collection. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "query",
+            "required": false,
+            "description": "Provider collection constant.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "description": "Provider category constant.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "num",
+            "in": "query",
+            "required": false,
+            "description": "Number of applications; values outside 1..200 are rejected.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "fullDetail",
+            "in": "query",
+            "required": false,
+            "description": "Request detail enrichment.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/search": {
+      "get": {
+        "operationId": "search",
+        "summary": "Search public App Store applications by term",
+        "description": "Search public App Store applications by term. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "description": "Search term.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "num",
+            "in": "query",
+            "required": false,
+            "description": "Number of results; values outside 1..50 are rejected.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Result page.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 200
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idsOnly",
+            "in": "query",
+            "required": false,
+            "description": "Return ids without detail lookups.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/developer": {
+      "get": {
+        "operationId": "developer",
+        "summary": "List applications by developer",
+        "description": "List applications by developer. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "devId",
+            "in": "query",
+            "required": true,
+            "description": "public developer identifier.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language code.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/privacy": {
+      "get": {
+        "operationId": "privacy",
+        "summary": "Read public App Store privacy details",
+        "description": "Read public App Store privacy details. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "public application identifier.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/suggest": {
+      "get": {
+        "operationId": "suggest",
+        "summary": "Suggest public App Store search terms",
+        "description": "Suggest public App Store search terms. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "description": "Search term.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/apps/{id}/similar": {
+      "get": {
+        "operationId": "similar",
+        "summary": "List apps related to an application",
+        "description": "List apps related to an application. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Numeric track id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "description": "Bundle id fallback.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "in": "query",
+            "required": false,
+            "description": "Language code.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/reviews": {
+      "get": {
+        "operationId": "reviews",
+        "summary": "Read a page of public app reviews",
+        "description": "Read a page of public app reviews. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "public application identifier; provide this or appId.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "description": "Bundle id; provide this or id.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Review page; values outside 1..10 are rejected.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "description": "Provider review sort constant.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/appstore/ratings": {
+      "get": {
+        "operationId": "ratings",
+        "summary": "Read public app ratings",
+        "description": "Read public app ratings. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+        "tags": [
+          "appstore"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "description": "public application identifier; provide this or appId.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "required": false,
+            "description": "Two-letter storefront code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "description": "Bundle id; provide this or id.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response. Single lookups carry exactly one element in data; searches and similar listings carry zero or more.",
+            "headers": {
+              "X-Request-Id": {
+                "description": "Correlation identifier echoed as meta.request_id.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Normalized error with code invalid_request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Normalized error with code not_found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Normalized error with code rate_limited.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until the quota window resets.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Normalized error with code upstream_unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Normalized error with code degraded.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Callers authenticate with one long-lived ReplyNodes fetcher key as Authorization: Bearer YOUR_FETCHER_KEY; scope and entitlement checks are performed by the shared control plane. Use the literal placeholder YOUR_FETCHER_KEY in documentation and keep the real long-lived fetcher key in an agent secret store; never embed it in code, logs, or prompts."
+      }
+    },
+    "schemas": {
+      "App": {
+        "type": "object",
+        "description": "Normalized public App Store application record (contract v1). Optional values stay null when the public source omitted them; zeros are never fabricated; unknown upstream fields are dropped at parse time.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Platform-prefixed URN ios:app:<numeric track id>."
+          },
+          "platform": {
+            "type": "string",
+            "const": "ios"
+          },
+          "bundle_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Reverse-DNS bundle id, or null when omitted."
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Public store page URL, or null when omitted."
+          },
+          "icon_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "release_notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "developer": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "ios:developer:<id> URN when known."
+              }
+            }
+          },
+          "primary_genre": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "genres": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "content_rating": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "size_bytes": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "min_os_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "released_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "RFC3339 UTC, or null when omitted."
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "RFC3339 UTC, or null when omitted."
+          },
+          "rating": {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "0..5 average, or null when omitted."
+              },
+              "ratings_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "reviews_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              }
+            }
+          },
+          "pricing": {
+            "type": "object",
+            "properties": {
+              "price": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "currency": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "free": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              }
+            }
+          },
+          "screenshot_urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Developer": {
+        "type": [
+          "object",
+          "null"
+        ],
+        "properties": {
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ios:developer:<id> URN when known."
+          }
+        }
+      },
+      "Rating": {
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "description": "0..5 average, or null when omitted."
+          },
+          "ratings_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "reviews_count": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        }
+      },
+      "Pricing": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "currency": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "free": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
+      "ResponseMeta": {
+        "type": "object",
+        "description": "Provenance metadata echoed with every response. request_id echoes the caller-supplied opaque correlation id; missing_fields appears only when availability is partial, using dotted *. paths that apply to every element of data.",
+        "additionalProperties": false,
+        "required": [
+          "request_id",
+          "contract_version",
+          "generated_at",
+          "availability"
+        ],
+        "properties": {
+          "request_id": {
+            "type": "string"
+          },
+          "contract_version": {
+            "type": "string",
+            "const": "v1"
+          },
+          "generated_at": {
+            "type": "string",
+            "description": "Server-side RFC3339 UTC timestamp."
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "partial",
+              "degraded"
+            ]
+          },
+          "detail": {
+            "type": "string",
+            "description": "Fixed generic note; never provider diagnostics."
+          },
+          "missing_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "AppResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "data",
+          "meta"
+        ],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/App"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ResponseMeta"
+          }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "description": "Body of every non-2xx response on this surface; retry hints travel in the Retry-After header.",
+        "additionalProperties": false,
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "code",
+              "message",
+              "request_id"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "degraded",
+                  "invalid_request",
+                  "not_found",
+                  "rate_limited",
+                  "upstream_unavailable"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "Fixed generic message."
+              },
+              "request_id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

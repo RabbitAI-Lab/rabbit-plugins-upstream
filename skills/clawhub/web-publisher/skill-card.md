@@ -1,45 +1,70 @@
-## Description: <br>
-Accepts article URLs or local documents, extracts content, optionally rewrites it, and publishes or saves drafts to WeChat Official Accounts while also supporting document-to-Markdown conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web Publisher Skill helps an agent turn article URLs or authorized local documents into Markdown, WeChat drafts, or WeChat publications through the tools.siping.me publishing service.
 
-## Publisher: <br>
-[sipingme](https://clawhub.ai/user/sipingme) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sipingme](https://clawhub.ai/user/sipingme)
 
-## Use Case: <br>
-Developers and content operators use this skill to turn web articles and local files into WeChat drafts or publications, with optional AI rewriting and Markdown-only conversion when publication is not desired. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A reusable publishing API key may be exposed in chat or logs on a persist-failed login-status path. <br>
-Mitigation: If this condition occurs, treat the key as exposed and rotate or revoke it before continuing. <br>
-Risk: Documents, URLs, and rewritten content are sent to tools.siping.me and may also flow through rewrite providers. <br>
-Mitigation: Use the skill only with content approved for that data flow, and avoid confidential or regulated material unless that transfer has been reviewed. <br>
+## Use Case:
 
+External creators, publishers, and agent users can use this skill to extract content from URLs or user-provided documents, convert it to Markdown, prepare WeChat drafts, and publish only when explicitly requested. It is also useful when an agent needs guided login, WeChat configuration, theme selection, and conversion status handling.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sipingme/web-publisher) <br>
-- [Publisher Profile](https://clawhub.ai/user/sipingme) <br>
-- [tools.siping.me](https://tools.siping.me) <br>
-- [Microsoft MarkItDown](https://github.com/microsoft/markitdown) <br>
-- [news-to-markdown companion skill](https://github.com/sipingme/news-to-markdown-skill) <br>
-- [browser-web-search companion skill](https://github.com/sipingme/browser-web-search-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, API calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce WeChat draft media IDs, publish IDs, login or configuration URLs, Markdown conversion output, and status summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.18 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The service receives article content, uploaded local files, publishing authority, and WeChat configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts tools.siping.me with that data and authority; prefer draft mode unless direct publishing is intended.
+
+Risk: Login and AppSecret setup links are relayed from the server without strong local origin validation.
+
+Mitigation: Before opening a link, verify that it uses HTTPS and the expected tools.siping.me domain.
+
+Risk: Direct publish actions can send content to WeChat instead of only preparing a draft.
+
+Mitigation: Use draft commands by default and publish only when the user explicitly asks to publish.
+
+Risk: Optional local fallback with news-to-markdown is outside this skill's audit scope.
+
+Mitigation: Use the documented fixed version with install scripts disabled, keep a lockfile, or provide already extracted article text.
+
+Risk: Large or changing local files can expose excessive or unintended content during upload.
+
+Mitigation: The artifact enforces a 50 MiB limit, reads only user-supplied files, and rejects files that grow or truncate during reading.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sipingme/skills/web-publisher)
+- [Publisher profile](https://clawhub.ai/user/sipingme)
+- [Markdown themes and extensions](references/markdown-themes.md)
+- [tools.siping.me service](https://tools.siping.me)
+- [news-to-markdown optional fallback](https://www.npmjs.com/package/news-to-markdown)
+- [Microsoft MarkItDown](https://github.com/microsoft/markitdown)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, JSON command results, browser setup URLs, status summaries, and optional Markdown files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill defaults to draft workflows unless the user explicitly requests publishing, accepts only authorized URLs or local files, and enforces a 50 MiB local file upload limit.]
+
+## Skill Version(s):
+
+0.10.2 (source: frontmatter, config.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

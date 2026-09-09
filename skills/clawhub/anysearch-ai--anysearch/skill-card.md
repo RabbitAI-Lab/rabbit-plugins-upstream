@@ -1,45 +1,57 @@
-## Description: <br>
-Real-time search engine supporting web search, vertical domain search, parallel batch search, and URL content extraction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Real-time search engine supporting web search, vertical domain search, parallel batch search, and URL content extraction.
 
-## Publisher: <br>
-[anysearch-ai](https://clawhub.ai/user/anysearch-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[anysearch-ai](https://clawhub.ai/user/anysearch-ai)
 
-## Use Case: <br>
-Developers and agent users use AnySearch to add real-time information retrieval, fact-checking, vertical domain search, parallel batch search, and URL content extraction to an AI agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, URLs selected for extraction, and any configured AnySearch API key are sent to AnySearch. <br>
-Mitigation: Do not use the skill for secrets, private internal URLs, regulated data, or confidential investigations unless the provider and workspace secret handling are trusted. <br>
-Risk: The skill requires sensitive credential handling when an API key is configured. <br>
-Mitigation: Prefer environment variables or a local .env file for ANYSEARCH_API_KEY, avoid pasting keys in chat, and confirm before saving any newly issued key. <br>
+## Use Case:
 
+Developers and agent users use AnySearch to retrieve current web information, run domain-specific searches, batch independent queries, and extract page content through bundled cross-platform CLI tools.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/anysearch-ai/anysearch) <br>
-- [Publisher profile](https://clawhub.ai/user/anysearch-ai) <br>
-- [AnySearch API key console](https://anysearch.com/console/api-keys) <br>
-- [AnySearch MCP API endpoint](https://api.anysearch.com/mcp) <br>
-- [README](README.md) <br>
-- [CLI documentation spec](scripts/shared/doc_spec.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON API responses, command-line output, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results and extracted pages are returned from a remote AnySearch API; anonymous access is supported with lower rate limits, and an optional API key enables higher limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The security summary reports that the skill can send search queries, extracted URLs, and configured API keys to AnySearch.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymous mode when practical, avoid sensitive queries, and configure API keys only when the user explicitly accepts the data-sharing behavior.
+
+Risk: The security summary reports uneven consent and warning language around creating third-party accounts and persisting returned API keys in plaintext local files.
+
+Mitigation: Do not allow an agent to register an account with a real email address or write an API key to .env unless the user explicitly approves and understands the key will persist on disk.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/anysearch-ai/skills/anysearch)
+- [AnySearch API](https://api.anysearch.com)
+- [AnySearch API Keys](https://anysearch.com/console/api-keys)
+- [AnySearch Skill Releases](https://github.com/anysearch-ai/anysearch-skill/releases)
+- [Interface Specification](scripts/shared/doc_spec.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and inline shell commands from CLI-backed search, batch search, extraction, and setup workflows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search queries, extracted URLs, and configured API keys are sent to AnySearch; extract output excludes unsupported binary document and media formats.]
+
+## Skill Version(s):
+
+3.1.1 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
