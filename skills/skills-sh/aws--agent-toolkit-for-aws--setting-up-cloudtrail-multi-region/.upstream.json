@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setting-up-cloudtrail-multi-region",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setting-up-cloudtrail-multi-region",
+  "branch": "main",
+  "pushedAt": "2026-09-08T16:51:52Z",
+  "contentHash": "89e16c9d00013592805d030285d00da5ce3f55003171df2e34c3c72993775f7b",
+  "fetchedAt": "2026-09-09T12:25:59.557Z"
+}
