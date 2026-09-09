@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/shieldadvanced",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "shieldadvanced",
+  "branch": "main",
+  "pushedAt": "2026-09-08T16:51:52Z",
+  "contentHash": "31d6b7f3ec3cb056014a0b506a754a80df816760fc263dd5fa87d9b0b8ace20c",
+  "fetchedAt": "2026-09-09T12:25:59.998Z"
+}
