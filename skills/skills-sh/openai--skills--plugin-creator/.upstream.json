@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/plugin-creator",
+  "repo": "openai/skills",
+  "skillId": "plugin-creator",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "d5da50d0c8d2776d5b0666855b04fa66795ca505577762428ae0a84594b6fa58",
+  "fetchedAt": "2026-09-10T12:18:50.685Z"
+}
