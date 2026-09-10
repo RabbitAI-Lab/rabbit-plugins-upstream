@@ -1,49 +1,64 @@
-## Description: <br>
-HTTP client for a user-deployed mt5-httpapi MetaTrader 5 bridge that can read account, symbol, market data, history, backtest, terminal, and server-side technical-analysis endpoints, while requiring explicit per-action confirmation before trade or terminal mutations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HTTP client for a user-deployed mt5-httpapi MetaTrader 5 bridge that lets an agent query account, market data, technical analysis, history, terminal, and backtest endpoints, with explicit confirmation required for trade and terminal mutations.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and trading-automation operators use this skill to connect an agent to their own mt5-httpapi deployment for MetaTrader 5 account inspection, market data retrieval, technical-analysis enrichment, order and position workflows, terminal checks, and backtest report access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Trade-mutating endpoints can open, modify, cancel, or close real orders and positions on a brokerage account. <br>
-Mitigation: Require fresh explicit confirmation for each mutating order, position, or terminal action, showing the resolved symbol, side, volume, SL, TP, account, and broker URL before execution. <br>
-Risk: An mt5-httpapi server without a configured API token exposes account state and trading actions to any reachable client. <br>
-Mitigation: Set a strong API token before network exposure, keep access bound to loopback or behind an authenticating proxy, and pass only the user-provided token. <br>
-Risk: Retrying or batching trade actions without renewed approval can duplicate orders or perform broader account changes than intended. <br>
-Mitigation: Do not auto-retry failed trade calls, enumerate batch targets before action, and require a new explicit confirmation for each retry or batch. <br>
-Risk: Using the wrong broker/account path in MT5_API_URL can send actions to an unintended account. <br>
-Mitigation: Surface the broker and account URL prefix in every confirmation prompt before any mutating call. <br>
+## Use Case:
 
+Developers and trading operators use this skill when they have intentionally deployed mt5-httpapi and want an agent to interact with a configured MetaTrader 5 bridge. It supports read-only account, market data, technical analysis, history, and backtest workflows, while trade and terminal changes require explicit per-action approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/mt5-httpapi) <br>
-- [mt5-httpapi repository](https://github.com/psyb0t/mt5-httpapi) <br>
-- [Setup reference](references/setup.md) <br>
-- [Model Context Protocol](https://modelcontextprotocol.io) <br>
-- [OpenClaw mt5-httpapi plugin](https://github.com/psyb0t/mt5-httpapi/tree/main/.agents/plugins/mt5-httpapi) <br>
-- [wickworks indicator catalog](https://github.com/psyb0t/docker-wickworks#available-indicators) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with curl commands, JSON request and response examples, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided MT5_API_URL and, when server auth is enabled, a user-provided MT5_API_TOKEN.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.0 (source: ClawHub release evidence) <br>
+Risk: The skill can submit live order, position, or terminal mutations that may move real money or interrupt a trading terminal.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit per-action confirmation that shows the account, broker URL, symbol, side, volume, price, stop loss, take profit, and requested terminal operation before any mutation.
+
+Risk: A reachable mt5-httpapi instance without a strong API token can expose account data and trading actions to anyone who can access it.
+
+Mitigation: Use a strong API token, keep the API bound to localhost when possible, and require HTTPS plus an authenticating proxy before remote exposure.
+
+Risk: Using the wrong broker, account, or unified MCP endpoint parameters can route an action to the wrong MetaTrader terminal.
+
+Mitigation: Surface and confirm the resolved broker, account, instance, and account login before every mutating call.
+
+Risk: The setup path depends on upstream downloads and a Docker/VM environment that may affect local system security.
+
+Mitigation: Review the upstream setup, pin or verify downloads, and test with a demo account before connecting live credentials.
+
+## Reference(s):
+
+- [mt5-httpapi homepage](https://github.com/psyb0t/mt5-httpapi)
+- [Setup guide](references/setup.md)
+- [Wickworks indicator catalog](https://github.com/psyb0t/docker-wickworks#available-indicators)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl commands, JSON examples, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-provided MT5_API_URL and, when server authentication is enabled, MT5_API_TOKEN.]
+
+## Skill Version(s):
+
+4.13.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

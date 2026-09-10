@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coupang 综合研究"
+  short_description: "组合商品、规格、类目和历史完成韩国站选品"
+  default_prompt: "使用极鲸云真实数据完成 Coupang 韩国站综合选品研究。"

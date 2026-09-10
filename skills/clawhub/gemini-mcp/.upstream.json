@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/gemini-mcp",
   "slug": "gemini-mcp",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1784480475666,
-  "contentHash": "8419de4cf5344f405934b2f1bb021e7507901a5366eb363e10f5093dec0bf7de",
-  "fetchedAt": "2026-07-26T18:10:31.421Z"
+  "version": "1.14.0",
+  "updatedAt": 1788981886214,
+  "contentHash": "c4dac1bfa402f96874b54bad2de156f84e2c2c72517b9ed7238763a71dfad974",
+  "fetchedAt": "2026-09-10T12:25:37.943Z"
 }

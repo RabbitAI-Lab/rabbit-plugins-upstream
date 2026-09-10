@@ -1,45 +1,62 @@
-## Description: <br>
-Lovart Skill enables agents to generate images, videos, audio, and music through Lovart AI while managing Lovart projects, conversation threads, uploads, downloads, user settings, and generation modes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lovart API lets agents generate images, videos, audio, music, and design assets through Lovart AI while managing Lovart projects, conversation threads, uploads, downloads, and generation settings.
 
-## Publisher: <br>
-[lovart-admin](https://clawhub.ai/user/lovart-admin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lovart-admin](https://clawhub.ai/user/lovart-admin)
 
-## Use Case: <br>
-External users and developers use this skill to request Lovart AI media generation or manage Lovart project and thread state from an agent. It supports reference uploads, generated artifact downloads, project canvas links, and mode or model selection for Lovart generation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, selected attachments, and generated-artifact traffic are sent to Lovart using the user's Lovart API keys. <br>
-Mitigation: Install and use the skill only when this Lovart data flow is acceptable for the user's content and account. <br>
-Risk: The skill can reuse local Lovart project and thread history stored in ~/.lovart/state.json. <br>
-Mitigation: Review or clear ~/.lovart/state.json when project or conversation continuity should not be reused. <br>
-Risk: TLS verification can be weakened when LOVART_INSECURE_SSL is set. <br>
-Mitigation: Avoid setting LOVART_INSECURE_SSL unless the user knowingly accepts weaker TLS protection. <br>
-Risk: Some high-cost generation operations may consume Lovart credits. <br>
-Mitigation: Require explicit user confirmation before running confirmation commands for credit-consuming operations. <br>
+## Use Case:
 
+External users and developers use this skill to send creative generation requests to Lovart AI, retrieve generated media files, and continue work across Lovart projects and conversation threads.
 
-## Reference(s): <br>
-- [Lovart Skill on ClawHub](https://clawhub.ai/lovart-admin/skills/lovart-skill) <br>
-- [Lovart Project Canvas](https://www.lovart.ai/canvas?projectId={project_id}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON command output, and downloaded media files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Lovart API credentials; generated artifacts may be downloaded to local paths and project/thread state may be persisted in ~/.lovart/state.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts and selected local files may be sent to Lovart for generation or upload.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and file paths before use, and avoid sending confidential or regulated data unless approved.
+
+Risk: The skill stores project and thread history locally and may reuse recent Lovart threads by default.
+
+Mitigation: Inspect local Lovart configuration and thread state before sensitive work, and switch or remove threads when context reuse is not desired.
+
+Risk: TLS verification can be disabled with LOVART_INSECURE_SSL, increasing exposure to intercepted traffic.
+
+Mitigation: Keep TLS verification enabled and avoid setting LOVART_INSECURE_SSL except in reviewed, controlled environments.
+
+Risk: Upload and download commands can move data between local paths, Lovart services, and generated artifact URLs.
+
+Mitigation: Use trusted paths and URLs only, and scan downloaded artifacts before opening or redistributing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lovart-admin/skills/lovart-skill)
+- [Lovart project canvas](https://www.lovart.ai/canvas?projectId={project_id})
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown status messages with JSON command output and downloaded media file attachments.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LOVART_ACCESS_KEY and LOVART_SECRET_KEY; may store project and thread history under ~/.lovart and download generated files to /tmp/lovart.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

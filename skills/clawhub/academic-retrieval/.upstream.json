@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/academic-retrieval",
   "slug": "academic-retrieval",
   "ownerHandle": null,
-  "version": "0.9.0",
-  "updatedAt": 1783062688701,
-  "contentHash": "c38608b387241037cb86b76d839c7855f8b1ab429ca6f32fc0dc5caf8b62ca07",
-  "fetchedAt": "2026-07-26T18:20:53.573Z"
+  "version": "0.14.1",
+  "updatedAt": 1789018155484,
+  "contentHash": "d76b5c9c787f38c9eab64a8a44c35d4b6147855945dc6807ccced0336010833a",
+  "fetchedAt": "2026-09-10T12:20:26.420Z"
 }

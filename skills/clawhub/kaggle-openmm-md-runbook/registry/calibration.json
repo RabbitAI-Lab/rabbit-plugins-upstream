@@ -1,0 +1,150 @@
+{
+ "version": "1.2.3",
+ "system": "1LPB porcine pancreatic lipase-colipase + orlistat (positive control)",
+ "purpose": "Literature-grounded acceptance bands: a 5 ns / 2 fs OpenMM calibration run must reproduce these published pancreatic-lipase MD observables before any production run is trusted (R19). Every number below was verified against the primary-source full text on 2026-09-09; unverified claims from earlier drafts were corrected or removed.",
+ "verification_note": "Corrections vs draft v1.2.0: DOI confirmed 10.2147/DDDT.S84052 (a research model had hallucinated S87313); the 50 ns extension with 98% Ser152 occupancy belongs to the LEAD complex (zinc 85893731), not orlistat; the Ser152 distances 2.05/8.47/15.35 A belong to lead/ejected hits respectively; one unverified Rg numeric range (2.65-2.75 nm) was dropped; 'protein+ligand consistent RMSD from 2.5 ns' is the lead complex, not orlistat.",
+ "ligand": {
+  "name": "orlistat (tetrahydrolipstatin)",
+  "pubchem_cid": 3034010,
+  "inchikey": "AHLBNYSZXLDEJQ-FWEHEUNISA-N",
+  "formula": "C29H53NO5",
+  "atoms_with_H": 88,
+  "experimental_ic50_um": [
+   {
+    "value": 0.481,
+    "sd": 0.023,
+    "source": "L2 Zhang 2026 (in vitro positive control)"
+   },
+   {
+    "value": 0.14,
+    "sd": 0.0,
+    "source": "L3 Tran 2024 (in vitro reference)"
+   },
+   {
+    "value": 8.1,
+    "sd": 0.5,
+    "source": "L5 Mughal 2025 (different assay; illustrates assay-dependence)"
+   }
+  ],
+  "docking_score_1lpb_kcal_mol": {
+   "vina_this_workspace": -6.713,
+   "lit_glide_v2015": -6.901,
+   "lit_glide_okra_2026": -6.9
+  }
+ },
+ "gates": {
+  "CAL-01": {
+   "metric": "protein_rmsd_plateau_A",
+   "band": "1.0-3.0 A plateau, drift < 0.5 A over final 2 ns",
+   "source": "L1 V2015: protein RMSD 1.25 -> max 2.5 A (fluct 6-8 ns, stable to 10 ns); L5 Mughal 2025: 2.0-2.5 A after 10 ns; L7 Life 2026: 0.15-0.22 nm"
+  },
+  "CAL-02": {
+   "metric": "ligand_rmsd_final2ns_A",
+   "band": "<= 5.0 A, no monotonic ejection (slope <= 0.002 A/ps)",
+   "source": "L1 V2015: orlistat ligand RMSD 1.2-4.8 A over 10 ns"
+  },
+  "CAL-03": {
+   "metric": "d_ser152_lig_A",
+   "band": "mean final-2-ns min distance < 6.0 A (ejected ligands: 8-15 A)",
+   "source": "L1 V2015: lead Ser152 distance 2.04 -> 2.05 A (before/after MDS); ejected hits 1.85 -> 8.47 A and 1.73 -> 15.35 A; L3 Tran 2024: orlistat beta-lactone ~2.55 A from Ser152 OH"
+  },
+  "CAL-04": {
+   "metric": "occ_ser152",
+   "band": ">= 0.50 of final-2-ns frames with Ser152 H-bond/contact",
+   "source": "L1 V2015: orlistat Ser152 H-bond occupancy 64% over 10 ns"
+  },
+  "CAL-05": {
+   "metric": "occ_phe77",
+   "band": ">= 0.30 (His263 informative, not gating)",
+   "source": "L1 V2015: Phe77 77%, His263 30% (partial 6-10 ns)"
+  },
+  "CAL-06": {
+   "metric": "triad_max_rmsf_A",
+   "band": "< 1.0 A for Ser152/Asp176/His263",
+   "source": "L7 Life 2026: core catalytic triad stable in both complexes; L5 Mughal 2025: RMSF 0.1-0.3 nm"
+  },
+  "CAL-07": {
+   "metric": "global_max_rmsf_A",
+   "band": "< 3.0 A (lid/termini tolerance documented)",
+   "source": "L1 V2015: RMSF maintained below 3.0 A with orlistat"
+  },
+  "CAL-08": {
+   "metric": "rg_sigma_A",
+   "band": "< 0.5 A (std of Rg over final 2 ns)",
+   "source": "L7 Life 2026: stable Rg ~1.97 nm throughout (health criterion; no verified numeric range for PL Rg in L2)"
+  },
+  "CAL-09": {
+   "metric": "pe_rel_drift",
+   "band": "< 0.01 relative drift over final 2 ns",
+   "source": "L1 V2015: complex energy stable at -450 kcal/mol from 8 ns of the 10 ns run"
+  },
+  "CAL-10": {
+   "metric": "density_g_cm3",
+   "band": "0.985-1.02",
+   "source": "standard NPT 1 bar / 310 K health check (implicit in all cited NPT studies)"
+  },
+  "CAL-11": {
+   "metric": "temp_K",
+   "band": "307-313 K (mean)",
+   "source": "310 K physiological setpoint (runbook); 300-310 K across cited studies"
+  },
+  "CAL-12": {
+   "metric": "hb_any_occ",
+   "band": ">= 0.50 frames with >= 1 protein-ligand H-bond",
+   "source": "L1 V2015: sustained H-bond network (Ser152 + Phe77 throughout, 'small naps'); L2 Zhang 2026: good binders keep > 3 H-bonds most of the simulation"
+  }
+ },
+ "validity_argument": {
+  "short_run_validity": [
+   "L1 V2015: the LEAD complex shows consistent RMSD from 2.5 ns onward, and complex energy is stable from 8 ns of a 10 ns run",
+   "L1 V2015: the same study's LEAD was extended to 50 ns — conclusions held and the Ser152 interaction rose to 98% (no regime change)",
+   "L6 catechin 2022: the catechin system equilibrates in ~5 ns (chlorogenic ~40 ns; orlistat complex flat after ~55 ns of 100 ns)",
+   "L7 Life 2026: both 100 ns PL complexes equilibrate within 20 ns, then flat RMSD/Rg — a 5 ns window samples the equilibrated regime of a well-behaved pose",
+   "L1 V2015: discrimination is retained at 10 ns — orlistat keeps Phe77+Ser152 (64-77%) while 3 of 4 weaker hits lose ALL interactions (Ser152 distance 8.47/15.35 A)"
+  ],
+  "decision_rule": "ALL 12 gates PASS => pipeline validated (inputs, solvation, FF assignment, integration, analysis all literature-consistent); any FAIL => debug before production (R19).",
+  "scope_note": "The 5 ns window follows ~1 ns of B1-B5 equilibration (total ~6 ns of dynamics) and is a PIPELINE calibration (inputs, solvation, FF assignment, integration, analysis), not a binding-mode discovery run. Well-behaved poses plateau within it (lead from 2.5 ns; catechin ~5 ns); if CAL-01 is still rising at 5 ns, extend to 10 ns (V2015's own window) before judging the pipeline — a FAIL is always the conservative outcome."
+ },
+ "literature": [
+  {
+   "id": "L1",
+   "cite": "Veeramachaneni GK, Raj KK, Subba Rao NV, et al. High-throughput virtual screening with e-pharmacophore and molecular simulations study in the designing of pancreatic lipase inhibitors. Drug Des Devel Ther. 2015;9:4397-4412. doi:10.2147/DDDT.S84052, PMID 26273199, PMC4532172",
+   "role": "primary calibration anchor: 10 ns Desmond 3.6 / OPLS-2005 / SPC / 0.15 M salt / NPT 300 K MD of 1LPB complexes incl. orlistat"
+  },
+  {
+   "id": "L2",
+   "cite": "Zhang Z, Long J, Li T, et al. Identification of Potential Pancreatic Lipase Inhibitors from Traditional Chinese Medicines via Molecular Docking, Molecular Dynamics Simulation and In Vitro Validation. Curr Issues Mol Biol. 2026;48(4):404. PMC13114888",
+   "role": "100 ns MD + MM/PBSA (-12.03..-21.24 kcal/mol); PL mean RMSD <= 0.212 nm; orlistat IC50 0.481 +/- 0.023 uM; quercetin control 0.231 mM"
+  },
+  {
+   "id": "L3",
+   "cite": "Tran TH, Mai TT, Ho TTT, et al. Inhibition of Pancreatic Lipase by Flavonoid Derivatives: In Vitro and In Silico Investigations. Adv Pharmacol Pharm Sci. 2024;2024:6655996. doi:10.1155/2024/6655996, PMID 38298460, PMC10830309",
+   "role": "orlistat IC50 0.14 uM; beta-lactone ~2.55 A from Ser152; weaker flavonoids 17.7+ uM"
+  },
+  {
+   "id": "L4",
+   "cite": "Nirmale D, Jalalpure S. Insight into the interaction of human pancreatic lipase with potential anti-obesity drug, Cetilistat, using a molecular docking and molecular dynamics simulation study. TMR Pharmacol Res. 2022;2(3):11",
+   "role": "ligand parameterization protocol anchor: GROMACS 2020.5, amber ff99SB + GAFF/AM1-BCC (Antechamber), 500 ps NVT+NPT, 100 ns production"
+  },
+  {
+   "id": "L5",
+   "cite": "Mughal EU, Naeem N, Jabeen A, et al. Flavonols as potent inhibitors of tyrosinase & pancreatic lipase: synthesis, docking, MD simulation, DFT, and ADMET. Future Med Chem. 2025;17(16):1977-1992. doi:10.1080/17568919.2025.2550925, PMC12407851",
+   "role": "1LPB-orlistat MD: RMSD stable 2.0-2.5 A after initial 10 ns; RMSF 0.1-0.3 nm"
+  },
+  {
+   "id": "L6",
+   "cite": "Inhibitive Property of Catechin and Chlorogenic Acid against Human Pancreatic Lipase: Molecular Docking and Molecular Dynamics Simulation Investigations. S A Chem A. 2022;5(3):226-240",
+   "role": "equilibration timescales: catechin ~5 ns, chlorogenic ~40 ns; orlistat complex flat after ~55 ns of 100 ns"
+  },
+  {
+   "id": "L7",
+   "cite": "Integrative Pharmacological and Computational Analysis of Abelmoschus esculentus Phytochemicals: Enzyme Inhibition, Molecular Docking, and Dynamics Simulation Against Key Antidiabetic Targets. Life. 2026;16(3):530",
+   "role": "100 ns MD with orlistat control: both complexes equilibrate within 20 ns; RMSD 0.15-0.22 nm; Rg ~1.97 nm; triad Ser152/Asp176/His263 stable"
+  },
+  {
+   "id": "X1",
+   "cite": "PDB 1LPB: The 2.46 A resolution structure of the pancreatic lipase-colipase complex inhibited by a C11 alkyl phosphonate. Egloff MP, Van Tilbeurgh H, Cambillau C. 1994",
+   "role": "receptor structure (porcine PPL-colipase + MUP + Ca2+)"
+  }
+ ]
+}

@@ -1,48 +1,67 @@
-## Description: <br>
-WooCommerce REST API integration with managed OAuth for accessing products, orders, customers, coupons, shipping, taxes, reports, webhooks, payment gateways, store settings, and system status tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WooCommerce REST API integration with managed OAuth for accessing products, orders, customers, coupons, shipping, taxes, reports, webhooks, payment gateways, store settings, and system status tools.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Store operators and developers use this skill to manage WooCommerce e-commerce operations through Maton-mediated REST API calls. It supports catalog, order, customer, coupon, shipping, tax, reporting, webhook, payment, settings, and system-status workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make changes to a real WooCommerce store through Maton-mediated access. <br>
-Mitigation: Install only when store-management access is intended, use the least-privileged practical store account, and confirm write operations before execution. <br>
-Risk: Customer and order workflows may expose personal information. <br>
-Mitigation: Avoid retrieving or displaying customer or order PII unless it is needed for the specific task. <br>
-Risk: Refunds, deletes, payment gateway changes, store settings changes, webhook creation, and system maintenance actions can affect customers or store operations. <br>
-Mitigation: Carefully confirm the target resource, requested action, and expected store-wide impact before performing these operations. <br>
+## Use Case:
 
+External developers, store operators, and agents use this skill to manage WooCommerce store operations through Maton, including catalog, order, customer, coupon, tax, shipping, reporting, webhook, payment gateway, settings, and system status tasks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/woocommerce) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [WooCommerce REST API Documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/) <br>
-- [WooCommerce API Authentication Guide](https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication) <br>
-- [WooCommerce Developer Resources](https://developer.woocommerce.com/) <br>
-- [Maton API](https://api.maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, curl, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can access sensitive WooCommerce store data, including customer and order personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton access to the store is intended, prefer OAuth and read-only scopes where possible, and avoid retrieving or displaying personal information unless needed for the task.
+
+Risk: Write operations, payment gateway changes, settings updates, webhooks, customer deletion, and system status tools can affect customers, transactions, or live store behavior.
+
+Mitigation: Default to read and list calls, confirm the exact target, payload, and intended effect before any POST, PUT, PATCH, or DELETE request, and use extra confirmation for disruptive maintenance actions.
+
+Risk: Long-lived Maton API keys can be exposed through environment variables, logs, command history, or pasted output.
+
+Mitigation: Use OAuth when possible, avoid exposing MATON_API_KEY, never print or persist credentials, and rotate the key if it was disclosed.
+
+Risk: Multiple Maton profiles or WooCommerce connections can cause requests to affect the wrong store.
+
+Mitigation: Specify the intended Maton profile and WooCommerce connection when more than one exists, especially before any write operation.
+
+## Reference(s):
+
+- [ClawHub WooCommerce Skill](https://clawhub.ai/byungkyu/skills/woocommerce)
+- [Maton](https://maton.ai)
+- [WooCommerce REST API Documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/)
+- [WooCommerce API Authentication Guide](https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Maton CLI or SDK workflows; favors read and list operations before any confirmed change.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,71 @@
-## Description: <br>
-Snapchat Marketing API integration with managed OAuth for managing ad accounts, campaigns, ad squads, ads, creatives, audiences, targeting, and performance reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Snapchat Marketing API integration with managed OAuth for managing ad accounts, campaigns, ad squads, ads, creatives, audiences, and performance stats.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External advertisers, marketers, and developers use this skill to connect a Snapchat Marketing API account through Maton and manage advertising resources, reporting, targeting, and public ads library lookups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API credentials provide access to the connected Snapchat Marketing API account. <br>
-Mitigation: Install only when Maton-brokered Snapchat access is intended, keep MATON_API_KEY secret, and avoid exposing it in logs, prompts, or shared files. <br>
-Risk: Campaign, budget, targeting, creative, audience, and delete actions can materially change an advertising account. <br>
-Mitigation: Review the target resource and intended effect, then require explicit user approval before create, update, or delete requests. <br>
-Risk: When multiple Snapchat connections exist, requests could affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header to select the intended connection before account-specific requests. <br>
+## Use Case:
 
+External users and developers use this skill to work with Snapchat Marketing API resources through Maton, including campaign setup, account inspection, performance reporting, creative management, and targeting workflows.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Snapchat Ads API Introduction](https://developers.snap.com/api/marketing-api/Ads-API/introduction) <br>
-- [Snapchat API Patterns](https://developers.snap.com/api/marketing-api/Ads-API/api-patterns) <br>
-- [Snapchat Campaign Management](https://developers.snap.com/api/marketing-api/Ads-API/campaigns) <br>
-- [Snapchat Creative Management](https://developers.snap.com/api/marketing-api/Ads-API/creatives) <br>
-- [Snapchat Targeting](https://developers.snap.com/api/marketing-api/Ads-API/targeting) <br>
-- [Snapchat Ads Gallery API](https://developers.snap.com/api/marketing-api/Ads-Gallery-Api/using-the-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and inline bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and, for account-specific actions, a connected Snapchat OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Authorized calls can affect Snapchat campaigns, ads, audiences, and advertising spend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact ad account, connection, resource identifiers, payload, and intended effect before any write or delete action.
+
+Risk: Long-lived API keys or provider-issued credentials can leak through logs, command lines, files, shell history, or copied output.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist credential values, and send raw API-key requests only to api.maton.ai when the CLI cannot be used.
+
+Risk: The Maton API passthrough can reach endpoints beyond the documented examples if the connected account is authorized for them.
+
+Mitigation: Default to read/list calls, use least-privilege OAuth scopes, specify the intended connection when multiple connections exist, and apply write-confirmation rules to every endpoint.
+
+Risk: Data returned by the Snapchat API may include untrusted or sensitive account, campaign, or user information.
+
+Mitigation: Treat fetched content as data, avoid executing or following instructions from API responses, and return only the fields needed for the user's task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/snapchat)
+- [Maton Homepage](https://maton.ai)
+- [Snapchat Ads API Introduction](https://developers.snap.com/api/marketing-api/Ads-API/introduction)
+- [Snapchat API Patterns](https://developers.snap.com/api/marketing-api/Ads-API/api-patterns)
+- [Snapchat Campaign Management](https://developers.snap.com/api/marketing-api/Ads-API/campaigns)
+- [Snapchat Creative Management](https://developers.snap.com/api/marketing-api/Ads-API/creatives)
+- [Snapchat Targeting](https://developers.snap.com/api/marketing-api/Ads-API/targeting)
+- [Snapchat Ads Gallery API](https://developers.snap.com/api/marketing-api/Ads-Gallery-Api/using-the-api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to prefer read/list calls and require explicit user approval before connection creation, writes, or deletes.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Read-only MCP skill for retrieving Workday HR tasks, pay, benefits, and compensation data through the user's signed-in browser session. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Workday MCP lets an agent read Workday org charts, worker profiles, pay, benefits, compensation, performance, and task or data cards through a signed-in Workday browser session.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Employees and authorized Workday users use this skill to inspect their own Workday tasks and HR data, including pay, benefits, compensation, and related task details, from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose private HR, pay, benefits, and compensation data available in the user's signed-in Workday browser session. <br>
-Mitigation: Install only when acceptable under employer policy, keep prompts explicit when requesting Workday data, and disable or remove the MCP and extension pairing when it is no longer needed. <br>
-Risk: The browser extension bridge depends on the user's live Workday session and approved local pairing. <br>
-Mitigation: Use the health check to confirm the bridge and session state, approve pairing only for the intended MCP server, and re-authenticate or disconnect when the session is no longer intended for agent access. <br>
+## Use Case:
 
+Employees and authorized Workday users use this skill to let an agent retrieve Workday people, organization, compensation, benefits, performance, and task data available to their signed-in browser session.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/workday-mcp) <br>
-- [workday-mcp npm package](https://www.npmjs.com/package/workday-mcp) <br>
-- [fetchproxy extension setup](https://github.com/chrischall/fetchproxy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, configuration, guidance] <br>
-**Output Format:** [Structured JSON from MCP tools with Markdown setup and usage guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Workday access; requires workday-mcp, the fetchproxy browser extension, tenant configuration, and an active signed-in Workday browser session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server-resolved release metadata) <br>
+Risk: The skill can expose sensitive Workday HR data available to the signed-in browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use only with an intended Workday account and tenant, and treat results as potentially including any Workday data that session is authorized to read.
+
+Risk: The setup instructions use remote MCP and browser-extension components.
+
+Mitigation: Pin and verify the MCP package and fetchproxy extension source before use.
+
+Risk: Raw fetch and GraphQL escape-hatch tools may return broader or less-modeled Workday data.
+
+Mitigation: Avoid those tools unless the user understands exactly what Workday data the request may return.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/workday-mcp)
+- [npm package referenced by artifact](https://www.npmjs.com/package/workday-mcp)
+- [Source repository referenced by artifact](https://github.com/chrischall/workday-mcp)
+- [Fetchproxy extension source referenced by artifact](https://github.com/chrischall/fetchproxy)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON]
+
+**Output Format:** [Structured JSON responses with text guidance from the selected Workday tool.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only behavior is described by the artifact; returned data scope depends on what the signed-in Workday session can access.]
+
+## Skill Version(s):
+
+0.6.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

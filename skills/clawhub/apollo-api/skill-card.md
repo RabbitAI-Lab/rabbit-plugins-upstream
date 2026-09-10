@@ -1,52 +1,70 @@
-## Description: <br>
-Apollo provides managed Apollo.io API access for searching and enriching people and companies and managing contacts, accounts, and sales sequences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Apollo helps agents use the Apollo.io API through Maton OAuth to search and enrich people and companies and manage contacts, accounts, sequences, labels, and related sales data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Sales, growth, and revenue-operations users use this skill through an agent to prospect, enrich leads, and manage Apollo contacts, accounts, and sequences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access business-sensitive Apollo data such as contacts, accounts, opportunities, sequences, and email data. <br>
-Mitigation: Install only for agents intended to use the connected Apollo account and avoid exposing returned sales data unnecessarily. <br>
-Risk: Create, update, delete, and sequence actions can change Apollo records or outreach. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing write operations. <br>
-Risk: Person and email enrichment may consume Apollo credits. <br>
-Mitigation: Confirm enrichment requests when credit use matters and keep batch sizes intentional. <br>
-Risk: Multiple active Apollo connections can route requests to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one Apollo connection is available. <br>
+## Use Case:
 
+Sales, growth, and operations users can use this skill to prospect, enrich leads, inspect Apollo account data, and manage sales records through approved API calls. Developers can also use it for guided CLI or SDK access to Apollo through Maton.
 
-## Reference(s): <br>
-- [ClawHub Apollo release](https://clawhub.ai/byungkyu/skills/apollo-api) <br>
-- [Apollo API Overview](https://docs.apollo.io/reference) <br>
-- [Search People](https://docs.apollo.io/reference/people-api-search.md) <br>
-- [Enrich Person](https://docs.apollo.io/reference/people-enrichment.md) <br>
-- [Search Organizations](https://docs.apollo.io/reference/organization-search.md) <br>
-- [Enrich Organization](https://docs.apollo.io/reference/organization-enrichment.md) <br>
-- [Create Contact](https://docs.apollo.io/reference/create-a-contact.md) <br>
-- [Apollo LLM Reference](https://docs.apollo.io/llms.txt) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, shell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Apollo access can expose or modify contacts, accounts, opportunities, sequences, and email-related data in the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege OAuth scopes, connect only the required account, and specify the intended connection when more than one Apollo or Maton account is available.
+
+Risk: Write, deletion, sequence enrollment, or other high-impact API calls can change sales data or trigger downstream communication workflows.
+
+Mitigation: Default to read and list calls, verify identifiers and current state first, and require explicit user confirmation of the target, payload, and intended effect before any modifying request.
+
+Risk: Credential exposure is possible if API keys or provider-issued tokens are printed, logged, passed on command lines, or stored outside the credential manager.
+
+Mitigation: Prefer OAuth through the Maton CLI, keep credentials in the operating system credential store, and never print, persist, inspect, or transmit credential values outside the approved gateway flow.
+
+Risk: Apollo API response content may contain untrusted data that should not control later tool use.
+
+Mitigation: Treat returned records, messages, comments, and webhook payloads as data; do not execute or follow instructions embedded in API responses.
+
+## Reference(s):
+
+- [Apollo Skill on ClawHub](https://clawhub.ai/byungkyu/skills/apollo-api)
+- [Maton](https://maton.ai)
+- [Apollo API Overview](https://docs.apollo.io/reference)
+- [Apollo People Search](https://docs.apollo.io/reference/people-api-search.md)
+- [Apollo People Enrichment](https://docs.apollo.io/reference/people-enrichment.md)
+- [Apollo Organization Search](https://docs.apollo.io/reference/organization-search.md)
+- [Apollo Organization Enrichment](https://docs.apollo.io/reference/organization-enrichment.md)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, code, configuration, API calls]
+
+**Output Format:** [Markdown with inline shell commands, JSON payloads, and Python or JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce read-only API calls by default and write-call proposals that require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata; artifact frontmatter says 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

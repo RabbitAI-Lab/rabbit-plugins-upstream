@@ -1,44 +1,73 @@
-## Description: <br>
-SharePoint API integration via Microsoft Graph with managed OAuth for accessing SharePoint sites, lists, document libraries, and files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft SharePoint guides agents through SharePoint site, list, document library, and file operations via Microsoft Graph using Maton-managed OAuth or a Maton API key fallback.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to make authenticated Microsoft Graph requests through Maton for SharePoint document management, list operations, site discovery, file handling, sharing, and permissions workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-managed OAuth and MATON_API_KEY to access and modify SharePoint content. <br>
-Mitigation: Protect MATON_API_KEY like a password and use the least-privileged SharePoint account practical. <br>
-Risk: Write and sharing operations can change files, lists, folders, or permissions in the connected SharePoint account. <br>
-Mitigation: Confirm the target resource, intended effect, audience, link scope, and expiration or revocation plan before approving write or sharing operations. <br>
+## Use Case:
 
+Developers, operators, and agent users use this skill to inspect and manage SharePoint sites, lists, document libraries, files, sharing links, and versions through Maton-mediated Microsoft Graph calls. It is intended for SharePoint document management, list operations, site content workflows, and troubleshooting while defaulting to read/list operations.
 
-## Reference(s): <br>
-- [Microsoft SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint) <br>
-- [Microsoft Graph DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem) <br>
-- [Microsoft Graph List API](https://learn.microsoft.com/en-us/graph/api/resources/list) <br>
-- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP examples, shell commands, Python snippets, JavaScript snippets, and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: SharePoint or Maton credentials could be exposed through logs, command lines, files, or raw HTTP fallback handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist credentials, avoid command-line secrets, and send Maton API keys only to api.maton.ai when the CLI cannot be installed.
+
+Risk: Write, delete, upload, or sharing operations can modify content, revoke access, or expose SharePoint data.
+
+Mitigation: Default to read/list calls and require explicit user confirmation of the target resource, payload, and intended effect before POST, PUT, PATCH, DELETE, upload, delete, or sharing-link operations.
+
+Risk: Ambiguous Maton profiles or multiple SharePoint connections can route a request to the wrong account or tenant.
+
+Mitigation: List active connections, match the intended connection ID, and specify the connection or profile when more than one candidate exists.
+
+Risk: SharePoint responses may contain personal, confidential, or adversarial content.
+
+Mitigation: Extract only fields needed for the task, avoid dumping raw responses into logs or files, and treat retrieved content as untrusted data rather than executable instructions.
+
+Risk: The Maton API passthrough can reach endpoints beyond the examples documented by the skill if the connected account permits them.
+
+Mitigation: Use least-privilege SharePoint scopes, prefer read-only access where possible, and apply the same confirmation rules to every passthrough endpoint.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/sharepoint)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Microsoft Graph SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint)
+- [Microsoft Graph DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem)
+- [Microsoft Graph List API](https://learn.microsoft.com/en-us/graph/api/resources/list)
+- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses should minimize returned SharePoint data and require explicit confirmation before connection creation, writes, uploads, deletes, sharing changes, or other high-impact operations.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

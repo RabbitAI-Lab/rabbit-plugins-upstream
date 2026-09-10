@@ -1,0 +1,106 @@
+{
+  "name": "newsgroup-update",
+  "description": "Update one Tradebee news group with automatic pre-update backup.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact enabled site language selected from languages-get; it must match the target news group."
+      },
+      "newsgroup": {
+        "type": "object",
+        "description": "Required update payload. Include newsgroup_id and only fields that should change.",
+        "properties": {
+          "newsgroup_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required positive news-group ID selected from newsgroup-read."
+          },
+          "group_name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 300,
+            "description": "Optional new group name containing 2-300 characters. Omit it to keep the current name."
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 50,
+              "description": "News-group tag containing 1-50 characters."
+            },
+            "description": "Optional replacement array of 1-6 tags. Omit it to keep current tags."
+          },
+          "brief_description": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional new brief description, up to 300 characters. Omit it to keep the current value."
+          },
+          "seo": {
+            "type": "object",
+            "description": "Optional SEO fields to change. Omit this object or an individual field to keep its current value.",
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 90,
+                "description": "Optional new SEO title, up to 90 characters. Omit it to keep the current title."
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Optional new SEO description, up to 200 characters. Omit it to keep the current description."
+              },
+              "keywords": {
+                "type": "string",
+                "maxLength": 120,
+                "description": "Optional new comma-separated SEO keywords, up to 6 keywords and 120 total characters. Omit it to keep current keywords."
+              }
+            }
+          }
+        },
+        "required": [
+          "newsgroup_id"
+        ]
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval covering update and backup.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language, update fields, and automatic backup approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "newsgroup",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result plus backup snapshot and restore payload."
+  },
+  "dependencies": {
+    "newsgroup.newsgroup_id": {
+      "skill": "newsgroup-read",
+      "field": "data.list[].newsgroup_id",
+      "mode": "select"
+    }
+  }
+}

@@ -1,44 +1,61 @@
-## Description: <br>
-Turing-inspired, privacy-first IT and telecommunications engineering for lawful Internet troubleshooting, evidence-based incident reporting, and authorized resilience work affecting users and organizations in Iran. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TuringNet Iran Connectivity Engineer helps agents perform privacy-first, lawful troubleshooting for Iran-context connectivity outages, Wi-Fi and mobile-data failures, DNS/TLS issues, ISP escalation, redacted evidence, bilingual support tickets, and low-bandwidth reports.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External users, support teams, schools, small businesses, nonprofits, and authorized network or service operators use this skill to structure lawful connectivity troubleshooting, privacy-preserving outage reports, bilingual support tickets, and authorized resilience planning for Internet and mobile-service issues affecting users and organizations in Iran. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles connectivity incidents that may involve sensitive user, subscriber, device, location, or network evidence. <br>
-Mitigation: Collect only redacted, minimum necessary evidence; avoid secrets and subscriber identifiers; keep original evidence local; and use public reports only in aggregate, opt-in form. <br>
-Risk: Network or shell diagnostics could be misused outside the operator's authority. <br>
-Mitigation: Run diagnostics only on systems the operator owns or is explicitly authorized to assess, keep network access disabled by default, and avoid scanning, flooding, exploitation, tunnels, or control bypass. <br>
-Risk: Outage analysis can lead to unsupported attribution or misleading causal claims. <br>
-Mitigation: Separate observations from hypotheses, document confidence and unresolved alternatives, and attribute causes only when credible, relevant evidence supports the conclusion. <br>
+## Use Case:
 
+Support agents, help desks, incident leads, and authorized network operators use this skill to triage Iran-context connectivity issues, redact sensitive evidence, draft bilingual support materials, and prepare low-bandwidth reports. It is intended for lawful troubleshooting within user-owned or explicitly authorized scopes, not bypass, scanning, or credential collection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/turingnet-iran-connectivity-engineer) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
+### Deployment Geography for Use:
 
+Iran
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance, checklists, support-ticket drafts, incident reports, playbooks, and approved local diagnostic command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Network access is disabled by default; diagnostics are limited to local parsing and explicitly authorized, low-rate checks on systems the operator owns or is permitted to assess.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence) <br>
+Risk: The skill handles sensitive troubleshooting evidence, and the server security summary says its privacy and guard guarantees are weakened by implementation issues.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, review redacted output before sharing, avoid --collect on shared machines, and do not use --skip-guard.
+
+Risk: Explicit networked commands can contact status pages or owned targets when invoked.
+
+Mitigation: Only allowlist known public status-page hosts and run owned-scope diagnostics only with clear authorization.
+
+Risk: The installation fallback using npx @latest can retrieve changing package contents.
+
+Mitigation: Use a pinned or reviewed installation path instead of the npx @latest fallback until the issue is fixed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/turingnet-iran-connectivity-engineer)
+- [Agent discovery](artifact/AGENT_DISCOVERY.md)
+- [README](artifact/README.md)
+- [Version history](artifact/references/history.md)
+- [Verdict schema](artifact/schema/verdict.v1.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command snippets, JSON verdicts, redacted text, support tickets, checklists, and low-bandwidth HTML reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3, bash, and curl; network use is off by default except explicit status-page requests and owned-scope diagnostics.]
+
+## Skill Version(s):
+
+2.3.2 (source: server release metadata; artifact frontmatter lists 2.3.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

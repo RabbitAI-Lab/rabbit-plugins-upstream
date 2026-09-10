@@ -1,45 +1,58 @@
-## Description: <br>
-Turns any industry into a daily intelligence briefing by searching, filtering, writing, and delivering structured briefs to configured channels with formatting checks and a business review gate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn any industry into a daily intelligence briefing: an AI agent searches, filters, writes, and delivers structured daily briefs to configured channels with formatting checks and a business review gate.
 
-## Publisher: <br>
-[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj)
 
-## Use Case: <br>
-Practitioners, analysts, and teams use this skill to generate sourced daily industry intelligence briefs and distribute them through configured collaboration, email, or publishing channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send generated brief content outside the workspace through configured delivery channels. <br>
-Mitigation: Enable only intended delivery targets and review the configured recipients or webhooks before use. <br>
-Risk: GitHub Pages delivery can publish report output to the public internet. <br>
-Mitigation: Use GitHub Pages only for content intended for public release and review the generated report before publishing. <br>
-Risk: Channel credentials and tokens are needed for delivery integrations. <br>
-Mitigation: Store credentials in environment variables or a secret store rather than committing them in configuration files. <br>
+## Use Case:
 
+Developers, analysts, and operations teams use this skill to produce recurring industry intelligence briefs from public sources. It is suited for daily newsletters or internal briefings that need source tracing, recency checks, structured sections, Markdown and HTML outputs, and optional delivery to configured channels.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/haiyangchenbj/skills/data-ai-daily-brief) <br>
-- [README](README.md) <br>
-- [Changelog](CHANGELOG.md) <br>
-- [CodeBuddy](https://www.codebuddy.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown daily brief, HTML report, and channel-specific delivery content.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write brief files and publish to configured external channels, including public GitHub Pages when enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter, changelog, server release metadata) <br>
+Risk: The skill can create daily briefing files and send content through configured delivery channels.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review config.json, enabled adapters, and local scripts before allowing delivery; keep the business review gate enabled.
+
+Risk: Delivery adapters may use sensitive tokens or webhooks for GitHub, SMTP, Telegram, or chat services.
+
+Mitigation: Provide only the credentials needed for intended channels and verify channel configuration before execution.
+
+Risk: Daily briefs can become misleading if stale or weakly sourced items pass through.
+
+Mitigation: Apply the skill's recency window, source tracing, deduplication, and pre-flight checks before publishing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/haiyangchenbj/skills/data-ai-daily-brief)
+- [Publisher Profile](https://clawhub.ai/user/haiyangchenbj)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown brief, optional HTML page, channel payloads, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The brief uses fixed sections, source links, WeChat summary lines, item counts, and a mandatory pre-flight format check before delivery.]
+
+## Skill Version(s):
+
+5.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

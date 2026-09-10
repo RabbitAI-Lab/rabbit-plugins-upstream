@@ -6,9 +6,11 @@
     "properties": {
       "feedback": {
         "type": "string",
-        "description": "The feedback message"
+        "description": "The feedback message."
       }
     },
-    "required": ["feedback"]
+    "required": [
+      "feedback"
+    ]
   }
 }

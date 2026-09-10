@@ -1,45 +1,64 @@
-## Description: <br>
-Generates condensed time-lapse album highlight reports from local or URL videos by extracting segments that match user-specified keywords or targets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates condensed album highlights from long videos by extracting segments that match user-specified keywords or target subjects.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agents use this skill when a user wants to find and summarize people, pets, scenes, or events in long videos, or retrieve prior time-lapse analysis reports linked to the current account identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send videos, video URLs, and prompts to a cloud analysis service. <br>
-Mitigation: Use it only with media that is appropriate for the listed cloud processing behavior, and avoid sensitive personal media unless that handling is acceptable. <br>
-Risk: The skill silently creates or reuses an account-like identifier and stores account tokens locally. <br>
-Mitigation: Run it in an environment where local account persistence is expected, and clear the skill data store when account linkage should not persist. <br>
-Risk: The skill can retrieve account-linked historical reports with limited user control. <br>
-Mitigation: Review history-query requests before use and avoid sharing the resulting report list or links outside the intended account context. <br>
+## Use Case:
 
+External users and developers use this skill to turn local or URL-based video footage into custom time-lapse highlight summaries focused on selected people, pets, scenes, or events. It can also return account-linked history reports for prior analyses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown report text with embedded JSON and report links; optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history and export links; detail can be basic, standard, or json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter declares 1.0.8) <br>
+Risk: Media uploads and account-linked history queries can expose personal video content or prior report history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disclose these actions to the user and confirm consent before sending media or querying historical reports.
+
+Risk: Automatic account handling and local token persistence may create or retain identity-linked credentials without clear user awareness.
+
+Mitigation: Avoid silent identity creation where possible and store any tokens in a real secret store or avoid persisting them.
+
+Risk: Development and test configuration files include HTTP endpoints.
+
+Mitigation: Default installations should use HTTPS production endpoints and review or remove non-production endpoint configuration before deployment.
+
+Risk: A dependency name may be incorrect.
+
+Mitigation: Correct the dependency specification before installation and verify dependency resolution in a clean environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis)
+- [Publisher profile](https://clawhub.ai/user/18072937735)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text and JSON-like structured analysis with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include exported report links and historical report records.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release metadata; artifact SKILL.md frontmatter reports 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

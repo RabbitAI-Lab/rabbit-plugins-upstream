@@ -1,0 +1,382 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_kind": "replynodes/social-data-skills/appstore-mcp-manifest",
+  "manifest_version": 1,
+  "name": "replynodes-appstore-public-reads",
+  "title": "ReplyNodes App Store Public Reads",
+  "version": "v1",
+  "contract_version": "v1",
+  "description": "Read-only App Store API for iOS app metadata and ASO research through the ReplyNodes prepaid-credit fetcher. Generated from services/social-data-skills/catalog/catalog_appstore.json (#16); do not edit by hand.",
+  "readonly": true,
+  "distribution_note": "Local repository artifact for agent distribution; publication to any registry is explicitly out of scope for this ticket.",
+  "transport": {
+    "type": "streamable_http",
+    "url": "{base_url}",
+    "authentication": {
+      "type": "bearer",
+      "location": "Authorization header",
+      "credential_description": "ReplyNodes fetcher API key issued per workspace; stored server-side as SHA-256 hashes only."
+    }
+  },
+  "instructions": "# ReplyNodes App Store Public Reads (MCP)\n\nRead-only App Store API for iOS app metadata and ASO research through the ReplyNodes prepaid-credit fetcher.\n\n## Surface status\n-All nine reviewed public read methods are exposed as stable capability identifiers in the manifest: app, list, search, developer, privacy, suggest, similar, reviews, and ratings.\n-Each route uses the provider method name and exact option names; app-shaped results are normalized into the public App contract and raw provider records never cross the public gateway.\n\n## How to call\n- Resolve the base URL issued to your workspace at onboarding; never assume a host.\n- Each tool maps to one HTTP GET capability: substitute path parameters into the endpoint path and pass optional parameters as query strings.\n- Authenticate at the gateway with header `Authorization: Bearer YOUR_FETCHER_KEY`; the manifest holds no key material.\n\n## Results\n- Success: `{\"data\": [app records], \"meta\": {\"request_id\": \"req-...\", \"contract_version\": \"v1\", \"generated_at\": \"...\", \"availability\": \"complete\"}}`.\n- Failure: `{\"error\": {\"code\": \"...\", \"message\": \"...\", \"request_id\": \"req-...\"}}`; honor HTTP status and any `Retry-After` header.\n- Report `meta.availability`, `meta.missing_fields`, and null counters honestly instead of guessing.\n\n## Conduct\n- Read-only: these tools never mutate anything; refuse requests asking them to purchase, review, submit, or touch accounts.\n- Respect page bounds (20 default results, max 50); there are no continuation tokens on this surface.",
+  "tools": [
+    {
+      "name": "appstore_app",
+      "title": "Look up one public App Store application",
+      "description": "Look up one public App Store application. Look up one public App Store application. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string",
+            "description": "Bundle id fallback."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code."
+          },
+          "ratings": {
+            "type": "boolean",
+            "description": "Include ratings information."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/apps/{id}",
+        "operation": "app",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_list",
+      "title": "List applications from a storefront collection",
+      "description": "List applications from a storefront collection. List applications from a storefront collection. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "collection": {
+            "type": "string",
+            "description": "Provider collection constant."
+          },
+          "category": {
+            "type": "string",
+            "description": "Provider category constant."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code."
+          },
+          "num": {
+            "type": "integer",
+            "description": "Number of applications; values outside 1..200 are rejected.",
+            "minimum": 1,
+            "maximum": 200
+          },
+          "fullDetail": {
+            "type": "boolean",
+            "description": "Request detail enrichment."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/list",
+        "operation": "list",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_search",
+      "title": "Search public App Store applications by term",
+      "description": "Search public App Store applications by term. Search public App Store applications by term. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Search term."
+          },
+          "num": {
+            "type": "integer",
+            "description": "Number of results; values outside 1..50 are rejected.",
+            "minimum": 1,
+            "maximum": 50,
+            "default": 20
+          },
+          "page": {
+            "type": "integer",
+            "description": "Result page.",
+            "minimum": 1,
+            "maximum": 200
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code."
+          },
+          "idsOnly": {
+            "type": "boolean",
+            "description": "Return ids without detail lookups."
+          }
+        },
+        "required": [
+          "term"
+        ],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/search",
+        "operation": "search",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_developer",
+      "title": "List applications by developer",
+      "description": "List applications by developer. List applications by developer. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "devId": {
+            "type": "string",
+            "description": "public developer identifier."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code."
+          }
+        },
+        "required": [
+          "devId"
+        ],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/developer",
+        "operation": "developer",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_privacy",
+      "title": "Read public App Store privacy details",
+      "description": "Read public App Store privacy details. Read public App Store privacy details. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "public application identifier."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/privacy",
+        "operation": "privacy",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_suggest",
+      "title": "Suggest public App Store search terms",
+      "description": "Suggest public App Store search terms. Suggest public App Store search terms. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "Search term."
+          }
+        },
+        "required": [
+          "term"
+        ],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/suggest",
+        "operation": "suggest",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_similar",
+      "title": "List apps related to an application",
+      "description": "List apps related to an application. List apps related to an application. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "appId": {
+            "type": "string",
+            "description": "Bundle id fallback."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "lang": {
+            "type": "string",
+            "description": "Language code."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/apps/{id}/similar",
+        "operation": "similar",
+        "auth_required": true,
+        "required_any_of": []
+      }
+    },
+    {
+      "name": "appstore_reviews",
+      "title": "Read a page of public app reviews",
+      "description": "Read a page of public app reviews. Read a page of public app reviews. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "public application identifier; provide this or appId."
+          },
+          "appId": {
+            "type": "string",
+            "description": "Bundle id; provide this or id."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Review page; values outside 1..10 are rejected.",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "sort": {
+            "type": "string",
+            "description": "Provider review sort constant."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/reviews",
+        "operation": "reviews",
+        "auth_required": true,
+        "required_any_of": [
+          "id",
+          "appId"
+        ]
+      }
+    },
+    {
+      "name": "appstore_ratings",
+      "title": "Read public app ratings",
+      "description": "Read public app ratings. Read public app ratings. Returns the normalized public contract; raw provider records are internal to the runtime boundary and never cross the public gateway.",
+      "readonly_hint": true,
+      "destructive_hint": false,
+      "idempotent_hint": true,
+      "open_world_hint": true,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "public application identifier; provide this or appId."
+          },
+          "country": {
+            "type": "string",
+            "description": "Two-letter storefront code."
+          },
+          "appId": {
+            "type": "string",
+            "description": "Bundle id; provide this or id."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "endpoint": {
+        "method": "GET",
+        "path": "/v1/appstore/ratings",
+        "operation": "ratings",
+        "auth_required": true,
+        "required_any_of": [
+          "id",
+          "appId"
+        ]
+      }
+    }
+  ]
+}

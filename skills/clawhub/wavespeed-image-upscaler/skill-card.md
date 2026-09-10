@@ -1,42 +1,59 @@
-## Description: <br>
-Upscale images to 2K, 4K, or 8K resolution using WaveSpeed AI's Image Upscaler. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upscales user-provided images to 2K, 4K, or 8K with WaveSpeed AI's Image Upscaler, supporting JPEG, PNG, and WebP outputs.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to guide image upscaling workflows with WaveSpeed AI, including local image upload, image URL input, target resolution selection, output format selection, retry configuration, and error handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Images submitted for upscaling are sent to WaveSpeed AI and may be sensitive. <br>
-Mitigation: Use only images approved for third-party processing, and avoid confidential images unless WaveSpeed's data handling terms are acceptable. <br>
-Risk: WaveSpeed API usage can incur charges under the configured API key. <br>
-Mitigation: Keep the API key in an environment variable or secret manager, restrict key access, and monitor account usage. <br>
-Risk: Untrusted image URLs can introduce unsafe input or unexpected external access. <br>
-Mitigation: Validate image URLs and only use trusted image sources before sending requests. <br>
+## Use Case:
 
+External users, developers, and image-production teams use this skill to upscale selected images through WaveSpeed AI while controlling target resolution and output format.
 
-## Reference(s): <br>
-- [WaveSpeed API key access](https://wavespeed.ai/accesskey) <br>
-- [ClawHub skill release](https://clawhub.ai/chengzeyi/wavespeed-image-upscaler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides API-key configuration and WaveSpeed API usage; the upscaled image URL is produced by the WaveSpeed API when the workflow is run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata; SKILL.md frontmatter lists 1.0) <br>
+Risk: Selected images are uploaded to WaveSpeed for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images appropriate for upload to WaveSpeed and work from a least-privileged workspace containing only files needed for the task.
+
+Risk: The skill depends on WaveSpeed CLI or MCP packages for execution.
+
+Mitigation: Install only trusted WaveSpeed packages, pin reviewed package versions in stricter environments, and avoid elevated shells for global npm installs.
+
+Risk: Authentication material could be exposed if requested or pasted into chat.
+
+Mitigation: Use `wavespeed login` or `WAVESPEED_API_KEY` in the environment; do not ask users to paste API keys into chat.
+
+## Reference(s):
+
+- [WaveSpeed MCP Server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed Access Key Setup](https://wavespeed.ai/accesskey)
+- [ClawHub Skill Page](https://clawhub.ai/wavespeed/skills/wavespeed-image-upscaler)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and parameter descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to produce WaveSpeed CLI or MCP usage steps and output URLs for upscaled images.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

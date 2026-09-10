@@ -1,48 +1,62 @@
-## Description: <br>
-A behavior-correction skill that responds to fix-oriented feedback by analyzing the mistake, improving the relevant behavioral prompt, rule, memory, or hook, and then resuming the current work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides behavior-correction feedback by analyzing an agent mistake, improving the relevant prompt or workflow guard to reduce recurrence, and resuming the interrupted work.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use this skill when an agent repeats or risks repeating an operational mistake and needs a structured root-cause analysis, prevention update, and completion of the interrupted work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make durable changes to agent behavior by editing rules, memories, skill files, settings, or hooks. <br>
-Mitigation: Install it only when that persistent behavior-correction workflow is desired, prefer `--plan` for review, and inspect diffs before accepting changes. <br>
-Risk: The trigger phrases are broad enough that the skill may be invoked accidentally during ordinary feedback. <br>
-Mitigation: Invoke it intentionally with an explicit `fix:` or `/fix` command and avoid enabling automatic behavior changes from ambiguous feedback. <br>
-Risk: Changes under agent configuration directories or hook registrations can affect future sessions beyond the current task. <br>
-Mitigation: Review proposed edits under `~/.claude`, `~/.agents`, `~/.gemini`, settings files, and hooks, and use local scoping when the correction should not be global. <br>
+## Use Case:
 
+Developers and agent users use this skill when a fix-style feedback message identifies an agent behavior mistake. It guides root-cause analysis, prevention changes, completion of the interrupted work, and wrap-up.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/fix) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Step 2 Improvement Guide](artifact/step2-improvement.md) <br>
-- [Step 3 Resume Guide](artifact/step3-resume.md) <br>
-- [Step 4 Wrap-up Guide](artifact/step4-wrapup.md) <br>
-- [Behavior Discipline Guide](artifact/behavior-discipline.md) <br>
-- [Ambiguity Guard Hook](artifact/resources/fix-and-ambiguity-guard.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with optional code, shell commands, configuration changes, and generated files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or modify persistent agent behavior artifacts such as rules, skill files, memory entries, settings, hooks, or plan documents when invoked without planning-only mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.8 (source: server release metadata) <br>
+Risk: The skill can persistently change future agent behavior through global memory, rule files, settings, and hooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when a behavior-correction workflow is intended; prefer local or project-scoped use for sensitive workspaces.
+
+Risk: Rule, settings, or hook changes can affect future sessions beyond the immediate correction.
+
+Mitigation: Review every proposed persistent diff and require explicit approval before changes under ~/.claude, ~/.gemini, or ~/.agents.
+
+Risk: Global hooks on shared or sensitive agent profiles can broaden the impact of a mistaken workflow guard.
+
+Mitigation: Avoid global hooks on sensitive or shared profiles unless the hook behavior and scope have been reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix)
+- [SKILL.md](SKILL.md)
+- [Step 2: Prompt Improvement](step2-improvement.md)
+- [Step 3: Resume Original Work](step3-resume.md)
+- [Step 4: Wrap-up](step4-wrapup.md)
+- [Behavior Discipline](behavior-discipline.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with optional code blocks, shell commands, configuration changes, and task updates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce persistent agent-behavior changes when the workflow routes updates to memory, rules, settings, or hooks.]
+
+## Skill Version(s):
+
+0.6.1 (source: ClawHub release metadata, released 2026-09-10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

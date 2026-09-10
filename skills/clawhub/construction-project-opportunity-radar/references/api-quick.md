@@ -1,7 +1,7 @@
 # 工具速查（商机雷达所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 5 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.2`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/search_proposed_projects`），Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.3`。
 
 ## 通用概念
 
@@ -13,7 +13,7 @@
 |---|---|---|
 | search_proposed_projects | min_amount / max_amount | **万元** |
 | search_expiring_projects | min_amount | **万元** |
-| search_bids | min_amount / max_amount | **元** |
+| search_bids | min_amount / max_amount | **万元** |
 
 返回值统一：`money` 为元；拟建路给 `money_format`（可读字符串），意向/临期路给 `money_wan`（万元数值）。
 
@@ -22,7 +22,6 @@
 ## 工具清单
 
 ### search_proposed_projects — ① 拟建项目（审批期，提前 6-18 个月）
-行业示例：查「XX区快速路网改造工程」这类项目，keywords 传 ["市政道路"]，可加 approval_status_code=3 只看审批办结的。
 ```json
 {"keywords": ["智慧校园"], "provinces": ["广东"], "cities": ["深圳"],
  "min_amount": 100, "begin_date": "2026-04-01", "approval_status_code": 3,
@@ -35,14 +34,13 @@
 ### search_bids（bid_process=[1]）— ② 采购意向（发标前 1-3 个月）
 ```json
 {"keywords": ["信息化"], "bid_process": [1], "provinces": ["广东"],
- "min_amount": 1000000, "begin_date": "2026-04-15", "page_size": 20}
+ "min_amount": 100, "begin_date": "2026-04-15", "page_size": 20}
 ```
 - `bid_process` 固定传 `[1]`（采购意向）。其他阶段值：2=预招标 4=招标 7=中标结果 8=合同——本 SKILL 只在 timeline 解读时用到含义，不主动查。
-- `min_amount` 单位是**元**（与另两路不同）。
+- `min_amount` 单位是**万元**（与另两路一致；服务端会 ×10000 转成元再过滤）。
 - 返回关键字段：`title`、`caller_name`、`money`/`money_wan`、`sm_names`（标的物）、`pub_time`、`url`（带 sk）。
 
 ### search_expiring_projects — ③ 临期续约（合同到期前 0-180 天）
-行业示例：`{"keywords": ["道路施工"], "provinces": ["浙江"]}` → 按到期日升序返回，现供应商在 winner_names。
 ```json
 {"keywords": ["物业"], "provinces": ["江苏"], "min_amount": 50,
  "company_type": ["政府", "事业单位"], "page_size": 20}

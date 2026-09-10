@@ -1,46 +1,57 @@
-## Description: <br>
-Translate one subtitle file at a time with deterministic local parsing, timeline preservation, strict batch mapping, and safe output composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Translates one SRT, VTT, or ASS subtitle file at a time while preserving timelines, validating batch mappings, and safely composing local outputs.
 
-## Publisher: <br>
-[lumen01](https://clawhub.ai/user/lumen01) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lumen01](https://clawhub.ai/user/lumen01)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to translate SRT, WebVTT/VTT, and ASS subtitle files while preserving timing and supported subtitle structure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Subtitle text is sent to the agent's selected translation model, which may be inappropriate for confidential media. <br>
-Mitigation: Use the skill only with subtitle content approved for that model path, and avoid confidential subtitle files unless the model handling is acceptable. <br>
-Risk: Shared installations and optional symlinks can expose the skill to multiple agent runtimes or overwrite an existing local setup. <br>
-Mitigation: Review installation destinations and symlinks before installing or sharing the skill across runtimes. <br>
-Risk: Invalid translation responses can break subtitle mapping, hard line breaks, or ASS style markers. <br>
-Mitigation: Validate every batch response, retry structural errors, and stop when required IDs, wrappers, BR markers, or fixed-structure markers still mismatch. <br>
-Risk: Some ASS karaoke timing or unresolved inline style markers may be degraded to static text. <br>
-Mitigation: Report karaoke degradations and inline-style fallback IDs from the final report so users understand any formatting loss. <br>
+## Use Case:
 
+Developers and agent users use this skill to translate individual subtitle files with local parsing, validation, and output composition while keeping timing and supported subtitle structure intact.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lumen01/skills/agent-subtitle-translator) <br>
-- [README](artifact/README.md) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated subtitle/report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Processes one subtitle file per run; generated batches contain stable IDs and subtitle text, not timelines or raw ASS override tags.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The optional visualizer stores local task history and exposes a bridge API on 127.0.0.1 while running.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the visualizer only when live progress is needed, keep it bound to loopback, and stop the service when the local access surface is no longer needed.
+
+Risk: The workflow writes work files, subtitle outputs, and reports on the local machine.
+
+Mitigation: Use deliberate work and output locations, inspect generated reports, and use overwrite flags only when replacing the exact existing output is intended.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/lumen01/skills/agent-subtitle-translator)
+- [Publisher Profile](https://clawhub.ai/user/lumen01)
+- [Server-Resolved GitHub Source](https://github.com/Lumen01/agent-subtitle-translator)
+- [README](artifact/README.md)
+- [Skill Definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Files, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands; generated subtitle files and JSON reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Processes one subtitle input per run and writes validated local outputs without requiring an external LLM API key.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; package.json reports 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

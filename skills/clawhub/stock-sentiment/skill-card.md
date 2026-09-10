@@ -1,46 +1,55 @@
-## Description: <br>
-Sentiment and smart-money positioning for US stocks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sentiment and smart-money positioning for US stocks.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-Developers and finance-focused agents use this skill to retrieve SentiSense sentiment, market mood, smart-money positioning, analyst activity, AI insights, and sentiment-tagged news for US equities. Outputs should be synthesized as educational market context, not personalized buy or sell advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SentiSense API key and outbound requests to app.sentisense.ai. <br>
-Mitigation: Store the key in SENTISENSE_API_KEY, keep it out of prompts and shared logs, and allow only the documented SentiSense endpoint when network egress is controlled. <br>
-Risk: Market sentiment and smart-money outputs could be mistaken for personalized financial advice. <br>
-Mitigation: Frame responses as educational market context and avoid buy, sell, portfolio, or order-entry recommendations. <br>
-Risk: Some sentiment, news, and AI insight surfaces are batch metrics rather than real-time values. <br>
-Mitigation: Label batch freshness when available and keep real-time quote data distinct from batch sentiment signals. <br>
+## Use Case:
 
+Developers and market-research agents use this skill to retrieve SentiSense sentiment, market mood, smart-money positioning, analyst activity, AI insights, and news context for US equities. It supports educational synthesis and signal comparison, not order entry, portfolio management, or personalized investment advice.
 
-## Reference(s): <br>
-- [SentiSense](https://sentisense.ai) <br>
-- [SentiSense Skill API Reference](https://sentisense.ai/skill.md) <br>
-- [SentiSense API Key](https://app.sentisense.ai/get-api-key) <br>
-- [Stock Sentiment on ClawHub](https://clawhub.ai/thesentitrader/skills/stock-sentiment) <br>
-- [Publisher Profile](https://clawhub.ai/user/thesentitrader) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with sourced market context, optional JSON from API calls, and inline shell or Python commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SENTISENSE_API_KEY and outbound HTTPS access to app.sentisense.ai; responses are read-only market data and should preserve batch freshness labels when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.4 (source: server release evidence) <br>
+Risk: The skill requires network access to SentiSense and use of a SENTISENSE_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit network access to app.sentisense.ai, keep the API key in environment variables, and avoid exposing the key in prompts, logs, or user-facing output.
+
+Risk: Financial sentiment and positioning summaries could be mistaken for personalized investment advice.
+
+Mitigation: Frame outputs as informational market context only, avoid buy/sell recommendations, and preserve the skill's read-only posture.
+
+## Reference(s):
+
+- [SentiSense](https://sentisense.ai)
+- [SentiSense API Skill Documentation](https://sentisense.ai/skill.md)
+- [ClawHub Skill Page](https://clawhub.ai/thesentitrader/skills/stock-sentiment)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Concise Markdown or text synthesis with optional JSON snippets, curl examples, and Python helper commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are informational financial context; API-derived values should be sourced from current read-only SentiSense GET responses and labeled for freshness when batch or delayed.]
+
+## Skill Version(s):
+
+0.4.4 (source: server release evidence, released 2026-09-08)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

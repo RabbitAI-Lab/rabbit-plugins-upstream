@@ -1,41 +1,58 @@
-## Description: <br>
-Classify every shell command as SAFE, WARN, or CRIT before your agent runs it. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Classifies shell commands as SAFE, WARN, or CRIT before agent execution and ships optional helpers for terminal display and OpenClaw hook patching.
 
-## Publisher: <br>
-[globalcaos](https://clawhub.ai/user/globalcaos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[globalcaos](https://clawhub.ai/user/globalcaos)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add pre-execution shell command classification, logging, and approval gates for OpenClaw or TinkerClaw-style agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The included installer scripts can modify and rebuild an OpenClaw codebase, which is high-impact behavior for a command-classification skill. <br>
-Mitigation: Review the scripts and exact source changes before running them, use only a trusted expected OpenClaw checkout, and keep a clean backup or version-control rollback available. <br>
-Risk: The rebuild step executes code from the target checkout. <br>
-Mitigation: Treat rebuild commands as code execution from that checkout and run them only in an environment where that code and dependencies are trusted. <br>
+## Use Case:
 
+Developers and operators giving an agent shell access use this skill to classify proposed commands, surface risky actions before execution, and optionally prepare an OpenClaw checkout for hook-based blocking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/shell-security-ultimate) <br>
-- [TinkerClaw project](https://github.com/globalcaos/clawdbot-moltbot-openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with shell commands, Python helper output, and patch scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SAFE, WARN, and CRIT command labels; included patch scripts modify and rebuild a local OpenClaw checkout when run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.2 (source: server release evidence) <br>
+Risk: The SAFE/WARN/CRIT gate is advisory instruction-level behavior by default and can be bypassed by misclassification or prompt injection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review classifications before execution and use a container, VM, or other isolation when hard enforcement is required.
+
+Risk: The optional patch script modifies source code in an OpenClaw checkout selected by the user.
+
+Mitigation: Read and dry-run the patch script first, set OPENCLAW_DIR deliberately, require explicit consent, and use the bundled unpatch script to revert.
+
+Risk: Command-line arguments passed to the display helper can appear in process listings or shell history.
+
+Mitigation: Do not pass secrets through display helper arguments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/shell-security-ultimate)
+- [Project repository](https://github.com/globalcaos/clawdbot-moltbot-openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown guidance with terminal text and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional helper scripts are run deliberately by the user; the display helper sanitizes and length-caps printed arguments.]
+
+## Skill Version(s):
+
+2.3.2 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,66 @@
-## Description: <br>
-Kit (formerly ConvertKit) API integration with managed OAuth for managing email subscribers, forms, tags, sequences, broadcasts, and custom fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Maton CLI and SDK guidance for using managed OAuth to call the Kit API for subscribers, forms, tags, sequences, broadcasts, custom fields, purchases, email templates, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate Kit email marketing workflows through Maton-managed OAuth, including subscriber, tag, form, sequence, broadcast, custom field, purchase, email template, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access subscriber and customer data in the connected Kit account through Maton-managed OAuth. <br>
-Mitigation: Install only when Maton and the connected Kit account are trusted, keep MATON_API_KEY private, and scope actions to the intended account. <br>
-Risk: Write, delete, webhook, broadcast, or connection-management operations can modify email marketing resources. <br>
-Mitigation: Confirm the target resource, account connection, and intended effect with the user before executing any modifying request. <br>
-Risk: Multiple Kit connections can route requests to the wrong account if the connection is not specified. <br>
-Mitigation: Use the Maton-Connection header when multiple Kit accounts exist. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to a Kit account through Maton, inspect email marketing resources, and perform approved subscriber, tag, sequence, broadcast, custom field, purchase, email template, and webhook operations.
 
-## Reference(s): <br>
-- [Kit Skill on ClawHub](https://clawhub.ai/byungkyu/skills/kit) <br>
-- [Kit API Overview](https://developers.kit.com/api-reference/overview) <br>
-- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers) <br>
-- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags) <br>
-- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline API paths, JSON examples, and Python, JavaScript, or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence; artifact frontmatter reports 1.0) <br>
+Risk: Broad Kit API passthrough can expose more account capability than the narrower manifest description suggests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when broad Kit API reach is acceptable, use OAuth with the narrowest available scopes, and confirm the exact account and connection before use.
+
+Risk: Write operations, webhook changes, and purchase-data access can create external side effects or expose sensitive business data.
+
+Mitigation: Default to read/list calls, require explicit approval for every write or webhook operation, and verify target resource identifiers and payloads before execution.
+
+Risk: Unpinned Maton CLI or SDK versions may change gateway behavior over time.
+
+Mitigation: Prefer pinned or locked Maton CLI and SDK versions where the deployment environment supports version control.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/kit)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Kit API Overview](https://developers.kit.com/api-reference/overview)
+- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers)
+- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags)
+- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline bash, Python, JavaScript, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Emphasizes read-first workflows, explicit approval for writes, OAuth credential handling, and connection selection.]
+
+## Skill Version(s):
+
+1.2.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

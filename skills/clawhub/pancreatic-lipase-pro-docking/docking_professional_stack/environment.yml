@@ -1,0 +1,41 @@
+name: pro-docking
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+channel_priority: strict
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - scipy
+  - pandas
+  - scikit-learn
+  - matplotlib
+  - seaborn
+  - jupyterlab
+  - rdkit
+  - openbabel
+  - pdbfixer
+  - openmm
+  - mdtraj
+  - mdanalysis
+  - ambertools
+  - autodock-vina
+  - gemmi
+  - biopython
+  - requests
+  - beautifulsoup4
+  - tqdm
+  - pyyaml
+  - networkx
+  - pip:
+      - meeko
+      - prolif
+      - pubchempy
+      - chembl_webresource_client
+      - oddt
+      - datamol
+      - mols2grid
+      - py3Dmol
+      - plip

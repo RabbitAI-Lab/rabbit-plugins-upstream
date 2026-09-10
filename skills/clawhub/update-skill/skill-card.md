@@ -1,43 +1,60 @@
-## Description: <br>
-Update Skill guides an agent through a gated refresh of one skill repository entry, including research, version and changelog updates, validation, and commit or PR follow-through. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refreshes one skill in a skills repository by researching usage, upstream changes, and documentation, then proposing gated edits, version updates, changelog changes, validation, commit, and CI checks.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and maintainers use this skill to refresh a single skill in a skills repository, review proposed edits at approval gates, update release metadata, run validation, and prepare repository changes for publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-assisted refreshes can introduce incorrect or misleading changes to skill files or release metadata. <br>
-Mitigation: Review the Gate 1 proposed edits, validation output, and Gate 2 diff before approving changes. <br>
-Risk: After approval, the workflow can commit and push repository changes that may publish through the repository pipeline. <br>
-Mitigation: Approve Gate 2 only after confirming the target branch, privacy scan result, diff, and CI or publication expectations. <br>
+## Use Case:
 
+Developers and maintainers use this skill to check and refresh a single agent skill in a skills repository, with human approval before edits and before commit or push.
 
-## Reference(s): <br>
-- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/update-skill) <br>
-- [Keep a Changelog 2.0.0](https://keepachangelog.com/en/2.0.0/) <br>
-- [Semantic Versioning](https://semver.org/spec/v2.0.0.html) <br>
-- [Pond MCP](https://pond.cascade.fyi/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with inline shell commands, proposed file edits, changelog entries, and git workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses two human approval gates before applying edits and before committing or pushing repository changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.1 (source: metadata.version, release.version, and CHANGELOG.md, released 2026-07-22) <br>
+Risk: The workflow can prepare repository edits that change a skill's behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Phase 3 proposed edits before approving the edit gate.
+
+Risk: External research sources can introduce incorrect, stale, or private information into proposed changes.
+
+Mitigation: Require primary-source verification and run the privacy scan before commit.
+
+Risk: Approved commits or pushes can publish repository changes.
+
+Mitigation: Review the Phase 6 diff carefully before approving the commit and push gate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/update-skill)
+- [Project Homepage](https://github.com/tenequm/skills/tree/main/skills/update-skill)
+- [Keep a Changelog 2.0.0](https://keepachangelog.com/en/2.0.0/)
+- [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown reports with proposed edits, changelog entries, diffs, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires human approval before applying edits and before commit or push.]
+
+## Skill Version(s):
+
+0.8.3 (source: frontmatter, changelog, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

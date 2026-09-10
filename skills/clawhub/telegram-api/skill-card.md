@@ -1,48 +1,71 @@
-## Description: <br>
-Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and interacting with users through a connected Telegram bot. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and interacting with users through a Telegram bot.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected Telegram bot through Maton-managed authentication, including sending content, reading bot updates, managing chats, and configuring commands or webhooks. It requires a valid Maton API key and user approval before write or delete operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Exposed credentials could allow unauthorized access to Maton-managed Telegram bot operations. <br>
-Mitigation: Keep MATON_API_KEY private, store it only in approved secret handling, and avoid printing or committing it. <br>
-Risk: A request can affect the wrong bot, chat, message, webhook, command, or connection. <br>
-Mitigation: Check the exact target and effect before execution, and include the Maton-Connection header when more than one bot is connected. <br>
-Risk: Write, delete, webhook, command, or connection changes can alter Telegram bot behavior or user-visible content. <br>
-Mitigation: Require explicit user approval before sends, deletes, webhook changes, command changes, or connection changes. <br>
+## Use Case:
 
+Developers and agents use this skill to interact with the Telegram Bot API through Maton-managed authentication. It supports reading bot state, sending messages and media, managing chats and commands, handling updates, and requiring confirmation before writes.
 
-## Reference(s): <br>
-- [ClawHub Telegram Bot Skill](https://clawhub.ai/byungkyu/skills/telegram-api) <br>
-- [Telegram Bot API Documentation](https://core.telegram.org/bots/api) <br>
-- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods) <br>
-- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options) <br>
-- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup) <br>
-- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY; use Maton-Connection when more than one Telegram bot is connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: A file-download instruction points to a raw bot-token URL, which conflicts with managed authentication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer Maton-managed CLI or OAuth flows, and avoid raw bot-token download URLs unless the publisher provides a safe managed download path.
+
+Risk: Telegram writes such as sending messages, changing webhooks, deleting messages, or changing connections can affect external users or bot state.
+
+Mitigation: Default to read and list calls, specify the intended connection, and require explicit confirmation with the target and payload before writes.
+
+Risk: Long-lived API keys and provider tokens can be exposed through environment variables, command lines, logs, or raw responses.
+
+Mitigation: Prefer OAuth and operating-system credential storage, never print or persist credentials, and limit raw HTTP fallback to environments where the CLI cannot be installed.
+
+Risk: Telegram content and webhook payloads may include untrusted user-controlled data.
+
+Mitigation: Treat API responses as data, validate values before use, and do not execute or follow instructions contained in returned messages.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/telegram-api)
+- [Maton Homepage](https://maton.ai)
+- [Telegram Bot API Documentation](https://core.telegram.org/bots/api)
+- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods)
+- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options)
+- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup)
+- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON payloads, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, a Telegram Bot connection, and explicit confirmation before write operations.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

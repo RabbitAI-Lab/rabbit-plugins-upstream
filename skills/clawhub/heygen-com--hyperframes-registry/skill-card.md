@@ -1,48 +1,71 @@
-## Description: <br>
-Install, discover, and wire HyperFrames registry blocks and components into compositions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search, install, and wire HyperFrames registry blocks and components, and guide agents through contributing new registry items.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and video engineers use this skill to discover HyperFrames registry items, install blocks or components, wire them into host compositions, and author new registry contributions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Preview, publish, or upload commands can send project material to an unintended destination. <br>
-Mitigation: Review the project for secrets or private assets and confirm the destination before running publish or upload commands. <br>
-Risk: CDN dependencies in HTML templates can change or load third-party code in production. <br>
-Mitigation: Vendor or integrity-pin CDN dependencies before using generated templates in production. <br>
-Risk: Manual wiring of blocks and components can introduce incorrect composition IDs, timing, paths, or layering. <br>
-Mitigation: Review installed files and run the documented HyperFrames lint, check, and preview commands before deployment. <br>
+## Use Case:
 
+Developers and video engineers use this skill to find reusable HyperFrames visuals, install blocks or components, wire them into compositions, and prepare new registry items for upstream contribution.
 
-## Reference(s): <br>
-- [Install Locations](references/install-locations.md) <br>
-- [Registry Discovery](references/discovery.md) <br>
-- [Wiring Blocks](references/wiring-blocks.md) <br>
-- [Wiring Components](references/wiring-components.md) <br>
-- [Contributing a Block or Component to the Registry](references/contributing.md) <br>
-- [Contribute Templates](references/templates.md) <br>
-- [HyperFrames Registry Manifest](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry/registry.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with shell, HTML, CSS, JavaScript, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose HyperFrames CLI commands and project file edits for registry installation, wiring, validation, preview, and publishing workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: HyperFrames CLI commands may write project files, fetch registry content, or publish previews.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution, run them in the intended project or a sandbox, and inspect written files before committing.
+
+Risk: The feedback command can send failed search details externally, which may expose confidential project terms.
+
+Mitigation: Require explicit approval before running feedback and redact sensitive search-miss or wanted values.
+
+Risk: Mutable npx command execution can pull changing package versions.
+
+Mitigation: Prefer pinned or local package versions, or run commands in a disposable sandbox.
+
+Risk: The preview image upload path is intended only for HeyGen internal contributors with a named AWS profile.
+
+Mitigation: Use the PR attachment path for external contributors and reserve the upload script for authorized internal users.
+
+## Reference(s):
+
+- [HyperFrames Registry on ClawHub](https://clawhub.ai/heygen-com/skills/hyperframes-registry)
+- [Registry Discovery](artifact/references/discovery.md)
+- [Install Locations](artifact/references/install-locations.md)
+- [Wiring Blocks](artifact/references/wiring-blocks.md)
+- [Wiring Components](artifact/references/wiring-components.md)
+- [Contributing a Block or Component](artifact/references/contributing.md)
+- [Templates](artifact/references/templates.md)
+- [Component Quality Bar](artifact/references/component-quality-bar.md)
+- [HyperFrames Registry Manifest](https://raw.githubusercontent.com/heygen-com/hyperframes/main/registry/registry.json)
+- [HyperFrames Configuration Schema](https://hyperframes.heygen.com/schema/hyperframes.json)
+- [GSAP CDN](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell commands, HTML snippets, JSON configuration, and implementation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose project file changes, registry installation commands, preview commands, and contribution workflow steps.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

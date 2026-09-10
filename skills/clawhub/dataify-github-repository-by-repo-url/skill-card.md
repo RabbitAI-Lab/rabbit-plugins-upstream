@@ -1,40 +1,58 @@
-## Description: <br>
-Prepares Dataify builder requests for the github.com scraper family rooted at github_repository_by-repo-url, including tool selection, saved parameter lookup, and a curl request that uses DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured GitHub repository information from one or more known repository URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and operators use this skill to prepare Dataify builder curl requests for GitHub repository scraping workflows after selecting one supported scraper tool and supplying any required values. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated curl command sends selected scraper parameters to Dataify and uses a bearer token from the local environment. <br>
-Mitigation: Keep DATAIFY_API_TOKEN private, review values.json before generating requests, and run the curl command only when the selected parameters are intended for Dataify. <br>
+## Use Case:
 
+Developers and operators use this skill to prepare Dataify Builder requests for GitHub repository collection, submit the task, wait for completion when requested, and return the collected JSON result.
 
-## Reference(s): <br>
-- [Dataify skill page](https://clawhub.ai/dataify-server/skills/dataify-github-repository-by-repo-url) <br>
-- [Saved Dataify tool parameter catalog](references/tool-params.json) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with a curl command and setup instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces user-directed requests for Dataify's builder API and relies on DATAIFY_API_TOKEN from the user's environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill exposes broader GitHub and search-style collection paths than the repository-URL name suggests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the repository-URL collection path unless the user explicitly requests another available Dataify tool.
+
+Risk: Generated curl commands and task submissions depend on user-provided URLs and parameters.
+
+Mitigation: Review generated commands before execution and avoid running commands built from untrusted input.
+
+Risk: The skill uses a Dataify API token and includes guidance for persistent shell profile storage.
+
+Mitigation: Prefer a session-scoped DATAIFY_API_TOKEN and rotate the token if it may have appeared in logs or command history.
+
+## Reference(s):
+
+- [Tool parameter catalog](artifact/references/tool-params.json)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-github-repository-by-repo-url)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit paid Dataify tasks, wait for asynchronous completion, and summarize large JSON payloads while preserving access to raw results.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

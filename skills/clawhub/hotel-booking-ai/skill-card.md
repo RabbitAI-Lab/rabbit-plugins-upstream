@@ -1,44 +1,55 @@
-## Description: <br>
-Book hotels with live prices and availability, including destination or hotel search, room-rate comparison, availability checks, reservations, booking lookup or cancellation, and WeChat Pay or Alipay payment initiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hotel search, comparison, and booking with live room rates and real-time availability.
 
-## Publisher: <br>
-[tourmind](https://clawhub.ai/user/tourmind) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tourmind](https://clawhub.ai/user/tourmind)
 
-## Use Case: <br>
-External users use this skill when they explicitly want to search live hotel inventory, compare rates, create or manage a reservation, cancel a booking, or initiate payment. The agent should collect location, check-in date, check-out date, and guest count before making API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores and reuses a persistent user_key.txt while sending authentication and booking details to a plain HTTP API. <br>
-Mitigation: Use only in a private environment, avoid shared machines, and delete user_key.txt when finished or when switching users. <br>
-Risk: Live booking workflows or evals can create reservations, cancellations, or payment flows. <br>
-Mitigation: Run booking actions only after explicit user intent and confirmation, and do not run evals against a live account unless real reservations are intended. <br>
-Risk: Hotel prices, room availability, and cancellation fees can be wrong if stale or fabricated data is used. <br>
-Mitigation: Use only live API responses, verify price and availability before booking, and report exact API errors rather than substituting recommendations from memory. <br>
+## Use Case:
 
+External travelers and travel-planning users use this skill to search hotels, compare live room products, verify rates and availability, and manage booking, payment, cancellation, and order lookup in one agent conversation.
 
-## Reference(s): <br>
-- [Hotel Booking AI Parameter Reference](references/parameter_guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/tourmind/skills/hotel-booking-ai) <br>
-- [AgentAuth Dashboard](https://aauth-170125614655.asia-northeast1.run.app/dashboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API Calls, Guidance, Configuration] <br>
-**Output Format:** [Markdown or plain text with JSON API request and response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hotel options, live prices, booking references, cancellation status, payment links, and exact API errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: frontmatter and release evidence) <br>
+Risk: The skill can ask the agent to store a booking user_key in a local plaintext file, which could expose account access if copied into prompts, logs, screenshots, commits, or support tickets.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the key local, restrict file access where supported, and avoid placing the key in prompts, logs, screenshots, commits, or support requests.
+
+Risk: The skill includes an update flow that asks the agent to update installed skill files from server-provided release links.
+
+Mitigation: Approve updates only after verifying the source and release, and preserve local changes and the local user_key file during any update.
+
+## Reference(s):
+
+- [Hotel Booking AI API and Field Reference](references/parameter_guide.md)
+- [Hotel Booking AI on ClawHub](https://clawhub.ai/tourmind/skills/hotel-booking-ai)
+- [TourMind Skills Product Page](https://tourmind.com/skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown conversational responses with structured hotel options, booking summaries, and order or payment guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live TourMind hotel data for prices, policies, availability, booking status, and payment flows.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

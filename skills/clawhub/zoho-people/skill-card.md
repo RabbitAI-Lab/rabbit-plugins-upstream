@@ -1,51 +1,69 @@
-## Description: <br>
-Zoho People API integration with managed OAuth for managing employees, departments, designations, attendance, leave, and arbitrary Zoho People forms, including custom forms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho People API integration with managed OAuth for reading, creating, updating, and querying employees, departments, designations, attendance, leave, and Zoho People forms through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, HR operators, and developers use this skill to make targeted Zoho People API requests for employee, department, designation, attendance, leave, and custom form workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive HR records may be exposed through broad employee, attendance, leave, or custom form reads. <br>
-Mitigation: Use the least-privileged Zoho connection available, request only specific records needed for the task, and avoid broad exports unless there is a clear business need. <br>
-Risk: Create, update, or delete operations can change HR records. <br>
-Mitigation: Review the target resource and intended effect with the user before approving any write operation. <br>
-Risk: Requests may target the wrong Zoho People account when multiple Maton connections exist. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header whenever multiple Zoho People connections are available. <br>
-Risk: Maton brokers access to the connected Zoho People account and requires a Maton API key. <br>
-Mitigation: Install only if Maton is trusted for this account, protect MATON_API_KEY as a credential, and rotate or revoke access if it is exposed. <br>
+## Use Case:
 
+Developers and agents use this skill to perform scoped Zoho People HR data operations through the Maton CLI or SDKs after connecting a Zoho People account. It is intended for user-requested reads, creates, updates, and queries of employee, department, designation, attendance, leave, and custom form records.
 
-## Reference(s): <br>
-- [ClawHub Zoho People Skill Page](https://clawhub.ai/byungkyu/skills/zoho-people) <br>
-- [Zoho People API Overview](https://www.zoho.com/people/api/overview.html) <br>
-- [Zoho People Get Bulk Records API](https://www.zoho.com/people/api/bulk-records.html) <br>
-- [Zoho People Fetch Forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html) <br>
-- [Zoho People Insert Record API](https://www.zoho.com/people/api/insert-records.html) <br>
-- [Zoho People Update Records API](https://www.zoho.com/people/api/update-records.html) <br>
-- [Zoho People Attendance Entries API](https://www.zoho.com/people/api/attendance-entries.html) <br>
-- [Zoho People Add Leave API](https://www.zoho.com/people/api/add-leave.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Zoho People connection; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill handles sensitive HR data through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Access only specific Zoho People records requested by the user and avoid broad retrieval unless clearly justified.
+
+Risk: Long-lived API keys and provider-issued tokens can expose connected HR systems.
+
+Mitigation: Prefer OAuth, do not print or persist credentials, and use the narrowest Zoho People scopes available.
+
+Risk: Write operations or connection changes can modify HR records or authorize account access.
+
+Mitigation: Require the agent to show the exact target record, connection, payload, and intended effect before any write or connection-changing action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-people)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Zoho People API Overview](https://www.zoho.com/people/api/overview.html)
+- [Zoho People Get Bulk Records API](https://www.zoho.com/people/api/bulk-records.html)
+- [Zoho People Fetch Forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html)
+- [Zoho People Insert Record API](https://www.zoho.com/people/api/insert-records.html)
+- [Zoho People Update Record API](https://www.zoho.com/people/api/update-records.html)
+- [Zoho People Attendance API](https://www.zoho.com/people/api/attendance-entries.html)
+- [Zoho People Add Leave API](https://www.zoho.com/people/api/add-leave.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline bash, Python, JavaScript, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, Maton authentication, and user confirmation before writes or connection changes.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

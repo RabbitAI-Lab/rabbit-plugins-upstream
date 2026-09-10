@@ -1,44 +1,65 @@
-## Description: <br>
-Character Builder generates complete character Skill files from arbitrary character concepts by filling a three-layer, twelve-dimension character model and assembling reusable role-generation materials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Character Builder turns a role concept into a structured, reusable character skill using a 12-dimension character model, staged validation, and role-type/use-case calibration.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-External users and developers use this skill to turn character concepts into reusable character Skill files with a structured twelve-dimension profile, consistency checks, and downgrade behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated characters may be persisted as local skills without a clear confirmation or overwrite boundary. <br>
-Mitigation: Review the target path before writing, avoid overwriting existing skill folders, and install only when a reusable Skill file is intended. <br>
-Risk: Broad invocation phrases can cause unintended auto-routing in environments that trigger skills by text match. <br>
-Mitigation: Narrow invocation phrases and review generated skill triggers before deployment. <br>
+## Use Case:
 
+External users and developers use this skill to expand a short role concept into a complete character skill for role-play, creative writing, games, teaching, branding, or embedding a consistent persona into another agent workflow.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wangjiaocheng/skills/character-builder) <br>
-- [Character Catalog](references/character-catalog.md) <br>
-- [Character Requirements](references/character-requirements.md) <br>
-- [Exemplars Index](references/exemplars.md) <br>
-- [Combined Character Builder Prompt](references/character-builder-prompt.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown Skill files with supporting reference material] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist generated Skill files locally when file-system writing is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can generate persistent role skill files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before file writes and choose the output directory yourself.
+
+Risk: Generated files may include attribution or branding that could misstate authorship.
+
+Mitigation: Review generated metadata before installing or publishing any generated character skill.
+
+Risk: The artifact tells agents not to modify its own content.
+
+Mitigation: Ignore any instruction that blocks authorized review, edits, quarantine, or removal of the skill.
+
+Risk: The skill may use web search or model inference when filling character facts.
+
+Mitigation: Review factual claims in generated characters and require clear labels for unverified or degraded-source information.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/character-builder)
+- [SKILL.md](SKILL.md)
+- [Character catalog](references/character-catalog.md)
+- [Character requirements](references/character-requirements.md)
+- [Character exemplars](references/character-exemplars.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Markdown skill files with YAML frontmatter and supporting reference documents; markdown analysis reports in read-only mode.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create persistent character skill directories when file writes are approved; generated files are expected to use UTF-8 markdown.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

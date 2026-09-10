@@ -1,0 +1,4 @@
+interface:
+  display_name: "亚马逊选品调研 · 评论验证需求"
+  short_description: "用评论数据验证品类需求，替代拍脑袋选品"
+  default_prompt: "使用 $amazon-product-research 用评论数据验证一个 Amazon 选品需求。"

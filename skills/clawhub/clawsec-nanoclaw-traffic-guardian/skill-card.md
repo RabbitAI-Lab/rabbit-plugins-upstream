@@ -1,41 +1,65 @@
-## Description: <br>
-NanoClaw runtime traffic monitoring baseline for host-side proxy inspection with container-safe MCP and IPC status surfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NanoClaw runtime traffic monitoring baseline for host-side proxy inspection with container-safe MCP and IPC status surfaces.
 
-## Publisher: <br>
-[davida-ps](https://clawhub.ai/user/davida-ps) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[davida-ps](https://clawhub.ai/user/davida-ps)
 
-## Use Case: <br>
-Developers and security engineers use this skill as a builder-facing specification for adding opt-in NanoClaw traffic monitoring, redacted local findings, and container-safe status surfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the scaffold for a working traffic monitor. <br>
-Mitigation: Treat this release as a builder-facing specification until a future version ships an implemented proxy, detector, host service, and MCP tool surface. <br>
-Risk: A future proxy implementation could expose sensitive traffic, CA key material, or unredacted findings if the safety contract is not preserved. <br>
-Mitigation: Keep monitoring opt-in, keep CA private keys host-side, avoid automatic trust-store changes, redact logs and MCP responses, and expose only status or redacted findings through container-facing tools. <br>
+## Use Case:
 
+Developers and security engineers use this skill as a NanoClaw baseline for designing opt-in host-side traffic monitoring, redacted findings, and bounded container-safe MCP status surfaces.
 
-## Reference(s): <br>
-- [ClawSec homepage](https://clawsec.prompt.security) <br>
-- [ClawHub skill page](https://clawhub.ai/davida-ps/skills/clawsec-nanoclaw-traffic-guardian) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, shell commands, markdown] <br>
-**Output Format:** [Markdown with inline shell commands and JSON schema examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Specification-only scaffold; no active proxy or runtime monitor is shipped in this release.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1-beta5 (source: server release evidence, frontmatter, skill.json, CHANGELOG released 2026-06-23) <br>
+Risk: Short installer commands can bypass stronger artifact verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the signed release verification workflow before installing or extracting release artifacts.
+
+Risk: Future traffic monitoring could expose secrets in logs or MCP responses.
+
+Mitigation: Redact snippets before persistence or responses, bound scanned bytes, and keep findings limited to redacted status data.
+
+Risk: HTTPS inspection could expose CA private key material or mutate system trust unexpectedly.
+
+Mitigation: Keep CA private keys host-side, require explicit per-runtime trust configuration, and never install a system-wide CA automatically.
+
+Risk: The reviewed artifact is a specification scaffold rather than an active runtime monitor.
+
+Mitigation: Treat it as implementation guidance and review future proxy, detector, IPC, and MCP code before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/davida-ps/skills/clawsec-nanoclaw-traffic-guardian)
+- [ClawSec homepage](https://clawsec.prompt.security)
+- [NanoClaw Traffic Guardian README](artifact/README.md)
+- [NanoClaw Traffic Guardian Specification](artifact/SPEC.md)
+- [NanoClaw Traffic Guardian Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, configuration details, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Current release is a specification scaffold; active proxy, detector, and MCP runtime behavior must be implemented and reviewed separately.]
+
+## Skill Version(s):
+
+0.0.2 (source: evidence.json release, SKILL.md frontmatter, skill.json, CHANGELOG released 2026-09-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

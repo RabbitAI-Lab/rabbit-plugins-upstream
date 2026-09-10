@@ -1,51 +1,69 @@
-## Description: <br>
-客户背景调查助手，帮助销售和 business development users use public bidding data to investigate a target organization's procurement history, supplier landscape, budget level, procurement activity, major projects, public risk signals, and optional side-by-side company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps sales and BD users produce procurement-focused customer background reports from public bidding records, supplier relationships, competitor overlap, and cited public-risk checks.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Sales and business development users use this skill before client visits, bids, and commercial outreach to understand a company's procurement behavior, historical spend signals, incumbent suppliers, competitive landscape, and public risk signals. The skill can produce a single-company intelligence report or a two-company comparison based on bidding-data queries and public web research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts external Zhiliaobiaoxun services and sends query terms such as company names, regions, and procurement keywords. <br>
-Mitigation: Use it only for queries appropriate for that service, and review the external-service dependency and data handling expectations before installation. <br>
-Risk: The skill can create or store credentials locally in ~/.zlbx/config.json and can auto-register a trial account after user consent. <br>
-Mitigation: Require explicit user opt-in before registration, prefer a preconfigured ZLBX_API_KEY where possible, and review or remove locally stored credentials when no longer needed. <br>
-Risk: Generated reports are written to disk and may include business-sensitive analysis, contact data, and signed platform links. <br>
-Mitigation: Store reports in an appropriate location, avoid sharing report files or access-bearing links broadly, and delete exported reports when they are no longer needed. <br>
-Risk: Contact results and public-risk sections can affect real organizations or individuals if over-interpreted. <br>
-Mitigation: Keep contacts masked unless the backend returns them otherwise, do not attempt to reconstruct masked contact details, cite sources for public-risk statements, and treat conclusions as data-supported signals rather than definitive judgments. <br>
+## Use Case:
 
+External sales, BD, procurement, and competitive-intelligence users use this skill before customer visits, bids, or commercial outreach to understand an organization's purchasing history, budget scale, supplier landscape, competitors, and public risk signals.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/client-background-check) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration guide](artifact/references/auto-register.md) <br>
-- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliaobiaoxun registration and recharge](https://ai.zhiliaobiaoxun.com/?ch=s127) <br>
-- [Zhiliaobiaoxun business intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report in conversation, optional self-contained HTML report file, and operational guidance for API-backed company research workflows.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based registration; may write reports to ~/zlbx-company-intel-files/ and credentials to ~/.zlbx/config.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version) <br>
+Risk: Company names and query terms are sent to the vendor API for procurement and bidding analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when this vendor data flow is acceptable, and disclose the expected data source and cost before beginning a report.
+
+Risk: Trial signup can collect a MAC-derived hash and other minimal device attributes.
+
+Mitigation: Run automatic signup only after explicit user consent, collect only the documented minimal attributes, and allow a preconfigured API key to skip signup.
+
+Risk: The skill stores an API key locally for later use.
+
+Mitigation: Do not expose API keys in chat or reports; prefer environment configuration where available and keep local credential files outside generated report outputs.
+
+Risk: Generated HTML reports can include signed no-login company or announcement links.
+
+Mitigation: Share generated reports only with trusted recipients and review signed-link handling before external distribution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/client-background-check)
+- [Publisher profile](https://clawhub.ai/user/dragonzu)
+- [Seven-step workflow](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Automatic registration flow](artifact/references/auto-register.md)
+- [Report template](artifact/references/report-template.md)
+- [ZLBX API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [ZLBX signup and account portal](https://ai.zhiliaobiaoxun.com/?ch=s127)
+- [ZLBX business intelligence portal](https://agent.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with optional self-contained HTML report files and concise follow-up guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-gated account setup; generated HTML reports may be written under ~/zlbx-company-intel-files/.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

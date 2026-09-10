@@ -1,46 +1,71 @@
-## Description: <br>
-WhatsApp Business API integration with managed OAuth for sending messages, managing templates, handling media, and managing customer conversations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WhatsApp Business API integration with managed OAuth for sending messages, managing templates, handling media, and working with conversations through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, support teams, and business operations teams use this skill to work with WhatsApp Business through Maton-managed OAuth, including sending messages, managing templates and media, and checking account resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send WhatsApp messages or modify templates, media, connections, and business profile data for the connected account. <br>
-Mitigation: Confirm recipients, message contents, connection IDs, target resources, and destructive or mutating changes with the user before running write operations. <br>
-Risk: The MATON_API_KEY grants access through Maton to WhatsApp Business account data and actions. <br>
-Mitigation: Keep MATON_API_KEY private, avoid printing or storing it in shared logs, and revoke unused OAuth connections. <br>
-Risk: Multiple WhatsApp Business connections can route a request to the wrong account if the target connection is ambiguous. <br>
-Mitigation: Use the Maton-Connection header when multiple connections exist and verify the intended account before making API calls. <br>
+## Use Case:
 
+Developers and operators use this skill to access WhatsApp Business from an agent through the Maton CLI or gateway. It supports customer messaging, template management, media handling, phone-number lookup, and business-profile operations while requiring confirmation for writes and new connections.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/whatsapp-business) <br>
-- [Maton](https://maton.ai) <br>
-- [WhatsApp Business API overview](https://developers.facebook.com/docs/whatsapp/cloud-api/overview) <br>
-- [WhatsApp send messages guide](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-messages) <br>
-- [WhatsApp message templates guide](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Python and JavaScript request examples, shell snippets, and HTTP endpoint references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be explicitly approved by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: The skill can send real WhatsApp messages to personal phone numbers, which may create cost, privacy, and account-reputation impact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact recipient, message text, template, and intended effect with the user before any send or other write operation.
+
+Risk: The skill depends on the Maton gateway, CLI, and package sources for WhatsApp Business access.
+
+Mitigation: Confirm that Maton and the installation sources are trusted before installing or authenticating.
+
+Risk: Using the raw HTTP fallback requires a long-lived Maton API key that can leak through logs, shell history, child processes, or pasted output.
+
+Mitigation: Prefer OAuth through the CLI or SDK; if an API key is unavoidable, do not print, log, persist, or pass it on a command line, and rotate it if exposed.
+
+Risk: The media-upload example writes to a fixed `/tmp/upload.body` path, which is unsuitable for sensitive files without hardening.
+
+Mitigation: Use a secure temporary file with restrictive permissions and cleanup when handling sensitive media.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/whatsapp-business)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [WhatsApp Business API Overview](https://developers.facebook.com/docs/whatsapp/cloud-api/overview)
+- [WhatsApp Send Messages](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-messages)
+- [WhatsApp Message Templates](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates)
+- [WhatsApp Media Reference](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/media)
+- [WhatsApp Phone Numbers Reference](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/phone-numbers)
+- [WhatsApp Business Profiles Reference](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce API request paths, command examples, payload templates, and confirmation guidance for write operations.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

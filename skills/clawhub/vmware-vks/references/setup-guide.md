@@ -4,14 +4,14 @@ Full setup, security details, and AI platform compatibility for `vmware-vks`.
 
 ## Installation
 
-All install methods fetch from the same source: [github.com/zw008/VMware-VKS](https://github.com/zw008/VMware-VKS) (MIT licensed). We recommend reviewing the source code before installing.
+All install methods fetch from the same source: [github.com/vmware-skills/VMware-VKS](https://github.com/vmware-skills/VMware-VKS) (MIT licensed). We recommend reviewing the source code before installing.
 
 ```bash
 # Via Skills.sh (fetches from GitHub)
-npx skills add zw008/VMware-VKS
+npx skills add vmware-skills/VMware-VKS
 
 # Via ClawHub (fetches from ClawHub registry snapshot of GitHub)
-clawhub install vmware-vks
+clawhub install @zw008/vmware-vks
 
 # Via PyPI (recommended for version pinning)
 uv tool install vmware-vks==1.2.3
@@ -40,7 +40,7 @@ The `vmware-vks` package installs a Python CLI binary and its dependencies (pyVm
 ### Development Install
 
 ```bash
-git clone https://github.com/zw008/VMware-VKS.git
+git clone https://github.com/vmware-skills/VMware-VKS.git
 cd VMware-VKS
 uv venv && source .venv/bin/activate
 uv pip install -e .
@@ -114,7 +114,7 @@ Choose the best mode based on your environment:
 | Scenario | Recommended Mode | Why |
 |----------|-----------------|-----|
 | **Cloud models** (Claude, GPT-4o, Gemini) | MCP or CLI | Both work well; MCP gives structured JSON I/O |
-| **Local/small models** (Ollama, Llama, Qwen <32B) | **CLI** | Lower token cost (~2K vs ~8K), higher accuracy -- small models struggle with 20 MCP tool schemas |
+| **Local/small models** (Ollama, Llama, Qwen <32B) | **CLI** | Lower token cost (~2K vs ~8K), higher accuracy -- small models struggle with 23 MCP tool schemas |
 | **Token-sensitive workflows** | **CLI** | CLI via SKILL.md uses ~2K tokens; MCP loads ~8K tokens of tool definitions into every conversation |
 | **Automated pipelines / Agent chaining** | **MCP** | Structured JSON input/output, type-safe parameters, no shell parsing |
 
@@ -148,7 +148,7 @@ To run the agent read-only, give it a read-only vCenter/Supervisor service accou
 
 This skill follows a defense-in-depth approach with six security properties:
 
-1. **Source Code** -- MIT-licensed, fully auditable. No obfuscated logic. Source at [github.com/zw008/VMware-VKS](https://github.com/zw008/VMware-VKS). The `uv` installer fetches the `vmware-vks` package from PyPI, which is built from this GitHub repository.
+1. **Source Code** -- MIT-licensed, fully auditable. No obfuscated logic. Source at [github.com/vmware-skills/VMware-VKS](https://github.com/vmware-skills/VMware-VKS). The `uv` installer fetches the `vmware-vks` package from PyPI, which is built from this GitHub repository.
 
 2. **Credentials** -- `config.yaml` contains vCenter hostnames and usernames only. Passwords are loaded exclusively from `~/.vmware-vks/.env` (read via `python-dotenv`). Passwords are never logged, never echoed to CLI output, and never included in audit log entries. **In-memory kubeconfig (v1.5.18+)**: Supervisor and TKC kubeconfigs — which embed the vCenter session bearer token — are built as a Python dict and handed to the kubernetes client via `load_kube_config_from_dict()`. The bearer token never touches disk during normal MCP/CLI flow, eliminating the previous temp-file TOCTOU window. The explicit `vmware-vks kubeconfig get -o <path>` CLI export still writes to the user-chosen path so `kubectl` can use it.
 
@@ -158,7 +158,7 @@ This skill follows a defense-in-depth approach with six security properties:
 
 5. **Prompt Injection Protection** -- All tool inputs are passed as typed Python parameters (`str`, `int`, `bool`), never interpolated into shell commands. No `eval`, `exec`, or subprocess calls with user-controlled data.
 
-6. **Least Privilege** -- 13/20 tools are read-only. All write operations default to `dry_run=True` where applicable. Destructive operations (`delete_namespace`, `delete_tkc_cluster`) require explicit `confirmed=True` and pass through safety guards that cannot be bypassed without `force=True`. All write operations are audit-logged to `~/.vmware/audit.db` (SQLite WAL, via vmware-policy).
+6. **Least Privilege** -- 15/23 tools are read-only. All write operations default to `dry_run=True` where applicable. Destructive operations (`delete_namespace`, `delete_tkc_cluster`) require explicit `confirmed=True` and pass through safety guards that cannot be bypassed without `force=True`. All write operations are audit-logged to `~/.vmware/audit.db` (SQLite WAL, via vmware-policy).
 
 ## Supported AI Platforms
 

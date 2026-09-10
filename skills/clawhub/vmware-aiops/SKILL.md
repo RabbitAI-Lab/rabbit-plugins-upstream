@@ -12,26 +12,26 @@ installer:
 argument-hint: "[vm-name or describe your task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["VMWARE_AIOPS_CONFIG"],"bins":["vmware-aiops"],"config":["~/.vmware-aiops/config.yaml","~/.vmware-aiops/.env"]},"optional":{"env":["VMWARE_TARGET_PASSWORD","VMWARE_<TARGET>_USERNAME","SLACK_WEBHOOK_URL","DISCORD_WEBHOOK_URL","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_AIOPS_CONFIG","homepage":"https://github.com/zw008/VMware-AIops","emoji":"🖥️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"env":["VMWARE_AIOPS_CONFIG"],"bins":["vmware-aiops"],"config":["~/.vmware-aiops/config.yaml","~/.vmware-aiops/.env"]},"optional":{"env":["VMWARE_TARGET_PASSWORD","VMWARE_<TARGET>_USERNAME","SLACK_WEBHOOK_URL","DISCORD_WEBHOOK_URL","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_AIOPS_CONFIG","homepage":"https://github.com/vmware-skills/VMware-AIops","emoji":"🖥️","os":["macos","linux"]}}
 compatibility: >
   vmware-policy auto-installed as Python dependency (provides @vmware_tool decorator and audit logging). All write operations audited to ~/.vmware/audit.db.
   Credentials: Each vCenter/ESXi target requires a per-target password env var in ~/.vmware-aiops/.env following the pattern VMWARE_<TARGET_NAME_UPPER>_PASSWORD. Passwords are never logged or echoed.
-  Destructive operations: All write tools require explicit parameters, pass through @vmware_tool decorator (pre-check + audit + sanitize), and CLI destructive commands require double confirmation + support --dry-run.
-  Guest operations: Require explicit vm_name, cmd (full path), args, user parameters — no implicit or background execution.
+  Destructive operations: All write tools require explicit parameters and pass through the @vmware_tool decorator (pre-check + audit + sanitize). CLI destructive commands additionally require double confirmation and support --dry-run; the MCP tools have neither — a write acts on the first call, and read/write authorization is delegated to the vCenter service account (give an agent a read-only vCenter role to run it read-only).
+  Guest operations: Require explicit vm_name, command (full path), arguments, username parameters — no implicit or background execution. The command is unbounded and runs with the guest credentials supplied, so the guest account is a second authorization boundary independent of the vCenter one; omit guest credentials if guest ops are not needed.
   Webhooks: Disabled by default. When enabled, send only aggregated alert metadata (alarm counts, event types) to user-configured URLs. No credentials, IPs, or PII in payloads.
-  SSL bypass: disableSslCertValidation is off by default; exists only for self-signed certs in isolated lab environments.
+  TLS verification is on by default (verify_ssl: true); set verify_ssl: false only for self-signed certs in isolated lab environments.
   Transitive dependencies: Only vmware-policy (audit/policy). No post-install scripts or background services.
 ---
 
 # VMware AIops
 
-> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/zw008/VMware-AIops](https://github.com/zw008/VMware-AIops) under the MIT license.
+> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/vmware-skills/VMware-AIops](https://github.com/vmware-skills/VMware-AIops) under the MIT license.
 
 VMware family entry point — AI-powered VM lifecycle, deployment, and alarm management — 60 MCP tools.
 
 > **Start here**: install vmware-aiops first, then add modules as needed.
 > Run `vmware-aiops hub status` to see which family members are installed.
-> **Family**: [vmware-monitor](https://github.com/zw008/VMware-Monitor) (inventory/health), [vmware-storage](https://github.com/zw008/VMware-Storage) (iSCSI/vSAN), [vmware-vks](https://github.com/zw008/VMware-VKS) (Tanzu Kubernetes), [vmware-nsx](https://github.com/zw008/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/zw008/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/zw008/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/zw008/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/zw008/VMware-Harden) (compliance baselines).
+> **Family**: [vmware-monitor](https://github.com/vmware-skills/VMware-Monitor) (inventory/health), [vmware-storage](https://github.com/vmware-skills/VMware-Storage) (iSCSI/vSAN), [vmware-vks](https://github.com/vmware-skills/VMware-VKS) (Tanzu Kubernetes), [vmware-nsx](https://github.com/vmware-skills/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/vmware-skills/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/vmware-skills/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/vmware-skills/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/vmware-skills/VMware-Harden) (compliance baselines).
 > | [vmware-pilot](../vmware-pilot/SKILL.md) (workflow orchestration) | [vmware-policy](../vmware-policy/SKILL.md) (audit/policy)
 
 ## What This Skill Does
@@ -182,15 +182,14 @@ Start here when the ask is "is anything on fire?" before diving into a specific 
 | Cloud models (Claude, GPT-4o) | Either | MCP gives structured JSON I/O |
 | Automated pipelines | **MCP** | Type-safe parameters, structured output |
 
-## MCP Tools (60 — 18 read, 42 write)
+## MCP Tools (60 — 17 read, 43 write)
 
 | Category | Tools | R/W |
 |----------|-------|:---:|
 | VM Lifecycle (16) | `vm_list_ttl`, `vm_list_snapshots`, `vm_task_status` | Read |
 | | `vm_power_on`, `vm_power_off`, `vm_create`, `vm_reconfigure`, `vm_clone`, `vm_migrate`, `vm_delete`, `vm_create_snapshot`, `vm_revert_snapshot`, `vm_delete_snapshot`, `vm_set_ttl`, `vm_cancel_ttl`, `vm_clean_slate` | Write |
 | Deployment (8) | `deploy_vm_from_ova`, `deploy_vm_from_template`, `deploy_linked_clone`, `attach_iso_to_vm`, `convert_vm_to_template`, `batch_clone_vms`, `batch_linked_clone_vms`, `batch_deploy_from_spec` | Write |
-| Guest Ops (5) | `vm_guest_download` | Read |
-| | `vm_guest_exec`, `vm_guest_exec_output`, `vm_guest_upload`, `vm_guest_provision` | Write |
+| Guest Ops (5) | `vm_guest_exec`, `vm_guest_exec_output`, `vm_guest_upload`, `vm_guest_download`, `vm_guest_provision` | Write |
 | Plan/Apply (4) | `vm_list_plans` | Read |
 | | `vm_create_plan`, `vm_apply_plan`, `vm_rollback_plan` | Write |
 | Datastore (2) | `browse_datastore`, `scan_datastore_images` | Read |
@@ -205,7 +204,9 @@ Start here when the ask is "is anything on fire?" before diving into a specific 
 
 **List envelope**: the read list tools — `browse_datastore`, `list_vcenter_alarms`, `vm_list_plans`, `vm_list_snapshots`, `vm_list_ttl` — return `{items, returned, limit, total, truncated, hint}` rather than a bare array. Read the rows from `items` and check `truncated` before concluding a listing is complete; empty `items` with `truncated: false` means checked-and-none, not a failure. The write `batch_*` tools keep their bare list (complete by construction). Rationale, `total` semantics, error shape: `references/capabilities.md`.
 
-**Read/write split**: 18 tools are read-only (per `[READ]` docstring marker), 42 modify state. All write tools require explicit parameters and are audit-logged. Destructive operations (`vm_delete`, `vm_revert_snapshot`, `vm_delete_snapshot`, `vm_set_ttl` (schedules an unattended auto-delete), force power-off, cluster delete/remove-host, alarm reset, `remove_host_vmk`, `delete_drs_rule`) require double confirmation at the CLI layer and support `--dry-run`.
+**Read/write split**: 17 tools are read-only (per `[READ]` docstring marker), 43 modify state. All write tools require explicit parameters and are audit-logged. Destructive operations (`vm_delete`, `vm_revert_snapshot`, `vm_delete_snapshot`, `vm_set_ttl` (schedules an unattended auto-delete), force power-off, cluster delete/remove-host, alarm reset, guest exec/upload, `remove_host_vmk`, `delete_drs_rule`) require double confirmation at the CLI layer and support `--dry-run`.
+
+**The MCP tools have no confirmation step and no dry-run** — a write acts on the first call, by design (HLD D-2). What decides whether it lands is the vCenter account's privilege; what records it is `~/.vmware/audit.db`. To run an agent read-only, give it a read-only vCenter role. `vm_guest_exec` is the widest blast radius here: an unbounded command run inside the guest with the credentials passed in (`root` in the documented example), ungated. The guest account is a second authorization boundary — a read-only vCenter role does not constrain it. Inventory: `references/capabilities.md`.
 
 **Network write gating**: `create_dvs_portgroup`, `add_host_vmk`, and `set_vmk_service` are preview/confirm-gated — `confirm=False` (default) returns the exact spec that would be applied without writing. `remove_host_vmk` is **fail-closed**: it refuses when the vmk is selected for a host service (management/vMotion/vSAN), lives on a non-default netstack (NSX TEPs, dedicated vMotion stacks), carries a default gateway route, or when any of that cannot be verified — pass `force_unprotected=True` to override the non-absolute protections. The host's only management-enabled vmk is never removable (no override). `set_vmk_service` is **fail-closed** too: it refuses both directions when the host's service map is unreadable, and refuses (no override) to untag `management` from the host's only management-enabled vmk — the call rides the interface it would untag.
 
@@ -283,7 +284,7 @@ Run `vmware-aiops plan list` to see failed plan status. Ask user if they want to
 
 ### Connection refused / SSL error
 1. Verify target is reachable: `vmware-aiops doctor`
-2. For self-signed certs: set `disableSslCertValidation: true` in config.yaml (lab environments only)
+2. For self-signed certs: set `verify_ssl: false` in config.yaml (lab environments only)
 
 ## Setup
 
@@ -311,4 +312,4 @@ vmware-policy is automatically installed as a dependency — no manual setup nee
 
 ## License
 
-MIT — [github.com/zw008/VMware-AIops](https://github.com/zw008/VMware-AIops)
+MIT — [github.com/vmware-skills/VMware-AIops](https://github.com/vmware-skills/VMware-AIops)

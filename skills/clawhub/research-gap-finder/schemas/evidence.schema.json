@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/research-gap-finder/schemas/evidence.schema.json",
+  "title": "Research Gap Finder evidence file",
+  "type": "object",
+  "required": ["schema_version", "papers", "fetched_at"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "2.1"},
+    "fetched_at": {"type": ["string", "null"]},
+    "papers": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/paper"}
+    }
+  },
+  "$defs": {
+    "paper": {
+      "type": "object",
+      "required": ["id", "title", "source", "source_id", "doi", "provenance"],
+      "properties": {
+        "id": {"type": "string"},
+        "title": {"type": "string"},
+        "authors": {"type": "array", "items": {"type": "string"}},
+        "year": {"type": ["string", "integer", "null"]},
+        "source": {"type": "string"},
+        "source_id": {"type": "string"},
+        "doi": {"type": "string"},
+        "url": {"type": "string"},
+        "abstract": {"type": "string"},
+        "cited_by": {"type": "integer", "minimum": 0},
+        "provenance": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["engine", "query", "retrieved_at", "identifier", "record_url"],
+            "properties": {
+              "engine": {"type": "string"},
+              "query": {"type": "string"},
+              "retrieved_at": {"type": "string"},
+              "identifier": {"type": "string"},
+              "record_url": {"type": "string"},
+              "request_urls": {"type": "array", "items": {"type": "string"}}
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

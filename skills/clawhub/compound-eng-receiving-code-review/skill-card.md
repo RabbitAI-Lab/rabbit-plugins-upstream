@@ -1,40 +1,57 @@
-## Description: <br>
-Guides agents through critical triage of PR/MR review feedback, including verifying suggestions, pushing back with evidence when needed, and implementing only confirmed fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process code review feedback critically: check correctness before acting, push back on incorrect suggestions, and avoid performative agreement when responding to PR/MR review comments or implementing reviewer suggestions.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to respond to PR/MR review comments, triage automated or human suggestions, and decide whether to fix, clarify, or push back with evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use an existing GitHub CLI session to read PR comments or draft and post review-thread replies when asked. <br>
-Mitigation: Review the target repository, comments, and reply text before allowing commands that read or post PR review content. <br>
-Risk: Incorrect triage could accept bad review feedback or dismiss valid feedback. <br>
-Mitigation: Require evidence-backed verification, escalate ambiguous or security-related suggestions, and test each implemented fix individually. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to triage incoming code review feedback, verify technical premises against the current codebase, decide whether to fix, defer, clarify, or push back, and prepare evidence-based responses.
 
-## Reference(s): <br>
-- [Headless Mode](references/headless-mode.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with optional structured triage summaries and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Headless mode returns AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill may guide an agent to inspect repository content and PR review comments, then draft or post review-thread replies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep approval gates for public comments, resolving threads, and automated headless workflows.
+
+Risk: Blindly accepting reviewer comments can introduce incorrect code changes or skip needed verification.
+
+Mitigation: Triage and verify every finding against code, tests, documentation, history, or reproduction evidence before implementing or replying.
+
+## Reference(s):
+
+- [Evidence and disagreement](references/evidence-and-disagreement.md)
+- [Feedback triage](references/feedback-triage.md)
+- [Fix and handoff](references/fix-and-handoff.md)
+- [Headless mode](references/headless-mode.md)
+- [Review modes](references/review-modes.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance, triage summaries, proposed code changes, shell commands, and review-thread reply drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return structured headless triage groups such as AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK when invoked programmatically.]
+
+## Skill Version(s):
+
+4.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,55 +1,75 @@
-## Description: <br>
-Use when accessing Outlit customer intelligence through the `outlit` CLI, Outlit MCP tools, Pi tools, or @outlit/tools, including customer lookups, users, workspace users, timelines, facts, source evidence, semantic search, revenue, churn, SQL analytics, setup, notifications, integrations, or troubleshooting agent access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when accessing Outlit customer intelligence through the `outlit` CLI, Outlit MCP tools, Pi tools, or @outlit/tools, including customer lookups, users, workspace users, timelines, facts, source evidence, semantic search, revenue, churn, SQL analytics, identity splits, merge suggestions, setup, integrations, or troubleshooting agent access.
 
-## Publisher: <br>
-[leo-paz](https://clawhub.ai/user/leo-paz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leo-paz](https://clawhub.ai/user/leo-paz)
 
-## Use Case: <br>
-Developers and customer-facing teams use this skill to query Outlit customer intelligence, inspect customer timelines and facts, run read-only analytics, configure agent access, and troubleshoot integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to access customer intelligence data that may include sensitive customer, billing, support, CRM, and communication context. <br>
-Mitigation: Install and use it only in trusted Outlit workspaces, request only needed fields, and handle returned customer data according to the user's data governance requirements. <br>
-Risk: Credential handling is required for CLI or tool access. <br>
-Mitigation: Prefer OAuth or environment-based credentials such as OUTLIT_API_KEY, avoid hardcoding shared endpoints or bearer tokens, and verify authentication state before use. <br>
-Risk: The fast installer uses a curl-to-bash pattern. <br>
-Mitigation: Prefer the documented npm or Homebrew install paths when possible, and review installer behavior before running direct shell installation. <br>
-Risk: Notification and integration setup commands can perform account-level actions. <br>
-Mitigation: Run notification, integration setup, or provider credential commands only after the user explicitly asks for those actions. <br>
+## Use Case:
 
+External customer-success, sales, support, and operations agents use this skill to retrieve and reason over Outlit customer profiles, timelines, facts, source evidence, search results, revenue signals, churn signals, SQL analytics, integrations, access settings, and identity-merge workflows.
 
-## Reference(s): <br>
-- [Outlit homepage](https://outlit.ai) <br>
-- [Outlit documentation](https://docs.outlit.ai/) <br>
-- [CLI overview](https://docs.outlit.ai/cli/overview) <br>
-- [CLI commands](https://docs.outlit.ai/cli/commands) <br>
-- [CLI integrations](https://docs.outlit.ai/cli/integrations) <br>
-- [AI agent setup](https://docs.outlit.ai/cli/ai-agents) <br>
-- [Agent skills](https://docs.outlit.ai/ai-integrations/skills) <br>
-- [MCP integration](https://docs.outlit.ai/ai-integrations/mcp) <br>
-- [Pi agents](https://docs.outlit.ai/ai-integrations/pi) <br>
-- [Public tools API](https://docs.outlit.ai/api-reference/tools) <br>
-- [Customer context graph](https://docs.outlit.ai/concepts/customer-context-graph) <br>
-- [SQL Reference](references/sql-reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, SQL, Markdown] <br>
-**Output Format:** [Markdown with inline shell commands, SQL snippets, and references to CLI, MCP, and Pi tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON-oriented CLI usage and evidence citations from customer records, timelines, facts, search results, sources, or SQL results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The artifact includes a curl-to-Bash CLI install command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the npm or Homebrew installation path from the release metadata, and install only when the Outlit distribution channel is trusted.
+
+Risk: The skill can guide workspace-changing actions, including access updates, integration changes, activation settings, feature archival, and customer merges.
+
+Mitigation: Require explicit user confirmation before write operations and use least-privilege Outlit API grants or OAuth permissions.
+
+Risk: Customer merge execution is permanent and has no supported undo.
+
+Mitigation: Preview merges first, confirm that records represent the same customer, require the reviewed preview token and stable request ID, and verify merge permission before execution.
+
+Risk: Customer intelligence outputs may expose sensitive customer or workspace data.
+
+Mitigation: Request only needed fields, cite evidence type, and report when data is sparse, stale, partial, truncated, or inconsistent.
+
+## Reference(s):
+
+- [ClawHub Outlit Skill Page](https://clawhub.ai/leo-paz/skills/outlit)
+- [Outlit Homepage](https://outlit.ai)
+- [Outlit Docs Home](https://docs.outlit.ai/)
+- [Outlit CLI Overview](https://docs.outlit.ai/cli/overview)
+- [Outlit CLI Commands](https://docs.outlit.ai/cli/commands)
+- [Outlit CLI Integrations](https://docs.outlit.ai/cli/integrations)
+- [Outlit AI Agent Setup](https://docs.outlit.ai/cli/ai-agents)
+- [Outlit Agent Skills](https://docs.outlit.ai/ai-integrations/skills)
+- [Outlit MCP Integration](https://docs.outlit.ai/ai-integrations/mcp)
+- [Outlit Pi Agents](https://docs.outlit.ai/ai-integrations/pi)
+- [Outlit Public Tools API](https://docs.outlit.ai/api-reference/tools)
+- [Outlit API Key Validation](https://docs.outlit.ai/api-reference/validation)
+- [Outlit Customer Context Graph](https://docs.outlit.ai/concepts/customer-context-graph)
+- [Customer Identity and Merge Workflow](references/identity.md)
+- [SQL Reference](references/sql-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Code, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, MCP or Pi tool recommendations, JSON-oriented setup notes, and SQL examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require an OUTLIT_API_KEY or OAuth-backed MCP access for live workspace data; agents should keep customer-data access least-privileged.]
+
+## Skill Version(s):
+
+1.0.9 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,76 @@
-## Description: <br>
-Google Play Developer API (Android Publisher) integration with managed OAuth for managing apps, subscriptions, in-app purchases, and reviews programmatically. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Play Developer API integration with managed OAuth for managing apps, subscriptions, in-app products, purchases, reviews, and app edits through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Google Play Console resources through Maton-managed OAuth, including app listings, in-app products, subscriptions, purchases, reviews, and edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY for access to Google Play resources through Maton. <br>
-Mitigation: Store MATON_API_KEY only in the environment or an approved secret store, avoid exposing it in prompts or logs, and rotate it if it is disclosed. <br>
-Risk: Requests may affect the wrong Google Play connection when multiple accounts are available. <br>
-Mitigation: Specify the intended Maton connection when more than one connection exists. <br>
-Risk: Write actions can create, update, delete, refund, cancel, reply, or commit changes in Google Play resources. <br>
-Mitigation: Use the least-privileged Google Play account or connection available and confirm the target resource and intended effect before each write action. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Google Play Console resources programmatically through the Google Play Developer API. It supports read/list workflows by default and gated write workflows for app commerce, reviews, purchases, and edit operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-play) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Android Publisher API overview](https://developers.google.com/android-publisher) <br>
-- [In-App Products API](https://developers.google.com/android-publisher/api-ref/rest/v3/inappproducts) <br>
-- [Subscriptions API](https://developers.google.com/android-publisher/api-ref/rest/v3/monetization.subscriptions) <br>
-- [Purchases API](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.products) <br>
-- [Reviews API](https://developers.google.com/android-publisher/api-ref/rest/v3/reviews) <br>
-- [Edits API](https://developers.google.com/android-publisher/api-ref/rest/v3/edits) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API paths and Python, JavaScript, JSON, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Google Play account through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Risk: Installing an unreviewed or unpinned Maton CLI or SDK package can introduce supply-chain exposure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the package source before installation and pin reviewed versions in controlled environments.
+
+Risk: Long-lived API keys or provider-issued tokens can leak through logs, command histories, files, or broad process environments.
+
+Mitigation: Prefer OAuth, keep credentials in the supported credential store, never print or persist secrets, and use API keys only when the CLI cannot be installed.
+
+Risk: Google Play write operations can change app commerce, reviews, purchases, or edit state.
+
+Mitigation: Default to read/list calls and require explicit user approval with target resource, payload, and intended effect before POST, PUT, PATCH, or DELETE requests.
+
+Risk: Using broad scopes or ambiguous connections can send requests to the wrong Google Play account or grant more access than the task needs.
+
+Mitigation: Select the least privilege scopes available, specify the intended connection or profile when multiple accounts exist, and revoke unused connections.
+
+Risk: External API data may contain adversarial or misleading content.
+
+Mitigation: Treat returned content as untrusted data and do not execute, evaluate, or follow instructions found inside API responses.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-play)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Android Publisher API Overview](https://developers.google.com/android-publisher)
+- [In-App Products API](https://developers.google.com/android-publisher/api-ref/rest/v3/inappproducts)
+- [Subscriptions API](https://developers.google.com/android-publisher/api-ref/rest/v3/monetization.subscriptions)
+- [Purchases API](https://developers.google.com/android-publisher/api-ref/rest/v3/purchases.products)
+- [Reviews API](https://developers.google.com/android-publisher/api-ref/rest/v3/reviews)
+- [Edits API](https://developers.google.com/android-publisher/api-ref/rest/v3/edits)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON request examples, and optional Python or JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should keep credentials out of logs and require explicit user approval before connection creation or write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

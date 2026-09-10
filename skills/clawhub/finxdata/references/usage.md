@@ -10,6 +10,7 @@
 
 | 用户想做什么 | 推荐命令 | 说明 |
 | --- | --- | --- |
+| 按代码或名称查找股票 | `python3 scripts/finxdata.py stock search --query 阿里` | 需要 API Key，但不扣账户额度；最多返回 5 个 A/H 股匹配项。 |
 | 看一只股票的当前概况 | `python3 scripts/finxdata.py stock summary --code 600519` | 用于公司简介、主营信息和概要行情。 |
 | 对比几只股票最新行情 | `python3 scripts/finxdata.py stock quote --code 600519 000001 300750` | 报价接口支持批量代码，优先一次请求完成。 |
 | 查一只股票的财报明细 | `python3 scripts/finxdata.py stock financial --code 600519 --sections reports,mainops` | `reports` 查基础财报和三大报表；可按需组合 `mainops/holdernum/predict/performance/disclosure`。 |
@@ -20,8 +21,12 @@
 | 看市场新闻跟踪 | `python3 scripts/finxdata.py track news` | 返回新闻跟踪快照；回答时优先整理更新时间、重点新闻、相关股票或主题线索。 |
 | 看市场状态跟踪 | `python3 scripts/finxdata.py track market` | 返回市场跟踪快照；适合整理大盘状态、活跃方向、情绪变化和需要继续追踪的板块线索。 |
 | 看公告跟踪 | `python3 scripts/finxdata.py track notice` | 返回公告跟踪快照；回答时优先提取公告时间、公司、事项类型、重要性和后续关注点。 |
+| 查个股标准公告 | `python3 scripts/finxdata.py disclosures list --symbol 600519 --limit 20` | 返回公告标题、披露时间、正文链接、附件和质量状态；适合精确查询，不与公告跟踪摘要混用。 |
+| 查港股标准公告 | `python3 scripts/finxdata.py disclosures list --symbol 00700.HK --limit 20` | 返回 `symbols=["00700"]`；保留代码前导零，股票基础信息尚未收录时仍可查询匹配公告。 |
+| 查市场标准公告 | `python3 scripts/finxdata.py disclosures list --market SSE --start-date 2026-09-01` | 不传 `symbol` 时查询全市场，可按交易所、日期和公告类型收窄。 |
 | 看龙虎榜 | `python3 scripts/finxdata.py market dragon-tiger --trade-date 2026-06-12 --limit 50` | 市场全量龙虎榜；个股席位用 `stock dragon-tiger-seats`。 |
 | 查限售解禁 | `python3 scripts/finxdata.py stock lockup --code 600519 --forward-days 180` | 覆盖未来待解禁和历史解禁。 |
+| 按股票筛选业绩预告 | `python3 scripts/finxdata.py stock forecast --code 600519` | `code` 可省略；省略时按页查询全市场业绩预告。 |
 | 查宏观指标 | `python3 scripts/finxdata.py economy china-types` 后接 `economy china --type <type>` | 先查可用类型，再查具体报表。 |
 | 查 FRED 时间序列 | `python3 scripts/finxdata.py fred series-list` 后接 `fred series --series-id FEDFUNDS` | 先查可用序列，再查观测值。 |
 | 查额度 | `python3 scripts/finxdata.py quota` | 用于解释 API Key 剩余次数、余额和重置等待时间。 |
@@ -43,8 +48,12 @@
 | Agent 看新闻跟踪 | `python3 scripts/finxdata.py agent track-news --agent-type hermes` | 免费零扣费；后台会按来源头统计调用来源和频率。 |
 | Agent 看市场跟踪 | `python3 scripts/finxdata.py agent track-market --agent-type hermes` | 免费零扣费；适合 Agent 客户端默认行情摘要。 |
 | Agent 看公告跟踪 | `python3 scripts/finxdata.py agent track-notice --agent-type hermes` | 免费零扣费；适合整理近期公告事项。 |
+| Agent 查标准公告 | `python3 scripts/finxdata.py agent disclosures --symbol 600519 --agent-type hermes` | 免费零扣费；返回与 API Key 通道一致的标准结构，受单 IP 限额。 |
+| Agent 查港股市场公告 | `python3 scripts/finxdata.py agent disclosures --market HKEX --limit 20 --agent-type codex` | 不传 `symbol`，按港股市场筛选；支持日期、公告类型及游标分页。 |
 | Agent 查中国宏观指标 | `python3 scripts/finxdata.py agent economy-china --type cpi --agent-type opencode` | 免费零扣费；返回中国宏观经济报表。 |
 | Agent 看宏观发布日历 | `python3 scripts/finxdata.py agent economy-calendar --year 2026 --month 6 --months 1 --agent-type opencode` | 免费零扣费；返回国内宏观数据发布日历。 |
+
+已知证券代码时直接查询公告，无需先查询股票基础信息或搜索结果。空列表仅表示当前筛选条件下未查到已收录公告，结合 `coverage_status` 说明覆盖完整性。公告查询的完整参数、响应字段、日期窗口和翻页示例见 [公告接口说明](api.md#标准化公告)。
 
 ## 更新节奏
 
@@ -53,6 +62,7 @@
 | 股票报价、市场价格、K 线 | 请求时读取短缓存或补取；交易时段通常更频繁，非交易时段缓存更长。 |
 | 热门题材、强势股、龙虎榜、北向资金 | 交易日内有缓存和刷新机制；带 `refresh` 或 `refresh_today` 的接口可跳过缓存尝试刷新。 |
 | 股票财务、主营、公告摘要、限售解禁 | 读取缓存或本地数据，缺失或指定 `refresh` 时尝试补取；财务类通常跟随公告披露节奏。 |
+| 标准化个股/市场公告 | `published_at` 为披露时间，`last_collected_at` 为最近采集时间，`as_of` 为本次响应生成时间；该接口无 `refresh` 参数。 |
 | 新股上市、业绩预告、A 股交易日历 | 后台每日定时更新。 |
 | 中国宏观、宏观发布日历 | 后台每日检查并补齐当前周期数据；发布日历滚动维护未来月份。 |
 | FRED | 后台按日检查，单个指标按自己的发布频率刷新。 |
@@ -62,7 +72,7 @@
 
 ## 配额和限制
 
-常规数据接口需要 `FINXDATA_API_KEY`，会消耗或检查账户额度。Agent 公开接口不需要 API Key，不扣注册用户额度，但必须提供 `--agent-type`，并受来源统计、IP 频率和服务端保护策略限制。
+常规数据接口需要 `FINXDATA_API_KEY`，会消耗或检查账户额度。`stock search` 只验证 API Key，不消耗账户额度。Agent 公开接口不需要 API Key，不扣注册用户额度，但必须提供 `--agent-type`，并受来源统计、IP 频率和服务端保护策略限制。
 
 `quota` 只反映 API Key 账户额度，不代表 Agent 公开接口的剩余次数。`quota` 返回字段含义：
 
@@ -104,7 +114,9 @@ Agent 公开接口失败时：
 | --- | --- |
 | `missing_api_key` | 本地没有配置 API Key，需要先申请并导出 `FINXDATA_API_KEY`。 |
 | `auth_failed` | API Key 错误、过期或没有接口权限。 |
+| `missing_agent_type` / `agent_auth_failed` | Agent 来源标识缺失、格式错误或没有接口权限。 |
 | `quota_limited` | 额度用尽或调用太频繁；先查 `quota`。 |
+| `agent_rate_limited` | Agent 免费接口达到单 IP 每日限额或频率限制；无需查 `quota`，按 `Retry-After` 或服务提示等待。 |
 | `not_found` | 接口、股票代码、日期或指标类型不存在。 |
 | `network_timeout` / `network_connect_failed` | 网络或服务连接问题；脚本已重试，稍后再试。 |
 | `service_unavailable` | 服务或上游数据暂时不可用；脚本已重试，稍后再试。 |
@@ -118,6 +130,7 @@ Agent 公开接口失败时：
 ```json
 {
   "code": 200,
+  "confidence": "高",
   "data": "### 600519 股票概要\n\n| 项目 | 值 |\n| --- | --- |\n| 最新价 | ... |"
 }
 ```

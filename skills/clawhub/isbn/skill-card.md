@@ -1,41 +1,60 @@
-## Description: <br>
-用 ISBN 查图书详情，或按书名关键字搜书。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries book details by ISBN or searches books by title keyword using the JisuAPI ISBN service.
 
-## Publisher: <br>
-[jisuapi](https://clawhub.ai/user/jisuapi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jisuapi](https://clawhub.ai/user/jisuapi)
 
-## Use Case: <br>
-External users and developers use this skill to look up book metadata by ISBN or search book records by title keyword through the JisuAPI ISBN service. It is useful when an agent needs structured book details such as title, author, publisher, publication date, price, summary, cover image, or ISBN values. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security evidence flags suspicious behavior involving broad full-access review execution and possible transmission of code diffs to external reviewer CLIs. <br>
-Mitigation: Review the skill before installing it in sensitive repositories; use `--no-yolo` and `--fallback-reviewer none` when sandbox prompts and no automatic third-party model fallback are required. <br>
-Risk: The skill requires a JisuAPI key and sends ISBN or title-search requests to external JisuAPI endpoints. <br>
-Mitigation: Store the API key in `JISU_API_KEY`, limit key permissions or quota where possible, and avoid submitting sensitive search terms if external API handling is not acceptable. <br>
+## Use Case:
 
+Agents use this skill to help users identify books from ISBN-10 or ISBN-13 values, search for books by title keywords, and summarize returned bibliographic details such as title, author, publisher, publication date, price, summary, cover, and ISBN.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jisuapi/isbn) <br>
-- [JisuAPI ISBN API documentation](https://www.jisuapi.com/api/isbn/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON responses with agent-facing guidance for summarizing book results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and JISU_API_KEY; calls JisuAPI ISBN query and search endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill sends ISBNs or title keywords to JisuAPI and requires a JISU_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the API key as a secret and avoid using the skill for confidential book lists or sensitive lookup terms.
+
+Risk: Returned cover, seller, or product links may point to third-party sites.
+
+Mitigation: Do not automatically fetch or open returned links; review them before use.
+
+Risk: Book metadata is provided by a third-party API and may be incomplete or stale.
+
+Mitigation: Verify important bibliographic details against an authoritative source before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jisuapi/skills/isbn)
+- [JisuAPI publisher profile](https://clawhub.ai/user/jisuapi)
+- [JisuAPI ISBN documentation](https://www.jisuapi.com/api/isbn/)
+- [JisuAPI website](https://www.jisuapi.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with JSON command inputs and JSON tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and the JISU_API_KEY environment variable; returned API data may include book metadata, cover URLs, and seller links.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata, created 2026-09-10T09:38:31Z)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

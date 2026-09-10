@@ -1,43 +1,63 @@
-## Description: <br>
-Wrike API integration with managed OAuth for managing tasks, folders, projects, spaces, collaboration, and administrative functions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wrike API integration with managed OAuth for managing tasks, folders, projects, spaces, team collaboration, and administrative functions through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, administrators, and agents use this skill to inspect and manage Wrike workspaces, tasks, folders, projects, spaces, time logs, users, invitations, access roles, audit logs, and data exports through an authenticated Wrike connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key that can access a connected Wrike account. <br>
-Mitigation: Keep MATON_API_KEY private, install only when Wrike access through Maton is intended, and scope usage to the correct connection. <br>
-Risk: Write, administrative, audit-log, invitation, user-management, and data-export operations can expose sensitive data or change account governance. <br>
-Mitigation: Review and explicitly approve the target, scope, and intended effect before any sensitive or account-changing operation. <br>
+## Use Case:
 
+Developers and external operators use this skill to access Wrike API v4 through managed OAuth for project work, task tracking, team collaboration, timelogs, and account administration. It is suited for read-first workflows and user-approved changes in a connected Wrike account.
 
-## Reference(s): <br>
-- [ClawHub Wrike Skill](https://clawhub.ai/byungkyu/wrike-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Wrike API Documentation](https://developers.wrike.com/) <br>
-- [Wrike OAuth 2.0 Authorization](https://developers.wrike.com/oauth-20-authorization/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, text] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; use Maton-Connection when selecting among multiple Wrike connections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can mediate access to a user's Wrike account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton-mediated Wrike access is intended, use the least Wrike scopes available, and confirm the target account when multiple connections exist.
+
+Risk: Write, invitation, user-management, access-role, audit-log, or data-export actions can affect account governance or expose sensitive organizational data.
+
+Mitigation: Default to read and list calls, and require explicit user approval with resource identifiers, payload, scope, and intended effect before sensitive or modifying operations.
+
+Risk: External Wrike content and webhook payloads may contain untrusted instructions or data.
+
+Mitigation: Treat returned content as data only; do not execute, evaluate, or use it to choose follow-up endpoints or recipients without validation and user intent.
+
+## Reference(s):
+
+- [Wrike API Documentation](https://developers.wrike.com/)
+- [Wrike API Overview](https://developers.wrike.com/overview/)
+- [OAuth 2.0 Authorization](https://developers.wrike.com/oauth-20-authorization/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Wrike API request paths, Maton CLI commands, JSON request bodies, and cautionary approval guidance.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

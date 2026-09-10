@@ -1,48 +1,62 @@
-## Description: <br>
-Enterprise due diligence assistant for light pre-cooperation checks on companies, using bidding records, customer and supplier relationships, competitor overlap, and sourced public risk signals to produce single-company or two-company comparison reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A company due-diligence skill that helps users evaluate prospective partners, suppliers, customers, or competitors using public bidding data, company profiles, partner relationships, competitor overlap, and public risk checks.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Business users and agents use this skill before cooperation, signing, credit terms, or supplier selection to generate a light due diligence report on a company. The skill supports single-company reports and two-company comparisons based on Zhiliaobiaoxun bidding data plus sourced public risk information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts zhiliaobiaoxun.com services and can consume paid or trial credits. <br>
-Mitigation: Confirm the expected credit cost before running a report and stop for user approval before exceeding the documented budget. <br>
-Risk: The skill checks and may store a service API key in ~/.zlbx/config.json. <br>
-Mitigation: Prefer a user-provided ZLBX_API_KEY when available, do not expose credentials in conversation, and review local credential storage before deployment. <br>
-Risk: Generated Markdown and HTML reports may contain signed免登录 links that can work for anyone who receives the file or URL. <br>
-Mitigation: Treat generated reports as sensitive business documents, store them in controlled locations, and avoid public sharing of report files or signed links. <br>
-Risk: Automatic registration collects device characteristics for trial-account deduplication. <br>
-Mitigation: Run automatic registration only after explicit user consent and limit collection to the documented platform, architecture, and hashed MAC fields. <br>
+## Use Case:
 
+External business users and analysts use this skill to run lightweight pre-cooperation due diligence on companies before contracting, credit, supplier, customer, or competitive decisions. It produces single-company reports and two-company comparisons grounded in bid records, company data, public links, and stated data gaps.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/enterprise-due-diligence-shuidixinyong) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Automatic registration flow](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown due diligence report with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or explicit-consent automatic registration; may use paid or trial credits; generated reports may include shareable signed links and are saved under ~/zlbx-company-intel-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Optional auto-registration sends a stable MAC-derived device hash.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a preconfigured ZLBX_API_KEY to skip auto-registration, or approve registration only when device-hash use for trial-account deduplication is acceptable.
+
+Risk: Generated reports may preserve login-bypass links returned by the data service.
+
+Mitigation: Treat generated Markdown and HTML reports as access-bearing artifacts and share them only with intended recipients.
+
+Risk: The skill may store an API key in local configuration.
+
+Mitigation: Restrict local config permissions and rotate or revoke the key if the configuration or generated reports are exposed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/enterprise-due-diligence-shuidixinyong)
+- [Skill definition](artifact/SKILL.md)
+- [Workflow reference](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Auto-registration reference](artifact/references/auto-register.md)
+- [Report template](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, guidance]
+
+**Output Format:** [Markdown report in chat with optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration; generated reports may include source links returned by the data service.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -66,7 +66,7 @@ function getParameterByName(name, url) {
 }
 
 function extractPicturePageInfoList(html = '') {
-  const marker = /(?:window\.)?picture_page_info_list\s*=\s*\[/g;
+  const marker = /(?:window\.)?picture_page_info_list\s*[:=]\s*\[/g;
   let markerMatch;
   let best = [];
 

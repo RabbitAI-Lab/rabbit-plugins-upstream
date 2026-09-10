@@ -93,7 +93,11 @@ Agent 的分组和图标元数据可存放在 `~/.config/bark-notify-agents.json
 }
 ```
 
-图标必须能被接收通知的 iOS 设备访问。可使用 GitHub Pages、Cloudflare Pages、S3/R2、nginx、Caddy 或 jsDelivr 托管。如果没有传入 `--icon`，Agent 配置或环境变量里也没有图标，技能会通过公开的 jsDelivr URL 使用上面的 Agent Bark 图标。优先级依次为显式 `--icon`、Agent 配置或环境变量、内置默认图标。
+WorkBuddy 使用同一份本机 Agent 配置：将 `workbuddy` 设置为
+`WorkBuddy` 分组，并把 ICON 指向 Bark Server 托管的
+`https://bark.ilumen.cc/icons/agents/workbuddy-v1.png`。
+
+图标必须能被接收通知的 iOS 设备访问。Bark Server 已提供 Agent ICON 的静态资源路径。如果没有传入 `--icon`，Agent 配置或环境变量里也没有图标，技能会通过公开的 jsDelivr URL 使用上面的 Agent Bark 图标。优先级依次为显式 `--icon`、Agent 配置或环境变量、内置默认图标。
 
 环境变量的优先级高于 Agent JSON：
 
@@ -110,6 +114,7 @@ BARK_AGENT_CODEX_ICON="https://example.com/icons/codex.png"
 python3 scripts/bark-notify.py "Title" "Body"
 python3 scripts/bark-notify.py --agent codex --level active "Build finished" "Codex completed the requested task"
 python3 scripts/bark-notify.py --agent codex --level active "Milestone reached" "The first migration finished"
+python3 scripts/bark-notify.py --agent workbuddy --level active "Build finished" "WorkBuddy task completed"
 python3 scripts/bark-notify.py --ping
 python3 scripts/bark-notify.py --doctor
 python3 scripts/bark-notify.py --dry-run --agent codex --level active "Build finished" "Ready"

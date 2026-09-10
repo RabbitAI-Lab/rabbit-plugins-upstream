@@ -1,50 +1,68 @@
-## Description: <br>
-Manage DocuSeal e-signature workflows from the terminal via the DocuSeal CLI, including creating templates from PDF, DOCX, and HTML, sending documents for signing, tracking submissions, and updating submitters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage DocuSeal e-signature workflows from the terminal via the DocuSeal CLI: create templates from PDF, DOCX, or HTML, send documents for signing, track submissions, and update submitters.
 
-## Publisher: <br>
-[alexbturchyn](https://clawhub.ai/user/alexbturchyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[docuseal](https://clawhub.ai/user/docuseal)
 
-## Use Case: <br>
-Developers, automation engineers, and operations teams use this skill to prepare DocuSeal CLI commands for document templates, signing submissions, submitter updates, and CI/CD-friendly e-signature workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent operate DocuSeal with an API key and affect real signing workflows, including sending emails or SMS, archiving records, updating templates or submitters, and marking submitters completed. <br>
-Mitigation: Review commands before execution, especially commands that send notifications or change workflow state, and use credentials scoped to the intended DocuSeal workspace. <br>
-Risk: The skill supports user-supplied local files, remote document URLs, and HTML content that are sent to the DocuSeal API for processing. <br>
-Mitigation: Use trusted local files or approved HTTPS document URLs for signing materials and avoid submitting unreviewed sensitive content. <br>
+## Use Case:
 
+Developers and operations teams use this skill to prepare DocuSeal CLI commands for creating templates, sending signature requests, tracking signing status, and updating submitters in shells, scripts, or CI/CD pipelines.
 
-## Reference(s): <br>
-- [DocuSeal homepage](https://www.docuseal.com) <br>
-- [DocuSeal API settings](https://console.docuseal.com/api) <br>
-- [Templates reference](references/templates.md) <br>
-- [Submissions reference](references/submissions.md) <br>
-- [Submitters reference](references/submitters.md) <br>
-- [DOCX dynamic content variables](references/docx-variables.md) <br>
-- [PDF and DOCX field tags](references/field-tags.md) <br>
-- [HTML field tags](references/html-fields.md) <br>
-- [DocuSeal dynamic DOCX variables guide](https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents) <br>
-- [DocuSeal embedded field tags guide](https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form) <br>
-- [DocuSeal HTML fillable form guide](https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; DocuSeal CLI command output is JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the docuseal CLI, DOCUSEAL_API_KEY, and DOCUSEAL_SERVER.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: artifact/SKILL.md frontmatter and server release evidence) <br>
+Risk: Agents using this skill can operate a DocuSeal account through an API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege API key and install only when agent access to DocuSeal workflows is intended.
+
+Risk: Commands can send signature requests by email or SMS and can update templates, submissions, and submitters.
+
+Mitigation: Confirm template, submission, and submitter IDs; review recipients before sending; use no-send-email options or test accounts for automation trials.
+
+Risk: Commands may pass local files, remote document URLs, HTML content, or internal URLs to the DocuSeal API.
+
+Mitigation: Share only intended document content and avoid passing sensitive internal URLs unless that disclosure is deliberate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/docuseal/skills/docuseal)
+- [DocuSeal Homepage](https://www.docuseal.com)
+- [Templates](references/templates.md)
+- [Submissions](references/submissions.md)
+- [Submitters](references/submitters.md)
+- [PDF / DOCX Field Tags](references/field-tags.md)
+- [HTML Field Tags](references/html-fields.md)
+- [DOCX Dynamic Content Variables](references/docx-variables.md)
+- [DocuSeal DOCX Dynamic Content Variables Guide](https://www.docuseal.com/guides/use-dynamic-content-variables-in-docx-to-create-personalized-documents)
+- [DocuSeal Embedded Field Tags Guide](https://www.docuseal.com/guides/use-embedded-text-field-tags-in-the-pdf-to-create-a-fillable-form)
+- [DocuSeal HTML Field Tags Guide](https://www.docuseal.com/guides/create-pdf-document-fillable-form-with-html-api)
+- [Example PDF with Field Tags](https://www.docuseal.com/examples/fieldtags.pdf)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON-oriented CLI parameter examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [DocuSeal CLI command output is documented as JSON; commands require DOCUSEAL_API_KEY and may use DOCUSEAL_SERVER.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
