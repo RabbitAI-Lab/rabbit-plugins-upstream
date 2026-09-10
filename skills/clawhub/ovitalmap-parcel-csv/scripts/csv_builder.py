@@ -1,6 +1,5 @@
-"""Build Ovitalmap-compatible vertex and boundary CSV files."""
+"""Build ordered, single-parcel Ovitalmap CSV exports."""
 
-import json
 import os
 import sys
 import tempfile
@@ -37,6 +36,16 @@ BOUNDARY_HEADERS = [
     "文件夹", "名称", "经纬度[经度+纬度]", "线条宽度", "线条颜色",
     "线条不透明度", "闭合", "线型", "轨迹风格", "Comment",
 ]
+EXPORT_MODES = {"boundary", "vertices", "both"}
+
+
+def normalize_export_mode(value=None):
+    """Return the supported export mode, defaulting to the normal boundary file."""
+    mode = str(value or "boundary").strip().lower()
+    if mode not in EXPORT_MODES:
+        choices = ", ".join(sorted(EXPORT_MODES))
+        raise ValueError(f"export_mode must be one of: {choices}")
+    return mode
 
 
 def _build_comment(parcel):
@@ -170,15 +179,18 @@ def _export_lock(export_dir):
                 fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
-def _available_paths(export_dir, identity):
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+def _available_paths(export_dir, identity, export_mode, timestamp):
+    """Allocate readable paths without overwriting an earlier export."""
     for sequence in range(1, 1000):
         suffix = "" if sequence == 1 else f"_{sequence:02d}"
         export_id = f"{identity}_{timestamp}{suffix}"
-        vertices_path = export_dir / f"{export_id}_vertices.csv"
-        boundary_path = export_dir / f"{export_id}_boundary.csv"
-        if not vertices_path.exists() and not boundary_path.exists():
-            return export_id, vertices_path, boundary_path
+        paths = {}
+        if export_mode in {"boundary", "both"}:
+            paths["boundary"] = export_dir / f"{export_id}.csv"
+        if export_mode in {"vertices", "both"}:
+            paths["vertices"] = export_dir / f"{export_id}_vertices.csv"
+        if not any(path.exists() for path in paths.values()):
+            return export_id, paths
     raise RuntimeError("Could not allocate a unique export filename")
 
 
@@ -194,59 +206,74 @@ def _atomic_write(path, headers, rows):
             os.unlink(temporary)
 
 
-def build_csvs(parcels, first_code, count, country_code):
+def build_parcel_exports(parcels, country_code, export_mode="boundary"):
+    """Export each parcel to its own file, preserving the submitted order."""
     country_code = validate_country_code(country_code)
-    first_code = _validate_parcel_code(first_code)
+    export_mode = normalize_export_mode(export_mode)
     prepared, warnings = prepare_parcels(parcels)
-    if int(count) != len(prepared):
-        raise ValueError("count must equal the number of parcels")
-    if first_code != prepared[0]["parcel_code"]:
-        raise ValueError("first_code must match the first parcel")
-
-    vertices_rows = build_vertices_rows(prepared)
-    boundary_rows = build_boundary_rows(prepared)
     export_dir = EXPORTS_DIR / country_code
-    identity = (
-        prepared[0]["parcel_code"]
-        if len(prepared) == 1
-        else f"{country_code}_batch_N{len(prepared)}"
-    )
-    with _export_lock(export_dir):
-        export_id, vertices_path, boundary_path = _available_paths(
-            export_dir, identity
-        )
-        _atomic_write(vertices_path, VERTICES_HEADERS, vertices_rows)
-        _atomic_write(boundary_path, BOUNDARY_HEADERS, boundary_rows)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    exports = []
 
-    return {
-        "export_id": export_id,
-        "filename_scheme": "descriptive-v2",
-        "vertices_path": str(vertices_path),
-        "boundary_path": str(boundary_path),
-        "vertices_count": len(vertices_rows),
-        "boundary_count": len(boundary_rows),
+    with _export_lock(export_dir):
+        for parcel in prepared:
+            export_id, paths = _available_paths(
+                export_dir,
+                parcel["parcel_code"],
+                export_mode,
+                timestamp,
+            )
+            if "boundary" in paths:
+                path = paths["boundary"]
+                _atomic_write(path, BOUNDARY_HEADERS, build_boundary_rows([parcel]))
+                exports.append(
+                    {
+                        "parcel_ref": parcel.get("parcel_ref"),
+                        "parcel_code": parcel["parcel_code"],
+                        "export_type": "boundary",
+                        "export_id": export_id,
+                        "path": str(path),
+                    }
+                )
+            if "vertices" in paths:
+                path = paths["vertices"]
+                _atomic_write(path, VERTICES_HEADERS, build_vertices_rows([parcel]))
+                exports.append(
+                    {
+                        "parcel_ref": parcel.get("parcel_ref"),
+                        "parcel_code": parcel["parcel_code"],
+                        "export_type": "vertices",
+                        "export_id": export_id,
+                        "path": str(path),
+                    }
+                )
+
+    result = {
+        "filename_scheme": "per-parcel-v3",
+        "export_mode": export_mode,
+        "exports": exports,
         "validation_errors": [],
         "duplicate_vertex_warnings": warnings,
     }
+    # Keep convenient single-parcel keys for existing archive integrations.
+    if len(prepared) == 1:
+        for item in exports:
+            result[f"{item['export_type']}_path"] = item["path"]
+    return result
 
 
-def build_single_csvs(parcel, country_code):
-    return build_csvs(
-        [parcel],
-        parcel["parcel_code"],
-        1,
-        country_code,
-    )
+def build_single_csvs(parcel, country_code, export_mode="boundary"):
+    return build_parcel_exports([parcel], country_code, export_mode)
 
 
 def main():
     try:
         data = read_json_stdin()
-        result = build_csvs(
-            data["parcels"],
-            data["first_code"],
-            data["count"],
-            data.get("country_code", data.get("iso3", "")),
+        parcels = data["parcels"]
+        result = build_parcel_exports(
+            parcels,
+            data["country_code"],
+            data.get("export_mode", "boundary"),
         )
         write_json_stdout(result)
     except (KeyError, TypeError, ValueError, RuntimeError) as exc:

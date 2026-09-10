@@ -1,46 +1,56 @@
-## Description: <br>
-RedFoxHub helps an agent search and read RedFoxHub data through the OOMOL redfox connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RedFoxHub (redfox.hk). Use this skill for searching and reading data from RedFoxHub through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to search and retrieve Douyin, WeChat Official Accounts, TikTok, and Xiaohongshu account, work, article, and AI-creation data through an OOMOL-connected RedFoxHub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use the user's OOMOL-connected RedFoxHub account for lookups. <br>
-Mitigation: Install and enable it only when that account-scoped RedFoxHub access is intended. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL oo CLI. <br>
-Mitigation: Run installer, login, or connection steps only after relevant command failures and only when the OOMOL CLI installation path is trusted. <br>
-Risk: Future connector actions could be marked write or destructive. <br>
-Mitigation: Fetch the live action schema, review the payload and effect, and require explicit user confirmation before any write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill to search, list, and fetch RedFoxHub content across supported social platforms through the oo CLI. It is aimed at read-oriented research and content retrieval workflows using an OOMOL-connected RedFoxHub account.
 
-## Reference(s): <br>
-- [ClawHub RedFoxHub skill page](https://clawhub.ai/oomol/skills/oo-redfox) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [RedFoxHub homepage](https://redfox.hk) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; command responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup directs users to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer a pinned, verifiable oo CLI release or inspect the downloaded installer before running it.
+
+Risk: RedFoxHub access depends on credentials brokered through OOMOL for read and search actions.
+
+Mitigation: Connect RedFoxHub credentials only when the user is comfortable with OOMOL brokering access for the intended actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-redfox)
+- [RedFoxHub homepage](https://redfox.hk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented connector actions should fetch the live schema before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

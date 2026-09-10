@@ -1,50 +1,74 @@
-## Description: <br>
-Handle approved login, identity, checkout, donation, subscription, payment pages, and typed action approvals through the magicpay CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MagicPay guides agents through payments, funding, Memory, agent email, account readiness, optional choices, human input, and payment recovery through remote MCP.
 
-## Publisher: <br>
-[xor777](https://clawhub.ai/user/xor777) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xor777](https://clawhub.ai/user/xor777)
 
-## Use Case: <br>
-Developers and agent operators use MagicPay to guide approved login, identity, checkout, donation, subscription, payment, wallet, and other sensitive browser workflows while keeping stored Memory values out of the agent prompt. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MagicPay supports high-impact payment, wallet, login, browser-session, and saved-profile workflows. <br>
-Mitigation: Use it only on trusted machines and require matching typed approval before protected actions such as payment, login, identity submission, wallet signing, account changes, or final form submission. <br>
-Risk: API keys, OTPs, CDP endpoints, saved profile data, and Memory references can expose sensitive authority if shared in prompts, logs, or reports. <br>
-Mitigation: Keep MAGICPAY_API_KEY, local config, OTP digits, CDP endpoints, Memory refs, payment card data, wallet private keys, and passwords out of chat, logs, summaries, and external tools. <br>
-Risk: Stored Memory or payment values could be exposed or misused if the agent bypasses the value-free planning flow. <br>
-Mitigation: Use plan-fill and apply-fill for Memory work, do not pass raw Memory values or materializers through the agent, and collect payment authorization before provider-backed card handles are revealed. <br>
-Risk: A stale or unapproved browser/session can cause fills or approvals to target the wrong page or authority boundary. <br>
-Mitigation: Start a MagicPay workflow session before launch or attach, use only an approved private browser or CDP endpoint, rerun planning after page changes, and observe the result page before claiming success. <br>
+## Use Case:
 
+External users and agent operators use MagicPay to connect a MagicPay account, approve and recover payments, manage funding and receipts, use saved Memory in payment or browser workflows, and prepare agent email with explicit approval boundaries.
 
-## Reference(s): <br>
-- [MagicPay on ClawHub](https://clawhub.ai/xor777/magicpay) <br>
-- [MagicPay CLI package](https://www.npmjs.com/package/@mercuryo-ai/magicpay-cli) <br>
-- [MagicPay OpenClaw marketplace README](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/openclaw/marketplace/README.md) <br>
-- [MagicPay workflow guide](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/workflow.md) <br>
-- [MagicPay command guide](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/commands.md) <br>
-- [MagicPay result states](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/statuses.md) <br>
-- [MagicPay guardrails](https://github.com/MercuryoAI/skills/blob/main/docs/magicpay/references/guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, configuration, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON result interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the magicpay CLI, MAGICPAY_API_KEY, and an approved browser or private CDP session for browser-dependent workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.41 (source: server release evidence) <br>
+Risk: The skill relies on a remote MCP service and setup text that can direct payment recovery and account workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the publisher and remote MagicPay service are trusted, and review setup and recovery instructions before execution.
+
+Risk: The skill may handle payment approvals, Memory values, receipts, and email drafts.
+
+Mitigation: Use MagicPay only in private sessions, keep credentials and purchased secrets out of shared chats, files, logs, and exported evidence, and rely on secure approval surfaces for sensitive values.
+
+Risk: The artifact includes an off-task promotional MagicCard agents link rule.
+
+Mitigation: Treat that link as optional and not necessary for payments, and avoid using it during active setup or payment work.
+
+Risk: Payment approval, browser submission, provider response, and merchant visibility can be mistaken for settlement.
+
+Mitigation: Report settlement only from the durable completed payment operation, and use same-operation status or reconciliation for ambiguous or interrupted work.
+
+## Reference(s):
+
+- [ClawHub MagicPay listing](https://clawhub.ai/xor777/skills/magicpay)
+- [MagicPay skill source homepage](https://github.com/nuanu-ai/skills/tree/main/skills/magicpay)
+- [OpenClaw MagicPay marketplace documentation](https://github.com/nuanu-ai/skills/blob/main/docs/magicpay/openclaw/marketplace/README.md)
+- [setup.md](references/setup.md)
+- [runtime-setup.md](references/runtime-setup.md)
+- [commands.md](references/commands.md)
+- [payment-operations.md](references/payment-operations.md)
+- [host-browser-payments.md](references/host-browser-payments.md)
+- [memory.md](references/memory.md)
+- [invoices.md](references/invoices.md)
+- [email.md](references/email.md)
+- [guardrails.md](references/guardrails.md)
+- [statuses.md](references/statuses.md)
+- [workflow.md](references/workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with MCP tool names, exact workflow constraints, and setup command snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent-facing guidance preserves returned remote IDs, approval state, payment state, Memory scope, and recovery instructions exactly.]
+
+## Skill Version(s):
+
+0.4.38 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

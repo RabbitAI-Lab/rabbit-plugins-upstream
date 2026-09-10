@@ -1,46 +1,61 @@
-## Description: <br>
-Lazarus helps an agent recover Google-indexed content from defunct websites using the Wayback Machine, clean it into Markdown, and guide deployment after user review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lazarus v2 helps agents discover evidence-backed dead-domain candidates or recover archived pages for rewrite-source notes, private corpora, or gated republishing.
 
-## Publisher: <br>
-[adsorgcn](https://clawhub.ai/user/adsorgcn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adsorgcn](https://clawhub.ai/user/adsorgcn)
 
-## Use Case: <br>
-Developers, site maintainers, and content recovery operators use this skill to scout defunct domains, recover archived pages that show Google indexing signals, review recovered material, and prepare static-site deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recovered pages may include copyrighted material, trademarks, or assets that the user does not have rights to reuse. <br>
-Mitigation: Confirm reuse rights before publication and remove, replace, or rewrite material that cannot be cleared. <br>
-Risk: Recovered pages may contain personal data, credentials, internal URLs, account endpoints, or other sensitive material. <br>
-Mitigation: Review all generated files before deployment and redact or remove sensitive findings before publishing. <br>
-Risk: The skill may create recovered content files from external archive sources. <br>
-Mitigation: Require explicit user confirmation for the output path, file count, and estimated disk use before writing files. <br>
+## Use Case:
 
+External users, developers, and content teams use lazarus to research dead domains, verify they are not live, grade archived pages by heuristic index evidence, and package recoverable material with privacy and copyright review gates.
 
-## Reference(s): <br>
-- [Lazarus on ClawHub](https://clawhub.ai/adsorgcn/lazarus) <br>
-- [Publisher profile](https://clawhub.ai/user/adsorgcn) <br>
-- [iLang homepage](https://ilang.ai) <br>
-- [AutoCode](https://github.com/ilang-ai/autocode) <br>
-- [Internet Archive account signup](https://archive.org/account/signup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Conversational guidance with Markdown file content, directory plans, metadata tables, and deployment instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Asks for confirmation before writing files and organizes recovered pages by index status when recovery proceeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The workflow can recover or package archived website material that may still be protected by copyright or trademark rights.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default rewrite-source mode when possible, require explicit acknowledgment before public republishing, and stop public deploy output when the review gate fails.
+
+Risk: Recovered archives can contain PII, secrets, internal endpoints, or sensitive URL components.
+
+Mitigation: Keep PII scanning enabled, fail the gate on secrets, redact findings, and avoid sending unsanitized URLs or sensitive queries to third-party providers.
+
+Risk: Death and index status can be misclassified if a live site, parked page, redirect, or blocked service is treated too casually.
+
+Mitigation: Run target validation, DNS and HTTP checks, redirect validation, Wayback evidence collection, and heuristic index grading before recovery; ask the user on uncertain verdicts and stop on live sites.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/adsorgcn/skills/lazarus)
+- [I-Lang homepage](https://ilang.ai)
+- [AutoCode](https://github.com/ilang-ai/autocode)
+- [OpenClaw Skills](https://github.com/ilang-ai/ilang-openclaw)
+- [Archive.org account signup](https://archive.org/account/signup)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, JSONL, Configuration, Guidance]
+
+**Output Format:** [Markdown, JSON, JSONL, YAML frontmatter, and plain text bundle files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recovery Bundle outputs can include candidates.json, death_report.json, url_index.jsonl, graded_urls.jsonl, review_report.json, CONTENT_INDEX.md, source notes, optional raw snapshots, and deploy-notes.md when the gate passes.]
+
+## Skill Version(s):
+
+2.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

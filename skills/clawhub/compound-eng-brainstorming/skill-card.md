@@ -1,40 +1,57 @@
-## Description: <br>
-Pre-implementation exploration workflow for deep interviews, approach comparison, and design documentation before coding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ia-brainstorming guides pre-implementation exploration through deep interviews, approach comparison, and design-document capture for vague feature ideas, ambiguous requirements, or approach decisions before coding.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and product or engineering collaborators use this workflow to clarify vague feature ideas, compare implementation approaches, and capture an approved design direction before planning or coding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may inspect relevant project context and create a design record that influences later implementation. <br>
-Mitigation: Review the brainstorm output and design document before proceeding to planning or implementation. <br>
-Risk: Ambiguous requirements or uncorrected assumptions can lead to an inaccurate design direction. <br>
-Mitigation: Confirm the scope synthesis, approach trade-offs, and listed assumptions before treating the design as approved. <br>
+## Use Case:
 
+Developers and product engineers use this skill to clarify vague feature ideas, compare implementation approaches, and produce a durable design artifact before planning or coding. It is suited to ambiguous requirements, competing interpretations, unresolved trade-offs, and multi-system feature exploration.
 
-## Reference(s): <br>
-- [Deep Interview Layer](references/deep-interview.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Conversational guidance and Markdown design documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create a design document under docs/brainstorms/ after user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release metadata) <br>
+Risk: The skill may preserve brainstorming output in the repository and may create a git commit when delegated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when a durable design artifact is intended, and delegate headless or commit authority only with a clear decision scope.
+
+Risk: Brainstorming output can turn unresolved assumptions into downstream planning or implementation direction.
+
+Mitigation: Review the scoped summary, explicit assumptions, open questions, and design artifact before handing off to planning or coding.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-brainstorming)
+- [Deep Interview Layer](artifact/references/deep-interview.md)
+- [Interview and approach selection](artifact/references/interview-and-approaches.md)
+- [Pre-write scope synthesis](artifact/references/scope-synthesis.md)
+- [Design capture and handoff](artifact/references/design-and-handoff.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown prose with optional saved design documents and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May preserve brainstorming output in docs/brainstorms and may commit only when caller authority explicitly permits it.]
+
+## Skill Version(s):
+
+4.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

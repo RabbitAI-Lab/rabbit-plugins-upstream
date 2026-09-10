@@ -1,40 +1,56 @@
-## Description: <br>
-Looks up a mobile phone number's province, city, carrier, and card type through JisuAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据手机号查归属省市、运营商与卡类型。
 
-## Publisher: <br>
-[jisuapi](https://clawhub.ai/user/jisuapi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jisuapi](https://clawhub.ai/user/jisuapi)
 
-## Use Case: <br>
-External users and agents use this skill to answer phone-number attribution questions by querying a provided mobile number and summarizing its province, city, carrier, and card type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried phone numbers are sent to JisuAPI under the configured API key. <br>
-Mitigation: Use a dedicated JISU_API_KEY, monitor quota or billing, and only query numbers you are authorized and comfortable sharing with the provider. <br>
+## Use Case:
 
+External users and developers use this skill to look up a Chinese mobile phone number's province, city, carrier, and card type through JisuAPI.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/jisuapi/shouji) <br>
-- [JisuAPI website](https://www.jisuapi.com/) <br>
-- [JisuAPI mobile phone number attribution documentation](https://www.jisuapi.com/api/shouji/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Configuration] <br>
-**Output Format:** [JSON result or JSON error object from the command-line script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and JISU_API_KEY; sends queried phone numbers to JisuAPI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server-resolved release metadata) <br>
+Risk: Queried phone numbers are sent to JisuAPI for attribution lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Query only numbers the user is permitted to process, mask numbers in user-facing summaries when practical, and avoid unnecessary retention.
+
+Risk: The JISU_API_KEY may create quota, billing, or access exposure if reused broadly.
+
+Mitigation: Use a dedicated key with limited quota or billing scope and avoid logging full command lines, request URLs, or raw key values.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jisuapi/skills/shouji)
+- [JisuAPI Website](https://www.jisuapi.com/)
+- [JisuAPI Mobile Phone Number Location API](https://www.jisuapi.com/api/shouji/)
+- [JisuAPI Query Endpoint](https://api.jisuapi.com/shouji/query)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON from a Python CLI, with agent-facing guidance for summarizing the lookup result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and JISU_API_KEY; sends the queried phone number to JisuAPI.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

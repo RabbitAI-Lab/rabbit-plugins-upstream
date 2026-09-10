@@ -38,6 +38,10 @@ Use explicit overrides only when requested:
 python3 scripts/bark-notify.py --agent codex --group Custom --icon "https://example.com/custom.png" "Title" "Body"
 ```
 
+To send WorkBuddy notifications, add a `workbuddy` entry to the local agent
+configuration with group `WorkBuddy` and the server-hosted icon URL from the
+example configuration.
+
 ## Decide Whether to Send
 
 A progress-update instruction grants permission to send useful notifications; it does not make every agent update notification-worthy.

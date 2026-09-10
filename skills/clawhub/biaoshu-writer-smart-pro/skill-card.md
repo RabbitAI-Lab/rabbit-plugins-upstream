@@ -1,48 +1,65 @@
-## Description: <br>
-投标文件智能制作凭 App Key 调用百炼®标书开放 API，帮助用户解读招标文件、抽取分包、生成 .docx 投标文件并进行可选合规审查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+投标文件智能制作 helps agents use the 百炼®标书 service to interpret tender documents, generate finished bid documents, review compliance risks, and compare bid-document similarity.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-Bid teams and procurement-support professionals use this skill to turn local tender documents into structured interpretations, draft bid documents, and compliance review reports through the 百炼®标书 cloud API. It is intended for users who understand that uploaded tender and bid files are processed by the third-party service and that bid generation consumes account credits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents can contain commercial, pricing, or personal information and are uploaded to the 百炼®标书 cloud service. <br>
-Mitigation: Confirm the user understands and agrees before upload, and process only files the user explicitly provides. <br>
-Risk: The App Key authorizes account access and credit consumption. <br>
-Mitigation: Keep config.json private, do not paste the App Key into chat, and do not forward links or logs that expose key material. <br>
-Risk: Using a custom base URL would send uploaded files and the App Key to that endpoint. <br>
-Mitigation: Use the default biaoshu.zhiliaobiaoxun.com endpoint unless the user explicitly trusts the replacement endpoint. <br>
-Risk: Generated bid files and compliance findings may require business and legal review before submission. <br>
-Mitigation: Have responsible bid owners review the generated .docx files, reports, and unresolved findings before filing. <br>
+## Use Case:
 
+External bid teams, proposal writers, and procurement-response specialists use this skill to analyze tender requirements, prepare bid documents, check submission risks, and compare bid files before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-smart-pro) <br>
-- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666) <br>
-- [百炼®标书 platform](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [百炼®标书 API contract](references/api.md) <br>
-- [Usage and operating guide](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text guidance plus generated HTML, Word, and .docx files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uploads user-provided tender and bid files to the 百炼®标书 cloud API; generated bid documents consume account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when the user is authorized to process those files and accepts upload to that service.
+
+Risk: The skill uses a billable API key and includes account setup flows involving phone numbers or SMS codes.
+
+Mitigation: Keep API keys, SMS codes, and phone numbers out of chat; configure credentials only in the local config file and confirm billing expectations before use.
+
+Risk: The security summary flags under-disclosed persistent-storage behavior.
+
+Mitigation: Review the local metadata storage behavior before installation and remove stored project metadata if it is not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-smart-pro)
+- [Publisher profile](https://clawhub.ai/user/chichihaixiaojian666)
+- [百炼标书 platform](https://biaoshu.zhiliaobiaoxun.com)
+- [API overview](references/api.md)
+- [API authentication](references/api-auth.md)
+- [Bid workflow API](references/api-bid-workflow.md)
+- [Compliance API](references/api-compliance.md)
+- [Duplicate check API](references/api-duplicate.md)
+- [Usage guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance]
+
+**Output Format:** [Text and Markdown guidance, local configuration instructions, generated report files, JSON results, and .docx bid documents.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated reports and documents may be stored locally or retrieved through short-lived platform download links.]
+
+## Skill Version(s):
+
+3.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

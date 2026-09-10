@@ -23,7 +23,7 @@
 export FINXDATA_API_KEY="sk-..."
 ```
 
-这些接口会走账户认证和额度逻辑。多数数据接口返回 `{"code": 200, "data": "<Markdown>"}`。
+这些接口需要账户认证；除 `stock search` 外会走账户额度逻辑。数据接口通常返回 `{"code": 200, "confidence": "高|中高|中", "data": "<字符串、对象或数组>"}`。
 
 ### 额度
 
@@ -37,6 +37,7 @@ export FINXDATA_API_KEY="sk-..."
 
 | 命令 | 接口 | 参数 | 内容 |
 |---|---|---|---|
+| `stock search` | `/api/v1/http/stock/search` | `query` | 按代码或名称模糊查询 A/H 股票，最多返回 5 条；需要 API Key，但不扣账户额度。 |
 | `stock summary` | `/api/v1/http/stock/summary` | `code` | 股票概要和公司信息。 |
 | `stock quote` | `/api/v1/http/stock/quote` | `code`，支持多个 | 股票最新行情。 |
 | `stock financial` | `/api/v1/http/stock/financial` | `code`，`sections=reports` | 财务报表和指定财务板块。 |
@@ -48,10 +49,121 @@ export FINXDATA_API_KEY="sk-..."
 | `stock dragon-tiger-seats` | `/api/v1/http/stock/dragon_tiger/seats` | `code`，`trade_date`，`look_back=30`，`refresh` | 个股龙虎榜上榜记录、买卖席位和机构席位统计。 |
 | `stock ontology` | `/api/v1/http/stock/ontology` | `code` | 股票图谱摘要。 |
 | `stock listing` | `/api/v1/http/stock/listing` | `limit=20` | 近期新股列表。 |
-| `stock forecast` | `/api/v1/http/stock/forecast` | `page=1`，`page_size=50`，`refresh` | 业绩预告公告。 |
+| `stock forecast` | `/api/v1/http/stock/forecast` | `code`，`page=1`，`page_size=50`，`refresh` | 业绩预告公告；`code` 可选。 |
 | `stock trade-calendar` | `/api/v1/http/stock/trade_calendar` | `year`，`month`，`months=3` | A 股交易日历。 |
 | `stock notice-summary` | `/api/v1/http/stock/notice/summary` | `code`，`refresh` | 股票公告摘要。 |
 | `stock lockup` | `/api/v1/http/stock/lockup` | `code`，`trade_date`，`forward_days=90`，`refresh` | 个股限售解禁日历，包含未来待解禁和历史解禁。 |
+
+### 标准化公告
+
+查询已采集的沪深及港股个股或市场公告，按条件筛选并通过游标分页。请求方法为 `GET`，响应为 `application/json`。`coverage_status=unknown` 表示公告覆盖完整性尚未确认。
+
+#### 接口与鉴权
+
+基础地址：`https://api.finxdata.ai`，可通过 `FINXDATA_BASE_URL` 配置。
+
+| 方式 | 路径 | 请求头 | Skill 命令 |
+| --- | --- | --- | --- |
+| API Key | `/api/v1/http/disclosures` | `X-API-Key: <API Key>` | `python3 scripts/finxdata.py disclosures list` |
+| Agent | `/api/v1/http/agent/disclosures` | `x-agent-type: codex`（或实际 Agent 类型） | `python3 scripts/finxdata.py agent disclosures --agent-type codex` |
+
+API Key 方式使用账户额度，空结果不计费。Agent 方式无需 API Key、不扣账户额度，受单 IP 每日限额和频率限制。两种方式使用相同的查询参数与返回结构。
+
+#### 查询参数
+
+以下参数均可省略。HTTP 参数使用下划线；Skill 命令将下划线改为连字符，例如 `start_date` 对应 `--start-date`。
+
+| 参数 | 类型 / 默认值 | 说明 |
+| --- | --- | --- |
+| `symbol` | 字符串 / 不限个股 | A 股支持 `600519`、`SH600519`、`600519.SH` 及深市格式；港股支持 `00700`、`HK00700`、`00700.HK`，统一规范为五位代码。单次只传一个代码。 |
+| `market` | 字符串 / 不限市场 | `SSE`（沪市）、`SZSE`（深市）或 `HKEX`（港股），可与 `symbol` 同时使用；冲突组合返回 400。 |
+| `document_type` | 字符串 / 不限类型 | 公告一级类型，1–48 字符，例如 `periodic_report`；按类型值精确筛选。 |
+| `document_subtype` | 字符串 / 不限细分类 | 公告细分类，1–64 字符，例如 `annual_report`；按类型值精确筛选。 |
+| `start_date` | 日期 / 按下方规则计算 | 披露日期下限，格式 `YYYY-MM-DD`，包含该日。 |
+| `end_date` | 日期 / 按下方规则计算 | 披露日期上限，格式 `YYYY-MM-DD`，包含该日。 |
+| `cursor` | 字符串 / 首页 | 上一页返回的 `data.next_cursor`，最长 1024 字符；原样传回，不解析或修改。 |
+| `limit` | 整数 / `20` | 每页条数，范围 `1–100`。 |
+
+日期按 `Asia/Shanghai` 时区解释：不传起止日期时查询最近 7 天（含当天）；仅传 `start_date` 时，结束日为其后第 6 天；仅传 `end_date` 时，起始日为其前第 6 天。结束日不得早于起始日，区间最多 31 天（含首尾）；更长历史范围须拆分成不超过 31 天的窗口。
+
+接口无 `refresh`、`page`、`page_size` 或关键词搜索参数。
+
+证券代码按字符串传递，保留前导零。`00700`、`HK00700` 和 `00700.HK` 均规范为 `symbol=00700`、`market=HKEX`；带 `SH` / `.SH` 或 `SZ` / `.SZ` 的六位代码会推断对应市场，纯六位代码不会自动补齐市场。显式 `market` 与代码推断的市场冲突时返回 `400`。
+
+已知证券代码时可直接查询，无需先调用股票搜索接口。股票基础信息尚未收录时，只要存在匹配的公告记录，仍支持按公告关联证券代码筛选，且返回的 `symbols` 保留该代码；股票搜索无结果不代表没有公告。
+
+#### 返回结构
+
+成功响应外层为 `{"code": 200, "confidence": "高", "data": {...}}`。`data` 是结构化对象：
+
+| 字段 | 含义 |
+| --- | --- |
+| `dataset` | 固定为 `company.disclosure_document.v1`。 |
+| `schema_version` | 当前为 `1.0`。 |
+| `scope` | 传入 `symbol` 时为 `stock`，否则为 `market`。 |
+| `as_of` | 本次响应生成时间，含时区；不代表公告披露或采集时间。 |
+| `coverage_status` | 当前为 `unknown`，不能据此认定查询区间的公告已全部覆盖。 |
+| `filters` | 实际生效的 `symbol`、`market`、`document_type`、`document_subtype`、`start_date`、`end_date` 及 `lifecycle_status`；日期已补齐，`lifecycle_status` 固定为 `current`。 |
+| `items` | 本页公告对象数组，按 `published_at` 降序排列，同时间按 `document_id` 降序排列。 |
+| `count` | 本页公告数量，不是符合条件的总数。 |
+| `next_cursor` | 下一页游标；为 `null` 时结束翻页。 |
+
+`items` 中的常用字段：
+
+| 字段 | 含义 |
+| --- | --- |
+| `document_id`、`title` | 公告唯一标识、标题。 |
+| `symbols` | 关联证券代码字符串数组；港股代码保留五位及前导零，例如 `["00700"]`。股票基础信息尚未收录时仍保留公告关联代码。 |
+| `exchange`、`board` | 公告所属交易所、板块；`market` 按公告的 `exchange` 筛选。 |
+| `document_type`、`document_subtype`、`statutory_class` | 公告一级类型、细分类、法定类别。 |
+| `published_at`、`published_at_precision` | 披露时间及其精度；判断时间先后时结合精度字段。 |
+| `report_period`、`document_number` | 报告期、公告文号，可为空。 |
+| `correspondence_direction` | 函件方向，可为空。 |
+| `version_no`、`lifecycle_status` | 公告版本号、生命周期状态；当前接口返回 `current` 记录。 |
+| `canonical_source_url` | 公告正文链接。 |
+| `attachments` | 附件数组，包含 `attachment_id`、`role`、`display_name`、`url`、`mime_type`、`size_bytes`、`content_sha256`、`fetch_status`；不直接返回附件二进制内容。 |
+| `language`、`schema_version` | 语言与公告对象结构版本。 |
+| `quality_score`、`quality_status` | 数据质量评分与状态。 |
+| `first_collected_at`、`last_collected_at` | 首次采集时间、最近采集时间。 |
+
+无匹配结果时仍返回成功响应，`items=[]`、`count=0`、`next_cursor=null`。回答时说明实际查询区间及筛选条件；空结果只表示当前条件下未查到已收录公告，不能据此断言该公司未发布公告。
+
+#### 调用与分页示例
+
+以下日期仅作参数示例，实际查询按用户指定日期或默认窗口执行。命令从 Skill 目录运行：
+
+```bash
+# API Key：查询个股公告
+python3 scripts/finxdata.py disclosures list --symbol 600519 --start-date 2026-09-01 --end-date 2026-09-07 --limit 20
+
+# API Key：按市场和公告类型筛选
+python3 scripts/finxdata.py disclosures list --market SSE --document-type periodic_report --document-subtype annual_report --start-date 2026-04-01 --end-date 2026-04-30 --limit 20
+
+# Agent：查询深市市场公告
+python3 scripts/finxdata.py agent disclosures --market SZSE --start-date 2026-09-01 --end-date 2026-09-07 --limit 20 --agent-type codex
+
+# Agent：查询港股个股公告
+python3 scripts/finxdata.py agent disclosures --symbol HK00700 --limit 20 --agent-type codex
+
+# API Key：查询港股市场公告
+python3 scripts/finxdata.py disclosures list --market HKEX --limit 20
+
+# 翻页：将占位符替换为上一页 data.next_cursor，保留原筛选条件
+python3 scripts/finxdata.py disclosures list --symbol 600519 --start-date 2026-09-01 --end-date 2026-09-07 --limit 20 --cursor '<上一页返回的 next_cursor>'
+```
+
+第一页若未传日期，翻页时使用响应 `data.filters.start_date` 和 `data.filters.end_date` 固定窗口；保留原证券、市场和公告类型筛选，只替换游标。不要将 `filters.lifecycle_status` 作为请求参数。按用户需要翻页，遵守 Skill 的请求次数与限速规则。
+
+#### 常见 HTTP 状态码
+
+| 状态码 | 含义与处理 |
+| --- | --- |
+| `200` | 查询成功，可能为空列表。 |
+| `400` | 证券代码、市场、日期区间或游标无效；修正参数后再请求。 |
+| `401` / `403` | 鉴权或权限校验失败；检查所用通道的 API Key 或 Agent 标识。 |
+| `422` | 参数类型或范围不合法，例如日期格式错误或 `limit` 不在 `1–100`。 |
+| `429` | 额度或频率受限；遵守 `Retry-After`。Agent 通道不通过账户 `quota` 查询剩余次数。 |
+| `503` | 公告数据暂不可用；按 Skill 的重试与失败处理规则处理。 |
 
 ### 市场
 
@@ -81,7 +193,7 @@ export FINXDATA_API_KEY="sk-..."
 | 命令 | 接口 | 参数 | 内容 |
 |---|---|---|---|
 | `fred series-list` | `/api/v1/http/fred/series` | 无 | 可用 FRED 序列清单。 |
-| `fred series` | `/api/v1/http/fred/series/{series_id}` | `series_id`，`observation_start`，`observation_end`，`limit` | 单个 FRED 序列观测值。 |
+| `fred series` | `/api/v1/http/fred/series/{series_id}` | `series_id`，`observation_start`，`observation_end`，`limit=12` | 单个 FRED 序列观测值。 |
 | `fred key-indicators` | `/api/v1/http/fred/key-indicators` | `observation_start`，`observation_end` | 重点宏观指标矩阵。 |
 
 ### 跟踪
@@ -113,10 +225,13 @@ export FINXDATA_AGENT_TYPE="openclaw"  # 也可在命令中传 --agent-type
 | `agent track-news` | `/api/v1/http/agent/track/news` | 另需 `--agent-type` | 新闻跟踪快照。 |
 | `agent track-market` | `/api/v1/http/agent/track/market` | 另需 `--agent-type` | 市场跟踪快照。 |
 | `agent track-notice` | `/api/v1/http/agent/track/notice` | 另需 `--agent-type` | 公告跟踪快照。 |
+| `agent disclosures` | `/api/v1/http/agent/disclosures` | `symbol`、`market=SSE|SZSE|HKEX`、公告类型、日期、`cursor`、`limit=20`；另需 `--agent-type` | 与 API Key 公告接口相同的标准化结构；传 `symbol` 为个股公告，不传为市场公告。 |
 | `agent economy-china` | `/api/v1/http/agent/economy/china` | `type`；另需 `--agent-type` | 中国宏观经济报表。 |
 | `agent economy-calendar` | `/api/v1/http/agent/economy/calendar` | `year`，`month`，`months=3`；另需 `--agent-type` | 国内宏观数据发布日历。 |
 | `agent ontology-abstract` | `/api/v1/http/agent/ontology/abstract` | `code`；另需 `--agent-type` | 股票图谱摘要，只返回代码、名称、摘要、分析时间和图谱版本。 |
 | `agent financial` | `/api/v1/http/agent/financial` | `code`；另需 `--agent-type` | 股票业绩报表简版，只返回业绩报表关键字段。 |
+
+公告接口的完整参数、返回结构、分页示例和错误码见本页[标准化公告](#标准化公告)章节。
 
 ## refresh 参数
 
@@ -125,5 +240,6 @@ export FINXDATA_AGENT_TYPE="openclaw"  # 也可在命令中传 --agent-type
 ## 批量查询
 
 - `stock quote`、`market price`、`agent market-price` 和 `agent stock-quote` 支持一次传多个 `--code`。
+- `disclosures list` 与 `agent disclosures` 使用不透明 `next_cursor` 翻页；不要解析或修改 cursor。
 - `stock kline` 支持传多个代码，但脚本会逐只查询并自动间隔，避免过快触发频率限制。
 - 其他接口优先单对象查询；用户给出大量股票时分批执行并摘要结果。

@@ -1,48 +1,68 @@
-## Description: <br>
-Analyzes a specific bidding opportunity before submission, using bid-history data to produce a pre-bid due-diligence report with buyer profile, competitive landscape, price benchmarks, risk flags, and bid/no-bid guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+标前分析与投标尽调助手，用于在投标前拆解招标项目、采购方历史、竞争格局、价格基准、风险信号和投标建议，并基于知了标讯招中标数据输出决策报告。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External users and business-development teams use this skill to evaluate whether and how to bid on a concrete procurement project. It produces a decision-oriented pre-bid analysis from public bidding records, user-provided project details, and vendor API results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Consent-based trial registration can send a hashed MAC-derived device identifier for trial de-duplication. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY to bypass registration, or decline auto-registration unless the user accepts the vendor workflow. <br>
-Risk: The skill can persist an API key in a local configuration file. <br>
-Mitigation: Protect ~/.zlbx/config.json on shared machines and rotate or revoke the key if local access may have been exposed. <br>
-Risk: Generated HTML reports and copied source links may contain signed access parameters. <br>
-Mitigation: Treat reports and links as sensitive, share them only with the intended audience, and redact signed URLs before broader distribution. <br>
-Risk: Reports are written to the user's home directory. <br>
-Mitigation: Review the saved report path and contents before sharing, and remove generated files when they are no longer needed. <br>
+## Use Case:
 
+External users and procurement teams use this skill to decide whether and how to bid on a specific tender before investing proposal effort. It supports project profiling, buyer history review, likely competitor analysis, pricing reference checks, risk review, and a concise bid/no-bid recommendation report.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/dragonzu/skills/pre-bid-analysis-assistant) <br>
-- [Workflow guide](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration workflow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown decision report plus optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based trial registration; full reports typically use 12-25 vendor API queries and may include signed source links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Bid, project, company, and search queries are sent to Zhiliaobiaoxun services during analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when those query terms are appropriate to share with the provider, and avoid including unnecessary sensitive business context in prompts.
+
+Risk: The skill can persist an API key in ~/.zlbx/config.json.
+
+Mitigation: Prefer manually configured credentials when possible, restrict permissions on the credential file, and avoid pasting API keys into chat.
+
+Risk: Generated reports and returned source links may contain signed or login-bypass URLs.
+
+Mitigation: Review reports before sharing, remove signed links when broad distribution is not intended, and keep generated HTML reports in access-controlled locations.
+
+Risk: Automatic registration uses device-derived identifiers for free-trial deduplication.
+
+Mitigation: Review the auto-registration prompt before consenting, or provide an existing ZLBX_API_KEY to skip automatic registration.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/pre-bid-analysis-assistant)
+- [Publisher Profile](https://clawhub.ai/user/dragonzu)
+- [Workflow](artifact/references/workflow.md)
+- [API Quick Reference](artifact/references/api-quick.md)
+- [Report Template](artifact/references/report-template.md)
+- [Auto Registration Workflow](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun Skill Documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report in conversation, with optional generated self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full analysis normally uses 12-25 API calls; lightweight analysis uses about 5-8 API calls. Reports include cited bid or company records when available, and generated HTML reports are written locally.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

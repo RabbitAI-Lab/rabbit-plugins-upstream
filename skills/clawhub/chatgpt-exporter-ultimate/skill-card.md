@@ -1,42 +1,60 @@
-## Description: <br>
-Export all your ChatGPT conversations instantly - full context, timestamps, and metadata in seconds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Exports a user's ChatGPT conversation history through a browser relay or bookmarklet into local JSON and Markdown files, with index-only mode as the default and explicit consent required before full-content export.
 
-## Publisher: <br>
-[globalcaos](https://clawhub.ai/user/globalcaos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[globalcaos](https://clawhub.ai/user/globalcaos)
 
-## Use Case: <br>
-External users and developers use this skill to export their ChatGPT conversation history, including project conversations, timestamps, metadata, and message content, into local backup files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create plaintext local copies of full ChatGPT conversation history, including sensitive prompts, responses, timestamps, IDs, and project conversations. <br>
-Mitigation: Run it only when a complete local export is intentional, choose a private non-synced output directory, restrict file permissions, and avoid sharing raw exports. <br>
-Risk: One export path accepts a live ChatGPT access token as a command-line argument. <br>
-Mitigation: Prefer browser-session based execution where possible and avoid passing live access tokens on the command line. <br>
+## Use Case:
 
+External users and developers use this skill to create local backups or reviewable copies of their own ChatGPT conversation history. It can produce an index-only export by default, or full plaintext conversation files after explicit consent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/chatgpt-exporter-ultimate) <br>
-- [Project repository linked by skill](https://github.com/globalcaos/clawdbot-moltbot-openclaw) <br>
-- [ChatGPT](https://chatgpt.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript, TypeScript, shell commands, JSON exports, and Markdown conversation files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Exports may include full private ChatGPT conversation history, timestamps, conversation IDs, project conversations, and local summary files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence) <br>
+Risk: The skill handles very sensitive ChatGPT history and can store it as plaintext on disk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use index-only mode unless full content is necessary, keep exports short-lived, and delete local exports when finished.
+
+Risk: The authoritative security summary reports a verified local symlink flaw that can redirect exported data outside the approved private folder.
+
+Mitigation: Avoid reusing export directories that may contain unexpected files or symlinks until the nested-symlink write issue is fixed.
+
+Risk: Best-effort redaction may not catch all secrets or sensitive content in exported conversations.
+
+Mitigation: Treat exported files as sensitive even when redaction is enabled, and review them before sharing with people, tools, or other agents.
+
+## Reference(s):
+
+- [ChatGPT Exporter on ClawHub](https://clawhub.ai/globalcaos/skills/chatgpt-exporter-ultimate)
+- [TinkerClaw repository](https://github.com/globalcaos/tinkerclaw)
+- [OpenClaw fork repository](https://github.com/globalcaos/clawdbot-moltbot-openclaw)
+- [TinkerClaw issues](https://github.com/globalcaos/tinkerclaw/issues)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [JSON and Markdown files with status text and shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Index-only mode writes titles, ids, and timestamps by default; full-content mode writes plaintext conversation files after explicit confirmation.]
+
+## Skill Version(s):
+
+1.9.1 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

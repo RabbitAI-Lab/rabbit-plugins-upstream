@@ -1,46 +1,64 @@
-## Description: <br>
-This Chinese-language skill helps security monitoring and intelligent-building bidders evaluate target tenders, compare buyer history and competitors, estimate pricing, and produce a bid-decision report from public bidding data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps bid teams evaluate weak-current and intelligent-building security monitoring tenders by analyzing whether to bid, buyer history, incumbent suppliers, likely competitors, pricing benchmarks, qualification thresholds, and rejection risks from public bidding data.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Bid teams and intelligent-building contractors use this skill to decide whether to pursue a specific security monitoring, weak-current, cabling, machine-room, access-control, or building-automation tender. It produces a decision-oriented report covering buyer history, incumbent supplier signals, likely competitors, comparable awards, pricing guidance, qualification thresholds, and no-bid risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; analysis is focused on Chinese public bidding data and vendor services. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that the skill contacts vendor services, can create an account after consent, and stores an API key under the user's home directory. <br>
-Mitigation: Install only when those vendor-service and credential-storage behaviors are acceptable; prefer a user-provided ZLBX_API_KEY when available and avoid sharing credentials in chat. <br>
-Risk: Generated reports can contain signed vendor links and bid-analysis details that may be confidential. <br>
-Mitigation: Treat generated reports and links as confidential, review recipients before sharing, and avoid publishing report files in public locations. <br>
-Risk: The security summary flags the release as suspicious because persistent credential/account flows and shareable report exports are not fully contained. <br>
-Mitigation: Review the skill's behavior before deployment, keep generated files in controlled directories, and use it only in environments where the vendor API and local report writing are permitted. <br>
+## Use Case:
 
+External bid teams, security monitoring contractors, and intelligent-building system integrators use this skill to decide whether to participate in a specific tender and to prepare a data-backed bidding posture. It produces a decision report covering buyer behavior, competitor signals, comparable award prices, suggested pricing bands, qualification constraints, and data gaps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/intelligent-building-bid-decision) <br>
-- [ZhiLiaoBiaoXun API endpoint pattern](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Manual account setup](https://ai.zhiliaobiaoxun.com/?ch=s81) <br>
-- [ZhiLiao business intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
-- [Biaoshu proposal-writing service](https://biaoshu.zhiliaobiaoxun.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, guidance] <br>
-**Output Format:** [Markdown report in chat, with optional local HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a ZLBX_API_KEY credential or consent-based account setup; complete reports typically consume 12-25 vendor query credits and quick checks consume about 5-8 credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Automatic registration can send a device-linked MAC-address hash and store the returned API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a user-supplied ZLBX_API_KEY; only approve automatic registration after reviewing the privacy notice, and protect the local API key configuration file.
+
+Risk: Project names, company names, and related search terms are sent to ZLBX services during analysis.
+
+Mitigation: Avoid entering confidential or non-public bidding information unless disclosure to the service is acceptable.
+
+Risk: Generated HTML reports are flagged for unsafe link handling when report data may come from untrusted sources.
+
+Mitigation: Review generated HTML before sharing or opening it in higher-trust contexts, and treat links from report data cautiously until URL escaping and validation are fixed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/intelligent-building-bid-decision)
+- [Publisher Profile](https://clawhub.ai/user/dragonzu)
+- [API Quick Reference](artifact/references/api-quick.md)
+- [Workflow Guide](artifact/references/workflow.md)
+- [Report Template](artifact/references/report-template.md)
+- [Auto Registration Guide](artifact/references/auto-register.md)
+- [ZLBX API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [ZLBX Skill Documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report in conversation, with optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses public bidding-data citations when available; complete mode estimates 12-25 API calls and quick mode estimates 5-8 API calls.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

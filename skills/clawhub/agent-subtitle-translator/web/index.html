@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e8" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/icon-small.png" />
+    <link rel="apple-touch-icon" href="/assets/icon-small.png" />
+    <title>字幕翻译工作台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <img class="brand-mark" src="/assets/icon-large.png" alt="" width="48" height="48" />
+          <div>
+            <p class="eyebrow">TRANSLATION STUDIO</p>
+            <h1>字幕翻译工作台</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button class="mobile-menu-toggle" id="mobile-menu-toggle" type="button" aria-controls="task-rail" aria-expanded="false" aria-label="打开翻译任务菜单" title="打开翻译任务菜单">
+            <span class="menu-glyph" id="mobile-menu-glyph" aria-hidden="true">☰</span>
+            <span id="mobile-menu-label">菜单</span>
+          </button>
+          <button class="icon-button" id="theme-toggle" type="button" aria-label="切换到深色主题" title="切换到深色主题">
+            <span class="ui-icon" id="theme-toggle-icon" data-sf-symbol="moon.fill" data-fallback-symbol="moon" aria-hidden="true">◐</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="task-rail" id="task-rail" aria-label="翻译任务列表">
+          <div class="rail-heading">
+            <div>
+              <p class="eyebrow">WORK QUEUE</p>
+              <h2>翻译任务</h2>
+            </div>
+            <span class="count-badge" id="task-count">0</span>
+          </div>
+
+          <div class="task-list" id="task-list" aria-live="polite"></div>
+
+          <section class="agent-input-panel" aria-label="翻译会话信息">
+            <div class="section-kicker">
+              <span class="live-dot" id="live-dot" role="img" aria-label="正在检查本地服务连接" title="正在检查本地服务连接" data-status="checking"></span>
+              <span class="agent-session-lines">
+                <span class="agent-session-line">翻译会话由 <strong id="agent-session-agent">Agent</strong> 启动</span>
+                <span class="panel-hint" id="visualizer-hint">页面只展示任务状态、过程记录和翻译结果。</span>
+              </span>
+            </div>
+            <div class="agent-program-meta" aria-label="程序信息">
+              <span><a class="program-repo-link" href="https://github.com/Lumen01/agent-subtitle-translator" target="_blank" rel="noopener noreferrer">Agent Subtitle Translator</a><strong id="program-version">v—</strong></span>
+            </div>
+          </section>
+        </aside>
+
+        <section class="detail-pane" id="detail-pane" aria-live="polite">
+          <div class="empty-state" id="empty-state">
+            <div class="empty-orbit"><span></span><span></span><span></span></div>
+            <p class="eyebrow">TRANSLATION FLOW</p>
+            <h2>选择一个任务，查看它如何完成。</h2>
+            <p>这里会显示字幕读取、批次翻译、结构校验、重试和最终合成的完整过程。</p>
+          </div>
+
+          <div id="task-detail" hidden>
+            <section class="detail-header">
+              <div class="detail-title-block">
+                <div class="detail-kicker">
+                  <div class="status-line" aria-label="任务状态"><span class="status-dot" id="detail-status-dot"></span><span id="detail-status-label">准备中</span></div>
+                  <span class="language-tag" id="detail-language">简体中文</span>
+                  <span class="format-tag" id="detail-format">SRT</span>
+                  <div class="detail-notice" id="detail-notice" hidden role="status" aria-live="polite">
+                    <span class="detail-notice-mark ui-icon" data-sf-symbol="exclamationmark.triangle.fill" data-fallback-symbol="warning-triangle" aria-hidden="true">!</span>
+                    <span id="detail-notice-text"></span>
+                  </div>
+                </div>
+                <div class="detail-file-row">
+                  <h2 id="detail-file-name">subtitle.srt</h2>
+                  <div class="detail-actions" id="detail-actions" hidden>
+                    <a class="download-button" id="download-output" href="#" hidden>下载字幕 <span class="download-icon ui-icon" data-sf-symbol="arrow.down.circle.fill" data-fallback-symbol="download-circle" aria-hidden="true">↓</span></a>
+                  </div>
+                </div>
+              </div>
+              <div class="detail-meta-row">
+                <div class="detail-stat-line" aria-label="任务进度">
+                  <span class="detail-stat"><span class="detail-stat-icon ui-icon" data-sf-symbol="captions.bubble.fill" data-fallback-symbol="captions-bubble" aria-hidden="true">▤</span><span class="detail-stat-copy"><strong id="detail-entry-count">0 / 0</strong><span>字幕</span></span></span>
+                  <span class="detail-stat"><span class="detail-stat-icon ui-icon" data-sf-symbol="square.stack.3d.up.fill" data-fallback-symbol="batch-stack" aria-hidden="true">▦</span><span class="detail-stat-copy"><strong id="detail-batch-count">0 / 0</strong><span>批次</span></span></span>
+                  <span class="detail-stat"><span class="detail-stat-icon ui-icon" data-sf-symbol="clock.fill" data-fallback-symbol="clock" aria-hidden="true">◷</span><span class="detail-stat-copy"><strong id="detail-duration">—</strong><span>用时</span></span></span>
+                  <span class="detail-stat detail-stat-model" aria-label="Agent 与模型" id="detail-stat-model"><span class="detail-stat-icon ui-icon" data-sf-symbol="cpu.fill" data-fallback-symbol="cpu" aria-hidden="true">▣</span><span class="detail-stat-copy"><strong class="detail-stat-agent" id="detail-agent">Agent</strong><span class="detail-stat-separator" aria-hidden="true">·</span><strong class="detail-stat-model-value" id="detail-model">待上报</strong></span></span>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel progress-flow-panel" aria-labelledby="progress-flow-title">
+              <div class="panel-heading">
+                <div class="panel-heading-copy"><p class="eyebrow">TRANSLATION FLOW</p><h3 id="progress-flow-title">翻译过程</h3><p class="panel-description">按批次查看当前进度和关键处理记录</p></div>
+                <div class="progress-flow-tools"><span class="panel-meta" id="batch-meta">0 / 0 批</span><span class="stream-indicator"><i></i>实时</span></div>
+              </div>
+              <div class="flow-list" id="flow-list">
+                <section class="flow-stage" id="flow-stage">
+                  <div class="flow-subheading"><span>任务阶段</span><span class="flow-subheading-meta" id="flow-stage-meta"></span></div>
+                  <div class="flow-event-list flow-task-events" id="flow-task-events"></div>
+                </section>
+                <div class="flow-batches" id="flow-batches"></div>
+              </div>
+            </section>
+
+            <section class="panel subtitle-panel">
+              <div class="panel-heading">
+                <div class="panel-heading-copy"><p class="eyebrow">SUBTITLE PREVIEW</p><h3>字幕明细</h3><p class="panel-description">选择视角查看原字幕、译文与时间轴</p></div>
+                <div class="subtitle-tools">
+                  <div class="view-switcher" role="group" aria-label="字幕明细视角">
+                    <button class="view-button" data-view-mode="stacked" type="button" aria-pressed="true" title="序号、原字幕和译文上下对照，时间轴在右侧">上下对照</button>
+                    <button class="view-button" data-view-mode="columns" type="button" aria-pressed="false" title="序号、时间轴、原字幕和译文并列显示">字段并列</button>
+                  </div>
+                </div>
+              </div>
+              <div class="subtitle-list" id="subtitle-list"></div>
+            </section>
+          </div>
+        </section>
+      </main>
+      <button class="mobile-menu-backdrop" id="mobile-menu-backdrop" type="button" aria-label="关闭翻译任务菜单" hidden></button>
+    </div>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

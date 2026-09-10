@@ -1,0 +1,7 @@
+interface:
+  display_name: "USA Business Migration Planner"
+  short_description: "Helps with People repeatedly need a practical, repeatable way..."
+  default_prompt: "Use $usa-business-migration-planner to help me People repeatedly need a practical, repeatable way to handle V2Echo iOS 客户端 TestFlight 内测招募｜前 50 名赠送 Pro 永久权益."
+
+policy:
+  allow_implicit_invocation: true

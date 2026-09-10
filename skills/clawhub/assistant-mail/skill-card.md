@@ -1,41 +1,58 @@
-## Description: <br>
-A skill that allows AI agents to send emails using the AssistantMail API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assistant Mail helps agents connect to managed email mailboxes through MCP using API key authentication, allowlists, consent controls, retention, and send caps.
 
-## Publisher: <br>
-[assistantmail](https://clawhub.ai/user/assistantmail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[assistantmail](https://clawhub.ai/user/assistantmail)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect agents to AssistantMail mailboxes through MCP tools for sending, replying to, listing, reading, and managing mailbox data with API-key authentication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants broad mailbox authority, including reading, sending, modifying policies and recipients, and deleting mailboxes or messages. <br>
-Mitigation: Use a least-privilege API key where possible and require human approval for sending email, changing policies, managing recipients, or deleting mailbox data. <br>
+## Use Case:
 
+Developers and external users use this skill to configure agents for Assistant Mail mailbox access, message retrieval, replies, sending, recipient management, and usage checks through MCP.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/assistantmail/assistant-mail) <br>
-- [AssistantMail app](https://app.assistant-mail.ai) <br>
-- [AssistantMail site](https://assistant-mail.ai) <br>
-- [AssistantMail API base URL](https://api.assistant-mail.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, shell commands, API calls] <br>
-**Output Format:** [Markdown with JSON examples and MCP configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an AssistantMail API key or Cognito JWT and a mailboxId for mailbox operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: API key exposure could allow mailbox operations through Assistant Mail.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat ASSISTANT_MAIL_API_KEY like a password, store it only in the agent runtime's secret mechanism, and rotate it if exposure is suspected.
+
+Risk: Agent-accessible tools include sending, replying to, reading, and deleting mail-related data.
+
+Mitigation: Review the exposed MCP tools before deployment and use allowlists, consent controls, and send caps to limit agent behavior.
+
+Risk: Using the wrong mailboxId could direct operations at an unintended mailbox within the authorized account.
+
+Mitigation: List mailboxes through the API, persist the intended mailboxId, and confirm it before send, read, update, or delete operations.
+
+## Reference(s):
+
+- [Assistant Mail documentation](https://assistant-mail.ai/docs)
+- [ClawHub assistant-mail skill page](https://clawhub.ai/assistantmail/skills/assistant-mail)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown with inline shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes MCP server setup, environment variable guidance, mailbox identifiers, and tool-call examples.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence.release.version, released 2026-09-09T23:25:19Z)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

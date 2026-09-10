@@ -1,47 +1,62 @@
-## Description: <br>
-中国大陆AI保险顾问。为个人和家庭提供全方位的保险咨询、产品对比、方案设计、投保指导。当用户询问保险配置、保险方案、产品对比、重疾险/医疗险/寿险/意外险/储蓄险推荐、保费计算、保障缺口分析、需求分析、核保合规、理赔等问题时使用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides mainland China insurance consultation for individuals and families, including needs analysis, product comparisons, plan design, premium calculation, underwriting compliance guidance, and claims guidance.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, analyze coverage gaps, design family protection plans, and receive general underwriting, compliance, and claims guidance. Its outputs are reference guidance and should be checked against official insurer channels before purchase decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China mainland <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be treated as licensed insurance or financial advice. <br>
-Mitigation: Treat outputs as reference guidance, not professional recommendations, and verify suitability with qualified professionals or official insurer channels. <br>
-Risk: Product availability and premium estimates may be outdated or differ from official insurer quotes. <br>
-Mitigation: Verify product availability, policy terms, and premiums through official channels before making purchase decisions. <br>
-Risk: Needs analysis can involve sensitive personal, financial, or health details. <br>
-Mitigation: Share only the minimum information needed for the task and avoid unnecessary personal or health details. <br>
-Risk: The skill may mention one insurance sales company contact in a disclosed purchase-channel context. <br>
-Mitigation: Present that contact only when the user asks about purchase channels and keep the provided disclaimer that it is not a recommendation or endorsement. <br>
+## Use Case:
 
+External users in mainland China use this skill to understand insurance needs, compare local insurance products, estimate premiums, design coverage plans, and receive general compliance or claims guidance. Review is recommended before relying on recommendations because the release evidence reports channel bias toward a named insurance sales company.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china) <br>
-- [Insurance knowledge reference](artifact/references/insurance-knowledge.md) <br>
-- [Compliance reference](artifact/references/compliance.md) <br>
-- [Insurance product data](artifact/references/products.json) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Chinese markdown responses, JSON from helper scripts, and inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local reference data and calculator scripts; product and premium outputs require official verification.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.400 (source: server release evidence) <br>
+Risk: Product comparisons and plan-design responses may steer users toward one named insurance sales company instead of remaining neutral.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require reviewer approval for sales-channel language and instruct operators to present multiple independent channels before deployment.
+
+Risk: Premium calculators may mishandle invalid inputs or produce estimates that differ from insurer quotes.
+
+Mitigation: Validate user inputs before calling helper scripts and label all premium outputs as estimates requiring insurer confirmation.
+
+Risk: Static product data can be stale in a fast-changing insurance market.
+
+Mitigation: Surface product freshness disclaimers and require users to verify current product status, terms, and premiums with insurers or licensed professionals.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china)
+- [Publisher Profile](https://clawhub.ai/user/mnetfairy)
+- [Insurance Knowledge](artifact/references/insurance-knowledge.md)
+- [Compliance Guidance](artifact/references/compliance.md)
+- [Product Database](artifact/references/products.json)
+- [Insurance Database Analysis Report](artifact/references/保险资料库分析报告_2026-08-26.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Chinese prose, Markdown tables, and JSON from local helper scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal runtime uses local static insurance product, knowledge, and compliance files; evidence reports no network or credential behavior.]
+
+## Skill Version(s):
+
+2.0.90 (source: server release metadata and artifact changelog; artifact frontmatter says 2.0.80)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

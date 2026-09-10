@@ -1,7 +1,7 @@
 {
   "name": "tradebee",
-  "description": "v26.6.26 A unified Tradebee Website Builder Open API skill for mapping an explicit Tradebee platform data-operation request to the correct Tradebee action. Use it only when the user clearly wants to operate on Tradebee blogs, blog groups, FAQs, FAQ groups, custom pages, products, product groups, inquiries, recent visitors, keyword rankings, or tenant HTML rule retrieval, and the target object type matches this skill. Do not use it for generic 'find', 'show', 'check', 'update', or 'delete' requests outside Tradebee platform data context. For all `*_update` actions, the skill also automatically reads the current record and writes a local JSON backup file before sending the update request.",
-  "version": "26.6.26",
+  "description": "v26.8.24 A unified Tradebee Website Builder Open API skill for explicit operations on blogs, FAQs, custom pages, news, news groups, website navigation, products, inquiries, analytics, and tenant HTML rules. Update actions automatically read and back up the current record before mutation.",
+  "version": "26.8.24",
   "input": {
     "type": "object",
     "properties": {
@@ -31,6 +31,18 @@
           "inquiry-read",
           "keywords-rank",
           "languages-get",
+          "navigation-create",
+          "navigation-delete",
+          "navigation-read",
+          "navigation-update",
+          "news-create",
+          "news-delete",
+          "news-read",
+          "news-update",
+          "newsgroup-create",
+          "newsgroup-delete",
+          "newsgroup-read",
+          "newsgroup-update",
           "products-create",
           "products-delete",
           "products-read",
@@ -96,7 +108,7 @@
           },
           "description": {
             "type": "string",
-            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `blog.description`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Do not use inline style attributes as the main styling method. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `blog-create`, this is required. For `blog-update`, omit it if the detailed description should stay unchanged."
+            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `blog.description`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `blog-create`, this is required. For `blog-update`, omit it if the detailed description should stay unchanged."
           },
           "seo": {
             "type": "object",
@@ -214,7 +226,7 @@
           },
           "answer": {
             "type": "string",
-            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `faq.answer`. Do not invent, shorten, translate, or rename the `scene` value. For `faq-create`, this is required. For `faq-update`, omit it if the answer should stay unchanged."
+            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `faq.answer`. Do not invent, shorten, translate, or rename the `scene` value. Follow the returned rule payload and use its embedded `<style>` block; do not use any inline style attributes or external stylesheet links. For `faq-create`, this is required. For `faq-update`, omit it if the answer should stay unchanged."
           },
           "seo": {
             "type": "object",
@@ -294,7 +306,7 @@
           },
           "content": {
             "type": "string",
-            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `custompage.content`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Do not use inline style attributes as the main styling method. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `custompage-create`, this is required. For `custompage-update`, omit it if the detailed content should stay unchanged."
+            "description": "HTML fragment only. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `custompage.content`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `custompage-create`, this is required. For `custompage-update`, omit it if the detailed content should stay unchanged."
           },
           "seo": {
             "type": "object",
@@ -320,9 +332,187 @@
         "type": "integer",
         "description": "Optional. Exact custom page filter used by `custompage-read`. Use this when the user wants one specific custom page, one exact custom page record, or custom page detail. If provided, it must be one positive integer (`> 0`). Omit this field to read all custom pages."
       },
+      "news": {
+        "type": "object",
+        "description": "Required by news-create and news-update. For create, send a complete payload; for update, news_id is required and unchanged fields must be omitted.",
+        "properties": {
+          "news_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required positive ID for news-update; select it from news-read."
+          },
+          "newsgroup_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for news-create; if supplied on update, select it from newsgroup-read under the same language."
+          },
+          "publisher": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional publisher, up to 100 characters. For update, omit it to keep the current value."
+          },
+          "publication_date": {
+            "type": "string",
+            "description": "Required valid date for create; optional for update."
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional source, up to 100 characters. For update, omit it to keep the current value."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 500,
+            "description": "Required for create, 2-500 characters. For update, omit it to keep the current title."
+          },
+          "cover_image": {
+            "type": "object",
+            "description": "Optional image up to 500 kB; an updated image cannot be automatically restored from backup.",
+            "properties": {
+              "name": { "type": "string", "description": "Required image file label when cover_image is supplied." },
+              "base64": { "type": "string", "description": "Required image data with MIME prefix when cover_image is supplied; decoded size must not exceed 500 kB." }
+            }
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": { "type": "string", "minLength": 3, "maxLength": 50, "description": "News tag containing 3-50 characters." },
+            "description": "Required for create: 1-6 tags. For update, omit it to keep current tags."
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Required for create, 10-500 characters. For update, omit it to keep the current summary."
+          },
+          "description": {
+            "type": "string",
+            "description": "Required news-body HTML fragment for create. Before generating it, call `rule-get` with the exact selected `language` and exact `scene=news.description`; stop if the call fails and follow the complete returned rule payload if it succeeds. The current rule requires one root `<section>` with a unique scoped class and one embedded `<style>` block at the end; do not use any inline style attributes or external stylesheet links. Do not include `<h1>` and prefer `<h2>` to `<h6>`. Each `<img src>` may be an HTTP(S) URL or `data:image/...;base64,...`; at most 50 images are allowed and each image must be at most 500 kB. The 100,000-character limit is calculated after removing `<img>` tags. The server uploads base64 images and replaces `src` with URLs. For update, call `rule-get` only when replacing this field; an empty string or omitted field leaves the current body unchanged."
+          },
+          "seo": {
+            "type": "object",
+            "description": "Optional SEO fields. For update, omit the object or individual fields to keep current values.",
+            "properties": {
+              "title": { "type": "string", "maxLength": 90, "description": "SEO title, up to 90 characters." },
+              "description": { "type": "string", "maxLength": 200, "description": "SEO description, up to 200 characters." },
+              "keywords": { "type": "string", "maxLength": 120, "description": "Comma-separated SEO keywords, up to 6 keywords and 120 total characters." }
+            }
+          }
+        }
+      },
+      "news_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional positive exact news filter used by news-read; omit it to avoid ID filtering. Mutually exclusive with newsgroup_id."
+      },
+      "newsgroup": {
+        "type": "object",
+        "description": "Required by newsgroup-create and newsgroup-update.",
+        "properties": {
+          "newsgroup_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required positive ID for newsgroup-update; select it from newsgroup-read."
+          },
+          "group_name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 300,
+            "description": "Required for create, 2-300 characters. For update, omit it to keep the current name."
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": { "type": "string", "minLength": 1, "maxLength": 50, "description": "News-group tag containing 1-50 characters." },
+            "description": "Required for create: 1-6 tags. For update, omit it to keep current tags."
+          },
+          "brief_description": {
+            "type": "string",
+            "maxLength": 300,
+            "description": "Optional, up to 300 characters. For update, omit it to keep the current value."
+          },
+          "seo": {
+            "type": "object",
+            "description": "Optional SEO fields. For update, omit the object or individual fields to keep current values.",
+            "properties": {
+              "title": { "type": "string", "maxLength": 90, "description": "SEO title, up to 90 characters." },
+              "description": { "type": "string", "maxLength": 200, "description": "SEO description, up to 200 characters." },
+              "keywords": { "type": "string", "maxLength": 120, "description": "Comma-separated SEO keywords, up to 6 keywords and 120 total characters." }
+            }
+          }
+        }
+      },
+      "newsgroup_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional positive group filter used by news-read and exact ID filter used by newsgroup-read. Omit it to avoid group filtering."
+      },
+      "navigation": {
+        "type": "object",
+        "description": "Required by navigation-create and navigation-update. Navigation supports at most two levels and three mutually exclusive child modes.",
+        "properties": {
+          "navigation_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required for navigation-update; select one positive ID from navigation-read."
+          },
+          "parent_navigation_id": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "description": "Create only. Defaults to 0 for first level. For second level, select a positive first-level ID from navigation-read where is_leaf=false; never use a second-level ID."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Required for create: navigation display name containing 2-100 characters. For update, omit it to keep the current name."
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500,
+            "description": "Required for create and 1-500 characters. Internal links must be /path without scheme/domain; external links must be absolute HTTP(S) URLs. For update, omit it to keep the current URL."
+          },
+          "system_children_type": {
+            "type": "integer",
+            "enum": [ 0, 1, 2, 3, 4, 5, 6, 7 ],
+            "minimum": 0,
+            "maximum": 7,
+            "description": "Defaults to 0 on create. System child-navigation type: 0 disables system children; 1 first-level product groups; 2 news groups; 3 FAQ groups; 4 certificate groups; 5 case groups; 6 all product groups without cover images; 7 blog groups. Values 1-7 are first-level only, require empty content, and forbid manual children. For update, omit it to keep the current type."
+          },
+          "content": {
+            "type": "string",
+            "description": "Optional first-level custom child-navigation HTML fragment. Before generating this field, call rule-get with the exact selected language and exact scene=navigation.content; stop if the call fails. For update, call rule-get only when replacing this field. Follow the returned payload: use one root section with a unique scoped class and one embedded style block at the end. Inline style attributes and external stylesheet links are forbidden. Do not include H1; prefer H2-H6. Each img src may be an HTTP(S) URL or data:image/...;base64,...; at most 50 images are allowed and each image must be at most 500 kB. The 100,000-character limit is calculated after removing img tags. The server uploads base64 images and replaces src with URLs. Use non-empty content only with system_children_type=0 and no manual children. It must be empty for system children, manual-child mode, and every second-level item. On update, an empty string or omitted field leaves the current content unchanged."
+          },
+          "open_in_new_window": {
+            "type": "boolean",
+            "description": "Defaults to false on create. true opens in a new window or tab; false opens in the current one. For update, omit it to keep the current setting."
+          },
+          "sort": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999999,
+            "description": "Defaults to 999999 on create. Smaller values appear earlier; valid range is 1-999999. For update, omit it to keep the current sort."
+          }
+        }
+      },
+      "navigation_id": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Optional positive exact navigation filter used by navigation-read. Omit it to avoid ID filtering; mutually exclusive with parent_navigation_id."
+      },
+      "parent_navigation_id": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "Optional parent filter for navigation-read. Use 0 for first-level navigation or a positive first-level ID for its children; mutually exclusive with navigation_id."
+      },
       "confirmation": {
         "type": "object",
-        "description": "Required by `blog-create`, `blog-update`, `blog-delete`, `bloggroup-create`, `bloggroup-update`, `bloggroup-delete`, `custompage-create`, `custompage-update`, `custompage-delete`, `faq-create`, `faq-update`, `faq-delete`, `faqgroup-create`, `faqgroup-update`, `faqgroup-delete`, `productsgroup-create`, `productsgroup-update`, `productsgroup-delete`, `products-create`, `products-update`, and `products-delete`. This object proves the user explicitly approved the exact destructive or high-impact change after seeing the real payload or ID list. For all `*-update` actions, that approval must also cover the automatic local backup file write of the current record and requested update payload before execution. Never set it automatically before showing the user the final action details.",
+        "description": "Required by every create, update, and delete action, including news, news-group, and navigation mutations. It proves the user approved the exact language and payload or ID list. Update approval must also cover the automatic local backup. Navigation delete approval must state that deleting a first-level item also deletes its children.",
         "properties": {
           "approved": {
             "type": "boolean",
@@ -348,7 +538,7 @@
       },
       "id_list": {
         "type": "array",
-        "description": "Required by `blog-delete`, `bloggroup-delete`, `custompage-delete`, `faq-delete`, `faqgroup-delete`, `productsgroup-delete`, and `products-delete`. ID list, up to 100 items. For `blog-delete`, these are blog IDs. For `bloggroup-delete`, these are blog group IDs. For `custompage-delete`, these are custom page IDs. For `faq-delete`, these are FAQ IDs. For `faqgroup-delete`, these are FAQ group IDs. For `productsgroup-delete`, these are product group IDs. For `products-delete`, these are product IDs.",
+        "description": "Required by delete actions. Supply 1 to 100 positive IDs of the object selected by action, including news IDs, news-group IDs, or navigation IDs.",
         "items": {
           "type": "integer",
           "description": "Target ID"
@@ -364,11 +554,11 @@
       },
       "language": {
         "type": "string",
-        "description": "Required for most content operations and for `rule-get`. This is the exact site language code to operate on, such as `en` or `fr`. Do not guess, translate, or invent this value. First call `languages-get`, show the returned language list to the user, and copy one exact `language` value from that list after the user confirms it. When generating any HTML fragment such as `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`, call `rule-get` first with the exact same selected `language` and the exact matching `scene` value. Do not normalize or replace the selected `language` value when calling `rule-get`."
+        "description": "Required for most content operations and for `rule-get`. This is the exact site language code to operate on, such as `en` or `fr`. Do not guess, translate, or invent this value. First call `languages-get`, show the returned language list to the user, and copy one exact `language` value from that list after the user confirms it. When generating any HTML fragment such as `navigation.content`, `news.description`, `blog.description`, `faq.answer`, `products.description`, `productsgroup.section.top`, `productsgroup.section.bottom`, or `custompage.content`, call `rule-get` first with the exact same selected `language` and the exact matching `scene` value. Do not normalize or replace the selected `language` value when calling `rule-get`."
       },
       "pagination": {
         "type": "object",
-        "description": "Optional. Used by `blog-read`, `bloggroup-read`, `custompage-read`, `products-read`, `inquiry-read`, `visitor-recent`, and `keywords-rank`.",
+        "description": "Optional. Used by paginated reads including news-read and newsgroup-read. navigation-read does not use pagination.",
         "properties": {
           "current_page": {
             "type": "integer",
@@ -469,7 +659,7 @@
           },
           "description": {
             "type": "string",
-            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `products.description`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Do not use inline style attributes as the main styling method. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `products-update`, omit this field if the detailed description should stay unchanged."
+            "description": "HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating this field, call `rule-get` with the exact selected `language` and the exact scene value `products.description`. Do not invent, shorten, translate, or rename the `scene` value. The generated fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `products-update`, omit this field if the detailed description should stay unchanged."
           },
           "seo": {
             "type": "object",
@@ -525,15 +715,15 @@
           },
           "section": {
             "type": "object",
-            "description": "Optional. Product group page custom decoration HTML fragments. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed in each fragment. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit for each fragment is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating these fragments, call `rule-get` with the exact selected `language` and the exact scene value `productsgroup.section.top` or `productsgroup.section.bottom` to match the fragment being generated. Do not invent, shorten, translate, or rename the `scene` value. Each fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Do not use inline style attributes as the main styling method. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `productsgroup-update`, omit the whole object, or omit `top` / `bottom`, or pass an empty string, to keep the current fragment unchanged.",
+            "description": "Optional. Product group page custom decoration HTML fragments. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed in each fragment. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit for each fragment is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Before generating these fragments, call `rule-get` with the exact selected `language` and the exact scene value `productsgroup.section.top` or `productsgroup.section.bottom` to match the fragment being generated. Do not invent, shorten, translate, or rename the `scene` value. Each fragment must follow the full rule payload returned by `rule-get`, including the current tenant structure rules such as starting with one root `<section>` element and placing one embedded `<style>` block at the end of the fragment. Use the embedded `<style>` block required by `rule-get`; do not use any inline style attributes or external stylesheet links. Do not hardcode assumptions here about individual rule details, because the rule API may add new constraints later without requiring `tradebee` changes. For `productsgroup-update`, omit the whole object, or omit `top` / `bottom`, or pass an empty string, to keep the current fragment unchanged.",
             "properties": {
               "top": {
                 "type": "string",
-                "description": "Optional. Product group page header decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Generate this fragment only after calling `rule-get` with exact `language` and exact `scene=productsgroup.section.top`, and follow the returned fragment structure rules instead of using inline style attributes as the main styling method."
+                "description": "Optional. Product group page header decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Generate this fragment only after calling `rule-get` with exact `language` and exact `scene=productsgroup.section.top`, and follow the returned fragment structure rules with an embedded `<style>` block; do not use any inline style attributes or external stylesheet links."
               },
               "bottom": {
                 "type": "string",
-                "description": "Optional. Product group page footer decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Generate this fragment only after calling `rule-get` with exact `language` and exact `scene=productsgroup.section.bottom`, and follow the returned fragment structure rules instead of using inline style attributes as the main styling method."
+                "description": "Optional. Product group page footer decoration fragment. HTML fragment only. Do not include any `<h1>` tag, and prefer `<h2>` to `<h6>`. `<img src>` may use a normal URL or `data:image/...;base64,...`. At most 50 `<img>` tags are allowed. Each single `<img>` image must be 500 kB or smaller. The 100,000-character limit is checked after removing `<img>` tags, and the server uploads supported base64 images and replaces them with URL addresses. Generate this fragment only after calling `rule-get` with exact `language` and exact `scene=productsgroup.section.bottom`, and follow the returned fragment structure rules with an embedded `<style>` block; do not use any inline style attributes or external stylesheet links."
               }
             }
           },
@@ -572,6 +762,8 @@
       "scene": {
         "type": "string",
         "enum": [
+          "navigation.content",
+          "news.description",
           "blog.description",
           "faq.answer",
           "products.description",

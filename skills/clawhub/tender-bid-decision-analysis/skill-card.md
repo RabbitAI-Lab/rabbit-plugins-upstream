@@ -1,49 +1,67 @@
-## Description: <br>
-Analyzes a specific tender opportunity using Zhiliaobiaoxun bid-history data to produce a bid/no-bid decision report with pricing guidance, competitor prediction, buyer signals, risk notes, and an optional shareable HTML report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps users evaluate a specific tender opportunity by analyzing project details, buyer history, likely competitors, bid probability, pricing references, and risks using Zhiliaobiaoxun bidding data.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business development teams use this skill to decide whether to pursue a specific tender, estimate pricing, identify likely competitors, and summarize public bid-history signals. The skill is intended for concrete bid opportunities supplied as an announcement link, project title, or tender file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts the Zhiliaobiaoxun service and spends API credits while producing a full decision report. <br>
-Mitigation: Confirm expected credit usage before analysis and pause for approval before exceeding the documented call budget. <br>
-Risk: Automatic trial registration can collect a hashed device identifier and store an API key in the user's home directory. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY to skip registration, or obtain explicit user consent before collecting the documented device fields. <br>
-Risk: Generated reports can include signed sk links that may be shared or logged. <br>
-Mitigation: Review reports before sharing and avoid distributing signed links beyond the intended audience. <br>
-Risk: Bid recommendations may affect commercial decisions and may involve real companies or public agencies. <br>
-Mitigation: Treat the report as decision support, keep facts and inferences separate, and retain the disclaimer and data-gap notes. <br>
+## Use Case:
 
+External business users and bid teams use this skill to decide whether to pursue a specific tender, estimate competitive pressure, compare pricing anchors, and produce a structured bid-decision report. The skill can also create a shareable HTML version of the report for review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/tender-bid-decision-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/liu-jiapeng) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision report and optional self-contained HTML report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include cited bid or company records when available, a decision recommendation, pricing range, risk list, and disclaimer.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Automatic trial registration collects a device fingerprint and stores an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require user consent before registration, allow preconfigured ZLBX_API_KEY to bypass registration, collect only platform, architecture, and hashed MAC address, and keep ~/.zlbx/config.json private to the local user.
+
+Risk: Shareable HTML reports can contain signed access links and sensitive bid-analysis details.
+
+Mitigation: Treat generated reports as sensitive, avoid forwarding them unless access-bearing URLs may be shared, and review the report before external distribution.
+
+Risk: The security summary reports an HTML injection flaw in generated reports.
+
+Mitigation: Review generated HTML before sharing and prefer opening reports in a trusted local context until the renderer is fixed and re-scanned.
+
+Risk: Bid recommendations may be misleading when source data is incomplete or stale.
+
+Mitigation: Require conclusions to cite supporting API data, explicitly mark data gaps, include the data time range, and preserve the report disclaimer that the output is not investment or commercial decision advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/tender-bid-decision-analysis)
+- [Analysis workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Automatic registration flow](references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun account and registration API](https://ai.zhiliaobiaoxun.com/web-api/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, HTML, Files, Guidance]
+
+**Output Format:** [Markdown decision report with an optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved trial registration; full reports use about 12-25 API calls and quick reports use about 5-8 API calls.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and artifact X-Client header)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -21,6 +21,7 @@ wheels/
 *.egg
 
 # Virtual environments
+.venv/
 venv/
 ENV/
 env/
@@ -73,6 +74,9 @@ docs/superpowers/
 .obsidian/workspace*
 .obsidian/cache
 .trash/
+
+# Transaction journals (apply-bundle)
+.backups/
 
 # Release builds
 release/

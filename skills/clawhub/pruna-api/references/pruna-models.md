@@ -8,7 +8,8 @@ Pricing and limits change; confirm on the official page: [Available models](http
 
 | Model ID | Type | Tool skill | QA checklist (install guide) |
 |----------|------|------------|------------------------------|
-| `p-image` | Text-to-image (good quality, extremely fast) | `p-image` | `p-image-quality-checklist.md` in `image-prompting` |
+| `p-image` | Text-to-image (good quality, extremely fast; use when user asks cheap/fast) | `p-image` | `p-image-quality-checklist.md` in `image-prompting` |
+| `p-image-ideogram` | Text-to-image with control knobs (photoreal photos, in-image text, JSON/hex/bbox; thinking + upsampling) | `p-image-ideogram` | `p-image-quality-checklist.md` in `image-prompting` |
 | `p-image-edit` | Image edit / compose (1–5 images) | `p-image-edit` | `p-image-edit-quality-checklist.md` in `image-prompting` |
 | `p-image-upscale` | Upscale (target MP 1–128, optional enhance) | `p-image-upscale` | `p-image-upscale-quality-checklist.md` in `image-prompting` |
 | `p-image-try-on` | Virtual try-on (person + up to 11 garments, ≤6 finals / 7–8 reliable; optional pose ref, turbo ~4) | `p-image-try-on` | `p-image-try-on-quality-checklist.md` in `image-prompting` |
@@ -16,6 +17,7 @@ Pricing and limits change; confirm on the official page: [Available models](http
 | `p-video-avatar` | Talking avatar from portrait + script or audio | `p-video-avatar` | `p-video-avatar-quality-checklist.md` in `video-prompting` |
 | `p-video-animate` | Animate a still using source video motion (motion transfer) | `p-video-animate` | `p-video-animate-quality-checklist.md` in `video-prompting` |
 | `p-video-replace` | Replace people in source video using 1–4 identity images | `p-video-replace` | `p-video-replace-quality-checklist.md` in `video-prompting` |
+| `p-video-edit` | Instruction video edit (source ≤15s + prompt; optional 0–4 refs) | `p-video-edit` | `p-video-edit-quality-checklist.md` in `video-prompting` |
 
 ## External tools (Replicate)
 

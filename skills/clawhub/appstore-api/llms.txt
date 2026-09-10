@@ -1,0 +1,91 @@
+# ReplyNodes App Store Public Reads
+
+> Read-only App Store API for iOS app metadata and ASO research through the ReplyNodes prepaid-credit fetcher. GET-only read capabilities with bearer API-key
+> authentication at the gateway, bounded pages, normalized v1 payloads, and
+> transparent errors plus an explicit unsupported-capability matrix.
+
+Base URL: deployment-specific. Use https://api.replynodes.com as the ReplyNodes fetcher gateway base URL.
+
+Setup: create a free account at https://app.replynodes.com/auth (500 one-time credits, no payment setup required), then create your fetcher API key at https://app.replynodes.com/developers. Store it as REPLYNODES_API_KEY and send it as Authorization: Bearer YOUR_FETCHER_KEY.
+
+## Surface status
+
+- All nine reviewed public read methods are exposed as stable capability identifiers in the manifest: app, list, search, developer, privacy, suggest, similar, reviews, and ratings.
+- Each route uses the provider method name and exact option names; app-shaped results are normalized into the public App contract and raw provider records never cross the public gateway.
+- No availability, uptime, latency, or success-rate figure is claimed; example payloads are illustrative fixtures.
+- Package access uses prepaid credits only: one long-lived fetcher key is sent as Authorization: Bearer YOUR_FETCHER_KEY
+
+## Endpoints
+
+- `GET /v1/appstore/apps/{id}` - Look up one public App Store application (capability `app`; requires a ReplyNodes API key at the gateway).
+  - Path parameter `id`: Numeric track id.
+  - Query parameter `appId` (optional): Bundle id fallback.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `lang` (optional): Language code.
+  - Query parameter `ratings` (optional): Include ratings information.
+- `GET /v1/appstore/list` - List applications from a storefront collection (capability `list`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `collection` (optional): Provider collection constant.
+  - Query parameter `category` (optional): Provider category constant.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `lang` (optional): Language code.
+  - Query parameter `num` (optional): Number of applications; values outside 1..200 are rejected.
+  - Query parameter `fullDetail` (optional): Request detail enrichment.
+- `GET /v1/appstore/search` - Search public App Store applications by term (capability `search`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `term` (required): Search term.
+  - Query parameter `num` (optional): Number of results; values outside 1..50 are rejected.
+  - Query parameter `page` (optional): Result page.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `lang` (optional): Language code.
+  - Query parameter `idsOnly` (optional): Return ids without detail lookups.
+- `GET /v1/appstore/developer` - List applications by developer (capability `developer`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `devId` (required): public developer identifier.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `lang` (optional): Language code.
+- `GET /v1/appstore/privacy` - Read public App Store privacy details (capability `privacy`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `id` (required): public application identifier.
+- `GET /v1/appstore/suggest` - Suggest public App Store search terms (capability `suggest`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `term` (required): Search term.
+- `GET /v1/appstore/apps/{id}/similar` - List apps related to an application (capability `similar`; requires a ReplyNodes API key at the gateway).
+  - Path parameter `id`: Numeric track id.
+  - Query parameter `appId` (optional): Bundle id fallback.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `lang` (optional): Language code.
+- `GET /v1/appstore/reviews` - Read a page of public app reviews (capability `reviews`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `id` (optional): public application identifier; provide this or appId.
+  - Query parameter `appId` (optional): Bundle id; provide this or id.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `page` (optional): Review page; values outside 1..10 are rejected.
+  - Query parameter `sort` (optional): Provider review sort constant.
+- `GET /v1/appstore/ratings` - Read public app ratings (capability `ratings`; requires a ReplyNodes API key at the gateway).
+  - Query parameter `id` (optional): public application identifier; provide this or appId.
+  - Query parameter `country` (optional): Two-letter storefront code.
+  - Query parameter `appId` (optional): Bundle id; provide this or id.
+
+## Essentials
+
+- Auth: `Authorization: Bearer YOUR_FETCHER_KEY` at the gateway; scope and entitlement enforcement belong to the shared control plane.
+- Envelope: success `{data:[app records], meta{request_id, contract_version, generated_at, availability}}`; failure `{error:{code, message, request_id}}`.
+- Correlation: supply an opaque request id per call; it is echoed as `meta.request_id`.
+- Page bounds: Provider-specific limits are enforced by the pinned runtime; the gateway bounds request and response transport sizes without renaming options.
+- Honesty rules: counters/scores/prices are `null` when the source omits them (zeros are never fabricated); `meta.availability` reports completeness; unknown upstream fields are dropped.
+- Guarantees: GET-only public data; no purchase/review/account capability exists now or later; the read layer carries no credential material of any kind.
+
+## Error codes
+
+- `400 invalid_request`
+- `404 not_found`
+- `429 rate_limited`
+- `502 upstream_unavailable`
+- `503 degraded`
+
+## Unsupported capabilities (do not improvise)
+
+- `version_history` (not supported by pinned provider)
+- `writes_auth_private` (read only policy)
+
+## Docs
+
+- [OpenAPI spec](openapi/appstore-public-v1.openapi.json)
+- [Skill handbook](skill.md)
+- [MCP manifest](mcp/appstore-mcp.schema.json)
+- [Endpoint examples](examples/endpoints.md)

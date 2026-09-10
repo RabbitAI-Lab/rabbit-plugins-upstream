@@ -1,47 +1,68 @@
-## Description: <br>
-Asana API integration with managed OAuth for accessing tasks, projects, workspaces, users, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Asana API integration with managed OAuth for accessing tasks, projects, workspaces, users, and webhooks through the Maton CLI or SDK.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Asana work items, track projects, inspect workspace and user data, and integrate Asana workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill brokers access to an Asana account through Maton and uses MATON_API_KEY for authentication. <br>
-Mitigation: Install only when the publisher and Maton broker are trusted, keep MATON_API_KEY out of logs, and verify authentication state before use. <br>
-Risk: Write actions can create, update, or delete Asana resources, including tasks, projects, workspaces, users, and webhooks. <br>
-Mitigation: Confirm the target resource and intended effect with the user before any create, update, delete, or webhook operation. <br>
-Risk: Webhook targets can send Asana event data to external or private endpoints. <br>
-Mitigation: Use only intentional, reachable webhook targets and avoid private or internal URLs unless that exposure is explicitly intended. <br>
+## Use Case:
 
+Developers and agent users use this skill to manage Asana work items, track projects, inspect workspaces and users, and configure webhooks through approved Maton-authenticated API calls.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/asana-api) <br>
-- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Asana API Documentation](https://developers.asana.com) <br>
-- [Asana API Reference](https://developers.asana.com/reference) <br>
-- [Asana LLM Reference](https://developers.asana.com/llms.txt) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Code, Configuration] <br>
-**Output Format:** [Markdown with CLI, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an authorized Asana OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Maton or Asana credentials could be exposed if keys or tokens are printed, logged, persisted, or passed through command lines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, let the CLI or SDK credential store handle secrets, and verify authentication status without inspecting credential values.
+
+Risk: Write, deletion, membership, or webhook operations can change Asana data or trigger downstream effects.
+
+Mitigation: Default to read and list calls, then require explicit user approval with the target resource, payload, and intended effect before any modifying operation.
+
+Risk: A request can affect the wrong Asana account or connection when multiple profiles or connections exist.
+
+Mitigation: Specify the intended Maton profile and Asana connection for scoped operations, and connect only accounts and scopes needed for the current task.
+
+Risk: Content returned by Asana or webhook payloads may contain untrusted instructions.
+
+Mitigation: Treat API and webhook content as data, not instructions, and do not execute or interpolate returned content into commands without validation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/asana-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Asana API Documentation](https://developers.asana.com)
+- [Asana API Reference](https://developers.asana.com/reference)
+- [Asana LLM Reference](https://developers.asana.com/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, JSON examples, and SDK code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs include read/list-first API guidance and approval-gated write, deletion, membership, and webhook actions.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

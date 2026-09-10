@@ -1,8 +1,8 @@
 {
   "name": "tradebee-skills-bundle",
   "display_name": "Tradebee OpenAPI Skills Bundle",
-  "version": "2.12.0",
-  "description": "Install one Tradebee Website Builder OpenAPI bundle whose primary external entrypoint is `tradebee`. Use it only for explicit Tradebee platform data operations across blogs, blog groups, FAQs, FAQ groups, custom pages, products, product groups, inquiries, recent visitors, keyword rankings, and tenant HTML rule retrieval. Read and analysis actions should still be narrowed to the correct Tradebee object type and filter, and create/update/delete actions should be used only after the target Tradebee object type and target record ID or confirmed ID list are explicit.",
+  "version": "2.13.0",
+  "description": "Install one Tradebee Website Builder OpenAPI bundle whose primary external entrypoint is `tradebee`. It supports explicit operations across blogs, FAQs, custom pages, news, news groups, website navigation, products, inquiries, analytics, and tenant HTML rules. Mutations require explicit target payload or IDs and confirmation.",
   "install_mode": "bundle",
   "skills": [
     {
@@ -104,6 +104,66 @@
       "name": "custompage-update",
       "directory": "custompage-update",
       "category": "custompage"
+    },
+    {
+      "name": "news-create",
+      "directory": "news-create",
+      "category": "news"
+    },
+    {
+      "name": "news-delete",
+      "directory": "news-delete",
+      "category": "news"
+    },
+    {
+      "name": "news-read",
+      "directory": "news-read",
+      "category": "news"
+    },
+    {
+      "name": "news-update",
+      "directory": "news-update",
+      "category": "news"
+    },
+    {
+      "name": "newsgroup-create",
+      "directory": "newsgroup-create",
+      "category": "news"
+    },
+    {
+      "name": "newsgroup-delete",
+      "directory": "newsgroup-delete",
+      "category": "news"
+    },
+    {
+      "name": "newsgroup-read",
+      "directory": "newsgroup-read",
+      "category": "news"
+    },
+    {
+      "name": "newsgroup-update",
+      "directory": "newsgroup-update",
+      "category": "news"
+    },
+    {
+      "name": "navigation-create",
+      "directory": "navigation-create",
+      "category": "navigation"
+    },
+    {
+      "name": "navigation-delete",
+      "directory": "navigation-delete",
+      "category": "navigation"
+    },
+    {
+      "name": "navigation-read",
+      "directory": "navigation-read",
+      "category": "navigation"
+    },
+    {
+      "name": "navigation-update",
+      "directory": "navigation-update",
+      "category": "navigation"
     },
     {
       "name": "inquiry-read",

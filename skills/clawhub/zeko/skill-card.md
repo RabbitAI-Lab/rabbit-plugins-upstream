@@ -1,53 +1,72 @@
-## Description: <br>
-Helps agents use and build on Zeko by selecting docs, endpoints, Bridge CLI or SDK workflows, faucet commands, GraphQL and curl queries, sequencer and archive guidance, and o1js or OCaml development paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when a user needs to use or build on Zeko, including bridge workflows, faucet funding, endpoint discovery, GraphQL or curl queries, sequencer and archive-node guidance, and zkApp development with o1js or OCaml.
 
-## Publisher: <br>
-[hebilicious](https://clawhub.ai/user/hebilicious) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hebilicious](https://clawhub.ai/user/hebilicious)
 
-## Use Case: <br>
-External Zeko users, builders, and operators use this skill to bridge assets, request testnet funds, inspect Zeko and Mina endpoints, run terminal or API workflows, and build zkApps or protocol integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes workflows that handle private keys, signing, bridging, and transaction broadcasts. <br>
-Mitigation: Use disposable testnet keys, avoid pasting real secrets inline, review commands before execution, and require explicit confirmation before signing, bridging, or broadcasting transactions. <br>
-Risk: Generated bridge, faucet, or GraphQL commands can affect funds or network state when executed against live endpoints. <br>
-Mitigation: Prefer public testnet routes for validation, start with small amounts, verify endpoints and routes, and inspect generated commands before running them. <br>
+## Use Case:
 
+Developers, builders, and agents use this skill to perform terminal-driven Zeko workflows, inspect network state, bridge assets, request faucet funds, and find the right documentation or endpoint for user and builder tasks.
 
-## Reference(s): <br>
-- [ClawHub Zeko Skill](https://clawhub.ai/hebilicious/zeko) <br>
-- [Zeko Agent Skills Docs](https://docs.zeko.io/developers/tools/agent-skills) <br>
-- [Zeko Docs](https://docs.zeko.io) <br>
-- [Bridge CLI Docs](https://docs.zeko.io/developers/tools/bridge-cli) <br>
-- [Bridge SDK Docs](https://docs.zeko.io/developers/guides/bridge-sdk) <br>
-- [Faucet CLI Docs](https://docs.zeko.io/developers/guides/faucet-cli) <br>
-- [Custom Network Guide](https://docs.zeko.io/developers/guides/custom-network) <br>
-- [o1js Docs](https://docs.o1labs.org/o1js/) <br>
-- [Zeko Protocol Repository](https://github.com/zeko-labs/zeko) <br>
-- [Agent Workflows](references/10-agent-workflows.md) <br>
-- [Bridge, Faucet, And Agent Automation](references/30-bridge-and-faucet.md) <br>
-- [Endpoints And Curl](references/40-endpoints-and-curl.md) <br>
-- [Build On Zeko](references/50-build-on-zeko.md) <br>
-- [Sequencer Archive And DA](references/60-sequencer-archive-and-da.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash, JavaScript, and GraphQL examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include commands that require local environment variables such as MINA_PRIVATE_KEY, GITHUB_TOKEN, PUBLIC_KEY, or ADDRESS.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1-main.17.1 (source: server release metadata) <br>
+Risk: The skill uses private keys and GitHub tokens for bridge, SDK, and faucet workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use low-value testnet keys, avoid putting secrets directly in shell commands, and use narrowly scoped short-lived GitHub tokens.
+
+Risk: The skill references unpinned command-line packages for blockchain operations.
+
+Mitigation: Pin package versions where possible and independently verify tool packages before using them with valuable accounts.
+
+Risk: Bridge or payment commands can broadcast irreversible transactions.
+
+Mitigation: Require explicit confirmation before broadcasts and prefer documented high-level commands with machine-readable output for inspection.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/hebilicious/skills/zeko)
+- [Zeko agent skills documentation](https://docs.zeko.io/developers/tools/agent-skills)
+- [Zeko documentation](https://docs.zeko.io)
+- [Bridge CLI documentation](https://docs.zeko.io/developers/tools/bridge-cli)
+- [Bridge SDK documentation](https://docs.zeko.io/developers/guides/bridge-sdk)
+- [Faucet CLI documentation](https://docs.zeko.io/developers/guides/faucet-cli)
+- [Developer getting started](https://docs.zeko.io/developers/getting-started)
+- [o1js documentation](https://docs.o1labs.org/o1js/)
+- [Zeko protocol repository](https://github.com/zeko-labs/zeko)
+- [Agent workflows reference](references/10-agent-workflows.md)
+- [Navigation reference](references/10-navigation.md)
+- [User flows reference](references/20-user-flows.md)
+- [Bridge and faucet reference](references/30-bridge-and-faucet.md)
+- [Endpoints and curl reference](references/40-endpoints-and-curl.md)
+- [Build on Zeko reference](references/50-build-on-zeko.md)
+- [Sequencer, archive, and DA reference](references/60-sequencer-archive-and-da.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, GraphQL, curl, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include executable CLI commands, endpoint values, environment variable guidance, and configuration snippets.]
+
+## Skill Version(s):
+
+0.0.1-main.18.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

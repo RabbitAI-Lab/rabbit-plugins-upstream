@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes fixed aquarium camera video to flag visual signs of fish gasping near the surface that may indicate hypoxia or ammonia-related risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed aquarium camera images or video for fish gasping and abnormal respiration near the water surface, producing visual hypoxia or ammonia-poisoning risk warnings and handling guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External aquarium owners, public aquarium operators, aquaculture operators, and developers use this skill to analyze aquarium or pond video for fish gasping patterns and receive structured warning reports with recommended next steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium images or video and identity-linked report records are sent to the Life Emergence cloud service. <br>
-Mitigation: Use only with media and report data approved for that service, and avoid submitting sensitive or unnecessary footage. <br>
-Risk: The skill can create or reuse a local account record and store returned service tokens in the workspace database. <br>
-Mitigation: Run in an isolated workspace when possible, and review or clear shared workspace data such as data/smyx-api-key.txt before use. <br>
-Risk: Visual warnings could be mistaken for a diagnosis or automatic treatment instruction. <br>
-Mitigation: Treat outputs as risk warnings only; confirm water quality and consult an aquarium veterinarian or aquatic technician before medication or other high-impact action. <br>
+## Use Case:
 
+External aquarium owners, aquaculture operators, and developers use this skill to analyze clear aquarium or pond footage, receive structured gasping-risk reports, and query prior warning reports.
 
-## Reference(s): <br>
-- [Skill Page](https://clawhub.ai/18072937735/skills/smyx-fish-gasping-ammonia-warning-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured report text, with optional report export link.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include warning level, observed fish behavior metrics, recommended non-medication actions, disclaimers, and history-report listings from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter says 1.0.6) <br>
+Risk: The server security summary reports that media and credentials can be sent over plaintext HTTP through shipped development configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review configuration before installing, require production HTTPS-only endpoints, and avoid running private development endpoint settings.
+
+Risk: The server security summary reports silent identity creation or reuse and local token storage.
+
+Mitigation: Require explicit account binding and store tokens in a proper secrets store or keep them transient.
+
+Risk: Cloud upload and history access may expose aquarium media or reports if account binding and retention are unclear.
+
+Mitigation: Disclose cloud upload and history access plainly, confirm user authorization, and limit retained media to necessary warning evidence.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-gasping-ammonia-warning-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown and JSON analysis reports with warning levels, recommended actions, report links, and optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report links and historical report tables when querying prior warnings.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact frontmatter reports 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

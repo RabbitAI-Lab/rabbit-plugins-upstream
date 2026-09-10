@@ -29,121 +29,27 @@ trap 'rm -rf -- "${_tmpdir:-}"' EXIT
 
 - `-E` propagates ERR traps into functions
 - `inherit_errexit` propagates errexit into `$()`  command substitutions
+- Resolve the script's own data files against `SCRIPT_DIR`, never the caller's cwd or `git rev-parse --show-toplevel`. A shared linter invoked from another project's git hook, a cron job, or a wrapper runs with someone else's cwd, so a caller-relative rules path resolves to a file that does not exist: the rule set loads empty, zero violations are found, exit 0. It is a silent no-op, not an error, and running it from inside its own repo passes for the wrong reason. Exercise it once from a scratch directory that is not the script's own tree
 - Always create temp dirs under the EXIT trap: `_tmpdir=$(mktemp -d)`
 - Wrap body in `main() { ... }` with source guard: `[[ "${BASH_SOURCE[0]}" == "$0" ]] && main "$@"` -- enables sourcing for testing
 
-## Core Rules
+## Core rules
 
-- Quote every expansion: `"$var"`, `"$(cmd)"`, `"${array[@]}"`
-- `local` for function variables, `local -r` for function constants, `readonly` for script constants
-- `printf '%s\n'` over `echo` -- predictable behavior, no flag interpretation
-- `[[ ]]` for conditionals; `(( ))` for arithmetic; `$()` over backticks
-- End options with `--`: `rm -rf -- "$path"`, `grep -- "$pattern" "$file"`
-- Require env vars: `: "${VAR:?must be set}"`
-- Never `eval` user input; build commands as arrays: `cmd=("grep" "--" "$pat" "$f"); "${cmd[@]}"`
-- Keep untrusted/derived bytes off the command line: never build a heredoc body or an `sh -c` string from external data. An unquoted `<<EOF` command-substitutes `$(...)`/backticks in the content, and even a quoted `<<'EOF'` breaks if a content line equals the delimiter (the heredoc ends early and the rest runs as shell). Write the data to a file with a non-shell writer and have the consumer read the file
-- Allowlisting a command? Match the whole command against an anchored pattern (`^…$`), never inspect individual arguments — shell operators (`;`, `&&`, `|`, `#`, newline) smuggle a second command past a per-argument check (`rm -rf node_modules; rm -rf /`). Unrecognized syntax must fail closed to deny/ask
-- Separate `local` from assignment to preserve exit codes: `local val; val=$(cmd)`
-- Debug tracing: `PS4='+${BASH_SOURCE[0]}:${LINENO}: '` with `bash -x` -- shows file:line per command
-- Named exit codes: `readonly EX_USAGE=64 EX_CONFIG=78` -- no magic numbers in `exit`
-- Pipeline diagnostics: `"${PIPESTATUS[@]}"` shows exit code of each pipe stage, not just last failure
+- Quote expansions, use arrays for commands, and never evaluate external data as shell code.
+- Validate numeric syntax, sign, and application bounds before arithmetic. Convert unsigned digits with `10#` before applying the sign; `10#-08` is invalid.
+- Keep secrets out of process arguments and tracing. Feed them through stdin and use a JSON-aware encoder.
+- Check exact exit statuses where “absent” differs from “failed to inspect.” Separate `local` declarations from command substitutions.
+- Use NUL-delimited file iteration, validate required flag values, and reject conflicting output/target combinations.
+- For atomic replacement, stage beside the destination; for multi-file activation, switch a single staged release reference.
+- Preserve unrelated files and report the actual signal or command status after cleanup.
+- Do not assume Bash options work in `sh`, GNU utility modes behave like syscall modes, or a configured fallback path is usable.
 
-## Safe Iteration
+## Task-specific references
 
-```bash
-# NUL-delimited file processing
-while IFS= read -r -d '' f; do
-    process "$f"
-done < <(find /path -type f -name '*.log' -print0)
+Read the relevant reference before implementing the matching behavior:
 
-# Array from command output
-readarray -t lines < <(command)
-readarray -d '' files < <(find . -print0)
-
-# Glob with no-match guard
-for f in *.txt; do [[ -e "$f" ]] || continue; process "$f"; done
-```
-
-## Argument Parsing
-
-```bash
-verbose=false; output=""
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -v|--verbose) verbose=true; shift ;;
-        -o|--output)  output="$2"; shift 2 ;;
-        -h|--help)    usage; exit 0 ;;
-        --)           shift; break ;;
-        -*)           printf 'Unknown: %s\n' "$1" >&2; exit 1 ;;
-        *)            break ;;
-    esac
-done
-```
-
-## Production Patterns
-
-**Dependency check:**
-```bash
-require() { command -v "$1" &>/dev/null || { printf 'Missing: %s\n' "$1" >&2; exit 1; }; }
-require jq; require curl
-```
-
-**Dry-run wrapper:**
-```bash
-run() { if [[ "${DRY_RUN:-}" == "1" ]]; then printf '[dry] %s\n' "$*" >&2; else "$@"; fi; }
-run cp "$src" "$dst"
-```
-
-**Atomic file write** -- write to temp, rename into place:
-```bash
-atomic_write() { local tmp; tmp=$(mktemp); cat >"$tmp"; mv -- "$tmp" "$1"; }
-generate_config | atomic_write /etc/app/config.yml
-```
-
-**Retry with backoff:**
-```bash
-retry() { local n=0 max=5 delay=1; until "$@"; do ((++n>=max)) && return 1; sleep $delay; ((delay*=2)); done; }
-retry curl -fsSL "$url"
-```
-
-**Script locking** -- prevent concurrent runs:
-```bash
-exec 9>/var/lock/"${0##*/}".lock
-flock -n 9 || { printf 'Already running\n' >&2; exit 1; }
-```
-
-**Idempotent operations** -- safe to rerun:
-```bash
-ensure_dir()  { [[ -d "$1" ]] || mkdir -p -- "$1"; }
-ensure_link() { [[ -L "$2" ]] || ln -s -- "$1" "$2"; }
-```
-
-**Input validation:** `[[ "$1" =~ ^[1-9][0-9]*$ ]] || die "Invalid: $1"` -- validate at script boundaries with `[[ =~ ]]`
-
-- `umask 077` for scripts creating sensitive files
-- Signal cleanup: `trap 'cleanup; exit 130' INT TERM` -- preserves correct exit codes for callers
-
-## Logging
-
-```bash
-log() { printf '[%s] [%s] %s\n' "$(date -Iseconds)" "$1" "${*:2}" >&2; }
-info()  { log INFO "$@"; }
-warn()  { log WARN "$@"; }
-error() { log ERROR "$@"; }
-die()   { error "$@"; exit 1; }
-```
-
-## Anti-Patterns
-
-| Bad | Fix |
-|-----|-----|
-| `for f in $(ls)` | `for f in *; do` or `find -print0 \| while read` |
-| `local x=$(cmd)` | `local x; x=$(cmd)` -- preserves exit code |
-| `x=$(cmd)` then an `[[ -z $x ]]` fallback check | `x=$(cmd) \|\| true` -- under `set -e` a failed `$()` in a bare assignment aborts the script there, so the fallback never runs (opposite of the `local` case: `local` masks the failure, a bare assignment propagates it) |
-| `echo "$data"` | `printf '%s\n' "$data"` |
-| `cat file \| grep` | `grep pat file` |
-| `kill -9 $pid` first | `kill "$pid"` first, `-9` as last resort |
-| `cd dir; cmd` | `cd dir || exit 1` or subshell `(cd dir && cmd)` |
+- For command execution, external input, numeric conversion, argument parsing, iteration, or subprocess status handling: [input-and-process-safety.md](./references/input-and-process-safety.md).
+- For file activation, secrets, locking, retries, cleanup, permissions, logging, or restartable automation: [production-patterns.md](./references/production-patterns.md).
 
 ## Performance
 

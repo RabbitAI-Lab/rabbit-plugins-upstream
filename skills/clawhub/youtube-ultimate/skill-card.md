@@ -1,40 +1,64 @@
-## Description: <br>
-TinkerClaw YouTube helps agents fetch YouTube transcripts, search and inspect videos, read comments and account data, and download video or audio through a local CLI workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TinkerClaw YouTube lets agents retrieve YouTube transcripts, download media, and explore video, channel, comment, and account data with optional read-only Google OAuth.
 
-## Publisher: <br>
-[globalcaos](https://clawhub.ai/user/globalcaos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[globalcaos](https://clawhub.ai/user/globalcaos)
 
-## Use Case: <br>
-Developers and agents use this skill to research YouTube content, extract transcripts, collect video and channel metadata, inspect comments and playlists, and prepare local media downloads for offline analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill under-discloses Google OAuth access, personal account data access, and persistent local token storage. <br>
-Mitigation: Use a dedicated Google project or account where possible, review OAuth consent scopes before authentication, avoid account-data commands unless needed, and protect or revoke local files under ~/.config/youtube-skill. <br>
-Risk: YouTube transcript, comment, download, and account-data commands can retrieve personal or sensitive content from YouTube and the authenticated account. <br>
-Mitigation: Review requested commands before execution, prefer transcript-only or public-video workflows when possible, and handle downloaded media and account-derived data according to the user's data handling requirements. <br>
+## Use Case:
 
+Developers and agent users use this skill to research YouTube content, extract transcripts, inspect videos and channels, read comments, and optionally download media for offline workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/globalcaos/skills/youtube-ultimate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and command output as plain text or JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local transcript, metadata, subtitle, audio, or video files; authenticated YouTube API commands use local OAuth credentials and token files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.3 (source: server release evidence) <br>
+Risk: The security scan reports that automatic legacy token migration can execute code from a local pickle file before user consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and avoid authenticated commands until legacy pickle migration is removed or changed to refuse pickle files; remove old token.pickle files and re-authenticate to JSON tokens.
+
+Risk: Authenticated commands can read personal YouTube account data and store a long-lived OAuth token locally.
+
+Mitigation: Use a dedicated ~/.config/youtube-skill/credentials.json OAuth client, confirm the youtube.readonly scope at consent time, and use YOUTUBE_SKILL_NO_ACCOUNT=1 or logout when account access is not needed.
+
+Risk: Download commands write media and subtitle files to the selected output directory, or to the current directory when no output directory is provided.
+
+Mitigation: Set an explicit output directory for downloads, review the target path before running, or set YOUTUBE_SKILL_NO_DOWNLOAD=1 in environments where file writes are not intended.
+
+Risk: Unpinned runtime dependencies can reduce reproducibility for installations that require controlled builds.
+
+Mitigation: Pin dependency versions and verify the installed yt-dlp binary when reproducible execution is required.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/globalcaos/skills/youtube-ultimate)
+- [Publisher profile](https://clawhub.ai/user/globalcaos)
+- [TinkerClaw project link from skill metadata](https://github.com/globalcaos/tinkerclaw)
+- [YouTube read-only OAuth scope](https://www.googleapis.com/auth/youtube.readonly)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Plain text and JSON CLI output, with optional downloaded media and subtitle files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Authenticated commands require a user-provided Google OAuth client; downloads require yt-dlp and write files only when requested.]
+
+## Skill Version(s):
+
+4.3.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

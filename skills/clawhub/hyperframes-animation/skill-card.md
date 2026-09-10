@@ -1,49 +1,62 @@
-## Description: <br>
-Provides HyperFrames animation authoring guidance, including atomic motion rules, multi-phase blueprints, scene transitions, runtime adapters, and choreography audit support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames Animation provides motion rules, scene blueprints, transitions, techniques, runtime adapters, and animation-map auditing guidance for deterministic HyperFrames compositions.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and designers use this skill to select and compose deterministic HyperFrames motion patterns, scene blueprints, transitions, and runtime-specific animation code for web and video compositions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example HTML loads JavaScript from public CDNs. <br>
-Mitigation: Review CDN sources and use pinned or locally hosted dependencies when running examples in controlled environments. <br>
-Risk: The animation-map helper can bootstrap HyperFrames packages when they are not bundled in the local environment. <br>
-Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION to an exact version before running the helper when deterministic dependency resolution is required. <br>
+## Use Case:
 
+Developers and motion designers use this skill to author and audit deterministic HyperFrames animations, including GSAP-based timelines, scene transitions, runtime-specific adapter patterns, and animation-map checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-animation) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Rules index](artifact/rules-index.md) <br>
-- [Blueprints index](artifact/blueprints-index.md) <br>
-- [Transitions overview](artifact/transitions/overview.md) <br>
-- [Motion techniques](artifact/techniques.md) <br>
-- [GSAP documentation](https://gsap.com/docs/v3/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [Lottie-web project](https://github.com/airbnb/lottie-web) <br>
-- [MDN CSS animation reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce deterministic HyperFrames animation recipes, runtime adapter guidance, and animation-map audit commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Dependency bootstrap can download npm packages from unpinned paths, including an @latest fallback.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preinstall reviewed HyperFrames packages or set HYPERFRAMES_SKILL_PKG_VERSION to an exact version before using bootstrap behavior.
+
+Risk: Examples and adapter guidance can reference CDN-hosted runtime scripts.
+
+Mitigation: Pin or vendor CDN scripts before production use.
+
+Risk: The animate-text adapter recommends installing a separate third-party agent skill.
+
+Mitigation: Review and scan the external animate-text skill before placing it under .agents/skills.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-animation)
+- [GSAP documentation](https://gsap.com/docs/v3/)
+- [Anime.js v4 documentation](https://animejs.com/documentation/)
+- [Three.js WebGLRenderer documentation](https://threejs.org/docs/pages/WebGLRenderer.html)
+- [Lottie web project](https://github.com/airbnb/lottie-web)
+- [MDN Web Animations API guide](https://developer.mozilla.org/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with code snippets and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to produce HyperFrames composition code, runtime-specific animation snippets, and animation-map audit commands.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

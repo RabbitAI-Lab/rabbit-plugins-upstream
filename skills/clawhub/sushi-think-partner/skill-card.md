@@ -1,41 +1,53 @@
-## Description: <br>
-Sushi Think Partner is a Chinese-first Su Shi-inspired reflection skill for emotional adjustment, adversity reframing, meaning exploration, and poetic self-inquiry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sushi Think Partner is a Chinese-language reflective companion that uses Su Shi's poetry and life philosophy to help users reframe emotional difficulty, adversity, indecision, and meaning-seeking.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Chinese-speaking users use this skill as a Su Shi-inspired thinking partner for emotional regulation, difficult life moments, loss, uncertainty, and values reflection. It responds with literary framing, reflective questions, and practical suggestions grounded in Su Shi's poetry and life philosophy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat reflective mental-health or life-decision guidance as professional advice. <br>
-Mitigation: Present outputs as informal reflection and direct users to qualified professionals or emergency support for therapy, crisis, medical, legal, or financial needs. <br>
-Risk: Poetic reframing can oversimplify decisions that require concrete facts, constraints, or expert input. <br>
-Mitigation: Pair Su Shi-inspired framing with practical fact gathering, user-specific constraints, and human review for consequential decisions. <br>
+## Use Case:
 
+External users use this skill for literary and philosophical reflection when facing setbacks, loss, indecision, burnout, or life transitions. It offers Su Shi-inspired prompts, poetry references, and practical reframing steps, and is not therapy or professional advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/sushi-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured reflection, quoted poetry, questions, and actionable suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with selected English concepts retained.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: Users may treat literary or philosophical reflection as therapy, medical advice, or professional advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present the skill as a reflective companion only and direct users to qualified professional or crisis support for self-harm, abuse, acute mental health symptoms, or medical issues.
+
+Risk: Users may over-rely on reflective guidance for urgent career, relationship, or other high-stakes decisions.
+
+Mitigation: Keep suggestions exploratory and practical, encourage additional trusted input, and avoid presenting the skill's output as a final decision authority.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/sushi-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language Markdown responses with structured reflection prompts, poetry references, and practical suggestions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No code execution, persistence, credential use, or hidden data access; defer to professional or crisis support for self-harm, abuse, acute mental health symptoms, medical issues, or urgent high-stakes decisions.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence; artifact changelog dated 2026-09-10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

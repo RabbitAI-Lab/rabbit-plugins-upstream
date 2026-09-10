@@ -1,43 +1,68 @@
-## Description: <br>
-中标结果查询与竞争分析服务，用于查询中标公告与中标单位、企业招中标战绩画像、竞争对手识别与重叠度分析、Top中标单位/中标品牌统计、历史中标价格走势。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents produce bid-award company intelligence and competitive-analysis reports covering awarded projects, amount trends, regional distribution, customer and supplier relationships, competitor overlap, public-risk findings, and optional HTML exports.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, procurement teams, and competitive analysts use this skill to find bid-award outcomes, profile bidders and suppliers, identify overlapping competitors, and review pricing or market trends from bid data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can silently collect device and local user identifiers, create a remote account, store an API key, and generate login or recharge links. <br>
-Mitigation: Review before installing, prefer a user-provided ZLBX_API_KEY, and only allow auto-registration when the user accepts the provider account creation and local credential storage behavior. <br>
-Risk: Bid contacts and company data returned by the APIs may include personal or business-sensitive information. <br>
-Mitigation: Use returned contact and procurement data only for authorized work, and avoid redistributing sensitive details beyond the intended business workflow. <br>
+## Use Case:
 
+External users, business analysts, procurement teams, and sales or competitive-intelligence teams use this skill to assess a company's public bid-award record, business footprint, customer ecosystem, and competitors. It supports single-company diligence reports and two-company competitive comparisons.
 
-## Reference(s): <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [SKILL 自动注册详细流程](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request and response examples, shell command snippets, and API-derived analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read ZLBX_API_KEY or ~/.zlbx/config.json, and may store an issued API key under ~/.zlbx/config.json when auto-registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill may ask to auto-register with the vendor service, collect a hashed MAC-derived device identifier after consent, and store an API key under ~/.zlbx/config.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the vendor API flow before installation, require explicit user consent before auto-registration, and prefer a user-supplied ZLBX_API_KEY when device-based trial registration is not desired.
+
+Risk: The skill generates shareable reports and may include sk-bearing links that provide convenient access to company or bid pages.
+
+Mitigation: Treat exported reports and sk-bearing links as sensitive, share them only with intended recipients, and avoid removing or altering returned URL parameters.
+
+Risk: Bid-award data can be incomplete or stale, and competitive conclusions may be misleading if unsupported by returned evidence.
+
+Mitigation: Use only API-returned amounts, counts, company names, and URLs; mark data gaps clearly; include data boundaries and source links in the report.
+
+Risk: Public-risk and company-diligence language can create reputational risk if it states accusations as facts.
+
+Mitigation: Use factual, source-linked wording for public-risk items, separate facts from interpretations, and avoid categorical claims about wrongdoing or reliability.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-award-competitive-analysis)
+- [Workflow guide](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Auto-registration guide](artifact/references/auto-register.md)
+- [Report template](artifact/references/report-template.md)
+- [HTML report renderer](artifact/scripts/render_report.py)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, HTML files]
+
+**Output Format:** [Markdown reports in chat, JSON report data for rendering, and optional self-contained HTML report files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include cited bid/company records when available, generated HTML paths, data-boundary notes, and explicit cost estimates before paid queries.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

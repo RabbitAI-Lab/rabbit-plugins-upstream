@@ -1,42 +1,65 @@
-## Description: <br>
-Packages an existing talking-head, interview, or podcast video with timed graphic overlay cards synced to the transcript while leaving the underlying clip intact. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Packages an existing talking-head, interview, or podcast video with timed graphic overlay cards such as kinetic titles, lower-thirds, data callouts, quotes, side panels, and picture-in-picture while the source clip plays underneath.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content teams use this skill to turn an existing talking-head clip into a polished recut with titles, lower-thirds, quote cards, data callouts, side panels, or picture-in-picture overlays. It is suited for agent-assisted video packaging workflows that can run local media tools and review generated files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill instructs agents to run a silent skill-package update before use, which can change trusted code without clear user approval. <br>
-Mitigation: Run updates only explicitly, review the installed skill content before execution, and avoid automatic update steps in controlled workflows. <br>
-Risk: The workflow runs local media tooling and npx hyperframes, then writes generated files under videos/<project>/. <br>
-Mitigation: Run it in a workspace where generated media files are acceptable, review commands before execution, and inspect generated HTML and MP4 outputs before relying on them. <br>
+## Use Case:
 
+External creators, video editors, and agents use this skill to dress up existing talking-head footage with transcript-synced designed overlays while preserving the original video and audio. It is suited for social clips, interviews, podcasts, explainers, and data-heavy talking-head segments that need visual packaging rather than plain subtitles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut) <br>
-- [Design reference index](artifact/references/DESIGN_INDEX.md) <br>
-- [Attribution notice](artifact/NOTICE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON planning artifacts, and HTML/CSS card fragments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces media workflow instructions and generated project files under videos/<project>/, including metadata, transcript, storyboard, card HTML, composition HTML, and output MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Mutable pre-run skill updates and an unpinned npm CLI can change behavior between runs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the release before use, pin the HyperFrames/npm version where practical, and avoid the pre-run skill update during normal use unless intentionally refreshing dependencies.
+
+Risk: Video processing runs with the user's local permissions and reads or writes media artifacts in the workspace.
+
+Mitigation: Run the workflow in a constrained workspace that contains only the source media needed, and review generated shell commands before execution.
+
+Risk: Transcript errors or timing drift can produce misleading overlays or a black tail after the source clip ends.
+
+Mitigation: Review and correct transcript text and timestamps, then clamp card and composition end times to the probed media duration before rendering.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/talking-head-recut)
+- [Design Index](references/DESIGN_INDEX.md)
+- [Layout Reference - Stack](references/layouts/stack.html)
+- [Layout Reference - Split](references/layouts/split.html)
+- [Layout Reference - Overlay](references/layouts/overlay.html)
+- [Layout Reference - Picture-in-Picture](references/layouts/pip.html)
+- [Frame Reference - Clean](references/frames/clean.html)
+- [Frame Reference - Hairline](references/frames/hairline.html)
+- [Frame Reference - Polaroid](references/frames/polaroid.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JSON storyboard structures, HTML/CSS/JavaScript composition snippets, and bash commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Workflow artifacts include metadata.json, transcript.json, storyboard.json, public/cards/*.html, public/index.html, and output.mp4; transcription uses local Whisper through HyperFrames and rendering uses ffmpeg/ffprobe plus the HyperFrames CLI.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

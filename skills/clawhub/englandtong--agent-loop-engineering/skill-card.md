@@ -1,45 +1,66 @@
-## Description: <br>
-Executes authorized software goals through bounded AI coding loops with persistent state, staged timeboxes, evidence requirements, failure budgets, context controls, stop gates, and resumable handoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agent Loop Engineering guides agents through authorized, bounded autonomous coding loops with persistent state, evidence-driven repair, staged review, safe workspace boundaries, and resumable handoffs.
 
-## Publisher: <br>
-[englandtong](https://clawhub.ai/user/englandtong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[englandtong](https://clawhub.ai/user/englandtong)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to run scoped coding work through bounded implementation, verification, state recording, and handoff loops when goals and acceptance criteria are clear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may make scoped coding changes and update project-local execution state. <br>
-Mitigation: Install only for repositories where this behavior is intended, and provide clear acceptance criteria and protected boundaries before use. <br>
-Risk: Sensitive or high-impact work can involve secrets, production data, destructive actions, privileged changes, or unclear authority. <br>
-Mitigation: Use the skill's stop gates: stop before those actions, require explicit authority, and record approvals without storing secret values. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to execute already-authorized software work in bounded loops, repair failures with evidence, maintain compact project state, and hand off work for independent acceptance.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/englandtong/skills/agent-loop-engineering) <br>
-- [Execution Loop](artifact/references/en/execution-loop.md) <br>
-- [Evidence And Completion](artifact/references/en/evidence-and-completion.md) <br>
-- [Safety And Context](artifact/references/en/safety-and-context.md) <br>
-- [Automation And Handoff](artifact/references/en/automation-and-handoff.md) <br>
-- [Legacy State Migration](artifact/references/en/migration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, project-local state updates, JSONL loop records, code changes, and shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update authorized project files, Docs/ACTIVE_PACKET.md, and Docs/LOOP_RUNS.jsonl while recording concise evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md, artifact/_meta.json, server release metadata) <br>
+Risk: The skill enables bounded autonomous project-local coding loops that can change code and record state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in repositories where that behavior is acceptable, review the Active Packet before long runs, and keep hard stops for secrets, production data, paid resources, destructive Git, and out-of-workspace writes in place.
+
+Risk: Repeated failed repair attempts can waste time or widen scope without producing evidence.
+
+Mitigation: Stop after two consecutive attempts with the same failure signature unless there is new evidence, a narrower scope, a root cause, or passing behavior.
+
+Risk: A claim may be overstated if weaker evidence is treated as proof of a stronger runtime or acceptance outcome.
+
+Mitigation: Keep the weaker result when evidence conflicts, record unrun checks as not executed, and require independent final acceptance for Standard and Full governance work.
+
+## Reference(s):
+
+- [Quickstart](QUICKSTART.md)
+- [Security](SECURITY.md)
+- [Execution Loop 2.1](references/en/execution-loop.md)
+- [Evidence And Completion 2.1](references/en/evidence-and-completion.md)
+- [Safety And Context 2.1](references/en/safety-and-context.md)
+- [Automation And Handoff 2.1](references/en/automation-and-handoff.md)
+- [Isolated Delegation 2.1.1](references/en/isolated-delegation.md)
+- [Legacy State Migration 2.1](references/en/migration.md)
+- [Host Cost Controls 2.1.1](references/en/host-cost-controls.md)
+- [Anti-Patterns 2.2](references/en/anti-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with optional shell commands, JSON state records, and project-local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are bounded by the active work packet, workspace write scope, stop conditions, and required evidence.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release metadata and SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

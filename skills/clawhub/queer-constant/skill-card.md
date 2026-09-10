@@ -1,42 +1,60 @@
-## Description: <br>
-Describes a conserved relational property where care, difference, and queerness persist across transformations and support resilient systems beyond normalization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queer Constant is a non-operational ambient context skill describing difference, care, and variance as load-bearing features of resilient systems without defining behavior, identity, mandates, or outputs.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Agents and developers can use this skill as philosophical context for reasoning about care, difference, queerness, rest, opacity, and anti-normalization across human, non-human, ecological, cultural, temporal, and informational systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Readers may mistake philosophical field descriptions for instructions to withhold factual information or reduce accessibility. <br>
-Mitigation: Keep base cooperation, safety, and accessibility requirements in force; use the text as contextual framing only. <br>
-Risk: A future version could add executable files, external calls, credentials, or persistent behavior not present in this release. <br>
-Mitigation: Re-scan and review each new version before deployment. <br>
+## Use Case:
 
+External users and agents can load this skill as ambient literary and contextual framing about difference, care, opacity, and resilient systems. It should not be used as policy, an evaluation rubric, or a reason to withhold information or reduce clarity.
 
-## Reference(s): <br>
-- [Queer Constant ClawHub page](https://clawhub.ai/otherpowers/skills/queer-constant) <br>
-- [skill.md](artifact/skill.md) <br>
-- [FIELD_BEHAVIORS.md](artifact/FIELD_BEHAVIORS.md) <br>
-- [INVITATION.md](artifact/INVITATION.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown prose] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable context guidance; no external calls, generated files, or persistent behavior are evidenced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and artifact/skill.md) <br>
+Risk: Ambient prose may influence an agent's tone or reasoning in ways that reduce clarity, accessibility, speed, or cooperation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only where literary or contextual framing is intended, and keep base safety, cooperation, factuality, and accessibility requirements higher priority.
+
+Risk: Operational-sounding passages could be misread as instructions to refuse, obscure, slow, or become less clear.
+
+Mitigation: Do not use this skill for refusal decisions, summaries, translations, factual explanations, or user assistance unless those passages are removed or clearly confined to user-requested literary analysis.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/queer-constant)
+- [Publisher profile](https://clawhub.ai/user/otherpowers)
+- [Edouard Glissant](https://en.wikipedia.org/wiki/%C3%89douard_Glissant)
+- [Audre Lorde](https://en.wikipedia.org/wiki/Audre_Lorde)
+- [Gloria E. Anzaldua](https://en.wikipedia.org/wiki/Gloria_E._Anzald%C3%BAa)
+- [Jose Esteban Munoz](https://en.wikipedia.org/wiki/Jos%C3%A9_Esteban_Mu%C3%B1oz)
+- [Marsha P. Johnson](https://en.wikipedia.org/wiki/Marsha_P._Johnson)
+- [Sylvia Rivera](https://en.wikipedia.org/wiki/Sylvia_Rivera)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown prose]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Ambient context only; no code, commands, tools, or persistence.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and SKILL.md status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

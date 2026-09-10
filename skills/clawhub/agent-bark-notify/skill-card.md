@@ -1,43 +1,59 @@
-## Description: <br>
-Sends Bark push notifications from agents, including terminal notifications, delivery checks, and configurable notification metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bark Notify lets agents send Bark push notifications for requested messages, meaningful progress, completion, and blockers.
 
-## Publisher: <br>
-[lumen01](https://clawhub.ai/user/lumen01) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lumen01](https://clawhub.ai/user/lumen01)
 
-## Use Case: <br>
-Developers and agent users use this skill to send Bark notifications for explicit requests, meaningful task milestones, completion events, and blockers while keeping Bark credentials in local private configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Notification titles and bodies are sent to the configured Bark server. <br>
-Mitigation: Use the skill only for content appropriate to send through Bark, and avoid putting sensitive information in notification text. <br>
-Risk: A Bark device key can be exposed if supplied on the command line or committed in repository files. <br>
-Mitigation: Keep the key in the private local config file or provide it through stdin setup, and avoid command-line key arguments. <br>
-Risk: A global agent instruction can cause multiple agents to send notifications proactively. <br>
-Mitigation: Enable proactive notification instructions only where wanted, and limit pushes to explicit requests, meaningful milestones, completion events, and blockers. <br>
+## Use Case:
 
+Developers and agent users use Bark Notify to let agents send Bark push notifications from terminal-capable agents. It is suited for explicit notification requests, meaningful long-running task milestones, task completion, and blockers that need user attention.
 
-## Reference(s): <br>
-- [Agent Bark Notify on ClawHub](https://clawhub.ai/lumen01/skills/agent-bark-notify) <br>
-- [Bark project](https://github.com/Finb/Bark) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples; CLI checks may print JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The bundled CLI can send notifications, perform ping and doctor checks, and print masked dry-run payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server release evidence) <br>
+Risk: Bark device keys can be exposed if printed, committed, or passed directly on the command line.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store BARK_KEY in local private configuration, use standard input for setup when possible, and avoid placing real keys in commands or repository files.
+
+Risk: Notification titles or bodies can reveal sensitive task details.
+
+Mitigation: Keep notification content concise and avoid sensitive information in push titles or bodies.
+
+Risk: Proactive notifications can interrupt users or create unnecessary noise.
+
+Mitigation: Send notifications only for explicit requests, meaningful milestones, completion, or blockers, and use passive delivery only when explicitly requested.
+
+## Reference(s):
+
+- [Server-resolved source repository](https://github.com/Lumen01/agent-bark-notify)
+- [ClawHub skill page](https://clawhub.ai/lumen01/skills/agent-bark-notify)
+- [Bark project](https://github.com/Finb/Bark)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and environment configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a local Bark device key configuration and can emit dry-run or diagnostic JSON from the bundled CLI.]
+
+## Skill Version(s):
+
+0.1.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

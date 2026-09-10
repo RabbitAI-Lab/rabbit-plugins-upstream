@@ -1,48 +1,75 @@
-## Description: <br>
-Helps agents discover Smartbi OpenAPI operations, inspect contracts, construct request bodies, execute calls, and handle scheduled tasks or outbound messages through @smartbi/cli. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+smartbi-cli helps agents discover, inspect, and call Smartbi OpenAPI operations for BI analysis, data queries, modeling, scheduling, messaging, and permission workflows through the @smartbi/cli tool.
 
-## Publisher: <br>
-[wahsonleung](https://clawhub.ai/user/wahsonleung) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wahsonleung](https://clawhub.ai/user/wahsonleung)
 
-## Use Case: <br>
-Developers, data teams, and Smartbi administrators use this skill to turn natural-language BI requests into Smartbi API discovery, contract review, API calls, scheduled jobs, and notifications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad Smartbi API authority and persist local tokens. <br>
-Mitigation: Use least-privileged, revocable tokens; restrict permissions on ~/.smartbi/config.yaml; rotate tokens if exposed; and review each operationKey and request body before execution. <br>
-Risk: Scheduled jobs and outbound messages can create recurring actions or send content to external channels. <br>
-Mitigation: Require explicit user approval for schedules, recipients, webhook URLs, outbound content, and activation of recurring jobs. <br>
-Risk: Documentation loading and parameter construction can influence API calls. <br>
-Mitigation: Use Smartbi-provided documentation and schemas as the source of truth, ask for missing values, and avoid arbitrary external documentation links. <br>
+## Use Case:
 
+Developers and BI operators use this skill to let an agent translate Smartbi business requests into CLI discovery, contract inspection, API calls, scheduled tasks, and outbound message workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wahsonleung/smartbi-cli) <br>
-- [Publisher profile](https://clawhub.ai/user/wahsonleung) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
-- [Scheduled task scenario](scenarios/schedule-task.md) <br>
-- [Message push scenario](scenarios/push-message.md) <br>
-- [Smartbi document index](references/doc-index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Smartbi CLI commands, JSON request-body files, and result summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create temporary JSON or JavaScript files for request bodies and scheduled task scripts; expected responses include operation keys, final commands, key results, and repair suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: The skill gives an agent broad Smartbi authority across BI data, modeling, scheduling, resource management, permissions, and messaging workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested operations and require explicit confirmation before write, schedule, permission, or outbound messaging actions.
+
+Risk: Smartbi tokens may be stored in local configuration or passed during setup.
+
+Mitigation: Review token scope before installation and prefer environment-variable or keyring-based credentials where possible.
+
+Risk: Scheduled jobs and outbound messages can send BI data outside Smartbi through email or webhook recipients.
+
+Mitigation: Confirm recipients, webhook URLs, schedules, and data payloads before execution.
+
+Risk: The skill depends on installing and running the external @smartbi/cli npm package.
+
+Mitigation: Review the npm CLI source and use a pinned, reviewed CLI version from a trusted installation path.
+
+Risk: Connecting to untrusted or non-HTTPS Smartbi endpoints may expose credentials or BI data.
+
+Mitigation: Use HTTPS-only trusted Smartbi or SDK Server endpoints unless a reviewer approves a controlled exception.
+
+## Reference(s):
+
+- [Smartbi CLI Skill](README.md)
+- [init / installation and configuration reference](references/init.md)
+- [profile environment reference](references/profiles.md)
+- [list / search discovery reference](references/discovery.md)
+- [describe contract reference](references/describe.md)
+- [call execution reference](references/call.md)
+- [strategy reference](references/strategy.md)
+- [domain documentation index](references/doc-index.md)
+- [Rhino MQL script template](references/rhino-template.md)
+- [scheduled task scenario](scenarios/schedule-task.md)
+- [message push scenario](scenarios/push-message.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Smartbi CLI commands, JSON request body files, and code snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create temporary JSON request body files and Smartbi configuration profiles when needed.]
+
+## Skill Version(s):
+
+2.0.0 (source: release evidence and user changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

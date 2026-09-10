@@ -1,51 +1,72 @@
-## Description: <br>
-Star Search helps agents search the web, retrieve Chinese and English news, finance, academic, and technical information, and return LLM-assisted answers through MCP, JSON-RPC, SSE, API, and command-line workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Star Search helps agents run Chinese and English web, news, finance, academic, and code searches and produce source-linked LLM answers through MCP, API, LangChain, and Dify integrations.
 
-## Publisher: <br>
-[muchenhengxin](https://clawhub.ai/user/muchenhengxin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[muchenhengxin](https://clawhub.ai/user/muchenhengxin)
 
-## Use Case: <br>
-Developers, operators, and agent users use Star Search to add real-time web, news, finance, academic, and code-search retrieval to agent workflows. It is suited to self-hosted search services that need multi-engine retrieval, LLM answer synthesis, source verification, monitoring, and MCP/API access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release is a broad self-hosted search service with account, payment, credential, upload, scraping, and persistence behavior. <br>
-Mitigation: Install only when operating a full self-hosted search service, review the deployment before use, isolate the service network, secure secrets, and harden account, payment, upload, and persistence paths. <br>
-Risk: Untrusted LLM endpoints or local credential fallbacks could expose secrets or route sensitive queries to unintended services. <br>
-Mitigation: Pin trusted LLM endpoints, remove the ~/.hermes auth fallback, and manage API keys through secured deployment secrets. <br>
-Risk: Automatic content fetching and scraping can reach internal/private URLs or violate service expectations. <br>
-Mitigation: Block internal and private URL ranges, restrict outbound network access, and review the Cloudflare and scraping guidance for compliance and abuse risk. <br>
-Risk: Mock payment or callback paths can create confusing or unsafe production behavior if left enabled. <br>
-Mitigation: Disable or harden mock payment and callback paths before deployment. <br>
+## Use Case:
 
+Developers and agent builders use this skill to add real-time search, research, news, finance, academic, and code lookup to agent workflows. It is especially oriented toward Chinese web search with source-linked LLM answers and integration paths for MCP, LangChain, Dify, CLI, and HTTP/SSE APIs.
 
-## Reference(s): <br>
-- [ClawHub Star Search release page](https://clawhub.ai/muchenhengxin/skills/star-search) <br>
-- [Search Engine Research](references/search-engine-research.md) <br>
-- [VS Baidu Search Comparison](references/vs-baidu-search-comparison.md) <br>
-- [Camofox API](references/camofox-api.md) <br>
-- [V15 Site Bing Probe Results](references/v15-site-bing-probe-results.md) <br>
-- [V16 Engine Addition Checklist](references/v16-engine-addition-checklist.md) <br>
-- [V16 RSS Probe Results](references/v16-rss-probe-results.md) <br>
-- [End-to-End Pipeline Fix Notes](references/实战102-end-to-end-pipeline-fix.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown, JSON, streamed text/API responses, and command-line output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citations, fetched snippets, entity cards, source credibility signals, structured output formats, and monitoring data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-20.41.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security evidence says this release bundles unsafe account, payment, credential, upload, and broad web-fetching behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat it as a Review install and avoid running it as a public service or on a machine or account with valuable local credentials until those areas are removed, secured, or reviewed.
+
+Risk: Broad web fetching can expose the host or service to unsafe URL access patterns.
+
+Mitigation: Sandbox or allowlist arbitrary URL fetching before deployment.
+
+Risk: LLM endpoint configuration and local credentials may be exposed or misused if unrestricted.
+
+Mitigation: Restrict LLM endpoints to trusted HTTPS hosts, replace auth secrets and password storage, and keep credentials out of the runtime environment when they are not required.
+
+Risk: The security evidence calls out undefined upload retention and unpinned dependencies.
+
+Mitigation: Define upload retention behavior and pin dependencies before production installation.
+
+Risk: Cloudflare bot or WAF changes can affect shared infrastructure.
+
+Mitigation: Apply Cloudflare bot or WAF instructions only after explicit administrator approval.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/muchenhengxin/skills/star-search)
+- [README](artifact/README.md)
+- [MCP server implementation](artifact/mcp/mcp_server.py)
+- [LangChain adapter](artifact/integrations/langchain/star_search_tool.py)
+- [Dify integration guide](artifact/integrations/dify/README.md)
+- [Search engine research](artifact/references/search-engine-research.md)
+- [star-search vs baidu-search comparison](artifact/references/vs-baidu-search-comparison.md)
+- [v16 engine addition checklist](artifact/references/v16-engine-addition-checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON, shell command, and configuration snippets; tool calls return JSON search results and source-linked text answers.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call external search, LLM, MCP/SSE, and integration endpoints depending on configuration.]
+
+## Skill Version(s):
+
+20.42.1 (source: server release evidence; artifact frontmatter reports 20.42.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

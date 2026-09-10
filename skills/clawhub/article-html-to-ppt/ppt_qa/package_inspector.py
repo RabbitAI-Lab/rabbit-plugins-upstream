@@ -201,13 +201,16 @@ def _check_slide_count(
     physical = _load_json_count(ppt_ir, ["deck", "physical_slide_count"])
     build_count = _load_json_count(build_manifest, ["slide_count"])
     for label, count in [("ppt_ir.logical_slide_count", expected), ("ppt_ir.physical_slide_count", physical), ("build_manifest.slide_count", build_count)]:
-        if count is not None and count != inspection.slide_count:
+        if count is None:
+            continue
+        expected_count = count
+        if expected_count != inspection.slide_count:
             inspection.issues.append(
                 factory.create(
                     "PPTX_SLIDE_COUNT_MISMATCH",
                     "error",
                     "package",
                     f"Slide count mismatch against {label}.",
-                    evidence={"actual_slide_count": inspection.slide_count, "expected_slide_count": count, "source": label},
+                    evidence={"actual_slide_count": inspection.slide_count, "expected_slide_count": expected_count, "source": label},
                 )
             )

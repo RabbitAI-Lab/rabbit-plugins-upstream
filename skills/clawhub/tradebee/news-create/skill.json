@@ -1,0 +1,153 @@
+{
+  "name": "news-create",
+  "description": "Create and publish one Tradebee website news article after explicit confirmation.",
+  "version": "1.0.0",
+  "input": {
+    "type": "object",
+    "properties": {
+      "language": {
+        "type": "string",
+        "description": "Required exact language selected from languages-get."
+      },
+      "news": {
+        "type": "object",
+        "description": "Required complete news payload.",
+        "properties": {
+          "newsgroup_id": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Required positive ID selected from newsgroup-read under the same language."
+          },
+          "publisher": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional publisher, up to 100 characters."
+          },
+          "publication_date": {
+            "type": "string",
+            "description": "Required valid display date, normally yyyy/M/d."
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "Optional source, up to 100 characters."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 500,
+            "description": "Required title, 2 to 500 characters."
+          },
+          "cover_image": {
+            "type": "object",
+            "description": "Optional image up to 500 kB.",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Required image file label when cover_image is supplied."
+              },
+              "base64": {
+                "type": "string",
+                "description": "Required image data with MIME prefix when cover_image is supplied, for example image/jpeg;base64,...; decoded size must not exceed 500 kB."
+              }
+            },
+            "required": [
+              "name",
+              "base64"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 6,
+            "items": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 50,
+              "description": "News tag containing 3-50 characters."
+            },
+            "description": "Required 1 to 6 tags; each 3 to 50 characters."
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 500,
+            "description": "Required summary, 10 to 500 characters."
+          },
+          "description": {
+            "type": "string",
+            "description": "Required news-body HTML fragment. Before generating this field, call `rule-get` with the exact selected `language` and exact `scene=news.description`. Generate the description only after that call succeeds and follow the complete returned rule payload instead of guessing layout, styling, structure, theme, or link rules. The current rule requires one root `<section>` with a unique scoped class and one embedded `<style>` block at the end; do not use any inline style attributes or external stylesheet links. Do not include `<h1>` and prefer `<h2>` to `<h6>`. Each `<img src>` may be an HTTP(S) URL or `data:image/...;base64,...`; at most 50 images are allowed and each image must be at most 500 kB. The 100,000-character limit is calculated after removing `<img>` tags. The server uploads base64 images and replaces `src` with URLs. If `rule-get` fails, stop instead of generating or publishing an assumed layout."
+          },
+          "seo": {
+            "type": "object",
+            "description": "Optional SEO metadata.",
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 90,
+                "description": "Optional SEO title, up to 90 characters."
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Optional SEO description, up to 200 characters."
+              },
+              "keywords": {
+                "type": "string",
+                "maxLength": 120,
+                "description": "Optional comma-separated SEO keywords, up to 6 keywords and 120 total characters."
+              }
+            }
+          }
+        },
+        "required": [
+          "newsgroup_id",
+          "publication_date",
+          "title",
+          "tags",
+          "summary",
+          "description"
+        ]
+      },
+      "confirmation": {
+        "type": "object",
+        "description": "Required explicit approval and summary for the exact payload.",
+        "properties": {
+          "approved": {
+            "type": "boolean",
+            "description": "Must be true only after the user explicitly approves this operation."
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the exact language and news payload approved by the user."
+          }
+        },
+        "required": [
+          "approved",
+          "summary"
+        ]
+      }
+    },
+    "required": [
+      "language",
+      "news",
+      "confirmation"
+    ]
+  },
+  "output": {
+    "type": "object",
+    "description": "API result containing data.news_id and data.url on success."
+  },
+  "dependencies": {
+    "language": {
+      "skill": "languages-get",
+      "field": "list[].language",
+      "mode": "select"
+    },
+    "news.newsgroup_id": {
+      "skill": "newsgroup-read",
+      "field": "data.list[].newsgroup_id",
+      "mode": "select"
+    }
+  }
+}

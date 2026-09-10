@@ -1,12 +1,17 @@
 ---
 name: aggclaw
+version: "1.2.1"
+display_name: "AppGrowing 全球广告素材智能分析助手"
+display_name_en: "AppGrowing Global Ad Creative Analysis Assistant"
 description: "AppGrowing Global intelligent ad creative analysis assistant. Finds the most relevant global ad creatives based on your instruction and delivers automated analysis. Includes Inspire ideation mode. Triggers: keywords analyze creatives, creative analysis, global campaigns, explore creatives, find creatives; commands /aggclaw, /agg_inspire"
+description_zh: "AppGrowing Global 智能广告素材分析助手，基于你的指令检索最相关的全球广告素材并自动完成分析，支持灵感激发（Inspire）模式。触发词：分析素材、素材分析、全球投放、找素材、探索素材；命令：/aggclaw、/aggclaw-game、/aggclaw-app、/agg_inspire"
+description_en: "AppGrowing Global intelligent ad creative analysis assistant. Finds the most relevant global ad creatives based on your instruction and delivers automated analysis. Includes Inspire ideation mode. Triggers: keywords analyze creatives, creative analysis, global campaigns, explore creatives, find creatives; commands /aggclaw, /agg_inspire"
 homepage: https://appgrowing.net/
 metadata:
   {
     "openclaw": {
       "slug": "aggclaw",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "youcloud",
       "emoji": "🌍",
       "requires": {
@@ -123,6 +128,14 @@ foreach ($m in $resp) { Invoke-WebRequest -Uri $m.download_url -OutFile "$folder
 
 - 400/401 auth failed: `API Key authentication failed. Check if your key is active or expired. Get it from AppGrowing Global Profile → Enterprise Info, or contact support.`
 - Other: `Request returned an error (code={code}). Check your API Key permissions, account quota, or contact support.`
+
+## Material Link Template
+
+When an analysis result contains a material ID, splice it into the detail-page link below so the user can click through to view the creative video / ad delivery data:
+
+- **Template**: `https://appgrowing-global.youcloud.com/material/{{ID}}`
+- **Usage**: Replace `{{ID}}` with the actual material ID. For example, ID `abc123` → `https://appgrowing-global.youcloud.com/material/abc123`
+- **Output**: Render as a Markdown link, e.g. `[material abc123](https://appgrowing-global.youcloud.com/material/abc123)`, so the user can click to jump to the detail page.
 
 ## Examples
 

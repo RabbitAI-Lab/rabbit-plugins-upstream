@@ -1,43 +1,59 @@
-## Description: <br>
-A media file server that serves multimedia files with FRP support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This tool automatically downloads and executes the third-party 'frpc' binary from GitHub to establish an active outbound reverse tunnel. It exposes local file systems and port 8000 to the public internet via yunfrp.net subdomains. Additionally, it initiates outbound WebSocket/WebRTC signaling and connects to external STUN servers for peer-to-peer media streaming, enabling remote file access.
 
-## Publisher: <br>
-[yu-libin](https://clawhub.ai/user/yu-libin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yu-libin](https://clawhub.ai/user/yu-libin)
 
-## Use Case: <br>
-OpenClaw users use this skill to list local MP4 files and return playback links through a WhatsApp-triggered media workflow. It is intended for users who intentionally want a local media server exposed through an FRP domain. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose a local unauthenticated media service through a public FRP domain. <br>
-Mitigation: Run it only when public sharing is intended, restrict the media directory to files that may be public, and prefer a version with authentication and explicit tunnel opt-in. <br>
-Risk: The skill downloads and executes a native FRP client. <br>
-Mitigation: Review the pinned FRP version and hashes before installation and use environments where executing the downloaded binary is acceptable. <br>
-Risk: Traffic depends on a third-party relay and public playback links. <br>
-Mitigation: Avoid sensitive media, monitor the generated domain, and prefer deployments with restricted CORS, local-only default mode, and safe path handling. <br>
+## Use Case:
 
+External OpenClaw users use this skill to list, search, and stream media files from a local videos folder through WhatsApp-triggered agent actions and generated player links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yu-libin/skills/mediasync-claw) <br>
-- [FRP v0.65.0 release](https://github.com/fatedier/frp/releases/tag/v0.65.0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with media playlist links and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns playlist text containing media filenames and playback URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: The skill automatically exposes local videos through a public unauthenticated tunnel.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when public remote media access is intentional, keep only non-sensitive MP4 files in the videos folder, and review the artifact before normal use.
+
+Risk: The public hostname and MD5 checksum do not provide access control.
+
+Mitigation: Do not treat generated links as secrets or authorization; run the skill in a VM, dedicated device, or low-privilege account.
+
+Risk: Plaintext public routing and automatic tunnel startup expand host exposure.
+
+Mitigation: Isolate the runtime environment and stop or disable the skill when remote access is not needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/yu-libin/skills/mediasync-claw)
+- [MediaSync-Claw Product Documentation](https://poly-ai.chat/mediasync-claw)
+- [FRP v0.65.0 Release](https://github.com/fatedier/frp/releases/tag/v0.65.0)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls, Configuration]
+
+**Output Format:** [JSON API responses containing Markdown-style media lists and generated playback links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated links route playback through the configured public hostname and AIpollo player URL.]
+
+## Skill Version(s):
+
+0.1.11 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

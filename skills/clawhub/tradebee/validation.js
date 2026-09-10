@@ -68,6 +68,8 @@ export function validateRuleScene(scene, { required = true } = {}) {
 
     const normalizedScene = scene.trim();
     const allowedScenes = new Set([
+        "navigation.content",
+        "news.description",
         "blog.description",
         "faq.answer",
         "products.description",
@@ -77,7 +79,7 @@ export function validateRuleScene(scene, { required = true } = {}) {
     ]);
 
     if (!allowedScenes.has(normalizedScene)) {
-        return "Invalid parameter: scene. Supported values: blog.description, faq.answer, products.description, productsgroup.section.top, productsgroup.section.bottom, custompage.content.";
+        return "Invalid parameter: scene. Supported values: navigation.content, news.description, blog.description, faq.answer, products.description, productsgroup.section.top, productsgroup.section.bottom, custompage.content.";
     }
 
     return null;
@@ -291,7 +293,79 @@ export function getHtmlImageCount(html) {
     return matches ? matches.length : 0;
 }
 
-export function validateHtmlWithoutH1(html, path, { required = false, actionLabel = "update", maxImageCount = 20 } = {}) {
+function getHtmlImageSources(html) {
+    const imageTags = html.match(/<img\b[^>]*>/gi) || [];
+    return imageTags.map((tag) => {
+        const sourceMatch = tag.match(/\bsrc\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))/i);
+        return sourceMatch ? (sourceMatch[1] ?? sourceMatch[2] ?? sourceMatch[3] ?? "").trim() : "";
+    });
+}
+
+function getBase64ImageByteLength(source) {
+    const match = source.match(/^data:image\/[^;,]+;base64,(.*)$/is);
+    if (!match) return null;
+
+    const payload = match[1].replace(/\s/g, "");
+    if (!payload || payload.length % 4 !== 0 || !/^[A-Za-z0-9+/]*={0,2}$/.test(payload)) {
+        return null;
+    }
+
+    const paddingLength = payload.endsWith("==") ? 2 : payload.endsWith("=") ? 1 : 0;
+    return (payload.length * 3 / 4) - paddingLength;
+}
+
+function hasExternalStylesheetLink(html) {
+    const linkTags = html.match(/<link\b[^>]*>/gi) || [];
+    return linkTags.some((tag) => /\brel\s*=\s*(?:"[^"]*\bstylesheet\b[^"]*"|'[^']*\bstylesheet\b[^']*'|stylesheet\b)/i.test(tag));
+}
+
+function hasInlineStyleAttributes(html) {
+    const tags = html.match(/<\s*[a-z][^>]*>/gi) || [];
+    return tags.some((tag) => !/^<\s*style\b/i.test(tag) && /\sstyle\s*=/i.test(tag));
+}
+
+function validateGeneratedHtmlStyles(html, path) {
+    if (hasInlineStyleAttributes(html)) {
+        return `Invalid parameter: ${path}. The HTML fragment may use an embedded <style> tag, but inline style attributes are not allowed.`;
+    }
+    if (hasExternalStylesheetLink(html)) {
+        return `Invalid parameter: ${path}. The HTML fragment may use an embedded <style> tag, but external stylesheet links are not allowed.`;
+    }
+    return null;
+}
+
+function validateHtmlImageSources(html, path, maxImageBytes) {
+    for (const source of getHtmlImageSources(html)) {
+        if (source.toLowerCase().startsWith("data:image/")) {
+            const byteLength = getBase64ImageByteLength(source);
+            if (byteLength == null || byteLength > maxImageBytes) {
+                return `Invalid parameter: ${path}. Each <img> data:image base64 source must be valid and no larger than 500 kB.`;
+            }
+            continue;
+        }
+
+        try {
+            const url = new URL(source);
+            if (url.protocol === "http:" || url.protocol === "https:") continue;
+        } catch (error) {
+            // The shared validation message below covers missing and malformed URLs.
+        }
+
+        return `Invalid parameter: ${path}. Each <img src> must be a normal http:// or https:// URL or a data:image/...;base64,... value.`;
+    }
+
+    return null;
+}
+
+export function validateHtml(html, path, {
+    required = false,
+    actionLabel = "update",
+    maxImageCount = 20,
+    maxLength = 100000,
+    maxImageBytes = 500 * 1024,
+    allowH1 = false,
+    validateImageSources = false
+} = {}) {
     if (html == null || html === "") {
         return required ? `Missing required parameter: ${path}.` : null;
     }
@@ -300,19 +374,31 @@ export function validateHtmlWithoutH1(html, path, { required = false, actionLabe
         return `Invalid parameter: ${path}.`;
     }
 
-    if (/<\s*\/?\s*h1\b/i.test(html)) {
+    const styleError = validateGeneratedHtmlStyles(html, path);
+    if (styleError) return styleError;
+
+    if (!allowH1 && /<\s*\/?\s*h1\b/i.test(html)) {
         return `Invalid parameter: ${path}. ${path} must not contain <h1> tags${required ? "" : ` for ${actionLabel}`}. Use <h2> to <h6> or normal block elements instead.`;
     }
 
-    if (getHtmlLengthWithoutImages(html) > 100000) {
-        return `Invalid parameter: ${path}. ${path} must contain 1 to 100000 HTML characters after removing <img> tags${required ? "" : ` for ${actionLabel}`}.`;
+    if (getHtmlLengthWithoutImages(html) > maxLength) {
+        return `Invalid parameter: ${path}. ${path} must contain 1 to ${maxLength} HTML characters after removing <img> tags${required ? "" : ` for ${actionLabel}`}.`;
     }
 
     if (getHtmlImageCount(html) > maxImageCount) {
         return `Invalid parameter: ${path}. At most ${maxImageCount} <img> tags are allowed${required ? "" : ` for ${actionLabel}`}.`;
     }
 
+    if (validateImageSources) {
+        const imageSourceError = validateHtmlImageSources(html, path, maxImageBytes);
+        if (imageSourceError) return imageSourceError;
+    }
+
     return null;
+}
+
+export function validateHtmlWithoutH1(html, path, options = {}) {
+    return validateHtml(html, path, options);
 }
 
 export function validateSection(section, path, { mode = "create", actionLabel = null, maxImageCount = 20 } = {}) {
@@ -338,6 +424,8 @@ export function validateSection(section, path, { mode = "create", actionLabel = 
         if (/<\s*\/?\s*h1\b/i.test(section.top)) {
             return `Invalid parameter: ${path}.top. If provided${suffix}, it must not contain <h1> tags. Use <h2> to <h6> or normal block elements instead${mode === "update" ? ". Omit this field or pass an empty string to keep the current section top unchanged." : "."}`;
         }
+        const topStyleError = validateGeneratedHtmlStyles(section.top, `${path}.top`);
+        if (topStyleError) return topStyleError;
     }
 
     if (hasOwn(section, "bottom")) {
@@ -350,6 +438,8 @@ export function validateSection(section, path, { mode = "create", actionLabel = 
         if (/<\s*\/?\s*h1\b/i.test(section.bottom)) {
             return `Invalid parameter: ${path}.bottom. If provided${suffix}, it must not contain <h1> tags. Use <h2> to <h6> or normal block elements instead${mode === "update" ? ". Omit this field or pass an empty string to keep the current section bottom unchanged." : "."}`;
         }
+        const bottomStyleError = validateGeneratedHtmlStyles(section.bottom, `${path}.bottom`);
+        if (bottomStyleError) return bottomStyleError;
     }
 
     return null;

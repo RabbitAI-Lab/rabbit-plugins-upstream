@@ -12,6 +12,7 @@ from typing import Any
 
 DEFAULT_CONFIG_PATH = Path.home() / ".config" / "bark-notify.env"
 DEFAULT_AGENTS_PATH = Path.home() / ".config" / "bark-notify-agents.json"
+VERSION = "0.2.0"
 DEFAULT_SERVER = "https://api.day.app"
 DEFAULT_ICON = "https://cdn.jsdelivr.net/gh/Lumen01/agent-bark-notify@main/assets/agent-bark.png"
 
@@ -125,7 +126,7 @@ def build_payload(key: str, title: str, body: list[str], group: str, args: argpa
 
 def request_json(url: str, payload: dict[str, Any] | None = None, timeout: int = 15) -> dict[str, Any]:
     data = None
-    headers = {"User-Agent": "agent-bark-notify/0.1"}
+    headers = {"User-Agent": f"agent-bark-notify/{VERSION}"}
     method = "GET"
     if payload is not None:
         data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
