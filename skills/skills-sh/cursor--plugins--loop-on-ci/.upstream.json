@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/loop-on-ci",
+  "repo": "cursor/plugins",
+  "skillId": "loop-on-ci",
+  "branch": "main",
+  "pushedAt": "2026-09-11T01:17:05Z",
+  "contentHash": "948910bcbc9f39e24e8c85fde2577c94f06a8808eaa361723276afef7ac7d579",
+  "fetchedAt": "2026-09-11T12:15:31.790Z"
+}
