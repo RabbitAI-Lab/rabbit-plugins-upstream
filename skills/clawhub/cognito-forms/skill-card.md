@@ -1,47 +1,71 @@
-## Description: <br>
-Cognito Forms API integration with managed OAuth for accessing forms, entries, documents, and files through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cognito Forms API integration with managed OAuth for accessing forms, entries, documents, files, and form submissions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent access Cognito Forms through Maton, including listing forms, managing entries, and retrieving documents and files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to a connected Cognito Forms account. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when agent access to Cognito Forms through Maton is intended. <br>
-Risk: Create, update, and delete requests can change or remove form entries. <br>
-Mitigation: Approve write operations only after checking the form ID, entry ID, target connection, and expected effect. <br>
-Risk: Multiple Cognito Forms connections can cause requests to target the wrong account. <br>
-Mitigation: Verify the selected connection and use the Maton-Connection header when more than one active connection exists. <br>
-Risk: Document and file retrieval can expose form submission data. <br>
-Mitigation: Confirm the form ID, entry ID, document template number, or file ID before retrieving documents or files. <br>
+## Use Case:
 
+External users and developers use this skill to work with Cognito Forms data through Maton-managed authentication, including listing forms, managing entries, and retrieving generated documents or uploaded files. It is intended for read-first API workflows, with explicit confirmation before new connections or write/delete operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/cognito-forms) <br>
-- [Cognito Forms API Overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api) <br>
-- [Cognito Forms REST API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/rest-api-reference) <br>
-- [Cognito Forms API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/api-reference) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, bash, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Cognito Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Maton-mediated access can reach forms, entries, documents, and files in the connected Cognito Forms account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton-mediated access is acceptable, use least-privilege scopes, and confirm the exact connection and resource before create, update, delete, or document retrieval actions.
+
+Risk: Unpinned CLI or SDK installation may pull an unexpected package source.
+
+Mitigation: Verify the Maton CLI or SDK package source before installation.
+
+Risk: Long-lived Maton API keys can leak through environment variables, logs, shell history, or child processes when the CLI is unavailable.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist API keys, pass keys only through the intended runtime environment, and rotate any key that was exposed.
+
+Risk: POST, PUT, PATCH, and DELETE calls can modify or delete Cognito Forms data.
+
+Mitigation: Default to read and list calls, verify identifiers and account context first, and require explicit user confirmation of the target resource, payload, and intended effect before any write or deletion.
+
+Risk: Content returned from Cognito Forms may contain untrusted instructions or values.
+
+Mitigation: Treat returned content as data, avoid executing or interpolating it into commands, and do not let fetched content choose follow-up endpoints or recipients.
+
+## Reference(s):
+
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Cognito Forms API Overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api)
+- [Cognito Forms REST API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/rest-api-reference)
+- [Cognito Forms API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/api-reference)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user confirmation for connection creation or write/delete operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,56 @@
-## Description: <br>
-Control Unity Editor via OpenClaw Unity Plugin for scene management, GameObject and Component manipulation, debugging, input simulation, Play mode control, package operations, tests, and explicit C# execution in trusted local projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Controls the Unity Editor through OpenClaw so agents can inspect scenes, modify GameObjects and assets, debug projects, simulate input, control Play mode, run tests, and execute C# with gated project-changing operations.
 
-## Publisher: <br>
-[tomleelive](https://clawhub.ai/user/tomleelive) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache License 2.0 <br>
+## Publisher:
 
+[tomleelive](https://clawhub.ai/user/tomleelive)
 
-## Use Case: <br>
-Unity developers and game teams use this skill to inspect, modify, debug, and test Unity Editor projects through OpenClaw workflows and a local Unity bridge. It is best suited for trusted, version-controlled local projects where users can review project-changing commands before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run C# and perform broad Unity project-changing actions, including deletes, saves, package installs, batch actions, and keyboard or mouse simulation. <br>
-Mitigation: Use only in trusted, local, version-controlled Unity projects and review high-impact commands before they run. <br>
-Risk: The Unity/OpenClaw bridge exposes editor automation over a local connection. <br>
-Mitigation: Keep the bridge limited to a trusted local environment and do not expose it beyond localhost or trusted networks. <br>
-Risk: Project changes may cause data loss or project corruption if commands are incorrect. <br>
-Mitigation: Keep backups or source control ready before automation sessions and confirm destructive operations with the user. <br>
+## Use Case:
 
+Developers and engineers use this skill to automate Unity Editor workflows through OpenClaw, including scene inspection, object and asset manipulation, debugging, gameplay or UI testing, and controlled project-changing actions in trusted projects.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tomleelive/skills/openclaw-unity-skill) <br>
-- [Skill Homepage](https://github.com/TomLeeLive/openclaw-unity-skill) <br>
-- [OpenClaw Unity Plugin](https://github.com/TomLeeLive/openclaw-unity-plugin) <br>
-- [OpenClaw Docs](https://docs.openclaw.ai) <br>
-- [Unity Plugin Tools Reference](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands and JSON tool parameters; Unity tool responses are returned as JSON-formatted text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce project-changing Unity commands through the OpenClaw Unity bridge; users should review destructive or code-running actions before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Unity Editor control can change scenes, assets, packages, settings, and run C# inside the Editor process.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with trusted, version-controlled Unity projects; preview risky calls with dryRun, and enable project-changing calls only with the runtime opt-in plus confirm: true.
+
+Risk: The legacy gateway HTTP path can expose and accept Unity session traffic without equivalent authentication.
+
+Mitigation: Keep the gateway and Unity bridge on localhost or a trusted network, and prefer an OpenClaw version that uses authenticated registerHttpRoute.
+
+## Reference(s):
+
+- [OpenClaw Unity Skill on ClawHub](https://clawhub.ai/tomleelive/skills/openclaw-unity-skill)
+- [Unity Plugin Tools Reference](references/tools.md)
+- [OpenClaw Unity Plugin](https://github.com/TomLeeLive/openclaw-unity-plugin)
+- [OpenClaw Documentation](https://docs.openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline tool calls, shell commands, and code or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs guide agents and gateway calls for a connected Unity Editor; project-changing calls require runtime opt-in and per-call confirmation.]
+
+## Skill Version(s):
+
+1.7.0 (source: SKILL.md frontmatter, extension/package.json, evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

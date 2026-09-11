@@ -1,13 +1,16 @@
 ---
 name: "sendmux-cli"
-description: "Use the Sendmux CLI for terminal-driven Management, Mailbox, and Sending workflows with JSON output and scoped credentials."
-version: "1.3.0"
+description: "Use the Sendmux CLI for durable agent inbox registration, owner invites, profiles, and terminal-driven Management, Mailbox, and Sending workflows."
+version: "1.5.0"
 metadata:
   openclaw:
     skillKey: "sendmux-cli"
     homepage: "https://github.com/Sendmux/skills"
     primaryEnv: "SENDMUX_API_KEY"
     envVars:
+      - name: "SENDMUX_ACCESS_TOKEN"
+        required: false
+        description: "Optional externally managed OAuth access token for CLI HTTP requests; the CLI does not refresh it."
       - name: "SENDMUX_API_KEY"
         required: false
         description: "Optional Sendmux API key or scoped agent token used by CLI, SDK, HTTP, or MCP examples."
@@ -41,9 +44,10 @@ Use this skill when the terminal is the right Sendmux surface.
 ## Boundaries
 
 - Do not ask the user to paste API keys.
-- Use `smx_root_` keys only for `management:*` commands.
-- Use `smx_mbx_` keys or scoped `smx_agent_` tokens for `mailbox:*` commands.
-- Use a send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token for `sending:*` commands. Pre-claim `smx_agent_` tokens cannot send.
+- For API-key profiles, use `smx_root_` for `management:*` and `smx_mbx_` or scoped `smx_agent_` for `mailbox:*`.
+- OAuth profiles require the operation's approved surface, scopes and mailbox access. REST OAuth tokens authenticate HTTP, not SMTP or IMAP.
+- Durable agent profiles can read and receive mail while active, but cannot send until an invited owner accepts and approves sending.
+- After owner approval, `sending:*` commands with an agent profile automatically exchange and cache a one-hour delegated token.
 - Do not run destructive commands without explicit confirmation.
 - Use `--json` for agent-readable output.
 - Prefer task-specific Sendmux skills when the user needs strategy; use this skill for exact CLI mechanics.
@@ -56,7 +60,53 @@ sendmux --help
 ```
 
 The package exposes the `sendmux` binary.
-Use the latest CLI before using `smx_agent_` tokens; older installs may reject that prefix before sending a request.
+
+## OAuth login and connection checks
+
+For an existing user's account, create a new named OAuth profile with the required scopes:
+
+```bash
+sendmux auth:login work --scope mailbox.read --scope email.send
+sendmux mailbox:get-connection --profile work --json
+```
+
+The CLI opens browser consent and receives the callback on the same computer. `--no-browser` prints the authorisation URL for manual opening. It preserves existing profiles and stores tokens with restricted file permissions. Expiring tokens refresh automatically with concurrent refreshes serialised; an uncertain refresh requires a new login.
+
+Use `sending:get-connection`, `mailbox:get-connection`, or `management:get-connection` for the selected surface. These checks require no mailbox selector and send no email. Use `data.label` for the connection name and `data.team.id` for its stable team identifier.
+
+Run `sendmux auth:logout work` to revoke the connection and remove its profile. A failed revocation keeps the profile for retry; logout also clears an interrupted login reservation.
+
+For externally managed tokens, inject `SENDMUX_ACCESS_TOKEN` through the environment. The CLI does not refresh that token. Supplying it alongside an API key is an error. See [OAuth for REST APIs](https://sendmux.ai/docs/developer-tools/oauth) for grant scopes and refresh rules.
+
+## Agent inbox onboarding
+
+No existing Sendmux account or API key is required:
+
+```bash
+sendmux agent:register my-agent \
+  --mailbox-local-part my-agent \
+  --client-name "My agent" \
+  --default \
+  --json
+```
+
+Add `--owner-email owner@example.com` to invite the owner during registration. Otherwise invite later:
+
+```bash
+sendmux agent:invite-owner owner@example.com --profile my-agent --json
+```
+
+The CLI persists registration idempotency before the network request, stores the durable credential in the local profile with restricted permissions, never prints it, reloads it from disk, and waits up to 10 minutes for readiness. Rerun registration with the same profile and options to resume safely.
+
+Use the profile for later reads:
+
+```bash
+sendmux mailbox:messages:list --profile my-agent --query limit=25 --json
+```
+
+Read/receive access has no expiry date while the registration remains active. Sending remains blocked until the owner accepts and approves it. After approval, a command such as `sending:send --profile my-agent` automatically exchanges the durable credential for a one-hour `email.send` token and caches it until near expiry. Full registration revocation removes read access and every delegated token.
+
+The inbox is capped at 500 MiB before approval. Enabling owner-approved sending first raises it to at least 5 GiB. Revoking sending does not itself change the current inbox storage allocation.
 
 ## Profiles
 
@@ -70,9 +120,9 @@ sendmux profiles:list --json
 sendmux profiles:show default --json
 ```
 
-Profile reads mask stored keys. `profiles:set` reports `key_kind` as `root` or `mailbox`.
+Profile reads mask stored API keys and never reveal agent credentials. `profiles:set` reports `key_kind` as `root` or `mailbox`; `agent:register` creates a discriminated agent profile.
 
-Authentication resolution:
+Authentication resolution: `SENDMUX_ACCESS_TOKEN` takes precedence and rejects a simultaneous API key. Otherwise:
 
 1. `--api-key`, then `SENDMUX_API_KEY`.
 2. If no direct key is present, `--profile` / `-p`, then `SENDMUX_PROFILE`, then the configured default profile.
@@ -80,13 +130,15 @@ Authentication resolution:
 
 ## Preflight
 
-The CLI infers key kind from the prefix before sending a request.
+For API-key authentication, the CLI infers key kind from the prefix before sending a request. OAuth profiles use their approved grants instead of API-key prefix checks.
 
 | Command surface | Required key                                                                      |
 | --------------- | --------------------------------------------------------------------------------- |
 | `management:*`  | `smx_root_`                                                                       |
 | `mailbox:*`     | `smx_mbx_` or scoped `smx_agent_`                                                 |
 | `sending:*`     | Send-capable `smx_mbx_` key or owner-approved Sending-resource `smx_agent_` token |
+
+For an agent profile, `mailbox:*` uses the durable read credential. `sending:*` obtains a delegated token only after owner approval. `management:*` rejects agent profiles before the request.
 
 Wrong-key examples fail before network:
 
@@ -101,10 +153,12 @@ The CLI exposes generated operation commands:
 
 | Surface    | Count | Examples                                                                                                                                                   |
 | ---------- | ----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Management |    53 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
-| Mailbox    |    41 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
-| Sending    |     7 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
+| Management |    54 | `management:domains:list`, `management:create-domain`, `management:create-mailbox`, `management:get-spend-summary`, `management:create-webhook`            |
+| Mailbox    |    42 | `mailbox:search-message-snippets`, `mailbox:batch-get-messages`, `mailbox:query-message-changes`, `mailbox:send-message`, `mailbox:list-granted-mailboxes` |
+| Sending    |     8 | `sending:get-open-api-spec`, `sending:send`, `sending:send:batch`, `sending:upload-attachment`, `sending:create-attachment-upload`, `sending:complete-attachment-upload`, `sending:get-attachment` |
+| OAuth      |     2 | `auth:login`, `auth:logout` |
 | Profiles   |     3 | `profiles:list`, `profiles:set`, `profiles:show`                                                                                                           |
+| Agent      |     2 | `agent:register`, `agent:invite-owner`                                                                                                                      |
 
 Use command-level help to discover accepted path, query, header, and body fields:
 

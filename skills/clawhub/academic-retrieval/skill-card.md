@@ -1,42 +1,50 @@
-## Description: <br>
-Sciverse academic paper retrieval: structured metadata search, semantic chunk retrieval for RAG, and byte-range content reading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sciverse academic paper retrieval: structured metadata search, semantic chunk retrieval for RAG, and character-range content reading (offsets in Unicode code points). For agent workflows that need citation-grade scientific literature.
 
-## Publisher: <br>
-[sciverse](https://clawhub.ai/user/sciverse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[sciverse](https://clawhub.ai/user/sciverse)
 
-## Use Case: <br>
-Developers and external agent users use this skill to locate academic papers, retrieve metadata and semantic excerpts, read accessible full text ranges, and fetch referenced paper figures or table images for citation-grounded workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, requested document identifiers, and the Sciverse API token are sent to Sciverse. <br>
-Mitigation: Install only when Sciverse academic retrieval is intended, keep the token scoped to this service, and avoid using SCIVERSE_BASE_URL unless it points to a trusted sciverse.space endpoint. <br>
-Risk: Full-text reading may be unavailable for papers without accessible content or caller authorization. <br>
-Mitigation: Check is_content_accessible before calling read_content and fall back to metadata or semantic search results when full text cannot be read. <br>
+## Use Case:
 
+External developers and agent builders use this skill to find academic papers, retrieve citation-ready paper chunks, inspect metadata schemas, paginate paper relations, and read source content around selected excerpts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sciverse/skills/academic-retrieval) <br>
-- [Sciverse homepage](https://sciverse.space) <br>
-- [Sciverse API endpoint](https://api.sciverse.space) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands] <br>
-**Output Format:** [JSON responses and Markdown text fragments, with shell command examples for direct invocation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCIVERSE_API_TOKEN; read_content only works when full text is available and authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.0 (source: SKILL.md frontmatter, manifest.json, server release metadata) <br>
+Risk: Academic queries, filters, document identifiers, content ranges, resource references, and the API token are sent to Sciverse; a plaintext or untrusted base URL could expose sensitive usage data or credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default HTTPS endpoint or another HTTPS Sciverse endpoint only, avoid http:// overrides, and rotate the token if it may have been used over plaintext HTTP.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sciverse/skills/academic-retrieval)
+- [Sciverse](https://sciverse.space)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, image data, guidance]
+
+**Output Format:** [JSON tool responses with text or Markdown paper excerpts and base64-encoded image resources when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCIVERSE_API_TOKEN; SCIVERSE_BASE_URL is optional and should remain on an HTTPS Sciverse endpoint.]
+
+## Skill Version(s):
+
+0.14.2 (source: frontmatter, manifest, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

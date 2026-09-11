@@ -1,48 +1,68 @@
-## Description: <br>
-Stripe API integration with managed OAuth for administering customers, subscriptions, invoices, products, prices, and payments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stripe API integration with managed OAuth for customers, subscriptions, invoices, products, prices, and payments.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Stripe resources through Maton-managed OAuth, including customers, subscriptions, invoices, products, prices, payments, and refunds. It is intended for users who need Stripe administration and can verify account context before write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Stripe financial actions such as charges, refunds, invoice finalization or payment, payment method changes, deletions, and subscription changes. <br>
-Mitigation: Require explicit user confirmation that shows the exact endpoint, target resource, object IDs, amounts, test/live mode, and expected financial effect before any write action. <br>
-Risk: Requests may be sent to the wrong Stripe account when multiple Maton connections exist or a default connection is used. <br>
-Mitigation: Verify the intended Maton-Connection account before each request and include the Maton-Connection header for Stripe API calls. <br>
-Risk: Broad OAuth access or stale connections can expose sensitive financial data and administrative capabilities. <br>
-Mitigation: Use the least-privileged Stripe or Maton connection available, prefer test mode where possible, and revoke unused connections promptly. <br>
+## Use Case:
 
+Developers and operators use this skill to administer Stripe resources through Maton-managed OAuth while keeping credentials out of the local agent workflow. It is intended for Stripe account administration tasks such as reading customer, subscription, invoice, product, price, payment, and refund data, with explicit confirmation before writes.
 
-## Reference(s): <br>
-- [Stripe skill on ClawHub](https://clawhub.ai/byungkyu/skills/stripe-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Stripe API Reference](https://docs.stripe.com/api) <br>
-- [Stripe Dashboard](https://dashboard.stripe.com/) <br>
-- [Stripe Testing](https://docs.stripe.com/testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell, Python, JavaScript, HTTP endpoint examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Maton-managed Stripe OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter version 1.0) <br>
+Risk: The generic Stripe API path can reach broader Stripe endpoints than the reviewed scope technically enforces.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Stay within the documented Stripe resources unless the user explicitly requests an exact undocumented endpoint, then confirm the method, object IDs, amounts, and test or live mode before calling it.
+
+Risk: Write-capable Stripe actions can affect live billing, payments, refunds, subscriptions, prices, or deletions.
+
+Mitigation: Default to read-only calls, verify the connection and target resource first, prefer test mode or least-privileged access, and require explicit user confirmation for every write.
+
+Risk: Ambiguous failures during money-moving calls can lead to duplicate charges or refunds if retried blindly.
+
+Mitigation: After a timeout or server error, retrieve the relevant object or recent activity to determine the result before retrying; use the same Idempotency-Key when a retry is necessary.
+
+Risk: Local Maton API keys can leak through logs, shell history, child processes, or persisted files when the CLI fallback is used.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist credentials, pass keys only through the active process environment when necessary, and rotate any key that may have been exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/stripe-api)
+- [Maton](https://maton.ai)
+- [Stripe API Reference](https://docs.stripe.com/api)
+- [Stripe Testing](https://docs.stripe.com/testing)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and API request guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Stripe API calls through Maton CLI or SDK workflows; write-capable actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

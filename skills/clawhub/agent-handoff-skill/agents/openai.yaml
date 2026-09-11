@@ -1,0 +1,7 @@
+interface:
+  display_name: "Handoff Installer"
+  short_description: "Install or update a repository handoff protocol"
+  default_prompt: "Use $handoff-installer to install handoff in this git repository."
+
+policy:
+  allow_implicit_invocation: false

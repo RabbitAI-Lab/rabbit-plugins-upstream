@@ -1,46 +1,62 @@
-## Description: <br>
-Research-grade Tavily web search and URL extraction for OpenClaw using native Node.js, with caching, usage stats, and rate-limit backoff. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Research-grade Tavily web search for OpenClaw using native Node.js with zero dependencies, supporting deep web research, multi-URL extraction, estimated Tavily credit tracking, response caching, usage-log review, and 429 backoff.
 
-## Publisher: <br>
-[jwestburg](https://clawhub.ai/user/jwestburg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jwestburg](https://clawhub.ai/user/jwestburg)
 
-## Use Case: <br>
-Developers and agents use this skill for deep web research, Tavily search, multi-URL extraction, usage review, cache inspection, and source-backed research follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and extraction URLs are sent to Tavily as a third-party research API. <br>
-Mitigation: Use the skill only for approved external research and avoid client/private or sensitive queries unless that external transmission is approved. <br>
-Risk: Default cache and usage-log behavior can leave local records of queries, URLs, and results. <br>
-Mitigation: Use --no-log --no-cache for sensitive approved work, and review or clear local cache entries only with explicit approval. <br>
-Risk: Cached results are not scoped to a specific Tavily account when multiple accounts share the same OS user profile. <br>
-Mitigation: Use separate OS profiles or --no-cache when account isolation matters. <br>
-Risk: Local/private URL refusal is a guardrail for obvious mistaken extract targets, not a complete boundary for all network misuse scenarios. <br>
-Mitigation: Extract only intended public HTTP(S) URLs and review URLs before sending them to Tavily. <br>
+## Use Case:
 
+Developers and agents use this skill when they need Tavily-backed web search, content extraction from selected public URLs, usage statistics, and cache inspection or cleanup within OpenClaw workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jwestburg/skills/tavily-search-pro-native-node) <br>
-- [Publisher profile](https://clawhub.ai/user/jwestburg) <br>
-- [Tavily Pro Contract](references/tavily-pro-contract.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON command output with URLs, source summaries, cache/log status, freshness choices, and estimated Tavily credit usage.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include command plans, source/result URLs, limitations, caveats, and next safe research steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.20 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Selected search queries or extract URLs are sent to Tavily for external processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Classify privacy sensitivity before search or extract, and do not send sensitive material unless external Tavily processing is approved.
+
+Risk: Usage logs and cache entries may store non-sensitive research context locally.
+
+Mitigation: Use --no-log --no-cache for sensitive but approved external research and separate OS/OpenClaw profiles when Tavily account isolation matters.
+
+Risk: Cached responses may become stale for freshness-critical research.
+
+Mitigation: Use --no-cache or an appropriate --ttl value when fresh results are required.
+
+Risk: The cache clear command deletes local cached response files.
+
+Mitigation: Run cache clear only after explicit approval; the artifact documents deletion of expected hash-named cache JSON files under the skill-specific cache directory.
+
+## Reference(s):
+
+- [Tavily Search Pro Contract](references/tavily-pro-contract.md)
+- [ClawHub skill page](https://clawhub.ai/jwestburg/skills/tavily-search-pro-native-node)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown-oriented agent guidance and CLI output, with optional JSON for search, extract, stats, and cache information.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires TAVILY_API_KEY for outbound search and extract calls; cache and usage logging can be disabled with flags when appropriate.]
+
+## Skill Version(s):
+
+1.0.36 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

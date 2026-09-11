@@ -1,41 +1,58 @@
-## Description: <br>
-When the user requests "call Google News" or "news search/information", or explicitly mentions the news search field, the dataify-google-news skill is triggered. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Google News for current news results. Do not use for general Google web search.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to convert Google News search requests into confirmed Dataify Scraper API calls and return the API response body. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google News queries and selected parameters are sent to Dataify during live API calls. <br>
-Mitigation: Install only if this data sharing is acceptable for the intended use case, and review the confirmation table before approving each call. <br>
-Risk: The Dataify API token could be exposed if handled carelessly. <br>
-Mitigation: Store DATAIFY_API_TOKEN securely and avoid passing tokens on the command line when possible. <br>
+## Use Case:
 
+Developers and agents use this skill to convert Google News requests into Dataify Scraper API calls and return compact news results with source links.
 
-## Reference(s): <br>
-- [Dataify Google News API Reference](references/google_news_api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-news) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API Calls, JSON, Text] <br>
-**Output Format:** [Markdown confirmation table, shell command invocation, and raw API response body in the requested output mode.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN for live calls, confirms parameters before outbound requests, and returns the API response body without summarizing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The package contains broader data-collection workflows beyond the advertised Google News search task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the bundled scripts before installation and limit routine use to the documented Google News workflow unless the broader workflows are intentionally needed.
+
+Risk: Dataify API credentials could be exposed or misused if handled through chat text or command arguments.
+
+Mitigation: Use session-scoped DATAIFY_API_TOKEN setup, do not paste tokens into chat, and avoid passing tokens directly on the command line.
+
+Risk: Generated preview or resume shell commands may perform actions the user did not intend if run without inspection.
+
+Mitigation: Inspect generated shell commands before execution and confirm any high-volume, multi-page, or cost-affecting request first.
+
+## Reference(s):
+
+- [Dataify Google News API Reference](references/google_news_api.md)
+- [ClawHub Skill Page](https://clawhub.ai/dataify-server/skills/dataify-google-news)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown summaries with optional raw JSON or HTML when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns compact user-facing news titles, links, selected vertical fields, counts, and truncation notes; raw response formats are only returned on explicit request.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

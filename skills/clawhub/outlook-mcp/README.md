@@ -62,7 +62,7 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v
 **62 tools** across 13 categories:
 
 - **Auth (1)** -- auth status check (login is via CLI)
-- **Mail Read (7)** -- list inbox (with Focused Inbox filter), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
+- **Mail Read (7)** -- list inbox (with Focused Inbox and uncategorized filters), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
 - **Mail Write (3)** -- send, reply/reply-all, forward
 - **Mail Triage (9)** -- move, delete (soft by default), flag, categorize, mark read/unread, reclassify (Focused Inbox), list/set/delete per-sender Focused Inbox overrides
 - **Calendar Read (3)** -- list events (with recurring expansion), get event details, delta-sync event changes
@@ -84,6 +84,9 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v
 - **Read-only mode** -- set `read_only: true` in config to block all write operations.
 - **Soft delete** -- delete moves to Deleted Items by default. Hard delete requires explicit `permanent: true`.
 - **Timezone-aware** -- calendar operations respect your configured IANA timezone.
+- **Relative dates** -- every datetime parameter takes ISO 8601 or an offset: `7d` is seven days ago, `+7d` is seven days from now, `now` is this moment. Units: `m`, `h`, `d`, `w`.
+- **Bounded attachments** -- attachment reads and writes are confined to `attachments_dir`, so a message that asks an agent to mail a file elsewhere on disk cannot be obeyed.
+- **Workflow prompts** -- `morning_brief`, `triage_folder` and `catch_up` ship as MCP prompts, so the common sequences do not have to be reconstructed call by call.
 
 ### Agent-friendly shape (1.8.0)
 
@@ -91,7 +94,7 @@ Two pure-code upgrades that make the same 57 tools cheaper and more recoverable 
 
 - **Concise mode** — pass `concise=True` to the five high-volume read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop bulky fields: full message bodies, per-event attendee lists, quoted prior-message text in threads, body previews/categories on inbox listings. Typical payload reduction ~10×. Default `concise=False` preserves the existing response shape — strict backward compat.
 
-- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, ROADMAP pointer on 403/`ErrorAccessDenied` (known unsupported-endpoint dead-ends), re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
+- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, a link to the repo's [ROADMAP dead-ends list](https://github.com/mpalermiti/outlook-mcp/blob/main/ROADMAP.md#investigated-and-not-viable) on 403/`ErrorAccessDenied`, re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
 
 ---
 
@@ -157,7 +160,8 @@ Create `~/.outlook-mcp/config.json`:
   "client_id": "YOUR_APPLICATION_CLIENT_ID",
   "tenant_id": "consumers",
   "timezone": "America/Los_Angeles",
-  "read_only": true
+  "read_only": true,
+  "attachments_dir": "~/.outlook-mcp/attachments"
 }
 ```
 
@@ -295,16 +299,16 @@ A one-time startup warning about the token cache falling back to plaintext means
 
 | Tool | Description |
 |------|-------------|
-| `outlook_list_events` | List events in a date range. Expands recurring events. Configurable via `days`, `after`, `before`. |
-| `outlook_get_event` | Get full event details: attendees, body, online meeting URL, recurrence. |
+| `outlook_list_events` | List events in a date range. Expands recurring events. Each event carries `type`, so a series master is distinguishable from a one-off. Configurable via `days`, `after`, `before`. |
+| `outlook_get_event` | Get full event details: attendees, body, online meeting URL, recurrence, `type` (`singleInstance` / `seriesMaster` / `occurrence` / `exception`). |
 | `outlook_list_events_delta` | List only event changes inside a window since the last call. `start` and `end` (ISO 8601) required on the first call (Graph constraint — no whole-calendar sync). Deletes come back as `{id, is_deleted: True}`. Cursor is stateless. |
 
 ### Calendar Write
 
 | Tool | Description |
 |------|-------------|
-| `outlook_create_event` | Create event with location, attendees, recurrence, online meeting support. |
-| `outlook_update_event` | Update event fields (subject, time, location, body). Only patches changed fields. |
+| `outlook_create_event` | Create event with location and attendees. (`is_online` has no effect on personal accounts — Graph ignores `isOnlineMeeting` for consumer mailboxes.) Pass `recurrence` to create a **series**: a shorthand (`daily`, `weekdays`, `weekly`, `monthly`, `yearly`, anchored on `start`) or a full [Graph recurrence object](https://learn.microsoft.com/graph/api/resources/patternedrecurrence) for anything else. `range.startDate` defaults to the event's start date. |
+| `outlook_update_event` | Update event fields (subject, time, location, body, attendees, all-day). Only patches changed fields. Pass `recurrence` to turn a single event into a series, or `remove_recurrence=True` to turn a series back into a single event. `attendees` **replaces** the whole guest list and emails invitations/cancellations; `is_all_day` needs `start`+`end` in the same call. |
 | `outlook_delete_event` | Delete a calendar event. |
 | `outlook_rsvp` | RSVP to an event: `accept`, `decline`, or `tentative`. Optionally include a message. |
 
@@ -390,6 +394,7 @@ Config lives at `~/.outlook-mcp/config.json` (created with `0600` permissions).
 | `tenant_id` | `string` | `"consumers"` | Azure AD tenant. Use `"consumers"` for personal Microsoft accounts. |
 | `timezone` | `string` | `"UTC"` | IANA timezone (e.g. `"America/New_York"`). Used for relative date computations in calendar tools. |
 | `read_only` | `bool` | `false` | When `true`, all write tools (send, reply, move, delete, create, update, RSVP) return an error. |
+| `attachments_dir` | `string` | `"~/.outlook-mcp/attachments"` | The only directory the attachment tools may read from or write to. Every path an agent supplies is resolved and must land inside it — a symlink out or a `..` is refused. Widen it only if you understand that anything reachable can be emailed. |
 | `allow_categories` | `list[string]` | `[]` | Optional. Restrict write tools to specific categories (see below). Empty list = all writes allowed when `read_only: false`. |
 
 ### Toolset selection (optional) — `OUTLOOK_MCP_TOOLSETS`

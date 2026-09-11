@@ -1,43 +1,63 @@
-## Description: <br>
-Prepare Dataify builder requests for TikTok scraper tools by helping users select a Dataify tool, collect parameter values, and generate a curl request using DATAIFY_API_TOKEN. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prepares and submits Dataify Builder requests for TikTok URL-based collection workflows, including the advertised TikTok comment-by-URL tool and related saved catalog entries.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users who use Dataify can generate builder requests for TikTok comment, shop, post-list, and profile scraping tools after choosing a tool and supplying parameter values. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated curl request sends selected URLs and parameters to Dataify. <br>
-Mitigation: Review the generated command before execution and use it only for the intended Dataify TikTok scraping workflow. <br>
-Risk: DATAIFY_API_TOKEN exposure could grant access to the Dataify account. <br>
-Mitigation: Treat DATAIFY_API_TOKEN like a password; prefer a session-scoped environment variable or secret manager and avoid storing it in shared shell profile files. <br>
+## Use Case:
 
+Developers and external users use this skill to collect TikTok data from known URLs through Dataify, submit the asynchronous task, monitor completion, and return the final JSON result.
 
-## Reference(s): <br>
-- [Tool parameter catalog](artifact/references/tool-params.json) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-tiktok-comment-by-url) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash or PowerShell command blocks and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a Dataify builder curl command and may provide DATAIFY_API_TOKEN setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: Submitted targets and collected results are sent to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when Dataify processing is acceptable for the target data and result content.
+
+Risk: The artifact includes related TikTok scraper entries beyond the advertised comment-by-URL workflow.
+
+Mitigation: Restrict use to the intended TikTok comment workflow unless broader TikTok collection has been reviewed and approved.
+
+Risk: API-token handling and query-string polling can expose credentials in local logs or command history.
+
+Mitigation: Use a session-scoped Dataify token, avoid printing token-bearing URLs, and rotate any token that may have been exposed.
+
+Risk: Normal submissions may consume paid Dataify credits.
+
+Mitigation: Require confirmation before paid or high-volume submissions and use preview or no-wait behavior only when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-tiktok-comment-by-url)
+- [Dataify Builder endpoint](https://scraperapi.dataify.com/builder)
+- [Tool parameter catalog](artifact/references/tool-params.json)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, json, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task/result payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May submit paid Dataify tasks, wait for asynchronous completion, and summarize large result payloads while preserving access to raw JSON.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

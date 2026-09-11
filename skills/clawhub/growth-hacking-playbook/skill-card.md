@@ -1,43 +1,57 @@
-## Description: <br>
-50 growth hacking tactics ranked by effort versus impact, with setup instructions, expected timelines, success metrics, and data-driven prioritization for resource-constrained startups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design, prioritize and run measurable growth experiments across acquisition, activation, retention, referral and revenue. Use when a startup needs an experiment backlog, ICE/RICE prioritization, referral or UGC loops, rapid weekly testing, causal measurement, or stop conditions without spam, fake accounts or dark patterns.
 
-## Publisher: <br>
-[gingiris-1031](https://clawhub.ai/user/gingiris-1031) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gingiris-1031](https://clawhub.ai/user/gingiris-1031)
 
-## Use Case: <br>
-Startup founders, growth marketers, and product teams use this skill to prioritize acquisition, activation, retention, and rapid-testing experiments using ICE-style scoring and concrete success metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Retention and notification tactics can become intrusive or misleading if applied without consent or frequency controls. <br>
-Mitigation: Use consent-based messaging, respect opt-outs, apply reasonable frequency limits, and keep user communications accurate. <br>
-Risk: Growth experiments can produce misleading decisions if teams skip clear metrics, sample thresholds, or post-experiment review. <br>
-Mitigation: Define the hypothesis, metric, minimum sample, duration, and success criteria before launch, then review and document outcomes. <br>
+## Use Case:
 
+Startup founders, growth marketers, and product teams use this skill to identify funnel constraints, prioritize growth experiments, define metrics and guardrails, and decide whether to keep, iterate, or stop tests.
 
-## Reference(s): <br>
-- [Growth Hacking Experiments - English](references/en/README.md) <br>
-- [Growth Hacking Experiments - Japanese](references/ja/README.md) <br>
-- [Growth Hacking Experiments - Korean](references/ko/README.md) <br>
-- [Growth Hacking Playbook on ClawHub](https://clawhub.ai/gingiris-1031/growth-hacking-playbook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown playbook with prioritized experiment guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static markdown guidance with no code execution or hidden system access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release evidence) <br>
+Risk: Growth experiments can become manipulative or violate community, consent, disclosure, or privacy expectations if referral, incentive, notification, or retention tactics are launched without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each experiment for user consent, disclosure, community rules, privacy obligations, guardrail metrics, maximum cost, and rollback criteria before launch.
+
+Risk: The historical CAC planning example could be misread as verified performance.
+
+Mitigation: Use the planning case only to audit arithmetic and assumptions, and require measured cohort data before reporting CAC, LTV, activation, retention, referral, or paid outcomes.
+
+## Reference(s):
+
+- [Growth Hacking Experiments - 50 Tactics Ranked by Effort/Impact (English)](references/en/README.md)
+- [Growth Hacking Experiments - 50 Tactics Ranked by Effort/Impact (Japanese)](references/ja/README.md)
+- [Growth Hacking Experiments - 50 Tactics Ranked by Effort/Impact (Korean)](references/ko/README.md)
+- [Related Gingiris Launch skill](https://clawhub.ai/gingiris-1031/skills/gingiris-launch)
+- [Gingiris publisher profile](https://clawhub.ai/gingiris-1031)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or structured text with funnel baselines, prioritized backlog items, experiment cards, calendars, and decision logs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning output only; no executable code, credential use, persistence, or hidden behavior.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release evidence; artifact _meta.json lists 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

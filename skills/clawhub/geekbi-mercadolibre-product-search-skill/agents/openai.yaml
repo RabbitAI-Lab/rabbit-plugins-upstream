@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mercado Libre 商品搜索"
+  short_description: "查询和分析美客多商品、筛选条件、详情与历史趋势"
+  default_prompt: "使用极鲸云真实数据查询并分析 Mercado Libre 商品。"

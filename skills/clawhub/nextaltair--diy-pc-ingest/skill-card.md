@@ -1,48 +1,69 @@
-## Description: <br>
-Ingests pasted PC parts purchase logs and spec notes, optionally enriches product details, and prepares or upserts records into Notion DIY_PC tables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ingest pasted PC parts receipts or specs into Notion DIY_PC tables with classification, enrichment, follow-up, and upsert.
 
-## Publisher: <br>
-[nextaltair](https://clawhub.ai/user/nextaltair) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nextaltair](https://clawhub.ai/user/nextaltair)
 
-## Use Case: <br>
-Developers and personal automation users use this skill to turn messy PC parts receipts or configuration notes into structured Notion records for PCConfig, storage, enclosure, and PCInput tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update or archive live Notion pages, and the documented preview step is not guaranteed to be read-only. <br>
-Mitigation: Use a backup or sandbox Notion workspace first, review all generated JSONL before execution, and do not treat preview output as a dry run unless the script adds an explicit dry-run mode. <br>
-Risk: A broad Notion integration token could expose or modify more workspace content than intended. <br>
-Mitigation: Use a minimally scoped Notion integration connected only to the intended DIY_PC databases and store the token in environment variables or a secret manager. <br>
-Risk: Optional web enrichment may send partial product text to external web providers. <br>
-Mitigation: Skip web search or fetch enrichment when inputs contain sensitive purchase details or when the user requests local-only extraction. <br>
-Risk: Control fields such as page_id, overwrite, archive, archived, relation, and mirror_to_pcconfig can cause direct updates, archiving, or linked-row changes. <br>
-Mitigation: Manually review and confirm records containing these fields before running the Notion apply script. <br>
+## Use Case:
 
+Developers and agents use this skill to turn pasted PC parts receipts or hardware notes into planned and applied Notion updates for DIY_PC storage, enclosure, PCConfig, and PCInput tables. It supports local extraction, optional web enrichment, duplicate-safe upsert planning, and explicit apply operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nextaltair/diy-pc-ingest) <br>
-- [Publisher profile](https://clawhub.ai/user/nextaltair) <br>
-- [Notion integrations](https://www.notion.so/my-integrations) <br>
-- [Example configuration](artifact/references/config.example.json) <br>
-- [Notion ID setup notes](artifact/references/notion-ids.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSONL examples, shell commands, and Notion record updates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and a Notion API key; may call the Notion API and optional web search or fetch tools for enrichment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.4 (source: server release metadata) <br>
+Risk: The skill can create, update, archive, and mirror records in Notion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default plan mode first, inspect the proposed targets and before/after changes, then run apply only for already authorized changes.
+
+Risk: Credentialed Notion requests are delegated to the notion-api-automation dependency and can be redirected with NOTIONCTL_PATH.
+
+Mitigation: Install the dependency only from a trusted source and set NOTIONCTL_PATH only to a reviewed local helper.
+
+Risk: A broad Notion integration or noisy runtime environment could expose unrelated workspace data or secrets.
+
+Mitigation: Limit the Notion integration to the intended DIY_PC data sources and keep unrelated secrets out of the runtime environment.
+
+Risk: The deprecated Python script remains in the artifact.
+
+Mitigation: Use scripts/notion_apply_records.js for plan and apply operations and do not invoke the deprecated Python script.
+
+Risk: Optional web enrichment may send partial product text to external search or fetch providers.
+
+Mitigation: Skip web_search and web_fetch when the user does not want external enrichment or when pasted records contain sensitive details.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/nextaltair/skills/diy-pc-ingest)
+- [Notion target IDs](references/notion-ids.md)
+- [Example Notion target configuration](references/config.example.json)
+- [Notion integrations](https://www.notion.so/my-integrations)
+- [Notion API](https://api.notion.com/v1)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSON, Code]
+
+**Output Format:** [Markdown guidance with shell commands and JSONL records for a Node-based Notion apply script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces plan/apply results for Notion upserts and requires explicit Notion target IDs plus NOTION_API_KEY.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -60,6 +60,9 @@ independent audit evidence.
 
 - Never submit secrets, credentials, personal data, private customer documents,
   or insufficiently anonymized screenshots/data.
+- Public README demos and assets must be synthetic and domain-neutral: do not
+  reuse customer nouns, workflows, metrics, screenshots, or recognizable project
+  combinations, and do not let one brownfield scenario define the whole Skill.
 - Do not copy protected standards or paid research in full. Store citation,
   applicability, version, and the minimal product implication.
 - Generated or inferred professional claims must be marked as such.
@@ -81,14 +84,14 @@ Breaking changes require:
 
 Run:
 
-```powershell
-py -3 scripts/ai_delivery_spec_cli.py check
+```bash
+python scripts/ai_delivery_spec_cli.py check
 ```
 
 For Product Truth changes:
 
-```powershell
-py -3 scripts/validators/validate_product_truth.py path/to/product-truth.yaml
+```bash
+python scripts/validators/validate_product_truth.py path/to/product-truth.yaml
 ```
 
 For prototype extraction or compatibility work, run the applicable artifact

@@ -1,0 +1,5 @@
+{
+  "domain": "watchitai.net",
+  "bridgePort": 8765,
+  "mode": "server"
+}

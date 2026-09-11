@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/video-editing",
   "slug": "video-editing",
   "ownerHandle": "pruna-ai",
-  "version": "0.1.0",
-  "updatedAt": 1778492014477,
-  "contentHash": "788caaffb53f3855b591cf909f8ed56f94482d846199a1a283f440c83cc9a523",
-  "fetchedAt": "2026-07-26T18:07:16.873Z"
+  "version": "1.0.12",
+  "updatedAt": 1789048579602,
+  "contentHash": "e1a3f440f027a29c58156ac6a222ab214d28f0cd6776002230f3773dd4594197",
+  "fetchedAt": "2026-09-11T12:23:11.451Z"
 }

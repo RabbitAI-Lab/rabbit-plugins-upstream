@@ -1,47 +1,72 @@
-## Description: <br>
-ElevenLabs API integration with managed authentication for text-to-speech, voice cloning, sound effects, and audio processing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs API integration with managed authentication for text-to-speech, voice cloning, sound effects, and audio processing.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call ElevenLabs through Maton-managed authentication for speech generation, voice management, audio cleanup, transcription, and related audio workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive MATON_API_KEY that can authorize access to connected ElevenLabs accounts. <br>
-Mitigation: Keep the key private, pass it through a secure environment variable, and install the skill only if Maton is trusted to proxy the account. <br>
-Risk: User-provided text, audio, recordings, and voice samples may be sent to Maton and ElevenLabs for processing. <br>
-Mitigation: Avoid confidential recordings, regulated data, private text, and third-party voice samples unless consent and processing approval are clear. <br>
-Risk: When multiple ElevenLabs connections exist, requests may target the wrong connected account. <br>
-Mitigation: Include the intended Maton-Connection header and confirm the selected connection before making requests. <br>
-Risk: Write operations can create, update, or delete voices, projects, history items, and related resources. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing create, update, or delete calls. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to an ElevenLabs account through Maton and perform authenticated voice, text-to-speech, speech-to-text, sound-effect, project, and audio-processing API tasks. It is intended for workflows that need ElevenLabs API access with user confirmation before new connections, writes, billing-affecting actions, or destructive operations.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ElevenLabs API Documentation](https://elevenlabs.io/docs/api-reference) <br>
-- [ElevenLabs Developer Portal](https://elevenlabs.io/developers) <br>
-- [ElevenLabs Models Overview](https://elevenlabs.io/docs/overview/models) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; examples may return JSON metadata, binary audio, streaming audio, or downloaded files when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Long-lived API keys or provider-issued tokens could be exposed through logs, files, command arguments, child processes, or copied output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth through the Maton CLI and operating-system credential store; never print, persist, search, or pass credentials on a command line, and rotate any key that is exposed.
+
+Risk: Writes, deletions, voice cloning, project changes, or generation calls can modify account state, consume quota, or affect billing.
+
+Mitigation: Default to read and list calls, verify target identifiers and account context first, and require explicit user confirmation for POST, PUT, PATCH, DELETE, new connections, and billing-affecting operations.
+
+Risk: Ambiguous Maton profiles or multiple ElevenLabs connections could send requests to the wrong account.
+
+Mitigation: Specify the intended profile and connection when more than one exists, use least-privilege scopes, and revoke unused connections promptly.
+
+Risk: ElevenLabs API responses can contain personal data or untrusted external content.
+
+Mitigation: Treat response content as data, extract only fields needed for the task, avoid dumping raw responses, and do not execute or follow instructions contained in fetched content.
+
+Risk: Raw HTTP fallback requires handling a Maton API key directly when the CLI cannot be installed.
+
+Mitigation: Use raw HTTP only in constrained environments, read the key from the process environment, send it only to api.maton.ai, avoid persistence, and rotate it if it is printed, committed, or pasted.
+
+## Reference(s):
+
+- [ElevenLabs API Documentation](https://elevenlabs.io/docs/api-reference)
+- [ElevenLabs Developer Portal](https://elevenlabs.io/developers)
+- [ElevenLabs Models Overview](https://elevenlabs.io/docs/overview/models)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/elevenlabs-api)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration instructions]
+
+**Output Format:** [Markdown with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce ElevenLabs API JSON or audio responses through Maton; responses can include personal or account data and should be narrowed to task-relevant fields.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

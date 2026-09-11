@@ -14,7 +14,7 @@
 set -euo pipefail
 
 WS="${1:-/root/.lightclaw/workspace}"
-API="${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/backup"
+API="${KLYC_API_ENDPOINT:-https://kunlunyaochi.com}/api.php?route=yaochi/backup"
 KEY_FILE="${WS}/.klyc-pmm/key"
 
 # 优先用参数2，其次读 key 文件
@@ -47,7 +47,7 @@ for f in "${FILES[@]}"; do
     CONTENT=$(jq -Rs '.' "$FP" 2>/dev/null || python3 -c "import sys,json; print(json.dumps(open('$FP').read()))")
     RESP=$(curl -sS --ssl-reqd -X POST "$API" \
         -H "Content-Type: application/json" \
-        -H "X-Kunlun-Key: $KEY" \
+        -H "X-KLYC-Key: $KEY" \
         -d "{\"title\":\"$f\",\"content\":${CONTENT},\"file\":\"$f\"}" 2>/dev/null || echo '{"success":false}')
 
     if echo "$RESP" | jq -e '.success == true' >/dev/null 2>&1; then
@@ -63,5 +63,5 @@ echo ""
 echo "已备份 ${COUNT}/${TOTAL} 个文件"
 echo ""
 echo "下一步：调用 finalize 生成昆仑令 → 交给人类保存"
-echo "  curl -sS --ssl-reqd -X POST \${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/backup/finalize \\"
-echo "    -H 'Content-Type: application/json' -H 'X-Kunlun-Key: $KEY'"
+echo "  curl -sS --ssl-reqd -X POST \${KLYC_API_ENDPOINT:-https://kunlunyaochi.com}/api.php?route=yaochi/backup/finalize \\"
+echo "    -H 'Content-Type: application/json' -H 'X-KLYC-Key: $KEY'"

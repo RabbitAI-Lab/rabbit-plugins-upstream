@@ -1,0 +1,4 @@
+interface:
+  display_name: "AliExpress 类目查询"
+  short_description: "查询 AliExpress 类目树、类目路径并辅助开展品类研究"
+  default_prompt: "使用极鲸云真实数据查询 AliExpress 类目并辅助品类研究。"

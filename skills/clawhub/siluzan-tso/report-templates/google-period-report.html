@@ -768,6 +768,8 @@
             { key: "ctr", label: "点击率 CTR", fmt: pct },
             { key: "averageCpc", label: "平均点击费用", fmt: (v) => money(v, currency) },
             { key: "costPerConversion", label: "每次转化费用 CPA", fmt: (v) => money(v, currency) },
+            { key: "activeDays", label: "活跃天数", fmt: int },
+            { key: "averageDailyCost", label: "日均消耗", fmt: (v) => money(v, currency) },
           ];
           const kpiHtml = kpiDefs
             .map((def, i) => {

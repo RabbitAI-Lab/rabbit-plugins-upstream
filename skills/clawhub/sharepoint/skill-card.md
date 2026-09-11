@@ -1,44 +1,69 @@
-## Description: <br>
-SharePoint API integration via Microsoft Graph with managed OAuth for accessing SharePoint sites, lists, document libraries, and files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft SharePoint provides SharePoint API integration via Microsoft Graph with managed OAuth for sites, lists, document libraries, and files.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to make authenticated Microsoft Graph requests through Maton for SharePoint document management, list operations, site discovery, file handling, sharing, and permissions workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-managed OAuth and MATON_API_KEY to access and modify SharePoint content. <br>
-Mitigation: Protect MATON_API_KEY like a password and use the least-privileged SharePoint account practical. <br>
-Risk: Write and sharing operations can change files, lists, folders, or permissions in the connected SharePoint account. <br>
-Mitigation: Confirm the target resource, intended effect, audience, link scope, and expiration or revocation plan before approving write or sharing operations. <br>
+## Use Case:
 
+Developers and agents use this skill to authenticate through Maton and perform SharePoint document, list, library, site, sharing, version, and search operations through Microsoft Graph.
 
-## Reference(s): <br>
-- [Microsoft SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint) <br>
-- [Microsoft Graph DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem) <br>
-- [Microsoft Graph List API](https://learn.microsoft.com/en-us/graph/api/resources/list) <br>
-- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP examples, shell commands, Python snippets, JavaScript snippets, and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can access or change SharePoint data using user-authorized credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read and list calls first, require explicit user confirmation before write, delete, or share actions, and verify the target resource and payload before execution.
+
+Risk: Multiple Maton accounts or SharePoint connections can cause requests to target the wrong tenant or site.
+
+Mitigation: Specify the intended profile and connection when more than one account or connection exists.
+
+Risk: API keys and provider-issued tokens can leak through environment variables, logs, command lines, or copied output.
+
+Mitigation: Prefer OAuth, keep credentials in the operating system credential store, avoid printing or persisting tokens, and send Maton API keys only to api.maton.ai.
+
+Risk: Documented install commands do not pin reviewed Maton package versions.
+
+Mitigation: Pin or isolate Maton CLI and SDK package versions when deploying in controlled environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/sharepoint)
+- [Maton Homepage](https://maton.ai)
+- [SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint)
+- [DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem)
+- [List API](https://learn.microsoft.com/en-us/graph/api/resources/list)
+- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, API paths, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include SharePoint and Microsoft Graph identifiers, request bodies, and response-field guidance.]
+
+## Skill Version(s):
+
+1.2.1 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

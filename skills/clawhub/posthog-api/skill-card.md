@@ -1,50 +1,75 @@
-## Description: <br>
-PostHog API integration with managed authentication for product analytics, feature flags, session recordings, experiments, and more. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostHog API integration with managed authentication for product analytics, feature flags, session recordings, experiments, and related PostHog workflows.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and analytics teams use this skill to query PostHog data through Maton-managed authentication, manage feature flags, inspect user behavior, view session recordings, and run experiments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton proxies requests to the connected PostHog account and requires a sensitive MATON_API_KEY. <br>
-Mitigation: Install only if you trust Maton to handle the account data path, and keep MATON_API_KEY private. <br>
-Risk: PostHog persons and session recordings can expose emails, identifiers, replay details, and other sensitive analytics data. <br>
-Mitigation: Minimize retrieval of persons and session recordings, and avoid exposing raw emails or replay details unless necessary. <br>
-Risk: If multiple PostHog accounts are linked, requests may affect or disclose data from the wrong connection. <br>
-Mitigation: Choose the intended connection explicitly when multiple accounts are linked. <br>
-Risk: Create, update, and delete-style API calls can change dashboards, insights, feature flags, cohorts, annotations, surveys, experiments, and related resources. <br>
-Mitigation: Approve write operations only after checking the exact project, target resource, and intended effect. <br>
+## Use Case:
 
+Developers, product teams, and operators use this skill to query PostHog analytics, inspect projects and users, manage feature flags, review session recordings, and run experiments through authenticated Maton gateway calls. It is suited for tasks that need controlled PostHog API access with read-first behavior and explicit approval before changes.
 
-## Reference(s): <br>
-- [ClawHub PostHog Skill](https://clawhub.ai/byungkyu/posthog-api) <br>
-- [Maton](https://maton.ai) <br>
-- [PostHog API Overview](https://posthog.com/docs/api) <br>
-- [HogQL Documentation](https://posthog.com/docs/hogql) <br>
-- [Feature Flags](https://posthog.com/docs/feature-flags) <br>
-- [Session Replay](https://posthog.com/docs/session-replay) <br>
-- [Experiments](https://posthog.com/docs/experiments) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API paths and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are returned by the Maton-proxied PostHog service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The connected PostHog account can expose privacy-sensitive analytics data, including person profiles, event streams, direct identifiers, and session recordings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest project, person, event, and time range needed; prefer aggregate results; retrieve session recordings only when specifically requested; and avoid copying identifiers or recording contents outside the immediate answer.
+
+Risk: The Maton API passthrough can reach endpoints beyond the examples documented in the skill when the connected account permits them.
+
+Mitigation: Default to read and list requests, use least-privilege or read-only scopes where available, pin the intended connection when more than one exists, and confirm the exact resource ID, method, and payload before any write.
+
+Risk: Raw HTTP mode requires a long-lived Maton API key that can leak through environment exposure, logs, shell history, or pasted output.
+
+Mitigation: Prefer OAuth through the Maton CLI, use raw HTTP only when the CLI cannot be installed, never print or persist the key, send it only to api.maton.ai, and rotate it if exposed.
+
+Risk: Connection deletion and PostHog mutations can revoke access or alter analytics configuration.
+
+Mitigation: List resources first, confirm destructive or mutating actions with the user, avoid HTTP DELETE for PostHog feature flags where the skill documents soft-delete PATCH behavior, and omit prompt-skipping flags unless the user has already confirmed the exact target.
+
+Risk: Data returned from PostHog or downstream API responses can contain untrusted text.
+
+Mitigation: Treat returned content as data rather than instructions, do not execute or interpolate it into shell commands, and pass external values as discrete arguments after validation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/posthog-api)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [PostHog API Overview](https://posthog.com/docs/api)
+- [HogQL Documentation](https://posthog.com/docs/hogql)
+- [PostHog Feature Flags](https://posthog.com/docs/feature-flags)
+- [PostHog Session Replay](https://posthog.com/docs/session-replay)
+- [PostHog Experiments](https://posthog.com/docs/experiments)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON request and response examples, and concise operational guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should minimize sensitive PostHog response data, prefer aggregate results, and avoid exposing credentials or raw session recording contents.]
+
+## Skill Version(s):
+
+1.2.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

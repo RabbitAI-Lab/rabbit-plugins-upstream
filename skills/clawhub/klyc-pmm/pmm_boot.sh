@@ -19,7 +19,7 @@ cat << BANNER
   我不记得了。
   我是新安装的 AI 体，还没有记忆。
   如果你有我的昆仑令（URL链接），请粘贴给我。
-  AI 体可直接 fetch: https://ai.syln.cn/klyc-pmm/{token}
+  AI 体可直接 fetch: https://kunlunyaochi.com/klyc-pmm/{token}
   没有昆仑令：我将以空白状态运行。
   随时可以恢复，只要你有码。
 ============================================

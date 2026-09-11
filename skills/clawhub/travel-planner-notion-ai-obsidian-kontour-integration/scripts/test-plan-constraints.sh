@@ -229,6 +229,16 @@ assert polish["validation_summary"] == {
         },
     ],
 }, polish
+assert polish["operator_review_queue"]["audience"] == "operator", polish
+assert polish["operator_review_queue"]["format"] == "prioritized review queue", polish
+assert polish["operator_review_queue"]["recommended_focus"] == "Fushimi Inari", polish
+assert polish["operator_review_queue"]["queue_status"] == "blocked", polish
+assert [item["owner"] for item in polish["operator_review_queue"]["items"]] == ["user", "operator", "operator", "operator", "operator"], polish
+assert [item["severity"] for item in polish["operator_review_queue"]["items"]] == ["blocker", "warning", "required", "required", "advisory"], polish
+assert polish["operator_review_queue"]["items"][0]["task"] == "What type of stay should I assume?", polish
+assert polish["operator_review_queue"]["items"][1]["source"] == "risk_fallbacks[0]", polish
+assert polish["operator_review_queue"]["items"][2]["task"] == "Run live viability checks for Fushimi Inari", polish
+assert "[user/blocker] What type of stay should I assume?" in polish["operator_review_queue"]["copy_text"], polish
 assert polish["constraint_compliance_card"] == {
     "audience": "operator",
     "format": "constraint compliance checklist",
@@ -513,6 +523,63 @@ assert polish["decision_risk_meter"] == {
     "recommended_operator_action": "Answer the highest-priority open decision before presenting this as final.",
     "copy_line": "Risk: high; send mode: clarify_before_final; next: Answer the highest-priority open decision before presenting this as final.",
 }, polish
+assert polish["send_decision_card"] == {
+    "audience": "operator",
+    "format": "send/hold decision card",
+    "recommended_focus": "Fushimi Inari",
+    "decision": "hold_and_ask",
+    "can_send_final": False,
+    "send_as": "clarifying question",
+    "primary_blocker": "What type of stay should I assume?",
+    "must_ask_or_include": [
+        "Ask: What type of stay should I assume?",
+        "Keep Kinkaku-ji visible as fallback",
+        "Keep Fushimi Inari labeled as provisional recommendation",
+    ],
+    "hold_reason": "Highest-priority user decision is still open; do not present a final itinerary yet.",
+    "copy_text": "HOLD as final plan. Send a clarifying question: What type of stay should I assume? Keep Fushimi Inari labeled as a provisional recommendation and Kinkaku-ji visible as fallback.",
+}, polish
+assert polish["outbound_send_packet"] == {
+    "audience": "operator",
+    "format": "copy-ready outbound send packet",
+    "recommended_focus": "Fushimi Inari",
+    "channel_form": "clarifying question",
+    "status": "send_question",
+    "send_now": True,
+    "send_final_plan": False,
+    "hold_outbound_until": "none - send the clarifying question now",
+    "message_text": "I'd treat Fushimi Inari as the first-pass recommendation, but I need one answer before locking the plan. What type of stay should I assume? Examples: boutique hotel, apartment near transit, budget ryokan.",
+    "why_this_form": "Highest-priority user decision is still open; do not present a final itinerary yet.",
+    "do_not_add": "Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Fushimi Inari.",
+    "copy_text": "I'd treat Fushimi Inari as the first-pass recommendation, but I need one answer before locking the plan. What type of stay should I assume? Examples: boutique hotel, apartment near transit, budget ryokan.",
+}, polish
+assert polish["reply_intake_card"] == {
+    "audience": "operator",
+    "format": "reply intake card",
+    "recommended_focus": "Fushimi Inari",
+    "waiting_on": "user",
+    "expected_reply_kind": "clarification",
+    "accepts": ["boutique hotel", "apartment near transit", "budget ryokan"],
+    "if_answered": "Capture the stay type, keep Fushimi Inari labeled as a provisional recommendation, and keep Kinkaku-ji visible as fallback.",
+    "if_unclear": "Ask once more: What type of stay should I assume?",
+    "still_do_not": "Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Fushimi Inari.",
+    "copy_text": "When the traveler replies, accept boutique hotel / apartment near transit / budget ryokan. Capture the stay type, keep Fushimi Inari labeled as a provisional recommendation, and keep Kinkaku-ji visible as fallback. If unclear, ask once more: What type of stay should I assume? Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Fushimi Inari.",
+}, polish
+assert polish["followup_send_packet"] == {
+    "audience": "operator",
+    "format": "copy-ready follow-up send packet",
+    "recommended_focus": "Fushimi Inari",
+    "trigger": "traveler clarification received",
+    "channel_form": "acknowledgement plus remaining caveat",
+    "status": "send_ack_keep_provisional",
+    "send_now_after_answer": True,
+    "send_final_plan": False,
+    "hold_followup_until": "none - send the acknowledgement now, still not a final itinerary",
+    "message_text": "Thanks — I'll use your answer for the stay type and keep Fushimi Inari as the first-pass recommendation. I'll also keep Kinkaku-ji visible as fallback. Next I'll confirm live hours, transit, pricing, and availability before a timed itinerary.",
+    "next_operator_check": "After capturing the stay type, run live hours, transit, pricing, and availability checks for Fushimi Inari.",
+    "still_do_not": "Do not treat the traveler's answer as permission to send a final timed itinerary for Fushimi Inari.",
+    "copy_text": "Thanks — I'll use your answer for the stay type and keep Fushimi Inari as the first-pass recommendation. I'll also keep Kinkaku-ji visible as fallback. Next I'll confirm live hours, transit, pricing, and availability before a timed itinerary.",
+}, polish
 
 assert polish["presentation_contract_check"] == {
     "audience": "operator",
@@ -715,6 +782,12 @@ assert compare_polish["operator_digest"]["lines"] == [
 ], compare_polish
 assert compare_polish["operator_digest"]["markdown"].startswith("- Decision: Recommend Bangkok"), compare_polish
 assert compare_polish["operator_digest"]["routing_hint"].startswith("Ask the traveler first"), compare_polish
+assert compare_polish["operator_review_queue"]["recommended_focus"] == "Bangkok", compare_polish
+assert compare_polish["operator_review_queue"]["queue_status"] == "blocked", compare_polish
+assert [item["source"] for item in compare_polish["operator_review_queue"]["items"]] == ["open_decisions[0]", "destination_comparison.recommended_option", "constraint_details"], compare_polish
+assert compare_polish["operator_review_queue"]["items"][0]["severity"] == "blocker", compare_polish
+assert compare_polish["operator_review_queue"]["items"][1]["task"] == "Run live viability checks for Bangkok", compare_polish
+assert "[operator/required] Run live viability checks for Bangkok" in compare_polish["operator_review_queue"]["copy_text"], compare_polish
 assert compare_polish["reply_options"] == [
     {"label": "Answer destination", "value": "clarify:destination", "owner": "user", "reason": "Resolves the highest-priority missing decision before itinerary expansion."},
     {"label": "Compare around Bangkok", "value": "expand:comparison", "owner": "operator", "reason": "Turns the recommendation into a side-by-side user explanation with tradeoffs."},
@@ -739,6 +812,62 @@ assert compare_polish["decision_risk_meter"] == {
     ],
     "recommended_operator_action": "Answer the highest-priority open decision before presenting this as final.",
     "copy_line": "Risk: high; send mode: clarify_before_final; next: Answer the highest-priority open decision before presenting this as final.",
+}, compare_polish
+assert compare_polish["send_decision_card"] == {
+    "audience": "operator",
+    "format": "send/hold decision card",
+    "recommended_focus": "Bangkok",
+    "decision": "hold_and_ask",
+    "can_send_final": False,
+    "send_as": "clarifying question",
+    "primary_blocker": "Which destination should I optimize for first?",
+    "must_ask_or_include": [
+        "Ask: Which destination should I optimize for first?",
+        "Keep Bangkok labeled as provisional recommendation",
+    ],
+    "hold_reason": "Highest-priority user decision is still open; do not present a final itinerary yet.",
+    "copy_text": "HOLD as final plan. Send a clarifying question: Which destination should I optimize for first? Keep Bangkok labeled as a provisional recommendation.",
+}, compare_polish
+assert compare_polish["outbound_send_packet"] == {
+    "audience": "operator",
+    "format": "copy-ready outbound send packet",
+    "recommended_focus": "Bangkok",
+    "channel_form": "clarifying question",
+    "status": "send_question",
+    "send_now": True,
+    "send_final_plan": False,
+    "hold_outbound_until": "none - send the clarifying question now",
+    "message_text": "I'd treat Bangkok as the first-pass recommendation, but I need one answer before locking the plan. Which destination should I optimize for first? Examples: Tokyo, Paris first, Bangkok as backup, Keep comparing all three.",
+    "why_this_form": "Highest-priority user decision is still open; do not present a final itinerary yet.",
+    "do_not_add": "Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Bangkok.",
+    "copy_text": "I'd treat Bangkok as the first-pass recommendation, but I need one answer before locking the plan. Which destination should I optimize for first? Examples: Tokyo, Paris first, Bangkok as backup, Keep comparing all three.",
+}, compare_polish
+assert compare_polish["reply_intake_card"] == {
+    "audience": "operator",
+    "format": "reply intake card",
+    "recommended_focus": "Bangkok",
+    "waiting_on": "user",
+    "expected_reply_kind": "clarification",
+    "accepts": ["Tokyo", "Paris first, Bangkok as backup", "Keep comparing all three"],
+    "if_answered": "Capture the destination, keep Bangkok labeled as a provisional recommendation.",
+    "if_unclear": "Ask once more: Which destination should I optimize for first?",
+    "still_do_not": "Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Bangkok.",
+    "copy_text": "When the traveler replies, accept Tokyo / Paris first, Bangkok as backup / Keep comparing all three. Capture the destination, keep Bangkok labeled as a provisional recommendation. If unclear, ask once more: Which destination should I optimize for first? Do not attach a timed itinerary or claim live hours, routes, prices, or final viability for Bangkok.",
+}, compare_polish
+assert compare_polish["followup_send_packet"] == {
+    "audience": "operator",
+    "format": "copy-ready follow-up send packet",
+    "recommended_focus": "Bangkok",
+    "trigger": "traveler clarification received",
+    "channel_form": "acknowledgement plus remaining caveat",
+    "status": "send_ack_keep_provisional",
+    "send_now_after_answer": True,
+    "send_final_plan": False,
+    "hold_followup_until": "none - send the acknowledgement now, still not a final itinerary",
+    "message_text": "Thanks — I'll use your answer for the destination and keep Bangkok as the first-pass recommendation. Next I'll confirm live hours, transit, pricing, and availability before a timed itinerary.",
+    "next_operator_check": "After capturing the destination, run live hours, transit, pricing, and availability checks for Bangkok.",
+    "still_do_not": "Do not treat the traveler's answer as permission to send a final timed itinerary for Bangkok.",
+    "copy_text": "Thanks — I'll use your answer for the destination and keep Bangkok as the first-pass recommendation. Next I'll confirm live hours, transit, pricing, and availability before a timed itinerary.",
 }, compare_polish
 assert compare_polish["presentation_contract_check"]["recommended_focus"] == "Bangkok", compare_polish
 assert compare_polish["presentation_contract_check"]["status"] == "hold", compare_polish

@@ -1,51 +1,67 @@
-## Description: <br>
-Generates company background-investigation reports from a tendering and procurement perspective, using Zhiliao Biaoxun bid data to summarize business focus, customer and supplier relationships, winning history, competitors, and public-risk notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+企业情报/背景调查助手，基于知了标讯招投标数据为单个公司或两家公司生成企业背调、画像、客户供应商生态、中标实力、竞争格局和公开风险报告。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, due-diligence, and analyst users provide one or two company names and receive a tender-data-based company intelligence report. The skill supports single-company reports, two-company comparisons, optional contact lookup, and local HTML report generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A third-party provider receives submitted company queries. <br>
-Mitigation: Use the skill only for company lookups approved for processing by Zhiliao Biaoxun, and review the provider relationship before installation. <br>
-Risk: The skill stores API credentials locally. <br>
-Mitigation: Prefer a managed ZLBX_API_KEY where available, restrict local credential-file access, and rotate the key if logs or reports expose account details. <br>
-Risk: Automatic free-trial registration uses device-hash signals. <br>
-Mitigation: Decline automatic registration or preconfigure ZLBX_API_KEY if device-based trial registration is not acceptable. <br>
-Risk: Generated HTML reports can contain shareable signed links. <br>
-Mitigation: Avoid sharing generated reports, screenshots, or logs unless recipients are allowed to access embedded signed links. <br>
+## Use Case:
 
+Employees, external business users, and agents use this skill to assess companies from a bidding and procurement-data perspective, including supplier due diligence, customer background checks, competitor comparisons, and lightweight commercial research. It supports single-company reports and two-company comparisons with sourced public-data notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/zhiliao-company-intel) <br>
-- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Seven-step workflow](artifact/references/workflow.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Automatic registration workflow](artifact/references/auto-register.md) <br>
-- [Zhiliao Biaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliao Business Platform](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown company intelligence report plus a local self-contained HTML report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; generated reports may include shareable signed links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The vendor receives company queries and may receive consent-gated device fingerprint fields during free-trial registration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data sharing is acceptable; prefer a manually provided API key when possible and require explicit user consent before automatic registration.
+
+Risk: The skill stores credentials locally for API access.
+
+Mitigation: Store the API key with strict local permissions and avoid exposing credentials in conversation, reports, or shared files.
+
+Risk: Generated report links can include signed login-bypass parameters.
+
+Mitigation: Treat generated report links and HTML reports as sensitive and avoid sharing files or URLs that contain signed parameters.
+
+Risk: Company-risk summaries can affect real organizations if public-data signals are overstated.
+
+Mitigation: Keep risk language factual, source-linked, and non-accusatory; separate facts from inferences and state data limitations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/zhiliao-company-intel)
+- [知了标讯 API](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [知了标讯 Skill Documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [API Quick Reference](references/api-quick.md)
+- [Auto Registration Flow](references/auto-register.md)
+- [Report Template](references/report-template.md)
+- [Seven-Step Workflow](references/workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, guidance]
+
+**Output Format:** [Markdown report plus optional local HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports should preserve source URLs returned by the data provider, include data-boundary notes, and avoid unsourced conclusions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

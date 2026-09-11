@@ -67,12 +67,12 @@ siluzan-cso workflow validate -f draft.md --max 800 --json
 | `-f, --file <path>`   | 待校验文案文件（`.md` / `.txt`）；与 `--text` / stdin 三选一                                            |
 | `--text <content>`    | 直接传入文案正文（宿主无文件工具时用）；优先级最高                                                      |
 | `--min <n>`           | 字数下限（按 `--count-by` 口径）                                                                        |
-| `--max <n>`           | 字数上限（按 `--count-by` 口径）                                                                        |
+| `--max <n>`           | 字数上限（按 `--count-by` 口径）。口播成稿只约束口播正文，不含字幕重点 / 画面建议等成稿块 |
 | `--count-by <mode>`   | 限制口径：`chars-no-space`（不含空白，**默认**）· `chars`（含空白）· `cjk`（汉字）· `words`（英文单词） |
 | `--strip-markdown`    | 统计前去除 markdown 语法与 frontmatter，默认 `false`                                                    |
 | `--no-check-leak`     | 跳过内部骨架资产泄漏检查（默认开启检查）                                                                |
 | `--forbidden <words>` | 额外禁用子串，逗号分隔，命中即校验不通过                                                                |
-| `--json`              | JSON 输出（含全部指标、问题列表、`passed`）                                                             |
+| `--json`              | JSON 输出（含全部指标、问题列表、`countScope`、`passed`）                                               |
 
 ---
 
@@ -84,6 +84,8 @@ siluzan-cso workflow validate -f draft.md --max 800 --json
 - **平台硬上限（如 X/Twitter 280 字符）**：用 `chars`（含空白）最贴近平台计数。
 
 > markdown 文件里 `#`、`*`、`>` 等符号会被计入原始字符数。需要「正文字数」时加 `--strip-markdown`。
+>
+> **口播 / 视频脚本**：`--min` / `--max` 只统计口播正文（`【口播脚本】` 到 `【字幕重点】` 之前）。【字幕重点】【画面建议】【发布文案】【话题标签】【风险与核验项】以及【平台】【标题/首行】等元数据**不计入**字数上限。泄漏检查仍扫全文。公众号文章等没有这些标题的成稿，仍按整篇统计。JSON 里 `countScope` 为 `spoken-body` 或 `full`。
 
 ---
 

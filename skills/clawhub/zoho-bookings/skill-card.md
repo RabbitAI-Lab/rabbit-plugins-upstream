@@ -1,48 +1,70 @@
-## Description: <br>
-Zoho Bookings API integration with managed OAuth for managing appointments, services, staff, and workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Bookings API integration with managed OAuth for managing appointments, services, staff, and workspaces through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, external users, developers, and operations teams use this skill to query Zoho Bookings data and perform user-approved booking, service, staff, workspace, and connection actions through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive Maton API key and managed OAuth access to Zoho Bookings. <br>
-Mitigation: Keep MATON_API_KEY private, avoid sharing outputs that expose credentials, and install only when Maton is trusted to proxy Zoho Bookings access. <br>
-Risk: Booking, service, workspace, staff, and connection write operations can change live scheduling data. <br>
-Mitigation: Review the target resource, intended account connection, and requested create, update, or delete effect before approving any write operation. <br>
-Risk: Multiple Maton connections may route requests to the wrong Zoho Bookings account if the connection is ambiguous. <br>
-Mitigation: Specify the intended Maton-Connection header when multiple active connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to help agents interact with Zoho Bookings accounts through managed Maton authentication. It supports listing, booking, updating, and managing appointments, services, staff, workspaces, and account connections when the user has authorized access.
 
-## Reference(s): <br>
-- [ClawHub Zoho Bookings Skill](https://clawhub.ai/byungkyu/zoho-bookings) <br>
-- [Maton](https://maton.ai) <br>
-- [Zoho Bookings API Documentation](https://www.zoho.com/bookings/help/api/v1/oauthauthentication.html) <br>
-- [Book Appointment API](https://www.zoho.com/bookings/help/api/v1/book-appointment.html) <br>
-- [Fetch Appointments API](https://www.zoho.com/bookings/help/api/v1/fetch-appointment.html) <br>
-- [Fetch Services API](https://www.zoho.com/bookings/help/api/v1/fetch-services.html) <br>
-- [Fetch Staff API](https://www.zoho.com/bookings/help/api/v1/fetch-staff.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell commands, HTTP endpoints, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY, and a connected Zoho Bookings OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill uses a broad Maton API passthrough, so authorized endpoints outside the documented Zoho Bookings surface may be reachable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, use the narrowest available Zoho Bookings scopes, specify the intended connection, and confirm every write or connection-management action with the user.
+
+Risk: Long-lived API keys or provider-issued credentials can leak through environment variables, logs, shell history, files, or command output.
+
+Mitigation: Prefer OAuth, keep credentials in the managed credential store, never print or persist secrets, and use raw HTTP with MATON_API_KEY only when the CLI cannot be installed.
+
+Risk: Connection deletion and booking changes can revoke access, cancel or modify appointments, or otherwise affect live scheduling data.
+
+Mitigation: Confirm exact connection IDs, resource identifiers, payloads, and intended effects before POST, PUT, PATCH, DELETE, or connection delete operations.
+
+Risk: Zoho Bookings responses can include personal data such as names, email addresses, phone numbers, notes, and scheduling details.
+
+Mitigation: Extract only fields needed for the task and avoid dumping raw responses into logs, files, or user-visible output unless specifically requested.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-bookings)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Zoho Bookings API Documentation](https://www.zoho.com/bookings/help/api/v1/oauthauthentication.html)
+- [Zoho Book Appointment API](https://www.zoho.com/bookings/help/api/v1/book-appointment.html)
+- [Zoho Fetch Appointments API](https://www.zoho.com/bookings/help/api/v1/fetch-appointment.html)
+- [Zoho Fetch Services API](https://www.zoho.com/bookings/help/api/v1/fetch-services.html)
+- [Zoho Fetch Staff API](https://www.zoho.com/bookings/help/api/v1/fetch-staff.html)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI commands, raw HTTP examples, endpoint paths, request bodies, and safety guidance for user-approved Zoho Bookings operations.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

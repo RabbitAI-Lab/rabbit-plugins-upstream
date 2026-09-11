@@ -1,42 +1,64 @@
-## Description: <br>
-Analyzes child study-area video from a smart desk lamp or tabletop camera to estimate focus scores, identify distraction periods, and return structured study-behavior reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes smart desk lamp or tabletop camera video of a child's study area to estimate per-minute focus scores, identify distraction events, and produce structured focus reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit a child study-area video or URL and receive visual focus metrics, distraction-event summaries, historical report listings, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child study videos, URLs, and identifiers may be processed by the vendor's cloud service. <br>
-Mitigation: Use only with appropriate guardian consent, and confirm the vendor's retention, deletion, and access-control practices before submitting sensitive child media. <br>
-Risk: The skill may silently create or reuse a local identity and cache service tokens in a workspace SQLite database. <br>
-Mitigation: Prefer a version that asks for explicit consent before uploads or identity creation, and inspect and remove stored identity or token data after use. <br>
+## Use Case:
 
+Parents, teachers, and developers use this skill to process child study-area video files or URLs and review focus scores, distraction periods, alerts, report links, and historical analysis records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-focus-analysis-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown or JSON analysis output, with optional saved result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [History report lists are rendered as Markdown tables; analysis results may include focus scores, distraction events, alerts, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.7) <br>
+Risk: The skill handles children's study-area video, which may contain sensitive minor data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit guardian or administrator consent and only after the publisher documents upload destination, retention, deletion, and protection practices.
+
+Risk: Security evidence reports unsafe defaults, including unencrypted private-network API endpoints.
+
+Mitigation: Do not use with real children's videos until the publisher removes packaged dev endpoints and enforces HTTPS to approved public services.
+
+Risk: Security evidence reports local plaintext credential persistence and silent account creation.
+
+Mitigation: Run in an isolated environment and avoid production use until the publisher protects or avoids persisted bearer tokens and stops silent account creation.
+
+Risk: Security guidance flags a dependency naming issue.
+
+Mitigation: Review and install dependencies in a sandbox, and require the publisher to correct the dependency metadata before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-focus-analysis-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Child focus analysis API documentation](references/api_doc.md)
+- [Shared video analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown status text with JSON or structured report content, report links, and optional file output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file or URL input, basic/standard/json detail levels, and historical report listing.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter says 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

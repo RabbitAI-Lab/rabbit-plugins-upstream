@@ -1,7 +1,7 @@
 # 工具速查（决策分析所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 9 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: bid-decision/1.0.0`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/search_bids`），Header 带 `X-API-Key` + `X-Client: bid-decision/1.0.5`。
 
 ## 通用概念
 
@@ -23,12 +23,12 @@
 
 **响应**：`{"success": true, "data": {...}, "meta": {"cost_units": 1}}`；分页 `page`/`page_size`（默认20，最大50）。
 
-**金额参数名差异**：search_bids 用 `min_amount/max_amount`；query_bids_advanced 与 aggregate 的 filters 用 `min_money/max_money`；价格类工具用 `min_price/max_price`。单位都是元。
+**金额单位按工具区分，传错会差 10000 倍**：`search_bids` / `search_proposed_projects` 的 `min_amount`/`max_amount` 单位是**万元**（用户说「500 万以上」就传 `500`）；`query_bids_advanced` 与 `aggregate_bids_advanced` 的 filters 用 `min_money`/`max_money`、`get_top_*` 的金额参数，单位是**元**。传错的后果是空结果**且照常扣积分**。价格类工具用 `min_price/max_price`。
 
 ## 工具清单
 
 ### get_bid_detail — 标讯详情+原文
-`{"bid_id": 123}` 或 `{"bid_url": "https://www.zhiliaobiaoxun.com/content/xxx/b1"}`。响应含 `fulltext`（公告原文）、`service_end_date`、`agency_name`。
+`{"bid_id": 123}` 或 `{"bid_url": "https://www.zhiliaobiaoxun.com/content/xxx/b1"}`。响应含 `fulltext`（公告原文）、`service_end_date`、`agency_name`，以及 `signup_time`（获取标书截止时间）、`tender_time`（投标截止时间，仅招标类公告有值）。
 
 ### search_bids — 常规搜索
 `keywords`(必填) + `match_modes` + `bid_type`(招标/中标/全部) + `bid_process` + `begin_date/end_date` + `provinces/cities` + `min_amount/max_amount`。

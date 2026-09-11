@@ -1,0 +1,37 @@
+{
+  "slug": "fitcheck-workout-readiness",
+  "displayName": "FitCheck: Workout Readiness & Recovery",
+  "version": "1.2.0",
+  "description": "Workout readiness and recovery check from a 60-second face scan in the browser: stress, mood, composure and a heart-rate estimate before or after training, a hard call or a date, with before-and-after comparisons. Also a deception challenge to play with friends and a video read. The scan runs on-device and no video or audio leaves the device. With the person's own RapidAPI key it can also analyse a photo they hand over, uploaded on purpose with their consent. Self-insight and entertainment, not a medical or lie-detection tool. Powered by EmoPulse.",
+  "author": "emopulse",
+  "homepage": "https://emo.city?utm_source=clawhub&utm_medium=skill",
+  "repository": "https://github.com/gv66co/Emo-City",
+  "license": "PROPRIETARY",
+  "tags": [
+    "fitness",
+    "workout",
+    "recovery",
+    "readiness",
+    "heart-rate",
+    "stress",
+    "wellness",
+    "mood",
+    "training",
+    "mediapipe",
+    "emotion",
+    "face-scan",
+    "camera",
+    "deception-game",
+    "party-game"
+  ],
+  "categories": [
+    "health",
+    "lifestyle"
+  ],
+  "source": {
+    "kind": "github",
+    "url": "https://github.com/gv66co/Emo-City",
+    "repo": "gv66co/Emo-City",
+    "path": "skills/emocity-biometric-scan"
+  }
+}

@@ -1,46 +1,72 @@
-## Description: <br>
-Accesses the Eventbrite API with managed OAuth to help agents manage events, venues, ticket classes, orders, attendees, and reference data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Eventbrite API integration with managed OAuth for managing events, venues, ticket classes, orders, attendees, categories, and related Eventbrite resources through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to retrieve Eventbrite account, organization, event, order, attendee, venue, ticket, and reference data, and to prepare approved Eventbrite create, update, publish, cancel, or delete API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton OAuth proxy and MATON_API_KEY to access the connected Eventbrite account. <br>
-Mitigation: Install only if the user trusts Maton for the Eventbrite account, keep MATON_API_KEY secret, and use the intended Eventbrite connection. <br>
-Risk: Create, update, publish, cancel, and delete operations can change Eventbrite events, venues, ticket classes, orders, or attendees. <br>
-Mitigation: Before any write call, require explicit user approval that names the target resource and the intended effect. <br>
-Risk: When multiple Eventbrite connections exist, requests can affect the wrong connected account. <br>
-Mitigation: Use the documented Maton-Connection header when more than one active Eventbrite connection is available. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect and manage Eventbrite organizations, events, venues, ticket classes, orders, attendees, and reference data. It is suited to read-first workflows with explicit user approval before account connections or Eventbrite write operations.
 
-## Reference(s): <br>
-- [ClawHub Eventbrite Skill](https://clawhub.ai/byungkyu/skills/eventbrite) <br>
-- [Eventbrite API Documentation](https://www.eventbrite.com/platform/api) <br>
-- [Eventbrite API Basics](https://www.eventbrite.com/platform/docs/api-basics) <br>
-- [Eventbrite API Explorer](https://www.eventbrite.com/platform/docs/api-explorer) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP paths, bash commands, Python examples, JavaScript examples, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; Eventbrite write operations require explicit user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence; artifact metadata.version is 1.0) <br>
+Risk: Unpinned Maton CLI or SDK installation can introduce supply-chain exposure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install Maton only from trusted sources, prefer pinned versions or isolated environments, and review installation provenance before use.
+
+Risk: Long-lived API keys can leak through environment variables, logs, command history, or child processes.
+
+Mitigation: Use OAuth where possible; if an API key is unavoidable, keep it out of command arguments, logs, files, and user-visible output.
+
+Risk: Eventbrite write operations can publish, cancel, delete, or alter events, tickets, venues, orders, or attendee-facing state.
+
+Mitigation: Default to read and list calls, confirm the target resource and payload with the user, and require approval before every POST, PUT, PATCH, DELETE, publish, cancel, delete, or ticket change.
+
+Risk: Multiple Maton profiles or Eventbrite connections can cause actions to target the wrong account.
+
+Mitigation: Verify account context first and specify the intended profile or connection when more than one is available.
+
+Risk: External Eventbrite content can contain untrusted or adversarial instructions.
+
+Mitigation: Treat API responses as data, avoid executing or interpolating returned content into shell commands, and validate values before reuse.
+
+## Reference(s):
+
+- [ClawHub Eventbrite Skill](https://clawhub.ai/byungkyu/skills/eventbrite)
+- [Maton Homepage](https://maton.ai)
+- [Eventbrite API Documentation](https://www.eventbrite.com/platform/api)
+- [Eventbrite API Basics](https://www.eventbrite.com/platform/docs/api-basics)
+- [Eventbrite API Explorer](https://www.eventbrite.com/platform/docs/api-explorer)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash, Python, JavaScript, JSON examples, and Maton API command patterns.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, Maton authentication, and user approval before creating connections or executing write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

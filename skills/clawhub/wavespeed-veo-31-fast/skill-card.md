@@ -1,44 +1,62 @@
-## Description: <br>
-Generate and extend videos using Google's Veo 3.1 Fast model via WaveSpeed AI, including text-to-video, image-to-video, video extension, up to 4K resolution, audio generation, and chained extensions up to 148 seconds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and extend videos using Google's Veo 3.1 Fast model via WaveSpeed AI. Supports text-to-video, image-to-video, and video extension. Features up to 4K resolution, audio generation, and chained extensions up to 148 seconds.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creative operators use this skill to configure WaveSpeed AI requests for text-to-video, image-to-video, and Veo-generated video extension workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a WaveSpeed API key and can expose credentials if copied into source files or logs. <br>
-Mitigation: Keep WAVESPEED_API_KEY in environment variables or secret storage and do not hardcode or commit it. <br>
-Risk: Image-to-video and video extension workflows may upload sensitive media to WaveSpeed AI. <br>
-Mitigation: Avoid uploading sensitive images or videos unless WaveSpeed's data handling is acceptable for the use case. <br>
-Risk: Chained video generations and extensions can incur paid API costs. <br>
-Mitigation: Confirm pricing and expected run counts before starting generation or extension chains. <br>
-Risk: Untrusted media URLs or unsupported parameters can produce unsafe or failed requests. <br>
-Mitigation: Use trusted media URLs, validate prompt and media inputs, and only pass documented parameters. <br>
+## Use Case:
 
+Developers and creators use this skill to generate videos from text prompts or source images, extend existing Veo-generated videos, quote pricing, and save outputs through WaveSpeed AI tooling.
 
-## Reference(s): <br>
-- [WaveSpeed AI access keys](https://wavespeed.ai/accesskey) <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-veo-31-fast) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides WaveSpeed API calls that return generated or extended video URLs; usage can involve uploaded media, API credentials, and paid generation requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Prompts and selected media files are sent to WaveSpeed's remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only prompts and media approved for that service and confirm the destination before upload or generation.
+
+Risk: WaveSpeed credentials may be stored by the CLI or provided through WAVESPEED_API_KEY.
+
+Mitigation: Authenticate through the CLI where possible, avoid pasting keys into chat, and store environment credentials only in approved secret stores.
+
+Risk: The skill relies on unpinned WaveSpeed npm tooling.
+
+Mitigation: Prefer pinned, reviewed package versions for the CLI or MCP server and run them as a normal user.
+
+Risk: Video generation and extension can incur per-run costs and may download files to local paths.
+
+Mitigation: Quote pricing before runs and confirm download paths before saving generated outputs.
+
+## Reference(s):
+
+- [WaveSpeedAI Veo 3.1 Fast Video Generation on ClawHub](https://clawhub.ai/wavespeed/skills/wavespeed-veo-31-fast)
+- [WaveSpeed MCP Server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown with inline bash commands and parameter guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs guide remote video generation, media upload, pricing checks, and MP4 download workflows.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -2,10 +2,10 @@
 name: dlazy-video-image-replicate
 version: 1.3.5
 description: "复刻图片、复刻视频、同款视频、照着做、仿做、参考重制——先分析用户提供的参考图片或视频,再用用户自己的主体 / 产品 / 角色重新生成同样观感与结构的成品。"
-metadata: {"clawdbot":{"emoji":"🔁","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill video-image-replicate --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
+metadata: {"clawdbot":{"emoji":"🔁","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill video-image-replicate --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
 ---
 
-# video-image-replicate
+# 视频图片仿制 Video Image Replicate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 
@@ -51,7 +51,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)

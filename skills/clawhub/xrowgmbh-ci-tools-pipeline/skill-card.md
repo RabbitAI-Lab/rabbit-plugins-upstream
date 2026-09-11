@@ -1,41 +1,56 @@
-## Description: <br>
-Build and maintain GitLab CI/CD pipelines with the CI Tools Components Catalog at ci-tools.xrow.de. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build and maintain GitLab CI/CD pipelines with the CI Tools Components Catalog at ci-tools.xrow.de.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineers use this skill to create, repair, and validate GitLab CI/CD pipelines, select CI Tools catalog components, and design delivery flows for applications, charts, containers, packages, documentation, infrastructure, and GitOps projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect CI configuration, use a GitLab token, fetch live catalog documentation, lint pipelines, push merge request branches, or trigger CI. <br>
-Mitigation: Use a GitLab token scoped only to the target project and review proposed pipeline changes before execution. <br>
+## Use Case:
 
+Developers and engineers use this skill to create, repair, and validate GitLab CI/CD pipelines that rely on the CI Tools Components Catalog for application, container, Helm, package, documentation, infrastructure, and GitOps workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-pipeline) <br>
-- [CI Tools Components Catalog](https://ci-tools.xrow.de/) <br>
-- [CI Tools Components Index](https://ci-tools.xrow.de/Components/) <br>
-- [CI Tools GitLab Source](https://gitlab.com/xrow-public/ci-tools) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require glab, curl, jq, and a GitLab token scoped appropriately for the target project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server-resolved release metadata) <br>
+Risk: Mutable CI component references such as @main can change the code that runs in a user's pipelines after the configuration is accepted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer immutable commit SHAs or protected version tags for CI component includes, and review generated .gitlab-ci.yml changes before use.
+
+Risk: Generated pipeline changes may grant registry, release, or deployment jobs broader credentials or permissions than needed.
+
+Mitigation: Confirm that write-capable jobs receive only the credentials and permissions required for the intended workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-pipeline)
+- [CI Tools Catalog](https://ci-tools.xrow.de/)
+- [CI Tools Components Index](https://ci-tools.xrow.de/Components/)
+- [CI Tools Source](https://gitlab.com/xrow-public/ci-tools)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with YAML and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include GitLab CI configuration snippets, component include guidance, validation commands, and review checklist items.]
+
+## Skill Version(s):
+
+1.91.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

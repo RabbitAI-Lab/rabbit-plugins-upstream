@@ -1,41 +1,54 @@
-## Description: <br>
-Generate professional PDFs from HTML/CSS using flow layouts and selective break controls to avoid whitespace gaps and layout issues in printed pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate professional PDFs from HTML/CSS using flow layouts and selective break controls to avoid whitespace gaps and layout issues in printed pages.
 
-## Publisher: <br>
-[Bartok9](https://clawhub.ai/user/Bartok9) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[bartok9](https://clawhub.ai/user/bartok9)
 
-## Use Case: <br>
-Developers and document authors use this skill to convert HTML, CSS, or Markdown content into professional PDFs while reducing whitespace gaps, awkward page breaks, and print layout defects. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: External PDF generation tools can introduce supply-chain or local environment risk if installed from untrusted sources. <br>
-Mitigation: Install suggested tools such as WeasyPrint, Pandoc, wkhtmltopdf, or Puppeteer from trusted sources and keep them patched. <br>
-Risk: Generated PDFs can still contain layout errors, missing content, or misleading formatting. <br>
-Mitigation: Open generated PDFs and review every page before sharing, checking whitespace, table breaks, orphan lines, and header placement. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [WeasyPrint documentation](https://doc.courtbouillon.org/weasyprint/) <br>
-- [CSS Paged Media Module Level 3](https://www.w3.org/TR/css-page-3/) <br>
-- [Print stylesheets in 2018](https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/) <br>
+## Use Case:
 
+Developers and engineers use this skill to convert HTML or Markdown-derived content into polished PDFs, with guidance for paged-media CSS, table breaks, header placement, and pre-flight review.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides PDF layout patterns, tool choices, and a pre-flight checklist; it does not execute code.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Optional PDF tooling may require installing packages or command-line utilities.
+
+Mitigation: Install tools from official sources, avoid elevated privileges, and prefer pinned or checksum-verified versions for production or CI use.
+
+Risk: PDF layout guidance can still produce visual defects if applied without review.
+
+Mitigation: Open generated PDFs before distribution and check all pages for whitespace gaps, orphan lines, table breaks, and headers separated from content.
+
+## Reference(s):
+
+- [WeasyPrint Documentation](https://doc.courtbouillon.org/weasyprint/)
+- [CSS Paged Media Module Level 3](https://www.w3.org/TR/css-page-3/)
+- [Print CSS Guide](https://www.smashingmagazine.com/2018/05/print-stylesheets-in-2018/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with CSS, HTML, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes layout rules, tool recommendations, and a PDF pre-flight checklist.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

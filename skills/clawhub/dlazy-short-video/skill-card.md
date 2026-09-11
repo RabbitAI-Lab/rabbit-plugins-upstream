@@ -1,45 +1,60 @@
-## Description: <br>
-Dlazy Short Video helps agents run dLazy's short-video template to create finished 15-25 second vertical MP4s for TikTok, YouTube Shorts, Instagram Reels, Douyin, and similar social formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates finished 15-25 second vertical short videos for TikTok, YouTube Shorts, Reels, Douyin, and similar social platforms using storyboarded shots, generated clips, voiceover, and burned-in subtitles.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Creators, marketers, and agent users use this skill to start or continue dLazy short-video projects from prompts and optional reference files. It is intended for social short-form video generation, while conversion-focused product ads are directed to a different skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files are sent to dLazy API and media storage services. <br>
-Mitigation: Review data sensitivity before use and avoid submitting confidential prompts or media unless that SaaS transfer is approved. <br>
-Risk: A dLazy organization API key may be stored in the local CLI configuration. <br>
-Mitigation: Use the environment variable option for one-off sessions when appropriate, keep local config permissions restricted, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Broad auto-routing terms such as reels may trigger short-video generation when the user intent is ambiguous. <br>
-Mitigation: Confirm the user wants short-video generation before invoking the skill for broad or ambiguous requests. <br>
+## Use Case:
 
+External creators, marketers, and agents use this skill to request a complete 9:16 social short video from a prompt. It is suited to social shorts where the desired deliverable is a rendered vertical MP4 rather than only a script or storyboard.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-short-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with inline bash command examples; dLazy project responses may include references to generated vertical MP4 files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; prompts, options, and attached files are sent to dLazy services when the CLI is invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.6 (source: frontmatter and release evidence) <br>
+Risk: The skill depends on dLazy's hosted service and sends prompts, options, and attached files to dLazy endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with data intended for dLazy processing, review service terms, and avoid attaching confidential files unless upload is intended.
+
+Risk: Authentication uses a dLazy API key stored locally or supplied through an environment variable.
+
+Mitigation: Protect the local config and environment, and rotate or revoke the API key if the CLI or machine is no longer trusted.
+
+Risk: The CLI is installed or executed through npm/npx, which introduces package execution risk.
+
+Mitigation: Prefer npx or a local install when possible and review the pinned package or source before running it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-short-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown and CLI-oriented text guidance for invoking dLazy short-video projects]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides use of a hosted dLazy service that returns agent responses and can produce a finished 15-25 second vertical MP4.]
+
+## Skill Version(s):
+
+1.2.16 (source: release evidence; artifact frontmatter lists 1.2.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

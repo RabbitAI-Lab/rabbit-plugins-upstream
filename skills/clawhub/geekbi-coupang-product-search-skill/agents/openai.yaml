@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coupang 商品搜索"
+  short_description: "查询韩国站商品、规格竞争、配送标记与历史趋势"
+  default_prompt: "使用极鲸云真实数据查询并分析 Coupang 韩国站商品。"

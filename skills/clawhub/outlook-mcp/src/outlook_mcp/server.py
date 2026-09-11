@@ -1,4 +1,4 @@
-"""FastMCP server for Microsoft Outlook."""
+"""MCP server for Microsoft Outlook."""
 
 from __future__ import annotations
 
@@ -8,12 +8,13 @@ from collections.abc import Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
-from mcp.server.fastmcp import Context, FastMCP
+from mcp.server.caching import CacheHint
+from mcp.server.mcpserver import Context, MCPServer
 
 from outlook_mcp import __version__, toolsets
 from outlook_mcp.auth import AuthManager
 from outlook_mcp.config import load_config
-from outlook_mcp.errors import OutlookMCPError, wrap_graph_error
+from outlook_mcp.errors import OutlookMCPError, ToolInputError, wrap_graph_error
 from outlook_mcp.graph import GraphClient
 from outlook_mcp.tools import (
     admin,
@@ -45,18 +46,52 @@ async def lifespan(server):
     auth = AuthManager(config)
     # Try to load cached token silently — if this fails, tools will
     # return an error telling the user to run `outlook-mcp auth`.
-    auth.try_cached_token(auth.get_token_scopes())
+    auth.try_cached_token()
     yield {"config": config, "auth": auth}
 
 
-mcp = FastMCP(
+# Sent once at connect, to every client, in every session — so it is the right
+# home for the conventions that span tools. Each rule below answers a mistake
+# visible in two months of real trajectories: 115 calls spent re-checking an
+# identity that never changes, and 196 folder listings before folder-scoped
+# scans that resolve display names on their own. That is roughly a quarter of
+# all traffic, bought back for the cost of sending this string.
+INSTRUCTIONS = """\
+Microsoft Outlook (personal accounts: outlook.com, hotmail.com, live.com) via Microsoft Graph.
+
+Working rules, each of which saves a round trip:
+
+- You are already signed in. Do not call outlook_whoami, outlook_list_accounts or
+  outlook_auth_status to check before doing something — just call the tool you need. If a call
+  does fail on authentication, its error says exactly what to run.
+- Folder parameters take display names directly ("Junk Email", "Purchases"), as well as
+  well-known names ("inbox", "drafts") and Graph IDs. Do not list folders first to find an ID.
+  Call outlook_list_folders only when you genuinely need to discover what folders exist.
+- Dates accept ISO 8601 (2026-10-22, or 2026-10-22T14:30:00Z) or a relative offset: `7d` is
+  seven days ago, `+7d` is seven days from now, `now` is this moment. Units: m, h, d, w.
+- Scanning mail or events? Pass concise=True — roughly ten times fewer tokens. To read several
+  messages, call outlook_read_messages once with the IDs, never outlook_read_message in a loop.
+- Polling on a schedule? The delta tools (outlook_list_inbox_delta and friends) return only what
+  changed since the token they handed you last time, and outlook_changes_since composes all
+  three into one digest.
+"""
+
+# SEP-2549: tell the client how long `tools/list` stays fresh, so it can stop
+# re-fetching ~8.6k tokens of schemas. The set is fixed at import — toolset
+# gating reads its env var once — so it cannot change while the process lives.
+# Five minutes rather than an hour because it *can* change across a restart,
+# which is exactly what someone editing OUTLOOK_MCP_TOOLSETS just did. Private:
+# the advertised set depends on this install's configuration, so it is not a
+# shared intermediary's to hand to someone else.
+TOOL_LIST_CACHE = CacheHint(ttl_ms=5 * 60 * 1000, scope="private")
+
+mcp = MCPServer(
     "outlook-mcp",
-    instructions="MCP server for Microsoft Outlook via Microsoft Graph API",
+    instructions=INSTRUCTIONS,
     lifespan=lifespan,
+    version=__version__,
+    cache_hints={"tools/list": TOOL_LIST_CACHE},
 )
-# FastMCP doesn't expose a `version` kwarg, so set it on the underlying server
-# directly. Otherwise serverInfo.version reports the MCP SDK's version.
-mcp._mcp_server.version = __version__
 
 
 # ── Helpers ─────────────────────────────────────────────
@@ -96,11 +131,14 @@ def _wrap_tool_errors(func: Callable[..., Any]) -> Callable[..., Any]:
     """Wrap an async tool function to translate Graph SDK errors.
 
     - Pass through ``OutlookMCPError`` subclasses (already structured).
-    - Pass through ``ValueError`` (validation errors carry useful messages).
+    - Re-raise ``ValueError`` as ``ToolInputError`` — same message, but now an
+      anticipated failure, so the SDK forwards the text to the model instead of
+      withholding it as a crash. Still a ``ValueError`` for existing callers.
     - Convert Graph SDK errors (``ODataError`` / ``APIError``) into
       ``GraphAPIError`` via :func:`wrap_graph_error` so agents see
       ``{code, message, action}`` instead of raw SDK exception text.
-    - Re-raise anything else unchanged.
+    - Re-raise anything else unchanged: a crash is not something we saw coming,
+      and its text stays on the server.
     """
 
     @functools.wraps(func)
@@ -109,8 +147,8 @@ def _wrap_tool_errors(func: Callable[..., Any]) -> Callable[..., Any]:
             return await func(*args, **kwargs)
         except OutlookMCPError:
             raise
-        except ValueError:
-            raise
+        except ValueError as exc:
+            raise ToolInputError(str(exc)) from exc
         except Exception as exc:
             try:
                 raise wrap_graph_error(exc) from exc
@@ -155,8 +193,9 @@ async def outlook_list_inbox(
     cursor: str | None = None,
     classification: str | None = None,
     concise: bool = False,
+    uncategorized_only: bool = False,
 ) -> dict:
-    """List messages in one folder with structured filters (read, sender, date, Focused class).
+    """List messages in one folder with structured filters (read, sender, date, category, Focused).
 
     Use this for folder-scoped browsing; use outlook_search_mail for KQL full-text search across
     all folders. For polling/recurring agents use outlook_list_inbox_delta (typically 10x cheaper
@@ -165,6 +204,9 @@ async def outlook_list_inbox(
     Example: outlook_list_inbox(folder="Junk Email", unread_only=True, count=5)
     `folder` accepts display names, well-known names ("inbox", "junkemail"), or Graph IDs — prefer
     names. Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
+    Pass uncategorized_only=True to return only messages with no categories assigned.
+    `after`/`before` take ISO 8601 or a relative offset — `7d` is seven days ago, `+7d` is seven
+    days from now.
     """
     client = _get_graph_client(ctx)
     return await mail_read.list_inbox(
@@ -179,6 +221,8 @@ async def outlook_list_inbox(
         cursor=cursor,
         classification=classification,
         concise=concise,
+        uncategorized_only=uncategorized_only,
+        timezone=_get_config(ctx).timezone,
     )
 
 
@@ -254,6 +298,8 @@ async def outlook_search_mail(
 
     Example: outlook_search_mail(query="from:sarah@acme.com received>=2026-01-01", count=10)
     `query` is Microsoft KQL (from:, subject:, received>=, hasattachment:true, AND/OR/NOT).
+    Operators must be UPPERCASE — lowercase `and` is matched as a literal term. Two terms
+    with no operator between them broaden the search; use AND explicitly to narrow.
     Pass concise=True to drop large fields (preview, categories) — ~10x fewer tokens.
     """
     client = _get_graph_client(ctx)
@@ -314,7 +360,6 @@ async def outlook_send_message(
     bcc: list[str] | None = None,
     is_html: bool = False,
     importance: str = "normal",
-    sensitivity: str = "normal",
     request_read_receipt: bool = False,
     reply_to: list[str] | None = None,
 ) -> dict:
@@ -335,7 +380,6 @@ async def outlook_send_message(
         bcc,
         is_html,
         importance,
-        sensitivity=sensitivity,
         request_read_receipt=request_read_receipt,
         reply_to=reply_to,
         config=config,
@@ -566,7 +610,11 @@ async def outlook_get_event(
     ctx: Context,
     event_id: str,
 ) -> dict:
-    """Get one full calendar event by ID, including body, attendees, organizer, and recurrence."""
+    """Get one full calendar event by ID: body, attendees, organizer, recurrence, type.
+
+    `recurrence` comes back in the same shape outlook_create_event accepts; `type` is
+    "singleInstance", "seriesMaster", "occurrence" or "exception".
+    """
     client = _get_graph_client(ctx)
     return await calendar_read.get_event(client.sdk_client, event_id)
 
@@ -591,7 +639,9 @@ async def outlook_list_events_delta(
     is_deleted=True items are tombstones. has_more=True means drain immediately.
     """
     client = _get_graph_client(ctx)
-    return await calendar_delta.list_events_delta(client, start, end, page_size, delta_token)
+    return await calendar_delta.list_events_delta(
+        client, start, end, page_size, delta_token, timezone=_get_config(ctx).timezone
+    )
 
 
 # ── Calendar Write Tools ────────────────────────────────
@@ -609,13 +659,24 @@ async def outlook_create_event(
     attendees: list[str] | None = None,
     is_all_day: bool = False,
     is_online: bool = False,
-    recurrence: str | None = None,
+    recurrence: dict | str | None = None,
 ) -> dict:
     """Create a calendar event with optional attendees, recurrence, and Teams online meeting.
 
     Example: outlook_create_event(subject="Q3 review", start="2026-08-15T14:00:00Z",
-    end="2026-08-15T15:00:00Z", attendees=["alice@acme.com"], is_online=True)
-    `start`/`end` are ISO 8601. `recurrence` accepts a simple string ("daily", "weekly", "monthly").
+    end="2026-08-15T15:00:00Z", attendees=["alice@acme.com"])
+    `is_online` is accepted but has no effect on personal accounts — Graph silently ignores
+    isOnlineMeeting for consumer mailboxes (it returns isOnlineMeeting: False,
+    onlineMeetingProvider: "unknown"). Teams meetings require a work/school account.
+    `start`/`end` are ISO 8601. Passing `recurrence` creates a series, not a single event.
+    It takes either a shorthand — "daily", "weekdays", "weekly", "monthly", "yearly", all
+    anchored on `start` and open-ended — or a full Microsoft Graph recurrence object for
+    anything else, e.g. every other Mon+Fri for 10 occurrences:
+    {"pattern": {"type": "weekly", "interval": 2, "daysOfWeek": ["monday", "friday"]},
+     "range": {"type": "numbered", "numberOfOccurrences": 10}}
+    `range.startDate` defaults to the event's start date. Prefer a bounded range
+    ("endDate"/"numbered") when the event has attendees — a "noEnd" series invites them
+    to every future occurrence.
     """
     client = _get_graph_client(ctx)
     config = _get_config(ctx)
@@ -644,12 +705,38 @@ async def outlook_update_event(
     end: str | None = None,
     location: str | None = None,
     body: str | None = None,
+    recurrence: dict | str | None = None,
+    remove_recurrence: bool = False,
+    attendees: list[str] | None = None,
+    is_all_day: bool | None = None,
 ) -> dict:
-    """Update fields on an existing event (partial patch — only provided fields change)."""
+    """Update fields on an existing event (partial patch — only provided fields change).
+
+    `recurrence` takes the same shapes as outlook_create_event and converts a single
+    event into a series, or replaces an existing series' pattern. Omit it to leave any
+    recurrence alone; pass remove_recurrence=True to turn a series back into a single
+    event, keeping the first occurrence's time (the two are mutually exclusive).
+    `attendees` REPLACES the whole guest list (Graph has no add-one operation) and sends
+    invitations to everyone on it plus cancellations to anyone dropped — pass the full
+    intended list; [] removes everyone. `is_all_day` REQUIRES start and end in the same
+    call, both on midnight boundaries. Omitting an argument leaves it unchanged, so False
+    and [] are instructions, not absences.
+    """
     client = _get_graph_client(ctx)
     config = _get_config(ctx)
     return await calendar_write.update_event(
-        client.sdk_client, event_id, subject, start, end, location, body, config=config
+        client.sdk_client,
+        event_id,
+        subject,
+        start,
+        end,
+        location,
+        body,
+        recurrence,
+        remove_recurrence,
+        attendees,
+        is_all_day,
+        config=config,
     )
 
 
@@ -877,8 +964,11 @@ async def outlook_create_task(
     """Create a Microsoft To Do task with optional due date, importance, body, and recurrence.
 
     Example: outlook_create_task(title="Send invoice", due="2026-09-01", importance="high")
-    `due` is ISO 8601. `importance` is "low", "normal", or "high". Defaults to the user's default
-    list when `list_id` is omitted.
+    `reminder=True` requires `due` and sets the reminder to the due time — Graph silently
+    drops a reminder that has no time.
+    `due` takes ISO 8601 or a relative offset — note `+7d` is seven days from now, while a bare
+    `7d` means seven days *ago*. `importance` is "low", "normal", or "high". Defaults to the
+    user's default list when `list_id` is omitted.
     """
     client = _get_graph_client(ctx)
     config = _get_config(ctx)
@@ -1084,13 +1174,19 @@ async def outlook_download_attachment(
     attachment_id: str,
     save_path: str,
 ) -> dict:
-    """Download an attachment from a message and write decoded bytes to `save_path` on the host."""
+    """Download an attachment and write the decoded bytes to `save_path` on the host.
+
+    `save_path` is resolved inside the configured attachments directory
+    (`attachments_dir`, default ~/.outlook-mcp/attachments) — a bare filename lands
+    there; a path outside it is refused. Same directory for reads and writes.
+    """
     client = _get_graph_client(ctx)
     return await mail_attachments.download_attachment(
         client.sdk_client,
         message_id,
         attachment_id,
         save_path,
+        config=_get_config(ctx),
     )
 
 
@@ -1110,7 +1206,9 @@ async def outlook_send_with_attachments(
 ) -> dict:
     """Send an email with file attachments; auto-switches to upload-session for files >3MB.
 
-    `attachment_paths` must be absolute paths to files that exist on the host. Pass reply_to to
+    `attachment_paths` resolve inside the configured attachments directory
+    (`attachments_dir`, default ~/.outlook-mcp/attachments) — a bare filename is looked up
+    there, and a path outside it is refused. Pass reply_to to
     route replies to a different address.
     """
     client = _get_graph_client(ctx)
@@ -1139,7 +1237,9 @@ async def outlook_attach_to_draft(
 ) -> dict:
     """Add attachments to an existing draft; auto-switches to upload-session for files >3MB.
 
-    `attachment_paths` must be absolute paths to files that exist on the host. Returns new
+    `attachment_paths` resolve inside the configured attachments directory
+    (`attachments_dir`, default ~/.outlook-mcp/attachments) — a bare filename is looked up
+    there, and a path outside it is refused. Returns new
     attachment IDs for later removal via outlook_remove_draft_attachment.
     """
     client = _get_graph_client(ctx)
@@ -1368,3 +1468,66 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# ── Workflow prompts ────────────────────────────────────
+#
+# Sequencing guidance is not per-tool knowledge, so it does not belong in 62
+# docstrings that every client pays for on every turn. A prompt costs one line
+# in `prompts/list` until it is invoked — and unlike a SKILL.md, which is not
+# even shipped in the wheel, it reaches every MCP client. These three are the
+# workflows the trajectory archive shows being assembled by hand, call by call.
+
+
+@mcp.prompt(
+    title="Morning brief",
+    description="Today's calendar, unread mail and tasks due, in one pass.",
+)
+def morning_brief(folder: str = "inbox") -> str:
+    """Compose the day-ahead summary from the cheapest calls that answer it."""
+    return (
+        f"Give me a brief for today, in this order:\n"
+        f"1. outlook_list_events(days=1, concise=True) — what is scheduled.\n"
+        f"2. outlook_list_inbox(folder={folder!r}, unread_only=True, concise=True, count=25) — "
+        f"what arrived and is unread.\n"
+        f"3. outlook_list_tasks() — what is due.\n"
+        f"Then summarise in plain language: what is on, what needs a reply, what is overdue. "
+        f"Lead with anything time-critical. Do not open individual messages unless the preview "
+        f"is genuinely ambiguous — and if you need several, use outlook_read_messages once "
+        f"rather than outlook_read_message in a loop."
+    )
+
+
+@mcp.prompt(
+    title="Triage a folder",
+    description="Scan one folder cheaply and act on it in a single batch.",
+)
+def triage_folder(folder: str = "inbox", count: int = 50) -> str:
+    """Scan-then-batch: one read, one write, instead of a call per message."""
+    return (
+        f"Triage {folder!r}:\n"
+        f"1. outlook_list_inbox(folder={folder!r}, count={count}, concise=True) — one scan. "
+        f"The folder name goes straight in; there is no need to list folders first.\n"
+        f"2. Sort what you find into: needs a reply, read and archive, junk, ignore.\n"
+        f"3. Apply the result with outlook_batch_triage in ONE call rather than a "
+        f"mark-read/move/delete per message.\n"
+        f"Tell me what you did and what you left for me. Ask before deleting anything you are "
+        f"not confident about — deletes are recoverable from Deleted Items, but replies are not."
+    )
+
+
+@mcp.prompt(
+    title="Catch up since",
+    description="What changed in mail, calendar and contacts since a point in time.",
+)
+def catch_up(since: str = "24h") -> str:
+    """Steer to the delta path, which is an order of magnitude cheaper on a poll."""
+    return (
+        f"Tell me what changed since {since}.\n"
+        f"Use outlook_changes_since(fallback_window_hours=...) — it composes the mail, calendar "
+        f"and contacts delta queries into one digest and hands back per-resource delta tokens. "
+        f"Keep those tokens and pass them back next time; that call then returns only what "
+        f"changed, which is roughly ten times cheaper than re-scanning.\n"
+        f"Summarise: new mail worth my attention (it flags high-importance and flagged items "
+        f"for you), calendar changes, and anything cancelled."
+    )

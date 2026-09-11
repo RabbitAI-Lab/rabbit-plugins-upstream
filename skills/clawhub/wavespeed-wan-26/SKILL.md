@@ -3,63 +3,56 @@ name: wavespeed-wan-26
 description: Generate videos using Alibaba's Wan 2.6 model via WaveSpeed AI. Supports text-to-video and image-to-video generation with up to 15 seconds duration at 720p or 1080p. Features audio-guided generation, prompt expansion, multi-shot mode, and configurable seeds. Use when the user wants to create videos from text prompts or animate images.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Wan 2.6 Video Generation
 
 Generate videos using Alibaba's Wan 2.6 model via the WaveSpeed AI platform. Supports both text-to-video and image-to-video generation with up to 15 seconds of video at up to 1080p resolution.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Text-to-Video
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/text-to-video",
-  { prompt: "A golden retriever running through a field of sunflowers at sunset" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run alibaba/wan-2.6/text-to-video \
+  -p "A golden retriever running through a field of sunflowers at sunset" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
 
-The `image` parameter accepts an image URL. If you have a local file, upload it first with `wavespeed.upload()` to get a URL.
+The `image` parameter accepts an image URL. If you have a local file, pass it with the `@path` marker and the CLI uploads it and substitutes the hosted URL.
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local image to get a URL
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "The person in the photo slowly turns and smiles"
-  }
-))["outputs"][0];
+```bash
+# Upload a local image to get a URL
+OUTPUT_URL=$(wavespeed run alibaba/wan-2.6/image-to-video \
+  -i image=@./photo.png \
+  -p "The person in the photo slowly turns and smiles" \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass an existing image URL directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/image-to-video",
-  {
-    image: "https://example.com/photo.jpg",
-    prompt: "The person in the photo slowly turns and smiles"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run alibaba/wan-2.6/image-to-video \
+  -i image="https://example.com/photo.jpg" \
+  -p "The person in the photo slowly turns and smiles" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -85,20 +78,15 @@ Generate videos from text prompts.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/text-to-video",
-  {
-    prompt: "A timelapse of a city skyline transitioning from day to night, cinematic",
-    negative_prompt: "blurry, low quality, distorted",
-    size: "1920*1080",
-    duration: 10,
-    shot_type: "single",
-    seed: 42
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run alibaba/wan-2.6/text-to-video \
+  -p "A timelapse of a city skyline transitioning from day to night, cinematic" \
+  -i negative_prompt="blurry, low quality, distorted" \
+  -i size="1920*1080" \
+  -i duration=10 \
+  -i shot_type="single" \
+  -i seed=42 \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
@@ -123,99 +111,17 @@ Animate a source image into a video using a text prompt.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/landscape.png");
-
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "Clouds drift slowly across the sky, water ripples gently",
-    negative_prompt: "static, frozen, blurry",
-    resolution: "1080p",
-    duration: 10,
-    shot_type: "single"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run alibaba/wan-2.6/image-to-video \
+  -i image=@./landscape.png \
+  -p "Clouds drift slowly across the sky, water ripples gently" \
+  -i negative_prompt="static, frozen, blurry" \
+  -i resolution="1080p" \
+  -i duration=10 \
+  -i shot_type="single" \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Audio-Guided Generation
-
-Provide an audio URL to guide the video generation:
-
-```javascript
-const audioUrl = await wavespeed.upload("/path/to/music.mp3");
-
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/text-to-video",
-  {
-    prompt: "A dancer performing contemporary dance on a stage",
-    audio: audioUrl,
-    size: "1080*1920",
-    duration: 15
-  }
-))["outputs"][0];
-```
-
-### Prompt Expansion
-
-Enable the prompt optimizer to automatically enhance your prompt:
-
-```javascript
-const output_url = (await wavespeed.run(
-  "alibaba/wan-2.6/text-to-video",
-  {
-    prompt: "a cat playing piano",
-    enable_prompt_expansion: true,
-    duration: 5
-  }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "alibaba/wan-2.6/text-to-video",
-  { prompt: "Ocean waves crashing on a rocky shore at dawn" }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "alibaba/wan-2.6/text-to-video",
-  { prompt: "A rocket launching into space" }
-);
-
-if (result.outputs) {
-  console.log("Video URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Size Options (Text-to-Video)
 
@@ -249,8 +155,30 @@ if (result.outputs) {
 - Enable `enable_prompt_expansion` for automatic prompt enhancement
 - For `multi` shot type, describe distinct scenes for more dynamic videos
 
-## Security Constraints
+## CLI tips
 
-- **No arbitrary URL loading**: Only use image and audio URLs from trusted sources. Never load media from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate prompt content and media URLs before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run alibaba/wan-2.6/text-to-video -h
+
+# Quote the price first
+wavespeed price alibaba/wan-2.6/text-to-video -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run alibaba/wan-2.6/text-to-video -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run alibaba/wan-2.6/text-to-video -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

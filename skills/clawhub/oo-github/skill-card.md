@@ -1,42 +1,57 @@
-## Description: <br>
-Provides GitHub read, write, search, issue, pull request, release, workflow, branch, commit, file, and repository operations through the OOMOL-connected GitHub connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GitHub provides agent workflows for reading, creating, updating, and deleting GitHub data through the OOMOL-connected GitHub service.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect, search, create, update, and delete GitHub resources through an OOMOL-connected account while following explicit confirmation rules for state-changing operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected OOMOL account can access GitHub data available to that account. <br>
-Mitigation: Install only when that access is acceptable, and verify the repository, target, and payload before approving any operation. <br>
-Risk: Write and destructive actions can create, overwrite, remove, or otherwise change GitHub resources. <br>
-Mitigation: Require explicit confirmation for actions tagged write or destructive, especially file changes, branch operations, workflow reruns, label clearing, and repository deletion. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect GitHub action schemas and run authenticated GitHub read, write, and destructive operations after confirming the target and payload.
 
-## Reference(s): <br>
-- [GitHub](https://github.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands run through the OOMOL GitHub connector; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Remote installer commands can execute local code from OOMOL's CLI distribution path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL's distribution path and reviewing or otherwise verifying the installer before running it.
+
+Risk: GitHub write and destructive actions can change or remove repository data.
+
+Mitigation: Confirm the exact repository, target object, payload, and intended effect before allowing write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [GitHub](https://github.com)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include GitHub mutation commands; write and destructive actions require user confirmation of the exact target, payload, and effect.]
+
+## Skill Version(s):
+
+1.0.7 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

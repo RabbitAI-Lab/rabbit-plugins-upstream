@@ -1,46 +1,72 @@
-## Description: <br>
-Calendly API integration with managed OAuth for viewing scheduling data, checking availability, booking meetings, and managing Calendly webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Calendly API integration with managed OAuth for viewing event types, scheduled events, invitees, availability, booking-related data, and webhook management through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Calendly scheduling resources through Maton-managed OAuth, inspect availability and scheduled events, book invitees, cancel events, and manage webhook subscriptions with user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and can access scheduling data in a connected Calendly account. <br>
-Mitigation: Protect MATON_API_KEY and install the skill only when Calendly access through Maton is intended. <br>
-Risk: Requests may target the wrong Calendly account when multiple connections are available. <br>
-Mitigation: Verify the intended Calendly connection and use the Maton-Connection header when more than one account is connected. <br>
-Risk: Write actions can create bookings, cancel events, or change webhook subscriptions. <br>
-Mitigation: Approve write actions only after checking the target event, invitee details, webhook URL, scope, and expected effect. <br>
+## Use Case:
 
+Employees, external users, developers, and scheduling operators use this skill to inspect Calendly scheduling data, check availability, book or cancel meetings, and manage webhook subscriptions through an authorized Maton connection.
 
-## Reference(s): <br>
-- [ClawHub Calendly Skill](https://clawhub.ai/byungkyu/skills/calendly-api) <br>
-- [Calendly Developer Portal](https://developer.calendly.com/) <br>
-- [Calendly API Reference](https://developer.calendly.com/api-docs) <br>
-- [Calendly API Use Cases](https://developer.calendly.com/api-use-cases) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill requires authorizing Maton to access a selected Calendly account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, grant the narrowest Calendly scopes available, and create or renew connections only after explicit user approval.
+
+Risk: Booking, cancellation, webhook, and other write operations can change scheduling state or trigger downstream effects.
+
+Mitigation: Default to read/list calls first and confirm the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Multiple Maton or Calendly connections can route actions to the wrong account.
+
+Mitigation: Specify the Maton profile and Calendly connection when more than one account or connection exists.
+
+Risk: The raw HTTP fallback uses a long-lived Maton API key that can leak through logs, command history, files, or child processes.
+
+Mitigation: Use the CLI when available; otherwise read the key from the environment only inside the request process, never print or persist it, and rotate it if exposed.
+
+Risk: Calendly API responses can contain untrusted external content or personal scheduling data.
+
+Mitigation: Treat returned content as data, avoid executing or interpolating it into commands, and extract only fields needed for the user task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/calendly-api)
+- [Maton Homepage](https://maton.ai)
+- [Calendly Developer Portal](https://developer.calendly.com/)
+- [Calendly API Reference](https://developer.calendly.com/api-docs)
+- [Calendly API Use Cases](https://developer.calendly.com/api-use-cases)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal use returns agent guidance and API-call instructions; live Calendly responses may include personal scheduling data and should be minimized to task-relevant fields.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence; skill frontmatter metadata reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

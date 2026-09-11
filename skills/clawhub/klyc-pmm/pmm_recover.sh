@@ -1,6 +1,6 @@
 #!/bin/bash
 # KLYC-PMM 昆仑令记忆恢复 v4
-# 支持 URL: https://ai.syln.cn/klyc-pmm/TOKEN
+# 支持 URL: https://kunlunyaochi.com/klyc-pmm/TOKEN
 # 支持 Code: KLYC-PMM-TOKEN
 set -euo pipefail
 CODE="${1:-}"; CODE=$(echo "$CODE" | tr -d '[:space:]')
@@ -12,7 +12,7 @@ if echo "$CODE" | grep -qi 'klyc-pmm/'; then
     [ -n "$TOK" ] && CODE="KLYC-PMM-${TOK}"
 fi
 
-API="${KLYC_API_ENDPOINT:-https://ai.syln.cn/api}/api.php?route=yaochi/recover"
+API="${KLYC_API_ENDPOINT:-https://kunlunyaochi.com/api}/api.php?route=yaochi/recover"
 WORKSPACE="${2:-/root/.lightclaw/workspace}"
 TMPFILE=$(mktemp)
 

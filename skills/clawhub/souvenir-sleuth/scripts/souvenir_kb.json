@@ -1,0 +1,207 @@
+{
+  "kyoto": {
+    "name": "Kyoto, Japan",
+    "currency": "JPY",
+    "haggling_index": 1,
+    "specialties": [
+      {"item": "Yuzen-washi paper goods", "category": "craft", "desc": "Hand-dyed Kyoto paper used for fans, boxes, letter sets", "local_price": [800, 5000], "buy_zones": ["Kamiya-cho district near Kyoto Station", "Washi specialty shops in Nakagyo"], "authenticity": "Hand-marbled patterns vary sheet to sheet; look for Kyoto Washi cooperative marks", "customs": "green", "weight_note": "light"},
+      {"item": "Yatsuhashi sweets", "category": "food", "desc": "Cinnamon mochi confection, Kyoto's signature omiyage", "local_price": [600, 2000], "buy_zones": ["Any local shop — skip airport for freshness", "Shinkyogoku street"], "authenticity": "Buy nama (raw) version fresh; boxed baked ones keep longer", "customs": "yellow", "weight_note": "light"},
+      {"item": "Kiyomizu-yaki ceramics", "category": "craft", "desc": "Kyoto's famous pottery tradition, 400+ years", "local_price": [2000, 30000], "buy_zones": ["Gojo-zaka slope toward Kiyomizu-dera", "Pottery festivals in March and August"], "authenticity": "Hand-thrown foot ring, brush-painted overglaze; workshop stamps on base", "customs": "green", "weight_note": "fragile"},
+      {"item": "Nishijin-ori textile smalls", "category": "textile", "desc": "Brocade woven in Kyoto's Nishijin district since the Heian era", "local_price": [1500, 40000], "buy_zones": ["Nishijin Textile Center", "Oriyasu-cho weavers"], "authenticity": "Reverse shows hand-tied threads; machine copies lack float irregularity", "customs": "green", "weight_note": "light"},
+      {"item": "Incense (shoeido style)", "category": "craft", "desc": "Kyoto incense houses are among the world's oldest", "local_price": [1000, 8000], "buy_zones": ["Incense shops near Shijo", "Sakae-cho"], "authenticity": "Named house with establishment dates on box; sandalwood not synthetic", "customs": "yellow", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Geisha costume items", "why": "Mostly made for the costume market, not worn tradition"},
+      {"item": "Cheap folding fans under 500 yen", "why": "Printed imports; real sensu start around 1500 yen"}
+    ]
+  },
+  "fez": {
+    "name": "Fez, Morocco",
+    "currency": "MAD",
+    "haggling_index": 5,
+    "specialties": [
+      {"item": "Vegetable-tanned leather goods", "category": "leather", "desc": "Chouara tannery leather, pigeon-lime and vegetable-dyed for centuries", "local_price": [80, 900], "buy_zones": ["Shops around Chouara tannery terraces", "Souk Henna"], "authenticity": "Vegetal smell, pore grain visible, fibrous cut edges; workshop visit offered", "customs": "yellow", "weight_note": "light"},
+      {"item": "Fez blue pottery", "category": "craft", "desc": "Cobalt-glazed ceramics, Fez signature since the 9th century", "local_price": [60, 1500], "buy_zones": ["Ain Nokbi pottery quarter", "Direct workshops off Talaa Kebira"], "authenticity": "Hand-drawn cobalt shows brush ridges; ask for the painter's signature on base", "customs": "green", "weight_note": "fragile"},
+      {"item": "Argan oil (cosmetic)", "category": "food", "desc": "Only grown in Morocco; buy cosmetic-grade from cooperatives", "local_price": [60, 200], "buy_zones": ["Women's cooperatives", "Pharmacies — not medina stalls"], "authenticity": "Nutty light smell, one ingredient; cooperatives print batch info; avoid rock-bottom prices", "customs": "yellow", "weight_note": "liquid-check"},
+      {"item": "Berber carpets (handknotted)", "category": "textile", "desc": "Amazigh weaving from Middle Atlas villages", "local_price": [800, 8000], "buy_zones": ["Cooperative stores in Ville Nouvelle", "Fixed-price shops on Talaa Saghirah"], "authenticity": "Fringe is continuous warp thread, irregular knots on reverse, natural dye bleeds on a damp cloth test", "customs": "yellow", "weight_note": "heavy"}
+    ],
+    "avoid": [
+      {"item": "Sandalwood-labeled boxes", "why": "Usually cedar; mislabeling is common"},
+      {"item": "Tortoiseshell-pattern combs", "why": "Can be real hawksbill turtle — CITES violation"}
+    ]
+  },
+  "oaxaca": {
+    "name": "Oaxaca, Mexico",
+    "currency": "MXN",
+    "haggling_index": 3,
+    "specialties": [
+      {"item": "Alebrijes (carved copal figures)", "category": "craft", "desc": "San Martín Tilcajete and Arrazola carving-painting tradition", "local_price": [150, 6000], "buy_zones": ["Villages of San Martín Tilcajete (day trip)", "FONART government store (fixed fair prices)"], "authenticity": "Single copal-wood piece, painting shows brush layering; workshops welcome visitors", "customs": "green", "weight_note": "fragile"},
+      {"item": "Mezcal (joven or reposado)", "category": "food", "desc": "Oaxaca is mezcal's spiritual home", "local_price": [300, 1200], "buy_zones": ["Licensed mezcalerias", "Markets — check seal"], "authenticity": "Hologram seal, town and agave on label (espadin, tobalá)", "customs": "yellow", "weight_note": "liquid-check"},
+      {"item": "Barro negro pottery", "category": "craft", "desc": "Black pottery of San Bartolo Coyotepec, burnished not glazed", "local_price": [100, 2500], "buy_zones": ["San Bartolo Coyotepec workshops", "Direct from family studios"], "authenticity": "Matte-burnished sheen, unglazed; Doña Rosa family workshops offer demos", "customs": "green", "weight_note": "fragile"},
+      {"item": "Textiles (cochineal-dyed)", "category": "textile", "desc": "Natural-dye weaving from Teotitlán del Valle", "local_price": [400, 8000], "buy_zones": ["Teotitlán del Valle family workshops", "FONART"], "authenticity": "Cochineal red shifts with a vinegar or lime demo; handwoven reverse irregularity", "customs": "green", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Mass-printed Day of the Dead shirts", "why": "Printed imports; support block-print workshops instead"}
+    ]
+  },
+  "lisbon": {
+    "name": "Lisbon, Portugal",
+    "currency": "EUR",
+    "haggling_index": 1,
+    "specialties": [
+      {"item": "Azulejo tiles (hand-painted)", "category": "craft", "desc": "Portuguese tile painting tradition", "local_price": [8, 60], "buy_zones": ["Fábrica Sant'Ana (est. 1741)", "Bairro Alto tile studios"], "authenticity": "Hand-painted shows brush texture; avoid loose old tiles (often pried off buildings — illegal)", "customs": "green", "weight_note": "fragile"},
+      {"item": "Cork products", "category": "craft", "desc": "Portugal produces half the world's cork; bags and wallets are waterproof", "local_price": [10, 150], "buy_zones": ["Cork and Co, Lisbon shops", "Feira da Ladra for vintage cork"], "authenticity": "Density test: real cork is light, warm, slightly textured", "customs": "green", "weight_note": "light"},
+      {"item": "Pastéis de nata packaging", "category": "food", "desc": "Canned specialty from Belém houses", "local_price": [5, 25], "buy_zones": ["Pastéis de Belém shop", "Supermarkets for local brands (not airport markup)"], "authenticity": "Sealed, dated packaging", "customs": "yellow", "weight_note": "light"},
+      {"item": "Ginjinha bottle", "category": "food", "desc": "Sour-cherry liqueur, Lisbon's spirit", "local_price": [8, 20], "buy_zones": ["A Ginjinha stand (since 1840)", "Grocery stores"], "authenticity": "Óbidos or Lisbon labels", "customs": "yellow", "weight_note": "liquid-check"}
+    ],
+    "avoid": [
+      {"item": "Loose antique azulejos at flea markets", "why": "Likely stripped from protected buildings — export and ownership issues"}
+    ]
+  },
+  "marrakech": {
+    "name": "Marrakech, Morocco",
+    "currency": "MAD",
+    "haggling_index": 5,
+    "specialties": [
+      {"item": "Pierced-brass lanterns", "category": "craft", "desc": "Souk metalwork tradition", "local_price": [100, 1500], "buy_zones": ["Souk Semmarine (deep sections)", "Cooperative near Bahia Palace"], "authenticity": "Hand-pierced shows slightly irregular holes; spot-welded seams versus machine-perfect", "customs": "green", "weight_note": "fragile"},
+      {"item": "Babouche slippers", "category": "leather", "desc": "Traditional Moroccan leather slippers", "local_price": [60, 300], "buy_zones": ["Souk Smata (slipper souk)", "Outside the main square for better prices"], "authenticity": "Sole stitching hand-visible; leather smell", "customs": "yellow", "weight_note": "light"},
+      {"item": "Ras el hanout spice blend", "category": "food", "desc": "House-blended top-of-the-shop spice mix", "local_price": [20, 120], "buy_zones": ["Spice souk stalls with high turnover", "Avoid pre-boxed tourist sets"], "authenticity": "Blended on request from bulk; strong aroma", "customs": "yellow", "weight_note": "light"},
+      {"item": "Vintage Berber jewelry", "category": "craft", "desc": "Silver and enamel tribal pieces", "local_price": [200, 4000], "buy_zones": ["Fixed-price antique shops in Gueliz", "Souk des Bijoutiers for new work"], "authenticity": "Real silver tarnishes and carries a hallmark; too-cheap antiques are reproductions", "customs": "green", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Faux designer bags", "why": "Counterfeit — seized at EU borders, fined in France and Italy"},
+      {"item": "Boxes of oud oil", "why": "Agarwood is CITES II; seizures are routine"}
+    ]
+  },
+  "chiangmai": {
+    "name": "Chiang Mai, Thailand",
+    "currency": "THB",
+    "haggling_index": 3,
+    "specialties": [
+      {"item": "Bo Sang umbrellas and paper crafts", "category": "craft", "desc": "Handmade sa-paper umbrellas, painted to order", "local_price": [80, 600], "buy_zones": ["Bo Sang umbrella village", "Saturday and Sunday walking streets"], "authenticity": "Painted while you watch; bamboo rib structure", "customs": "green", "weight_note": "fragile"},
+      {"item": "Hill-tribe textiles", "category": "textile", "desc": "Hmong and Karen embroidery and weaving", "local_price": [100, 2500], "buy_zones": ["Paa Sang walking street", "Direct cooperative stalls"], "authenticity": "Reverse-side threadwork; machine embroidery has uniform lock stitches", "customs": "green", "weight_note": "light"},
+      {"item": "Northern Thai celadon ceramics", "category": "craft", "desc": "Green-glazed stoneware, Sankampaeng tradition", "local_price": [150, 3000], "buy_zones": ["Sankampaeng road workshops"], "authenticity": "Crackle glaze under light; foot ring unglazed", "customs": "green", "weight_note": "fragile"},
+      {"item": "Local coffee (Doi Chang, Doi Inthanon)", "category": "food", "desc": "Thailand's specialty arabica highlands", "local_price": [150, 500], "buy_zones": ["Roasteries in Nimman", "Farm-gate if touring"], "authenticity": "Roast date printed; single-origin labels", "customs": "yellow", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Antique opium weights and pipes", "why": "Reproductions mostly; vintage sales legally grey"},
+      {"item": "Items with ivory claims", "why": "CITES — regardless of seller story"}
+    ]
+  },
+  "neworleans": {
+    "name": "New Orleans, USA",
+    "currency": "USD",
+    "haggling_index": 1,
+    "specialties": [
+      {"item": "Pralines (hand-made)", "category": "food", "desc": "Pecan-candy tradition from French Quarter candy shops", "local_price": [3, 12], "buy_zones": ["Aunt Sally's, Leah's, Magazine St candy makers", "French Market on weekends"], "authenticity": "Made-in-house signage plus slightly irregular discs", "customs": "yellow", "weight_note": "light"},
+      {"item": "Local art on Royal St and Jackson Square", "category": "craft", "desc": "Living local painter scene, from canvases to prints", "local_price": [20, 500], "buy_zones": ["Royal Street galleries", "Jackson Square artists (weekends)"], "authenticity": "Buy from the artist directly — many work on-site", "customs": "green", "weight_note": "fragile"},
+      {"item": "Mardi Gras beads (hand-strung vintage)", "category": "craft", "desc": "Antique glass beads versus modern throw plastic", "local_price": [10, 200], "buy_zones": ["Vintage shops on Magazine St", "French Flea Market"], "authenticity": "Glass weight, Czech or French strand tags on antiques", "customs": "green", "weight_note": "light"},
+      {"item": "Cajun spice and filé powder", "category": "food", "desc": "Gumbo filé (sassafras) and house blends", "local_price": [4, 15], "buy_zones": ["Local spice shops", "Farmers markets"], "authenticity": "Blended locally with shop branding", "customs": "yellow", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Bourbon St hand-grenade merch", "why": "Novelty tourist goods, zero local craft content"}
+    ]
+  },
+  "mexicocity": {
+    "name": "Mexico City, Mexico",
+    "currency": "MXN",
+    "haggling_index": 3,
+    "specialties": [
+      {"item": "Talavera pottery", "category": "craft", "desc": "Certified Talavera from nearby Puebla workshops", "local_price": [100, 5000], "buy_zones": ["FONART store (fixed fair prices)", "Bazaar Sábado for curated crafts"], "authenticity": "Certified Talavera carries a Consejo Talavera hologram and workshop number", "customs": "green", "weight_note": "fragile"},
+      {"item": "Mezcal and raicilla (small-batch)", "category": "food", "desc": "Beyond tequila: agave distillates sold in CDMX", "local_price": [400, 2000], "buy_zones": ["Licorerías in Roma and Condesa", "Mercado de San Juan"], "authenticity": "Sealed, labeled with agave varietal and producer", "customs": "yellow", "weight_note": "liquid-check"},
+      {"item": "Cartonería (alebrije paper-mâché)", "category": "craft", "desc": "CDMX-born folk art from the Linares family tradition", "local_price": [80, 3000], "buy_zones": ["La Merced area cartonería workshops", "Museo de Arte Popular gift shop"], "authenticity": "Signed pieces from family workshops (Linares, Santiago); layered hand-mâché", "customs": "green", "weight_note": "fragile"},
+      {"item": "Café de olla blend and cacao", "category": "food", "desc": "Piloncillo-cinnamon coffee and Chiapas or Tabasco cacao", "local_price": [80, 400], "buy_zones": ["Specialty coffee shops in Roma Norte", "Cacao specialty stores"], "authenticity": "Origin labels (Chiapas), roast dates", "customs": "yellow", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Silver without the 925 Mexico and maker-initials assay stamp", "why": "Taxco fakes are common; real pieces carry registered stamps"}
+    ]
+  },
+  "istanbul": {
+    "name": "Istanbul, Turkey",
+    "currency": "TRY",
+    "haggling_index": 4,
+    "specialties": [
+      {"item": "Iznik-style ceramics", "category": "craft", "desc": "Cobalt and red tulip motifs from the Iznik and Kütahya tradition", "local_price": [150, 5000], "buy_zones": ["Kütahya ceramic shops in Sultanahmet", "Workshops in Arasta Bazaar"], "authenticity": "Hand-painted brush relief; workshop signature; quartz-glassy body", "customs": "green", "weight_note": "fragile"},
+      {"item": "Peshtemal towels", "category": "textile", "desc": "Flat-woven hammam towels, light and quick-dry", "local_price": [100, 500], "buy_zones": ["Textile shops near Grand Bazaar gates", "Hammam suppliers"], "authenticity": "Hand-tied fringe, natural cotton texture", "customs": "green", "weight_note": "light"},
+      {"item": "Turkish delight (lokum) fresh", "category": "food", "desc": "Cut-to-order from neighborhood shops", "local_price": [50, 300], "buy_zones": ["Hacı Bekir (est. 1777)", "Local lokum shops away from the bazaar core"], "authenticity": "Cut fresh, dusted, not pre-boxed tourist tins", "customs": "yellow", "weight_note": "light"},
+      {"item": "Copper coffee sets (hand-beaten)", "category": "craft", "desc": "Cezve and cups from the coppersmiths' row", "local_price": [200, 1500], "buy_zones": ["Coppersmiths' street near the Grand Bazaar", "Arasta Bazaar"], "authenticity": "Hammer marks visible, tinned interior; spun copies are flawless", "customs": "green", "weight_note": "heavy"}
+    ],
+    "avoid": [
+      {"item": "Handmade carpets from commission-tout shops", "why": "Often factory weaves; buy from a cooperative with a certificate"},
+      {"item": "Fake football jerseys and designer leather", "why": "Counterfeits — EU border seizures and fines"}
+    ]
+  },
+  "florence": {
+    "name": "Florence, Italy",
+    "currency": "EUR",
+    "haggling_index": 2,
+    "specialties": [
+      {"item": "Leather goods (Scuola del Cuoio style)", "category": "leather", "desc": "Florentine leather school tradition since the 1950s; bags, jackets", "local_price": [30, 400], "buy_zones": ["San Lorenzo leather school workshops", "Oltrarno artisan botteghe"], "authenticity": "Vegetable-tan smell, hand-stitched edges, workshop receipts; street stalls selling bonded-leather traps", "customs": "yellow", "weight_note": "light"},
+      {"item": "Marbled paper (carta marmorizzata)", "category": "craft", "desc": "Giulio Giannini-style marbled journals and boxes", "local_price": [8, 80], "buy_zones": ["Ponte Vecchio paper shops (riverside)", "Oltrarno stationers"], "authenticity": "No two sheets identical; comb patterns show hand drag", "customs": "green", "weight_note": "light"},
+      {"item": "Gold jewelry (Ponte Vecchio)", "category": "craft", "desc": "Centuries of goldsmiths on the bridge", "local_price": [100, 3000], "buy_zones": ["Ponte Vecchio certified shops"], "authenticity": "Italian hallmark (star and number) plus shop certificate", "customs": "green", "weight_note": "light"},
+      {"item": "Tuscan olive oil and wine", "category": "food", "desc": "Chianti and DOCG from enoteche", "local_price": [8, 60], "buy_zones": ["Enoteche (wine shops) with shipping", "Farm stands on a Chianti day trip"], "authenticity": "DOCG seal, harvest date; shipped versus carried (weight)", "customs": "yellow", "weight_note": "liquid-check"}
+    ],
+    "avoid": [
+      {"item": "Street-stall Italian leather jackets at suspicious prices", "why": "Usually imported bonded leather; quality lasts one season"},
+      {"item": "Fake brand bags from street sellers", "why": "Illegal; fines for buyers now enforced in Italy"}
+    ]
+  },
+  "capetown": {
+    "name": "Cape Town, South Africa",
+    "currency": "ZAR",
+    "haggling_index": 3,
+    "specialties": [
+      {"item": "Wire art and beadwork", "category": "craft", "desc": "Township wire sculpture and bead traditions", "local_price": [50, 800], "buy_zones": ["Montebello Design Centre", "Greenmarket Square (morning)"], "authenticity": "One-maker pieces; many sellers are the makers", "customs": "green", "weight_note": "light"},
+      {"item": "Rooibos and Cape teas", "category": "food", "desc": "Cederberg-grown rooibos and honeybush", "local_price": [40, 150], "buy_zones": ["Design-market shops", "Supermarkets (much cheaper)"], "authenticity": "South-Africa-grown packaged brands", "customs": "yellow", "weight_note": "light"},
+      {"item": "Karoo ceramics and stone jewelry", "category": "craft", "desc": "Regional ceramicists and semi-precious stone work", "local_price": [100, 2000], "buy_zones": ["The Old Biscuit Mill (Saturdays)", "Woodstock studios"], "authenticity": "Studio stamps and artist cards", "customs": "green", "weight_note": "fragile"},
+      {"item": "Cape wines", "category": "food", "desc": "Stellenbosch and Franschhoek estates", "local_price": [80, 600], "buy_zones": ["Wine estates direct (tasting fee often waived on purchase)", "Airport wine shop for last-minute"], "authenticity": "Wine of Origin seal", "customs": "yellow", "weight_note": "liquid-check"}
+    ],
+    "avoid": [
+      {"item": "Ostrich eggs of unknown origin", "why": "Fine if bought cleaned from licensed shops; raw or uncleaned eggs can breach customs"},
+      {"item": "Ivory trinkets", "why": "CITES — no exceptions"}
+    ]
+  },
+  "hanoi": {
+    "name": "Hanoi, Vietnam",
+    "currency": "VND",
+    "haggling_index": 4,
+    "specialties": [
+      {"item": "Lacquerware", "category": "craft", "desc": "Ha Thai village lacquer tradition, many layered coats", "local_price": [50000, 1500000], "buy_zones": ["Ha Thai village workshops", "Craft Link fair-trade store"], "authenticity": "Twelve or more layers hand-polished; flawless gloss at rock price means chemical fast-cure", "customs": "green", "weight_note": "fragile"},
+      {"item": "Silk (Van Phuc village)", "category": "textile", "desc": "Traditional silk weaving village", "local_price": [100000, 2000000], "buy_zones": ["Van Phuc silk village", "Hang Gai street shops"], "authenticity": "Burn test on a corner thread (shops allow): real silk smells like hair and self-extinguishes; synthetic balls up", "customs": "green", "weight_note": "light"},
+      {"item": "Vietnamese coffee and phin filter", "category": "food", "desc": "Robusta blends and egg-coffee culture", "local_price": [50000, 300000], "buy_zones": ["Highland or Trung Nguyen brand stores", "Old Quarter coffee roasters"], "authenticity": "Roast date; sealed brand tins at real prices", "customs": "yellow", "weight_note": "light"},
+      {"item": "Embroidery art (hand-stitched)", "category": "textile", "desc": "Detailed hand-embroidered scenes, a Hanoi specialty", "local_price": [200000, 5000000], "buy_zones": ["Quat Dong embroidery village", "Reputable Old Quarter galleries"], "authenticity": "Reverse shows dense hand stitching; machine versions have uniform chain-lock", "customs": "green", "weight_note": "fragile"}
+    ],
+    "avoid": [
+      {"item": "Antique propaganda posters", "why": "Nearly all modern reproductions aged with tea — fine decor, just don't pay antique prices"}
+    ]
+  },
+  "prague": {
+    "name": "Prague, Czech Republic",
+    "currency": "CZK",
+    "haggling_index": 1,
+    "specialties": [
+      {"item": "Bohemian crystal", "category": "craft", "desc": "Cut crystal from Czech glassworks (Moser and others)", "local_price": [200, 20000], "buy_zones": ["Manufacturer stores (Moser, Rückl)", "Multi-brand glass centers"], "authenticity": "Certificate stickers plus hand-cut sparkle; crystal without origin paperwork is a gamble", "customs": "green", "weight_note": "fragile"},
+      {"item": "Garnet jewelry (Bohemian garnet)", "category": "craft", "desc": "Deep-red pyrope garnet, Bohemia's gemstone", "local_price": [500, 15000], "buy_zones": ["Certified garnet shops (Granát Turnov co-op)"], "authenticity": "Certificate of origin; deep red, not fire-engine", "customs": "green", "weight_note": "light"},
+      {"item": "Becherovka and local slivovitz", "category": "food", "desc": "Herbal bitter and plum brandy", "local_price": [200, 600], "buy_zones": ["Any potraviny (grocery) — same bottle cheaper than old town", "Duty-free only on the last day"], "authenticity": "Sealed labeled bottles", "customs": "yellow", "weight_note": "liquid-check"},
+      {"item": "Marionettes (hand-carved)", "category": "craft", "desc": "Czech puppet tradition, UNESCO-listed", "local_price": [500, 8000], "buy_zones": ["Puppet workshops in Old Town side streets", "Rise loutek theater shop"], "authenticity": "Carved linden wood, hand-painted, workshop signature", "customs": "green", "weight_note": "fragile"}
+    ],
+    "avoid": [
+      {"item": "Matryoshka stalls", "why": "Wrong country — imported; Czech marionettes are the real thing"},
+      {"item": "Amber at rock prices", "why": "Usually copal or plastic; buy in Baltic states with certificates"}
+    ]
+  },
+  "cusco": {
+    "name": "Cusco, Peru",
+    "currency": "PEN",
+    "haggling_index": 3,
+    "specialties": [
+      {"item": "Textiles (alpaca, natural dye)", "category": "textile", "desc": "Andean weaving cooperatives, Chinchero tradition", "local_price": [30, 600], "buy_zones": ["Chinchero and Pisac community weavers (with demo)", "Centro de Textiles Tradicionales del Cusco (fixed prices, fair trade)"], "authenticity": "Cooperative labels; baby-alpaca burn test offered; synthetic alpaca is suspiciously cheap", "customs": "green", "weight_note": "light"},
+      {"item": "Retablos and ceramics", "category": "craft", "desc": "Ayacucho-style portable box altars adapted in Cusco", "local_price": [40, 800], "buy_zones": ["San Blas artisan shops", "Merced market area"], "authenticity": "Hand-modeled figures, painted detail, workshop names", "customs": "green", "weight_note": "fragile"},
+      {"item": "Peruvian coffee (single-origin)", "category": "food", "desc": "Northern and Sacred Valley specialty arabica", "local_price": [15, 60], "buy_zones": ["Roasteries in San Blas", "Valle Sagrado co-op stores"], "authenticity": "Altitude and region plus roast date", "customs": "yellow", "weight_note": "light"},
+      {"item": "Chullo hats (hand-knitted)", "category": "textile", "desc": "Ear-flap Andean caps", "local_price": [20, 150], "buy_zones": ["San Pedro market upper floor", "Weaving communities"], "authenticity": "Hand-knit irregular tension, natural dyes; uniform knit means machine acrylic", "customs": "green", "weight_note": "light"}
+    ],
+    "avoid": [
+      {"item": "Pre-Columbian antiquities", "why": "Illegal to export real ones; offered authentic pieces are either fake or a crime"}
+    ]
+  }
+}

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-checkout",
   "slug": "amazon-checkout",
   "ownerHandle": null,
-  "version": "2.9.5",
-  "updatedAt": 1779076998622,
-  "contentHash": "06c6e2014039751906ee90de968d27c69ea202e8b54542aac6bf3e01cadd4730",
-  "fetchedAt": "2026-07-26T18:54:25.343Z"
+  "version": "1.0.5",
+  "updatedAt": 1789068352037,
+  "contentHash": "d1d66c3a3d2cc4ef2437103ff6bc3de83215d317f32a2d3e9197fe4608461653",
+  "fetchedAt": "2026-09-11T12:21:40.185Z"
 }

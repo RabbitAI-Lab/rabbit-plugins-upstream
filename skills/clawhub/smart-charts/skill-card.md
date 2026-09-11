@@ -1,43 +1,58 @@
-## Description: <br>
-Smart Charts reads user-supplied CSV, Excel, and JSON files, analyzes data characteristics with LLM assistance, recommends chart types, and generates interactive ECharts HTML visualizations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Smart Charts turns CSV, TSV, TXT, Excel, or JSON data files into standalone offline ECharts HTML visualizations with traceable plot statistics and data previews.
 
-## Publisher: <br>
-[neuhanli](https://clawhub.ai/user/neuhanli) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[neuhanli](https://clawhub.ai/user/neuhanli)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to turn uploaded tabular data into recommended interactive charts and lightweight data summaries. It is most useful for CSV, Excel, and JSON datasets that can be parsed locally and rendered as ECharts HTML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated pandas transform code may run against user data without an explicit confirmation gate. <br>
-Mitigation: Run the skill in a constrained environment and review transform code before execution, especially for sensitive datasets. <br>
-Risk: Generated HTML loads JavaScript from public CDNs. <br>
-Mitigation: Use the generated charts only where public CDN access is acceptable, or require a trusted offline asset path before using the skill in restricted environments. <br>
+## Use Case:
 
+Developers and analysts use this skill to generate offline interactive HTML charts from tabular data and include traceable caption facts without building a backend dashboard.
 
-## Reference(s): <br>
-- [Smart Charts Skill Documentation](artifact/SKILL.md) <br>
-- [Smart Charts CLI Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/neuhanli/skills/smart-charts) <br>
-- [Publisher Profile](https://clawhub.ai/user/neuhanli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell commands, structured JSON status, and generated HTML chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated HTML loads ECharts from public CDNs and is usually written under smart_charts_output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Model-written transform code may have more local execution power than users expect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill in an isolated environment, review or disable transform-code use for untrusted inputs, and avoid processing untrusted transform code on machines with sensitive files or credentials.
+
+Risk: Generated HTML may carry misleading or unsafe content if published under a trusted site origin without review.
+
+Mitigation: Inspect generated HTML and its embedded chart facts before publishing or sharing it from a trusted origin.
+
+Risk: Dependency drift or crafted GeoJSON filenames may increase operational risk.
+
+Mitigation: Prefer a locked dependency set and process custom GeoJSON only in a constrained working directory.
+
+## Reference(s):
+
+- [Smart Charts reference](artifact/references/REFERENCE.md)
+- [ClawHub skill page](https://clawhub.ai/neuhanli/skills/smart-charts)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Files, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON stdout; generated artifacts are standalone HTML files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated HTML is self-contained for offline rendering and includes plot statistics plus data previews for traceable captions.]
+
+## Skill Version(s):
+
+8.3.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

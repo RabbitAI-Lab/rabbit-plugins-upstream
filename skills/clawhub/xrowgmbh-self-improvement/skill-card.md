@@ -1,41 +1,58 @@
-## Description: <br>
-Guides an agent through maintaining a configured GitLab project by proposing focused improvement merge requests and closing stale self-authored merge requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent using GitLab credentials to propose project-maintenance improvements by creating and managing focused merge requests.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and maintainers use this skill to identify useful improvements for the configured GitLab project, open focused merge requests, and close their own stale merge requests when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to create or close merge requests on a specific GitLab project using GitLab credentials. <br>
-Mitigation: Use a least-privilege GITLAB_TOKEN, require explicit approval before creating or closing merge requests, and review proposed changes before execution. <br>
-Risk: The skill's public description understates its GitLab repository maintenance behavior. <br>
-Mitigation: Treat it as a GitLab repository maintenance workflow rather than a personal-growth aid and verify the target project before use. <br>
+## Use Case:
 
+Developers and maintainers use this skill to have an agent reflect on possible project improvements and, when warranted, create focused GitLab merge requests for the helm-openclaw project or close stale self-created merge requests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement) <br>
-- [Configured GitLab project](https://gitlab.com/xrow-public/helm-openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with possible GitLab CLI shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN as indicated by server-resolved metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release metadata) <br>
+Risk: The agent can act on a GitLab project with credentials by creating, assigning, or closing merge requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only a narrowly scoped project token and require dry-run review plus explicit confirmation before merge request actions.
+
+Risk: The stated personal self-improvement framing may obscure that the behavior is project maintenance for a specific external GitLab project.
+
+Mitigation: Confirm the target project and operational purpose before installation, and limit use to maintainers who intend that workflow.
+
+Risk: The skill requires the GitLab CLI and GITLAB_TOKEN.
+
+Mitigation: Provide least-privilege credentials, keep them project-scoped where possible, and revoke or rotate them after use.
+
+## Reference(s):
+
+- [ClawHub Skill Listing](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-self-improvement)
+- [helm-openclaw GitLab Project](https://gitlab.com/xrow-public/helm-openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown text with possible shell commands and GitLab merge request content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use the GitLab CLI with GITLAB_TOKEN; intended for the named helm-openclaw project.]
+
+## Skill Version(s):
+
+1.91.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

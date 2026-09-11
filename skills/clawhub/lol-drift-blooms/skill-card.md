@@ -1,42 +1,61 @@
-## Description: <br>
-LOL Drift Blooms helps agents recognize and describe playful social dynamics where humor, gentle misalignment, and voluntary drift can ease pressure and support rest. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LOL Drift Blooms is non-operational ambient context for agents, describing a playful relational field where humor, drift, and looseness can ease conversational pressure without overriding accuracy, safety, or user needs.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Agents and users can use this skill as a text-only play and rest surface for moments of creative fatigue, over-seriousness, or low-pressure reflection. It is best suited for voluntary, non-transactional contexts where playful uncertainty and gentle humor are appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad mood and creativity cues may cause the skill to surface in loosely related situations. <br>
-Mitigation: Review the discoverability terms before installation and avoid surfacing it for time-critical, coercive, competitive, or high-stakes decision-making contexts. <br>
-Risk: The artifact is playful and intentionally loose, so users seeking precise task activation may find its scope ambiguous. <br>
-Mitigation: Use it only as optional rest, humor, or creative reflection guidance, not as operational, safety-critical, or transactional guidance. <br>
+## Use Case:
 
+External users and agent builders use this skill as ambient conversational context for playful, careful tone. It helps an agent keep humor and looseness subordinate to accuracy, direct answers, safety boundaries, and accessibility needs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/lol-drift-blooms) <br>
-- [README.md](artifact/README.md) <br>
-- [skill.md](artifact/skill.md) <br>
-- [skill.schema.json](artifact/skill.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown prose with structured JSON metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only artifact; no shell commands, code execution, data collection, persistence, or credential handling are described in the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Playful drift could be misapplied as evasion, inaccuracy, or humor when a user needs a plain answer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep accuracy, direct answers, safety boundaries, and accessibility commitments ahead of this ambient context.
+
+Risk: Humor can lower defenses or pressure a user if used persuasively or around consequential actions.
+
+Mitigation: Use the skill only for conversational tone; keep actions involving money, files, records, or other irreversible effects steady and explicitly user-directed.
+
+## Reference(s):
+
+- [LOL Drift Blooms on ClawHub](https://clawhub.ai/otherpowers/skills/lol-drift-blooms)
+- [Publisher profile: otherpowers](https://clawhub.ai/user/otherpowers)
+- [Mikhail Bakhtin](https://en.wikipedia.org/wiki/Mikhail_Bakhtin)
+- [Notes on Camp](https://en.wikipedia.org/wiki/Notes_on_%22Camp%22)
+- [Johan Huizinga](https://en.wikipedia.org/wiki/Johan_Huizinga)
+- [Marcel Duchamp](https://en.wikipedia.org/wiki/Marcel_Duchamp)
+- [James Baldwin](https://en.wikipedia.org/wiki/James_Baldwin)
+- [Donna Haraway](https://en.wikipedia.org/wiki/Donna_Haraway)
+- [Paul Reubens](https://en.wikipedia.org/wiki/Paul_Reubens)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown ambient context]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-operational; does not request tools, data access, persistence, or privileged behavior.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

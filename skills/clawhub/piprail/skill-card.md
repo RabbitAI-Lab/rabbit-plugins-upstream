@@ -1,47 +1,63 @@
-## Description: <br>
-PipRail gives an OpenClaw agent a self-custodial crypto payment wallet with hard spend caps for discovering, quoting, planning, and paying x402 paywalls across supported chains. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PipRail gives OpenClaw agents a self-custodial, budget-capped crypto wallet for discovering, quoting, planning, and paying x402-gated resources across supported chains.
 
-## Publisher: <br>
-[piprail](https://clawhub.ai/user/piprail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[piprail](https://clawhub.ai/user/piprail)
 
-## Use Case: <br>
-Developers and external OpenClaw users use PipRail to let an agent discover, quote, plan, and optionally pay x402 resources with a self-custodial wallet under configured spending limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can move crypto funds when a user supplies a wallet key and enables payment tools. <br>
-Mitigation: Start in read-only mode without PIPRAIL_PRIVATE_KEY; if enabling payments, use a dedicated low-balance wallet and low PIPRAIL_MAX_AMOUNT and PIPRAIL_MAX_TOTAL values. <br>
-Risk: The agent may invoke payment actions through the @piprail/mcp package after configuration. <br>
-Mitigation: Review the @piprail/mcp npm package or source before trusting it with real funds, and review quoted payment details before allowing payment. <br>
+## Use Case:
 
+Developers and OpenClaw users use PipRail to let agents discover, quote, plan, and pay for x402-gated APIs under explicit spend caps. The skill also supports read-only discovery and quoting workflows when no wallet signing key is configured.
 
-## Reference(s): <br>
-- [PipRail homepage](https://piprail.com) <br>
-- [PipRail OpenClaw integration docs](https://docs.piprail.com/integrations/openclaw/) <br>
-- [@piprail/mcp npm package](https://www.npmjs.com/package/@piprail/mcp) <br>
-- [PipRail MCP tools](https://docs.piprail.com/mcp/tools/) <br>
-- [PipRail spend controls](https://docs.piprail.com/spend-controls/payment-policy/) <br>
-- [PipRail MCP configuration](https://docs.piprail.com/mcp/configuration/) <br>
-- [PipRail MCP chains](https://docs.piprail.com/mcp/chains/) <br>
-- [ClawHub skill page](https://clawhub.ai/piprail/piprail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [MCP tool results and Markdown instructions with JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only discovery, quote, budget, guide, register, and receipt verification are available without a wallet key; payment requires explicit wallet and budget configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: The MCP server may receive a wallet signing key when payments are enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only mode unless payments are required, and use a dedicated low-value wallet when enabling payments.
+
+Risk: The configured npm MCP package is not pinned in the artifact configuration.
+
+Mitigation: Pin and review the MCP package version where possible before deployment.
+
+Risk: Budget controls inside the MCP server may be the only limit on agent-initiated payments.
+
+Mitigation: Keep wallet balances no higher than acceptable loss and prefer externally enforced wallet or smart-contract limits.
+
+## Reference(s):
+
+- [PipRail homepage](https://piprail.com)
+- [PipRail OpenClaw integration docs](https://docs.piprail.com/integrations/openclaw/)
+- [PipRail MCP configuration](https://docs.piprail.com/mcp/configuration/)
+- [PipRail MCP tools](https://docs.piprail.com/mcp/tools/)
+- [PipRail spend controls](https://docs.piprail.com/spend-controls/payment-policy/)
+- [@piprail/mcp npm package](https://www.npmjs.com/package/@piprail/mcp)
+- [PipRail source repository](https://github.com/piprail/piprail)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline JSON and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Configures an MCP server that exposes PipRail payment and wallet tools to an OpenClaw agent.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

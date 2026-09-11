@@ -1,50 +1,68 @@
-## Description: <br>
-建筑工程商机雷达 helps agents find early construction and infrastructure opportunities by searching proposed projects, procurement intents, and expiring service contracts, then ranking opportunities with follow-up guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users find early construction and infrastructure opportunities by scanning proposed projects, purchase intentions, and expiring service contracts, then ranking leads with suggested next actions.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External business-development, sales, and construction-market users use this skill to discover earlier-stage engineering opportunities by region, sector, budget threshold, and project maturity. It produces prioritized opportunity lists with objective next steps for proposed projects, procurement intents, and contract-renewal windows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, regions, and opportunity criteria are sent to the vendor API. <br>
-Mitigation: Use the skill only when that disclosure is acceptable, and avoid entering confidential bid strategy or customer-sensitive context as search input. <br>
-Risk: Automatic trial registration may send a hashed MAC-based device identifier and persist credentials locally. <br>
-Mitigation: Prefer manually setting ZLBX_API_KEY; if using auto-registration, review the consent prompt and local credential file handling. <br>
-Risk: Generated HTML reports and returned sk links may provide direct access to opportunity details. <br>
-Mitigation: Treat reports and links as sensitive business documents and do not publish or forward them broadly. <br>
-Risk: Scheduled monitoring can continue to consume account credits and repeatedly send search criteria. <br>
-Mitigation: Disable cron or /loop schedules when monitoring is no longer needed and review expected credit use before scans. <br>
+## Use Case:
 
+External business development, sales, and bid teams use this skill to identify China construction-market leads before formal tender release. It produces a ranked opportunity list and shareable report from proposed-project approvals, purchase-intention notices, and expiring-contract windows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/construction-project-opportunity-radar) <br>
-- [Workflow Manual](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliaobiaoxun Opportunity Platform](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown opportunity list, optional self-contained HTML report, and concise guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include ranked opportunity tables, data-source notes, API-derived links, and optional report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can consume paid or trial Zhiliaobiaoxun API quota during scans.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell users the expected credit cost before scanning and pause for approval before exceeding the documented call budget.
+
+Risk: The skill may create or use a local API key file and can perform device-derived auto-registration when no key is configured.
+
+Mitigation: Prefer a user-supplied ZLBX_API_KEY for managed environments, require consent before registration, and avoid exposing API keys in conversation or reports.
+
+Risk: Generated reports and chat output can contain login-bypass sk links returned by the vendor service.
+
+Mitigation: Treat generated reports and links as sensitive and share them only with trusted recipients.
+
+Risk: The skill writes persistent HTML reports to the local filesystem.
+
+Mitigation: Review generated reports before distribution and remove local report files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/construction-project-opportunity-radar)
+- [Publisher Profile](https://clawhub.ai/user/dragonzu)
+- [API Quick Reference](references/api-quick.md)
+- [Auto Registration Flow](references/auto-register.md)
+- [Report Template](references/report-template.md)
+- [Workflow Guide](references/workflow.md)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun AI Platform](https://ai.zhiliaobiaoxun.com/?ch=s102)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, HTML files, configuration, guidance]
+
+**Output Format:** [Markdown lead lists in chat plus optional self-contained HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs include ranked opportunities, source links, data notes, disclaimers, and suggested next actions.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

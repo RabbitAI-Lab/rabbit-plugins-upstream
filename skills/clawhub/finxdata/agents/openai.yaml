@@ -1,0 +1,7 @@
+interface:
+  display_name: "FinXData"
+  short_description: "优先免 Key 免费查询金融数据；高级分析用户注册即获免费 API 额度。"
+  brand_color: "#2563EB"
+  default_prompt: "使用 $finxdata 优先通过免 Key API 免费查询金融数据；如需高级分析数据，说明注册可免费获得 API 额度，并用易懂语言解释结果。"
+policy:
+  allow_implicit_invocation: true

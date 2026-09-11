@@ -5,7 +5,7 @@ description: 规划亚马逊商品套图、编写逐版位生成说明，并在 
 
 # 亚马逊套图生成规范 / Generate Amazon Image Set
 
-> 版本 / Version: v1.2.0
+> 版本 / Version: v1.3.0  
 > 规范整理与维护 / Curated and maintained by: Tong Li（同力 / QuietPhoenix）
 
 ## 版权、商标与发布信息 / Copyright, trademarks, and publication
@@ -65,7 +65,7 @@ description: 规划亚马逊商品套图、编写逐版位生成说明，并在 
 
 - 1 张 MAIN。
 - 最多 7 张 Listing 附属图，每张承担不同的购买决策角色。
-- 根据叙事需求和账号权限选择 A+ 模块，不强制统一模块数量。
+- 普通 A+ (Basic / Standard) 最多 5 个模块，高级 A+ (Premium) 最多 7 个模块；按叙事需求选取，不强制凑满。模块数不等于图片文件数，PC/Mobile 配对素材只计入同一个模块。
 - 每个需要设备专用图片的 A+ PC 位都建立一个 Mobile 配对位。
 
 ### 4. 每个版位只承担一个主要任务
@@ -86,6 +86,8 @@ description: 规划亚马逊商品套图、编写逐版位生成说明，并在 
 ### 5. 定义尺寸和设备行为
 
 交付尺寸必须来自选定的 Amazon 模块或用户模板。生图模型只支持其他尺寸时，将 `delivery_size` 和 `generation_size` 分开记录。
+
+普通 A+ 常见横幅参考为 `970x300`，必须对应具体模块；高级 A+「完整图片 / Full Image」模块桌面图最低 `1464x600`，移动图最低 `600x450`，两端分别提供替代文本。以上为像素宽 x 高，不是所有 A+ 模块的统一尺寸。最低尺寸、选定交付尺寸和生图尺寸分别记录；移动图需独立重排，不直接裁切或压缩桌面横幅。详见尺寸合同中的模块映射与来源。
 
 创建 A+ 配对位或文字较多的 Listing 图之前，读取 [composition-and-devices.md](references/composition-and-devices.md)。
 
@@ -118,9 +120,7 @@ description: 规划亚马逊商品套图、编写逐版位生成说明，并在 
 
 ## 已验证案例 / Validated example
 
-需要查看一套从商品参考、事实锁、MAIN 返工到 Listing 和 PC A+ 验收的完整示例时，读取 [example-mini-straw-hat.md](references/example-mini-straw-hat.md)。
-
-案例用于展示证据约束、版位分工和失败返工方式，不把特定模型、接口或生成结果当作通用事实。不得跳过当前商品的事实锁，直接复制案例中的尺寸、材质或版位结论。
+需要查看商品参考、事实锁、MAIN 返工及 Listing 和 PC A+ 验收示例时，读取 [example-mini-straw-hat.md](references/example-mini-straw-hat.md)。案例为历史素材制作记录；执行新任务必须重新建立事实锁，不能将仅 PC 案例视为已满足需要双端素材的模块上传条件。
 
 ## 必须交付的内容 / Required deliverables
 
@@ -147,3 +147,5 @@ description: 规划亚马逊商品套图、编写逐版位生成说明，并在 
 5. 一般审美偏好。
 
 禁止让审美偏好覆盖合规要求或产品事实。
+
+

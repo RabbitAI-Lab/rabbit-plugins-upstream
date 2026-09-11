@@ -1,49 +1,70 @@
-## Description: <br>
-Airtable API integration with managed OAuth for reading, creating, updating, deleting, and querying Airtable bases, tables, and records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Airtable API integration with managed OAuth for managing bases, tables, and records through the Maton CLI.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Airtable schemas and records, query data with filters, and perform approved create, update, or delete operations through a Maton-managed OAuth connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Airtable records through the connected account. <br>
-Mitigation: Confirm the target base, table, records, and intended effect with the user before any write operation. <br>
-Risk: Requests are brokered through Maton and depend on the permissions of the connected Airtable account. <br>
-Mitigation: Install only when the user trusts Maton for Airtable access, keeps MATON_API_KEY private, and grants only the Airtable permissions needed for the task. <br>
-Risk: Multiple Airtable connections can route a request to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one connection exists and verify the selected connection before changing data. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Airtable bases, query records, and perform approved create, update, or delete operations through Maton-managed OAuth.
 
-## Reference(s): <br>
-- [Airtable API Overview](https://airtable.com/developers/web/api/introduction) <br>
-- [Airtable List Records](https://airtable.com/developers/web/api/list-records) <br>
-- [Airtable Create Records](https://airtable.com/developers/web/api/create-records) <br>
-- [Airtable Update Records](https://airtable.com/developers/web/api/update-record) <br>
-- [Airtable Delete Records](https://airtable.com/developers/web/api/delete-record) <br>
-- [Airtable Formula Reference](https://support.airtable.com/docs/formula-field-reference) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/airtable) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API calls, Shell commands, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with HTTP paths, Python and JavaScript examples, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and the intended Maton Airtable connection when multiple connections exist] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: Airtable access is mediated through Maton, so the user must trust Maton as the gateway for the connected Airtable account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, grant only scopes needed for the task, and confirm that Maton is acceptable before installation or connection.
+
+Risk: Create, update, and delete operations can change or remove Airtable data.
+
+Mitigation: Default to read and list calls first, then require explicit confirmation of the target resource, payload, and intended effect before any write or delete.
+
+Risk: The installation examples use unpinned third-party CLI and SDK package commands.
+
+Mitigation: Pin or otherwise verify Maton CLI and SDK versions in controlled environments before use.
+
+Risk: API-key fallback mode can expose a long-lived Maton credential through environment variables, logs, shell history, or process output.
+
+Mitigation: Use the CLI OAuth flow when possible; if a key is unavoidable, do not print, persist, or pass it on a command line, and send it only to api.maton.ai.
+
+## Reference(s):
+
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Airtable API Overview](https://airtable.com/developers/web/api/introduction)
+- [Airtable List Records](https://airtable.com/developers/web/api/list-records)
+- [Airtable Create Records](https://airtable.com/developers/web/api/create-records)
+- [Airtable Update Record](https://airtable.com/developers/web/api/update-record)
+- [Airtable Delete Record](https://airtable.com/developers/web/api/delete-record)
+- [Airtable Formula Reference](https://support.airtable.com/docs/formula-field-reference)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and SDK code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Airtable API paths, request payloads, and CLI or SDK examples; write and delete actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
