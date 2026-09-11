@@ -1,44 +1,60 @@
-## Description: <br>
-Search Viator tours, activities, attractions, availability, pricing, and exchange-rate information through an MCP server using the Viator Partner API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Viator tours, activities, attractions, availability, pricing, and destination data through an MCP server using a Viator Partner API key.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to search Viator travel products, compare activities or attractions, check details, pricing, availability, and exchange rates, and obtain Viator booking links without making bookings through the skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search queries may be sent to a third-party commercial travel API. <br>
-Mitigation: Use the skill only when Viator-backed travel search is desired, and avoid sending sensitive personal information in queries. <br>
-Risk: Returned booking links preserve affiliate attribution and may not represent provider-neutral travel planning. <br>
-Mitigation: Confirm the user wants Viator results and review returned product links before relying on them for recommendations or booking decisions. <br>
-Risk: The skill requires a Viator Partner API key. <br>
-Mitigation: Store the API key in the MCP server environment and do not expose it in prompts, shared files, or generated output. <br>
+## Use Case:
 
+External users and developers use this skill to find Viator tours, excursions, attraction information, availability, pricing, destination data, and supplier-currency exchange rates. It supports search and retrieval workflows only; booking is handled through returned Viator product URLs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/viator-mcp) <br>
-- [npm package @chrischall/viator-mcp](https://www.npmjs.com/package/@chrischall/viator-mcp) <br>
-- [Viator Partner Resources](https://partnerresources.viator.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Viator Partner API queries; returned booking and attraction links may preserve affiliate attribution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill runs an external MCP package in the user's agent environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install a pinned reviewed package version or commit before use.
+
+Risk: A Viator Partner API key is required for normal operation.
+
+Mitigation: Avoid placing real keys in shared project configuration and keep local config files out of source control.
+
+Risk: The MCP server only needs access for Viator search and retrieval workflows.
+
+Mitigation: Run the server with only the access needed for Viator lookups.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/viator-mcp)
+- [npm package @chrischall/viator-mcp](https://www.npmjs.com/package/@chrischall/viator-mcp)
+- [GitHub repository listed in the skill artifact](https://github.com/chrischall/viator-mcp)
+- [Viator Partner Resources](https://partnerresources.viator.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool result summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Viator lookups; compact responses are the default for tool results.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

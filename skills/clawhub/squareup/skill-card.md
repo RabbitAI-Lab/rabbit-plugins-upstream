@@ -1,51 +1,81 @@
-## Description: <br>
-Square API integration with managed OAuth for administering supported Square resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Square API integration with managed OAuth for agent-assisted Square administration through the Maton CLI and gateway.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and Square administrators use this skill to inspect and manage supported Square resources including locations, merchants, payments, refunds, customers, orders, catalog, inventory, invoices, team members, loyalty, checkout links, cards, payouts, bank accounts, and terminal checkouts. It is intended for users who need Square administration and can apply least-privileged OAuth scopes and explicit approval for write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform sensitive Square business and financial changes when directed. <br>
-Mitigation: Require explicit confirmation before any payment, refund, customer, order, catalog, invoice, card, terminal, or other write operation, including the exact endpoint, account, resource ID, and expected consequence. <br>
-Risk: Broad Square OAuth scopes or the wrong connected account could expose or change more data than intended. <br>
-Mitigation: Use the least-privileged Square account and OAuth scopes available, verify the Maton connection ID before actions, and revoke unused connections promptly. <br>
-Risk: Exposure of MATON_API_KEY could allow unauthorized use of the integration. <br>
-Mitigation: Keep MATON_API_KEY secret, do not log or share it, and rotate it immediately if compromised. <br>
+## Use Case:
 
+Developers and operators use this skill to list, inspect, and administer Square resources through managed OAuth. It supports Square API workflows such as locations, merchants, payments, refunds, customers, orders, catalog, inventory, invoices, team members, loyalty, online checkout, cards, payouts, bank accounts, and terminal checkouts.
 
-## Reference(s): <br>
-- [ClawHub Square Skill](https://clawhub.ai/byungkyu/skills/squareup) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Square API Overview](https://developer.squareup.com/docs) <br>
-- [Square API Reference](https://developer.squareup.com/reference/square) <br>
-- [Square Payments API](https://developer.squareup.com/reference/square/payments-api) <br>
-- [Square Orders API](https://developer.squareup.com/reference/square/orders-api) <br>
-- [Square Catalog API](https://developer.squareup.com/reference/square/catalog-api) <br>
-- [Square Inventory API](https://developer.squareup.com/reference/square/inventory-api) <br>
-- [Square Invoices API](https://developer.squareup.com/reference/square/invoices-api) <br>
-- [Square Terminal API](https://developer.squareup.com/reference/square/terminal-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with API endpoint examples, JSON request bodies, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Square OAuth connection; write operations require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: The skill can mutate Square business data and perform financial actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, retrieve the target resource first, and require explicit user confirmation with endpoint, account, resource ID, payload, and consequence before any write or financial action.
+
+Risk: The wrong Square account or Maton connection could be used when multiple profiles or connections exist.
+
+Mitigation: Verify the active Maton profile and specify the intended Square connection ID before requests, especially before writes.
+
+Risk: Long-lived API keys or provider-issued tokens could be exposed through logs, command lines, files, or environment leakage.
+
+Mitigation: Prefer OAuth through the Maton CLI credential store, never print or persist credentials, send Maton API keys only to api.maton.ai, and rotate any key that was exposed.
+
+Risk: Square API responses and webhook payloads may contain untrusted content.
+
+Mitigation: Treat fetched content as data, do not execute instructions from responses, and pass external values as discrete arguments rather than interpolating them into shell commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/squareup)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Square API Overview](https://developer.squareup.com/docs)
+- [Square API Reference](https://developer.squareup.com/reference/square)
+- [Square Payments API](https://developer.squareup.com/reference/square/payments-api)
+- [Square Customers API](https://developer.squareup.com/reference/square/customers-api)
+- [Square Orders API](https://developer.squareup.com/reference/square/orders-api)
+- [Square Catalog API](https://developer.squareup.com/reference/square/catalog-api)
+- [Square Inventory API](https://developer.squareup.com/reference/square/inventory-api)
+- [Square Invoices API](https://developer.squareup.com/reference/square/invoices-api)
+- [Square Locations API](https://developer.squareup.com/reference/square/locations-api)
+- [Square Team Members API](https://developer.squareup.com/reference/square/team-api)
+- [Square Loyalty API](https://developer.squareup.com/reference/square/loyalty-api)
+- [Square Online Checkout API](https://developer.squareup.com/reference/square/checkout-api)
+- [Square Cards API](https://developer.squareup.com/reference/square/cards-api)
+- [Square Payouts API](https://developer.squareup.com/reference/square/payouts-api)
+- [Square Bank Accounts API](https://developer.squareup.com/reference/square/bank-accounts-api)
+- [Square Terminal API](https://developer.squareup.com/reference/square/terminal-api)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Maton CLI and SDK instructions for Square API requests; responses are returned by the external API and may include JSON.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Safe single-owner bounded memory consolidation with guarded backups, recovery, and deterministic audits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Consolidate daily session logs into L2 topic files and a compact MEMORY.md index, in three bounded phases with backups, lifecycle and secret guards.
 
-## Publisher: <br>
-[lzyling](https://clawhub.ai/user/lzyling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lzyling](https://clawhub.ai/user/lzyling)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to consolidate daily memory logs into durable topic files, a compact MEMORY.md index, and a bounded dream diary while preserving backups, ownership checks, and deterministic audits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill performs local memory file writes in the target workspace. <br>
-Mitigation: Install it only in workspaces where it should maintain MEMORY.md and top-level memory topic files, keep built-in OpenClaw Dreaming disabled before writes, and review the generated plan before editing. <br>
-Risk: Multiple scheduled memory writers could create ownership ambiguity. <br>
-Mitigation: Create at most one scheduled writer yourself when using the cron template, and run scheduled invocations through preflight with --scheduled. <br>
-Risk: Memory consolidation can accidentally preserve outdated authority, lifecycle state, contradictions, or unnecessary private detail. <br>
-Mitigation: Review touched topic files semantically before finalization and rely on the deterministic audit to report credential categories by file. <br>
-Risk: Incomplete runs require human recovery before another write run. <br>
-Mitigation: Inspect the manifest and backups, restore or reconcile files manually, then acknowledge only the exact reviewed run id. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to have an agent consolidate daily Markdown memory logs into durable topic notes, a compact MEMORY.md index, and a dream log while preserving backups and secret handling rules.
 
-## Reference(s): <br>
-- [Signal Dreaming on ClawHub](https://clawhub.ai/lzyling/skills/signal-dreaming) <br>
-- [Signal Dreaming V3 Protocol](references/dream-protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell command blocks; scripts produce JSON plans, manifests, audits, and state files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces bounded local file updates to MEMORY.md, top-level memory topic files, memory/dream-log.md, logs/signal-dreaming/state.json, and .backup/memory-dreams manifests when its guarded write workflow is followed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0-rc.1 (source: server release metadata and SKILL.md release candidate note) <br>
+Risk: The skill rewrites MEMORY.md, memory/dream-log.md, and topic files, so the first upgraded consolidation can restructure existing workspace memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the first 5.0.0 consolidation manually, confirm backups under .backup/memory-dreams, and review the final dream summary before returning it to a schedule.
+
+Risk: Backups may contain local memory content that should not be synced or published.
+
+Mitigation: Keep .backup/memory-dreams out of public archives and sync targets.
+
+Risk: The skill reads daily workspace memory logs and may consult workspace configuration while planning consolidation.
+
+Mitigation: Prefer field-scoped reads or documented defaults instead of loading the full OpenClaw config into context.
+
+## Reference(s):
+
+- [Signal Dreaming full protocol](references/dream-protocol.md)
+- [Signal Dreaming audit helper](references/dream-audit.sh)
+- [Signal Dreaming version history](references/changelog.md)
+- [Signal Dreaming on ClawHub](https://clawhub.ai/lzyling/skills/signal-dreaming)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown file edits, shell command invocations, configuration snippets, and concise text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces updates to workspace memory files and a final dream summary; it does not emit structured machine-readable state.]
+
+## Skill Version(s):
+
+5.0.0 (source: server release metadata and references/changelog.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

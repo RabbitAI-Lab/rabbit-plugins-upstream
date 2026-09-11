@@ -1,0 +1,198 @@
+{
+  "manifest_kind": "replynodes/social-data-skills/appstore-api-package-manifest",
+  "manifest_version": 1,
+  "name": "appstore-api",
+  "title": "App Store Public Reads (ReplyNodes)",
+  "description": "Read-only App Store API for iOS app metadata and ASO research through ReplyNodes prepaid credits using one long-lived Bearer fetcher key.",
+  "version": "2.0.1",
+  "contract_version": "v1",
+  "platform": "ios",
+  "mode": "readonly",
+  "license": "Apache-2.0",
+  "entrypoint": "SKILL.md",
+  "install_doc": "INSTALL.md",
+  "publication_doc": "PUBLICATION.md",
+  "required_agents": [
+    "OpenClaw",
+    "Hermes",
+    "ChatGPT",
+    "Claude",
+    "generic HTTP",
+    "MCP agents"
+  ],
+  "search_terms": [
+    "app store api",
+    "appstore",
+    "ios",
+    "ios app metadata",
+    "app lookup",
+    "app search",
+    "related apps",
+    "app metadata",
+    "public app data"
+  ],
+  "surface_status": [
+    "All nine reviewed public read methods are exposed as stable capability identifiers in the manifest: app, list, search, developer, privacy, suggest, similar, reviews, and ratings.",
+    "Each route uses the provider method name and exact option names; app-shaped results are normalized into the public App contract and raw provider records never cross the public gateway.",
+    "No availability, uptime, latency, or success-rate figure is claimed; example payloads are illustrative fixtures.",
+    "Package access uses prepaid credits only: one long-lived fetcher key is sent as Authorization: Bearer YOUR_FETCHER_KEY"
+  ],
+  "source_of_truth": {
+    "catalog": "services/social-data-skills/catalog/catalog_appstore.json",
+    "capability_matrix": "services/appstore-fetcher/internal/capabilities/capabilities.go",
+    "normalized_contract": "services/appstore-fetcher/internal/contract/contract.go",
+    "generator": "services/social-data-skills/catalog/generate_appstore.py"
+  },
+  "distribution": {
+    "published_to_registry": false,
+    "note": "Canonical package source for the prepaid-credit release; external publication is gated on a live package-mode capability response."
+  },
+  "capabilities": [
+    {
+      "capability": "app",
+      "mcp_tool": "appstore_app",
+      "operation": "app",
+      "method": "GET",
+      "path": "/v1/appstore/apps/{id}",
+      "auth_required": true,
+      "summary": "Look up one public App Store application",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "list",
+      "mcp_tool": "appstore_list",
+      "operation": "list",
+      "method": "GET",
+      "path": "/v1/appstore/list",
+      "auth_required": true,
+      "summary": "List applications from a storefront collection",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "search",
+      "mcp_tool": "appstore_search",
+      "operation": "search",
+      "method": "GET",
+      "path": "/v1/appstore/search",
+      "auth_required": true,
+      "summary": "Search public App Store applications by term",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "developer",
+      "mcp_tool": "appstore_developer",
+      "operation": "developer",
+      "method": "GET",
+      "path": "/v1/appstore/developer",
+      "auth_required": true,
+      "summary": "List applications by developer",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "privacy",
+      "mcp_tool": "appstore_privacy",
+      "operation": "privacy",
+      "method": "GET",
+      "path": "/v1/appstore/privacy",
+      "auth_required": true,
+      "summary": "Read public App Store privacy details",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "suggest",
+      "mcp_tool": "appstore_suggest",
+      "operation": "suggest",
+      "method": "GET",
+      "path": "/v1/appstore/suggest",
+      "auth_required": true,
+      "summary": "Suggest public App Store search terms",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "similar",
+      "mcp_tool": "appstore_similar",
+      "operation": "similar",
+      "method": "GET",
+      "path": "/v1/appstore/apps/{id}/similar",
+      "auth_required": true,
+      "summary": "List apps related to an application",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "reviews",
+      "mcp_tool": "appstore_reviews",
+      "operation": "reviews",
+      "method": "GET",
+      "path": "/v1/appstore/reviews",
+      "auth_required": true,
+      "summary": "Read a page of public app reviews",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    },
+    {
+      "capability": "ratings",
+      "mcp_tool": "appstore_ratings",
+      "operation": "ratings",
+      "method": "GET",
+      "path": "/v1/appstore/ratings",
+      "auth_required": true,
+      "summary": "Read public app ratings",
+      "implemented_in": "services/appstore-fetcher/provider-runtime and services/replynodes-fetcher/internal/appstoreadapter"
+    }
+  ],
+  "unsupported_capabilities": [
+    {
+      "name": "version_history",
+      "status": "unsupported",
+      "reason": "not_supported_by_pinned_provider",
+      "notes": "No version_history method exists in the pinned provider source."
+    },
+    {
+      "name": "writes_auth_private",
+      "status": "unsupported",
+      "reason": "read_only_policy",
+      "notes": "Writes and authenticated/private operations are excluded by the domain read-only policy."
+    }
+  ],
+  "files": [
+    {
+      "path": "CHECKSUMS.txt",
+      "bytes": 609,
+      "sha256": "35f81ab1b657277c80fddd7a07d3419cb07c4fb0e5158180d46938350596e4b7"
+    },
+    {
+      "path": "INSTALL.md",
+      "bytes": 2989,
+      "sha256": "b9140c878fe652dfcc515359fbc4148fffb79ac7f158205cb01d8b2e1b5b469b"
+    },
+    {
+      "path": "PUBLICATION.md",
+      "bytes": 2380,
+      "sha256": "a9cd080cf2fbe04331d7b5faed4f6b6431b0d3a8a68f817f700bf5cc08b05521"
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 11508,
+      "sha256": "94236eb01c8d93db4b1cadb8da33e222f73f9585c26625de4d28def4891341fc"
+    },
+    {
+      "path": "llms.txt",
+      "bytes": 6261,
+      "sha256": "782bfe43af944f265d1e357da87f7579564fc8398038601e239fb0aaf5912573"
+    },
+    {
+      "path": "references/appstore-mcp.schema.json",
+      "bytes": 14179,
+      "sha256": "9d8fbb6442ab639ed062428b06211422ce0914fe014e803cdab152facccbfd83"
+    },
+    {
+      "path": "references/appstore-public-v1.openapi.json",
+      "bytes": 46233,
+      "sha256": "ab8e8c63ed86d1a66bd8aabe5ad7df00fd400a71866dc6036156ebb815906018"
+    },
+    {
+      "path": "references/endpoints.md",
+      "bytes": 14553,
+      "sha256": "a177828a6ec9403aa53fdce1ac12b2c09190fcf2e62610ffa49bd7b864a24e0a"
+    }
+  ]
+}

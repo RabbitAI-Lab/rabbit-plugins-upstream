@@ -1,50 +1,68 @@
-## Description: <br>
-Notion MCP provides managed-authentication access to Notion workspaces for querying databases, creating and updating pages, managing blocks, comments, teams, users, and related workspace content via Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Notion MCP integration with managed authentication for querying databases, creating and updating pages, and managing blocks through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an agent to a Notion workspace through Maton-managed MCP authentication. It supports workspace search, content retrieval, page and database creation, page updates, moves, duplication, comments, teams, and user lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and can broker access to connected Notion workspace content. <br>
-Mitigation: Keep MATON_API_KEY secret, install only if Maton is trusted, and verify the active workspace or connection before use. <br>
-Risk: Write-capable operations can create, update, move, duplicate, comment on, or otherwise change Notion content. <br>
-Mitigation: Require explicit confirmation of the target resource and intended effect before approving any write operation. <br>
-Risk: Accounts with multiple Notion connections could route requests to the wrong workspace. <br>
-Mitigation: Use the Maton-Connection header or otherwise verify the intended connection before sending requests. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to a user-approved Notion workspace, search and fetch workspace content, and perform approved content or database updates. It is suited for Notion workflows that need managed authentication through Maton instead of direct credential handling.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/notion-mcp) <br>
-- [Maton](https://maton.ai) <br>
-- [Notion MCP Overview](https://developers.notion.com/guides/mcp) <br>
-- [MCP Supported Tools](https://developers.notion.com/guides/mcp/mcp-supported-tools) <br>
-- [notion-search schema](schemas/notion-search.json) <br>
-- [notion-fetch schema](schemas/notion-fetch.json) <br>
-- [notion-create-pages schema](schemas/notion-create-pages.json) <br>
-- [notion-update-page schema](schemas/notion-update-page.json) <br>
-- [notion-create-database schema](schemas/notion-create-database.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON payloads and Python or JavaScript request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Notion MCP workspace through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can access selected Notion workspace content through Maton, including pages, databases, comments, users, and team information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when comfortable authorizing Maton for the selected workspace, prefer OAuth, choose the narrowest available Notion scopes, and avoid collecting or storing data beyond the immediate task.
+
+Risk: Write operations can create or change pages, comments, databases, data-source schemas, moves, deletions, and raw passthrough API calls.
+
+Mitigation: Require a clear confirmation step before page edits, schema changes, comments, moves, deletions, or passthrough calls, including the target resource and intended payload.
+
+Risk: Long-lived Maton API keys can be exposed if printed, stored improperly, or inherited by child processes.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid MATON_API_KEY unless the CLI is unavailable, and rotate the key if it is ever printed or stored improperly.
+
+Risk: The external Maton CLI or SDK is part of the execution path.
+
+Mitigation: Verify the Maton package source and version before installation or use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/notion-mcp)
+- [Publisher profile](https://clawhub.ai/user/byungkyu)
+- [Maton homepage](https://maton.ai)
+- [Notion MCP Overview](https://developers.notion.com/guides/mcp)
+- [MCP Supported Tools](https://developers.notion.com/guides/mcp/mcp-supported-tools)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON payloads and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May initiate authenticated Notion MCP API calls that return workspace content, page metadata, comments, users, teams, IDs, URLs, and operation results.]
+
+## Skill Version(s):
+
+1.2.2 (source: ClawHub release evidence; artifact frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

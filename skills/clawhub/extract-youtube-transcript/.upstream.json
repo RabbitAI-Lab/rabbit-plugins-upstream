@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/extract-youtube-transcript",
   "slug": "extract-youtube-transcript",
   "ownerHandle": null,
-  "version": "2.1.0",
-  "updatedAt": 1779077705701,
-  "contentHash": "d3ff85f2c305413823a3adfd835c450f0c8ff003566187c9350b12e5aea5a157",
-  "fetchedAt": "2026-07-26T18:51:22.212Z"
+  "version": "2.0.0",
+  "updatedAt": 1789109229306,
+  "contentHash": "552e0821126dd5733eb837abfdf8cdd9a8e52a8359f3d7cc46039bd7f0306c34",
+  "fetchedAt": "2026-09-11T12:19:38.232Z"
 }

@@ -1,42 +1,59 @@
-## Description: <br>
-Generate and edit images using ByteDance's Seedream V4.5 model via WaveSpeed AI, including text-to-image generation and multi-image editing with custom resolutions up to 4096x4096. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images using ByteDance's Seedream V4.5 model via WaveSpeed AI, including text-to-image generation and multi-image editing with custom resolutions up to 4096x4096.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creative teams use this skill to guide agents in generating new images or editing existing images through WaveSpeed AI, especially when high-quality text rendering is needed for posters, logos, and branded visuals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a WaveSpeed API key and may incur provider charges when agents generate or edit images. <br>
-Mitigation: Configure the API key through environment variables or secret management, review expected usage before running requests, and monitor provider billing. <br>
-Risk: Prompts and selected images are sent to WaveSpeed AI for processing, which may expose confidential, regulated, or personal content. <br>
-Mitigation: Use only authorized prompts and images, avoid sensitive content unless approved, and review WaveSpeed AI data handling policies before use. <br>
-Risk: Image editing uses external or uploaded image URLs, so untrusted image sources can create privacy or content-safety exposure. <br>
-Mitigation: Validate image URLs and use trusted sources only; do not pass untrusted or user-provided image URLs without review. <br>
+## Use Case:
 
+Developers and creative agents use this skill to generate new images or edit supplied images through WaveSpeed AI when a task needs high-quality text rendering, custom image sizes, or multi-image composition.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/chengzeyi/wavespeed-seedream-45) <br>
-- [WaveSpeed AI access keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may include WaveSpeed model IDs, prompt and image parameters, image output URLs, retry settings, and error handling patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The setup and MCP examples use npm or npx commands that may resolve the latest package version at install time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted WaveSpeed packages, prefer pinned versions or locked project installs, and avoid elevated privileges when installing or running npm commands.
+
+Risk: Authentication and image uploads send credentials or user media to WaveSpeed-managed services.
+
+Mitigation: Use scoped, revocable API keys, rely on the CLI login flow instead of pasting keys into chat, and upload only images intended for WaveSpeed processing.
+
+Risk: Passing arbitrary media URLs could expose unintended remote content to the image model workflow.
+
+Mitigation: Only pass media URLs provided by the user or returned by a previous trusted WaveSpeed run.
+
+## Reference(s):
+
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed access key page](https://wavespeed.ai/accesskey)
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-seedream-45)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and model parameter guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces WaveSpeed CLI or MCP invocation guidance that returns generated or edited image URLs and optional downloaded files.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

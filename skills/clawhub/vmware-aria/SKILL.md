@@ -1,9 +1,9 @@
 ---
 name: vmware-aria
 description: >
-  Use this skill whenever the user needs VMware Aria Operations data — performance metrics, alerts, capacity planning, anomaly detection, and automated reports.
+  Use this skill whenever the user needs VMware Aria Operations (rebranded VMware VCF Operations in VCF 9 and later) data — performance metrics, alerts, capacity planning, anomaly detection, and automated reports.
   Directly handles: query resource metrics, list/acknowledge/cancel alerts, manage alert definitions, check capacity and time-remaining forecasts, detect anomalies, generate and manage reports.
-  Always use this skill for "check vSphere capacity", "what Aria Operations alerts are active", "show VMware anomalies", "generate an Aria report", "rightsizing recommendations", or any Aria/vRealize Operations task.
+  Always use this skill for "check vSphere capacity", "what Aria Operations alerts are active", "show VMware anomalies", "generate an Aria report", "rightsizing recommendations", "VCF Operations alerts", or any Aria Operations / VCF Operations / vRealize Operations task.
   Combined with LLM, Aria data powers natural language reports: "give me a capacity report" → Aria collects data → LLM formats the report.
   Do NOT use for real-time vCenter alarms/events (use vmware-monitor), VM operations (use vmware-aiops), or NSX networking (use vmware-nsx).
   For load balancing/AVI/AKO use vmware-avi.
@@ -12,23 +12,23 @@ installer:
   package: vmware-aria
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["VMWARE_ARIA_CONFIG"],"bins":["vmware-aria"],"config":["~/.vmware-aria/config.yaml","~/.vmware-aria/.env"]},"optional":{"env":["VMWARE_ARIA_<TARGET>_PASSWORD","VMWARE_ARIA_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_ARIA_CONFIG","homepage":"https://github.com/zw008/VMware-Aria","emoji":"📊","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"env":["VMWARE_ARIA_CONFIG"],"bins":["vmware-aria"],"config":["~/.vmware-aria/config.yaml","~/.vmware-aria/.env"]},"optional":{"env":["VMWARE_ARIA_<TARGET>_PASSWORD","VMWARE_ARIA_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_ARIA_CONFIG","homepage":"https://github.com/vmware-skills/VMware-Aria","emoji":"📊","os":["macos","linux"]}}
 compatibility: >
   vmware-policy auto-installed as Python dependency (provides @vmware_tool decorator and audit logging). All write operations audited to ~/.vmware/audit.db.
   Credentials: Each Aria Operations target requires a per-target password env var in ~/.vmware-aria/.env following the pattern VMWARE_ARIA_<TARGET_NAME_UPPER>_PASSWORD. Passwords are never logged or echoed.
-  Read-heavy: 21 of 28 tools are read-only. Write operations limited to alert acknowledge/cancel, alert definition management, and report management.
+  Read-heavy: 26 of 33 tools are read-only. Write operations limited to alert acknowledge/cancel, alert definition management, and report management.
   No webhooks, no outbound network calls, no guest operations. Local only: stdio MCP + Aria Operations REST API (HTTPS 443).
   Transitive dependencies: Only vmware-policy (audit/policy). No post-install scripts or background services.
 ---
 
 # VMware Aria Operations
 
-> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "Aria" are trademarks of Broadcom. Source code is publicly auditable at [github.com/zw008/VMware-Aria](https://github.com/zw008/VMware-Aria) under the MIT license.
+> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "Aria" are trademarks of Broadcom. Source code is publicly auditable at [github.com/vmware-skills/VMware-Aria](https://github.com/vmware-skills/VMware-Aria) under the MIT license.
 
-VMware Aria Operations (vRealize Operations) AI-assisted monitoring — 28 MCP tools for resources, alerts, alert definitions, capacity planning, anomaly detection, report automation, and platform health.
+VMware Aria Operations (vRealize Operations / VCF Operations 9.1) AI-assisted monitoring — 33 MCP tools for resources, alerts, alert definitions, capacity planning, anomaly detection, report automation, platform health, and VCF 9.1 fleet certificates/passwords/domains, diagnostic findings, and real-time PromQL metrics.
 
 > Domain-focused monitoring skill for Aria Operations 8.x / vRealize Operations 8.x.
-> **Companion skills**: [vmware-nsx](https://github.com/zw008/VMware-NSX) (networking), [vmware-aiops](https://github.com/zw008/VMware-AIops) (VM lifecycle), [vmware-monitor](https://github.com/zw008/VMware-Monitor) (read-only vSphere), [vmware-avi](https://github.com/zw008/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/zw008/VMware-Harden) (compliance baselines).
+> **Companion skills**: [vmware-nsx](https://github.com/vmware-skills/VMware-NSX) (networking), [vmware-aiops](https://github.com/vmware-skills/VMware-AIops) (VM lifecycle), [vmware-monitor](https://github.com/vmware-skills/VMware-Monitor) (read-only vSphere), [vmware-avi](https://github.com/vmware-skills/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/vmware-skills/VMware-Harden) (compliance baselines).
 > | [vmware-pilot](../vmware-pilot/SKILL.md) (workflow orchestration) | [vmware-policy](../vmware-policy/SKILL.md) (audit/policy)
 
 ## What This Skill Does
@@ -42,8 +42,9 @@ VMware Aria Operations (vRealize Operations) AI-assisted monitoring — 28 MCP t
 | **Reports** | list templates, generate, list, get status+download URL, delete | 5 |
 | **Anomaly** | list anomalies, risk badge | 2 |
 | **Health** | Aria platform health, collector group status | 2 |
+| **Fleet / PromQL** (VCF Ops 9.1) | fleet certificates, password accounts, VCF domains, diagnostic findings, real-time PromQL query | 5 |
 
-**Total**: 28 tools (21 read-only + 7 write)
+**Total**: 33 tools (26 read-only + 7 write)
 
 ## Quick Install
 
@@ -169,7 +170,7 @@ vmware-aria resource top --target lab
 
 Running vmware-aria with a local or small model? See [`references/agent-guardrails.md`](references/agent-guardrails.md) for tool-calling guardrails (alert-to-resource correlation and Aria data fidelity).
 
-## MCP Tools (28 — 21 read, 7 write)
+## MCP Tools (33 — 26 read, 7 write)
 
 All MCP tools accept an optional `target` parameter to select which Aria Operations instance to connect to.
 
@@ -203,8 +204,13 @@ All MCP tools accept an optional `target` parameter to select which Aria Operati
 | | `get_resource_riskbadge` | Read | Risk score (0–100): likelihood of future problems |
 | Health | `get_aria_health` | Read | Aria platform node status (ONLINE/OFFLINE) |
 | | `list_collector_groups` | Read | Collector agents status and connectivity |
+| Fleet / PromQL (VCF Ops 9.1) | `fleet_certificate_list` | Read | Certificate status/expiry across the VCF fleet |
+| | `fleet_password_account_list` | Read | Managed password-account status (read-only; does not rotate) |
+| | `fleet_domain_list` | Read | SDDC/workload domains behind one registered VCF integration |
+| | `findings_list` | Read | Operations diagnostic findings (not compliance — see vmware-harden) |
+| | `promql_query` | Read | Real-time PromQL instant query via the VODAP service (base path INFERRED, unverified on real hardware) |
 
-**Read/write split**: 21 read-only, 7 write. All write operations are audit-logged to `~/.vmware/audit.db` (via vmware-policy).
+**Read/write split**: 26 read-only, 7 write. All write operations are audit-logged to `~/.vmware/audit.db` (via vmware-policy).
 
 ### List results are envelopes — read `truncated` before you summarise
 
@@ -227,7 +233,7 @@ Rules:
 - **`truncated: true` means more rows exist.** Never describe such a result as the complete set; either say it is a partial view or re-query with a higher `limit` or a narrower filter, as `hint` instructs.
 - **`truncated: false` means the answer is complete** — safe to summarise as the whole picture.
 - **`total: null` means the API reported no collection size**, so a page filled exactly to the limit is flagged truncated conservatively. It may in fact be complete; a follow-up query with a larger limit settles it.
-- **`list_anomalies` also carries `scanned`** — how many VMs were examined. It returns only VMs with a non-zero anomaly count, so a short list is not evidence that the environment is clean; check `truncated`.
+- **`list_anomalies` also carries `scanned`, `vm_total` and `scan_complete`** — `limit` bounds the answer, not the scan: the environment is ranked in full and the worst `limit` objects are returned. It returns only VMs with a non-zero anomaly count, so a short list is not evidence that the environment is clean; check `truncated`. With `scan_complete: true`, `total` is the number of anomalous objects found. With `scan_complete: false` the scan hit its cap, `total` is the environment's VM count, and a `note` says the ranking is partial.
 
 ## CLI Quick Reference
 
@@ -321,7 +327,7 @@ Variable names follow the pattern `VMWARE_ARIA_<TARGET_NAME_UPPER>_PASSWORD` whe
 
 ## Safety
 
-- **Read-heavy**: 21 of 28 tools are read-only
+- **Read-heavy**: 26 of 33 tools are read-only
 - **Audit logging**: Write operations logged to `~/.vmware/audit.db` (SQLite WAL, via vmware-policy) with timestamp, user, target, operation, and result
 - **Token expiry handling**: vRealizeOpsToken re-acquired automatically 60 seconds before expiry (6-hour sliding validity, extended on each call)
 - **Prompt injection defense**: API text values sanitized via `_sanitize()` — strips control characters, truncates to 500 chars
@@ -377,4 +383,4 @@ vmware-policy is automatically installed as a dependency — no manual setup nee
 
 ## License
 
-MIT — [github.com/zw008/VMware-Aria](https://github.com/zw008/VMware-Aria)
+MIT — [github.com/vmware-skills/VMware-Aria](https://github.com/vmware-skills/VMware-Aria)

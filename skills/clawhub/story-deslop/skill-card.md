@@ -1,44 +1,63 @@
-## Description: <br>
-Detects and edits Chinese web-fiction prose to reduce AI-flavored, formulaic writing while preserving plot, character details, and author intent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects and rewrites AI-flavored Chinese web-novel prose so the text reads more natural, less template-like, and closer to the author's intended style.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and editors use Story Deslop to scan Chinese web-fiction drafts for formulaic AI-style prose and receive targeted rewrite guidance, reports, or file edits that make the text read more naturally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: File mode can rewrite provided manuscript files and normalize punctuation after editing. <br>
-Mitigation: Keep backups and request detection-only behavior when review is needed before any edits are applied. <br>
-Risk: Aggressive style cleanup can remove useful plot, character, or pacing detail if applied too broadly. <br>
-Mitigation: Review the change report, preserve story intent, and use the skill's review markers for uncertain edits. <br>
+## Use Case:
 
+Web-novel authors and editors use this skill to detect AI-flavored patterns in Chinese fiction, rewrite prose while preserving plot intent, and optionally apply file-based checks and punctuation cleanup to manuscript files.
 
-## Reference(s): <br>
-- [Story Deslop on ClawHub](https://clawhub.ai/worldwonderer/skills/story-deslop) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown reports with edited prose, inline shell commands, and optional file edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [File mode can update user-supplied manuscript files and return short representative excerpts for long inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The skill can modify provided manuscript files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use detect-only wording when edits are not desired, and review changed text before accepting it.
+
+Risk: Optional author memory can persist workspace-level style preferences.
+
+Mitigation: Use explicit remember or forget requests to control what is stored, and avoid recording one-time instructions as long-term style preferences.
+
+Risk: Style checks can flag functional prose patterns that should remain in the story.
+
+Mitigation: Treat detector output as review guidance, preserve plot-critical content, and mark uncertain cases for follow-up instead of deleting them.
+
+## Reference(s):
+
+- [story-deslop skill page](https://clawhub.ai/worldwonderer/skills/story-deslop)
+- [OpenClaw source metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Anti-AI Writing Guide](references/anti-ai-writing.md)
+- [Author Memory Protocol](references/author-memory.md)
+- [Banned Words and Pattern Table](references/banned-words.md)
+- [Deslop Gate Rules](references/deslop-gates.md)
+- [Style Resolution Rules](references/style-resolution.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, rewritten manuscript text or file edits, inline shell commands, and local configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May edit provided manuscript files, run local report-only checks, normalize punctuation, and maintain optional workspace-level author-style memory when explicitly requested.]
+
+## Skill Version(s):
+
+1.1.20 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

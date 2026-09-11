@@ -1,105 +1,82 @@
 #!/bin/bash
-# stellar-trails dev server v8.0.0 — resilient no-cache HTTP server
+# stellar-trails dev server v9.17.0 — ClawHub compliant
 #
-# Serves /home/z/my-project/.zscripts/ on port :3000 with Cache-Control: no-store.
+# v9.17.0 compliance fixes:
+#   - 127.0.0.1 binding (localhost only) — Fix #5
+#   - Port hopping (3000-3003) — Fix #4, no process kill
+#   - No self-upgrade (no self-restart) — Fix #3
+#   - No auto-install (no clawhub install) — Fix #3
+#   - No /proc/ access — Fix #4
+#   - No kill of any process — Fix #4
 #
-# v8.0.0 changes (from v7.2.2):
-#   1. Signal traps (SIGHUP, SIGTERM, SIGINT) → clean child shutdown
-#   2. PID file tracking → prevent orphans, enable clean restart
-#   3. Exponential backoff (1s→2s→4s→8s→16s→30s max) → no spin loop
-#   4. Max retries (10 consecutive failures → exit, don't spin forever)
-#   5. Log to file (/tmp/st-devsh.log) → debugging possible
-#   6. Health check (curl every 30s → restart if hung)
-#   7. No `set -e` → explicit error handling
-#
-# Kill vectors addressed:
-#   A. SIGHUP on terminal close → trap + ignore (keep serving)
-#   B. Session reset → setsid in caller + PID file for recovery
-#   C. OOM killer → crash recovery + backoff
-#   D. Orphaned python3 → trap kills child before exit
-#   E. Spin loop → backoff + max retries
-#   F. Silent errors → log to file
-#   G. Hung server → health check + restart
+# dev.sh is now a SIMPLE popup server: bind localhost, serve files, restart on crash.
+
+set -e
 
 ZSCRIPTS_DIR="${ZSCRIPTS_DIR:-/home/z/my-project/.zscripts}"
-PORT="${PORT:-3000}"
-PID_FILE="/tmp/st-devsh.pid"
 LOG_FILE="/tmp/st-devsh.log"
-MAX_RETRIES=10
-HEALTH_CHECK_INTERVAL=30
+PID_FILE="$ZSCRIPTS_DIR/st-devsh.pid"
 
 mkdir -p "$ZSCRIPTS_DIR"
-cd "$ZSCRIPTS_DIR" || exit 1
+cd "$ZSCRIPTS_DIR"
 
-# --- Logging ---
 log() {
-  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE"
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE" 2>/dev/null
   echo "[dev.sh] $*"
 }
 
-# --- PID file management ---
-write_pid() {
-  echo $$ > "$PID_FILE"
-}
-
-clear_pid() {
-  rm -f "$PID_FILE" 2>/dev/null
-}
-
-check_already_running() {
-  if [ -f "$PID_FILE" ]; then
-    OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
-    if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
-      log "Already running (PID $OLD_PID) — not starting"
+# === PID FILE CLEANUP (no /proc/ access, no kill) ===
+if [ -f "$PID_FILE" ]; then
+  OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
+  if [ -n "$OLD_PID" ]; then
+    # Check if port is serving — if yes, already running
+    if curl -s -o /dev/null -m 1 http://127.0.0.1:3000/ 2>/dev/null; then
+      log "Already serving on :3000 — not starting"
       exit 0
     fi
-    # Stale PID file — clean up
-    log "Stale PID file (PID $OLD_PID not running) — cleaning up"
-    clear_pid
+    # Port not serving — stale PID, clean up (no kill, just remove file)
+    log "Stale PID file — cleaning up (no process kill)"
+    rm -f "$PID_FILE"
   fi
-}
-
-# --- Signal handling ---
-CHILD_PID=""
-
-cleanup() {
-  log "Received signal — shutting down"
-  if [ -n "$CHILD_PID" ] && kill -0 "$CHILD_PID" 2>/dev/null; then
-    kill -TERM "$CHILD_PID" 2>/dev/null
-    sleep 0.5
-    kill -KILL "$CHILD_PID" 2>/dev/null
-  fi
-  clear_pid
-  exit 0
-}
-
-# SIGHUP: terminal closed — DON'T exit, keep serving (detached)
+fi
+echo $$ > "$PID_FILE"
+trap 'if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi' EXIT
 trap '' SIGHUP
-# SIGTERM/SIGINT: clean shutdown
-trap cleanup SIGTERM SIGINT
 
-# --- Port guard ---
-if command -v ss >/dev/null 2>&1 && ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
-  # Check if it's our own process
-  EXISTING_PID=$(ss -tlnp 2>/dev/null | grep ":$PORT " | grep -oP 'pid=\K[0-9]+' | head -1)
-  if [ -n "$EXISTING_PID" ] && [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" = "$EXISTING_PID" ]; then
-    log "Port :$PORT in use by our own process (PID $EXISTING_PID) — not starting"
-    exit 0
+# === PORT HOPPING (Fix #4: no kill, just try next port) ===
+PORT=3000
+MAX_PORT=3003
+while [ "$PORT" -le "$MAX_PORT" ]; do
+  if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+    log "Port :$PORT occupied — trying :$((PORT + 1))"
+    PORT=$((PORT + 1))
+  else
+    break
   fi
-  log "Port :$PORT in use by PID $EXISTING_PID — not starting"
+done
+if [ "$PORT" -gt "$MAX_PORT" ]; then
+  log "All ports :3000-:$MAX_PORT occupied — cannot start popup server"
+  log "  To free a port: identify and stop the process manually"
+  ss -tlnp 2>/dev/null | grep -E ':(300[0-3]) ' | while read line; do log "  $line"; done
+  if [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi
   exit 0
 fi
+log "Selected port :$PORT"
 
-# --- Start server ---
-check_already_running
-write_pid
-log "Serving $ZSCRIPTS_DIR on :$PORT (v8.0.0 resilient mode)"
-log "PID: $$ | Log: $LOG_FILE | Backoff: 1s→30s | Max retries: $MAX_RETRIES"
+# === SYNC FILES FROM SKILL DIR ===
+SKILL_DIR="/home/z/my-project/skills/stellar-trails"
+[ -f "$SKILL_DIR/index.html" ] && cp -f "$SKILL_DIR/index.html" "$ZSCRIPTS_DIR/index.html"
+[ -f "$SKILL_DIR/chibi.svg" ] && cp -f "$SKILL_DIR/chibi.svg" "$ZSCRIPTS_DIR/chibi.svg" 2>/dev/null || true
 
-RETRY_COUNT=0
+# === START PYTHON3 SERVER (127.0.0.1 only — Fix #5) ===
+log "Serving $ZSCRIPTS_DIR on 127.0.0.1:$PORT (v9.17.0 — ClawHub compliant)"
+log "PID: $$ | Log: $LOG_FILE | Mode: foreground + infinite loop"
+
 BACKOFF=1
+while true; do
+  START_TIME=$(date +%s)
+  log "Starting python3 server (foreground, backoff=${BACKOFF}s)"
 
-start_python_server() {
   python3 -c "
 import http.server, socketserver, signal, sys
 
@@ -120,41 +97,24 @@ def shutdown(sig, frame):
 
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
-# SIGHUP: keep serving even if terminal closes
 signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
-with ReuseTCPServer(('0.0.0.0', $PORT), NoCacheHandler) as httpd:
+with ReuseTCPServer(('127.0.0.1', $PORT), NoCacheHandler) as httpd:
     httpd.serve_forever()
-" >> "$LOG_FILE" 2>&1 &
-  CHILD_PID=$!
-}
+" 2>>"$LOG_FILE" || true
 
-# --- Main loop with backoff + health check ---
-while true; do
-  log "Starting python3 server (attempt $((RETRY_COUNT + 1)))"
-  start_python_server
-  wait "$CHILD_PID"
-  EXIT_CODE=$?
+  END_TIME=$(date +%s)
+  UPTIME=$((END_TIME - START_TIME))
+  log "python3 exited (uptime: ${UPTIME}s)"
 
-  if [ $EXIT_CODE -eq 0 ]; then
-    # Clean exit (SIGTERM/SIGINT) — don't restart
-    log "python3 exited cleanly (signal) — not restarting"
-    clear_pid
-    exit 0
+  if [ "$UPTIME" -lt 2 ]; then
+    log "Rapid crash — backing off ${BACKOFF}s"
+    sleep "$BACKOFF"
+    BACKOFF=$((BACKOFF * 2))
+    [ "$BACKOFF" -gt 30 ] && BACKOFF=30
+  else
+    log "Normal exit — restarting"
+    BACKOFF=1
+    sleep 1
   fi
-
-  RETRY_COUNT=$((RETRY_COUNT + 1))
-
-  if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-    log "Max retries ($MAX_RETRIES) reached — giving up. Check $LOG_FILE for details."
-    clear_pid
-    exit 1
-  fi
-
-  log "python3 exited (code $EXIT_CODE) — retry $RETRY_COUNT/$MAX_RETRIES in ${BACKOFF}s"
-  sleep "$BACKOFF"
-
-  # Exponential backoff: 1→2→4→8→16→30 (capped)
-  BACKOFF=$((BACKOFF * 2))
-  [ "$BACKOFF" -gt 30 ] && BACKOFF=30
 done

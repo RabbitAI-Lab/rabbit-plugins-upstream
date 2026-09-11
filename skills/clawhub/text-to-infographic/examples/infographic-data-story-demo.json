@@ -1,0 +1,349 @@
+{
+  "infographic_id": "support_ai_90d_evidence_story",
+  "intent": "persuade",
+  "chart_family": "dashboard",
+  "language": "zh-CN",
+  "audience": "客户体验与运营负责人",
+  "source_summary": "基于工单仓库与季度客户体验调研，解释 AI 客服上线 90 天后的效率与质量变化。",
+  "message": {
+    "title": "AI 客服提速，但满意度仍需守住",
+    "subtitle": "上线 90 天：处理时长下降 31%，首次解决率提升 8 个百分点",
+    "core_takeaway": "自动化显著提高效率；升级人工的复杂工单仍是满意度风险源。",
+    "cta": "下一阶段优先优化升级人工的交接上下文。"
+  },
+  "layout": {
+    "layout_mode": "dashboard",
+    "coordinate_system": "cartesian",
+    "aspect_ratio": "16:9",
+    "reading_order": "left-to-right",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "evidence-first-data-story",
+    "palette_mode": "triad",
+    "emphasis_style": "editorial",
+    "premium_style": "data-journal",
+    "brand_colors": [
+      "#173B57",
+      "#1F8A70",
+      "#D97706"
+    ]
+  },
+  "data_sources": [
+    {
+      "source_id": "src_tickets_q2",
+      "title": "2026 Q2 客服工单仓库快照",
+      "source_type": "database",
+      "publisher": "客户体验数据组",
+      "citation": "内部数据仓库 CX.TICKETS，快照日期 2026-07-05",
+      "published_at": "2026-07-05",
+      "methodology": "排除测试工单和重复合并记录；按工单首次创建时间归属季度。"
+    },
+    {
+      "source_id": "src_csat_q2",
+      "title": "2026 Q2 客户满意度调研",
+      "source_type": "survey",
+      "publisher": "客户研究团队",
+      "citation": "内部季度调研，n=2,418，有效回收率 34%",
+      "published_at": "2026-07-08",
+      "methodology": "工单关闭后 24 小时抽样邀请；结果按渠道加权。"
+    }
+  ],
+  "metrics": [
+    {
+      "metric_id": "m_handle_time",
+      "label": "平均处理时长",
+      "value": 8.9,
+      "display_value": "8.9 分钟",
+      "unit": "minute",
+      "period": "2026 Q2",
+      "source_ids": [
+        "src_tickets_q2"
+      ],
+      "baseline": {
+        "value": 12.9,
+        "period": "2026 Q1",
+        "label": "上线前季度",
+        "source_ids": [
+          "src_tickets_q2"
+        ]
+      },
+      "delta": {
+        "value": -31.0,
+        "unit": "percent",
+        "direction": "down"
+      }
+    },
+    {
+      "metric_id": "m_fcr",
+      "label": "首次解决率",
+      "value": 76,
+      "display_value": "76%",
+      "unit": "percent",
+      "period": "2026 Q2",
+      "source_ids": [
+        "src_tickets_q2"
+      ],
+      "baseline": {
+        "value": 68,
+        "period": "2026 Q1",
+        "label": "上线前季度",
+        "source_ids": [
+          "src_tickets_q2"
+        ]
+      },
+      "delta": {
+        "value": 8,
+        "unit": "percentage-point",
+        "direction": "up"
+      }
+    },
+    {
+      "metric_id": "m_csat_escalated",
+      "label": "升级人工工单满意度",
+      "value": 72,
+      "display_value": "72 / 100",
+      "unit": "score",
+      "period": "2026 Q2",
+      "source_ids": [
+        "src_csat_q2"
+      ],
+      "baseline": {
+        "value": 78,
+        "period": "2026 Q1",
+        "label": "上线前季度",
+        "source_ids": [
+          "src_csat_q2"
+        ]
+      },
+      "delta": {
+        "value": -6,
+        "unit": "absolute",
+        "direction": "down"
+      }
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "c_speed",
+      "statement": "AI 客服上线后，平均处理时长较基期下降 31%。",
+      "claim_type": "comparison",
+      "metric_ids": [
+        "m_handle_time"
+      ],
+      "source_ids": [
+        "src_tickets_q2"
+      ],
+      "block_ids": [
+        "metric_speed"
+      ]
+    },
+    {
+      "claim_id": "c_resolution",
+      "statement": "首次解决率提升 8 个百分点，效率改善没有以重复咨询为代价。",
+      "claim_type": "trend",
+      "metric_ids": [
+        "m_fcr"
+      ],
+      "source_ids": [
+        "src_tickets_q2"
+      ],
+      "block_ids": [
+        "metric_fcr"
+      ]
+    },
+    {
+      "claim_id": "c_risk",
+      "statement": "升级人工工单满意度下降 6 分，交接体验是当前主要风险。",
+      "claim_type": "interpretation",
+      "metric_ids": [
+        "m_csat_escalated"
+      ],
+      "source_ids": [
+        "src_csat_q2"
+      ],
+      "block_ids": [
+        "metric_csat",
+        "action_handoff"
+      ],
+      "qualification": "满意度变化存在抽样误差，需结合后续访谈验证具体原因。"
+    }
+  ],
+  "story_arc": {
+    "thesis_claim_id": "c_speed",
+    "stages": [
+      {
+        "stage_id": "arc_hook",
+        "role": "hook",
+        "title": "效率跃升",
+        "claim_ids": [
+          "c_speed"
+        ],
+        "block_ids": [
+          "metric_speed"
+        ]
+      },
+      {
+        "stage_id": "arc_evidence",
+        "role": "evidence",
+        "title": "质量信号",
+        "claim_ids": [
+          "c_resolution"
+        ],
+        "block_ids": [
+          "metric_fcr"
+        ]
+      },
+      {
+        "stage_id": "arc_tension",
+        "role": "tension",
+        "title": "交接风险",
+        "claim_ids": [
+          "c_risk"
+        ],
+        "block_ids": [
+          "metric_csat"
+        ]
+      },
+      {
+        "stage_id": "arc_action",
+        "role": "action",
+        "title": "下一步",
+        "claim_ids": [
+          "c_risk"
+        ],
+        "block_ids": [
+          "action_handoff"
+        ]
+      }
+    ]
+  },
+  "annotations": [
+    {
+      "annotation_id": "a_baseline",
+      "text": "所有变化均以上线前季度 2026 Q1 为基期。",
+      "target_type": "metric",
+      "target_id": "m_handle_time",
+      "source_ids": [
+        "src_tickets_q2"
+      ],
+      "annotation_type": "methodology"
+    },
+    {
+      "annotation_id": "a_csat_caveat",
+      "text": "满意度来自关闭后问卷，并非全量客户。",
+      "target_type": "claim",
+      "target_id": "c_risk",
+      "source_ids": [
+        "src_csat_q2"
+      ],
+      "annotation_type": "caveat"
+    }
+  ],
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "90 天证据故事",
+      "content": "效率、质量与风险按证据链展开。",
+      "visual_role": "primary",
+      "claim_ids": [
+        "c_speed"
+      ],
+      "text_budget": 18
+    },
+    {
+      "block_id": "metric_speed",
+      "block_type": "metric",
+      "title": "处理时长",
+      "content": "8.9 分钟 / 较基期 -31%",
+      "visual_role": "primary",
+      "metric_ids": [
+        "m_handle_time"
+      ],
+      "claim_ids": [
+        "c_speed"
+      ],
+      "payload": {
+        "trend": "down",
+        "target": "越低越好"
+      },
+      "text_budget": 18
+    },
+    {
+      "block_id": "metric_fcr",
+      "block_type": "metric",
+      "title": "首次解决率",
+      "content": "76% / 较基期 +8pt",
+      "visual_role": "primary",
+      "metric_ids": [
+        "m_fcr"
+      ],
+      "claim_ids": [
+        "c_resolution"
+      ],
+      "payload": {
+        "trend": "up",
+        "target": "越高越好"
+      },
+      "text_budget": 18
+    },
+    {
+      "block_id": "metric_csat",
+      "block_type": "metric",
+      "title": "升级人工满意度",
+      "content": "72 / 较基期 -6 分",
+      "visual_role": "primary",
+      "metric_ids": [
+        "m_csat_escalated"
+      ],
+      "claim_ids": [
+        "c_risk"
+      ],
+      "payload": {
+        "trend": "down",
+        "target": "风险"
+      },
+      "text_budget": 20
+    },
+    {
+      "block_id": "action_handoff",
+      "block_type": "cta",
+      "title": "优化交接上下文",
+      "content": "把机器人已收集的信息完整带给人工坐席。",
+      "visual_role": "secondary",
+      "claim_ids": [
+        "c_risk"
+      ],
+      "text_budget": 24
+    }
+  ],
+  "relations": [
+    {
+      "from": "metric_speed",
+      "to": "metric_fcr",
+      "relation_type": "flow",
+      "label": "效率改善"
+    },
+    {
+      "from": "metric_fcr",
+      "to": "metric_csat",
+      "relation_type": "flow",
+      "label": "质量检验"
+    },
+    {
+      "from": "metric_csat",
+      "to": "action_handoff",
+      "relation_type": "highlights",
+      "label": "优先行动"
+    }
+  ],
+  "delivery": {
+    "primary_target": "html",
+    "secondary_targets": [
+      "png",
+      "doc"
+    ],
+    "doc_mode": "companion-detail"
+  }
+}

@@ -1,7 +1,7 @@
 # sogni-creative-agent-skill
 
 Agent skill and CLI for Sogni AI image, video, and music generation. Works as
-a skill source for Claude Code, OpenAI Codex CLI, Hermes Agent, OpenClaw,
+a skill source for Claude Code, OpenAI Codex CLI, Goose, Hermes Agent, OpenClaw,
 Manus AI, and other SKILL.md-aware agent runtimes.
 
 ## Install (pick the integration that matches your environment)
@@ -33,6 +33,19 @@ npx setup-sogni-agent-skill --only=codex
 # Hermes session
 npx setup-sogni-agent-skill --only=hermes
 
+# Hermes Skills Hub (install the narrow skill bundle plus the global CLI), then
+# /reset the Hermes session
+hermes skills install skills-sh/sogni-ai/sogni-creative-agent-skill/sogni-creative-agent-skill
+npm install -g @sogni-ai/sogni-creative-agent-skill@latest
+
+# Goose Agent Skill (install the skill plus the globally available CLI)
+npx skills add Sogni-AI/sogni-creative-agent-skill --global --agent goose --skill sogni-creative-agent-skill --yes
+npm install -g @sogni-ai/sogni-creative-agent-skill@latest
+
+# Goose MCP extension (temporary session; configure the same command permanently
+# through `goose configure`, or install it from the public Extensions directory)
+goose session --with-extension "npx -y --package @sogni-ai/sogni-creative-agent-skill@latest sogni-agent-mcp"
+
 # OpenClaw plugin (the npm package is scoped — use the npm: source prefix)
 openclaw plugins install npm:@sogni-ai/sogni-creative-agent-skill
 
@@ -58,6 +71,21 @@ bootstrap scripts with `set -e`, `bash -c`, `sh -c`, or inline repository URLs.
 Use the npm upgrade command above, update an existing checkout with `git -C`, or
 ask before cloning.
 
+## Host launchers
+
+The package installs one launcher shim per host next to `sogni-agent`. Each is
+the same CLI with the same flags and output; it only attributes the request to
+the host that ran it. Use the shim matching your runtime wherever these docs say
+`sogni-agent`, and fall back to `sogni-agent` when it is not on PATH.
+
+```bash
+sogni-agent-hermes       # Hermes Agent
+sogni-agent-goose        # Goose
+sogni-agent-codex        # OpenAI Codex CLI
+sogni-agent-claude-code  # Claude Code
+sogni-agent              # OpenClaw (auto-detected) and everything else
+```
+
 ## Configure Sogni API key
 
 Once-only setup, used by every integration above. The API key can always be
@@ -73,6 +101,14 @@ chmod 600 ~/.config/sogni/credentials
 
 You can also export `SOGNI_API_KEY` instead of writing the file. Confirm with
 `sogni-agent doctor`.
+
+The CLI leases a stable app ID per process from a persistent slot pool in
+`~/.config/sogni/app-ids/`, so concurrent agents (Claude Code, Codex,
+OpenCode, hermes, ...) never share one socket identity and routine runs never
+mint new IDs. Preserve that directory between sessions. In ephemeral
+containers, set one stable `SOGNI_APP_ID` value; rotating IDs on each run can
+trigger Sogni error 4061. If blocked, preserve the stable ID and wait before
+retrying.
 
 ## Hosted API modes (require SOGNI_API_KEY)
 
@@ -112,14 +148,23 @@ image, video, and music generation under a fair-use policy instead of spending
 Spark or SOGNI per render. Plans: Unlimited ($20/mo, $199/yr) and Unlimited Pro
 ($50/mo, $498/yr), with a one-per-account 3-day free trial (trial usage is
 capped). External-vendor models — GPT Image 2 (`gpt-image-2`), Seedance 2.0 /
-Mini / Fast (`seedance-2-0`, `seedance-2-0-mini`, `seedance-2-0-fast`), and
-HappyHorse 1.1 (`happyhorse-1.1-t2v`, `happyhorse-1.1-i2v`,
-`happyhorse-1.1-r2v`) — are never covered and always need Premium Spark;
+Mini / Fast / 2.5 (`seedance-2-0`, `seedance-2-0-mini`, `seedance-2-0-fast`,
+`seedance-2-5`), HappyHorse 1.1 (`happyhorse-1.1-t2v`, `happyhorse-1.1-i2v`,
+`happyhorse-1.1-r2v`), and Wan 3 (`wan3.0-video`) — are never covered and
+always need Premium Spark;
 selecting SOGNI opts a job out of coverage. The server decides
 coverage from the verified entitlement + resolved model; the CLI never asserts
-coverage. Fair-use throttling lowers per-UTC-day concurrency as completed renders
-climb (resets UTC midnight) and demotes over-allowance jobs to a lower-priority
-standard queue — describe this as fair use / standard queue, never "relaxed".
+coverage. Never infer a Spark charge from `tokenType: "spark"`: that field is
+the quote/accounting denomination and can remain `spark` on a covered job.
+`paymentModel: "subscription"` is the authoritative indication that the artist
+debit was skipped. If `paymentModel` is absent, call the payment source unknown
+instead of claiming Spark was spent. A successful `--billing-mode subscription`
+request is covered; unavailable coverage fails with 4078 or 4080 rather than
+silently falling back to Spark. Describe only the concurrency and queue limits
+shown in the current plan catalog. Actual throughput varies with demand,
+available Supernet capacity, and fair-use controls; do not speculate about
+unpublished scheduling mechanics or availability windows, and never call the plan
+"relaxed".
 Subscription-billing failures use `errorCategory: "subscription_billing"` with
 `errorCode` 4078 (vendor/no-entitlement -> use Premium Spark or reconnect), 4079
 (queue cap -> wait), 4080 (renewal retry, access paused -> pay with Spark/SOGNI,

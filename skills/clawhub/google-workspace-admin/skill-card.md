@@ -1,48 +1,72 @@
-## Description: <br>
-Google Workspace Admin SDK integration with managed OAuth for reading and managing users, groups, organizational units, roles, and domain settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Workspace Admin SDK integration with managed OAuth for reading and managing users, groups, organizational units, roles, and domain settings.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Workspace administrators and operators use this skill to let an agent assist with Google Workspace directory administration through the Maton OAuth/API gateway. It is intended for tasks such as reviewing users and groups, managing organizational units, assigning roles, and making explicitly approved administrative changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can assist with high-impact Google Workspace administration, including account, group, role, organizational unit, and domain changes. <br>
-Mitigation: Use a least-privileged admin account, restrict OAuth scopes to the task, start with read-only checks, and require explicit approval with the exact method, endpoint path, target identifier, and consequences before any write action. <br>
-Risk: A request may target the wrong Google Workspace connection when multiple Maton connections exist. <br>
-Mitigation: Include the intended `Maton-Connection` header on every request and verify the connection before making changes. <br>
-Risk: The skill depends on Maton as the OAuth/API gateway and requires a Maton API key. <br>
-Mitigation: Install only when Maton is trusted for the intended administration workflow, protect the `MATON_API_KEY`, and revoke or delete the OAuth connection when the work is complete. <br>
+## Use Case:
 
+Workspace administrators and their delegated agents use this skill to inspect and manage Google Workspace directory resources through Maton. It is intended for user, group, organizational unit, role, and domain administration with explicit approval before write actions.
 
-## Reference(s): <br>
-- [Google Workspace Admin on ClawHub](https://clawhub.ai/byungkyu/skills/google-workspace-admin) <br>
-- [Maton](https://maton.ai) <br>
-- [Google Admin SDK Overview](https://developers.google.com/admin-sdk) <br>
-- [Directory API Users](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users) <br>
-- [Directory API Groups](https://developers.google.com/admin-sdk/directory/reference/rest/v1/groups) <br>
-- [Directory API Org Units](https://developers.google.com/admin-sdk/directory/reference/rest/v1/orgunits) <br>
-- [Directory API Roles](https://developers.google.com/admin-sdk/directory/reference/rest/v1/roles) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce HTTP request examples against Maton endpoints; write actions require explicit approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill can perform broad Google Workspace administrator actions through a raw API gateway.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privileged admin account with narrow OAuth scopes and install only when Google Workspace administration through Maton is required.
+
+Risk: Write operations can change or delete users, groups, organizational units, role assignments, and domain settings.
+
+Mitigation: Confirm the exact HTTP method, endpoint, target resource, payload, and consequence before every POST, PUT, PATCH, or DELETE request.
+
+Risk: Long-lived API keys and surfaced credentials can be exposed through logs, command history, files, or pasted output.
+
+Mitigation: Prefer OAuth, never print or persist credentials, avoid broad default connections, and revoke the connection when the task is complete.
+
+Risk: Fetched Google Workspace data may include personal data or adversarial content.
+
+Mitigation: Treat API responses as untrusted data, avoid dumping full responses, and use only the fields required for the task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-workspace-admin)
+- [Maton](https://maton.ai)
+- [Google Admin SDK Overview](https://developers.google.com/admin-sdk)
+- [Directory API Users](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users)
+- [Directory API Groups](https://developers.google.com/admin-sdk/directory/reference/rest/v1/groups)
+- [Directory API Members](https://developers.google.com/admin-sdk/directory/reference/rest/v1/members)
+- [Directory API Org Units](https://developers.google.com/admin-sdk/directory/reference/rest/v1/orgunits)
+- [Directory API Domains](https://developers.google.com/admin-sdk/directory/reference/rest/v1/domains)
+- [Directory API Roles](https://developers.google.com/admin-sdk/directory/reference/rest/v1/roles)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, code snippets, JSON examples, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an approved Google Workspace Admin connection.]
+
+## Skill Version(s):
+
+1.2.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

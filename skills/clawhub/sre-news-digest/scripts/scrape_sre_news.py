@@ -1,23 +1,27 @@
 #!/usr/bin/env python3
 """
-Scrape https://sre.news for recent news articles.
-Outputs a JSON array of {title, url, source} to stdout.
+Fetch recent SRE news articles from the RSS feed at https://news.imzye.com/rss.xml.
+Outputs a JSON array of {title, url, source, date} to stdout.
 
 Usage:
     python scrape_sre_news.py [days]
 
 Arguments:
-    days  Number of days to look back (default: 1). The script filters
-          articles by date markers found on the page when available.
+    days  Number of most recent days to include (default: 1). Each RSS item
+          represents one day of articles, so `days=1` returns today's (or the
+          most recently published) list.
 """
 
 import json
 import re
 import sys
-from datetime import datetime, timedelta, timezone
+import xml.etree.ElementTree as ET
+from html import unescape
+from html.parser import HTMLParser
 from urllib.parse import urlparse
 from urllib.request import urlopen, Request
-from html.parser import HTMLParser
+
+RSS_URL = "https://news.imzye.com/rss.xml"
 
 
 # Map common domains to human-readable source names
@@ -69,110 +73,104 @@ def title_from_url(url):
     return title.title() if title else url
 
 
-class SRENewsParser(HTMLParser):
-    """Parse sre.news homepage for news article links and date sections."""
+class DescriptionParser(HTMLParser):
+    """Parse an RSS item <description> HTML <ul> list into (title, url) pairs."""
 
     def __init__(self):
         super().__init__()
         self.articles = []
+        self._in_li = False
         self._in_link = False
-        self._current_url = None
-        self._text_buf = []
-        self._current_date = None
+        self._in_code = False
+        self._title_parts = []
+        self._url = None
 
     def handle_starttag(self, tag, attrs):
-        attrs_dict = dict(attrs)
-
-        if tag == "a" and "href" in attrs_dict:
-            href = attrs_dict["href"]
-            if href.startswith("http") and "sre.news" not in href:
+        if tag == "li":
+            self._in_li = True
+            self._title_parts = []
+            self._url = None
+        elif tag == "a" and self._in_li:
+            href = dict(attrs).get("href")
+            if href:
                 self._in_link = True
-                self._current_url = href
-                self._text_buf = []
-
-    def handle_data(self, data):
-        text = data.strip()
-        if not text:
-            return
-
-        if self._in_link:
-            self._text_buf.append(text)
-
-        # Try to detect date markers in the page (e.g., "March 21, 2026" or "2026-03-21")
-        date_match = re.match(
-            r'^(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)?,?\s*'
-            r'((?:January|February|March|April|May|June|July|August|September|October|November|December)'
-            r'\s+\d{1,2},?\s+\d{4})$',
-            text
-        )
-        if date_match:
-            try:
-                self._current_date = datetime.strptime(
-                    date_match.group(1).replace(",", ""), "%B %d %Y"
-                ).strftime("%Y-%m-%d")
-            except ValueError:
-                pass
-
-        iso_match = re.match(r'^(\d{4}-\d{2}-\d{2})$', text)
-        if iso_match:
-            self._current_date = iso_match.group(1)
+                self._url = href
+        elif tag == "code" and self._in_li and not self._in_link:
+            self._in_code = True
+            self._title_parts.append("`")
 
     def handle_endtag(self, tag):
-        if self._in_link and tag == "a":
+        if tag == "a":
             self._in_link = False
-            raw_title = " ".join(self._text_buf).strip()
-            if self._current_url:
-                # Determine title
-                if raw_title and raw_title != ">_" and len(raw_title) > 3:
-                    title = raw_title
-                else:
-                    title = title_from_url(self._current_url)
+        elif tag == "code" and self._in_code:
+            self._in_code = False
+            self._title_parts.append("`")
+        elif tag == "li" and self._in_li:
+            self._in_li = False
+            raw_title = " ".join("".join(self._title_parts).split())
+            if self._url:
+                title = unescape(raw_title).strip()
+                if not title or title == ">_":
+                    title = title_from_url(self._url)
+                self.articles.append((title, self._url))
 
-                article = {
-                    "title": title,
-                    "url": self._current_url,
-                    "source": source_from_url(self._current_url),
-                }
-                if self._current_date:
-                    article["date"] = self._current_date
-
-                self.articles.append(article)
-            self._current_url = None
-            self._text_buf = []
+    def handle_data(self, data):
+        if self._in_li and not self._in_link:
+            self._title_parts.append(data)
 
 
-def fetch_page(url):
-    """Fetch a web page and return its HTML content."""
+def fetch_rss(url=RSS_URL):
+    """Fetch the RSS feed and return raw bytes."""
     req = Request(url, headers={
         "User-Agent": "Mozilla/5.0 (compatible; SRENewsDigest/1.0)"
     })
     with urlopen(req, timeout=30) as resp:
-        return resp.read().decode("utf-8", errors="replace")
+        return resp.read()
+
+
+def parse_feed(data):
+    """Parse RSS XML bytes into a list of article dicts (newest day first)."""
+    root = ET.fromstring(data)
+    articles = []
+    for item in root.findall("./channel/item"):
+        title = (item.findtext("title") or "").strip()
+        description = item.findtext("description") or ""
+
+        # The item title is the ISO date for that day's digest (e.g. 2026-09-08)
+        date = title if re.match(r"^\d{4}-\d{2}-\d{2}$", title) else None
+
+        parser = DescriptionParser()
+        parser.feed(description)
+        for art_title, url in parser.articles:
+            article = {
+                "title": art_title,
+                "url": url,
+                "source": source_from_url(url),
+            }
+            if date:
+                article["date"] = date
+            articles.append(article)
+    return articles
 
 
 def scrape_sre_news(days=1):
-    """Scrape sre.news and return articles from the last N days."""
-    html = fetch_page("https://sre.news")
+    """Fetch the RSS feed and return articles from the most recent N days."""
+    articles = parse_feed(fetch_rss())
 
-    parser = SRENewsParser()
-    parser.feed(html)
-
-    # Deduplicate by URL
+    # Deduplicate by URL, preserving order (newest day first)
     seen = set()
     unique = []
-    for a in parser.articles:
+    for a in articles:
         if a["url"] not in seen:
             seen.add(a["url"])
             unique.append(a)
 
-    # Filter by date if date info is available
+    # Keep only the most recent `days` distinct dates
     if days and any("date" in a for a in unique):
-        cutoff = (datetime.now(timezone.utc) - timedelta(days=days)).strftime("%Y-%m-%d")
-        filtered = [a for a in unique if a.get("date", "9999-99-99") >= cutoff]
-        if filtered:
-            return filtered
+        dates = sorted({a["date"] for a in unique if "date" in a}, reverse=True)
+        keep_dates = set(dates[:days])
+        return [a for a in unique if a.get("date") in keep_dates]
 
-    # If no date info available or filtering yields nothing, return all
     return unique
 
 

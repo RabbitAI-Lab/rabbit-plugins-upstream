@@ -1,43 +1,54 @@
-## Description: <br>
-Prepares Dataify builder requests for the play.google.com scraper family rooted at google-play-store_reviews_by-url, including tool selection, saved parameter lookup, and generation of a DATAIFY_API_TOKEN-authenticated builder curl request. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect Google Play app reviews from a known Play Store app URL. Do not use for app discovery, rankings, or general Google Play search.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-Developers and external users use this skill to prepare Dataify scraper API builder requests for Google Play Store review or information URL tools without hand-building form-urlencoded payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated commands use DATAIFY_API_TOKEN for outbound requests to Dataify's scraper API. <br>
-Mitigation: Treat DATAIFY_API_TOKEN as a secret, avoid storing it in synced dotfiles or shared-machine profiles, and review generated curl commands before running them. <br>
-Risk: Scraper parameters may contain sensitive URLs or identifiers. <br>
-Mitigation: Avoid sending sensitive URLs or identifiers as scraper parameters unless they are necessary for the intended Dataify request. <br>
+## Use Case:
 
+External users and developers use this skill to submit Dataify Builder jobs for known Google Play app URLs, wait for completion, and retrieve JSON results. It is scoped to URL-based Google Play review collection, not app discovery or rankings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-play-store-reviews-by-url) <br>
-- [Tool parameter catalog](references/tool-params.json) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with curl command blocks and environment-variable setup instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Builds form-urlencoded Dataify builder requests using user-selected tool signs and JSON spider_parameters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The security review marks the release as suspicious because it includes broader Dataify workflows and weak scoping around inputs and imports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, keep use limited to the named Google Play review workflow, and avoid broad or sensitive URLs.
+
+Risk: The workflow requires a Dataify API token.
+
+Mitigation: Use only a token suitable for this workflow, prefer session-scoped setup, and never paste or expose the token in chat or generated output.
+
+## Reference(s):
+
+- [Tool parameter catalog](references/tool-params.json)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-google-play-store-reviews-by-url)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a task ID and resume command when monitoring times out or no-wait behavior is requested.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,108 @@
+{
+  "schema": "edge-cpu-gguf-tuner.evidence.v1",
+  "retrieved_on": "2026-09-06",
+  "policy": "External sources establish documented upstream behavior; they do not establish a benchmark result for an arbitrary host. Local measurements are recommendations only for the exact model, build, binary, and host recorded in a report.",
+  "sources": [
+    {
+      "id": "llama-readme",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/README.md",
+      "raw_url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/master/README.md",
+      "sha256": "e58520857253729851cc02313883c9d2a8b2ae86abe212aaf1bcbd7db8bfefb4",
+      "supports": ["unified llama cli quick start", "CPU architecture support overview"]
+    },
+    {
+      "id": "llama-build",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/docs/build.md",
+      "raw_url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/master/docs/build.md",
+      "sha256": "7acf214194de477a38ff54233016c23494fdfc9bdc5bc08005217c104274ce81",
+      "supports": ["CPU CMake build baseline", "parallel build and ccache notes"]
+    },
+    {
+      "id": "llama-bench",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/llama-bench/README.md",
+      "raw_url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/master/tools/llama-bench/README.md",
+      "sha256": "8a35d8107c859cda096e70b6d74adb69bb91094a39e63f9c501641aab8db6db0",
+      "supports": ["current llama-bench flags", "pp/tg/pg tests", "JSON and JSONL output", "repetitions and standard deviation", "context depth", "benchmark exclusion of tokenization and sampling"]
+    },
+    {
+      "id": "generation-performance",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/docs/development/token_generation_performance_tips.md",
+      "raw_url": "https://raw.githubusercontent.com/ggml-org/llama.cpp/master/docs/development/token_generation_performance_tips.md",
+      "sha256": "0401c2af372af0467713e00833bfcf86126a4e03f608bcd8f58045855f0f8f7a",
+      "supports": ["avoid excessive thread counts", "start at one thread and scale toward a bottleneck", "compare CPU topology rather than assuming all logical CPUs win"]
+    }
+  ],
+  "evidence_ledger": [
+    {
+      "claim_id": "U-001",
+      "claim": "Current upstream quick start documents the unified `llama cli` command.",
+      "status": "upstream_verified",
+      "source_ids": ["llama-readme"],
+      "implementation": "The deploy renderer emits `llama cli` when the selected executable is named `llama`; it also supports direct `llama-cli` and legacy `llama-completion` candidates.",
+      "scope": "Upstream documentation at retrieval date; probe the exact installed binary before execution."
+    },
+    {
+      "claim_id": "U-002",
+      "claim": "Current llama-bench accepts JSON/JSONL output and exposes average and standard-deviation token rates; pp, tg, and pg tests are distinct.",
+      "status": "upstream_verified",
+      "source_ids": ["llama-bench"],
+      "implementation": "The runner requests `-o json`, parses structured records, preserves test type, and ranks only the requested metric.",
+      "scope": "Exact option support is version-dependent; errors and empty output are surfaced rather than guessed."
+    },
+    {
+      "claim_id": "U-003",
+      "claim": "The current bench options distinguish logical batch (`-b`) and micro-batch (`-ub`), expose `-fa on|off|auto`, and mark legacy mmap/direct-io switches deprecated.",
+      "status": "upstream_verified",
+      "source_ids": ["llama-bench"],
+      "implementation": "Plans use current documented options and do not emit deprecated mmap/direct-io flags.",
+      "scope": "The user must verify `-h` on the selected binary."
+    },
+    {
+      "claim_id": "U-004",
+      "claim": "Thread count should be measured; excessive threads can oversaturate CPU, and upstream suggests starting at one and doubling toward a bottleneck.",
+      "status": "upstream_verified_method_not_default",
+      "source_ids": ["generation-performance"],
+      "implementation": "The default plan compares 1, powers of two through detected physical cores, and logical cores when different.",
+      "scope": "No thread count is asserted to be universally optimal."
+    },
+    {
+      "claim_id": "U-005",
+      "claim": "The documented CPU build baseline is CMake configure followed by a Release build.",
+      "status": "upstream_verified_instruction_only",
+      "source_ids": ["llama-build"],
+      "implementation": "README documents the command but the published tool never builds or installs llama.cpp.",
+      "scope": "Build flags, compilers, and target paths vary by OS and architecture."
+    },
+    {
+      "claim_id": "L-001",
+      "claim": "The fake-benchmark regression suite selects the higher local tg rate and rejects unsafe shell splitting.",
+      "status": "local_test",
+      "source_ids": [],
+      "implementation": "scripts/selftest.py; deterministic synthetic output only; not evidence of real model throughput.",
+      "scope": "Regression coverage, not performance evidence."
+    },
+    {
+      "claim_id": "L-002",
+      "claim": "A report recommendation is host/model/build-specific and confidence is lowered when variance, repetitions, or margin are insufficient.",
+      "status": "local_tested_algorithm",
+      "source_ids": [],
+      "implementation": "rank_records in scripts/edge_cpu_tuner.py.",
+      "scope": "A statistical heuristic, not a scientific confidence interval or quality assessment."
+    },
+    {
+      "claim_id": "N-001",
+      "claim": "The historical results in registry 1.1.9 are not universal defaults.",
+      "status": "qualified_or_removed",
+      "source_ids": [],
+      "implementation": "The improved skill does not repeat the old 2-vCPU/2-GB numbers as defaults; the archived base copy remains outside the published artifact.",
+      "scope": "Reproduce any result on the target host before using it."
+    }
+  ],
+  "unverified_by_design": [
+    "No universal best quantization, KV-cache type, flash-attention setting, batch size, or thread count.",
+    "No claim that benchmark throughput equals end-to-end latency; tokenization and sampling are excluded upstream.",
+    "No claim that output identity proves semantic quality.",
+    "No claim that a GGUF file or llama.cpp binary is safe merely because this wrapper validates a path.",
+    "No claim that a recommendation remains valid after changing model, build, compiler, OS, CPU frequency, thermal state, or background load."
+  ]
+}

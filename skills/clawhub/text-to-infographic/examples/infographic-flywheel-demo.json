@@ -1,0 +1,140 @@
+{
+  "infographic_id": "growth_flywheel_ai_workspace_demo",
+  "intent": "explain",
+  "chart_family": "flywheel",
+  "language": "zh-CN",
+  "audience": "product and growth team",
+  "source_summary": "说明 AI 协作产品如何通过获客、激活、协作与留存形成增长飞轮。",
+  "message": {
+    "title": "AI 协作产品增长飞轮",
+    "subtitle": "让增长来自可持续的正反馈循环",
+    "core_takeaway": "把新用户获取、首次成功、团队协作扩散和留存运营串成闭环，飞轮就会越转越快。",
+    "cta": "先补强首次成功与团队扩散两个环节。"
+  },
+  "layout": {
+    "layout_mode": "radial",
+    "coordinate_system": "polar",
+    "aspect_ratio": "1:1",
+    "reading_order": "clockwise",
+    "density": "medium"
+  },
+  "visual_system": {
+    "theme_id": "saas-growth-blue",
+    "palette_mode": "triad",
+    "emphasis_style": "clean",
+    "brand_colors": ["#2457F5", "#13B98A", "#FFB020"]
+  },
+  "blocks": [
+    {
+      "block_id": "title_main",
+      "block_type": "title",
+      "title": "增长飞轮",
+      "content": "一张图说明增长如何自我增强。",
+      "visual_role": "primary",
+      "icon_hint": "spark",
+      "must_include": ["中心标题区", "环形结构"],
+      "avoid": ["长段落"],
+      "text_budget": 20
+    },
+    {
+      "block_id": "summary_loop",
+      "block_type": "summary",
+      "title": "核心结论",
+      "content": "优化首次成功与协作扩散，能同时提升转化率与留存率。",
+      "visual_role": "primary",
+      "icon_hint": "target",
+      "must_include": ["高亮结论"],
+      "avoid": ["说明过长"],
+      "text_budget": 26
+    },
+    {
+      "block_id": "stage_acquire",
+      "block_type": "stage",
+      "title": "1. 获取新用户",
+      "content": "内容分发、口碑推荐、活动投放。",
+      "visual_role": "secondary",
+      "group_id": "flywheel_stages",
+      "icon_hint": "megaphone",
+      "payload": {"kpi": "新访客 -> 注册", "target": "提高高意向线索"},
+      "must_include": ["流量入口"],
+      "avoid": ["太多渠道名称"],
+      "text_budget": 22
+    },
+    {
+      "block_id": "stage_activate",
+      "block_type": "stage",
+      "title": "2. 首次成功",
+      "content": "让用户在 10 分钟内得到可感知结果。",
+      "visual_role": "secondary",
+      "group_id": "flywheel_stages",
+      "icon_hint": "rocket",
+      "payload": {"kpi": "注册 -> 激活", "target": "缩短 Time to Value"},
+      "must_include": ["激活节点"],
+      "avoid": ["抽象描述"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "stage_collaborate",
+      "block_type": "stage",
+      "title": "3. 团队协作扩散",
+      "content": "共享模板、邀请同事、跨团队复用。",
+      "visual_role": "secondary",
+      "group_id": "flywheel_stages",
+      "icon_hint": "users",
+      "payload": {"kpi": "单点使用 -> 团队使用", "target": "提升协作渗透率"},
+      "must_include": ["邀请与分享"],
+      "avoid": ["过多说明"],
+      "text_budget": 24
+    },
+    {
+      "block_id": "stage_retain",
+      "block_type": "stage",
+      "title": "4. 留存与续费",
+      "content": "通过复盘、提醒和指标回传提升复用率。",
+      "visual_role": "secondary",
+      "group_id": "flywheel_stages",
+      "icon_hint": "refresh-cw",
+      "payload": {"kpi": "活跃 -> 留存", "target": "稳定周活与续费"},
+      "must_include": ["留存闭环"],
+      "avoid": ["文字密集"],
+      "text_budget": 26
+    },
+    {
+      "block_id": "metric_north_star",
+      "block_type": "metric",
+      "title": "北极星指标",
+      "content": "每周产生有效协作成果的团队数。",
+      "visual_role": "supporting",
+      "icon_hint": "gauge",
+      "must_include": ["指标小卡片"],
+      "avoid": ["过多数字"],
+      "text_budget": 22
+    }
+  ],
+  "relations": [
+    {
+      "from": "stage_acquire",
+      "to": "stage_activate",
+      "relation_type": "loop",
+      "label": "高意向用户进入体验"
+    },
+    {
+      "from": "stage_activate",
+      "to": "stage_collaborate",
+      "relation_type": "loop",
+      "label": "成功案例促进分享"
+    },
+    {
+      "from": "stage_collaborate",
+      "to": "stage_retain",
+      "relation_type": "loop",
+      "label": "团队复用提升留存"
+    },
+    {
+      "from": "stage_retain",
+      "to": "stage_acquire",
+      "relation_type": "loop",
+      "label": "满意客户带来口碑扩散"
+    }
+  ]
+}

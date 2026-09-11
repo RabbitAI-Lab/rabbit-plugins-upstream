@@ -1,49 +1,63 @@
-## Description: <br>
-Set up and troubleshoot a hybrid OpenClaw architecture where a cloud VPS runs the gateway and a local machine acts as a node for hardware, browser, local model, and macOS capabilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set up and troubleshoot a secure hybrid OpenClaw Gateway on a VPS with a paired local node, covering Tailscale pairing, exact-request approval, least-privilege remote exec, reconnects, and SSH fallback guidance.
 
-## Publisher: <br>
-[jkfaris94](https://clawhub.ai/user/jkfaris94) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jkfaris94](https://clawhub.ai/user/jkfaris94)
 
-## Use Case: <br>
-Developers and operators use this skill to connect a local OpenClaw node to a VPS-hosted gateway, configure Tailscale networking, set up service auto-start, route exec commands, and troubleshoot pairing or connectivity failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Gateway exposure could make the OpenClaw gateway reachable beyond the intended local setup. <br>
-Mitigation: Restrict port 18789 to Tailscale or trusted IPs, prefer wss:// when possible, and use token auth with rate limiting. <br>
-Risk: Remote exec routing can let agents run commands on the local node. <br>
-Mitigation: Review node command approvals carefully and avoid broad allowlist entries such as /bin/bash unless that access is intentional. <br>
-Risk: Gateway tokens can grant access if leaked through shell history, service files, or logs. <br>
-Mitigation: Protect the gateway token, keep it in the node service environment only where needed, and rotate it if exposed. <br>
-Risk: Auto-start can keep the node continuously available for remote work even when the user is not actively operating it. <br>
-Mitigation: Enable LaunchAgent or systemd auto-start only when continuous node availability is intended. <br>
+## Use Case:
 
+Developers and operators use this skill to split OpenClaw across a VPS-hosted Gateway and a trusted local machine, then pair, approve, route, and troubleshoot the node securely.
 
-## Reference(s): <br>
-- [Hybrid Gateway ClawHub page](https://clawhub.ai/jkfaris94/hybrid-gateway) <br>
-- [Publisher profile](https://clawhub.ai/user/jkfaris94) <br>
-- [OpenClaw node host docs](https://docs.openclaw.ai/nodes/) <br>
-- [Tailscale download](https://tailscale.com/download) <br>
-- [Tailscale Serve](https://tailscale.com/kb/1242/tailscale-serve) <br>
-- [GitHub SSH key guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only; includes environment variable names and operational troubleshooting steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version) <br>
+Risk: Exposing the Gateway beyond the trusted tailnet could allow unwanted access to the pairing and control surface.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the Gateway bound to loopback, publish it through Tailscale Serve as tailnet-only, and avoid public ports, Tailscale Funnel, plaintext routes, or broad trusted proxy ranges.
+
+Risk: Join links, tokens, or setup codes could be leaked through chat, logs, or shell history.
+
+Mitigation: Use single-use join links, move only the join URL through a private node-local file, restrict file permissions, and avoid relaying credentials through transcripts.
+
+Risk: Remote exec approval could grant broader host access than intended.
+
+Mitigation: Approve only the exact pending request, keep exec on allowlist with ask-on-miss behavior, use named absolute-path binaries, and exclude shells, interpreters with arbitrary code, wildcards, and destructive commands.
+
+Risk: Node upgrades can request expanded capabilities that change the approved attack surface.
+
+Mitigation: Inspect current versus pending capabilities with node describe and approve reapproval requests only when the workflow needs the new surface.
+
+## Reference(s):
+
+- [Upgrade Notes](references/upgrade-notes.md)
+- [remote-node-ssh companion skill](https://github.com/jkfaris94/remote-node-ssh)
+- [ClawHub skill page](https://clawhub.ai/jkfaris94/skills/hybrid-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Step-by-step checks and troubleshooting tables for OpenClaw Gateway and node setup.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release metadata and README)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

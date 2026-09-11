@@ -1,41 +1,59 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+An English vocabulary study skill that stores learner-selected words, schedules SM-2 spaced review due dates, prepares one daily due-vocabulary card, and supports pre-class vocabulary warm-up.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+Students in upper-primary and middle-school English use this skill to build a personal vocabulary library, receive consent-gated due-word review cards, and warm up new classroom vocabulary before lessons. Learning agents can use it to generate vocabulary prompts, update vocabulary mastery records, and queue a single merged daily reminder when consent allows.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Long-term vocabulary records and reminder schedules may expose student learning data if enabled without appropriate student or guardian consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm profile, cross-skill sharing, reminder, and guardian consent before writing records or queuing reminders; provide view, correction, pause, delete, export, and sharing-control paths.
+
+Risk: Vocabulary reminders can become intrusive if a student stops responding.
+
+Mitigation: Limit the skill to one daily vocabulary card merged by the reminder system and pause vocabulary reminders after three consecutive nonresponses.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+- [Vocabulary radar topic templates](artifact/references/vocabulary-radar-topics.md)
+- [Spaced review schedule](artifact/shared/ebbinghaus-schedule.md)
+- [Shared vocabulary and consent rules](artifact/shared/vocab.md)
+- [English error dimension table](artifact/shared/english-error-dimension-table.md)
+- [Platform capability conventions](artifact/shared/platform-conventions.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured handoff payload examples for vocabulary cards, profile updates, and reminder queue entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses consent-gated long-term vocabulary records and a single merged daily vocabulary reminder when platform reminder support is available.]
+
+## Skill Version(s):
+
+2.1.12 (source: server release metadata and artifact/SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

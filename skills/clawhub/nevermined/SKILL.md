@@ -108,7 +108,7 @@ After they sign in, the browser is redirected to `http://127.0.0.1:<port>/callba
 
 **Option B — manual paste (works anywhere).** Ask your human to open [nevermined.app](https://nevermined.app), sign in, create an API Key (Settings → Global NVM API Keys → **+ New API Key**), and paste it back. Or, once signed in, open `https://nevermined.app/auth/cli` with no `callback_url` to see the key on screen.
 
-**Store the key and reuse it.** Never fabricate a key; the placeholder is `sandbox:your-api-key`. Full docs: https://nevermined.ai/docs/getting-started/get-your-api-key
+**Store the key and reuse it.** Never fabricate a key; the placeholder is `sandbox:your-api-key`. Full docs: https://nevermined.ai/docs/agents-guide/get-api-key
 
 ## A2 · Check your payment methods
 
@@ -335,7 +335,7 @@ export NVM_API_KEY="sandbox:your-api-key"
 
 | Variable | Required | Description |
 |---|---|---|
-| `NVM_API_KEY` | Yes | Your Nevermined API key — see [Get Your API Key](https://nevermined.ai/docs/getting-started/get-your-api-key) |
+| `NVM_API_KEY` | Yes | Your Nevermined API key — see [Get Your API Key](https://nevermined.ai/docs/agents-guide/get-api-key) |
 | `NVM_ENVIRONMENT` | Yes | `sandbox` for testing, `live` for production |
 | `NVM_PLAN_ID` | Yes | The plan ID from registration |
 | `NVM_AGENT_ID` | Sometimes | Required for MCP servers and plans with multiple agents |
@@ -585,7 +585,7 @@ Nevermined supports several plan types:
 
 Each plan can be priced in **crypto** (`getERC20PriceConfig`, `getEURCPriceConfig`, `getNativeTokenPriceConfig`) or **fiat** (`getFiatPriceConfig` — Stripe / Braintree / Visa Trusted Agent). The selected price helper determines the x402 scheme used at runtime.
 
-For fiat plans, the active provider is selected per plan via the `fiatPaymentProvider` metadata field (`'stripe'`, `'braintree'`, or `'visa'`). Sellers using Braintree must connect a Braintree merchant account with at least one child merchant account in the plan's currency. Sellers offering Visa Trusted Agent plans must complete Stripe Connect onboarding (Visa delegations settle through Stripe Connect) — see [`braintree-onboarding`](/docs/products/payments/braintree-onboarding) for the Braintree seller setup and [`card-enrollment`](/docs/products/payments/card-enrollment) for the buyer-side flow.
+For fiat plans, the active provider is selected per plan via the `fiatPaymentProvider` metadata field (`'stripe'`, `'braintree'`, or `'visa'`). Sellers using Braintree must connect a Braintree merchant account with at least one child merchant account in the plan's currency. Sellers offering Visa Trusted Agent plans must complete Stripe Connect onboarding (Visa delegations settle through Stripe Connect) — see [`braintree-onboarding`](/products/payments/braintree-onboarding) for the Braintree seller setup and [`card-enrollment`](/products/payments/card-enrollment) for the buyer-side flow.
 
 **Visa caveat for SDK builders.** Visa delegation creation is browser-only — it requires `consumerPrompt` + `assuranceData` produced by an in-browser WebAuthn ceremony embedded by Visa VTS. The SDK can **consume** an existing Visa delegation by passing its `delegationId` to `DelegationConfig`, but calling `createDelegation` / `create_delegation` with `provider: 'visa'` is rejected by the backend (`BCK.VISA.0014`). For any SDK code path that needs a Visa delegation, instruct the user to create it in the Nevermined webapp and pass the resulting ID back to the agent.
 
@@ -890,7 +890,7 @@ curl -X POST http://localhost:3000/chat \
 - **Card enrollment & delegation**: [nevermined.ai/docs/solutions/card-delegation](https://nevermined.ai/docs/solutions/card-delegation)
 - **Nevermined App**: [nevermined.app](https://nevermined.app) — register agents, create plans, manage subscriptions
 - **API discovery (per environment)**: `GET {API_BASE}/api/v1/rest/docs-json` (OpenAPI JSON)
-- **MCP Search Server**: `https://docs.nevermined.app/mcp` — search Nevermined docs from any MCP client
+- **MCP Search Server**: `https://nevermined.ai/docs/mcp` — search Nevermined docs from any MCP client
 - **Tutorials**: [github.com/nevermined-io/tutorials](https://github.com/nevermined-io/tutorials)
 - **Discord**: [discord.com/invite/GZju2qScKq](https://discord.com/invite/GZju2qScKq)
 - **TypeScript SDK**: `@nevermined-io/payments` on npm

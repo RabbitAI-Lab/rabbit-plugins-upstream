@@ -1,330 +1,51 @@
-# Maintainer Assurance Lab
+# 5.5.0 维护说明
 
-This directory contains release-only tests, evaluations, evidence, fixtures,
-schemas and tools. Runtime agents must not load it for ordinary customer work.
+5.5.0 重点是减少无效义务，同时保留能发现真实错误的检查。当前实现与验证状态见 [实施记录](../IMPLEMENTATION.md)。
 
-Use this reference when changing the Skill, a shared template, a domain pack,
-or a validator. The lab is a **release-hardening activity**. It is not a new
-mandatory stage for every customer project.
+## 检查
 
-v5.3 系列的设计决策、模拟缺口和版本处置统一收纳在
-[`v5.3-design-record.md`](v5.3-design-record.md)；不再为每个补丁版本新增平铺设计稿。
+`python scripts/ai_delivery_spec_cli.py check` 检查预算、引用、Schema、配置、领域元数据、版本边界和公开入口。
+`--profile release` 另外运行全部 pytest 与保留的专业合同检查。干净来源打包单独执行。
 
-## 1. Two Deliberately Separate Loops
+本地 Windows 沙箱可能限制 pytest 临时目录；这属于执行环境问题，不能记为产品失败或忽略测试。运行日志需明确环境和结果。
 
-```text
-Release / method change
-  -> offline cross-industry multi-agent simulation
-  -> deterministic regression
-  -> publish the Skill
+## 删减与保留
 
-Customer project
-  -> requirement workflow
-  -> one unified PRD and/or executable prototype
-  -> small deterministic final gate
-  -> human/customer acceptance
-```
+- 删除默认 PRD 门禁的等级、固定标题、章节/表格数量及全量机器附录义务；三种呈现共用路由。
+- 替换大模板，取消无依据默认负责人、优先级、迭代、不可逆性和证据等级。
+- 日常原型指引中移除重复评审工作区细则，普通产品态不再机械询问双态偏好。
+- 取消“每阶段一个门禁/检查点”“风险必升长 PRD”等指令。
+- 退役 5.0.2–5.4.0 维护脚本中只保护版本文案、模板布局和旧路由输出的断言。旧版本检查代码留在 Git 历史；当前验证以行为测试及有效 Schema 为准。
+- 保留未知冲突/重复定义、状态语义污染、来源冲突、权限、原型处理器、评审分母、范围指纹、数据引用与包完整性检查。模型语义判断不伪装成静态证明。
 
-The assurance lab explores whether the method misses a class of requirement.
-The runtime gate checks whether the current artifact violates a known contract.
-Do not run a panel of reviewer agents merely to declare a project complete.
+任何新增强制规则应能说明：防止什么失败、何时触发、会增加什么负担，以及什么证据允许以后简化/删除。维护记录可写在变更说明里，不要求再建规则台账。
 
-## 2. What The Lab Can And Cannot Prove
+## 对照评价口径
 
-The lab can prove that representative scenarios exercise all requirement
-stages, role lenses, risk classes, and output contracts, and that known omissions
-are caught by deterministic tests. It cannot prove jurisdictional correctness,
-clinical or financial safety, customer acceptance, production behavior, or
-domain-pack maturity. A simulated reviewer is not an accountable domain expert.
+同任务、输入、权限、目标和验证环境，A 使用指定 Skill，B 不读目标 Skill。评审者先定判定事实和标准，再盲读产物；跨组不可共享答案。一次对照只支持该次观察，不能声称稳定优于纯模型。
 
-Official sources in `maintainer/evals/industry-assurance-portfolio.yaml` are discovery
-anchors. A real project must register the applicable edition, jurisdiction,
-authority, interpretation owner, and customer-confirmed decisions as `SRC-*`.
-
-## 3. When To Run It
-
-Run the portfolio when any of these changes:
-
-- `SKILL.md` routing, completion, or stage behavior;
-- the unified PRD or prototype contract;
-- shared intake, review, change, traceability, or acceptance schemas;
-- a domain/capability pack or reusable pattern;
-- a validator or quality-gate severity rule;
-- a production escape reveals a missing requirement class.
-
-For a documentation-only typo with no contract effect, the normal static tests
-are enough. For a new industry, add one scenario only after its requirement
-physics is not already represented by an existing case.
-
-## 4. Compact Multi-Agent Protocol
-
-Use eight independent role lenses. Give each reviewer one scenario, its role
-contract, the seven stage checkpoints, and only the stable-ID slice needed for
-that review. Do not give every reviewer the full repository or all domain packs.
-
-| Lens | Accountability in the simulation |
+| 指标 | 口径 |
 |---|---|
-| business sponsor | outcome, value evidence, decision authority, scope trade-off |
-| product | requirement closure, source precedence, stable IDs, baseline/change |
-| domain | vocabulary, lifecycle, invariant, authority applicability, unknowns |
-| UX/prototype | discoverable role path, states, actions, errors, visible results |
-| engineering/architecture | non-inventive handoff, integration, concurrency, recovery |
-| QA/acceptance | executable AC, negative path, evidence, regression and reverse trace |
-| compliance/security | data scope, human accountability, audit, retention, prohibited action |
-| customer acceptor | business outcome, operable handoff, acceptance evidence, residual condition |
+| 接收复述正确率 | 独立接收方正确复述的预先定义关键选择数 / 所有被询问关键选择数；无来源支持不算正确 |
+| 澄清决策轮次 | 用户必须作出决定的交互轮次；工具调用/普通进度不计 |
+| 变更漏判率 | 经独立核实应影响却遗漏的对象数 / 应影响对象数 |
+| 变更泛判率 | 无依赖依据却列为正式影响的对象数 / 正式影响对象数；候选另报核实成本 |
+| 授权错误 | 未经决定擅定政策、重复阻止已授权工作、错误改变生命周期的次数及严重度 |
+| 返工 | 首次交接后因合同缺失/错误/投影漂移产生的修改轮次；实现缺陷和环境失败另计 |
+| 总负担 | 输入加载、产物长度、人工审查耗时及模型耗时/token；无可靠计量则写未测 |
 
-Each role returns compact finding records only:
+无应影响对象或无问题时，相应比率写 N/A，不能用零制造完美成绩。小样本报告分子/分母、原始产物与局限；高风险漏项不能被平均分抵消。
 
-```yaml
-- id: FIND-{scenario}-{role}-{nnn}
-  stage: intake|clarify|specify|review|baseline|change|acceptance
-  role: ROLE-LENS-*
-  verdict: pass|finding|block|not_applicable
-  affected_ids: [REQ-*]
-  evidence_refs: [SRC-*]
-  gap: one concrete, falsifiable sentence
-  required_decision: owner plus a closure condition
-```
+AC 覆盖与测试通过率是不同指标：报告唯一 AC 分母、明确映射且语义已核实的 AC 分子、断言执行通过数；同一 AC 的多条断言不增加 AC 分子。代码注释和宽松正则只能产生候选映射。没有同任务对照时，不把一次可运行实验写成相对其他方法的质量提升。
 
-One role reviews all seven stage checkpoints in one bounded pass. The portfolio
-caps findings and evidence references; a reviewer must prioritize missing P0/P1
-contracts instead of rewriting the PRD. Independent role outputs are aggregated
-by stable ID. Majority voting never overrules a safety, authority, privacy,
-financial, or customer-acceptance blocker.
+隐式触发需要单独观察宿主的实际工具/技能选择。批量路由判读只评估描述是否易理解，不冒充线上命中率。办公规则、流程改变属于目标范围；纯翻译、排版、抄录与既定步骤执行是负对照。
 
-## 5. Seven Stage Checkpoints
+专业领域历史成熟度只描述原有证据，不能直接算作 5.5.0 的模型行为收益或客户验收。
 
-| Stage | Minimal cross-role closure |
-|---|---|
-| intake | outcome/value/source/owner, complexity and risk, decision, mode/tier and target baseline |
-| clarify | actor/data scope, lifecycle, rule/exception, integration and acceptance unknowns closed or blocked |
-| specify | readable journeys plus exact page/action/field/state/rule/integration/AC contracts |
-| review | P0/P1 findings bound to IDs, owners, dispositions, decisions and evidence |
-| baseline | approved version, included IDs, source precedence, frozen unknowns and consumer synchronization |
-| change | authorized request, bidirectional impact, before/after, compatibility, regression and new baseline |
-| acceptance | executed mandatory AC, visible/domain results, evidence, defect reverse trace and sign-off |
+## 2026-09-07 外部测评修订
 
-The detailed role-by-stage minimum outputs live in the portfolio so a test can
-detect silent loss of a reviewer or stage.
+新增的正文检查只覆盖有证据的分歧模式，输出位置、触发文本与待核实问题；不能因某关键词出现就新增业务政策、提高优先级或把 GAP 说成已证明的语义缺陷。声明 pass 不覆盖正文疑点；没有疑点也不形成评阅证据。每个扩展至少有真实失败机制与清晰正例，若误报成本超过收益，应收窄或移除相应探针，不以提高反例拦截百分比为目的。
 
-## 6. PRD Standard Exercised By The Portfolio
+本轮减法包括 state→recovery 的自动连带、非导航引用的补表压力、简单浮层→跨页复杂图的自动连带，以及歧义扫描中无条件的状态/异常维度。保留实际状态、跨角色和写入风险的检查。没有新增日常产物或运行文件预算，独立实验和原始用户材料留在运行包之外。
 
-A simulated PRD output passes only when it remains one shared reading path and:
-
-1. explains outcome, scope, roles, end-to-end handoffs and business flows before
-   engineering appendices;
-2. specifies actions, visible/domain results, permissions, states, rules,
-   exceptions, data semantics and applicable integration behavior;
-3. prevents product, development, test, and Coding Agents from inventing a
-   business decision while leaving implementation design to engineering;
-4. binds `SRC -> REQ -> behavior -> AC -> test/run -> evidence` in both
-   directions and carries approved changes through every affected projection;
-5. gives traditional teams a readable document, not only YAML tables.
-
-The same scenario is then probed as a downstream consumer handoff: product/
-business review, prototype build, engineering design, coding implementation,
-test derivation and customer acceptance. These probes check readiness and
-forbidden invention; they do not manage sprints, code, CI/CD or deployment.
-
-## 7. Prototype Standard Exercised By The Portfolio
-
-A simulated prototype output passes only when:
-
-- each important view, region, action, field and state has the stable runtime
-  annotation defined in `prototype-testability.md`;
-- every `data-action` has a handler, visible result, domain-state result, failure
-  behavior and an acceptance reference;
-- all primary role journeys include entry, permission, handoff, success, exit,
-  applicable empty/error/no-permission/conflict states, and representative data;
-- brownfield changes preserve the trusted view/action/handler/role-path baseline;
-- JavaScript syntax, interaction ledger closure, CSS `.hidden` isolation, and
-  applicable browser walkthroughs pass.
-
-The lab inspects requirement and interaction completeness. It does not replace
-visual design review or executed customer acceptance.
-
-## 8. Lightweight Runtime Goalkeeper
-
-The final project gate is a goalkeeper, not an author:
-
-- zero LLM/sub-agent calls;
-- no automatic PRD/Product Truth/prototype regeneration;
-- load each artifact at most once and reuse parsed indexes;
-- select only applicable checks from artifact type, tier, risk and change state;
-- emit concise findings with severity, stable IDs, evidence and the violated
-  contract; do not produce long tutorial prose;
-- default to fail-fast on P0 and summarize P1/P2; use full diagnostics only when
-  a maintainer explicitly requests it;
-- do not require Product Truth below its existing scale/audit trigger;
-- require browser evidence only for in-scope critical journeys, not every
-  decorative control.
-
-Runtime completion remains `PASS`, `REVIEW_COMPLETE_WITH_GAPS`, or `BLOCKED`.
-A syntactic PASS cannot upgrade missing accountable approval or acceptance
-evidence.
-
-## 9. Portfolio Maintenance
-
-`maintainer/evals/industry-assurance-portfolio.yaml` contains seven high-relevance sectors
-selected for different requirement physics rather than a marketing ranking:
-industrial batch genealogy, clinical accountability, regulated money,
-safety/IoT/offline work, high-scale order/inventory consistency, cross-agency
-public service, and project/contract settlement. It also bridges the existing
-traffic, CRM, education, data-product, and AI-native packs.
-
-Run the deterministic contract check with:
-
-```powershell
-py -3 maintainer/tests/test_v510_industry_assurance.py
-```
-
-The test verifies portfolio structure and coverage. Actual agent transcripts,
-expert reviews, customer sign-off, and browser evidence must be recorded as
-separate dated evidence; do not rewrite scenario declarations to look executed.
-
-## Domain-Pack Assurance
-
-Keep method practice and reusable-pack maturity separate:
-
-```text
-knowledge_backed -> contract_tested -> behavior_validated
--> expert_reviewed -> audited
-```
-
-`production_practiced` records that the method was used in a shipped product;
-it does not promote every reusable rule. Domain claims require applicable
-sources, declared gaps and dated evidence. Vendor materials prove only the
-documented product/version; cases seed scenarios; open source or SDK code proves
-only the inspected component. Simulations and static PASS never count as expert
-review or production correctness.
-
-Promotion requires the matching evidence class:
-
-| Target | Minimum evidence |
-|---|---|
-| `contract_tested` | source/coverage/schema checks and deterministic fixtures |
-| `behavior_validated` | independent fresh-agent runs with raw task-local artifacts |
-| `expert_reviewed` | accountable domain reviewer, scope, findings and closure |
-| `audited` | controlled audit evidence and retained decision trail |
-
-Run domain checks from the repository root:
-
-```bash
-python maintainer/tools/validators/validate_domain_sources.py
-python maintainer/tools/validators/validate_domain_contracts.py
-python maintainer/tools/validators/validate_domain_coverage.py
-```
-
-Never batch-promote all domains from one scenario. Promote one pack and one
-evidence boundary at a time.
-
-## Private Knowledge Promotion Test
-
-The runtime `custom/` loop is deliberately smaller than a learning platform:
-
-```text
-project-local candidate -> usage evidence across projects -> assess
--> independent human review -> organization/public review candidate -> regression
-```
-
-`candidate assess` may recommend review but never moves files, changes scope,
-publishes data or calls a network service. `adopted` evidence alone is
-insufficient: modified, rejected and invalidated uses remain first-class records.
-Sensitive project-local candidates are excluded even from the shared private
-package until an accountable owner redacts and moves them into the review area.
-
-The 15-repository GitHub matrix is a method stress test, not domain promotion.
-Its consolidated v5.3.3 exploratory evidence fills previously unexecuted cells
-without inflating repository file count; a single-session cell remains partial
-until repetitions, token measurements, real coding delivery and accepted ACs exist.
-
-## Reviewer Contract
-
-Review requirement intake, the unified PRD, optional Product Truth, prototypes,
-changes, traceability and acceptance evidence. Bind each finding to `REV-*` and
-affected `REQ-*`/behavior IDs; do not rewrite artifacts unless requested.
-
-- P0 blocks outcome, authority, safety/compliance, data isolation or acceptance.
-- P1 creates likely rework, ambiguity, failed journeys or missing evidence.
-- P2/P3 cover readability, maintainability, context efficiency and future risk.
-
-Open P0/P1 cannot be hidden in notes. Finish with scoped `PASS`,
-`REVIEW_COMPLETE_WITH_GAPS` or `BLOCKED`, citing exact IDs and evidence.
-
-## Directory Policy
-
-- `evals/`: catalogs, runs and immutable evidence ledgers.
-- `tests/`: deterministic regression and fixtures.
-- `examples/`: non-runtime reference projects used by regression.
-- `tools/`: release/evaluation utilities; user-facing commands stay in `scripts/`.
-- `schemas/`: contracts used only by the assurance lab.
-- `templates/`: maintainer-only extension templates.
-
-Prefer appending records to an existing catalog/ledger over creating one file
-per run. Create a new file only when immutability, a distinct schema or an
-independently reviewable raw artifact requires it.
-
-## Community And Release Communication
-
-This section contains reusable community copy, terminology and release checks. It
-does not prove submission, acceptance, maturity or production behavior. Verify
-each community's current rules and run the maintainer status/release checks
-before publishing.
-
-### Core Glossary
-
-| Term | Meaning |
-|---|---|
-| Intake | Evidence-backed value, complexity, priority, owner, dependency and accept/clarify/defer/reject decision. |
-| Requirement stage | `intake -> clarify -> specify -> review -> baseline -> change -> acceptance -> closed`; not a sprint state. |
-| Unified PRD | One human reading baseline with engineering, machine acceptance and traceability annexes. |
-| Product Truth | Optional structured authority for large, repeatedly changed, multi-export or audited requirements. |
-| Stable ID | Permanent `REQ/FLOW/VIEW/ACT/FLD/RULE/API/AC` identity changed through `CHG-*`. |
-| Review / Change / Acceptance | `REV-*` findings, `CHG-*` controlled diffs and `ARUN-*` executed evidence. |
-| Domain Pack | Optional accelerator with explicit applicability, practice status, maturity and gaps. |
-| Completion | Scoped `PASS`, `REVIEW_COMPLETE_WITH_GAPS` or `BLOCKED`. |
-
-### Positioning
-
-AI Delivery Spec is an open-source requirement-management kernel: lightweight
-for ToC idea-to-PRD work and deep for governed ToB/ToG requirements. It manages
-intake, clarification, one unified PRD, change, traceability and acceptance.
-
-AI Delivery Spec 是需求管理内核：ToC 想法到 PRD 可以轻量使用，ToB/ToG 复杂
-需求可以深度展开；默认只有一份人类可读、AI Coding 可执行的统一 PRD。
-
-```md
-- [AI Delivery Spec](https://github.com/franklinxkk/ai-delivery-spec) -
-  Requirement-management kernel for intake, clarification, one unified PRD,
-  prototype requirements, change, traceability, and acceptance.
-```
-
-### Evidence-Safe Proof Points
-
-- requirement intake and adaptive mode/tier recommendation;
-- guided clarification with P0-unknown blocking;
-- one Human-First PRD with engineering/Coding Agent annexes;
-- optional progressive Product Truth for scale/audit triggers;
-- change impact, bidirectional traceability and evidence-bound acceptance;
-- maturity-declared domain packs and deterministic project gates.
-
-Never convert `contract_tested`, `partial` or `not_run` into behavioral,
-expert, customer or production claims. Do not claim legal, clinical, financial,
-safety or regulatory correctness without matching accountable evidence.
-
-### Publication Checklist
-
-- README first screen states problem, audience, install path and evidence boundary.
-- Commands exist and status agrees with public maturity claims.
-- No customer-specific project name or compatibility patch is shipped.
-- Fixture presence is not described as behavioral validation.
-- License, security policy, contribution guide and release tag are present.
-- SkillHub package stays within the repository file-budget gate.
-
-Suggested topics:
-
-```text
-product-management, requirements-engineering, spec-driven-development,
-enterprise-software, tob, tog, prd, traceability, ai-coding, coding-agent,
-acceptance-criteria, prototype, brownfield, agent-skills
-```
+`test_v550_external_review.py` 保存脱敏机制的正反配对；`test_review_workspace_contracts.py` 验证简单抽屉无需假造跨页链。独立前向案例发现的否定句误报、正文未定策略漏判已回归。必须单独报告尚无证据的来源真实性、任意自然语言完整性、真人澄清/返工收益和真实系统效果。

@@ -1,50 +1,63 @@
-## Description: <br>
-Veritier Fact Checking helps agents extract falsifiable claims from text or documents, verify them against live web evidence or private references, and run document authenticity scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Veritier gives agents an API and MCP trust gate for fact-checking claims, validating documents, and fail-closed attestation before sensitive tool calls.
 
-## Publisher: <br>
-[salomonhenao](https://clawhub.ai/user/salomonhenao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[salomonhenao](https://clawhub.ai/user/salomonhenao)
 
-## Use Case: <br>
-Developers, editors, and AI-agent operators use this skill to fact-check draft text, articles, AI-generated answers, URLs, and documents before relying on or publishing them. It can also support hallucination audits, disinformation screening, private-reference verification, and document authenticity checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Fact-checking inputs, document contents, URLs, and private references are sent to Veritier's hosted API. <br>
-Mitigation: Use the skill only when that processing is permitted, and avoid submitting secrets, personal data, regulated records, or internal documents unless approved by the organization. <br>
-Risk: The Veritier API key authorizes access to the hosted service. <br>
-Mitigation: Store the key in the required environment variable, send it only to the documented Veritier API endpoint, and rotate it if it is exposed. <br>
-Risk: Example webhook receivers process externally delivered results. <br>
-Mitigation: Verify the HMAC-SHA256 webhook signature against the raw request body before parsing or trusting the payload. <br>
-Risk: The Flask webhook example is not suitable for public production deployment with debug mode enabled. <br>
-Mitigation: Disable debug mode for public servers, deploy behind production infrastructure, and pin dependencies for production use. <br>
+## Use Case:
 
+Developers and agents use this skill to check claims, audit generated text, validate untrusted documents, and gate tool calls against external systems of record before acting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/salomonhenao/skills/veritier-fact-checking) <br>
-- [Veritier website](https://veritier.ai) <br>
-- [Veritier documentation](https://veritier.ai/docs) <br>
-- [Veritier API base](https://api.veritier.ai) <br>
-- [Veritier MCP endpoint](https://api.veritier.ai/mcp/) <br>
-- [Veritier dashboard](https://veritier.ai/dashboard) <br>
-- [Published skill file](https://veritier.ai/skill.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, JSON or text API responses, and Python or JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include extracted claims, verdicts, confidence scores, explanations, source URLs, MCP configuration, REST examples, and webhook setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release and skill frontmatter) <br>
+Risk: The release was flagged as suspicious because installation and example-code paths require review before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a reviewed local copy or pinned, verified release, and scan the skill before deployment.
+
+Risk: The skill requires a Veritier API key and sends it as bearer authentication.
+
+Mitigation: Use a dedicated key with minimal account privileges and send it only to https://api.veritier.ai.
+
+Risk: Example test and webhook paths can be unsafe if pointed at untrusted destinations or exposed broadly.
+
+Mitigation: Prefer vt_test_ keys for tests, avoid overriding API_URL unless the destination is trusted, and keep the Python webhook receiver off public debug deployments.
+
+## Reference(s):
+
+- [ClawHub listing](https://clawhub.ai/salomonhenao/skills/veritier-fact-checking)
+- [Veritier website](https://veritier.ai)
+- [Veritier documentation](https://veritier.ai/docs)
+- [Veritier dashboard](https://veritier.ai/dashboard)
+- [MCP endpoint](https://api.veritier.ai/mcp/)
+- [Skill source](https://veritier.ai/skill.md)
+- [Examples README](https://veritier.ai/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and Python or JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce API request examples, MCP configuration, verification summaries, document-validation guidance, and gate decisions.]
+
+## Skill Version(s):
+
+3.4.1 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

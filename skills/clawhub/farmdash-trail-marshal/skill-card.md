@@ -1,43 +1,61 @@
-## Description: <br>
-FarmDash Trail Marshal helps agents plan guarded DeFi workflows by listing recipes, building quality gates, recording session workflow runs, and reporting status without executing wallet or trading actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when composing multi-step DeFi workflows from FarmDash tools: plan, run, inspect supervised pipelines. Wallet steps stay policy-gated, preview-only.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-Developers and agent operators use this skill to coordinate DeFi workflow recipes, check installed companion skills, and keep state-changing actions behind separate confirmation gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DeFi workflow plans can lead to financial loss if stale quotes, market movement, or incomplete companion-skill coverage are ignored. <br>
-Mitigation: Verify each quote and required companion skill before confirmation, and keep execution in separately reviewed skills with their own confirmation gates. <br>
-Risk: Session workflow records and optional tokens may expose paid or session-tracking features when configured. <br>
-Mitigation: Provide FARMDASH_API_KEY or session tokens only when intentionally using those features, and do not provide wallet secrets or signing material. <br>
+## Use Case:
 
+External agents and DeFi workflow operators use this skill to choose named FarmDash recipes, check required sub-skills, separate read-only from state-changing steps, and track supervised workflow sessions. It supports planning and status coordination, while wallet-changing actions remain outside this skill.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-trail-marshal) <br>
-- [FarmDash agents homepage](https://www.farmdash.one/agents) <br>
-- [FarmDash API schema](https://www.farmdash.one/agents/openapi.yaml) <br>
-- [FarmDash MCP server config](https://www.farmdash.one/.well-known/mcp.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with structured workflow metadata and status records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Plans are advisory orchestration outputs; state-changing execution remains delegated to separately installed skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: server release metadata) <br>
+Risk: Users may mistake workflow plans or recipe metadata for financial advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present plans as coordination guidance only and require the user to review financial decisions independently before any separately installed execution skill is used.
+
+Risk: Live workflow features may send session metadata to FarmDash.
+
+Mitigation: Use the public catalog or research-only planning when possible, and send session tokens or agent metadata only when the user chooses live workflow tracking.
+
+Risk: Wallet-changing actions could be performed by companion execution skills after a plan is created.
+
+Mitigation: Keep Trail Marshal out of execution paths and require each execution skill to present fresh quotes and obtain explicit user confirmation.
+
+## Reference(s):
+
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [FarmDash Documentation](https://www.farmdash.one/docs)
+- [FarmDash API Schema](https://www.farmdash.one/agents/openapi.yaml)
+- [FarmDash MCP Server](https://www.farmdash.one/.well-known/mcp.json)
+- [Canonical FarmDash Trail Marshal Skill](https://www.farmdash.one/openclaw-skills/farmdash-trail-marshal/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON-shaped tool outputs, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces workflow catalog guidance, quality-gate plans, guarded run records, and run-status summaries; it does not execute wallet transactions.]
+
+## Skill Version(s):
+
+0.1.9 (source: server release metadata; artifact frontmatter reports 1.1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

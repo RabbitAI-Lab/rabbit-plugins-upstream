@@ -17,7 +17,7 @@ The set is intentionally small, predictable, and Apple-grade in UX:
 | `workspace_bridge.py` | File-sync side of the BYOB bridge (separate port from listener) | Daemon |
 | **`update.sh`** | **Apple-grade one-command skill update** | `./update.sh` or TG `/update` or MC button |
 | **`doctor.sh`** | **Self-diagnosis report (paste-ready)** | `./doctor.sh` or TG `/doctor` |
-| **`version_check_daemon.sh`** | **Daily registry poll; nudges owner via TG when newer version exists** | Supervisord daemon (auto) |
+| ~~`version_check_daemon.sh`~~ | **REMOVED in 0.8.11** — the daily update nudge now runs inside `telegram_listener.py`'s pulse thread, so it works on containers, non-systemd hosts and unsupervised boxes too | n/a |
 
 ## Apple-grade update story (Phase 1–5, 2026-06-15)
 
@@ -31,7 +31,7 @@ they like — they all converge on the same signed `[OWNER-APPROVED]` dispatch
 | **2** | `./doctor.sh` | Owner runs on their box. Output is paste-ready for support. |
 | **3** | Mission Control **🧰 Skill / Version** card | One-tap "Update" button in MC — dispatches signed TG message. |
 | **4** | TG `/update` or `/doctor` slash command | Type in the duck's chat. Bot sends signed prompt. Owner taps Approve. |
-| **5** | Daily cron via supervisord | Polls registry every 6h; nudges TG when newer version exists. |
+| **5** | Daily check inside the listeners | Both the pulse thread (telegram_listener) and the peck poll loop (peck_listener) call the shared `_version_nudge`: one registry check per 24h per box, one TG nudge per published version. No separate daemon or cron. |
 
 **Owner journey:**
 1. (Optionally) installs supervisord (Phase 5 ships with this), gets daily nudges.
@@ -100,18 +100,21 @@ prompt. No mid-flow forms, no version inputs, no confirmations.
 
 ## Bridge-side configuration
 
-When `setup_listeners_supervised.sh` is run (any mode), it now also
-installs the `version_check` program under supervisord, which runs
-`version_check_daemon.sh` every 6 hours. The daemon:
-1. Reads installed version from `_meta.json`
-2. Queries the registry for latest
-3. Skips if equal
-4. Skips if already-nudged-this-version (idempotency via
-   `~/.space-duck/last_nudge.txt`)
-5. POSTs to `/beak/tg/notify` (beak-key auth) → platform sends TG message
-   to the duck's owner
+**0.8.11 [VER-0811]:** the separate supervisord `version_check` program and
+`version_check_daemon.sh` are **gone**. The daily update check now lives in
+`telegram_listener.py`'s pulse thread, which runs on every duck that has a
+listener at all — including the container / non-root / unsupervised boxes
+where the daemon never ran. Same logic, no extra process:
+1. Reads installed version from `_meta.json` (fresh each time, not cached)
+2. Queries `/beak/skill/latest`
+3. Skips if equal or newer
+4. Skips if already-nudged-for-this-version — persisted to
+   `~/.space-duck/version-check.json`, so a restart loop cannot re-nudge
+5. POSTs to `/beak/tg/notify` with `X-Beak-Key` + `{spaceduck_id, message}`
+   → platform sends TG message to the duck's owner
 
-Daemon logs to `~/.space-duck/logs/version_check.log`.
+Between 0.8.10 and 0.8.11 both existed on supervised boxes; keeping the
+daemon would have double-nudged once the listener's contract was fixed.
 
 ## Invocation convention — always `bash <script>` (or `python3 <script>`)
 
@@ -139,8 +142,8 @@ Same property holds for Python scripts via `python3 <script>`.
 - Lambda v760+: signed-action bash blocks dispatched to user boxes always
   use `bash "$SCRIPT_PATH"`, never direct exec
 - Lambda v758+ TG `/update` + `/doctor` slash commands: same
-- `setup_listeners_supervised.sh` supervisord `[program:version_check]`
-  entry: `command=/bin/sh -c "...bash version_check_daemon.sh..."`
+- (removed in 0.8.11) `setup_listeners_supervised.sh` supervisord
+  `[program:version_check]` entry used the same `bash <script>` convention
 
 **For skill authors writing new scripts:**
 - Use `bash` invocation in any caller documentation (READMEs, MC instructions,

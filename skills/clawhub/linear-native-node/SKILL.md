@@ -1,13 +1,13 @@
 ---
 name: linear-native-node
-description: Linear workspace helper using Linear's GraphQL API from native Node.js. Use when creating, listing, updating, commenting on, summarizing, or looking up Linear issues, projects, teams, workflow states, priorities, standup notes, or branch names. Write actions are explicit and approval-gated via create/comment/status/priority/project-create commands. Reads LINEAR_API_KEY from the process environment only; no OAuth gateway, bash, Python, npm dependencies, or third-party service.
-version: 1.0.20
+description: Linear workspace helper using Linear's GraphQL API from native Node.js. Use when creating, listing, updating, commenting on, summarizing, or looking up Linear issues, projects, teams, workflow states, priorities, standup notes, or branch names. Write actions are explicit and approval-gated via create/comment/status/priority/project-create commands. Reads LINEAR_API_KEY from the process environment only; no OAuth gateway, bash, Python, npm dependencies, or third-party intermediary/proxy service.
+version: 1.0.22
 risk_class: external-api-read-write-gated
 ---
 
 # Linear Native Node
 
-Version: 1.0.20 / local Linear utility.
+Version: 1.0.22 / local Linear utility.
 
 
 Use `scripts/linear.mjs` to talk directly to Linear's GraphQL API at `https://api.linear.app/graphql`.
@@ -218,6 +218,8 @@ Optional default team:
 
 ## Changelog
 
+- `1.0.22`: Frontmatter wording hygiene: clarify that the skill has no third-party intermediary/proxy service while still calling Linear's own GraphQL API directly. No runtime Linear behavior change and no ClawHub/public publish authority.
+- `1.0.21`: Test/source-review hygiene: construct the fake Linear API key sentinel in `tests.mjs` instead of embedding a credential-looking literal, so source-attached review packaging can scan the test harness without weakening secret gates. No runtime Linear behavior change and no ClawHub/public publish authority.
 - `1.0.20`: Public-clear packaging polish: exclude `dry-runs/` review evidence from ClawHub packages, move current dry-run evidence out of the skill source tree, and extend package leak tests to scan expected packaged files for Windows path variants and review/evidence inventory markers. No categories, topics, topic tags, tags, keywords, or ClawHub catalog metadata added to source.
 - `1.0.19`: Source polish: remove remaining direct/direct wording, make global flags prefix-only so positional text equal to `--execute`/`--json` is not consumed as a global flag, omit workspace-sensitive Linear response bodies/details from non-auth HTTP/GraphQL errors, and clarify write/JSON examples. No categories, topics, topic tags, tags, keywords, or ClawHub catalog metadata added to source.
 - `1.0.18`: Metadata wording hygiene: remove "Direct" from the description; no runtime behavior change.

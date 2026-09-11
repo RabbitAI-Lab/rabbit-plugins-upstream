@@ -1,52 +1,66 @@
-## Description: <br>
-Sogni Creative Agent Skill gives agents a CLI and skill surface for image, video, and music generation through Sogni AI's decentralized GPU network. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sogni Creative Agent Skill gives agents a CLI and hosted workflow surface for generating, editing, upscaling, and composing images, video, and music through Sogni AI's decentralized GPU network.
 
-## Publisher: <br>
-[krunkosaurus](https://clawhub.ai/user/krunkosaurus) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[krunkosaurus](https://clawhub.ai/user/krunkosaurus)
 
-## Use Case: <br>
-Developers and agent users use this skill to plan and execute Sogni-powered creative workflows, including prompt-to-image, image editing, video generation, music generation, loop reels, personas, and durable multi-step media workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a networked Sogni media-generation CLI with a Sogni API key and may spend account credits or use subscription entitlement. <br>
-Mitigation: Install only for users who intend to use Sogni services, keep credentials in the documented credentials file or environment, and review balance or billing-mode guidance before paid generation. <br>
-Risk: Hosted modes can upload selected local media to Sogni services for generation, editing, or multi-step workflows. <br>
-Mitigation: Use direct CLI modes for private media that must stay local, and upload only media the user has approved for Sogni processing. <br>
-Risk: Saved personas, memories, personality settings, face photos, and voice clips can persist locally and may represent sensitive people or preferences. <br>
-Mitigation: Store persona and voice assets only with consent, remove saved personas or memories when no longer needed, and avoid using voice clips or likenesses without permission. <br>
-Risk: The skill can update its installed code through self-update behavior. <br>
-Mitigation: Run self-update only after explicit approval and review the version change or changelog before relying on the upgraded package. <br>
+## Use Case:
 
+Developers, creative operators, and agent users use this skill to route media-generation requests into Sogni image, video, music, upscaling, persona, and durable workflow commands. It is intended for agent-assisted creative production where the agent plans the prompt, model choice, file handling, and command invocation.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/krunkosaurus/skills/sogni-creative-agent-skill) <br>
-- [Sogni AI homepage](https://sogni.ai) <br>
-- [Hosted API guide](artifact/references/hosted-api.md) <br>
-- [Model reference](artifact/references/models.md) <br>
-- [Personas and memory guide](artifact/references/personas-memory.md) <br>
-- [Video editing guide](artifact/references/video-editing.md) <br>
-- [Video prompting guide](artifact/references/video-prompting.md) <br>
-- [Loop maker guide](artifact/references/loop-maker.md) <br>
-- [OpenClaw configuration guide](artifact/references/openclaw-config.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create local media files, inspect JSON command output, or call Sogni-hosted generation workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.16.1 (source: frontmatter metadata, CHANGELOG, and server release evidence) <br>
+Risk: The install and update path can execute mutable npm package code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use pinned package versions, review updates before adoption, and avoid unversioned npx or @latest installs in controlled environments.
+
+Risk: Hosted modes may upload selected local media to Sogni infrastructure.
+
+Mitigation: Use direct local CLI modes for private media that must not leave the machine, and reserve hosted chat or durable workflows for media that may be uploaded.
+
+Risk: The skill stores persistent Sogni credentials, app IDs, memories, personas, and render state under local configuration paths.
+
+Mitigation: Protect the local Sogni configuration directory, use least-privilege API keys where available, and purge or back up local state deliberately during deprovisioning.
+
+Risk: The server security verdict requires review before deployment.
+
+Mitigation: Run organizational security review and scanner validation before enabling the skill in a shared or production agent environment.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/krunkosaurus/skills/sogni-creative-agent-skill)
+- [Sogni homepage](https://sogni.ai)
+- [Sogni Creative Agent README](README.md)
+- [Hosted API Modes](references/hosted-api.md)
+- [Model Catalog and Sizing Rules](references/models.md)
+- [OpenClaw Configuration](references/openclaw-config.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, CLI commands, JSON workflow plans, configuration snippets, and generated media file paths or result records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js, a Sogni API key, and ffmpeg for some local video and audio utilities; hosted modes may upload selected local media to Sogni infrastructure.]
+
+## Skill Version(s):
+
+3.42.0 (source: server release, SKILL.md metadata, version.mjs, CHANGELOG; server release created 2026-09-11T05:39:30Z)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

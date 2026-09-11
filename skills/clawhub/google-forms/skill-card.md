@@ -1,45 +1,64 @@
-## Description: <br>
-Google Forms API integration with managed OAuth for creating forms, adding questions, and retrieving responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Forms API integration with managed OAuth for creating forms, adding questions, and retrieving responses through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect agents to Google Forms through Maton-managed OAuth, then retrieve form data or create and update forms with user-approved API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Google Forms content and responses through a connected Google account. <br>
-Mitigation: Install only when Maton is trusted to broker the account connection, keep MATON_API_KEY private, and verify the selected connection when multiple accounts are available. <br>
-Risk: Create, update, or delete operations can change Google Forms resources. <br>
-Mitigation: Approve write operations only after checking the exact form ID, target resource, and intended change. <br>
+## Use Case:
 
+External users and developers use this skill to connect an authorized Google Forms account through Maton, create and update forms, add supported question types, and retrieve form metadata and responses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-forms) <br>
-- [Google Forms API Overview](https://developers.google.com/workspace/forms/api/reference/rest) <br>
-- [Get Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/get) <br>
-- [Create Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/create) <br>
-- [Batch Update Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/batchUpdate) <br>
-- [List Responses](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms.responses/list) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with Python, JavaScript, shell command, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Maton-managed Google Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Authorizing a connection grants Maton access to the selected Google Forms account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, verify the target account and connection before use, select the least-privileged scopes available, and revoke unused connections.
+
+Risk: Write operations can create or modify forms, questions, or related form data.
+
+Mitigation: Default to read and list calls first, then require explicit user approval for the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE call.
+
+Risk: API-key fallback uses a long-lived credential that can leak through logs, shell history, files, or child processes.
+
+Mitigation: Use OAuth and the CLI credential store when possible; if an API key is unavoidable, never print, persist, or pass it on a command line.
+
+Risk: Installing CLI or SDK packages may not meet strict supply-chain controls in some environments.
+
+Mitigation: Use pinned or otherwise verified package versions when the deployment environment requires strict supply-chain control.
+
+## Reference(s):
+
+- [Maton homepage](https://maton.ai)
+- [Google Forms API REST reference](https://developers.google.com/workspace/forms/api/reference/rest)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Code]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI commands, Google Forms API paths, JSON request bodies, SDK examples, and operational cautions.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

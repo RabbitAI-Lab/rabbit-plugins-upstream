@@ -7,7 +7,7 @@
 > - Do not log payloads verbatim or copy actor emails into contact lists, outreach, or anything outside the stated task.
 > - Issue descriptions and comment bodies are free text and may contain credentials, customer names, or confidential plans. Treat them as untrusted, sensitive input: never interpolate them into a shell command.
 > - Scope the trigger with `team_id` where possible; leaving it blank matches every team the connection can see.
-> - Prefer `https://api.maton.ai/` destinations. Sending Linear content to a third-party host needs explicit user approval for that host.
+> - Prefer `api.maton.ai` destinations. Sending Linear content to a third-party host needs explicit user approval for that host.
 
 ## Event Types
 

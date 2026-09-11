@@ -1,45 +1,64 @@
-## Description: <br>
-Monitor Reddit, Hacker News, X, and Bluesky for product or website keyword mentions with the RedReplier API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitor Reddit, Hacker News, X, and Bluesky for keyword mentions of a product or website using the RedReplier API.
 
-## Publisher: <br>
-[tarasshyn](https://clawhub.ai/user/tarasshyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tarasshyn](https://clawhub.ai/user/tarasshyn)
 
-## Use Case: <br>
-Users who manage product monitoring use this skill to configure RedReplier websites and keywords, retrieve and filter AI-scored mentions, triage leads, and manage alert settings through the RedReplier API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a RedReplier API token. <br>
-Mitigation: Use a dedicated, revocable API token and keep REDREPLIER_API_KEY scoped to the agent runtime. <br>
-Risk: Activating pending keywords can charge for a plan upgrade. <br>
-Mitigation: Call the activation preview first, show the charge and target plan to the user, and require explicit confirmation before activation. <br>
-Risk: Deleting a monitored website stops monitoring for that website. <br>
-Mitigation: Confirm deletion with the user using the website domain, not only the resource ID. <br>
+## Use Case:
 
+External developers and growth teams use this skill to monitor product and website mentions across Reddit, Hacker News, X, and Bluesky, then triage AI-scored mentions as potential leads.
 
-## Reference(s): <br>
-- [RedReplier homepage](https://redreplier.com) <br>
-- [ClawHub skill page](https://clawhub.ai/tarasshyn/redreplier) <br>
-- [RedReplier API Reference](references/api-reference.md) <br>
-- [RedReplier Mention Filtering](references/mention-filtering.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with curl commands and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDREPLIER_API_KEY; paid keyword activation and website deletion require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+Risk: The skill requires a RedReplier API token that grants account-level access to monitoring data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated, revocable token and send it only to the fixed RedReplier API host.
+
+Risk: Manual API actions can activate billing upgrades or delete monitored websites.
+
+Mitigation: Require a preview, exact target, cost details, and explicit user confirmation before any billing activation or deletion.
+
+Risk: URL analysis may expose private or internal site details to the SaaS service.
+
+Mitigation: Avoid URL-analysis features for private or internal sites unless the user has approved that disclosure.
+
+Risk: AI-scored mentions can be wrong or incomplete.
+
+Mitigation: Review the actual mention content and relevance explanation before approving or rejecting leads.
+
+## Reference(s):
+
+- [RedReplier API Reference](artifact/references/api-reference.md)
+- [Mention Filtering Reference](artifact/references/mention-filtering.md)
+- [RedReplier Website](https://redreplier.com)
+- [ClawHub Skill Page](https://clawhub.ai/tarasshyn/skills/redreplier)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API response summaries and explicit confirmation prompts before billing or deletion actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

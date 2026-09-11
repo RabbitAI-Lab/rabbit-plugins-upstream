@@ -1,6 +1,6 @@
 ---
 name: pscale-branch
-description: Create, delete, promote, diff, inspect query patterns, and manage PlanetScale database branches, Postgres parameters, and Vitess workflows. Use when creating development branches for schema changes, viewing schema diffs, downloading query pattern reports, changing Postgres branch size, replicas, or parameters, promoting branches to production, managing branch lifecycle, or creating vtctld MoveTables workflows. Essential for schema migration workflows and branch-level query analysis. Triggers on branch, create branch, schema diff, query patterns, query pattern report, resize branch, Postgres parameters, promote branch, development branch, database branch, MoveTables, global keyspace.
+description: Create, rename, protect, delete, promote, diff, switchover, restore, inspect query patterns, and manage PlanetScale database branches, Postgres maintenance/extensions/parameters, Vitess VTGate capacity, tablet throttling, keyspace routing rules, Lookup Vindexes, and Vitess workflows. Use when creating development branches for schema changes, restoring a PostgreSQL branch to a point in time, renaming branches, changing deletion protection, switching a Postgres primary to a replica, running Postgres branch maintenance, listing available Postgres extensions, viewing schema diffs, changing Postgres branch size, inspecting or resizing VTGates, inspecting or replacing live keyspace routing rules, changing tablet throttler rules, creating or completing an owned Lookup Vindex backfill, promoting branches, or creating vtctld MoveTables workflows. Essential for schema migration workflows and branch-level query analysis. Triggers on branch, create branch, restore point, point-in-time recovery, PITR, rename branch, deletion protection, branch switchover, primary switchover, branch maintenance, Postgres maintenance, extensions, schema diff, query patterns, resize branch, Postgres parameters, VTGate, tablet throttler, keyspace routing rules, routing rules, lookup vindex, owned vindex, continue after copy with owner, vtctld, promote branch, MoveTables, global keyspace.
 ---
 
 # pscale branch
@@ -16,6 +16,14 @@ pscale branch create <database> <branch-name>
 # Create branch from specific source
 pscale branch create <database> <branch-name> --from <source-branch>
 
+# Restore a new Postgres branch to a point in time (write; inspect and approve first)
+pscale branch create <database> <branch-name> \
+  --from <source-branch> \
+  --restore-point <RFC3339-timestamp> \
+  --cluster-size <postgres-cluster-size> \
+  --wait \
+  --format json
+
 # List the default page (up to 100 branches)
 pscale branch list <database>
 
@@ -25,8 +33,23 @@ pscale branch list <database> --page 2 --per-page 100 --format json
 # Show branch details
 pscale branch show <database> <branch-name>
 
+# Rename a branch or change deletion protection (write; inspect and approve first)
+pscale branch update <database> <branch-name> --new-name <new-name> --format json
+pscale branch update <database> <branch-name> --deletion-protected=true --format json
+
 # Inspect branch infrastructure/pods (supports Postgres and Vitess)
 pscale branch infra <database> <branch-name> --format json
+
+# List available extensions on a Postgres branch cluster image
+pscale branch extensions list <database> <branch-name> --format json
+
+# Start Postgres branch image maintenance (operational write; inspect and approve first)
+pscale branch maintenance run <database> <branch-name> --format json
+
+# Start a Postgres primary switchover (operational write; inspect and approve first)
+pscale branch switchover <database> <branch-name> --candidate <replica-name> --format json
+pscale branch switchover list <database> <branch-name> --format json
+pscale branch switchover show <database> <branch-name> <switchover-id> --format json
 
 # View schema diff
 pscale branch diff <database> <branch-name>
@@ -48,6 +71,17 @@ pscale branch resize <database> <branch-name> \
 pscale branch resize status <database> <branch-name> --format json
 pscale branch resize cancel <database> <branch-name> --format json
 
+# Inspect and resize VTGates on a Vitess production branch
+pscale branch vtgate show <database> <branch-name> --format json
+pscale branch vtgate resize <database> <branch-name> \
+  --vtgate-size VTG_320 \
+  --vtgate-autoscaling \
+  --vtgate-count 2 \
+  --vtgate-max-count 8 \
+  --vtgate-target-cpu-utilization 50 \
+  --format json
+pscale branch vtgate resize status <database> <branch-name> --format json
+
 # Inspect live branch connections (Postgres and Vitess)
 pscale branch connections show <database> <branch-name> --format json
 pscale branch connections top <database> <branch-name>
@@ -55,13 +89,32 @@ pscale branch connections top <database> <branch-name>
 # Download a branch query patterns CSV report
 pscale branch query-patterns download <database> <branch-name> --output query-patterns.csv
 
+# List/show generated branch query pattern reports
+pscale branch query-patterns list <database> <branch-name> --format json
+pscale branch query-patterns show <database> <branch-name> <report-id> --format json
+
+# Delete a stale query pattern report only after explicit approval
+pscale branch query-patterns delete <database> <branch-name> <report-id> --format json
+
 # Stream the CSV to stdout for pipelines
 pscale branch query-patterns download <database> <branch-name> --output - > query-patterns.csv
 
-# Inspect Vitess routing rules
+# Inspect Vitess routing rules and tablet state
 pscale branch routing-rules get <database> <branch-name>
 pscale branch vtctld get-routing-rules <database> <branch-name>
+pscale branch vtctld get-keyspace-routing-rules <database> <branch-name> --format json
 pscale branch vtctld get-shard <database> <branch-name> --keyspace <keyspace> --shard <shard>
+pscale branch vtctld list-tablets <database> <branch-name> --format json
+
+# Inspect one Lookup Vindex workflow; table-keyspace is where the lookup table/workflow lives
+pscale branch vtctld lookup-vindex show <database> <branch-name> \
+  --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> \
+  --format json
+
+# Inspect one tablet's throttler state before proposing a change
+pscale branch vtctld throttler status <database> <branch-name> \
+  --tablet-alias <zone-tablet-alias> --format json
 
 # Create a Vitess MoveTables workflow whose generated sequence tables live in a global keyspace
 pscale branch vtctld move-tables create <database> <branch-name> \
@@ -119,6 +172,30 @@ pscale branch create my-database $BRANCH_NAME --from main
 
 See `scripts/create-branch-for-mr.sh` for automation.
 
+### Restore a Postgres branch to a point in time
+
+`pscale branch create --restore-point` creates a new PostgreSQL branch from a point-in-time recovery timestamp. This is a write that can allocate billable resources. Confirm the organization, database, source branch, timestamp, target branch name, cluster size, and retention/recovery objective with the user before running it.
+
+If `--cluster-size` is omitted, a restore-point branch defaults to `PS-10`, a billable non-development size, rather than `PS_DEV`; always pass an explicit size. `--from` may be omitted only when `--restore <backup-id>` is supplied; with `--restore-point` and no `--restore`, the CLI requires `--from` and resolves the covering backup from that parent branch and timestamp. Prefer passing the source branch explicitly in automation.
+
+```bash
+# Inspect the intended source branch and its current state first
+pscale branch show <database> <source-branch> --org <org> --format json
+
+# After explicit approval, create and wait for the recovered branch
+pscale branch create <database> <new-branch> --org <org> \
+  --from <source-branch> \
+  --restore-point <RFC3339-timestamp> \
+  --cluster-size <postgres-cluster-size> \
+  --wait \
+  --format json
+
+# Verify the resulting branch rather than relying only on the create exit code
+pscale branch show <database> <new-branch> --org <org> --format json
+```
+
+Use an absolute RFC 3339 timestamp such as `2026-08-25T13:30:00Z`; do not infer a timezone or silently round the requested recovery point. The flag is PostgreSQL-only. The CLI permits `--restore <backup-id>` with `--restore-point` even when `--from` is omitted; in that mode, the recovery source is the supplied backup. Without `--restore`, the CLI resolves the backup needed by the API from the required parent branch and timestamp. If the user supplied a specific backup ID, read back both the backup and timestamp before creating the branch. The CLI still rejects combining `--restore-point` with `--seed-data`. If creation fails or times out, treat the outcome as unconfirmed and inspect the target branch before retrying.
+
 ### Schema Comparison
 
 ```bash
@@ -141,6 +218,85 @@ pscale branch infra <database> <branch-name> --org <org> --format json
 ```
 
 Use this for read-only diagnostics. Do not infer that a schema/deploy operation is safe solely from infra output; combine it with branch status, schema diff, and deploy-request checks.
+
+### Postgres branch extensions
+
+`pscale branch extensions list` is read-only and returns the extensions available on the branch's current cluster image. It is not an inventory of installed `CREATE EXTENSION` state inside a database.
+
+```bash
+pscale branch extensions list <database> <branch> --org <org> --format json
+```
+
+There is no CLI command to enable an extension. Use `pscale sql` for reviewed SQL such as `CREATE EXTENSION`, and use `pscale branch resize --parameters` only for preload-library configuration when the parameter catalog shows that a parameter is available.
+
+### Rename or protect a branch
+
+`pscale branch update` supports both Vitess and Postgres branches. It sends only flags explicitly provided and requires at least one of `--new-name` or `--deletion-protected`. Renames can break connection configuration, deployment jobs, scripts, and branch references; disabling deletion protection increases removal risk.
+
+```bash
+# Inspect the current branch first
+pscale branch show <database> <branch> --org <org> --format json
+
+# After reviewing downstream references and receiving explicit approval
+pscale branch update <database> <branch> --org <org> \
+  --new-name <new-name> \
+  --deletion-protected=true \
+  --format json
+
+# Use an explicit false value to remove protection after approval
+pscale branch update <database> <branch> --org <org> \
+  --deletion-protected=false --format json
+
+# Verify using the resulting branch name
+pscale branch show <database> <resulting-branch-name> --org <org> --format json
+```
+
+Before a rename, inventory application connection settings, CI/CD jobs, deploy-request automation, and project `.pscale.yml` references. Show the complete proposed update and obtain explicit approval. If renaming and changing deletion protection together, verify both returned fields rather than assuming an all-or-nothing update.
+
+### Postgres primary switchover
+
+`pscale branch switchover` starts a Postgres-only primary switchover and returns immediately; it does not wait for completion. On a replicated branch, PlanetScale promotes the named `--candidate` from `branch infra`, or selects one when the flag is omitted. A single-instance branch has no replica to promote, so PlanetScale restarts the instance in place and the branch is unavailable while it returns. Writes are briefly interrupted in either case.
+
+```bash
+# Inspect instance names, roles, and replica availability
+pscale branch infra <database> <branch> --org <org> --format json
+
+# After confirming impact, target, and rollback/incident plan with the user
+pscale branch switchover <database> <branch> --org <org> \
+  --candidate <replica-name> --format json
+
+# Re-read infra until the primary role and instance health are clear
+pscale branch infra <database> <branch> --org <org> --format json
+
+# Inspect switchover history/status if the create result is unclear
+pscale branch switchover list <database> <branch> --org <org> --format json
+pscale branch switchover show <database> <branch> <switchover-id> --org <org> --format json
+```
+
+Only one switchover can run on a branch at a time. If the create response contains a switchover ID, keep it with the incident notes and use `switchover show` for read-only status/detail lookup. Do not pass `--candidate` for a branch without replicas. A failed switchover has an unconfirmed outcome: the primary may still have moved and the CLI does not roll it back. Re-check `branch infra` and switchover history before any retry. Treat this as an availability-impacting operational write that always requires explicit approval.
+
+### Postgres branch maintenance
+
+`pscale branch maintenance run` starts asynchronous Postgres branch image maintenance. PlanetScale applies the image upgrade to replicas first, then switches over from the old primary to an upgraded replica. Expect seconds of unavailability during the switchover, and expect all direct connections to be terminated; applications must rely on retry logic. A single-instance branch has no replica to promote and is unavailable until the instance returns.
+
+```bash
+# Inspect instance topology and make sure no resize/change request is in progress
+pscale branch infra <database> <branch> --org <org> --format json
+pscale branch resize status <database> <branch> --org <org> --format json
+
+# After explicit approval for the target and impact
+pscale branch maintenance run <database> <branch> --org <org> --format json
+
+# Optionally include a PostgreSQL minor-version upgrade during maintenance
+pscale branch maintenance run <database> <branch> --org <org> \
+  --update-postgres-minor-version \
+  --format json
+
+# Track async progress through branch infrastructure
+pscale branch infra <database> <branch> --org <org> --format json
+```
+
+Maintenance cannot start while a `branch resize` change request is in progress. Treat this as an availability-impacting operational write: show the target branch, topology, expected connection termination/unavailability, minor-version choice, and incident/rollback plan before asking for approval.
 
 ### Connection inspection and safe termination
 
@@ -167,9 +323,19 @@ Treat `kill` and `kill-transaction` as destructive operational actions: show the
 
 ### Query pattern reports
 
-`pscale branch query-patterns download` generates a branch-level query patterns report, polls until PlanetScale finishes it, and downloads the resulting CSV. Use it for query-shape analysis before tuning indexes, schema, or application query patterns.
+`pscale branch query-patterns` manages branch-level query pattern reports for query-shape analysis before tuning indexes, schema, or application query patterns. `list` and `show` are read-only. `download` generates/polls/downloads a CSV report. `delete` removes one generated report and requires explicit approval for the exact report ID.
 
 ```bash
+# List generated reports, paging by cursor when needed
+pscale branch query-patterns list <database> <branch-name> --org <org> --format json
+pscale branch query-patterns list <database> <branch-name> --org <org> \
+  --starting-after <cursor> \
+  --limit 100 \
+  --format json
+
+# Inspect one report before downloading or deleting it
+pscale branch query-patterns show <database> <branch-name> <report-id> --org <org> --format json
+
 # Download with an explicit output path
 pscale branch query-patterns download <database> <branch-name> --org <org> --output query-patterns.csv
 
@@ -179,9 +345,12 @@ pscale branch query-patterns download <database> <branch-name> --org <org>
 
 # Use --output - to write the CSV to stdout for shell pipelines
 pscale branch query-patterns download <database> <branch-name> --org <org> --output - > query-patterns.csv
+
+# Delete only after confirming the exact report ID and target branch
+pscale branch query-patterns delete <database> <branch-name> <report-id> --org <org> --format json
 ```
 
-The command requires Query Insights to be enabled for the database. A not-found error can mean either the branch does not exist or Query Insights is disabled. Prefer an explicit `--output` path in automation so downstream analysis can find the CSV deterministically; use `--output -` when a pipeline should consume the CSV from stdout.
+The command group requires Query Insights to be enabled for the database. A not-found error can mean either the branch/report does not exist or Query Insights is disabled. Prefer an explicit `--output` path in automation so downstream analysis can find the CSV deterministically; use `--output -` when a pipeline should consume the CSV from stdout. For deletion, `--force` only skips the prompt; it is not approval. Re-run `list` or `show` after deletion and verify the report is gone.
 
 ### Change a Postgres branch
 
@@ -211,6 +380,35 @@ pscale branch resize cancel <database> <branch-name> --org <org> --format json
 
 Review the parameter catalog's `restart` and `immutable` fields before proposing a change. Surface restart impact and capacity/cost impact to the user, then obtain approval before running `resize`. Request states include `queued`, `pending`, `resizing`, `completed`, and `canceled`; only the last two are terminal. A JSON no-op returns `{"result":"no_change","branch":"<branch>"}` rather than a change request. After completion, verify with both `resize status` and `branch show`.
 
+### Resize Vitess VTGates
+
+`pscale branch vtgate` manages VTGate capacity for Vitess production branches. Development branches cannot be resized. Inspect current capacity first, propose the exact size/count/autoscaling change and cost/capacity impact, and obtain approval before creating or canceling a resize.
+
+```bash
+# Read the applied configuration
+pscale branch vtgate show <database> <branch> --org <org> --format json
+
+# Fixed capacity: two VTGates per availability zone
+pscale branch vtgate resize <database> <branch> --org <org> --format json \
+  --vtgate-size VTG_320 \
+  --vtgate-count 2 \
+  --vtgate-autoscaling=false
+
+# Autoscaling: minimum two and maximum eight VTGates per availability zone
+pscale branch vtgate resize <database> <branch> --org <org> --format json \
+  --vtgate-size VTG_320 \
+  --vtgate-autoscaling \
+  --vtgate-count 2 \
+  --vtgate-max-count 8 \
+  --vtgate-target-cpu-utilization 50
+
+# Track the latest request; cancel only while it is still queued
+pscale branch vtgate resize status <database> <branch> --org <org> --format json
+pscale branch vtgate resize cancel <database> <branch> --org <org> --format json
+```
+
+At least one resize flag is required. Omitted flags preserve their current values; pass `--vtgate-autoscaling=false` explicitly to disable autoscaling. `--vtgate-count` is the per-availability-zone fixed count, or the minimum when autoscaling is enabled. After the request completes, verify both `resize status` and `vtgate show`; do not treat the requested values as applied while status is non-terminal.
+
 ### Routing rules
 
 ```bash
@@ -220,11 +418,20 @@ pscale branch routing-rules get <database> <branch-name>
 # Vitess only: read live routing rules from vtctld/current cluster state
 pscale branch vtctld get-routing-rules <database> <branch-name>
 
+# Vitess only: read live keyspace-to-keyspace routing rules
+pscale branch vtctld get-keyspace-routing-rules <database> <branch-name> --format json
+
 # Update routing rules from a file
 pscale branch routing-rules update <database> <branch-name> --routing-rules routing-rules.json
+
+# Replace live keyspace routing rules (approved write)
+pscale branch vtctld apply-keyspace-routing-rules <database> <branch-name> \
+  --rules-file keyspace-routing-rules.json --format json
 ```
 
 Use `vtctld get-routing-rules` when debugging propagation/live cluster state; use `routing-rules get` when you need the schema snapshot contract.
+
+Keyspace routing rules are a separate live map of `from_keyspace` to `to_keyspace`. Before replacing them, save `get-keyspace-routing-rules` output, validate every entry includes both fields, show the complete proposed replacement, and obtain explicit approval. `apply-keyspace-routing-rules` requires exactly one of `--rules` or `--rules-file`; an empty `rules` array clears all live keyspace routing rules. By default the command rebuilds SrvVSchema objects; use `--cells` only to scope that rebuild deliberately, and use `--skip-rebuild` only with an explicit propagation plan. Re-run `get-keyspace-routing-rules` after the write and compare the full returned set.
 
 ### Vitess shard inspection
 
@@ -241,6 +448,99 @@ pscale branch vtctld get-shard <database> <branch-name> \
   --keyspace commerce \
   --shard '-80'
 ```
+
+### Vitess tablet throttler configuration
+
+`pscale branch vtctld throttler update-config` mutates a Vitess keyspace's tablet-throttler policy. Inspect tablet aliases and current state first, show the exact keyspace/app/metrics/rule to the user, and obtain explicit approval before changing it.
+
+```bash
+# Discover tablets and inspect current throttler state
+pscale branch vtctld list-tablets <database> <branch> --org <org> --format json
+pscale branch vtctld throttler status <database> <branch> --org <org> \
+  --tablet-alias <zone-tablet-alias> --format json
+
+# Temporarily throttle an app at 50% for 30 minutes
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> \
+  --throttle-app rowstreamer \
+  --throttle-app-ratio 0.5 \
+  --throttle-app-duration 30m \
+  --format json
+
+# Remove one app throttle rule
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --unthrottle-app rowstreamer --format json
+
+# Assign the metrics checked for one app
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --app-name vreplication \
+  --app-metrics lag,loadavg --format json
+
+# Change the keyspace's overall enable state explicitly
+pscale branch vtctld throttler update-config <database> <branch> --org <org> \
+  --keyspace <keyspace> --enabled=false --format json
+```
+
+Rules:
+
+- Omit `--enabled` to preserve the current enable state; use `--enabled=true` or `--enabled=false` only for an approved state change.
+- `--throttle-app` and `--unthrottle-app` are mutually exclusive.
+- `--app-name` and `--app-metrics` must be passed together; `--app-name` cannot be empty.
+- `--throttle-app-ratio` is between `0.00` and `1.00` and defaults to `1`; `--throttle-app-duration` defaults to one hour.
+- `--threshold` changes the replication-lag threshold (in seconds) for the keyspace's default check; treat it as a keyspace-wide mutation that needs the same explicit approval as an app rule change.
+- After a write, re-run `throttler status` on the relevant tablets and verify the returned policy. Do not assume one tablet proves cluster-wide propagation when the branch has multiple tablets.
+
+### Vitess Lookup Vindex lifecycle
+
+`pscale branch vtctld lookup-vindex` creates and manages a Vitess Lookup Vindex backfill workflow. Every lifecycle action changes live workflow or VSchema state except `show`. Confirm the organization, database, branch, owner table, owner columns, lookup table, both keyspaces, vindex type, and recovery plan before creating or advancing one.
+
+The keyspace flags have distinct meanings:
+
+- `--keyspace` is the owner table's keyspace, where the lookup vindex is defined in the VSchema.
+- `--table-keyspace` is where the lookup table and its backfill workflow are created and managed.
+
+Do not swap them. `--table-keyspace` and `--name` identify the workflow for every follow-up command; commands that alter owner-side VSchema state also accept `--keyspace`.
+
+```bash
+# Inspect branch schema/routing and any existing workflow first
+pscale branch schema <database> <branch> --org <org>
+pscale branch vtctld lookup-vindex show <database> <branch> --org <org> \
+  --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> \
+  --format json
+
+# After explicit approval, create the lookup table and backfill workflow
+pscale branch vtctld lookup-vindex create <database> <branch> --org <org> \
+  --keyspace <owner-table-keyspace> \
+  --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> \
+  --type <lookup-vindex-type> \
+  --table-owner <owner-table> \
+  --table-owner-columns <owner-column> \
+  --table-name <lookup-table> \
+  --format json
+
+# Verify progress before any lifecycle transition
+pscale branch vtctld lookup-vindex show <database> <branch> --org <org> \
+  --table-keyspace <lookup-table-keyspace> --name <vindex-name> --format json
+
+# Run only the specifically approved transition
+pscale branch vtctld lookup-vindex externalize <database> <branch> --org <org> \
+  --keyspace <owner-table-keyspace> --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> --format json
+pscale branch vtctld lookup-vindex internalize <database> <branch> --org <org> \
+  --keyspace <owner-table-keyspace> --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> --format json
+pscale branch vtctld lookup-vindex complete <database> <branch> --org <org> \
+  --keyspace <owner-table-keyspace> --table-keyspace <lookup-table-keyspace> \
+  --name <vindex-name> --format json
+pscale branch vtctld lookup-vindex cancel <database> <branch> --org <org> \
+  --table-keyspace <lookup-table-keyspace> --name <vindex-name> --format json
+```
+
+For an owned Lookup Vindex, `--continue-after-copy-with-owner` defaults to `true` and is always sent to the API. This keeps the backfill workflow running after the copy phase so writes that bypass VTGate, including rows applied by VReplication during an import, continue reaching the lookup table. Pass `--continue-after-copy-with-owner=false` only when the user explicitly wants the workflow stopped after copy and understands the write-propagation gap.
+
+Do not externalize until the copy/backfill state and lookup-table consistency are verified. `externalize --delete` also removes the workflow, so omit `--delete` unless that irreversible cleanup was separately approved. Treat `internalize`, `complete`, and `cancel` as distinct actions, never interchangeable recovery guesses. After each action, re-run `show` and inspect schema/routing state; a not-found result after cleanup is only expected when the approved action removed the workflow.
 
 ### Vitess MoveTables and global sequences
 
@@ -359,7 +659,7 @@ pscale branch list <database> | grep main
 
 ## References
 
-See `references/commands.md` for complete `pscale branch` command reference.
+See `references/commands.md` for the general `pscale branch` command reference. See `references/lookup-vindex-commands.md` for the complete Lookup Vindex parent and lifecycle help surfaces.
 
 ## Branch Lifecycle
 

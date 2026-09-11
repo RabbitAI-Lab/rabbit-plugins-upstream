@@ -1,7 +1,7 @@
 ---
 name: "sendmux-management"
 description: "Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup."
-version: "1.3.0"
+version: "1.5.0"
 metadata:
   openclaw:
     skillKey: "sendmux-management"
@@ -22,12 +22,13 @@ metadata:
 
 This ClawHub skill connects OpenClaw agents to Sendmux. Some workflows require a Sendmux account and an appropriate Sendmux API key or agent token. Sendmux account usage is external to ClawHub; do not ask users to paste secrets into chat.
 
-Use this skill for team administration with an `smx_root_` key.
+Use this skill for team administration with an `smx_root_` key or a REST OAuth grant with Management access.
 
 ## Boundaries
 
 - Do not ask the user to paste an API key or one-time secret.
-- Use `smx_root_` keys for Management API calls.
+- Use a root API-key profile or OAuth profile with Management access and the operation's required scopes. OAuth remains limited by the authorising user's current team permissions.
+- Agent self-registration does not require Management or a root key. Route a user who only wants an agent inbox to `sendmux-getting-started` and `sendmux agent:register`.
 - Do not use management calls to read, triage, sync, or reply from a mailbox; route those tasks to `sendmux-mailbox-agent`.
 - Treat create-key and webhook-secret responses as sensitive one-time values. Put them only in the user's chosen secret store or secure output path.
 - Confirm destructive operations before deleting domains, mailboxes, mailbox keys, sending accounts, or webhooks.
@@ -46,6 +47,8 @@ Use this skill for team administration with an `smx_root_` key.
 | Incoming logs | CLI or SDK. MCP does not curate incoming-log tools yet. |
 
 For terminal work, use the `sendmux` CLI with `--json`. For application code, use `@sendmux/management` and `createManagementClient`.
+
+Validate the selected profile with `sendmux management:get-connection --profile work --json` before reading resources. This check requires Management access but no additional read permission. For OAuth login and token lifecycle, use `sendmux-cli`; SDK clients accept `accessToken` instead of `apiKey`, including a provider that resolves the current token before each request.
 
 ## Efficient defaults
 
@@ -120,7 +123,9 @@ Use CLI `management:update-domain` or SDK `managementUpdateDomain` with `If-Matc
 
 ## Mailboxes and keys
 
-Create mailboxes with a root key; use mailbox keys afterwards for agent mailbox work.
+For API-key setup, create mailboxes with a root key and use mailbox keys afterwards for agent mailbox work. A Management OAuth profile can provision with the required scopes; Mailbox runtime needs its own approved access.
+
+This owner-administered path is separate from self-registration. A self-registering agent uses a durable CLI profile without an existing account or API key; do not create or expose a root key merely to give that agent an inbox.
 
 MCP tools:
 

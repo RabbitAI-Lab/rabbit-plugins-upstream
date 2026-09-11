@@ -1,47 +1,66 @@
-## Description: <br>
-Governed Veeam Backup & Replication operations for health overview, diagnostics, job control, restore workflows, repository capacity checks, infrastructure inventory, async session tracking, and undo-aware audited actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Veeam AIops helps agents operate Veeam Backup & Replication through governed CLI and MCP tools for health checks, diagnostics, backup jobs, restores, repositories, backups, infrastructure, sessions, and undo workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, backup operators, and infrastructure teams use this skill to inspect and operate Veeam Backup & Replication environments through CLI or MCP workflows with audit logging, dry-run previews, and undo records for reversible writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact backup and restore writes, including stopping jobs or sessions and starting irreversible VM restores. <br>
-Mitigation: Use a dedicated least-privilege Veeam account, begin with read-only permissions where possible, and require an operational approval process before enabling write-capable credentials. <br>
-Risk: Master passwords or Veeam credentials could be exposed if placed in committed MCP configuration, shell history, CI logs, or persistent plaintext environment files. <br>
-Mitigation: Inject secrets through a secret manager or ephemeral environment, keep the encrypted store outside version control, and avoid committing MCP configs that contain `VEEAM_AIOPS_MASTER_PASSWORD`. <br>
-Risk: The skill relies on account permissions and agent discipline rather than a built-in approval gate for MCP write tools. <br>
-Mitigation: Configure the Veeam account with only the permissions each workflow needs and instruct the agent to avoid write tools unless an operator has explicitly approved the action. <br>
+## Use Case:
 
+Developers, backup operators, and infrastructure teams use this skill to inspect Veeam Backup & Replication environments, triage failed jobs and repository capacity, run or stop backup jobs, list restore points, start VM restores, and follow asynchronous sessions. It is intended for Veeam Backup & Replication only and is out of scope for other backup products, hypervisor lifecycle operations, Kubernetes, or cloud providers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/veeam-aiops) <br>
-- [Veeam-AIops homepage](https://github.com/AIops-tools/Veeam-AIops) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI and MCP workflows may return Veeam environment data, audit status, dry-run previews, undo identifiers, and risk-tier labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: The skill can perform high-impact Veeam write and restore actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege Veeam account, start with read-only or restricted permissions, and require human review before stop, disable, undo, or restore actions.
+
+Risk: Restore and session stop workflows can be irreversible or have no undo token.
+
+Mitigation: Use dry-run previews where available, verify the resolved restore target, and confirm destructive actions outside the model before execution.
+
+Risk: Credential handling includes a legacy plaintext password fallback and a master password for non-interactive use.
+
+Mitigation: Use the encrypted secrets store, avoid plaintext .env password fallback, and do not hardcode the master password in shared MCP configuration.
+
+Risk: The scanner reports weak built-in approval controls.
+
+Mitigation: Rely on Veeam account permissions and external human approval policy for authorization, treating the skill's audit and risk labels as visibility rather than permission gates.
+
+## Reference(s):
+
+- [Veeam AIops project homepage](https://github.com/AIops-tools/Veeam-AIops)
+- [Veeam AIops ClawHub release](https://clawhub.ai/zw008/skills/veeam-aiops)
+- [Capabilities](references/capabilities.md)
+- [Setup Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+- [CLI Reference](references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown and text with inline shell commands, configuration snippets, and structured MCP tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return operational findings, audit-oriented status, dry-run previews, undo identifiers for reversible writes, and session progress details.]
+
+## Skill Version(s):
+
+0.12.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

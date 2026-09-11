@@ -1,49 +1,67 @@
-## Description: <br>
-Mirror positions from top Polymarket traders with polling mode for portfolio-style copying and Reactor mode for event-driven real-time mirroring via Simmer's on-chain signal infrastructure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mirror positions from top Polymarket traders. Polling mode (free) for portfolio-style copying, Reactor mode (Pro) for event-driven real-time mirroring via Simmer's on-chain signal infrastructure.
 
-## Publisher: <br>
-[simmer](https://clawhub.ai/user/simmer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[simmer](https://clawhub.ai/user/simmer)
 
-## Use Case: <br>
-External users and their agents use this skill to configure and run Polymarket copytrading workflows, including dry-run checks, paper-mode trading, wallet-following scans, and Reactor-mode mirroring for eligible Simmer Pro users. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automated copytrading can place live trades with real funds when configured for live trading or Reactor mode. <br>
-Mitigation: Start in dry-run or $SIM mode, use conservative position caps, and review venue, max_size, daily_cap, and watchlist settings before enabling live execution. <br>
-Risk: A raw wallet private key used for external-wallet trading would expose funds if mishandled. <br>
-Mitigation: Prefer managed wallets, or use a dedicated low-balance trading wallet when WALLET_PRIVATE_KEY is required. <br>
-Risk: Reactor mode can execute live trades even when the normal dry-run default would otherwise apply. <br>
-Mitigation: Treat Reactor setup as live automation, verify server-side Reactor configuration, and use the sim venue for paper trading. <br>
-Risk: Strategy errors, market movement, signal lag, and misconfiguration can produce trading losses. <br>
-Mitigation: Validate selected wallets and sizing in paper mode, keep per-position and daily caps low, and periodically review generated trade reports. <br>
+## Use Case:
 
+External traders and agents use this skill to inspect Polymarket whale positions, paper trade with Simmer, or execute capped copytrading runs. It supports portfolio-style polling and Pro Reactor mode for event-driven mirroring.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/simmer/skills/polymarket-copytrading) <br>
-- [Simmer API](https://api.simmer.markets) <br>
-- [Simmer Dashboard](https://simmer.markets/dashboard) <br>
-- [Polymarket V2 Migration Guide](https://docs.simmer.markets/v2-migration) <br>
-- [predicting.top](https://predicting.top) <br>
-- [alphawhale.trade](https://alphawhale.trade) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, environment-variable configuration, API endpoints, and trade-status text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce dry-run summaries, account status, copytrading configuration, and live or simulated trade execution reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.12.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can automatically execute real-money trades and sells when run live.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review carefully before installing, test with a dedicated low-balance wallet, and prefer --venue sim or COPYTRADING_FORCE_SIMMER_VENUE=true while validating behavior.
+
+Risk: Default polling should be treated as sell-capable unless whale-exit handling is disabled.
+
+Mitigation: Use --no-whale-exits when buy-only behavior is required, and review rebalance and exit settings before running with live funds.
+
+Risk: Reactor cron can execute automatically and Reactor mode is documented as live execution.
+
+Mitigation: Do not enable Reactor cron until the operator understands its automatic execution model, and use Simmer venue configuration for paper trading first.
+
+Risk: Trading behavior depends on installed dependencies and SDK behavior.
+
+Mitigation: Pin and review dependencies before using live funds, including the required simmer-sdk package.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/simmer/skills/polymarket-copytrading)
+- [Simmer publisher profile](https://clawhub.ai/user/simmer)
+- [Simmer API](https://api.simmer.markets)
+- [Simmer dashboard](https://simmer.markets/dashboard)
+- [Polymarket V2 migration guide](https://docs.simmer.markets/v2-migration)
+- [predicting.top](https://predicting.top)
+- [alphawhale.trade](https://alphawhale.trade)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown status summaries with inline shell commands and configuration values]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run dry-run simulations or live trading commands depending on user flags and venue configuration.]
+
+## Skill Version(s):
+
+1.12.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

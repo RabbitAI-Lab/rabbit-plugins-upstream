@@ -1,43 +1,56 @@
-## Description: <br>
-Perform OCR on image files (jpg, png, bmp, gif, tiff) using the system's `tesseract` binary and return extracted plain text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Perform OCR on image files (jpg, png, bmp, gif, tiff) using the system's `tesseract` binary and return extracted plain text.
 
-## Publisher: <br>
-[kaarl92](https://clawhub.ai/user/kaarl92) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kaarl92](https://clawhub.ai/user/kaarl92)
 
-## Use Case: <br>
-Developers and agents use this skill to extract plain text from image files and PDFs through local Tesseract OCR, with an optional OCR.space example for API-based OCR. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The optional OCR.space helper can send local images or image URLs to an external OCR service. <br>
-Mitigation: Use the local Tesseract script for private or regulated documents, and run the OCR.space helper only when external upload is acceptable. <br>
-Risk: PDF processing creates temporary page images on disk during OCR. <br>
-Mitigation: Process sensitive PDFs in a controlled environment and verify temporary files are removed after execution. <br>
+## Use Case:
 
+Developers and agents use this skill to extract plain text from image files through local Tesseract OCR. The artifact also includes an optional remote OCR helper, so users handling sensitive documents should prefer the local shell wrapper unless remote processing is intended.
 
-## Reference(s): <br>
-- [Reference Documentation for Ocr](references/api_reference.md) <br>
-- [OCR.space API endpoint](https://api.ocr.space/parse/image) <br>
-- [OCR.space OCR API documentation](https://ocr.space/ocrapi) <br>
-- [ClawHub skill page](https://clawhub.ai/kaarl92/sm-ocr-scanner) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Plain text OCR output, with Markdown usage guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local OCR uses Tesseract with English language data by default; PDF inputs are converted to temporary page images before OCR.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The included Python helper can upload local images to OCR.space even though the main description presents the skill as local-only.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the local Tesseract shell script for sensitive documents, and use the Python helper only when remote processing is intentional and acceptable.
+
+Risk: The documented behavior omits remote processing, URL support, PDF support, and related privacy implications.
+
+Mitigation: Review the scripts before installation and require the publisher to document or remove behavior that changes where files are processed.
+
+## Reference(s):
+
+- [Skill page](https://clawhub.ai/kaarl92/skills/sm-ocr-scanner)
+- [OCR API Reference](references/api_reference.md)
+- [OCR.space API](https://api.ocr.space/parse/image)
+- [OCR.space API documentation](https://ocr.space/ocrapi)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, code, guidance]
+
+**Output Format:** [Plain text OCR output, Markdown guidance, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local OCR uses Tesseract with English language settings by default; PDF handling depends on pdftoppm.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

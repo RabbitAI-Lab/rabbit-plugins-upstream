@@ -16,7 +16,8 @@
 #   • Auto-discover every Space Duck artefact on the box
 #   • Categorise findings: ✓ healthy / ⚠ known degraded / ✗ broken
 #   • Suggest the next action for each ⚠ or ✗
-#   • Output is safe to share publicly (no secrets, no full URLs with tokens)
+#   • Output carries no secrets/tokens and no full URLs with tokens, but it
+#     DOES include host/process/log-tail context — glance before sharing widely
 #
 # Doctrine:
 #   • Read-only. NEVER mutates state. Doctor diagnoses, never treats.
@@ -54,6 +55,17 @@ redact_url() {
   # Keep scheme + tld, hide subdomain hash so report is safe to paste publicly
   local u="$1"
   echo "$u" | sed -E 's|(https?://)[^/]+(\.[a-z]+/)|\1<host>\2|; s|(https?://)[^/]+$|\1<host>|'
+}
+
+# 0.8.6 — F1: kill -0 returns EPERM for a live process under another uid;
+# only "no such process" means dead. Check /proc + the error text.
+proc_alive() {
+  local pid="$1"
+  [[ -n "$pid" ]] || return 1
+  if kill -0 "$pid" 2>/dev/null; then return 0; fi
+  [[ -d "/proc/$pid" ]] && return 0
+  kill -0 "$pid" 2>&1 | grep -qi 'not permitted' && return 0
+  return 1
 }
 
 # ─── 0. Banner ────────────────────────────────────────────────────────────────
@@ -100,8 +112,13 @@ else
     LATEST=$(timeout 5 clawhub inspect space-duck 2>/dev/null | grep -E '^Latest:' | awk '{print $2}' || echo "")
   fi
   if [[ -n "$LATEST" ]]; then
+    # 0.8.6 — F2: three-way compare (registry can lag installed by several
+    # releases; a naive != check surfaces a fake "update" pointing to an
+    # older version and users run a de-facto downgrade).
     if [[ "$LATEST" == "$CUR_VER" ]]; then
       ok "Up to date (latest=$LATEST, authoritative)"
+    elif [[ "$(printf '%s\n%s\n' "$CUR_VER" "$LATEST" | sort -V | tail -1)" == "$CUR_VER" ]]; then
+      ok "Installed v$CUR_VER is ahead of registry (v$LATEST) — registry lag, informational"
     else
       warn "Update available: v$CUR_VER → v$LATEST"
       hint "Run: $SKILL_DIR/scripts/update.sh"
@@ -192,7 +209,7 @@ fi
 # ─── 5. Supervisord ───────────────────────────────────────────────────────────
 section "Supervisord"
 SUP_PID="$SD_DIR/supervisor/supervisord.pid"
-if [[ -f "$SUP_PID" ]] && kill -0 "$(cat "$SUP_PID")" 2>/dev/null; then
+if [[ -f "$SUP_PID" ]] && proc_alive "$(cat "$SUP_PID")"; then  # 0.8.6 — F1
   ok "Supervisord up (PID $(cat "$SUP_PID"))"
 elif [[ -f "$SUP_PID" ]]; then
   warn "Stale PID file at $SUP_PID (process gone)"
@@ -246,20 +263,54 @@ else
 fi
 
 if [[ -f "$TL_ERR" ]] && [[ -s "$TL_ERR" ]]; then
+  # 0.8.6 — F3: report last-write age so a stale-since-yesterday .err
+  # doesn't look like an active fire. -s guarantees non-empty already.
   ERR_CT=$(wc -l < "$TL_ERR")
-  if (( ERR_CT > 0 )); then
-    warn "telegram_listener.err has $ERR_CT lines"
-    hint "Tail: tail -20 $TL_ERR"
+  ERR_MTIME=$(stat -c %Y "$TL_ERR" 2>/dev/null || stat -f %m "$TL_ERR" 2>/dev/null || echo 0)
+  NOW=$(date +%s)
+  ERR_AGE_S=$(( NOW - ERR_MTIME ))
+  if (( ERR_AGE_S < 0 )); then ERR_AGE_S=0; fi
+  if (( ERR_AGE_S < 3600 )); then
+    AGE="$(( ERR_AGE_S / 60 ))m"
+  elif (( ERR_AGE_S < 86400 )); then
+    AGE="$(( ERR_AGE_S / 3600 ))h"
+  else
+    AGE="$(( ERR_AGE_S / 86400 ))d"
+  fi
+  warn "telegram_listener.err has $ERR_CT lines (last write ${AGE} ago — may predate current bind)"
+  hint "Tail: tail -20 $TL_ERR"
+fi
+
+# 0.8.6 — F5: root-owned inbox files are silently skipped by chain history
+INBOX_DIR="$SD_DIR/inbox"
+if [[ -d "$INBOX_DIR" ]]; then
+  UNREADABLE=0
+  for f in "$INBOX_DIR"/*.json; do
+    [[ -e "$f" ]] || break
+    [[ -r "$f" ]] || UNREADABLE=$((UNREADABLE+1))
+  done
+  if (( UNREADABLE > 0 )); then
+    warn "$UNREADABLE inbox file(s) unreadable by uid $(id -u) — chain history silently skips them"
+    hint "Fix: sudo chown -R $(id -un): $INBOX_DIR"
   fi
 fi
 
 # ─── 7. Bridge tunnel ─────────────────────────────────────────────────────────
 section "Bridge tunnel"
 # Find cloudflared / trycloudflare process if any
-TUNNEL_PROC=$(pgrep -fa 'cloudflared\|tryclou' 2>/dev/null | head -1 || true)
+# 0.8.6 — F4: `pgrep -fa 'a\|b'` isn't portable (busybox pgrep also lacks
+# -a). Split into two plain invocations, then fall back to bare -f pgrep
+# when -a isn't supported so we still surface a running tunnel.
+TUNNEL_PROC=$( { pgrep -fa cloudflared 2>/dev/null; pgrep -fa trycloudflare 2>/dev/null; } | head -1 || true)
+if [[ -z "$TUNNEL_PROC" ]] && pgrep -f cloudflared >/dev/null 2>&1; then
+  TUNNEL_PROC="cloudflared (pid $(pgrep -f cloudflared | head -1))"
+fi
 if [[ -n "$TUNNEL_PROC" ]]; then
   ok "Tunnel process running"
-  row "${C_DIM}${TUNNEL_PROC:0:140}${C_RESET}"
+  # [HARDEN-074] Redact before printing: named-tunnel cmdlines can carry
+  # --token <JWT> and full tunnel URLs — both violate "safe to paste publicly".
+  TUNNEL_SAFE=$(echo "$TUNNEL_PROC" | sed -E 's/(--token[= ])[^ ]+/\1<redacted>/g; s|https?://[^ ]+|<url-redacted>|g')
+  row "${C_DIM}${TUNNEL_SAFE:0:140}${C_RESET}"
   if echo "$TUNNEL_PROC" | grep -q 'trycloudflare\|quick'; then
     warn "Quick tunnel detected — URL is ephemeral (will change on restart)"
     hint "Production: switch to named cloudflared tunnel or owner DNS"
@@ -295,6 +346,6 @@ echo "  ${C_GREEN}✓ healthy: $HEALTH_OK${C_RESET}"
 echo "  ${C_YELLOW}⚠ warnings: $HEALTH_WARN${C_RESET}"
 echo "  ${C_RED}✗ failures: $HEALTH_FAIL${C_RESET}"
 echo
-echo "${C_DIM}This report contains no secrets and is safe to paste publicly.${C_RESET}"
+echo "${C_DIM}This report contains no secrets or tokens, but includes host/process/log context — review before sharing widely.${C_RESET}"
 echo
 exit 0

@@ -1,43 +1,55 @@
-## Description: <br>
-Searches Duke of Zhou dream interpretations by keyword with pagination support for dream-meaning questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按关键词检索周公解梦释义，支持分页，适用于回答梦见蛇、梦到飞或类似解梦问题。
 
-## Publisher: <br>
-[jisuapi](https://clawhub.ai/user/jisuapi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jisuapi](https://clawhub.ai/user/jisuapi)
 
-## Use Case: <br>
-External users and agent developers use this skill to look up short entertainment-oriented interpretations for dream keywords, then summarize the most relevant results in conversation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dream search keywords are sent to JisuAPI and may reveal sensitive personal details if users include them. <br>
-Mitigation: Avoid sensitive personal details in dream queries and use a dedicated JisuAPI key that can be rotated or revoked. <br>
-Risk: Dream interpretations are entertainment and learning references, not reliable decision, medical, or safety advice. <br>
-Mitigation: Summarize results as non-authoritative guidance and include a brief reminder not to over-rely on dream meanings for real-world decisions. <br>
+## Use Case:
 
+External users and developers use this skill to look up Duke of Zhou dream interpretations by keyword through JisuAPI. Agents can summarize the returned entries for conversational dream-interpretation questions while reminding users that results are for entertainment or learning reference.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jisuapi/jisu-dream) <br>
-- [JisuAPI Dream API](https://www.jisuapi.com/api/dream) <br>
-- [JisuAPI](https://www.jisuapi.com/) <br>
-- [Dream search endpoint](https://api.jisuapi.com/dream/search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON command output from the dream search script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and the JISU_API_KEY environment variable; search requests include a keyword plus optional pagenum and pagesize values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill sends dream keywords and an API key to JisuAPI when invoked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering highly sensitive personal details in dream keywords and keep JISU_API_KEY in environment or secret management rather than hardcoding it.
+
+Risk: Dream-interpretation results could be mistaken for practical, medical, or other real-world decision guidance.
+
+Mitigation: Present results as entertainment or learning reference and avoid treating them as advice for real-world decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jisuapi/skills/jisu-dream)
+- [JisuAPI Dream API Documentation](https://www.jisuapi.com/api/dream)
+- [JisuAPI Provider Site](https://www.jisuapi.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON API results and Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and JISU_API_KEY; sends dream keywords to JisuAPI for lookup.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

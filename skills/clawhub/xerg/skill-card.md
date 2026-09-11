@@ -1,48 +1,61 @@
-## Description: <br>
-Audit and reduce AI agent spend in dollars across OpenClaw, Hermes, Claude Code, Cursor, and event-ingest workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audit and reduce AI agent runtime spend in dollars. Use for AI costs, agent spend, token waste, runtime attribution, detector coverage, and FinOps. Works with OpenClaw, Hermes, QM, Claude Code, Cursor, and generic event ingest.
 
-## Publisher: <br>
-[xerg](https://clawhub.ai/user/xerg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xerg](https://clawhub.ai/user/xerg)
 
-## Use Case: <br>
-Developers, engineering teams, and AI operations teams use this skill to run Xerg CLI audits, summarize AI spend and waste in dollars, and compare workflow or model changes. It is useful when investigating retry loops, context bloat, downgrade candidates, per-agent spend, or optional hosted sync setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The CLI can inspect local AI usage records and logs for cost analysis. <br>
-Mitigation: Run it only on data sources you intend to audit, and review the local sources reported by `xerg doctor` before running an audit. <br>
-Risk: Cloud push, connect, hosted MCP, remote SSH, and Railway flows can move beyond a local-only audit. <br>
-Mitigation: Keep audits local unless the user explicitly chooses hosted or remote setup, and review the generated SSH, Railway, or MCP configuration before use. <br>
-Risk: The `npx @xerg/cli@latest` path fetches and executes a third-party npm package. <br>
-Mitigation: Use the published package only when third-party CLI execution is acceptable, or install and pin the CLI through the environment's normal package controls. <br>
+## Use Case:
 
+Developers, engineering managers, and FinOps teams use this skill to audit local or approved remote AI-agent runtime data, attribute spend, identify evidence-strict waste, and compare compatible remediation results.
 
-## Reference(s): <br>
-- [Xerg documentation](https://xerg.ai/docs) <br>
-- [Xerg skill](https://xerg.ai/skill.md) <br>
-- [Xerg service status](https://status.xerg.ai) <br>
-- [@xerg/cli npm package](https://www.npmjs.com/package/@xerg/cli) <br>
-- [OpenSSH](https://www.openssh.com/) <br>
-- [rsync](https://rsync.samba.org/) <br>
-- [Railway CLI](https://github.com/railwayapp/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local CLI commands, runtime-specific flags, hosted setup steps, and concise summaries of audit JSON fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.13.0 (source: server release evidence) <br>
+Risk: Approved audits can let the pinned closed-source npm CLI inspect sensitive agent runtime logs or snapshots.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after approval, run local audits in a restricted environment when possible, and approve uploads separately.
+
+Risk: Hosted sync may share summarized audit data with Xerg Cloud.
+
+Mitigation: Use hosted pairing or push only when the summarized audit data is appropriate to share, and avoid exposing API keys in chat or shell history.
+
+Risk: Runtime costs are observed, locally estimated, or unpriced rather than authoritative provider invoices.
+
+Mitigation: Present audit spend as runtime analysis, preserve pricing-coverage limitations, and avoid using it as invoice reconciliation evidence.
+
+## Reference(s):
+
+- [Xerg homepage](https://xerg.ai)
+- [Xerg documentation](https://xerg.ai/docs)
+- [Xerg skill source](https://xerg.ai/skill.md)
+- [Xerg service status](https://status.xerg.ai)
+- [@xerg/cli npm package](https://www.npmjs.com/package/@xerg/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON-producing CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local audit results may include spend summaries, detector coverage, findings, neutral signals, and compare deltas; hosted upload is optional and permission-gated.]
+
+## Skill Version(s):
+
+0.33.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

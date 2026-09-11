@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>AI 伴读 · 中文苏格拉底式阅读教练</title>
+    <link rel="stylesheet" href="/app.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main class="app">
+      <header>
+        <h1>AI 伴读</h1>
+        <p>面向中文阅读场景的苏格拉底式阅读教练</p>
+        <button id="settingsBtn" class="secondary">模型设置</button>
+      </header>
+      <section id="privacyNotice" class="notice">
+        <strong>隐私与外发说明</strong><br />Reader Memory
+        保存在本机。在线模式会从微信读书读取书籍信息、你的划线与想法；使用在线模型时，书籍信息、所选原文和对话会发给你选择的模型供应商。每类外发均须你明确同意。Demo
+        不外发。
+      </section>
+      <section class="card">
+        <div class="row">
+          <input
+            id="searchInput"
+            placeholder="输入书名，例如「苏格拉底的申辩」"
+          /><button id="searchBtn">搜索</button>
+        </div>
+        <div id="status" class="muted">正在检查本地服务…</div>
+      </section>
+      <section id="bookPanel" class="card hidden">
+        <div id="bookMeta"></div>
+        <h2>全书结构</h2>
+        <div id="outline"></div>
+        <div class="row">
+          <button id="copyOutline" class="secondary">复制结构文本</button
+          ><button id="exportPng" class="secondary">导出 PNG</button>
+        </div>
+        <h2>划线</h2>
+        <div class="row">
+          <button id="hotBtn" class="secondary">万人划线</button
+          ><button id="mineBtn" class="secondary">我的划线（个人数据）</button>
+        </div>
+        <div id="highlights"></div>
+        <button id="startChat" disabled>开始 5 轮对话</button>
+      </section>
+      <section id="chatPanel" class="card hidden">
+        <h2>引导对话</h2>
+        <div id="chat"></div>
+        <div class="row">
+          <textarea id="answer" placeholder="写下你的回答"></textarea
+          ><button id="sendAnswer">发送</button>
+        </div>
+        <button id="exportNotes" class="secondary">导出笔记</button>
+      </section>
+      <section class="card">
+        <h2>Reader Memory Graph</h2>
+        <p class="muted">
+          概念、立场和未解问题仅写入本机；相同标签形成跨书连接。
+        </p>
+        <div class="grid">
+          <select id="memoryType">
+            <option value="concept">概念</option>
+            <option value="stance">立场</option>
+            <option value="question">未解问题</option></select
+          ><input id="memoryTags" placeholder="标签（逗号分隔）" /><textarea
+            id="memoryContent"
+            maxlength="2000"
+            placeholder="记录阅读记忆"
+          ></textarea>
+        </div>
+        <div class="row">
+          <button id="saveMemory">保存</button
+          ><button id="exportMemory" class="secondary">导出 JSON</button
+          ><button id="clearMemory" class="danger">删除全部</button>
+        </div>
+        <div id="connections"></div>
+        <div id="memoryList"></div>
+      </section>
+    </main>
+    <dialog id="settings">
+      <form method="dialog">
+        <h2>在线模型设置</h2>
+        <p>Key 仅保存在当前浏览器。调用前仍会单独请求外发同意。</p>
+        <select id="provider">
+          <option value="zhipu">智谱 GLM</option>
+          <option value="deepseek">DeepSeek</option></select
+        ><input
+          id="apiKey"
+          type="password"
+          placeholder="API Key（留空即 Demo）"
+        />
+        <div class="row">
+          <button value="cancel" class="secondary">取消</button
+          ><button id="saveSettings" value="default">保存</button>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" role="status"></div>
+  </body>
+</html>

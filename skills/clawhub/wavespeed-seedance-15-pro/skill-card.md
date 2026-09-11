@@ -1,42 +1,55 @@
-## Description: <br>
-Generate text-to-video and image-to-video clips with ByteDance's Seedance V1.5 Pro model through WaveSpeed AI, including options for duration, resolution, audio, camera control, and seed configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate videos using ByteDance's Seedance V1.5 Pro model via WaveSpeed AI, supporting text-to-video and image-to-video generation with 4-12 second duration at up to 1080p, optional audio generation, camera control, smart duration, and configurable seeds.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to generate short videos from text prompts or animate trusted source images through WaveSpeed AI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WaveSpeed API key exposure. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret manager, and do not hardcode or commit it. <br>
-Risk: Prompts and selected images are sent to WaveSpeed for processing. <br>
-Mitigation: Avoid uploading confidential media unless the provider's terms are acceptable, and validate media URLs before use. <br>
-Risk: Video generation can create billing impact. <br>
-Mitigation: Monitor usage and choose duration, resolution, and audio settings deliberately. <br>
+## Use Case:
 
+Developers and creative operators use this skill to generate short videos from text prompts or animate images through WaveSpeed AI's Seedance V1.5 Pro endpoints. It helps agents provide setup guidance, parameter choices, pricing checks, and runnable WaveSpeed CLI or MCP commands.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-seedance-15-pro) <br>
-- [WaveSpeed AI access keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WaveSpeed model endpoint names, generation parameters, output URL handling, and secret-management guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Unpinned npm and MCP setup commands can introduce supply-chain risk in sensitive environments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin reviewed package versions before installation and run setup only in a restricted workspace.
+
+Risk: WaveSpeed authentication and selected media files may expose account credentials, credits, prompts, or local assets to the external service.
+
+Mitigation: Use the CLI login flow or environment variable handling, avoid pasting API keys into chat, and limit the workspace to media files needed for generation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-seedance-15-pro)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed access key page](https://wavespeed.ai/accesskey)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and parameter tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include WaveSpeed CLI commands, MCP tool guidance, model parameters, pricing examples, and generated video output URLs.]
+
+## Skill Version(s):
+
+2.0.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

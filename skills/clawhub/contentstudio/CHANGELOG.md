@@ -1,5 +1,298 @@
 # Changelog
 
+## 1.4.1 — Clearer reporting help, and a guard on competitor ids
+
+No behaviour change to any working command; this is about the two mistakes the
+command names invite.
+
+- **A "competitor report" is a saved set, not a document.** `competitor-reports:create`
+  now says so in `--help`, and points at the command that does produce a PDF.
+  `competitor-reports:get` says the same, and that `--wait` belongs to `reports:get`.
+- **`reports:generate --help`** names the command that yields the URL
+  (`reports:get <id> --wait`) instead of only saying "poll", and states that the
+  competitor types take `--competitor-report-id` rather than `--accounts`.
+- **`--competitors` now rejects a competitor-set id.** A set id is a 24-character
+  hex ObjectId; a real page id is numeric. Passing the former created a competitor
+  the network had never heard of, which surfaced minutes later as state `Failed`
+  with nothing explaining why. It is refused at entry, naming the fix.
+- **`share-links:create --help`** distinguishes a live shared dashboard from a
+  generated PDF.
+
+## 1.4.0 — Bluesky and Threads analytics, competitor reports are generatable
+
+### Bluesky and Threads analytics (26 commands)
+
+The `analytics:` namespace covered eight networks and stopped there; both newer
+platforms had none, despite the API serving them. Added one command per endpoint,
+same shape as every other platform:
+
+- **`analytics:bluesky-*` (10)** — `summary`, `audience-growth`, `engagement`,
+  `publishing-behaviour`, `top-posts`, `sorted-top-posts`, `post`,
+  `posts-per-days`, `hashtags`, `capabilities`.
+- **`analytics:threads-*` (16)** — the same, plus `activity` (the true per-day
+  account series, distinct from engagement-by-publish-date), `posts-per-hours`,
+  `topic-tags` (Meta's curated tags, counted separately from hashtags),
+  `demographics`, `audience-location` and `ai-insights`.
+
+Neither network publishes impressions or reach, so neither has the exposure
+endpoints the older platforms do. That is the whole surface, not a subset.
+
+### Competitor reports are generatable
+
+`reports:generate` gains **`--competitor-report-id`**, required for the
+`facebook_competitor` and `instagram_competitor` types. Those are built from a
+saved competitor set (see `competitor-reports:list`) rather than from connected
+accounts, and 1.3.0 shipped them as generatable types with no way to name the
+set — the id had to go somewhere, `--accounts` was the natural guess, and it was
+dropped silently: the call returned 202 and the report failed minutes later with
+"Combined report generation failed". The CLI now refuses that up front and names
+the flag.
+
+Requires the matching API change (`competitor_report_id` on the report-generate
+request). Against an older API the field is ignored and competitor reports still
+fail, so upgrade the CLI only once that has shipped.
+
+## 1.3.0 — Analytics: reports, schedules, share links, competitors, ads
+
+### Reports, schedules and share links
+
+Three new command groups, all under the analytics umbrella:
+
+- **`reports:*` (6)** — `options`, `generate`, `get`, `list`, `retry`, `delete`.
+  Generation is asynchronous: `reports:generate` returns an id immediately and
+  `reports:get <id> --wait` polls until the download URL is ready.
+- **`report-schedules:*` (7)** — `create`, `list`, `get`, `pause`, `resume`,
+  `run`, `delete`. Recurring email delivery; `pause` is reversible and `run`
+  sends one immediately without disturbing the schedule.
+- **`share-links:*` (6)** — `create`, `list`, `get`, `enable`, `disable`,
+  `delete`. Client-facing links that need no ContentStudio account, optionally
+  password-protected and pinned to a fixed date range. `disable` revokes a link
+  without deleting it, so the URL can be restored rather than reissued.
+
+### Competitor benchmarking
+
+- **`competitors:search`** to find a page to track, **`competitor-reports:*`**
+  (`create`, `list`, `get`, `update`, `delete`) to manage a saved set, and
+  **`competitors:compare`** for the comparison numbers.
+  `competitor-reports:update` replaces the whole competitor set rather than
+  merging into it.
+
+### Ads analytics support
+
+34 more commands under the `analytics:` namespace, tracking the public API's ads
+surface (added after the analytics work below):
+
+- **Meta Ads (11)** and **Google Ads (17)** — summary, performance over time /
+  by level / by placement / by type, campaigns, ad sets, ad groups, ads,
+  keywords, search terms, shopping, the four Google conversion reports,
+  demographics, ad-account listing, and `ai-insights` on both. These take
+  `--account-id` (an ad account) rather than `--platform-id`.
+- **Campaigns & Labels (5)** — summary, breakdown, insights-breakdown, posts and
+  top-posts. The only POST analytics commands: their filters are lists, so
+  `--campaigns`, `--labels` and the per-network `--*-accounts` flags repeat.
+- **YouTube publishing-behaviour** — the one social endpoint added since.
+
+`analytics:*-accounts` is how you find an ad account id; every other ads command
+needs one. Still read-only, still one command per endpoint.
+
+### Analytics support
+
+99 new commands under the `analytics:` namespace, one per ContentStudio
+public API v1 analytics endpoint, across Facebook, Instagram, YouTube,
+Pinterest, LinkedIn, Google Business Profile, TikTok, and Twitter/X.
+
+- Date-range reports (`--platform-id`, `--start-date`, `--end-date`, plus
+  per-command optional filters like `--order-by`, `--media-type`,
+  `--hashtags`, `--limit`/`--offset`).
+- Single-item lookups (`*-single-post`, `*-single-pin`, `*-single-tweet`,
+  `*-single-video`) taking `--platform-id` + `--post-id`.
+- AI insights commands (`*-ai-insights`) taking `--type` and `--language`.
+- All read-only GETs — no `--dry-run` (mutating commands only).
+- SKILL.md documents the full command reference and the
+  `ANALYTICS_UPSTREAM_ERROR` response shape.
+
+### Instagram trial reels, per-platform overrides, `id` field rename, `platform_overrides` rename
+
+- `posts:create` / `posts:update`: added `--instagram-trial-reel` (boolean) and
+  `--instagram-trial-reel-graduation SS_PERFORMANCE|MANUAL` →
+  `instagram_options.trial_reel.{enabled,graduation_strategy}`. Publishes an
+  Instagram trial reel (shown to non-followers first). Requires
+  `--post-type reel` exactly plus a video; rejected (422) together with
+  `--instagram-collaborator` — the CLI now guards this locally as well.
+- `posts:create` / `posts:update`: added `--platform-overrides '<json>'` →
+  top-level `platform_overrides`, a per-platform content-override object
+  (`text`/`post_type` merge independently with the common content; `media`
+  is all-or-nothing per platform). Field was renamed from `overrides` to
+  `platform_overrides` to match a pre-release backend contract fix — no
+  compatibility shim needed since neither side has shipped yet.
+- **Breaking (mirrors a backend Public API v1 change):** all Public API v1
+  responses now return the primary identifier as `id` instead of `_id`
+  (accounts, media, workspaces, team members, campaigns, approval workflows,
+  labels, comments, content categories, posts and their nested
+  `labels[]`/`folder`/`accounts[]`). `member_id` on team members is unaffected
+  — it remains a distinct field. CLI output formatting and docs now read
+  `id` first, falling back to `_id` for compatibility with any cached/older
+  responses.
+
+## 1.2.0 — Best time to post
+
+### `scheduling:best-times`
+
+The scheduling optimiser is now part of the ContentStudio public API, so the CLI
+and the agent skill cover it. One new command wrapping
+`POST /workspaces/{w}/scheduling/optimal-times`.
+
+`scheduling:best-times` analyses the historical performance of the workspace's
+connected accounts and returns ranked posting **slots** — a weekday and an hour,
+best-first — both pooled across accounts (`global`) and per account
+(`individual`).
+
+Flags:
+
+- `--account <platform>:<account_id>` (repeatable) — restrict the analysis.
+  Both halves come from a single `accounts:list` row (its `platform` and `_id`),
+  because the API needs the platform as the entity `type`. Omit the flag to
+  analyse every connected account.
+- `--entities '<json>'` — the full entity array, for a different slot count per
+  account: `[{"id":"<id>","type":"facebook","slots":3}]`. Mutually exclusive
+  with `--account`.
+- `--global-slots <n>` / `--per-account-slots <n>` — how many recommendations
+  come back (1–24; API defaults 5 and 3).
+
+Notes:
+
+- **Times are always in the workspace timezone**, echoed as `meta.timezone`;
+  the endpoint takes no timezone parameter. That is the same clock
+  `posts:create --scheduled-at` writes against, so a slot can be scheduled
+  as-is — converting it to UTC first would move the post.
+- The response is not the usual `{status, message, data}` envelope, so the API
+  wrapper normalises `{meta, global, individual}` into the CLI's standard
+  `{ok, data}` shape like every other command.
+- A workspace with too little history still returns HTTP 200: the accounts that
+  could not be analysed come back in `meta.missing_entities` and `global` may be
+  `null`. That is a successful read, not an error. Accounts in
+  `meta.ai_fallback_entities` are estimates rather than measurements, and the
+  human-mode output labels them as such.
+- Slot counts and the `<platform>:<account_id>` form are validated client-side,
+  so a bad call fails immediately with a `ConfigError` rather than a round-trip.
+- Read-only, so there is no `--dry-run` — matching `inbox:list`, the CLI's other
+  POST-with-a-body read.
+- Human mode renders the pooled and per-account recommendations as tables
+  (rank, day, date, time, score, platform breakdown), with the hour formatted as
+  a clock time (the API returns it as a bare string, e.g. `"14"`).
+
+### Corrected `--scheduled-at` timezone documentation
+
+`posts:create` / `posts:update` `-s / --scheduled-at` was documented as UTC. The
+API actually interprets the timestamp as **workspace-local wall-clock time**, so
+the help text, SKILL.md and the README now say so. No behaviour change — the CLI
+sends the same string it always did; only the documentation was wrong, and it
+would have caused posts scheduled from `scheduling:best-times` slots to land at
+the wrong hour.
+
+## 1.1.1 — documentation wording
+
+- Reworded the Social Inbox sections of SKILL.md and the README, the inbox
+  `--help` text, and the `ConflictError` hint for clarity and consistency.
+- No CLI behaviour changes.
+
+## 1.1.0 — Social Inbox support, posts:update, and approval workflows
+
+### Social Inbox
+
+The inbox endpoints are now part of the ContentStudio public API, so the CLI and
+the agent skill cover them. 30 new commands under the `inbox:` namespace.
+
+**Reading** — `inbox:list` (search across conversations, commented posts, and
+reviews), `inbox:summary` (counts per bucket), `inbox:messages`, `inbox:comments`,
+`inbox:notes`, `inbox:bookmarks`, `inbox:contact`, `inbox:tags`.
+
+**Replying** — `inbox:send` (DM, with optional attachment), `inbox:comment-add`
+(comment, threaded reply, or Facebook private reply), `inbox:review-reply`,
+`inbox:note-add`. All accept `--idempotency-key` where the API supports it.
+
+**Triage** — `inbox:mark-read`, `inbox:update` (bulk done/pending, archive,
+assign), `inbox:star` / `inbox:unstar`, `inbox:contact-update`.
+
+**Moderation** — `inbox:comment-hide` / `-unhide`, `inbox:comment-like` /
+`-unlike`, `inbox:comment-delete`, `inbox:message-delete`,
+`inbox:review-reply-delete`.
+
+**Tags** — `inbox:tag-create`, `-update`, `-delete` (bulk), `-merge`, `-attach`,
+`-detach`.
+
+**Identifiers.** Inbox commands take their id from `element_details` on each
+`inbox:list` row: `element_details.element_id` for element-scoped commands,
+conversations, notes and bookmarks, and `element_details.post_id` for post
+comments. SKILL.md and the README both lead with this.
+
+Notes:
+
+- Inbox responses are normalised into the CLI's standard envelope, so `--json`
+  output keeps the same `{ok, data, pagination}` shape as every other command.
+  Each endpoint's collection (`elements`, `messages`, `comments`, `tags`,
+  `contact`, `element_counts`) and its paginator fields are mapped onto that
+  envelope by the inbox wrappers.
+- Human-mode tables map to the inbox response fields: `platform` on a list row,
+  `last_message.message` for a conversation and `last_comment.message` for a
+  post, and the sender from `from[0]` (falling back to `first_name` /
+  `last_name` when `name` is empty). `inbox:list` also shows an UNREAD column.
+- `inbox:notes` and `inbox:bookmarks` accept `--page` / `--limit` and return a
+  `pagination` block.
+- Inbox tag colors are hex values, e.g. `#33aa55`.
+- Post-comment paging counts top-level threads (`total_threads`) rather than
+  every comment, so page counts reflect threads.
+- API limits are validated client-side so an invalid call fails immediately
+  with a `ConfigError` rather than a round-trip: `--limit` ≤ 200 on every inbox
+  list, ≤ 100 elements per `inbox:update`, tag names ≤ 50 chars, and exactly
+  one operation per `inbox:update` (`--status`, `--archived` and `--assigned`
+  are mutually exclusive).
+- `inbox:update` understands HTTP `207` partial success: when the response
+  carries `missing_ids`, the CLI warns and names the elements it could not
+  update rather than reporting the whole batch as applied.
+- New `ConflictError` (HTTP 409, exit code 7), used for duplicate resources and
+  for sends whose delivery outcome is undetermined. It carries a hint to verify
+  before retrying, and SKILL.md tells the agent to read the conversation back
+  rather than resending automatically.
+- `inbox:contact-update` documents its scope: a contact is a person, not a
+  per-element attribute, so the update applies to every element for that
+  contact on that account. The command reports `updated_count`.
+- `inbox:send` and `inbox:comment-add` report the outcome from the response:
+  `sent_comment.resource_type` distinguishes a comment from a private reply, and
+  `sent_message.id_status: "unavailable"` is surfaced as a note that delivery
+  could not be confirmed by id.
+- SKILL.md documents that `inbox:comments` nests replies under each thread's
+  `children` and pages by threads, and that `inbox:contact` returns end-customer
+  contact details (email, phone) that should be handled with care.
+- Note for agents: inbox pages are capped at 200 items, so SKILL.md directs
+  paging through `--page` rather than raising `--limit` past that.
+- Every inbox write supports `--dry-run`, and the preview now percent-encodes
+  path segments so it shows the URL that would actually be requested — element
+  refs can contain `:` and `/`.
+- Inbox lists page with `--limit` / `--page` (the API's own parameter names);
+  `--per-page` is accepted as an alias so the existing pagination guidance holds.
+- SKILL.md flags inbox writes as customer-facing: they publish to a real person
+  with no undo, so the agent must preview and get approval before sending.
+- Internal: `Client` gained a `patch()` method (three inbox endpoints use PATCH;
+  the client had no PATCH support at all). Inbox responses are unwrapped by
+  dedicated helpers rather than the generic `data` unwrapper. `emitDryRun` /
+  `parseJsonOption` moved from `commands/crud.ts` into `cliCtx.ts` so both
+  modules share one copy.
+- Removed SKILL.md's trailing `## Version` section; the frontmatter `version:`
+  field is the single source of truth.
+
+### posts:update, approval workflows, LinkedIn polls & collaborators
+
+- New `accounts:remove <account_id>` command — `DELETE /workspaces/{w}/accounts/{account_id}` disconnects a social account (`account_id` is the account's `_id` from `accounts:list`). Requires the `save_social` permission (403 otherwise); 404 when the account isn't found, 422 when removal fails. Carries `--dry-run` like the other mutating commands.
+- New `posts:update <post_id>` command — PUTs `/workspaces/{w}/posts/{post_id}` with the **same body/flags** as `posts:create` (shared option set + body builder). The backend rejects the update (422) once the post is `published` or `processing`.
+- New `approval-workflows:list` command (GET `/workspaces/{w}/approval-workflows`) — lists `{ _id, name, is_default, levels[] }`; use `_id` as `--approval-workflow-id`.
+- `posts:create` / `posts:update` new shortcut flags:
+  - `--linkedin-options '<json>'` → `linkedin_options` (title + poll; poll needs `--post-type poll` and text-only content).
+  - `--facebook-collaborator` (repeatable, max 10) → `facebook_options.collaborators`; `--instagram-collaborator` (repeatable, max 3) → `instagram_options.collaborators`.
+  - `--approval-workflow-id` + `--approval-workflow-notes` → attach a workflow (`approval_workflow.workflow_id`); `--approval-workflow-action restart|resume|renotify_current|keep|remove` → mutate an attached workflow (update only). Mutually exclusive with `--approver`, and exactly one of id/action.
+  - `--post-type` now documents `poll` (carousel is auto-derived by the backend from `post_type=carousel` + 2+ images).
+- `posts:list` now surfaces `linkedin_options` and `approval_workflow` per post in the `--json` output.
+
 ## 1.0.10 — propagate platform-name metadata to the npm package
 
 - Release-only bump. The `package.json`/`plugin.json` description + keywords were updated to include Threads, Tumblr, and Bluesky *after* `1.0.9` had already been published to npm, so npm's `1.0.9` carried the old description and the follow-up deploy failed (`403`, can't republish an existing version). This bump ships the corrected package metadata to npm.
@@ -16,6 +309,16 @@
 - Added a headless-deployment note: a shell `export` does not persist to a service process; set `CONTENTSTUDIO_API_KEY` via systemd `Environment=`/`EnvironmentFile=`, Docker `-e`, etc., then restart. Runtimes that gate on `requires.env` (e.g. OpenClaw) stay blocked until the variable is present in the process environment.
 - Resolves a docs/metadata mismatch: the frontmatter already declared `requires.env: CONTENTSTUDIO_API_KEY`, but the body only documented `auth:login`, so OpenClaw operators were left blocked with no instruction on how to satisfy the gate.
 - No CLI source-code changes — the CLI already reads `CONTENTSTUDIO_API_KEY` from the environment (`src/config.ts`).
+
+### write commands for workspaces/labels/campaigns/team + posts:create fixes
+
+- Fixed `posts:create`: now emits top-level `content_category_id` and no longer forces `--account` when `--content-category-id` is supplied (content-category posts derive accounts from the category — previously 422'd). Added `--content-category-id`.
+- `posts:create` now normalizes `--scheduled-at` to the backend's `YYYY-MM-DD HH:MM:SS` (UTC) format, and gained parity flags `--label` (repeatable, max 20), `--campaign-id`, `--approver` (repeatable) + `--approve-option` + `--approval-notes`, and `--facebook-background-id`. `--publish-type` now also accepts `now`.
+- New workspace write commands: `workspaces:create`, `workspaces:update`, `workspaces:delete`.
+- New label write commands: `labels:create`, `labels:update`, `labels:delete`.
+- New campaign write commands: `campaigns:create`, `campaigns:update`, `campaigns:delete`.
+- New team-member write commands: `team:add`, `team:update`, `team:remove` (with `--confirmed` for guarded removals).
+- All new mutating commands support `--dry-run` and are added to the SKILL.md workspace-confirmation list. Added a `put` method to the API client and nock tests for every new wrapper.
 
 ## 1.0.5 — workspace confirmation before mutations
 

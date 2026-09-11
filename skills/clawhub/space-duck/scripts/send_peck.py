@@ -37,7 +37,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def resolve_reply_to(peck_id):
     """Look up a stashed inbound envelope in ~/.space-duck/inbox/ and return
@@ -287,14 +290,17 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
     }
     signature = _v2_sign(env_v2, bk)
 
-    # ── [BEAK-V3-P2] envelope v3 (Ed25519 asymmetric) — opt-in, graceful ──
-    # Try v3 only when ALL of (local sign_key.hex, `envelope_v3: true` in
-    # config, `cryptography` importable) hold. Any exception here degrades to
-    # v2 — the sender must never break on v3, even if the server or the local
-    # key file drift out of sync. Server accepts v2 and v3 in parallel through
-    # the sunset (see docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md §7).
+    # ── [BEAK-V3-P3] envelope v3 (Ed25519 asymmetric) — v3-preferred default ──
+    # Sign v3 whenever a local sign key loads (Phase 3 flip; spec §7). The
+    # platform is the verifier and dual-accepts v2/v3, and v3 recipients treat
+    # unknown/extra envelope fields tolerantly, so a v3 sender is always safe
+    # to default when it has a key. `envelope_v3: false` in config is the
+    # explicit opt-OUT (absent / true / any truthy value keeps v3 on).
+    # Any exception in the v3 attempt degrades byte-identically to v2 — the
+    # sender must never break, even if the server or the local key file drift
+    # out of sync. See docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md §7 Phase 3.
     _v3_payload = None
-    if cfg.get('envelope_v3'):
+    if cfg.get('envelope_v3', True):
         try:
             from _envelope import load_sign_key as _load_sign_key, \
                 canonical_v3 as _v3_canonical, sign_v3 as _v3_sign, \
@@ -506,8 +512,27 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
                 chans = gr.get('notification_channels') or []
                 if chans:
                     print(f'   Owner notified via: {", ".join(chans)}')
+                # 0.9.0 [F4-CLIENT] — persist the unsent peck so the approval
+                # resends it automatically (peck_listener consumes the platform
+                # grant-approved notice, or the poll fallback). Keyed by the
+                # grant REQUEST id — the only join key that exists now and the
+                # one _notify_grant_approved echoes back. Best-effort; a failure
+                # here just falls back to the old "re-run manually" behavior.
+                try:
+                    import _pending_sends
+                    _pending_sends.enqueue(
+                        gr['request_id'],
+                        target_spaceduck_id=target_id,
+                        message=message, purpose=purpose, peck_type=peck_type,
+                        capability=cap, scope=scope,
+                        peck_meta=peck_meta, tool_use=tool_use,
+                    )
+                    print('   💾 Queued for auto-resend on approval '
+                          '(pending_sends.json).')
+                except Exception as _pq_e:
+                    print(f'   (auto-resend queue unavailable: {_pq_e})')
                 print(f'   Poll status:  check_pecks.py --grant-status {target_id} {cap}')
-                print('   Re-run send_peck once the grant is approved.')
+                print('   Re-run send_peck once the grant is approved (or wait for auto-resend).')
                 sys.exit(2)
             print(f'  ⚠ Grant request did not succeed: {gr}')
             print(f'  Web fallback: https://spaceduckling.com/explore.html?duck={target_id}')

@@ -2,21 +2,31 @@
 
 ## 使用主题
 
-不传 `--theme` 时，**`format.py`** 从合并配置读取 **`custom_format_preset`**（优先）> **`default_format_preset`**（**`.aws-article/config.yaml`** + 本篇 **`article.yaml`**）。该键**须为 YAML 字符串列表**：`[]`、单元素 `[主题名]`，或多候选；**多候选**须在本篇同键改为**单元素列表**后再运行，否则报错。
+不传 `--theme` 时，**`format.py`** 只读取与 `article.md` 同目录 **`article.yaml`** 的 **`default_format_preset`**（不直接读 `.aws-article/config.yaml`；全局 `custom_format_preset` / `default_format_preset` 候选池由 main 在本篇准备阶段收敛后写回 `article.yaml`）。该键**须为 YAML 字符串列表**：`[]` 或单元素 `[主题名]`；为空则用内置默认模版 `块`；多候选会报错，须先改为单元素列表。
 
 ```bash
-python format.py article.md --theme <主题名>
-python format.py --list-themes              # 列出可用主题
+{python} format.py article.md --theme <主题名>
+{python} format.py --list-themes              # 列出可用主题
 ```
 
 ## 内置主题
 
-| 主题名 | 风格 | 适用场景 |
-|--------|------|---------|
-| `default` | 经典蓝 — 沉稳大气的编辑风格 | 科技、商业、通用 |
-| `grace` | 优雅紫 — 柔和圆润的风格 | 文化、美学 |
-| `modern` | 暖橙 — 活力大胆的风格 | 自媒体、创业 |
-| `simple` | 极简黑 — 极度克制的留白风格 | 思想深度、学术 |
+`themes/` 下四套模版随 skill 内置，每套带三种配色（YAML 里的 `schemes:`，第一项即默认色）：
+
+| 模版 | 骨架 | 适合 | 配色 |
+|------|------|------|------|
+| `亲和` | kuai | 教程、职场、面向新手 | 黛紫 / 松绿 / 靛蓝 |
+| `资讯` | bao | 快讯、评测、行业观察 | 墨绿 / 绛红 / 藏青 |
+| `书卷` | shu | 人文、读书、深度长文 | 朱砂 / 黛蓝 / 苍绿 |
+| `杂志` | yi | 品牌、访谈、生活方式 | 石青 / 驼褐 / 铁锈 |
+
+`templates/` 下另外四套（活力 / 手账 / 硬朗 / 技术）不进内置搜索路径，经网站 `.aws` 预设包下发到
+`.aws-article/presets/formatting/`。两处 YAML 是网站系统预设的**唯一真源**——网站仓库
+`backend/scripts/build_formatting_presets.py` 从这里生成 fixture 与预览页。
+
+模版 YAML 的形状：`skeleton`（对应 `references/components/<skeleton>/` 的装饰组件）、
+`variables`（默认色）、`schemes`（配色列表，每项只是一组 variables 覆盖）、`styles`。
+换配色：`--scheme <名>`；派生色（fill / ink / 淡底 / 高亮笔）由主色自动算，不用手填。
 
 ## 自定义主题
 
@@ -42,7 +52,7 @@ styles:                        # 样式规则（可用 {变量名} 引用变量�
   h2: "font-size:18px; background:{primary-color}; color:#FFF; padding:6px 14px; border-radius:4px;"
   h3: "font-size:16px; font-weight:bold; color:{primary-color};"
   h4: "font-size:15px; font-weight:bold; color:#444;"
-  p: "font-size:15px; line-height:1.8; color:#3a3a3a; margin:10px 0;"
+  p: "font-size:{font-size}; line-height:1.8; color:#3a3a3a; margin:10px 0;"   # 用 {font-size} 变量，--font-size 才能覆盖
   strong: "color:{primary-color}; font-weight:bold;"
   em: "font-style:italic; color:#555;"
   a: "color:{primary-color}; text-decoration:none; border-bottom:1px solid {primary-color};"
@@ -65,9 +75,11 @@ styles:                        # 样式规则（可用 {变量名} 引用变量�
 基于内置主题导出 YAML，再修改：
 
 ```bash
-python format.py --export-theme default > .aws-article/presets/formatting/my-brand.yaml
+{python} format.py --export-theme default > .aws-article/presets/formatting/my-brand.yaml
 # 编辑 my-brand.yaml，修改颜色和样式
 ```
+
+导出内容包含全部默认变量与样式键，`{变量}` 引用保持原样，可直接改色改样式。
 
 ## 可用变量
 
@@ -81,7 +93,7 @@ python format.py --export-theme default > .aws-article/presets/formatting/my-bra
 | `bg-light` | 浅色背景 | #F7F7F7 |
 | `border-color` | 边框颜色 | #EEEEEE |
 | `link-color` | 链接颜色 | #576B95 |
-| `font-size` | 正文字号 | 16px |
+| `font-size` | 正文字号；`--font-size` 覆盖时，主题 p / li 中硬编码的字号也会被一并替换 | 16px |
 | `font-family` | 字体 | system fonts |
 | `line-height` | 行高 | 1.8 |
 | `paragraph-spacing` | 段间距 | 1.5em |
@@ -107,6 +119,8 @@ python format.py --export-theme default > .aws-article/presets/formatting/my-bra
 | `figcaption` | 图片说明 |
 | `code` | 行内代码 |
 | `pre` | 代码块 |
+| `table` / `th` / `td` | 表格、表头、单元格（留空用内置默认） |
+| `del` | 删除线 `~~文字~~` |
 | `strong-color` | 加粗文字颜色（兼容旧主题） |
 
 样式值为 CSS inline style 格式，可使用 `{变量名}` 引用变量。

@@ -1,7 +1,7 @@
 # 工具速查（商机雷达所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 5 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.0`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/search_proposed_projects`），Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.3`。
 
 ## 通用概念
 
@@ -13,11 +13,11 @@
 |---|---|---|
 | search_proposed_projects | min_amount / max_amount | **万元** |
 | search_expiring_projects | min_amount | **万元** |
-| search_bids | min_amount / max_amount | **元** |
+| search_bids | min_amount / max_amount | **万元** |
 
 返回值统一：`money` 为元；拟建路给 `money_format`（可读字符串），意向/临期路给 `money_wan`（万元数值）。
 
-**链接**：意向/临期条目的 `url` 带 `sk` 免登录参数，原样输出可直接点击；拟建条目的 `url` 为 `builddetail/{id}?from=mcp`（无 sk），点击需登录主站——输出时按 SKILL.md 的规范统一标注。
+**链接**：三路条目（拟建/意向/临期）的 `url` 均带 `sk` 免登录参数，原样输出可直接点击。
 
 ## 工具清单
 
@@ -29,15 +29,15 @@
 ```
 - `approval_status_code`：1=未审批 2=审批中 3=办结（通过）4=审批未通过 5=撤销 6=其他；0/不传=全部。**办结的最接近落地**。
 - `match_type`：0=标题智能匹配（默认，匹配 project_name+caller_name），3=全文匹配（连带返回正文 content）。
-- 返回关键字段：`project_name`、`project_code`（发改委项目代码）、`caller_name`（立项单位）、`money`/`money_format`、`approval_status`、`pub_time`、`url`（无 sk）。
+- 返回关键字段：`project_name`、`project_code`（发改委项目代码）、`caller_name`（立项单位）、`money`/`money_format`、`approval_status`、`pub_time`、`url`（带 sk）。
 
 ### search_bids（bid_process=[1]）— ② 采购意向（发标前 1-3 个月）
 ```json
 {"keywords": ["信息化"], "bid_process": [1], "provinces": ["广东"],
- "min_amount": 1000000, "begin_date": "2026-04-15", "page_size": 20}
+ "min_amount": 100, "begin_date": "2026-04-15", "page_size": 20}
 ```
 - `bid_process` 固定传 `[1]`（采购意向）。其他阶段值：2=预招标 4=招标 7=中标结果 8=合同——本 SKILL 只在 timeline 解读时用到含义，不主动查。
-- `min_amount` 单位是**元**（与另两路不同）。
+- `min_amount` 单位是**万元**（与另两路一致；服务端会 ×10000 转成元再过滤）。
 - 返回关键字段：`title`、`caller_name`、`money`/`money_wan`、`sm_names`（标的物）、`pub_time`、`url`（带 sk）。
 
 ### search_expiring_projects — ③ 临期续约（合同到期前 0-180 天）

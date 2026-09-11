@@ -2,7 +2,7 @@
 
 The legacy `SKILL.md` at the repo root is the public entry point ingested by skill-loading hosts (Claude Code, OpenClaw, Hermes Agent, Manus AI, etc.) that load a skill as one artifact. This `skills/` directory is the **per-skill** view used by hosts that want to load a focused subset of capability rather than the whole monolith.
 
-Each file is the canonical SKILL.md for one skill, kept in sync with the matching manifest exported from [`@sogni/creative-agent`](../../sogni-creative-agent/src/public-skill-runtime/index.ts). Frontmatter declares `name`, `description`, `always_loaded`, and `tool_names`; the body documents the LLM-callable tools and any constraints the host should respect.
+Each file is the canonical SKILL.md for one skill, kept in sync with the matching manifest exported from [`@sogni/creative-agent`](https://github.com/Sogni-AI/sogni-creative-agent/tree/main/src/public-skill-runtime). Frontmatter declares `name`, `description`, `always_loaded`, and `tool_names`; the body documents the LLM-callable tools and any constraints the host should respect.
 
 ## Always-loaded skills
 
@@ -21,9 +21,9 @@ Available to every per-skill consumer. Sogni-hosted chat loads all capabilities 
 | Skill | Tools |
 |---|---|
 | [`image_generation`](./image_generation.md) | `generate_image` |
-| [`image_editing`](./image_editing.md) | `edit_image`, `restore_photo`, `apply_style`, `change_angle`, `refine_result` |
+| [`image_editing`](./image_editing.md) | `edit_image`, `upscale_image`, `restore_photo`, `apply_style`, `change_angle`, `refine_result` |
 | [`video_generation`](./video_generation.md) | `generate_video` |
-| [`video_editing`](./video_editing.md) | `animate_photo`, `sound_to_video`, `video_to_video`, `stitch_video`, `orbit_video`, `dance_montage`, `extend_video`, `replace_video_segment`, `overlay_video`, `add_subtitles` |
+| [`video_editing`](./video_editing.md) | `animate_photo`, `sound_to_video`, `video_to_video`, `upscale_video`, `stitch_video`, `orbit_video`, `dance_montage`, `extend_video`, `replace_video_segment`, `overlay_video`, `add_subtitles` |
 | [`music_generation`](./music_generation.md) | `generate_music` |
 | [`media_analysis`](./media_analysis.md) | `analyze_image`, `analyze_video`, `extract_metadata` |
 | [`persona_management`](./persona_management.md) | `resolve_personas`, `manage_memory` |

@@ -1,0 +1,7 @@
+{
+  "version": "3.16.1",
+  "bundle_sha256": "d156cf5f4e1ea64474055a0170e2ee8bb2edf328cedae83b54df96b248fc3e24",
+  "published_at": "2026-09-08T15:40:50.027Z",
+  "commit": "9bc7f41ca5bdb0f01bb07680da63f500fde3ebdb",
+  "changelog": "General fixes and polish"
+}

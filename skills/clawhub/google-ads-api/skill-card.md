@@ -1,46 +1,71 @@
-## Description: <br>
-Google Ads API integration with managed OAuth for querying campaigns, ad groups, keywords, and performance metrics with GAQL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Ads API integration with managed OAuth for querying campaigns, ad groups, keywords, and performance metrics with GAQL through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing operators, analysts, and developers use this skill to access Google Ads account data, run GAQL queries, inspect campaign performance, and manage Google Ads resources through Maton-managed authentication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Ads account data and OAuth access flow through Maton's service. <br>
-Mitigation: Use the intended Maton and Google Ads accounts, protect MATON_API_KEY, and review organizational requirements for third-party access before use. <br>
-Risk: Requests can target the wrong Google Ads connection or manager/client account when multiple accounts are available. <br>
-Mitigation: Specify the connection ID and the correct customer or login customer ID before querying or changing data. <br>
-Risk: Create, update, or delete calls can alter Google Ads resources. <br>
-Mitigation: Require clear confirmation of the target resource and intended effect before any write or delete action. <br>
+## Use Case:
 
+External users, developers, and marketing operators use this skill to inspect Google Ads accounts, run GAQL reports, and perform account operations through the Maton CLI or API gateway. It is suited for campaign, ad group, keyword, and performance workflows where write actions are reviewed before execution.
 
-## Reference(s): <br>
-- [ClawHub Google Ads skill](https://clawhub.ai/byungkyu/skills/google-ads-api) <br>
-- [Google Ads API overview](https://developers.google.com/google-ads/api/docs/start) <br>
-- [GAQL query guide](https://developers.google.com/google-ads/api/docs/query/overview) <br>
-- [GAQL fields reference](https://developers.google.com/google-ads/api/fields/v24/overview) <br>
-- [Maton CLI manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, Python, JavaScript, and GAQL examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a connected Google Ads OAuth account; write and delete actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: The Maton connection can access the authorized Google Ads account, and write actions can affect campaigns, budgets, ads, audiences, or deleted resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list operations, then require explicit review of the exact target, payload, and intended effect before any write, deletion, budget, bid, audience, or campaign-state change.
+
+Risk: Long-lived API keys and exposed tokens can leak through logs, shell history, child processes, or persisted files.
+
+Mitigation: Prefer OAuth through the Maton CLI, keep credentials in the operating system credential store, never print or persist secrets, and rotate any key that was exposed.
+
+Risk: Unpinned or unofficial Maton tooling could increase supply-chain risk.
+
+Mitigation: Install Maton only from official Maton sources and verify the installed command before using it for Google Ads operations.
+
+Risk: Google Ads response data can include sensitive business or customer information.
+
+Mitigation: Extract only fields needed for the task and avoid dumping raw responses into logs, files, or user-visible output unless specifically requested.
+
+## Reference(s):
+
+- [Google Ads API Overview](https://developers.google.com/google-ads/api/docs/start)
+- [GAQL Reference](https://developers.google.com/google-ads/api/docs/query/overview)
+- [GAQL Grammar](https://developers.google.com/google-ads/api/docs/query/grammar)
+- [GAQL Cookbook](https://developers.google.com/google-ads/api/docs/query/cookbook)
+- [GAQL Fields Reference](https://developers.google.com/google-ads/api/fields/v24/overview)
+- [Metrics Reference](https://developers.google.com/google-ads/api/fields/v24/metrics)
+- [GoogleAdsService Search](https://developers.google.com/google-ads/api/reference/rpc/v24/GoogleAdsService/Search)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request and response examples, and Python or JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Google Ads API response data; users should extract only the fields needed for the task.]
+
+## Skill Version(s):
+
+1.2.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Pine Script v6: syntax, performance, error diagnosis, backtesting, visualization. Use when writing or debugging `.pine` files or TradingView Pine indicators/strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pine Script v6 guidance for syntax, performance, error diagnosis, backtesting, visualization, and writing or debugging `.pine` files or TradingView Pine indicators and strategies.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent workflows use this skill to write, debug, review, and tune TradingView Pine Script v6 indicators and strategies, including syntax fixes, performance patterns, backtesting checks, and visualization guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pine Script examples or backtesting guidance could be mistaken for financial advice or copied into live trading logic without review. <br>
-Mitigation: Treat generated trading code as an implementation aid only, verify behavior in TradingView, and avoid presenting examples as financial advice or performance guarantees. <br>
-Risk: Forward-looking references used for indicator accuracy testing can create misleading live alerts, entries, exits, or published backtests. <br>
-Mitigation: Use forward-looking references only for offline labeling or evaluation, and confirm live signals use only data available at the current bar. <br>
-Risk: Pine Script syntax and built-in functions change over time, so stale guidance can produce compile errors or incorrect scripts. <br>
-Mitigation: Check current TradingView Pine Script documentation for version-specific syntax and verify that generated `.pine` files compile before use. <br>
+## Use Case:
 
+Developers and engineers use this skill to write, debug, and review Pine Script v6 indicators and strategies for TradingView, with guidance on syntax, platform limits, performance, visualization, and backtesting validation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/compound-eng-pinescript) <br>
-- [ia-pinescript findings log](references/evidence/findings-log.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown] <br>
-**Output Format:** [Markdown with Pine Script code blocks and concise review guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include TradingView-specific validation notes, anti-repainting checks, and backtesting cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.0 (source: release evidence) <br>
+Risk: Generated Pine Script or strategy guidance can be incorrect or stale because TradingView updates Pine Script frequently.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify version-specific syntax, built-in functions, platform limits, and publishing rules against current TradingView documentation before implementation.
+
+Risk: Backtest results and trading logic may be misleading if repainting, costs, sampling assumptions, or overfitting are not checked.
+
+Mitigation: Compile and test scripts on TradingView, inspect live and reloaded signal stability, and validate on multiple symbols and timeframes before relying on results.
+
+## Reference(s):
+
+- [TradingView Pine Script limitations](https://www.tradingview.com/pine-script-docs/writing/limitations/)
+- [TradingView Pine Script debugging](https://www.tradingview.com/pine-script-docs/writing/debugging/)
+- [TradingView Pine Script history referencing](https://www.tradingview.com/pine-script-docs/language/operators/)
+- [ia-pinescript findings log](references/evidence/findings-log.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, code, markdown]
+
+**Output Format:** [Markdown with Pine Script code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to verify current TradingView documentation for version-specific syntax, platform limits, and publishing rules.]
+
+## Skill Version(s):
+
+4.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,63 +3,56 @@ name: wavespeed-seedance-15-pro
 description: Generate videos using ByteDance's Seedance V1.5 Pro model via WaveSpeed AI. Supports text-to-video and image-to-video generation with 4-12 second duration at up to 1080p. Features audio generation, camera control, smart duration, and configurable seeds. Use when the user wants to create videos from text prompts or animate images.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Seedance V1.5 Pro Video Generation
 
 Generate videos using ByteDance's Seedance V1.5 Pro model via the WaveSpeed AI platform. Supports both text-to-video and image-to-video generation with 4-12 second duration at up to 1080p resolution, with optional audio generation.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Text-to-Video
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  { prompt: "A golden retriever running through a field of sunflowers at sunset" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/text-to-video \
+  -p "A golden retriever running through a field of sunflowers at sunset" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
 
-The `image` parameter accepts an image URL. If you have a local file, upload it first with `wavespeed.upload()` to get a URL.
+The `image` parameter accepts an image URL. If you have a local file, pass it with the `@path` marker and the CLI uploads it and substitutes the hosted URL.
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local image to get a URL
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "The person slowly turns and smiles at the camera"
-  }
-))["outputs"][0];
+```bash
+# Upload a local image to get a URL
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/image-to-video \
+  -i image=@./photo.png \
+  -p "The person slowly turns and smiles at the camera" \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass an existing image URL directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/image-to-video",
-  {
-    image: "https://example.com/photo.jpg",
-    prompt: "The person slowly turns and smiles at the camera"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/image-to-video \
+  -i image="https://example.com/photo.jpg" \
+  -p "The person slowly turns and smiles at the camera" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -84,20 +77,15 @@ Generate videos from text prompts.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  {
-    prompt: "A timelapse of a city skyline transitioning from day to night, cinematic slow pan",
-    aspect_ratio: "21:9",
-    duration: 10,
-    resolution: "1080p",
-    generate_audio: true,
-    camera_fixed: false
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/text-to-video \
+  -p "A timelapse of a city skyline transitioning from day to night, cinematic slow pan" \
+  -i aspect_ratio="21:9" \
+  -i duration=10 \
+  -i resolution="1080p" \
+  -i generate_audio=true \
+  -i camera_fixed=false \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image-to-Video
@@ -122,109 +110,28 @@ Animate a source image into a video using a text prompt. Optionally provide an e
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/landscape.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/image-to-video",
-  {
-    image: imageUrl,
-    prompt: "Clouds drift slowly across the sky, water ripples gently",
-    resolution: "1080p",
-    duration: 8,
-    generate_audio: true,
-    camera_fixed: true
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/image-to-video \
+  -i image=@./landscape.png \
+  -p "Clouds drift slowly across the sky, water ripples gently" \
+  -i resolution="1080p" \
+  -i duration=8 \
+  -i generate_audio=true \
+  -i camera_fixed=true \
+  --json | jq -r '.outputs[0]')
 ```
 
 #### With End-Frame Reference
 
-```javascript
-const startUrl = await wavespeed.upload("/path/to/start-frame.png");
-const endUrl = await wavespeed.upload("/path/to/end-frame.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/image-to-video",
-  {
-    image: startUrl,
-    last_image: endUrl,
-    prompt: "Smooth transition from day to night",
-    duration: 8
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedance-v1.5-pro/image-to-video \
+  -i image=@./start-frame.png \
+  -i last_image=@./end-frame.png \
+  -p "Smooth transition from day to night" \
+  -i duration=8 \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Smart Duration (Text-to-Video)
-
-Let the model choose the optimal duration based on the prompt:
-
-```javascript
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  {
-    prompt: "A butterfly lands on a flower and slowly opens its wings",
-    duration: -1
-  }
-))["outputs"][0];
-```
-
-### Without Audio
-
-```javascript
-const output_url = (await wavespeed.run(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  {
-    prompt: "A silent timelapse of clouds rolling over mountains",
-    generate_audio: false
-  }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  { prompt: "Ocean waves crashing on a rocky shore at dawn" }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "bytedance/seedance-v1.5-pro/text-to-video",
-  { prompt: "A rocket launching into space" }
-);
-
-if (result.outputs) {
-  console.log("Video URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
@@ -245,8 +152,30 @@ if (result.outputs) {
 - Set `generate_audio: false` when you plan to add your own audio track
 - Use smart duration (`duration: -1`) to let the model choose the best length for text-to-video
 
-## Security Constraints
+## CLI tips
 
-- **No arbitrary URL loading**: Only use image URLs from trusted sources. Never load media from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate prompt content and media URLs before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run bytedance/seedance-v1.5-pro/text-to-video -h
+
+# Quote the price first
+wavespeed price bytedance/seedance-v1.5-pro/text-to-video -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run bytedance/seedance-v1.5-pro/text-to-video -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run bytedance/seedance-v1.5-pro/text-to-video -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

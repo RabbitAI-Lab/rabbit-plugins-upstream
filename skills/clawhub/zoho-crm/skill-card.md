@@ -1,50 +1,66 @@
-## Description: <br>
-Zoho CRM API integration with managed OAuth for managing leads, contacts, accounts, deals, and other CRM records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho CRM API integration with managed OAuth for reading, creating, updating, deleting, searching, and managing CRM records, organization settings, users, and module metadata.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to interact with Zoho CRM through Maton-managed OAuth for CRM records, searches, sales pipeline workflows, organization settings, users, and module metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Zoho CRM records and organization data through Maton-proxied access. <br>
-Mitigation: Install only when Maton is trusted for the intended Zoho CRM account and keep access limited to the connected account. <br>
-Risk: A leaked MATON_API_KEY could allow unauthorized CRM access through the Maton proxy. <br>
-Mitigation: Protect MATON_API_KEY as a secret and avoid printing or storing it in logs, shared shell history, or generated output. <br>
-Risk: Using the wrong connection can apply reads or writes to the wrong Zoho CRM account. <br>
-Mitigation: When multiple connections exist, require the Maton-Connection header for the selected account. <br>
-Risk: Create, update, delete, bulk, user, or account-management operations can alter business data. <br>
-Mitigation: Require fresh user confirmation of the target resource and intended effect before executing any write or account-management action. <br>
+## Use Case:
 
+Employees, sales operations teams, and developers use this skill to work with Zoho CRM records and metadata through Maton-managed OAuth. It supports read-first CRM lookup workflows and user-approved create, update, and delete operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/zoho-crm) <br>
-- [Zoho CRM API v8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/) <br>
-- [Get Records API](https://www.zoho.com/crm/developer/docs/api/v8/get-records.html) <br>
-- [Insert Records API](https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html) <br>
-- [Update Records API](https://www.zoho.com/crm/developer/docs/api/v8/update-records.html) <br>
-- [Delete Records API](https://www.zoho.com/crm/developer/docs/api/v8/delete-records.html) <br>
-- [Search Records API](https://www.zoho.com/crm/developer/docs/api/v8/search-records.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions, shell commands, Python and JavaScript examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; use Maton-Connection when selecting among multiple Zoho CRM connections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: The skill relies on mutable third-party Maton CLI and SDK packages and routes Zoho CRM access through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton is trusted for the connected CRM account, and pin or review Maton CLI and SDK package versions in sensitive environments.
+
+Risk: Zoho CRM write and delete operations can modify or remove business records.
+
+Mitigation: Default to read and list calls, verify identifiers and account context first, and require explicit user approval for every POST, PUT, PATCH, or DELETE operation.
+
+Risk: API keys or provider-issued tokens could be exposed if printed, logged, persisted, or passed through shell commands.
+
+Mitigation: Prefer OAuth with operating-system credential storage, avoid printing or persisting credentials, and send Maton API keys only to api.maton.ai when the CLI cannot be used.
+
+## Reference(s):
+
+- [ClawHub Zoho CRM Skill](https://clawhub.ai/byungkyu/skills/zoho-crm)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Zoho CRM API v8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/)
+- [Zoho CRM Get Records API](https://www.zoho.com/crm/developer/docs/api/v8/get-records.html)
+- [Zoho CRM Insert Records API](https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html)
+- [Zoho CRM Update Records API](https://www.zoho.com/crm/developer/docs/api/v8/update-records.html)
+- [Zoho CRM Delete Records API](https://www.zoho.com/crm/developer/docs/api/v8/delete-records.html)
+- [Zoho CRM Search Records API](https://www.zoho.com/crm/developer/docs/api/v8/search-records.html)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, Maton authentication, and user approval for new connections and write operations.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence; artifact frontmatter version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
