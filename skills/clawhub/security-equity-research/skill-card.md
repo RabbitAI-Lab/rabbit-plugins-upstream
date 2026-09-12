@@ -1,40 +1,54 @@
-## Description: <br>
-Generates China A-share equity research report drafts, including industry analysis, coverage initiation, earnings review, valuation models, ESG notes, and short-seller response templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered equity research report generator for China A-share market, covering industry research, company coverage initiation, earnings analysis, valuation modeling, ESG integration, short-seller response drafting, and investment thesis synthesis.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-China equity research analysts, buy-side analysts, and investment bank researchers use this skill to draft research reports, valuation model sections, compliance checklists, and short-seller response frameworks. Outputs should be reviewed by qualified analysts before publication or investment use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial outputs may contain incorrect data, valuation assumptions, target prices, ratings, or regulatory claims. <br>
-Mitigation: Verify outputs against authoritative disclosures, market data, and current regulatory sources before relying on or publishing them. <br>
-Risk: Short-seller response drafts may include unsupported rebuttals or misleading statements when source facts are incomplete. <br>
-Mitigation: Require evidence-backed fact checking plus legal and compliance review before external use. <br>
+## Use Case:
 
+External analysts, buy-side researchers, and investment bank researchers use this skill to draft China A-share equity research reports, valuation analyses, earnings reviews, industry comparisons, compliance checklists, and short-seller response frameworks. Outputs are intended as analyst-reviewed drafting and modeling support, not as standalone investment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-equity-research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown report drafts with tables, checklists, and optional Python valuation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial data, regulatory claims, valuation assumptions, target prices, ratings, and publication-ready language require authoritative verification and qualified analyst review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Generated market, company, regulatory, valuation, rating, or target-price content may be incorrect, stale, or unsupported.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify all such content against authoritative sources before publication or investment use.
+
+Risk: Equity research drafts can create compliance, suitability, or conflict-disclosure risk if used without professional review.
+
+Mitigation: Require approval by qualified analysts and compliance reviewers before sharing outputs externally or relying on them for investment decisions.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/gechengling/skills/security-equity-research)
+- [ClawHub publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown with tables, templates, narrative analysis, and optional code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include valuation assumptions, sensitivity matrices, rating and target-price rationale, compliance checklists, and reviewer-facing disclaimers.]
+
+## Skill Version(s):
+
+3.0.2 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

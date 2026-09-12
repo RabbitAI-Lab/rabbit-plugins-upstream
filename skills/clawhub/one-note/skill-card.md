@@ -1,48 +1,64 @@
-## Description: <br>
-OneNote API integration with managed OAuth via Microsoft Graph for accessing and managing notebooks, sections, section groups, and pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OneNote API integration with managed OAuth via Microsoft Graph for accessing and managing notebooks, sections, section groups, and pages.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to work with Microsoft OneNote content through Maton-managed OAuth, including reading, creating, and organizing notebooks, sections, section groups, and pages. It is suited for agents that need to generate API requests, shell commands, code examples, and configuration guidance for OneNote workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY and Microsoft OAuth access to OneNote data. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when the user trusts Maton to broker access to the connected OneNote account. <br>
-Risk: Requests may affect the wrong OneNote account when multiple connections are active. <br>
-Mitigation: Use the Maton-Connection header and confirm the intended connection before acting. <br>
-Risk: Create, update, or delete operations can change notebooks, sections, pages, or connections. <br>
-Mitigation: Confirm the exact target resource and intended effect with the user before executing any write or delete request. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent read, organize, create, and update OneNote content through Microsoft Graph via Maton. It is suited for notebook, section, section group, and page workflows where OAuth-managed access and explicit confirmation for changes are acceptable.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/one-note) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [OneNote API overview](https://learn.microsoft.com/en-us/graph/integrate-with-onenote) <br>
-- [OneNote REST API reference](https://learn.microsoft.com/en-us/graph/api/resources/onenote-api-overview) <br>
-- [OneNote page HTML reference](https://learn.microsoft.com/en-us/graph/onenote-input-output-html) <br>
-- [Microsoft Graph Explorer](https://developer.microsoft.com/graph/graph-explorer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline API paths, JSON, HTML, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Microsoft Graph and Maton API request examples that require MATON_API_KEY and an active OneNote OAuth connection] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The generic Microsoft Graph passthrough can reach endpoints beyond the documented OneNote workflows if the connection is authorized for them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the smallest available OAuth scopes, prefer read-only access, specify the intended connection, and keep calls within the documented OneNote task scope.
+
+Risk: Write, delete, and connection-management operations can change or revoke OneNote access and content.
+
+Mitigation: Default to read and list calls, verify resource identifiers first, and require explicit user confirmation before POST, PUT, PATCH, DELETE, connection creation, or connection deletion.
+
+Risk: Using a Maton API key or printing full API responses can expose credentials or personal notebook data.
+
+Mitigation: Prefer OAuth through the CLI, never print or persist credentials, and return only the fields needed for the user's task.
+
+## Reference(s):
+
+- [Microsoft OneNote API Overview](https://learn.microsoft.com/en-us/graph/integrate-with-onenote)
+- [Microsoft OneNote REST API Reference](https://learn.microsoft.com/en-us/graph/api/resources/onenote-api-overview)
+- [Microsoft Graph OneNote HTML Reference](https://learn.microsoft.com/en-us/graph/onenote-input-output-html)
+- [Maton Homepage](https://maton.ai)
+- [Maton Documentation](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/one-note)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration]
+
+**Output Format:** [Markdown with command examples, JSON examples, HTML snippets, and Python or JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Microsoft Graph paths, Maton CLI commands, OAuth connection handling guidance, and examples for minimizing returned OneNote data.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

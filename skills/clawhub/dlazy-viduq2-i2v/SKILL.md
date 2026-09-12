@@ -1,14 +1,13 @@
 ---
 name: dlazy-viduq2-i2v
 version: 1.3.5
-description: Convert static images into dynamic videos using Vidu Q2 image-to-video model. 使用 Vidu Q2 图生视频模型，将静态图片通过智能运镜转化为动态视频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy viduq2-i2v -h for help."}}
+description: "Convert static images into dynamic videos using Vidu Q2 image-to-video model. 使用 Vidu Q2 图生视频模型，将静态图片通过智能运镜转化为动态视频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy viduq2-i2v -h for help."}}
 ---
 
-# dlazy-viduq2-i2v
+# 图生视频 Vidu Q2
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Convert static images into dynamic videos using Vidu Q2 image-to-video model.
@@ -49,7 +48,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -86,7 +85,7 @@ Options:
   --images [images...]                 Images [image: url or local path] (max 10) [only when !(generation_mode="frames")]
   --firstFrame [firstFrame]            First Frame [image: url or local path] [only when generation_mode="frames"]
   --lastFrame [lastFrame]              Last Frame [image: url or local path] [only when generation_mode="frames"]
-  --subjects [subjects...]             Subjects (max 7) [only when !(generation_mode="frames")]
+  --subjects [subjects...]             Subject IDs (max 7) [only when !(generation_mode="frames")]
   --audio [audio]                      Audio [default: false] (choices: "true", "false")
   --audioType [audioType]              Audio Type [default: all] (choices: "all", "speech_only") [only when !(generation_mode="frames")]
   --duration [duration]                Duration (s) [default: 5] (choices: "2", "3", "4", "5", "6", "7", "8", "9", "10")
@@ -95,6 +94,7 @@ Options:
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 
@@ -107,7 +107,7 @@ Options:
   "ok": true,
   "result": {
     "tool": "viduq2-i2v",
-    "modelId": "viduq2-i2v",
+    "modelId": "vidu-i2v-viduq2",
     "outputs": [
       {
         "type": "image",

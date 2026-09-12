@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/truenas-aiops",
   "slug": "truenas-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635295013,
-  "contentHash": "4bfd391442335c0f92cb820c14525fc2a4ce58ecaad240d6700df0774d0c3653",
-  "fetchedAt": "2026-07-26T18:09:04.596Z"
+  "version": "0.11.1",
+  "updatedAt": 1789209088736,
+  "contentHash": "dd69ab74a025aa3ce22b220553d2a851f06a1da25ad7cdbaacc397d743badb69",
+  "fetchedAt": "2026-09-12T11:41:19.253Z"
 }

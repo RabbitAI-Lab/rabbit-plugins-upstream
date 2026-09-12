@@ -1,44 +1,63 @@
-## Description: <br>
-Upscale videos to 720p, 1080p, 2K, or 4K resolution using WaveSpeed AI's Ultimate Video Upscaler. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upscale videos to 720p, 1080p, 2K, or 4K resolution using WaveSpeed AI's Ultimate Video Upscaler.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and automation agents use this skill to prepare WaveSpeed AI API calls that upscale publicly accessible videos or uploaded video assets to a selected target resolution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video files or publicly accessible video URLs are sent to WaveSpeed AI for processing. <br>
-Mitigation: Use the skill only when that data-sharing posture is acceptable for the video content. <br>
-Risk: User-provided video URLs can introduce privacy and URL-validation concerns. <br>
-Mitigation: Validate URLs and use trusted video sources before submitting them to the API. <br>
-Risk: The skill requires a WaveSpeed API key. <br>
-Mitigation: Store the API key in an environment variable or secret manager and do not hardcode or commit it. <br>
-Risk: Video upscaling can incur usage-based costs. <br>
-Mitigation: Monitor costs and choose target resolution intentionally before running upscaling jobs. <br>
+## Use Case:
 
+Developers and media operators use this skill to guide an agent through WaveSpeed video upscaling for user-provided video URLs or local video files uploaded through the WaveSpeed CLI. It is intended for producing higher-resolution video outputs at 720p, 1080p, 2K, or 4K.
 
-## Reference(s): <br>
-- [WaveSpeed API Key Access](https://wavespeed.ai/accesskey) <br>
-- [ClawHub Skill Page](https://clawhub.ai/chengzeyi/wavespeed-ultimate-video-upscaler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WaveSpeed model ID, video URL input, target resolution, API-key setup, pricing notes, and error-handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The workflow uploads media to WaveSpeed for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only media the user intends to send to WaveSpeed, and avoid passing arbitrary URLs that were not supplied by the user or returned by a prior run.
+
+Risk: The WaveSpeed CLI stores authentication locally after login.
+
+Mitigation: Use the CLI login flow or environment variables without asking users to paste API keys into chat, and run the tools with least privilege.
+
+Risk: Long videos and high target resolutions can incur material processing cost.
+
+Mitigation: Quote the price before processing long videos and confirm the target resolution with the user.
+
+Risk: Global npm installs may introduce supply-chain exposure.
+
+Mitigation: Install only trusted WaveSpeed packages and prefer pinning reviewed package versions where the environment allows it.
+
+## Reference(s):
+
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+- [WaveSpeed access key page](https://wavespeed.ai/accesskey)
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-ultimate-video-upscaler)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and parameter tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides use of WaveSpeed CLI or MCP tools and may produce result URLs or downloaded video file paths after execution.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release metadata; artifact frontmatter reports 2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

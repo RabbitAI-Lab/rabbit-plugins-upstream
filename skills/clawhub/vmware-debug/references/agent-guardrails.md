@@ -10,15 +10,22 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-debug are specific to this skill.
 
-vmware-debug exposes 2 MCP tools and both are reads. It connects to nothing:
-the calling agent gathers events from the other skills, normalises them, and
-hands them over for correlation. That makes it the safest skill in the family
-to point a small model at — and the one most exposed to the model's reasoning,
-because its output *is* an interpretation.
+vmware-debug exposes 14 MCP tools: 7 reads and 7 writes. It connects to nothing
+and holds no credentials — the calling agent gathers events from the other
+skills, normalises them, and hands them over. The seven writes go to the local
+investigation ledger under `~/.vmware/cases/`, never to a VMware system. That
+makes it the safest skill in the family to point a small model at — and the one
+most exposed to the model's reasoning, because its output *is* an
+interpretation.
+
+For a small model the ledger is more than bookkeeping: `case_grade` computes the
+conclusion level from recorded evidence rather than accepting one, so a model
+that would happily narrate "root cause confirmed" cannot record that unless the
+evidence for it is actually in the folder.
 
 > **Disclaimer**: This is a community-maintained open-source project and is
 > **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom
@@ -34,12 +41,12 @@ These are structural, so it cannot.
 
 | Guardrail you would otherwise prompt for | Now enforced by |
 |---|---|
-| "Work read-only and never modify anything" | **The tool surface itself.** Both tools are reads — this skill has no write tool at all, so there is nothing to withhold and nothing to switch off. |
-| "Diagnose only — never apply the fix you propose" | **Structural.** This skill has no tool that changes anything, and it holds no connection to vCenter, NSX or anything else. Remediation is routed to vmware-aiops or vmware-pilot by the calling agent. |
+| "Work read-only and never modify anything" | **The tool surface itself.** No tool reaches a VMware system. The seven [WRITE] tools write only to this skill's own local case ledger, so there is nothing in vSphere to withhold and nothing to switch off. |
+| "Diagnose only — never apply the fix you propose" | **Structural.** This skill has no tool that changes anything outside its own ledger, and it holds no connection to vCenter, NSX or anything else. Remediation is routed to vmware-aiops or vmware-pilot by the calling agent. |
 | "Do not fabricate a timeline — build it from the events I gave you" | **`incident_timeline` correlates only its input.** It is source-agnostic and has no way to fetch anything, so the timeline cannot contain an event the agent did not supply. |
 | "Tell me when the symptom is outside what you can recognise" | **`list_symptom_categories`** states the catalogue, and unmatched symptoms come back as `uncategorized` rather than being forced into the nearest signature. |
 | "Use explicit limits for queries that may return large amounts of data" | **The list envelope.** `list_symptom_categories` returns `{items, returned, limit, total, truncated, hint}` with `truncated` always `false` — which is the point: it states that the catalogue is complete instead of leaving you to infer it. |
-| "Log everything you looked at" | **The `@vmware_tool` decorator.** Every call is recorded to `~/.vmware/audit.db`, reads included. |
+| "Log everything you looked at" | **The case ledger, for investigations.** Evidence submitted to a case is recorded with its source skill, tool, query and fetch time. Debug's own tool calls are not written to `~/.vmware/audit.db`: none of them acts on a VMware target. |
 
 ---
 
@@ -131,4 +138,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-Debug/issues](https://github.com/zw008/VMware-Debug/issues).
+[github.com/vmware-skills/VMware-Debug/issues](https://github.com/vmware-skills/VMware-Debug/issues).

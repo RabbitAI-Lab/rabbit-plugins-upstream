@@ -1,48 +1,62 @@
-## Description: <br>
-Helps agents manage VMware NSX distributed firewall policies and rules, security groups, VM tags, Traceflow diagnostics, and IDS/IPS status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage VMware NSX security tasks including distributed firewall policies and rules, security groups, VM tags, Traceflow diagnostics, and IDS/IPS status.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Infrastructure, network security, and platform engineers use this skill to administer NSX security controls, validate microsegmentation behavior, inspect firewall policy state, and run controlled diagnostics from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent use can administer sensitive NSX firewall and security objects. <br>
-Mitigation: Install only for intended NSX security administration, use a dedicated least-privilege NSX account, and require explicit approval for write operations. <br>
-Risk: NSX target credentials and local configuration may expose privileged access if handled loosely. <br>
-Mitigation: Prefer environment injection or a secret manager over a plaintext .env file for production, and keep config and .env files owner-only. <br>
-Risk: Firewall rule, security group, tag, or diagnostic write actions can change network enforcement or inject trace packets. <br>
-Mitigation: Use dry-run and review flows where available, rely on audit logging for state changes, and validate proposed changes before execution. <br>
+## Use Case:
 
+Infrastructure, network security, and platform engineers use this skill to inspect and operate NSX distributed firewall controls, security groups, VM tags, Traceflow diagnostics, and IDS/IPS status through an agent workflow.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-nsx-security) <br>
-- [Publisher Profile](https://clawhub.ai/user/zw008) <br>
-- [Project Homepage](https://github.com/zw008/VMware-NSX-Security) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute NSX security administration actions through CLI or MCP tools when configured; write actions require appropriate user approval and environment credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: evidence.release.version) <br>
+Risk: The security scan verdict is suspicious because the install path is not reproducible enough for a skill that can access credentials and change firewall state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact PyPI and GitHub release before installing, pin and hash-check dependencies where possible, and deploy only after source and package verification.
+
+Risk: Incorrect firewall or security group changes can permit or block production traffic.
+
+Mitigation: Use a dedicated least-privilege NSX account, keep dry-run and audit controls enabled for writes, and confirm all state-changing operations before execution.
+
+Risk: Credential exposure or weakened TLS verification could compromise NSX Manager access.
+
+Mitigation: Store per-target credentials outside config files, keep local secret files owner-only, and keep TLS verification enabled outside isolated lab environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-nsx-security)
+- [Project Homepage](https://github.com/vmware-skills/VMware-NSX-Security)
+- [Capabilities Reference](references/capabilities.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text with inline shell commands, configuration snippets, and structured tool guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce operational recommendations and command sequences for high-impact NSX security changes that require review before execution.]
+
+## Skill Version(s):
+
+1.11.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

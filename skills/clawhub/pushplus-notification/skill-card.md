@@ -1,46 +1,65 @@
-## Description: <br>
-Send push notifications via the PushPlus HTTP API to WeChat, email, webhook, SMS, and other channels using a PUSHPLUS_TOKEN and shell/curl access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sends PushPlus notifications via HTTP API to WeChat, ClawBot, QQ bot, email, webhook, SMS, App, and other channels, with Open API guidance for send-result lookup, account resources, blacklists, channel bindings, and message rules.
 
-## Publisher: <br>
-[pcstx](https://clawhub.ai/user/pcstx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pcstx](https://clawhub.ai/user/pcstx)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to send user-approved PushPlus notifications for alerts, reminders, task completion messages, reports, and logs across supported channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Notifications are transmitted through the third-party PushPlus service and can expose sensitive or confidential message content. <br>
-Mitigation: Review the title, content, channel, recipient, webhook, and callback destination before approving each send; avoid transmitting passwords, API keys, personal data, or confidential logs unless explicitly accepted. <br>
-Risk: The PUSHPLUS_TOKEN is a credential required to send messages. <br>
-Mitigation: Do not display, log, store, or write the full token; mask it in any user-facing output and read only the PUSHPLUS_TOKEN line when using a .env file. <br>
-Risk: The skill can send external notifications from an agent workflow. <br>
-Mitigation: Require explicit user confirmation before each send and provide a concise summary of the message and delivery settings before executing the request. <br>
+## Use Case:
 
+External users and developers use this skill to have an agent send confirmed PushPlus alerts, reminders, build results, and reports across configured messaging channels. When needed, the same skill guides result lookup and PushPlus Open API management tasks such as topics, friends, blacklists, channel bindings, and message rules.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pcstx/pushplus-notification) <br>
-- [PushPlus official site](https://www.pushplus.plus) <br>
-- [PushPlus single-send endpoint](https://www.pushplus.plus/send) <br>
-- [PushPlus batch-send endpoint](https://www.pushplus.plus/batchSend) <br>
-- [pushplus MCP server](https://www.npmjs.com/package/@perk-net/pushplus-mcp-server) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, API calls, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided PUSHPLUS_TOKEN and user confirmation before sending each message.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact metadata reports 1.1.0) <br>
+Risk: Selected message content and routing metadata are sent to PushPlus and may be forwarded to configured third-party channels.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the destination and content summary before each send, and avoid secrets, regulated data, or unnecessary personal data in notifications.
+
+Risk: Shell-based curl examples can become unsafe if user-controlled titles or message bodies are interpolated into command strings.
+
+Mitigation: Build request JSON with a serializer or structured HTTP client, or otherwise safely escape values before execution.
+
+Risk: Open API operations can modify or delete messages, topics, friends, blacklists, bindings, channel settings, or message rules.
+
+Mitigation: Require explicit user confirmation before destructive or account-changing actions and summarize the exact resource and operation.
+
+Risk: Installing with an unpinned latest package can change installer behavior over time.
+
+Mitigation: Prefer a pinned ClawHub CLI version or manual installation when reproducibility matters.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pcstx/skills/pushplus-notification)
+- [PushPlus official site](https://www.pushplus.plus)
+- [PushPlus message API V1.17](https://www.pushplus.plus/doc/guide/api.html)
+- [PushPlus Open API V1.17](https://www.pushplus.plus/doc/guide/openApi.html)
+- [Artifact Open API reference](artifact/reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing instructions for PushPlus API calls; sends and destructive Open API actions require user confirmation.]
+
+## Skill Version(s):
+
+1.3.4 (source: evidence.json release version and artifact frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

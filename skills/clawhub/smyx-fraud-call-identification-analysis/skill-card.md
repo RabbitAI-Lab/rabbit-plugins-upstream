@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes incoming call content for multi-dimensional risk, identifies scam scripts, determines whether a call is fraudulent, assesses risk levels, and generates an Anti-Fraud Guardian analysis report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes incoming call content for multi-dimensional risk, identifies scam scripts, determines whether a call is fraudulent, assesses risk level, and generates an Anti-Fraud Guardian analysis report.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and security teams use this skill to submit call recordings, call transcript text, or media URLs for fraud-risk analysis and structured anti-fraud reporting. It can also query cloud-hosted historical analysis reports linked to the internally resolved user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Supplied files, URLs, and transcript text are sent to third-party lifeemergence.com services for remote analysis. <br>
-Mitigation: Install and run the skill only when those remote data flows are acceptable for the content being analyzed. <br>
-Risk: The skill can create or reuse an account-like identity, store tokens locally, and retrieve cloud-hosted historical reports associated with that identity. <br>
-Mitigation: Review local token storage and cloud history behavior before use, and avoid shared environments where account-linked report history would be inappropriate. <br>
-Risk: The artifacts are inconsistent about audio/text fraud-call support versus video/media analysis behavior. <br>
-Mitigation: Validate expected input types and output behavior in a controlled environment before relying on results. <br>
+## Use Case:
 
+External users, analysts, and security teams use this skill to submit call recordings, public media URLs, or call transcripts for fraud-risk analysis, scam-script detection, risk-level assessment, anti-fraud guidance, and history/report retrieval.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fraud-call-identification-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Fraud Analysis API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured text with report links; history queries return structured report lists.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-9.9.11 (source: ClawHub release metadata; SKILL.md frontmatter reports 1.0.9) <br>
+Risk: Call content, report metadata, and internal identity values may be sent to the provider's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this cloud processing is acceptable, and make upload and history retrieval behavior explicit to users before use.
+
+Risk: The skill silently manages cloud identity and persists tokens.
+
+Mitigation: Review identity and token handling before installation, avoid plaintext token persistence, and rotate or revoke credentials if exposed.
+
+Risk: The security scan reports insecure or mismatched analysis configuration, including default development/private HTTP endpoints.
+
+Mitigation: Require production HTTPS-only configuration and remove default development or private HTTP endpoints before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fraud-call-identification-analysis)
+- [API interface documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports and JSON-formatted analysis or history data, with optional saved text output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can process a local audio file, a public media URL, or direct transcript text; history queries return report lists and links.]
+
+## Skill Version(s):
+
+9.9.16 (source: server release metadata; artifact frontmatter declares 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

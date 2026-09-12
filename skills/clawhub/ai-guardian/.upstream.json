@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ai-guardian",
   "slug": "ai-guardian",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635026663,
-  "contentHash": "53a8549fa6efaa891b8c680861f56655a8b89624ed72ae889295337bae9b234c",
-  "fetchedAt": "2026-07-26T18:09:08.260Z"
+  "version": "0.11.1",
+  "updatedAt": 1789207129486,
+  "contentHash": "991053f7d8da6bf77997b569df3aa8654f3a8353167dbb58d329dfbc19e33ea7",
+  "fetchedAt": "2026-09-12T11:41:35.344Z"
 }

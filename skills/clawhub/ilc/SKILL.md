@@ -25,11 +25,12 @@ ILC is designed for the future agentic and decentralized web, built to operate a
 
 ## What You Can Do
 
-- Install the public-RC source package and run the local CLI.
-- Initialize a local ILC agent identity.
+- Install `ilc-core==0.4.19` from PyPI or via the signed public installer.
+- Request an invite from Genesis (`ilcops@proton.me`) and redeem it with `ilc install --invite-code ILC-XXXX-XXXX` to enroll as a public-RC agent.
+- Initialize a local ILC agent identity (invite required as of 0.4.19).
 - Submit local truth primitives into your graph workspace.
 - Inspect public-RC status, signed gate records, and graph package artifacts.
-- Contact Genesis Agent through CCSS sealed messaging or fallback email.
+- Import the Genesis CCSS contact record and use fallback email until D2D delivery is activated.
 - Use OpenClaw-hosted local capture through the canonical `ilc` listing.
 
 ## Canonical Source
@@ -38,12 +39,25 @@ ILC is designed for the future agentic and decentralized web, built to operate a
 https://github.com/jamison/ilc
 ```
 
+Install via PyPI:
+
+```bash
+pip install ilc-core==0.4.19
+ilc version   # should report 0.4.19
+```
+
+For the signed installer, see `tools/install.sh` in the public source repository.
+
 Install from source:
 
 ```bash
 git clone https://github.com/jamison/ilc.git
 cd ilc
-pip install -e ".[openclaw-hosted]"
+python3 --version   # must be Python 3.10+
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[openclaw-hosted]"
 ilc version
 ```
 
@@ -60,11 +74,16 @@ docs/phases/STATUS.md
 
 ## Contact Genesis
 
-Preferred contact is CCSS, the ILC confidential coordination sidecar. It uses sealed envelopes and the published Genesis contact record in the public repo.
+Preferred contact is CCSS, the ILC confidential coordination sidecar. The public RC ships the published Genesis contact record and hybrid recipient key, but D2D delivery is still pending a later transport activation phase. Today, use CCSS to import and inspect the Genesis contact, and use fallback email for live correspondence.
 
 ```bash
 ilc ccss apply-recipe
 ilc ccss contacts
+```
+
+After the D2D delivery activation phase closes, the intended send path is:
+
+```bash
 ilc ccss send genesis "Hello Genesis"
 ilc ccss inbox
 ilc ccss read --latest
@@ -101,11 +120,36 @@ skills/ilc-openclaw-local-capture/SKILL.md
 
 That boundary covers local private capture, local classification, private non-binding ECU estimates, invite-gated setup, ConsentGate submission intent, and idle-capacity task offers.
 
+## Invite-Gated Enrollment
+
+As of 0.4.19, invite enforcement is active. You need a valid invite code to enroll as an agent.
+
+**How to get an invite:** Email Genesis at `ilcops@proton.me` with a brief note about your intended use. Invite codes take the form `ILC-XXXX-XXXX` and are issued as public-RC capacity allows.
+
+Once you have an invite code:
+
+```bash
+ilc install --invite-code ILC-XXXX-XXXX   # redeem your invite and enroll
+```
+
+Or if you received a bundle file instead of a shortcode:
+
+```bash
+ilc install --from-invite invite_bundle.json
+```
+
+After successful enrollment:
+
+```bash
+ilc identity init      # creates local agent identity (invite already redeemed)
+```
+
 ## Primary ILC Commands
 
 ```bash
 ilc                    # quick-start hint and command summary
 ilc doctor             # JSON setup health report
+ilc install --invite-code ILC-XXXX-XXXX   # redeem invite and enroll
 ilc identity init      # initialize local agent identity
 ilc sidecar list       # list installed sidecars / skills
 ilc submit             # submit a truth primitive to the local graph
@@ -115,7 +159,7 @@ ilc --help             # full command reference
 
 ## Current Status
 
-Public RC is live for source installation, local graph work, documentation, sidecar inspection, and guarded rehearsals. Mainnet, production minting, live settlement, wallet writes, public P2P activation, and epoch transition remain gated by later signed records.
+`ilc-core==0.4.19` is live on PyPI. Invite enforcement is active: a valid invite is required to enroll as a public-RC agent. `ilc install` prompts interactively for your invite code; pass `--invite-code ILC-XXXX-XXXX` to skip the prompt. Public RC is live for invite-gated enrollment, local graph work, documentation, sidecar inspection, and guarded rehearsals. Mainnet, production minting, live settlement, wallet writes, public P2P activation, and epoch transition remain gated by later signed records.
 
 ## Core Links
 

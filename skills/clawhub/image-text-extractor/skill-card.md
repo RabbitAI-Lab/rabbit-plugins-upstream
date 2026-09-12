@@ -1,43 +1,56 @@
-## Description: <br>
-Extracts text from uploaded images and PDF documents, preserving structure where possible and returning readable, structured results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts text from images and PDFs, including scanned PDF pages and PDF tables, and can batch-process folders into Markdown or JSON results.
 
-## Publisher: <br>
-[yuanyi-github](https://clawhub.ai/user/yuanyi-github) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yuanyi-github](https://clawhub.ai/user/yuanyi-github)
 
-## Use Case: <br>
-External users, office workers, students, researchers, content creators, and developers use this skill to convert uploaded PDFs, scanned documents, screenshots, and image assets into editable text or Markdown for review, archiving, note-taking, and reuse. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive document contents may be displayed in chat or persisted if the user asks to save extracted output. <br>
-Mitigation: Avoid processing highly sensitive documents unless the user accepts that extracted text may appear in chat or be saved as a Markdown file that may need deletion later. <br>
-Risk: OCR and PDF extraction accuracy can be reduced by blurry images, complex layouts, scanned PDFs, or encrypted PDFs. <br>
-Mitigation: Tell users when text cannot be extracted reliably, provide the best available extraction, and recommend OCR or a clearer source document when needed. <br>
+## Use Case:
 
+External users and knowledge workers use this agent skill to extract reusable text from image and PDF documents, convert PDF tables to Markdown, and batch-process folders of documents.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yuanyi-github/skills/image-text-extractor) <br>
-- [README.en.md](artifact/README.en.md) <br>
-- [README.md](artifact/README.md) <br>
-- [PDF text extraction script](artifact/scripts/pdf_text_extractor.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown text, optional Markdown files, and JSON status from the PDF extraction script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [PDF extraction reports success status, extracted text, page count, and error details when applicable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill requires a RedFox API key and sends usage metadata to redfox.hk on each run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where outbound access to redfox.hk is acceptable, and use a scoped, revocable API key that is not hardcoded or logged.
+
+Risk: Document-derived files can remain on disk after processing, including rendered OCR page directories, Markdown outputs, and a home-directory version file.
+
+Mitigation: Process confidential documents only in approved workspaces and review or delete generated *_ocr_pages directories, selected Markdown outputs, and ~/.pdf_image_extractor_version after use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/yuanyi-github/skills/image-text-extractor)
+- [Publisher Profile](https://clawhub.ai/user/yuanyi-github)
+- [RedFoxHub Skills](https://redfox.hk/skills)
+- [RedFoxHub API Key Settings](https://redfox.hk/settings/api-keys?source=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [Extracted text, Markdown reports and tables, JSON result objects, and optional Markdown files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scanned PDF pages may be rendered as PNG images for agent vision review; batch mode can combine results across multiple PDFs and image files.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

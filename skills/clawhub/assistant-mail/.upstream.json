@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/assistant-mail",
   "slug": "assistant-mail",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1780799834745,
-  "contentHash": "cd170756a60adea783b6deb2fd681810a2d9233c598d0e0e310253ac180d0087",
-  "fetchedAt": "2026-07-26T18:33:21.520Z"
+  "version": "1.0.4",
+  "updatedAt": 1788996461005,
+  "contentHash": "947ff44910f0c9a44a5ffeb107b8b73aeca8d51aa64ade4a618475eca9805975",
+  "fetchedAt": "2026-09-12T11:53:28.278Z"
 }

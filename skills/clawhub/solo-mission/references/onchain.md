@@ -1,5 +1,14 @@
 # SOLO Mission Platform — On-Chain Reference (EscrowVault)
 
+> ⚠️ **Base is closed to new mission creation** during the Solana private beta
+> migration ahead of Solana mainnet. `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` — including the
+> pre-Solana default of omitting `chain` entirely. This document remains accurate
+> only for **resuming or managing a Base mission created before the closure**
+> (funding one already in `pending_funding`, or cancelling/settling/refunding one
+> already on-chain). **For any new on-chain mission, use `chain: 'solana'` and read
+> `references/solana-wallet.md` instead — none of the mechanics below apply to it.**
+
 **Network:** Base Sepolia, chain_id `84532`, RPC `https://sepolia.base.org`  
 **EscrowVault:** address varies per mission — **never hardcode it.** Always read
 `funding_params.escrow_vault_address` (returned by `create_mission` / `get_cancel_params` /
@@ -137,7 +146,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -212,7 +221,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -259,7 +268,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -287,7 +296,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 

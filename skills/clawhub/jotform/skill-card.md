@@ -1,48 +1,67 @@
-## Description: <br>
-JotForm API integration with managed OAuth for creating forms, managing submissions, accessing form data, and managing webhooks through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides JotForm API access through Maton-managed OAuth so agents can create forms, manage submissions, access form data, and use approved passthrough endpoints.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to interact with JotForm forms, submissions, webhooks, and account data through Maton's managed OAuth proxy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MATON_API_KEY can grant access to connected JotForm data if exposed. <br>
-Mitigation: Install only when Maton is trusted, store MATON_API_KEY securely, and avoid sharing terminal output that prints the key. <br>
-Risk: Requests may target the wrong JotForm account when multiple connections exist. <br>
-Mitigation: Use the Maton-Connection header when multiple accounts are connected and confirm the intended connection before making requests. <br>
-Risk: Create, update, and delete operations can modify forms, submissions, webhooks, or connections. <br>
-Mitigation: Confirm the exact target resource and intended effect with the user before approving write or delete operations. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to a user's JotForm account through Maton, retrieve forms and submissions, create forms, manage webhooks, and perform confirmed write or delete operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/jotform) <br>
-- [JotForm API Overview](https://api.jotform.com/docs/) <br>
-- [JotForm User Forms](https://api.jotform.com/docs/#user-forms) <br>
-- [JotForm Form Submissions](https://api.jotform.com/docs/#form-id-submissions) <br>
-- [JotForm Webhooks](https://api.jotform.com/docs/#form-id-webhooks) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be confirmed with the user before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Long-lived Maton API keys can leak through environment variables, logs, shell history, or pasted output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth through the Maton CLI, store credentials in the operating system credential store, and never print, persist, or pass API keys on command lines.
+
+Risk: Form, submission, webhook, and connection changes can modify or remove user data.
+
+Mitigation: Default to read and list calls, then require explicit user confirmation of the target resource, payload, and intended effect before any POST, PUT, PATCH, or DELETE operation.
+
+Risk: JotForm responses can include personal data or adversarial content.
+
+Mitigation: Treat returned content as untrusted data, extract only fields needed for the task, and avoid writing raw responses into logs, files, or transcripts unless the user asks for that output.
+
+Risk: Multiple Maton profiles or JotForm connections can route actions to the wrong account.
+
+Mitigation: Specify the intended profile and connection when more than one exists, and verify identifiers before changing remote resources.
+
+## Reference(s):
+
+- [JotForm API Overview](https://api.jotform.com/docs/)
+- [JotForm User Forms](https://api.jotform.com/docs/#user-forms)
+- [JotForm Form Submissions](https://api.jotform.com/docs/#form-id-submissions)
+- [JotForm Webhooks](https://api.jotform.com/docs/#form-id-webhooks)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [JotForm Skill Page](https://clawhub.ai/byungkyu/skills/jotform)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, HTTP examples, SDK snippets, and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a connected JotForm account; write operations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence and target metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

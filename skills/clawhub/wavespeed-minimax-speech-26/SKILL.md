@@ -3,33 +3,34 @@ name: wavespeed-minimax-speech-26
 description: Convert text to speech using MiniMax Speech 2.6 Turbo via WaveSpeed AI. Features ultra-human voice cloning, sub-250ms latency, 40+ languages, emotion control, and 200+ voice presets. Use when the user wants to generate speech audio from text.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI MiniMax Speech 2.6 Turbo
 
 Convert text to speech using MiniMax Speech 2.6 Turbo via the WaveSpeed AI platform. Features ultra-human voice cloning, sub-250ms latency, 40+ language support, and emotion control.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "Hello, welcome to WaveSpeed AI!",
-    voice_id: "English_CalmWoman"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run minimax/speech-2.6-turbo \
+  -i text="Hello, welcome to WaveSpeed AI!" \
+  -i voice_id="English_CalmWoman" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoint
@@ -57,99 +58,30 @@ Convert text to speech with configurable voice, emotion, speed, pitch, and audio
 
 ### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "The quick brown fox jumps over the lazy dog.",
-    voice_id: "English_expressive_narrator",
-    speed: 1.0,
-    pitch: 0,
-    emotion: "neutral",
-    format: "mp3",
-    sample_rate: 24000,
-    bitrate: 128000
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run minimax/speech-2.6-turbo \
+  -i text="The quick brown fox jumps over the lazy dog." \
+  -i voice_id="English_expressive_narrator" \
+  -i speed=1.0 \
+  -i pitch=0 \
+  -i emotion="neutral" \
+  -i format="mp3" \
+  -i sample_rate=24000 \
+  -i bitrate=128000 \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Pause Control
 
 Insert pauses in speech using `<#x#>` syntax where `x` is seconds (0.01-99.99):
 
-```javascript
-const output_url = (await wavespeed.run(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "And the winner is <#2.0#> WaveSpeed AI!",
-    voice_id: "English_CaptivatingStoryteller"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run minimax/speech-2.6-turbo \
+  -i text="And the winner is <#2.0#> WaveSpeed AI!" \
+  -i voice_id="English_CaptivatingStoryteller" \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Sync Mode
-
-```javascript
-const output_url = (await wavespeed.run(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "Hello world!",
-    voice_id: "English_CalmWoman"
-  },
-  { enableSyncMode: true }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "Welcome to our platform.",
-    voice_id: "English_Trustworth_Man"
-  }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "minimax/speech-2.6-turbo",
-  {
-    text: "Testing speech generation.",
-    voice_id: "English_CalmWoman"
-  }
-);
-
-if (result.outputs) {
-  console.log("Audio URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Voice IDs
 
@@ -197,7 +129,30 @@ For `language_boost`: `Chinese`, `Chinese,Yue`, `English`, `Arabic`, `Russian`, 
 
 $0.06 per 1,000 characters.
 
-## Security Constraints
+## CLI tips
 
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate text content before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run minimax/speech-2.6-turbo -h
+
+# Quote the price first
+wavespeed price minimax/speech-2.6-turbo -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run minimax/speech-2.6-turbo -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run minimax/speech-2.6-turbo -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

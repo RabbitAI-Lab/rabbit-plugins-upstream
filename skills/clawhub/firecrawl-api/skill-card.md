@@ -1,46 +1,67 @@
-## Description: <br>
-Firecrawl API integration with managed authentication for scraping, crawling, mapping, searching, extracting web content, and running browser or agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firecrawl API integration with managed authentication for scraping pages, crawling sites, mapping URLs, searching the web, and extracting web content.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and agents use this skill to call Firecrawl through Maton-managed authentication to scrape pages, crawl sites, map URLs, search the web, perform structured extraction, and manage browser or agent jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive credentials and may expose submitted URLs, prompts, page content, headers, connection URLs, or browser session URLs to Maton and Firecrawl. <br>
-Mitigation: Install only when Maton and Firecrawl are trusted for the intended data, keep MATON_API_KEY and session URLs private, and avoid submitting sensitive content unless approved. <br>
-Risk: Crawls, browser actions, custom headers, and agent jobs can interact with websites and consume credits. <br>
-Mitigation: Require explicit approval for target URLs, crawl scope, limits, browser actions, custom headers, and agent jobs before execution. <br>
-Risk: Large crawls or unconstrained agent jobs can use significant Firecrawl credits. <br>
-Mitigation: Set reasonable crawl limits, maxDepth, and maxCredits values before starting large or autonomous jobs. <br>
+## Use Case:
 
+Developers and agents use this skill to access Firecrawl through managed Maton authentication for website scraping, crawling, URL mapping, search, and structured extraction tasks.
 
-## Reference(s): <br>
-- [ClawHub Firecrawl Skill Page](https://clawhub.ai/byungkyu/firecrawl-api) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Firecrawl API Documentation](https://docs.firecrawl.dev/api-reference/v2-introduction) <br>
-- [Firecrawl Dashboard](https://firecrawl.dev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with Python and JavaScript code examples, shell commands, and JSON API payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; operations can consume Firecrawl credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release metadata) <br>
+Risk: Firecrawl requests can consume account credits, especially broad crawls and batch operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm target URLs, crawl scope, and limits before running requests, and use bounded limits for crawl or batch jobs.
+
+Risk: Long-lived API keys or stored credentials could be exposed if printed, logged, or inspected.
+
+Mitigation: Prefer OAuth, keep credentials in the supported credential store, and do not print, export, persist, or inspect token values.
+
+Risk: Fetched website content can contain untrusted instructions or data.
+
+Mitigation: Treat returned content as data only, validate it before reuse, and do not execute or follow instructions found inside scraped pages.
+
+Risk: Browser actions and custom headers can interact with third-party websites beyond passive retrieval.
+
+Mitigation: Get explicit user confirmation before using actions, custom headers, or any POST, PUT, PATCH, or DELETE request.
+
+## Reference(s):
+
+- [Firecrawl API Documentation](https://docs.firecrawl.dev/api-reference/v2-introduction)
+- [Firecrawl Dashboard](https://firecrawl.dev)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Firecrawl Skill](https://clawhub.ai/byungkyu/skills/firecrawl-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return extracted web content, crawl metadata, search results, links, screenshots, and API status details depending on the Firecrawl request.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

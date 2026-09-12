@@ -1,42 +1,57 @@
-## Description: <br>
-Honeybook helps an agent work with HoneyBook client-portal sessions to review vendor contracts, invoices, payment methods, workspace files, and signing or payment links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps an agent work with HoneyBook client-portal data for contracts, invoices, questionnaires, messages, meetings, tasks, payments, and related wedding-vendor workflows.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and their agents use this skill to inspect HoneyBook portal data across wedding vendors, identify unsigned contracts or overdue invoices, and obtain confirmed deep links for signing or payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HoneyBook magic links and cached sessions can grant access to sensitive portal data. <br>
-Mitigation: Treat magic links as login secrets, use the skill only for HoneyBook-specific tasks, and delete or revoke cached sessions when access is no longer needed. <br>
-Risk: Signing and payment links can lead to contractual or financial action. <br>
-Mitigation: Require explicit user confirmation before returning signing or payment deep links, and have the user review the HoneyBook portal before completing the action. <br>
-Risk: Contract, invoice, and payment-method details may expose private vendor or client information. <br>
-Mitigation: Limit use to the intended vendor workspace and avoid sharing retrieved details outside the authorized requester. <br>
+## Use Case:
 
+External users and their agents use this skill to inspect and act on HoneyBook client-portal workspaces, including vendor files, contracts, invoices, messages, meetings, questionnaires, payments, and tasks. It is intended for cases where the user is comfortable giving the agent access to HoneyBook portal credentials and related client and vendor data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/honeybook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text summaries with HoneyBook portal links when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Signing and payment tools require explicit confirmation and return portal deep links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.13 (source: server release metadata) <br>
+Risk: HoneyBook portal credentials can expose client, vendor, contract, invoice, payment, message, meeting, and contact data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use only when the user accepts that access level; prefer compact or summary views and avoid raw responses unless needed.
+
+Risk: Raw modes can reveal vendor-side data beyond a normal client task.
+
+Mitigation: Use compact or sectioned views first, and request raw data only for a specific missing field or troubleshooting need.
+
+Risk: Outgoing messages, signing links, and payment links may trigger real-world workflow consequences.
+
+Mitigation: Confirm outgoing messages, signing links, and payment links deliberately before taking action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/honeybook)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, guidance]
+
+**Output Format:** [Markdown or text responses with HoneyBook portal data, summaries, previews, and action links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include compact summaries by default, raw portal data when explicitly requested, message previews, and deep links for signing or payment.]
+
+## Skill Version(s):
+
+0.10.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

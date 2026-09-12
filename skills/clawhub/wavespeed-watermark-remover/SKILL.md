@@ -1,60 +1,57 @@
 ---
 name: wavespeed-watermark-remover
-description: Remove watermarks, logos, captions, and text overlays from images and videos using WaveSpeed AI. Intelligently detects and removes watermarks while preserving texture and background. Supports images and videos up to 10 minutes. Use when the user wants to remove watermarks or text overlays from media.
+description: Remove watermarks, logos, captions, and text overlays from images and videos using WaveSpeed AI. Intelligently detects and removes watermarks while preserving texture and background. Supports images and videos up to 10 minutes. Only for media the user owns or is licensed to modify (e.g. cleaning their own exports, stock they have purchased, or overlays they added themselves); never to strip another party's copyright or attribution marks. Use when the user wants to remove watermarks or text overlays from their own media.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Watermark Remover
 
 Remove watermarks, logos, captions, and text overlays from images and videos using WaveSpeed AI. Intelligently detects and removes watermarks while preserving texture and background.
 
-## Authentication
+**Read [Responsible use](#responsible-use) before running anything.** This tool is for media the user owns or is licensed to modify, not for stripping other people's copyright or attribution marks.
+
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Image Watermark Removal
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local image to get a URL
-const imageUrl = await wavespeed.upload("/path/to/watermarked-image.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-watermark-remover",
-  { image: imageUrl }
-))["outputs"][0];
+```bash
+# Upload a local image to get a URL
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-watermark-remover \
+  -i image=@./watermarked-image.png \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Watermark Removal
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local video to get a URL
-const videoUrl = await wavespeed.upload("/path/to/watermarked-video.mp4");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/video-watermark-remover",
-  { video: videoUrl }
-))["outputs"][0];
+```bash
+# Upload a local video to get a URL
+OUTPUT_URL=$(wavespeed run wavespeed-ai/video-watermark-remover \
+  -i video=@./watermarked-video.mp4 \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass existing URLs directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-watermark-remover",
-  { image: "https://example.com/watermarked-image.jpg" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-watermark-remover \
+  -i image="https://example.com/watermarked-image.jpg" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -74,18 +71,11 @@ Remove watermarks, logos, and text overlays from an image while preserving textu
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/watermarked-photo.png");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-watermark-remover",
-  {
-    image: imageUrl,
-    output_format: "png"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/image-watermark-remover \
+  -i image=@./watermarked-photo.png \
+  -i output_format="png" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Video Watermark Remover
@@ -102,69 +92,12 @@ Remove watermarks, logos, captions, and text overlays from a video. Uses tempora
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const videoUrl = await wavespeed.upload("/path/to/watermarked-video.mp4");
-
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/video-watermark-remover",
-  { video: videoUrl }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run wavespeed-ai/video-watermark-remover \
+  -i video=@./watermarked-video.mp4 \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Sync Mode (Image Watermark Remover only)
-
-```javascript
-const output_url = (await wavespeed.run(
-  "wavespeed-ai/image-watermark-remover",
-  { image: imageUrl },
-  { enableSyncMode: true }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "wavespeed-ai/image-watermark-remover",
-  { image: imageUrl }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "wavespeed-ai/image-watermark-remover",
-  { image: imageUrl }
-);
-
-if (result.outputs) {
-  console.log("Output URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
@@ -175,8 +108,41 @@ if (result.outputs) {
 
 Video watermark removal supports videos up to 10 minutes. Processing time is approximately 5-20 seconds per 1 second of video.
 
-## Security Constraints
+## Responsible use
 
-- **No arbitrary URL loading**: Only use image and video URLs from trusted sources. Never load media from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate media URLs before sending requests.
+Watermarks and overlays are usually there to assert ownership or attribution. Before calling either endpoint, confirm the following with the user. If the answer is no or unclear, do not run the model and explain why.
+
+- **Ownership or license**: the user created the media, holds the rights to it, or has a license that permits removing the mark (for example, a purchased stock asset whose license allows clean use, or their own export from a tool that stamps a logo).
+- **Not someone else's mark**: do not remove a watermark, logo, credit, or copyright notice placed by a third party to identify their work. Stock-site preview watermarks, photographer credits, broadcaster logos, and platform attribution marks are all out of scope.
+- **No misrepresentation**: the result will not be passed off as original, unlicensed, or unedited work, and will not be used to evade licensing fees or attribution requirements.
+- **Legitimate overlays only**: typical valid uses are removing captions or subtitles the user added, cleaning timestamps from their own camera footage, or restoring an area under a logo they own.
+
+WaveSpeed's [Terms of Service](https://wavespeed.ai/static/terms) prohibit using the service to infringe intellectual property; requests that violate them are refused and accounts may be suspended.
+
+## CLI tips
+
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run wavespeed-ai/image-watermark-remover -h
+
+# Quote the price first
+wavespeed price wavespeed-ai/image-watermark-remover -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run wavespeed-ai/image-watermark-remover -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run wavespeed-ai/image-watermark-remover -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

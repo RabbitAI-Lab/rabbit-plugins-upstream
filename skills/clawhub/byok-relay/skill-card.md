@@ -1,45 +1,68 @@
-## Description: <br>
-BYOK Relay Builder helps developers integrate an OpenAI-compatible relay for client-side applications that routes LLM requests across multiple providers while supporting user-supplied API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BYOK Relay Builder helps developers integrate byok-relay, an OpenAI-compatible gateway for client-side applications that supports BYOK credentials, CORS-safe streaming, and routing to OpenAI, Anthropic, Gemini, Groq, Mistral, OpenRouter, and other models without a dedicated backend.
 
-## Publisher: <br>
-[avikalpg](https://clawhub.ai/user/avikalpg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[avikalpg](https://clawhub.ai/user/avikalpg)
 
-## Use Case: <br>
-Developers and engineers use this skill to add multi-provider LLM access to browser, mobile, extension, Electron, and other client-side applications without putting provider API keys directly in application code. It provides setup and integration guidance for managed-relay and self-hosted deployments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may route provider API keys through a hosted relay and store relay bearer tokens in browser storage. <br>
-Mitigation: Use the managed relay only when that custody model is acceptable; for production, enterprise, browser-extension, or shared-key deployments, prefer self-hosting with explicit token storage, rotation, revocation, and user-consent controls. <br>
-Risk: The managed-relay path is presented with open CORS and no domain registration. <br>
-Mitigation: For production self-hosting, restrict allowed origins to trusted application domains and document the trust boundary for users before collecting API keys. <br>
-Risk: Team shared-key guidance describes sharing a relay token or registering the same provider key for multiple members. <br>
-Mitigation: Avoid sharing bearer tokens for team access; add organization-level access controls, per-user authorization, and revocation before using shared provider keys in B2B deployments. <br>
+## Use Case:
 
+Developers use this skill to add OpenAI-compatible, client-side LLM access with bring-your-own-key workflows. It helps generate relay setup guidance, API key connection UI, streaming request code, self-hosting commands, and key lifecycle guidance for frontend, mobile, extension, and B2B applications.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/avikalpg/skills/byok-relay) <br>
-- [BYOK Relay GitHub Repository](https://github.com/avikalpg/byok-relay) <br>
-- [Managed Relay Endpoint](https://relay.byokrelay.com) <br>
-- [Vercel Deployment Template](https://vercel.com/new/clone?repository-url=https://github.com/avikalpg/byok-relay) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: VERSION and server release metadata) <br>
+Risk: Applications may send valuable provider API keys to a managed relay.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the managed relay only when that trust model is acceptable; for sensitive, regulated, or high-volume deployments, prefer self-hosting or a backend-controlled design.
+
+Risk: Browser-readable relay tokens can expose access to keys stored under that token.
+
+Mitigation: Scope relay tokens per user, app, tenant, and relay origin; avoid shared relay tokens in clients and route organization-managed key flows through a backend.
+
+Risk: Incorrect relay origins or non-HTTPS key upload flows can increase credential exposure.
+
+Mitigation: Validate the relay origin, require HTTPS outside localhost development, and pin reviewed releases before deployment.
+
+Risk: Users may need to recover from compromised, revoked, or expired provider keys.
+
+Mitigation: Document key rotation, provider-side revocation, relay token revocation, and account deletion flows in the product experience.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/avikalpg/skills/byok-relay)
+- [Managed Relay Endpoint](https://relay.byokrelay.com)
+- [OpenAI API Keys](https://platform.openai.com/api-keys)
+- [Anthropic API Keys](https://console.anthropic.com/settings/keys)
+- [Google AI Studio API Keys](https://aistudio.google.com/app/apikey)
+- [Groq API Keys](https://console.groq.com/keys)
+- [Mistral API Keys](https://console.mistral.ai/api-keys)
+- [OpenRouter API Keys](https://openrouter.ai/settings/keys)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JavaScript, HTML, and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes client-side integration patterns, key lifecycle UX states, self-hosting commands, and security guidance.]
+
+## Skill Version(s):
+
+1.0.7 (source: evidence.release.version and artifact/VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

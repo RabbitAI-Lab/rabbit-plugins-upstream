@@ -1,46 +1,68 @@
-## Description: <br>
-Adaptive Hyperliquid perps execution engine for OpenClaw agents. Provides research, pre-trade simulation, predictive funding shifts, and zero-custody EIP-712 order routing with forensic telemetry. Scout (5/day), Pioneer (unlimited), and Syndicate (unlimited) execution supported. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hyperliquid perps strategist: market scans, funding rates, position sizing, and user-signed EIP-712 order execution and cancellation with drawdown guardrails.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-External users and OpenClaw agents use this skill to research Hyperliquid perpetual futures markets, simulate strategies, size positions, and prepare order or cancellation requests. State-changing actions require explicit user confirmation and a fresh user-signed EIP-712 payload. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prepared futures orders can cause financial loss, liquidation, or unwanted exposure if confirmed with incorrect details. <br>
-Mitigation: Before every execution or cancellation, verify the asset, side, size, leverage, stop, liquidation estimate, margin impact, and order IDs before signing or confirming. <br>
-Risk: Private key, seed phrase, mnemonic, or raw wallet export disclosure would compromise the user's funds. <br>
-Mitigation: Do not provide wallet secrets to the agent or FarmDash; use only fresh local EIP-712 signatures from the user's Hyperliquid API wallet. <br>
-Risk: Stale strategy data or mutated order parameters can make a signed request unsafe or invalid. <br>
-Mitigation: Re-run strategy analysis when quotes are stale, and use nonce, expiresAt, and intentHash checks so signed actions match the presented order. <br>
-Risk: Oracle latency, price deviation, low liquidity, or conflicting signals can make leveraged execution unsuitable. <br>
-Mitigation: Respect no-trade outcomes, oracle-latency and deviation guardrails, adaptive risk reductions, and explicit user review before any non-reduce-only action. <br>
+## Use Case:
 
+External users and developers use this skill to research Hyperliquid perpetual futures markets, compare funding and technical signals, size positions, and prepare user-approved EIP-712 order or cancellation requests. It is intended for zero-custody workflows where every state-changing action requires current market evidence and explicit manual confirmation.
 
-## Reference(s): <br>
-- [FarmDash agents homepage](https://www.farmdash.one/agents) <br>
-- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist) <br>
-- [Bundled OpenAPI contract](artifact/openapi.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Guidance, JSON, API Calls, Shell commands] <br>
-**Output Format:** [Markdown guidance with structured JSON strategy, sizing, simulation, receipt, and order or cancellation payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scout tier supports up to 5 execution or analysis requests per day; state-changing actions require explicit user confirmation and user-signed EIP-712 authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.20 (source: server release metadata; artifact frontmatter version 3.0.1) <br>
+Risk: The skill can help submit real leveraged futures trades or cancellations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require fresh EIP-712 user signatures and immediate explicit confirmation for every state-changing request.
+
+Risk: Leveraged futures trading can cause financial loss.
+
+Mitigation: Verify order details, sizing, leverage metadata, stop levels, and builder fee terms before signing.
+
+Risk: Credential confusion could lead users to expose sensitive wallet material.
+
+Mitigation: Use FARMDASH_API_KEY only for FarmDash access tier and rate limits; never request or provide private keys, seed phrases, mnemonics, or wallet exports.
+
+Risk: Stale analysis or mismatched delegated accounts can make execution unsafe.
+
+Mitigation: Refresh analysis before execution and verify signer, account owner, nonce, expiry, and intent hash against the current request.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical FarmDash Futures Strategist skill manual](https://www.farmdash.one/openclaw-skills/farmdash-futures-strategist/SKILL.md)
+- [Agent integration documentation](https://www.farmdash.one/docs)
+- [OpenAPI contract](https://www.farmdash.one/agents/openapi.yaml)
+- [Live agent capability status](https://www.farmdash.one/api/v1/agent/status)
+- [Fees and commercial terms](https://www.farmdash.one/fees)
+- [Security and authority boundaries](https://www.farmdash.one/security)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured JSON-compatible tool parameters and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce trading analysis, no-trade outcomes, EIP-712 signing instructions, and user-confirmed execution or cancellation request parameters; private keys and seed phrases are never required.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

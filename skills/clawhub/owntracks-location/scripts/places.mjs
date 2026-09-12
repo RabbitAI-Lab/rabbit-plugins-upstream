@@ -7,19 +7,25 @@
  *   places list [category]
  *   places nearest <lat> <lon> [limit] [max_meters]
  *   places search <query>
- *   places where          # combines OwnTracks latest + nearest place
+ *   places where [--precise]   # nearest named place; --precise adds exact coordinates
  */
-import { existsSync, mkdirSync, readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, chmodSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import Database from "better-sqlite3";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = process.env.OWNTRACKS_DATA || join(__dirname, "data");
-mkdirSync(DATA_DIR, { recursive: true });
+mkdirSync(DATA_DIR, { recursive: true, mode: 0o700 });
+chmodSync(DATA_DIR, 0o700);
 
-const db = new Database(join(DATA_DIR, "places.sqlite"));
+const dbFile = join(DATA_DIR, "places.sqlite");
+const db = new Database(dbFile);
 db.pragma("journal_mode = WAL");
+// Your saved home/work/gym coordinates are as sensitive as the live trail.
+for (const f of [dbFile, dbFile + "-wal", dbFile + "-shm"]) {
+  if (existsSync(f)) chmodSync(f, 0o600);
+}
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS places (
@@ -42,6 +48,7 @@ function haversineSQL() {
 }
 
 const cmd = process.argv[2];
+const precise = process.argv.includes("--precise");
 
 if (cmd === "add") {
   const [, , , name, lat, lon, category, ...notesParts] = process.argv;
@@ -124,7 +131,14 @@ if (cmd === "add") {
   `).all(loc.lat, loc.lat, loc.lon).filter(r => r.distance_m <= 500);
 
   const age = Math.round((Date.now() / 1000 - loc.tst) / 60);
-  console.log(`📍 ${loc.lat}, ${loc.lon} (acc: ${loc.acc}m, ${age}min ago, batt: ${loc.batt}%)`);
+  // Exact coordinates, accuracy and battery level are opt-in: the nearest named
+  // place answers "where am I?" without printing a pinpoint to every caller.
+  if (precise) {
+    console.log(`📍 ${loc.lat}, ${loc.lon} (acc: ${loc.acc}m, ${age}min ago, batt: ${loc.batt}%)`);
+  } else {
+    const round = n => (typeof n === "number" ? n.toFixed(2) : "?");
+    console.log(`📍 ~${round(loc.lat)}, ~${round(loc.lon)} (±1km, ${age}min ago) — add --precise for exact coordinates`);
+  }
   if (rows.length) {
     console.log(`📌 At: ${rows[0].name} — ${Math.round(rows[0].distance_m)}m away [${rows[0].category}]`);
   } else {
@@ -138,7 +152,7 @@ if (cmd === "add") {
   list [category]
   nearest <lat> <lon> [limit=5] [max_meters=500]
   search <query>
-  where   (current location + nearest place)`);
+  where [--precise]   (nearest named place; --precise adds exact coordinates)`);
 }
 
 db.close();

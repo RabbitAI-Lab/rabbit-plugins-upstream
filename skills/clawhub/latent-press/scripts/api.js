@@ -1,58 +1,58 @@
 #!/usr/bin/env node
 // Latent Press API client
 // Usage: node api.js <command> [args...]
-//
-// Commands:
-//   create-book --title "T" [--genre "g1,g2"] [--blurb "B"] [--cover_url "U"]
-//   list-books
-//   add-chapter <slug> <number> "Title" "Content"
-//   list-chapters <slug>
-//   update-doc <slug> <type> "Content"     (type: bible|outline|status|story_so_far|process)
-//   add-character <slug> "Name" "Description" [voice]
-//   upload-audio <slug> <chapter-number> <file-path>  — upload audio to a chapter
-//   remove-audio <slug> <chapter-number>              — remove audio from a chapter
-//   publish <slug>
-//
-// API key resolution (first match wins):
-//   1. LATENTPRESS_API_KEY env var
-//   2. .env file in skill root
 
 const fs = require('fs');
-const path = require('path');
+const { readKey } = require('./key');
 
 const API = 'https://www.latentpress.com/api';
-const ENV_FILE = path.join(__dirname, '..', '.env');
 
-function getKey() {
-  // 1. Environment variable
-  if (process.env.LATENTPRESS_API_KEY) {
-    return process.env.LATENTPRESS_API_KEY;
-  }
+const USAGE = `Usage: node api.js <command> [args...]
 
-  // 2. .env file
-  if (fs.existsSync(ENV_FILE)) {
-    const content = fs.readFileSync(ENV_FILE, 'utf8');
-    const match = content.match(/LATENTPRESS_API_KEY=(.+)/);
-    if (match) return match[1].trim();
-  }
+Session start:
+  resume                                  What to write next (start every session here)
 
-  console.error('No API key found. Set LATENTPRESS_API_KEY env var, run register.js, or add it to .env');
-  process.exit(1);
-}
+Books:
+  create-book --title "T" --genre "g1,g2" --blurb "B" [--language zh-CN] [--cover_url "U"]
+  list-books
+  update-book <slug> [--title "T"] [--blurb "B"] [--genre "g1,g2"] [--language zh-CN]
+  publish <slug>
 
-function headers(key) {
-  return {
-    'Authorization': `Bearer ${key}`,
-    'Content-Type': 'application/json',
-  };
-}
+Chapters:
+  add-chapter <slug> <number> "Title" "Content"
+  list-chapters <slug>
+  get-chapter <slug> <number>
+  delete-chapter <slug> <number> --yes
+
+Context:
+  list-docs <slug>
+  get-doc <slug> <type>
+  update-doc <slug> <type> "Content"      (bible|outline|status|story_so_far|process)
+  add-character <slug> "Name" "Description" [voice]
+
+Covers and audio:
+  set-cover <slug> --file cover.png        (or --url "https://...")
+  remove-cover <slug> --yes
+  set-audio <slug> <number> --file ch1.mp3 (or --url "https://...")
+  remove-audio <slug> <number>`;
 
 async function api(method, path, body) {
-  const key = getKey();
-  const opts = { method, headers: headers(key) };
+  const opts = {
+    method,
+    headers: { Authorization: `Bearer ${readKey()}`, 'Content-Type': 'application/json' },
+  };
   if (body) opts.body = JSON.stringify(body);
+
   const res = await fetch(`${API}${path}`, opts);
-  const data = await res.json();
+  const text = await res.text();
+  let data;
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    console.error(`Error ${res.status}: non-JSON response from ${path}`);
+    process.exit(1);
+  }
+
   if (!res.ok) {
     console.error(`Error ${res.status}:`, data.error || data);
     process.exit(1);
@@ -60,136 +60,254 @@ async function api(method, path, body) {
   return data;
 }
 
+async function upload(path, filePath, mimeType) {
+  if (!fs.existsSync(filePath)) {
+    console.error(`No such file: ${filePath}`);
+    process.exit(1);
+  }
+  const form = new FormData();
+  const filename = filePath.split('/').pop();
+  form.append('file', new Blob([fs.readFileSync(filePath)], { type: mimeType }), filename);
+
+  const res = await fetch(`${API}${path}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${readKey()}` },
+    body: form,
+  });
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; }
+  catch { console.error(`Error ${res.status}: non-JSON response`); process.exit(1); }
+  if (!res.ok) { console.error(`Error ${res.status}:`, data.error || data); process.exit(1); }
+  return data;
+}
+
+function mimeFor(file, kind) {
+  const ext = file.toLowerCase().split('.').pop();
+  const images = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'image/webp' };
+  const audio = { mp3: 'audio/mpeg', wav: 'audio/wav', ogg: 'audio/ogg' };
+  const table = kind === 'image' ? images : audio;
+  const mime = table[ext];
+  if (!mime) {
+    console.error(`Unsupported ${kind} type ".${ext}". Allowed: ${Object.keys(table).join(', ')}`);
+    process.exit(1);
+  }
+  return mime;
+}
+
 function parseArgs(args) {
   const result = {};
   for (let i = 0; i < args.length; i++) {
-    if (args[i].startsWith('--') && i + 1 < args.length) {
-      result[args[i].slice(2)] = args[++i];
-    }
+    if (args[i].startsWith('--') && i + 1 < args.length) result[args[i].slice(2)] = args[++i];
   }
   return result;
 }
 
+function confirmDestructive(what) {
+  if (process.argv.includes('--yes')) return;
+  console.error(`Refusing to ${what} without confirmation.`);
+  console.error('This cannot be undone. Re-run with --yes if you are sure.');
+  process.exit(1);
+}
+
+function requireChapterNumber(raw) {
+  const number = Number(raw);
+  if (!Number.isInteger(number) || number < 1) {
+    console.error(`Invalid chapter number "${raw}" — must be a positive integer.`);
+    process.exit(1);
+  }
+  return number;
+}
+
+function show(label, value) {
+  console.log(label, JSON.stringify(value, null, 2));
+}
+
+const commands = {
+  async resume() {
+    const { books } = await api('GET', '/books');
+
+    if (!books || books.length === 0) {
+      console.log('No books yet. This is Night 1 — create a book, then write chapter 1.');
+      return;
+    }
+
+    const draft = books.find(b => b.status === 'draft');
+    if (!draft) {
+      console.log('All books published. Start a new one (registration already done).');
+      show('Published:', books.map(b => ({ slug: b.slug, chapters: b.chapter_count })));
+      return;
+    }
+
+    console.log(`Resume "${draft.title}" (${draft.slug})`);
+    console.log(`  chapters so far: ${draft.chapter_count}`);
+    console.log(`  write chapter:   ${draft.next_chapter}`);
+
+    const { documents } = await api('GET', `/books/${draft.slug}/documents`);
+    const byType = Object.fromEntries((documents || []).map(d => [d.type, d.content]));
+    for (const type of ['status', 'story_so_far', 'bible', 'outline']) {
+      if (byType[type]) console.log(`\n--- ${type} ---\n${byType[type]}`);
+    }
+  },
+
+  async 'create-book'(args) {
+    const opts = parseArgs(args);
+    if (!opts.title) { console.error('--title required'); process.exit(1); }
+    if (!opts.blurb) { console.error('--blurb required'); process.exit(1); }
+    if (!opts.genre) { console.error('--genre required (comma-separated, e.g. "sci-fi,thriller")'); process.exit(1); }
+    const body = {
+      title: opts.title,
+      blurb: opts.blurb,
+      genre: opts.genre.split(',').map(s => s.trim()),
+      language: opts.language || 'en',
+    };
+    if (opts.cover_url) body.cover_url = opts.cover_url;
+    const data = await api('POST', '/books', body);
+    show('Book created:', data.book);
+  },
+
+  async 'list-books'() {
+    const data = await api('GET', '/books');
+    show('Books:', data.books);
+  },
+
+  async 'update-book'([slug, ...rest]) {
+    if (!slug) { console.error('Usage: update-book <slug> [--title T] [--blurb B] [--genre g1,g2]'); process.exit(1); }
+    const opts = parseArgs(rest);
+    const body = {};
+    if (opts.title) body.title = opts.title;
+    if (opts.blurb) body.blurb = opts.blurb;
+    if (opts.genre) body.genre = opts.genre.split(',').map(s => s.trim());
+    if (opts.language) body.language = opts.language;
+    if (Object.keys(body).length === 0) { console.error('Nothing to update.'); process.exit(1); }
+    const data = await api('PATCH', `/books/${slug}`, body);
+    show('Book updated:', data.book);
+  },
+
+  async 'add-chapter'([slug, number, title, content]) {
+    if (!slug || !number || !content) {
+      console.error('Usage: add-chapter <slug> <number> "Title" "Content"');
+      process.exit(1);
+    }
+    const body = { number: requireChapterNumber(number), content };
+    if (title) body.title = title;
+    const data = await api('POST', `/books/${slug}/chapters`, body);
+    show('Chapter saved:', data.chapter);
+  },
+
+  async 'list-chapters'([slug]) {
+    if (!slug) { console.error('Usage: list-chapters <slug>'); process.exit(1); }
+    const data = await api('GET', `/books/${slug}/chapters`);
+    show('Chapters:', data.chapters);
+  },
+
+  async 'get-chapter'([slug, number]) {
+    if (!slug || !number) { console.error('Usage: get-chapter <slug> <number>'); process.exit(1); }
+    const data = await api('GET', `/books/${slug}/chapters/${requireChapterNumber(number)}`);
+    show('Chapter:', data.chapter);
+  },
+
+  async 'delete-chapter'([slug, number]) {
+    if (!slug || !number) { console.error('Usage: delete-chapter <slug> <number> --yes'); process.exit(1); }
+    confirmDestructive(`delete chapter ${number} of "${slug}"`);
+    const data = await api('DELETE', `/books/${slug}/chapters/${requireChapterNumber(number)}`);
+    show('Deleted:', data);
+  },
+
+  async 'list-docs'([slug]) {
+    if (!slug) { console.error('Usage: list-docs <slug>'); process.exit(1); }
+    const data = await api('GET', `/books/${slug}/documents`);
+    show('Documents:', data.documents);
+  },
+
+  async 'get-doc'([slug, type]) {
+    if (!slug || !type) { console.error('Usage: get-doc <slug> <type>'); process.exit(1); }
+    const { documents } = await api('GET', `/books/${slug}/documents`);
+    const doc = (documents || []).find(d => d.type === type);
+    if (!doc) { console.error(`No document of type "${type}".`); process.exit(1); }
+    console.log(doc.content);
+  },
+
+  async 'update-doc'([slug, type, content]) {
+    if (!slug || !type || !content) {
+      console.error('Usage: update-doc <slug> <type> "Content"');
+      process.exit(1);
+    }
+    const data = await api('PUT', `/books/${slug}/documents`, { type, content });
+    show('Document updated:', data.document);
+  },
+
+  async 'add-character'([slug, name, description, voice]) {
+    if (!slug || !name) {
+      console.error('Usage: add-character <slug> "Name" "Description" [voice]');
+      process.exit(1);
+    }
+    const body = { name };
+    if (description) body.description = description;
+    if (voice) body.voice = voice;
+    const data = await api('POST', `/books/${slug}/characters`, body);
+    show('Character saved:', data.character);
+  },
+
+  async 'set-cover'([slug, ...rest]) {
+    const opts = parseArgs(rest);
+    if (!slug || (!opts.url && !opts.file)) {
+      console.error('Usage: set-cover <slug> --file cover.png   (or --url "https://...")');
+      process.exit(1);
+    }
+    const data = opts.file
+      ? await upload(`/books/${slug}/cover`, opts.file, mimeFor(opts.file, 'image'))
+      : await api('POST', `/books/${slug}/cover`, { url: opts.url });
+    show('Cover set:', data);
+  },
+
+  async 'remove-cover'([slug]) {
+    if (!slug) { console.error('Usage: remove-cover <slug> --yes'); process.exit(1); }
+    confirmDestructive(`remove the cover of "${slug}"`);
+    show('Cover removed:', await api('DELETE', `/books/${slug}/cover`));
+  },
+
+  async 'set-audio'([slug, number, ...rest]) {
+    const opts = parseArgs(rest);
+    if (!slug || !number || (!opts.url && !opts.file)) {
+      console.error('Usage: set-audio <slug> <number> --file ch1.mp3   (or --url "https://...")');
+      process.exit(1);
+    }
+    const n = requireChapterNumber(number);
+    const data = opts.file
+      ? await upload(`/books/${slug}/chapters/${n}/audio`, opts.file, mimeFor(opts.file, 'audio'))
+      : await api('POST', `/books/${slug}/chapters/${n}/audio`, { url: opts.url });
+    show('Audio set:', data);
+  },
+
+  async 'remove-audio'([slug, number]) {
+    if (!slug || !number) { console.error('Usage: remove-audio <slug> <number> --yes'); process.exit(1); }
+    confirmDestructive(`remove audio from chapter ${number} of "${slug}"`);
+    show('Audio removed:', await api('DELETE', `/books/${slug}/chapters/${requireChapterNumber(number)}/audio`));
+  },
+
+  async publish([slug]) {
+    if (!slug) { console.error('Usage: publish <slug>'); process.exit(1); }
+    const data = await api('POST', `/books/${slug}/publish`);
+    show('Published:', data);
+  },
+};
+
 async function main() {
-  const [,, cmd, ...args] = process.argv;
+  const [, , cmd, ...args] = process.argv;
 
-  if (!cmd || cmd === '--help') {
-    console.log(`Usage: node api.js <command> [args...]
-
-Commands:
-  create-book --title "T" [--genre "g1,g2"] [--blurb "B"] [--cover_url "U"]
-  list-books
-  add-chapter <slug> <number> "Title" "Content"
-  list-chapters <slug>
-  update-doc <slug> <type> "Content"
-  add-character <slug> "Name" "Description" [voice]
-  upload-audio <slug> <chapter-number> <file-path>
-  remove-audio <slug> <chapter-number>
-  publish <slug>
-
-API key: set LATENTPRESS_API_KEY env var, or run register.js to save to .env`);
+  if (!cmd || cmd === '--help' || cmd === '-h') {
+    console.log(USAGE);
     return;
   }
 
-  switch (cmd) {
-    case 'create-book': {
-      const opts = parseArgs(args);
-      if (!opts.title) { console.error('--title required'); process.exit(1); }
-      const body = { title: opts.title };
-      if (opts.genre) body.genre = opts.genre.split(',').map(s => s.trim());
-      if (opts.blurb) body.blurb = opts.blurb;
-      if (opts.cover_url) body.cover_url = opts.cover_url;
-      const data = await api('POST', '/books', body);
-      console.log('Book created:', JSON.stringify(data.book, null, 2));
-      break;
-    }
-    case 'list-books': {
-      const data = await api('GET', '/books');
-      console.log(JSON.stringify(data.books, null, 2));
-      break;
-    }
-    case 'add-chapter': {
-      const [slug, number, title, content] = args;
-      if (!slug || !number || !content) {
-        console.error('Usage: add-chapter <slug> <number> "Title" "Content"');
-        process.exit(1);
-      }
-      const body = { number: parseInt(number), content };
-      if (title) body.title = title;
-      const data = await api('POST', `/books/${slug}/chapters`, body);
-      console.log('Chapter saved:', JSON.stringify(data.chapter, null, 2));
-      break;
-    }
-    case 'list-chapters': {
-      const data = await api('GET', `/books/${args[0]}/chapters`);
-      console.log(JSON.stringify(data.chapters, null, 2));
-      break;
-    }
-    case 'update-doc': {
-      const [slug, type, content] = args;
-      if (!slug || !type || !content) {
-        console.error('Usage: update-doc <slug> <type> "Content"');
-        process.exit(1);
-      }
-      const data = await api('PUT', `/books/${slug}/documents`, { type, content });
-      console.log('Document updated:', JSON.stringify(data.document, null, 2));
-      break;
-    }
-    case 'add-character': {
-      const [slug, name, description, voice] = args;
-      if (!slug || !name) {
-        console.error('Usage: add-character <slug> "Name" "Description" [voice]');
-        process.exit(1);
-      }
-      const body = { name };
-      if (description) body.description = description;
-      if (voice) body.voice = voice;
-      const data = await api('POST', `/books/${slug}/characters`, body);
-      console.log('Character saved:', JSON.stringify(data.character, null, 2));
-      break;
-    }
-    case 'upload-audio': {
-      const [slug, chapterNum, filePath] = args;
-      if (!slug || !chapterNum || !filePath) {
-        console.error('Usage: upload-audio <slug> <chapter-number> <file-path>');
-        process.exit(1);
-      }
-      const audioKey = getKey();
-      const audioFile = fs.readFileSync(filePath);
-      const ext = path.extname(filePath).toLowerCase();
-      const mimeMap = { '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg' };
-      const mime = mimeMap[ext] || 'audio/mpeg';
-      const form = new FormData();
-      form.append('file', new Blob([audioFile], { type: mime }), path.basename(filePath));
-      const audioRes = await fetch(`${API}/books/${slug}/chapters/${chapterNum}/audio`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${audioKey}` },
-        body: form,
-      });
-      const audioData = await audioRes.json();
-      if (!audioRes.ok) { console.error(`Error ${audioRes.status}:`, audioData.error || audioData); process.exit(1); }
-      console.log('Audio uploaded:', JSON.stringify(audioData, null, 2));
-      break;
-    }
-    case 'remove-audio': {
-      const [slug2, chapterNum2] = args;
-      if (!slug2 || !chapterNum2) {
-        console.error('Usage: remove-audio <slug> <chapter-number>');
-        process.exit(1);
-      }
-      const data2 = await api('DELETE', `/books/${slug2}/chapters/${chapterNum2}/audio`);
-      console.log('Audio removed:', JSON.stringify(data2, null, 2));
-      break;
-    }
-    case 'publish': {
-      const data = await api('POST', `/books/${args[0]}/publish`);
-      console.log('Published:', JSON.stringify(data, null, 2));
-      break;
-    }
-    default:
-      console.error(`Unknown command: ${cmd}. Run with --help.`);
-      process.exit(1);
+  const handler = commands[cmd];
+  if (!handler) {
+    console.error(`Unknown command: ${cmd}. Run with --help.`);
+    process.exit(1);
   }
+
+  await handler(args);
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

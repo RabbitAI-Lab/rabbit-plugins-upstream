@@ -1,43 +1,64 @@
-## Description: <br>
-Detect whether an image, video, or audio file is AI-generated, including visual deepfakes and the likely generator model, and return confidence scores for threshold-based decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect whether an image, video, or audio file is AI-generated, including visual deepfakes and likely generator attribution, and return confidence scores for review.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, analysts, and other external users use this skill to check image, video, or audio media for signs of AI generation, visual deepfakes, and likely generator attribution. It is intended for media analysis workflows where a structured verdict and confidence scores help inform human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local images, videos, or audio files can be uploaded to dLazy hosted services for analysis. <br>
-Mitigation: Use public URLs for less sensitive material when possible, and avoid sending private, biometric, or otherwise sensitive media unless the user has accepted that data handling. <br>
-Risk: The CLI can store a dLazy API key in the user's local configuration. <br>
-Mitigation: Use a per-invocation DLAZY_API_KEY environment variable for short-lived access or log out after use when persistent local credentials are not appropriate. <br>
+## Use Case:
 
+External users, developers, and content-review workflows use this skill to ask an agent to run dLazy media detection for images, videos, or audio. It helps review whether media appears AI-generated, contains a deepfake, or matches a likely generator model.
 
-## Reference(s): <br>
-- [Dlazy Detect on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-detect) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Text, Guidance] <br>
-**Output Format:** [JSON detection result plus a human-readable text summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires exactly one image, video, or audio input. Local files may be uploaded to dLazy media storage for hosted analysis; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Selected local media may be uploaded to dLazy media storage and sent to the hosted dLazy detection service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media approved for third-party processing, and avoid private or sensitive files unless that sharing is acceptable.
+
+Risk: The dLazy API key may be stored in local CLI configuration or supplied through an environment variable.
+
+Mitigation: Protect the local configuration and environment, use per-user credentials, and rotate the key if it is exposed.
+
+Risk: Broad detect-related triggers could invoke the hosted service when the user intended a different kind of detection.
+
+Mitigation: Confirm that the request is specifically for AI media detection before running the command.
+
+Risk: Detection verdicts are confidence-based and may be sensitive to thresholds or media quality.
+
+Mitigation: Treat results as decision support and review raw confidence scores before taking consequential action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-detect)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Text and JSON detection results with optional shell commands for authentication and execution.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results include confidence scores, boolean verdict fields, likely generator attribution when available, and asynchronous task identifiers when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

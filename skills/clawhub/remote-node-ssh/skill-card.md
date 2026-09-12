@@ -1,44 +1,54 @@
-## Description: <br>
-Run commands and transfer files between an OpenClaw gateway and a paired local node via node protocol or SSH fallback. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run commands and transfer files between an OpenClaw Gateway and a paired local node using the node protocol when connected and least-privilege SSH fallback when needed.
 
-## Publisher: <br>
-[jkfaris94](https://clawhub.ai/user/jkfaris94) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jkfaris94](https://clawhub.ai/user/jkfaris94)
 
-## Use Case: <br>
-Developers and operators use this skill to run commands, transfer files, check node status, and recover from disconnects for an already paired OpenClaw node. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Commands and file transfers can affect a paired remote node or move unintended files. <br>
-Mitigation: Confirm the node target or SSH alias before use, review commands and paths carefully, and use least-privilege SSH accounts. <br>
-Risk: Long-running nohup or tmux sessions can continue after the initiating agent session ends. <br>
-Mitigation: Use explicit process names, log paths, and follow-up status checks so work can be monitored and stopped when needed. <br>
-Risk: SSH fallback depends on network reachability and correct local SSH configuration. <br>
-Mitigation: Check node status first, verify SSH reachability with a harmless command, and recover the paired node service only through the remote machine's normal service manager. <br>
+## Use Case:
 
+Developers and engineers use this skill to operate a paired OpenClaw node from a Gateway, choose node protocol or SSH transport, transfer files, and recover from disconnect or reapproval states.
 
-## Reference(s): <br>
-- [Remote Node SSH homepage](https://github.com/kanso-agent/remote-node-ssh) <br>
-- [Hybrid Gateway setup skill](https://clawhub.ai/skills/hybrid-gateway) <br>
-- [ClawHub release page](https://clawhub.ai/jkfaris94/remote-node-ssh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline tool and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release evidence) <br>
+Risk: Agent operation of a paired node can execute commands or transfer files beyond the intended workflow if SSH access or command allowlists are too broad.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a non-root, key-only SSH account on a private route, keep allowlists narrow, require approvals on misses, and review rsync previews before applying transfers.
+
+Risk: Long-running remote tasks can continue unattended after an agent turn ends.
+
+Mitigation: Run tasks that outlive invoke timeouts only under an explicitly approved supervised workflow with a named owner and a way to stop it.
+
+## Reference(s):
+
+- [Remote Node SSH homepage](https://github.com/jkfaris94/remote-node-ssh)
+- [Hybrid Gateway setup and security contract](https://github.com/jkfaris94/hybrid-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with bash, tool, and SSH configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes transport selection, SSH setup, file transfer, status checks, and recovery steps.]
+
+## Skill Version(s):
+
+1.1.0 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

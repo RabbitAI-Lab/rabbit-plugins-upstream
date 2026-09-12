@@ -1,0 +1,346 @@
+{
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAYkqirBNK6598dX3M+KzBaGd7ZBOSVG1tgZYOFQUH8k8=\n-----END PUBLIC KEY-----\n",
+  "check_chain": false,
+  "receipts": [
+    {
+      "version": "1.1.0",
+      "decision_id": "dec-batch-000",
+      "timestamp": "2026-09-05T07:58:24Z",
+      "agent_id": "agent-test-0",
+      "session_id": "sess-0001",
+      "tool": "http.request",
+      "action": "POST",
+      "request": {
+        "url": "https://api.example.com/v1/items/0",
+        "method": "POST",
+        "body": {
+          "seq": 0
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "seq": 0
+        }
+      },
+      "checks": {
+        "structure": {
+          "status": "pass",
+          "detail": "structure check pass"
+        },
+        "schema": {
+          "status": "pass",
+          "detail": "schema check pass"
+        },
+        "latency": {
+          "status": "pass",
+          "detail": "latency check pass"
+        },
+        "cost": {
+          "status": "pass",
+          "detail": "cost check pass"
+        },
+        "identity": {
+          "status": "pass",
+          "detail": "identity check pass"
+        },
+        "integrity": {
+          "status": "pass",
+          "detail": "integrity check pass"
+        },
+        "security": {
+          "status": "pass",
+          "detail": "security check pass"
+        }
+      },
+      "verdict": "allow",
+      "reason": "batch fixture 0: 7/7 checks passed",
+      "policy_id": "pol-default",
+      "policy_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_hash": "21a578764a9c8e72cd50ae3e9be26c16a41d2afb8958580451c5bbc71037cca4",
+      "previous_receipt_hash": null,
+      "issuer": "correctover",
+      "public_key_id": "k916a98237c8f",
+      "nonce": "nb85860af95ff94ab",
+      "latency_ms": 0.42,
+      "metadata": {
+        "batch": true,
+        "seq": 0
+      },
+      "signature": "0XlC8WNVtWQkSJJKCJqKS3lvfPYM2hCjEz4p/CwkJ0mpbMGKff/ZDdu6eL93ICd86Inbz9TcXMdLZx+x4ML8Aw=="
+    },
+    {
+      "version": "1.1.0",
+      "decision_id": "dec-batch-001",
+      "timestamp": "2026-09-05T07:58:24Z",
+      "agent_id": "agent-test-1",
+      "session_id": "sess-0001",
+      "tool": "http.request",
+      "action": "POST",
+      "request": {
+        "url": "https://api.example.com/v1/items/1",
+        "method": "POST",
+        "body": {
+          "seq": 1
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "seq": 1
+        }
+      },
+      "checks": {
+        "structure": {
+          "status": "pass",
+          "detail": "structure check pass"
+        },
+        "schema": {
+          "status": "pass",
+          "detail": "schema check pass"
+        },
+        "latency": {
+          "status": "pass",
+          "detail": "latency check pass"
+        },
+        "cost": {
+          "status": "pass",
+          "detail": "cost check pass"
+        },
+        "identity": {
+          "status": "pass",
+          "detail": "identity check pass"
+        },
+        "integrity": {
+          "status": "pass",
+          "detail": "integrity check pass"
+        },
+        "security": {
+          "status": "pass",
+          "detail": "security check pass"
+        }
+      },
+      "verdict": "allow",
+      "reason": "batch fixture 1: 7/7 checks passed",
+      "policy_id": "pol-default",
+      "policy_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_hash": "ee35951d3c19019821c9a7be3141dc525f23a8e892c36070c0e7bf4b7972230c",
+      "previous_receipt_hash": null,
+      "issuer": "correctover",
+      "public_key_id": "k916a98237c8f",
+      "nonce": "nb21f71b2f243e31d",
+      "latency_ms": 0.42,
+      "metadata": {
+        "batch": true,
+        "seq": 1
+      },
+      "signature": "KhoY2JTjafRRR8BYFlQJlZcg+lE319PRwLP/l0IqXz7oFo1yKRH9iSzPqEXLI+xzRJCahM4RU2pMDk6z6+eyDA=="
+    },
+    {
+      "version": "1.1.0",
+      "decision_id": "dec-batch-002",
+      "timestamp": "2026-09-05T07:58:24Z",
+      "agent_id": "agent-test-2",
+      "session_id": "sess-0001",
+      "tool": "http.request",
+      "action": "POST",
+      "request": {
+        "url": "https://api.example.com/v1/items/2",
+        "method": "POST",
+        "body": {
+          "seq": 2
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "seq": 2
+        }
+      },
+      "checks": {
+        "structure": {
+          "status": "pass",
+          "detail": "structure check pass"
+        },
+        "schema": {
+          "status": "pass",
+          "detail": "schema check pass"
+        },
+        "latency": {
+          "status": "pass",
+          "detail": "latency check pass"
+        },
+        "cost": {
+          "status": "pass",
+          "detail": "cost check pass"
+        },
+        "identity": {
+          "status": "pass",
+          "detail": "identity check pass"
+        },
+        "integrity": {
+          "status": "pass",
+          "detail": "integrity check pass"
+        },
+        "security": {
+          "status": "pass",
+          "detail": "security check pass"
+        }
+      },
+      "verdict": "allow",
+      "reason": "batch fixture 2: 7/7 checks passed",
+      "policy_id": "pol-default",
+      "policy_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_hash": "d718e07148e6a241744efee4736e0f9be0dd5565c1242e24bb2c44cf226c22fe",
+      "previous_receipt_hash": null,
+      "issuer": "correctover",
+      "public_key_id": "k916a98237c8f",
+      "nonce": "n286e107d99bdba43",
+      "latency_ms": 0.42,
+      "metadata": {
+        "batch": true,
+        "seq": 2
+      },
+      "signature": "XCoYwx3JVwlynHP8UwK2Jxmf+4MdO8n21ErAmNFVAIds/2JdJfhG2+upWBKbAZvwBRvAzqwwTtSalkDPupmpDQ=="
+    },
+    {
+      "version": "1.1.0",
+      "decision_id": "dec-batch-003",
+      "timestamp": "2026-09-05T07:58:24Z",
+      "agent_id": "agent-test-3",
+      "session_id": "sess-0001",
+      "tool": "http.request",
+      "action": "POST",
+      "request": {
+        "url": "https://api.example.com/v1/items/3",
+        "method": "POST",
+        "body": {
+          "seq": 3
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "seq": 3
+        }
+      },
+      "checks": {
+        "structure": {
+          "status": "pass",
+          "detail": "structure check pass"
+        },
+        "schema": {
+          "status": "pass",
+          "detail": "schema check pass"
+        },
+        "latency": {
+          "status": "pass",
+          "detail": "latency check pass"
+        },
+        "cost": {
+          "status": "pass",
+          "detail": "cost check pass"
+        },
+        "identity": {
+          "status": "pass",
+          "detail": "identity check pass"
+        },
+        "integrity": {
+          "status": "pass",
+          "detail": "integrity check pass"
+        },
+        "security": {
+          "status": "pass",
+          "detail": "security check pass"
+        }
+      },
+      "verdict": "allow",
+      "reason": "batch fixture 3: 7/7 checks passed",
+      "policy_id": "pol-default",
+      "policy_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_hash": "49fe0cd29e237d14664b61ab9b06032f9cf975c32a841e666237e22e90b1fcae",
+      "previous_receipt_hash": null,
+      "issuer": "correctover",
+      "public_key_id": "k916a98237c8f",
+      "nonce": "nc1e3e036fc6c575d",
+      "latency_ms": 0.42,
+      "metadata": {
+        "batch": true,
+        "seq": 3
+      },
+      "signature": "jLsUT8tvSeF7MUQfDHLpNdRzQhb3kaHB33IOb/6Ozk4zmBvziZv5xKF7ta75vc+2vkUHw5tkWC0mVtXEFTFlAQ=="
+    },
+    {
+      "version": "1.1.0",
+      "decision_id": "dec-batch-004",
+      "timestamp": "2026-09-05T07:58:24Z",
+      "agent_id": "agent-test-4",
+      "session_id": "sess-0001",
+      "tool": "http.request",
+      "action": "POST",
+      "request": {
+        "url": "https://api.example.com/v1/items/4",
+        "method": "POST",
+        "body": {
+          "seq": 4
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "seq": 4
+        }
+      },
+      "checks": {
+        "structure": {
+          "status": "pass",
+          "detail": "structure check pass"
+        },
+        "schema": {
+          "status": "pass",
+          "detail": "schema check pass"
+        },
+        "latency": {
+          "status": "pass",
+          "detail": "latency check pass"
+        },
+        "cost": {
+          "status": "pass",
+          "detail": "cost check pass"
+        },
+        "identity": {
+          "status": "pass",
+          "detail": "identity check pass"
+        },
+        "integrity": {
+          "status": "pass",
+          "detail": "integrity check pass"
+        },
+        "security": {
+          "status": "fail",
+          "detail": "security check pass"
+        }
+      },
+      "verdict": "block",
+      "reason": "blocked by security check",
+      "policy_id": "pol-default",
+      "policy_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "content_hash": "619eacd927594f62d3d8ef4abff38c1e46fafbffe4e4051aa8902e72d0eb4e2c",
+      "previous_receipt_hash": null,
+      "issuer": "correctover",
+      "public_key_id": "k916a98237c8f",
+      "nonce": "n644cdfadb80cadfa",
+      "latency_ms": 0.42,
+      "metadata": {
+        "batch": true,
+        "seq": 4
+      },
+      "signature": "lHHRZKZszLr7K7lI4DkCTBHZ9B/2VxTD8Ume1JRKQYX11Px121qxqt/dRFip9p/Q0AhYABY96RGY8royK0dzDw=="
+    }
+  ]
+}

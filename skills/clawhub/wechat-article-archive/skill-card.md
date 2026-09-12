@@ -1,43 +1,54 @@
-## Description: <br>
-Save WeChat Official Account articles and image-note / Xiaolushu pages from mp.weixin.qq.com into a user-specified local folder as Markdown plus local assets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Archives WeChat Official Account articles and image-note pages from mp.weixin.qq.com into a local Markdown file with copied image assets.
 
-## Publisher: <br>
-[harven-droid](https://clawhub.ai/user/harven-droid) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[harven-droid](https://clawhub.ai/user/harven-droid)
 
-## Use Case: <br>
-External users and developers use this skill to archive WeChat Official Account articles or image-note pages into a local folder as Markdown with copied image assets. It is suited for local preservation and review workflows, not cloud import or message sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill fetches WeChat content and downloads referenced images from the network. <br>
-Mitigation: Use it only for user-selected WeChat URLs or trusted saved HTML, and refresh dependencies from trusted registries. <br>
-Risk: The skill writes Markdown and image files into a user-selected local directory. <br>
-Mitigation: Use a dedicated output folder and review generated file paths and image failure reports before relying on the archive. <br>
-Risk: A custom NODE path can change which runtime executes the bundled extractor. <br>
-Mitigation: Avoid setting NODE unless the runtime path is trusted. <br>
+## Use Case:
 
+External users and developers use this skill to save WeChat articles or image notes into a chosen local folder as Markdown plus local assets for offline reference and review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/harven-droid/skills/wechat-article-archive) <br>
-- [Publisher Profile](https://clawhub.ai/user/harven-droid) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown files with local image assets and JSON execution summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or reuses a destination folder, writes an assets subdirectory, and reports paths, image counts, and image download failures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata) <br>
+Risk: Image downloads may cause the local machine to fetch internal or very large non-image content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use --skip-images for lower-risk archives, or deploy only after restricting image downloads to approved HTTPS WeChat/CDN hosts with redirect checks and response-size limits.
+
+Risk: The skill runs local Python and Node code, installs npm and pip dependencies, fetches WeChat pages, and writes Markdown plus assets to a user-selected folder.
+
+Mitigation: Install and run it only in an environment where these local execution, network, dependency, and filesystem effects are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/harven-droid/skills/wechat-article-archive)
+- [Publisher profile](https://clawhub.ai/user/harven-droid)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown files with local asset links, local image files, and JSON status output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports Markdown path, assets directory, image counts, and image download failures; supports skipping image downloads.]
+
+## Skill Version(s):
+
+1.1.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

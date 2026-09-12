@@ -1,0 +1,21 @@
+{
+  "name": "watchitai",
+  "version": "2.2.0",
+  "description": "WatchItAI - Cross-platform screen sharing and remote control skill (self-contained Go binary, no Node.js required)",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://watchitai.net",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/watchitai/watchitai-skill"
+  },
+  "keywords": [
+    "watchitai",
+    "webrtc",
+    "screen-sharing",
+    "remote-control",
+    "p2p",
+    "monitoring"
+  ]
+}

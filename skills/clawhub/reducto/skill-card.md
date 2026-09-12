@@ -1,46 +1,68 @@
-## Description: <br>
-Reducto provides a document processing API integration through Maton-managed authentication for parsing, extraction, splitting, uploads, jobs, pipelines, and PDF or DOCX edits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reducto document processing API integration with managed API key authentication for parsing, extracting, splitting, and editing documents.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Reducto document workflows from ClawHub, including parsing documents, extracting structured fields, splitting content into sections, editing PDFs or DOCX files, uploading files, and polling asynchronous jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Document data is sent to Maton and Reducto for processing. <br>
-Mitigation: Use the skill only when that transfer is acceptable, and avoid sensitive or regulated documents unless the user has approved the transfer and compliance requirements are satisfied. <br>
-Risk: MATON_API_KEY is a sensitive credential required for all requests. <br>
-Mitigation: Use a dedicated API key where possible, keep the key out of logs and chat transcripts, and rotate it if exposure is suspected. <br>
-Risk: Uploads, document edits, connection changes, and delete operations can change documents or account state. <br>
-Mitigation: Require clear user confirmation before any upload, create, update, edit, connection-management, or delete operation, including the target resource and intended effect. <br>
+## Use Case:
 
+Developers and external users use this skill to access Reducto document processing through Maton, including document parsing, structured extraction, splitting, editing, uploads, pipelines, and job status checks.
 
-## Reference(s): <br>
-- [ClawHub Reducto Skill](https://clawhub.ai/byungkyu/reducto) <br>
-- [Maton](https://maton.ai) <br>
-- [Reducto Documentation](https://docs.reducto.ai) <br>
-- [Reducto API Reference](https://docs.reducto.ai/api-reference) <br>
-- [Reducto Studio](https://studio.reducto.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API requests] <br>
-**Output Format:** [Markdown with inline Bash, Python, JavaScript, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses may include processed document content, job status, usage data, and presigned upload URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence; artifact frontmatter says 1.0) <br>
+Risk: The authenticated API passthrough can reach endpoints beyond the documented examples when the connection permits it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read and list calls, use the narrowest available Reducto scopes, specify the intended connection when multiple accounts exist, and confirm every write or delete request before execution.
+
+Risk: Third-party installation and long-lived credential handling can expose Maton or Reducto access.
+
+Mitigation: Install only official Maton packages, avoid administrator privileges unless needed, prefer OAuth over API keys, and never print, log, persist, or pass credentials on command lines.
+
+Risk: Deleting a connection is irreversible and can break automation using that connection.
+
+Mitigation: List connections first, confirm the exact connection identifier with the user, and use deletion only after explicit approval.
+
+Risk: Document-processing responses can contain personal, confidential, or sensitive content.
+
+Mitigation: Extract only the fields needed for the task and avoid dumping full raw responses into logs, files, or user-visible output unless specifically requested.
+
+## Reference(s):
+
+- [Reducto Documentation](https://docs.reducto.ai)
+- [Reducto API Reference](https://docs.reducto.ai/api-reference)
+- [Reducto Studio](https://studio.reducto.ai)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Community](https://community.maton.ai/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Code]
+
+**Output Format:** [Markdown with bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Reducto connection.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

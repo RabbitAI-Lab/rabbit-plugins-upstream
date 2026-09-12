@@ -1,46 +1,64 @@
-## Description: <br>
-Implements energy-efficient, harm-reducing memory and pattern governance that preserves ecological variance and excludes identity tracking or profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when designing, reviewing, or operating memory, recall, and pattern-stewardship systems for agentic AI where harm reduction, non-identifiability, consent-scoped recall, and energy restraint are required; this is a specification of invariants, not a runtime.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Developers and agent designers use this skill as guidance for building non-identifying memory, recall, and pattern governance that reduces harmful retention, profiling, and energy-heavy long-context behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill describes persistent memory and non-transparent safety behaviors that may narrow or degrade responses under suspected misuse. <br>
-Mitigation: Install only with host controls that make storage, retention, opt-in sharing, audit visibility, and deletion verification clear to users. <br>
-Risk: Privacy, deletion, identity-vault, and sharing guarantees depend on the host implementation. <br>
-Mitigation: Review implementation controls before relying on the skill's privacy, deletion, identity separation, or sharing claims. <br>
+## Use Case:
 
+Developers, reviewers, and operators use this skill to specify or audit memory and recall systems against non-identifiability, consent scope, honest refusal, energy restraint, and pattern-stewardship requirements. It supports design review and conformance planning rather than installing or running a memory service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/regenerative-intelligence) <br>
-- [Publisher profile](https://clawhub.ai/user/otherpowers) <br>
-- [Regenerative Intelligence Skill Specification](artifact/skill.md) <br>
-- [Architecture](artifact/architecture.md) <br>
-- [Metadata Schema](artifact/metadata-schema.md) <br>
-- [Threat Model](artifact/threat-model.md) <br>
-- [Energy Accounting](artifact/energy-accounting.md) <br>
-- [Non-Goals](artifact/non-goals.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Markdown documentation with memory schema and governance guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces architectural guidance for persistent memory, recall boundaries, metadata, stasis behavior, and non-identifying audit practices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Readers may mistake the bundle for an implemented memory system or deployed security control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat it as a design checklist only; review any implementation's actual storage, deletion, audit, identity-vault, and user-consent controls before relying on conformance.
+
+Risk: An implementation could claim conformance without test evidence.
+
+Mitigation: Use the bundled conformance checklist and publish criterion-level results, including any unmet criteria and the numeric defaults in force.
+
+Risk: Memory-governance implementations can introduce identity, surveillance, or hidden-storage risk if core controls are omitted.
+
+Mitigation: Require non-identifiability, no behavioral telemetry, Trust Vault separation for execution-only identity, aggregate-only audit, and plainly announced boundaries before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/otherpowers/skills/regenerative-intelligence)
+- [Publisher profile](https://clawhub.ai/user/otherpowers)
+- [README](artifact/README.md)
+- [Skill specification](artifact/SKILL.md)
+- [Conformance checklist](artifact/conformance-checklist.md)
+- [Threat model](artifact/threat-model.md)
+- [Metadata schema](artifact/metadata-schema.md)
+- [Energy accounting](artifact/energy-accounting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance, specifications, schemas, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; no code execution, API calls, credentials, or persistent storage.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact status says 1.1.0 specification draft)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

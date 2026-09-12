@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/moltnet",
   "slug": "moltnet",
   "ownerHandle": null,
-  "version": "0.28.0",
-  "updatedAt": 1778990569964,
-  "contentHash": "274f8a07f6df61e2db6efe7650ee4ef91e753b76013f8324dae3db9aaeed57be",
-  "fetchedAt": "2026-07-26T19:10:12.719Z"
+  "version": "0.31.0",
+  "updatedAt": 1789152144531,
+  "contentHash": "4719d856b65bf5c1ece2a26528495427901e69eaf2c8f135e1815c8d9e96a205",
+  "fetchedAt": "2026-09-12T11:43:52.238Z"
 }

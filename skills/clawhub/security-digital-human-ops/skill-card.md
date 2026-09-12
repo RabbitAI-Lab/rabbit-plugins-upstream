@@ -1,42 +1,52 @@
-## Description: <br>
-AI-powered digital human operations assistant for financial institutions covering script design, content planning, live streaming management, interaction optimization, and performance analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered digital human operations assistant for financial institutions that supports script design, content planning, live streaming management, interaction optimization, and performance analytics.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Bank and insurance digital marketing teams use this skill to draft digital human scripts, plan content calendars, prepare live streaming operations, design interaction patterns, and review performance. Its regulatory summaries, templates, and sample scripts are planning aids that require current legal and compliance review before publication.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Regulatory summaries or financial marketing guidance may be outdated or misapplied to a specific institution, product, or channel.
+
+Mitigation: Verify recommendations against current official rules and route scripts, calendars, and campaign plans through legal and compliance review before publication.
+
+Risk: Generated scripts or live streaming plans may omit required AI identity disclosures, financial risk notices, source attribution, or content authorization records.
+
+Mitigation: Require human approval, banned-claim checks, disclosure checks, and material authorization tracking before publishing or archiving digital human content.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Bank and insurance digital marketing teams use this skill to plan and generate digital-human scripts, content calendars, live-stream interaction designs, and performance-analysis guidance. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Code, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated scripts or campaign plans could conflict with advertising or financial-marketing compliance requirements. <br>
-Mitigation: Review generated content against applicable advertising and financial-marketing rules before publication. <br>
-Risk: Regulatory-update content is advisory and may become stale or incomplete. <br>
-Mitigation: Confirm regulatory claims against current official sources before using them in customer-facing materials. <br>
-Risk: Performance analytics workflows could expose customer communications, account data, or confidential business records if raw data is used. <br>
-Mitigation: Use aggregated or anonymized metrics and avoid entering sensitive customer or business data. <br>
+**Output Format:** [Markdown with tables, checklists, and code blocks]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/security-digital-human-ops) <br>
+**Other Properties Related to Output:** [Guidance-only outputs for campaign planning, scripts, compliance review workflows, and analytics; human approval is required before use in public financial marketing.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured templates and illustrative code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory content for financial digital-human marketing workflows; generated scripts and metrics guidance should be reviewed before use.] <br>
+3.0.3 (source: frontmatter and release evidence)
 
-## Skill Version(s): <br>
-3.0.1 (source: server evidence and frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

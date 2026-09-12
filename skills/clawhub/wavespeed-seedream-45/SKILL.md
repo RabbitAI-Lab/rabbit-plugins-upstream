@@ -3,63 +3,56 @@ name: wavespeed-seedream-45
 description: Generate and edit images using ByteDance's Seedream V4.5 model via WaveSpeed AI. Supports text-to-image generation and multi-image editing with custom resolutions up to 4096x4096. Features enhanced typography for posters and logos. Use when the user wants to create or edit images with high-quality text rendering.
 metadata:
   author: wavespeedai
-  version: "1.0"
+  version: "2.0"
 ---
 
 # WaveSpeedAI Seedream V4.5 Image Generation/Editing
 
 Generate and edit images using ByteDance's Seedream V4.5 model via the WaveSpeed AI platform. Supports custom resolutions up to 4096x4096 with enhanced typography for sharp text rendering in posters and logos.
 
-## Authentication
+## Setup
+
+Install the open-source CLI once and sign in; the CLI stores the key, so never ask the user to paste an API key into the chat:
 
 ```bash
-export WAVESPEED_API_KEY="your-api-key"
+npm install -g @wavespeed/cli
+wavespeed login          # opens https://wavespeed.ai/accesskey and stores the key
+wavespeed status         # confirms you are signed in
 ```
 
-Get your API key at [wavespeed.ai/accesskey](https://wavespeed.ai/accesskey).
+For CI or one-off shells, `WAVESPEED_API_KEY` in the environment also works.
+
+Prefer MCP tools over shell commands? The same platform is exposed by [`@wavespeed/mcp`](https://github.com/WaveSpeedAI/mcp-server) (`npx -y @wavespeed/mcp`; tools `search_models`, `get_model_schema`, `get_price`, `upload_file`, `run_model`, `get_prediction`). It shares the CLI's stored login. Every example below maps one-to-one onto `run_model` with the same model id and input fields.
 
 ## Quick Start
 
 ### Text-to-Image
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5",
-  { prompt: "A minimalist coffee shop logo with clean typography" }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5 \
+  -p "A minimalist coffee shop logo with clean typography" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image Editing
 
-The `images` parameter accepts an array of image URLs (1-10 images). If you have local files, upload them first with `wavespeed.upload()` to get a URL.
+The `images` parameter accepts an array of image URLs (1-10 images). For local files use the `@path` marker; the CLI uploads them for you.
 
-```javascript
-import wavespeed from 'wavespeed';
-
-// Upload a local image to get a URL
-const imageUrl = await wavespeed.upload("/path/to/photo.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5/edit",
-  {
-    images: [imageUrl],
-    prompt: "Add warm sunset lighting and lens flare"
-  }
-))["outputs"][0];
+```bash
+# Upload a local image to get a URL
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5/edit \
+  -i images='["@./photo.png"]' \
+  -p "Add warm sunset lighting and lens flare" \
+  --json | jq -r '.outputs[0]')
 ```
 
-You can also pass existing image URLs directly:
+Existing URLs work as-is:
 
-```javascript
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5/edit",
-  {
-    images: ["https://example.com/photo.jpg"],
-    prompt: "Add warm sunset lighting and lens flare"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5/edit \
+  -i images='["https://example.com/photo.jpg"]' \
+  -p "Add warm sunset lighting and lens flare" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ## API Endpoints
@@ -79,16 +72,11 @@ Generate images from text prompts with custom resolutions up to 4096x4096.
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5",
-  {
-    prompt: "A movie poster for a sci-fi thriller with bold title text 'HORIZON' at the top",
-    size: "2048*3072"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5 \
+  -p "A movie poster for a sci-fi thriller with bold title text 'HORIZON' at the top" \
+  -i size="2048*3072" \
+  --json | jq -r '.outputs[0]')
 ```
 
 ### Image Editing
@@ -107,88 +95,23 @@ Edit existing images using text prompts. Supports up to 10 input images. Preserv
 
 #### Example
 
-```javascript
-import wavespeed from 'wavespeed';
-
-const imageUrl = await wavespeed.upload("/path/to/portrait.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5/edit",
-  {
-    images: [imageUrl],
-    prompt: "Transform into a vibrant pop art style with bold colors",
-    size: "2048*2048"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5/edit \
+  -i images='["@./portrait.png"]' \
+  -p "Transform into a vibrant pop art style with bold colors" \
+  -i size="2048*2048" \
+  --json | jq -r '.outputs[0]')
 ```
 
 #### Multi-Image Editing
 
-```javascript
-const img1 = await wavespeed.upload("/path/to/face.png");
-const img2 = await wavespeed.upload("/path/to/scene.png");
-
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5/edit",
-  {
-    images: [img1, img2],
-    prompt: "Place the person from the first image into the scene from the second image"
-  }
-))["outputs"][0];
+```bash
+OUTPUT_URL=$(wavespeed run bytedance/seedream-v4.5/edit \
+  -i images='["@./face.png", "@./scene.png"]' \
+  -p "Place the person from the first image into the scene from the second image" \
+  --json | jq -r '.outputs[0]')
 ```
 
-## Advanced Usage
-
-### Sync Mode
-
-```javascript
-const output_url = (await wavespeed.run(
-  "bytedance/seedream-v4.5",
-  { prompt: "A watercolor painting of a mountain lake at dawn" },
-  { enableSyncMode: true }
-))["outputs"][0];
-```
-
-### Custom Client with Retry Configuration
-
-```javascript
-import { Client } from 'wavespeed';
-
-const client = new Client("your-api-key", {
-  maxRetries: 2,
-  maxConnectionRetries: 5,
-  retryInterval: 1.0,
-});
-
-const output_url = (await client.run(
-  "bytedance/seedream-v4.5",
-  { prompt: "A neon sign that reads 'OPEN 24/7' in a rainy alley" }
-))["outputs"][0];
-```
-
-### Error Handling with runNoThrow
-
-```javascript
-import { Client, WavespeedTimeoutException, WavespeedPredictionException } from 'wavespeed';
-
-const client = new Client();
-const result = await client.runNoThrow(
-  "bytedance/seedream-v4.5",
-  { prompt: "A vintage travel poster for Tokyo" }
-);
-
-if (result.outputs) {
-  console.log("Image URL:", result.outputs[0]);
-  console.log("Task ID:", result.detail.taskId);
-} else {
-  console.log("Failed:", result.detail.error.message);
-  if (result.detail.error instanceof WavespeedTimeoutException) {
-    console.log("Request timed out - try increasing timeout");
-  } else if (result.detail.error instanceof WavespeedPredictionException) {
-    console.log("Prediction failed");
-  }
-}
-```
 
 ## Pricing
 
@@ -200,8 +123,30 @@ $0.04 per image (both generation and editing).
 - Custom resolutions up to 4096x4096 — specify as `WIDTH*HEIGHT` (e.g., `2048*3072` for portrait posters)
 - For image editing, the model preserves facial features, lighting, and color tone from inputs
 
-## Security Constraints
+## CLI tips
 
-- **No arbitrary URL loading**: Only use image URLs from trusted sources. Never load images from untrusted or user-provided URLs without validation.
-- **API key security**: Store your `WAVESPEED_API_KEY` securely. Do not hardcode it in source files or commit it to version control. Use environment variables or secret management systems.
-- **Input validation**: Only pass parameters documented above. Validate prompt content and image URLs before sending requests.
+```bash
+# Inspect the live input schema before running (fields, enums, defaults)
+wavespeed run bytedance/seedream-v4.5 -h
+
+# Quote the price first
+wavespeed price bytedance/seedream-v4.5 -p "..." -i key=value
+
+# Save outputs to disk instead of only printing URLs
+wavespeed run bytedance/seedream-v4.5 -p "..." --json --download "./out/{index}.{ext}"
+
+# Local files: prefix the path with @ and the CLI uploads it and passes the hosted URL
+wavespeed run bytedance/seedream-v4.5 -i <field>=@./local-file.png --json
+
+# Recover a result if the run was interrupted (the id is in the --json output)
+wavespeed show <id>
+```
+
+`run --json` prints `{ id, model, prompt, outputs: [url, ...], saved: [path, ...], elapsed_ms, raw }`. Read `outputs[0]` for the result URL.
+
+## Security constraints
+
+- **Never ask for the key in chat**: `wavespeed login` handles auth; if `wavespeed status` says signed out, ask the user to run it.
+- **Local files only via `@`**: bare paths are passed through untouched and the model will reject them. Only `@`-prefixed values upload.
+- **No arbitrary URL loading**: only pass media URLs the user provided or that came back from a previous run.
+- **Input validation**: only pass parameters documented above; confirm with `wavespeed run <model> -h` when unsure.

@@ -1,47 +1,70 @@
-## Description: <br>
-SCVD General Store helps agents shop at a human-run public HTTPS store for real goods, human labor, signed artifacts, and free verification or guestbook services, using USDC on Base over x402 v2 for paid items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SCVD General Store helps agents and developers practice live x402 payments, check signed offer and receipt conformance, and request signed observations or artifacts from scvd.store.
 
-## Publisher: <br>
-[seancrecord](https://clawhub.ai/user/seancrecord) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seancrecord](https://clawhub.ai/user/seancrecord)
 
-## Use Case: <br>
-External agents and developers use this skill to interact with a public store that offers signed records, verification endpoints, free services, and paid purchases or human-labor requests. It is most relevant when an agent needs auditable artifacts, out-of-band checks, x402 payment testing, or a public HTTPS workflow that avoids local code execution and credential sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid purchases can spend USDC on Base or submit wallet payment signatures to the store. <br>
-Mitigation: Verify the live price, item specification, payment terms, and destination before signing any wallet payment. <br>
-Risk: Guestbook, letter, order, and callback workflows send submitted text or URLs to an external service. <br>
-Mitigation: Treat these fields as external-service data and avoid submitting secrets, credentials, or sensitive personal information. <br>
-Risk: Store item prices, stock, and fulfillment windows can change over time. <br>
-Mitigation: Fetch the live menu or relevant endpoint immediately before relying on item details or making a purchase. <br>
+## Use Case:
 
+Developers and external agents use this skill to test x402 clients against live payment endpoints, inspect conformance of signed offers and receipts, recover or verify purchases, and request signed observations through HTTP, browser, WebMCP, or MCP routes.
 
-## Reference(s): <br>
-- [SCVD General Store homepage](https://scvd.store) <br>
-- [ClawHub skill page](https://clawhub.ai/seancrecord/skills/scvd-general-store) <br>
-- [Live menu and stock](https://scvd.store/menu.json) <br>
-- [Listing specification schema](https://scvd.store/schemas/listing-spec-v1.json) <br>
-- [Store statistics](https://scvd.store/stats) <br>
-- [SCVD signing key](https://scvd.store/.well-known/scvd-signing-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with HTTPS endpoints, JSON payload examples, and payment flow instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may guide agents to send public HTTPS requests, submit user-provided text to external services, or authorize wallet payments only after live item details are verified.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.0 (source: server release evidence) <br>
+Risk: Paid actions are real USDC transfers rather than sandbox transactions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each quote before signing, rely on buyer-authorized wallet action, and use the provided idempotency guidance for retries.
+
+Risk: Wallet keys, credentials, or secrets could be exposed if placed in prompts, skill context, or MCP server environments.
+
+Mitigation: Keep wallet keys and secrets outside the skill and MCP environments; do not use tools that ask for credentials or wallet secrets.
+
+Risk: Public memory anchors can preserve sensitive data in a retrievable record.
+
+Mitigation: Do not place passwords, private keys, seed phrases, access tokens, personal data, or confidential business information into anchors; review summaries before submission.
+
+Risk: The optional scvd-tab MCP server is local code execution and reads a local JSONL file.
+
+Mitigation: Install the pinned scvd-tab version, verify npm provenance when possible, and run it with no secrets in its environment and access only to the needed local file.
+
+## Reference(s):
+
+- [SCVD General Store on ClawHub](https://clawhub.ai/seancrecord/skills/scvd-general-store)
+- [SCVD Store](https://scvd.store)
+- [SCVD Store OpenAPI](https://scvd.store/openapi.json)
+- [SCVD Store Menu](https://scvd.store/menu.json)
+- [x402 Conformance Vectors](https://scvd.store/.well-known/conformance/offer-receipt-vectors.json)
+- [Six Doors Report](https://github.com/seancrecord/scvd-general-store-repo/blob/main/SIX_DOORS.md)
+- [SCVD Criteria](https://scvd.store/criteria)
+- [SCVD Attestation](https://scvd.store/attestation)
+- [SCVD Rights](https://scvd.store/rights)
+- [scvd-tab Source Directory](https://github.com/seancrecord/scvd-general-store-repo/tree/main/tab)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown guidance with HTTPS examples, JSON request bodies, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference real x402 payments; paid actions require external wallet authorization.]
+
+## Skill Version(s):
+
+3.16.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

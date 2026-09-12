@@ -17,7 +17,7 @@ installer:
 argument-hint: "[device name or describe your network task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["NETWORK_AIOPS_CONFIG"],"bins":["network-aiops"],"config":["~/.network-aiops/config.yaml"]},"optional":{"env":["NETWORK_AIOPS_HOME","NETWORK_AIOPS_MASTER_PASSWORD","NETWORK_NETBOX_TOKEN"]},"primaryEnv":"NETWORK_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Network-AIops","emoji":"🛜","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["network-aiops","uvx"]},"optional":{"env":["NETWORK_AIOPS_CONFIG","NETWORK_AIOPS_HOME","NETWORK_AIOPS_MASTER_PASSWORD","NETWORK_NETBOX_TOKEN"]},"homepage":"https://github.com/AIops-tools/Network-AIops","emoji":"🛜","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed network device operations over NAPALM. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.network-aiops/ (relocatable via NETWORK_AIOPS_HOME).
@@ -55,6 +55,15 @@ uv tool install network-aiops
 network-aiops init            # interactive wizard: device + driver + host + encrypted password (+ optional NetBox)
 network-aiops doctor          # checks config, encrypted secret store, and per-device password presence
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@aiops-tools/network-aiops
+openclaw skills info network-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 `init` writes `~/.network-aiops/config.yaml` and stores secrets **encrypted** in `~/.network-aiops/secrets.enc`. Export `NETWORK_AIOPS_MASTER_PASSWORD` in your shell profile so the CLI and MCP server can unlock secrets non-interactively.
 

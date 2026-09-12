@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ozon 类目研究"
+  short_description: "查询 Ozon 类目树、类目指标与商品样本机会"
+  default_prompt: "使用 $geekbi-ozon-category-search-skill 查询并研究 Ozon 类目。"

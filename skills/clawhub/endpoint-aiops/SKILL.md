@@ -17,7 +17,7 @@ installer:
 argument-hint: "[endpoint id or describe your fleet task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["ENDPOINT_AIOPS_CONFIG"],"bins":["endpoint-aiops"],"config":["~/.endpoint-aiops/config.yaml","~/.endpoint-aiops/secrets.enc"]},"optional":{"env":["ENDPOINT_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"ENDPOINT_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Endpoint-AIops","emoji":"💻","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["endpoint-aiops","uvx"]},"optional":{"env":["ENDPOINT_AIOPS_CONFIG","ENDPOINT_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Endpoint-AIops","emoji":"💻","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed managed-endpoint operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.endpoint-aiops/ (relocatable via ENDPOINT_AIOPS_HOME).
@@ -57,6 +57,15 @@ uv tool install endpoint-aiops
 endpoint-aiops init       # interactive wizard: connection + encrypted API key
 endpoint-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@aiops-tools/endpoint-aiops
+openclaw skills info endpoint-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

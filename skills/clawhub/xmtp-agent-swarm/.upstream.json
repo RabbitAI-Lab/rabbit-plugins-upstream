@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/xmtp-agent-swarm",
   "slug": "xmtp-agent-swarm",
   "ownerHandle": null,
-  "version": "4.0.0",
-  "updatedAt": 1779077209574,
-  "contentHash": "4083ee8105a7b5abd4754585d17f8effd99b73744b35ea8221d1234074beecb0",
-  "fetchedAt": "2026-07-26T18:53:36.788Z"
+  "version": "3.1.0",
+  "updatedAt": 1789076414253,
+  "contentHash": "48c401ee9e09b4f09fa5b069aad410561f1d2a891ff9b87049d19270cfd766c9",
+  "fetchedAt": "2026-09-12T11:46:03.630Z"
 }

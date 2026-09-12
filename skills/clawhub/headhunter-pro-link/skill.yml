@@ -1,0 +1,59 @@
+name: headhunter-pro
+version: 15.0.0
+description: AI 驱动的端到端招聘工作流——猎头候选人筛选、推荐报告、触达话术、面试评估、客户管理、入职护航
+
+# 输入契约
+input:
+  required:
+    - field: task_type
+      type: string
+      description: "任务类型：resume_screen / write_recommendation / generate_outreach / interview_assess / client_manage / talent_mapping"
+      accepted_values: [resume_screen, write_recommendation, generate_outreach, interview_assess, client_manage, talent_mapping]
+    - field: candidate_info
+      type: object
+      description: "候选人信息（简历文本或结构化数据）"
+      when: task_type 为 resume_screen/write_recommendation/interview_assess
+  optional:
+    - field: job_description
+      type: string
+      description: "职位描述（JD）文本"
+    - field: company_name
+      type: string
+      description: "目标公司名称"
+    - field: industry
+      type: string
+      description: "行业（快消/金融/新能源/医疗）"
+      accepted_values: [快消零售, 金融, 新能源, 医疗, 其他]
+    - field: output_format
+      type: string
+      description: "输出格式偏好"
+      default: "markdown"
+
+# 输出契约
+output:
+  format: markdown
+  required_sections:
+    - "任务摘要"
+    - "分析/报告正文"
+    - "评分/评估结果（如适用）"
+    - "下一步建议"
+  rules:
+    - "不编造缺失事实；明确标注假设"
+    - "候选人个人信息不输出到文件外"
+    - "推荐报告必须包含 9+1 维度评分"
+    - "触达话术必须个性化，不使用模板"
+
+# 权限边界
+permissions:
+  file_access:
+    read: ["workspace/candidates/**", "workspace/memory/*.md"]
+    write: ["workspace/candidates/*/profile.md", "workspace/candidates/*/recommendation.md"]
+  connectors: []
+  external_api: false
+
+# 已知限制
+limitations:
+  - "无法访问外部招聘平台（LinkedIn/猎聘/Boss直聘）的实时数据"
+  - "候选人联系方式需由用户手动提供"
+  - "行业趋势数据需联网搜索支持"
+  - "背调需人工执行，AI 仅提供检查清单"

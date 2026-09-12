@@ -1,40 +1,53 @@
-## Description: <br>
-Insurance Agent Digital Employee is an insurance agent assistant that supports customer profiling, needs analysis, coverage gap review, plan drafting, policy explanation, objection handling, health disclosure guidance, pre-application checks, business planning, renewal retention, product knowledge, and social media marketing workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps insurance agents draft customer profiles, needs analyses, coverage gap assessments, proposal content, policy explanations, objection responses, health disclosure guidance, application checks, renewal support, sales planning, and customer relationship workflows for human review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance professionals use this skill as a reference framework for customer analysis, insurance planning workflows, policy and product explanation, renewal follow-up, and marketing content preparation. Outputs are for professional reference and require human review before use with customers or in regulated insurance activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may process sensitive customer, financial, or health-disclosure information. <br>
-Mitigation: Use it only in a controlled professional environment and require human review before using generated insurance, health-disclosure, marketing, or customer-facing material. <br>
-Risk: The evidence reports conflicting instructions about local file writes, web or API use, and social-media posting. <br>
-Mitigation: Keep network access, local file writes, social-media publishing, and logged-in browser automation disabled unless explicitly approved. <br>
+## Use Case:
 
+Authorized insurance staff use this skill as a controlled workflow reference for drafting client-facing insurance analysis, planning, explanation, servicing, and follow-up materials. Outputs are drafts that require review by qualified personnel before customer use or operational action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include tables, checklists, customer-analysis templates, plan outlines, review prompts, and marketing draft content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence and skill frontmatter) <br>
+Risk: The skill may process sensitive customer, health, identity, account, or insurance data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in a controlled environment with authorized insurance staff, and enter masked values or source-system references instead of full sensitive data.
+
+Risk: Draft plan, sales, renewal, health-disclosure, or underwriting-related outputs may be incomplete, misleading, or under-scoped.
+
+Mitigation: Require qualified licensed or compliance review before sharing outputs with customers or taking operational action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, tables, checklists, talk tracks, and draft planning content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft outputs require licensed or compliance review; personal, medical, identity, and account data should be masked or referenced through source-system identifiers.]
+
+## Skill Version(s):
+
+1.0.10 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
