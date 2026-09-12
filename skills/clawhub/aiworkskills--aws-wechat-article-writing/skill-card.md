@@ -1,44 +1,55 @@
-## Description: <br>
-公众号写稿｜长文写作｜文章润色｜改写续写 — 公众号长文 AI 写作，从话题或提纲生成完整初稿，支持改写、续写、润色、开头结尾优化，可调 DeepSeek / GPT / Claude 或由 Agent 代写。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从话题、提纲或已有稿件生成、改写、续写和润色微信公众号长文，并可通过配置的写作模型或提示词 JSON 支持 Agent 代写。
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-External creators, WeChat account operators, and brand copywriters use this skill to draft, rewrite, continue, and polish long-form WeChat articles from a topic, outline, existing article, or selected reference documents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Drafts, topic cards, writing configuration, and selected reference documents may be sent to the configured LLM endpoint. <br>
-Mitigation: Use only trusted providers or an approved internal proxy, and avoid passing confidential business documents through --reference unless that endpoint is approved for that data. <br>
-Risk: The skill requires a writing-model API key and sends it to the configured endpoint as a bearer token. <br>
-Mitigation: Use a dedicated key, store it in aws.env, and configure only endpoints trusted to receive that credential. <br>
-Risk: Generated article drafts may contain inaccurate, unsupported, or overly promotional content. <br>
-Mitigation: Review draft.md before downstream review, layout, image, or publishing steps, and verify claims against provided source documents. <br>
+## Use Case:
 
+External creators, WeChat operators, and brand copywriters use this skill to draft, rewrite, continue, and polish long-form WeChat public-account articles from topic cards, outlines, existing drafts, and selected business reference Markdown.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/aiworkskills/aws-wechat-article-writing) <br>
-- [Writing script usage](references/usage.md) <br>
-- [WeChat long-form structure template](references/structure-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown articles, prompt JSON, and configuration-oriented instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write draft.md in the selected article directory and can emit prompt JSON without calling an external model.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.25 (source: server release evidence, created 2026-06-16T09:48:28Z) <br>
+Risk: Article drafts, selected reference Markdown, and WRITING_MODEL_API_KEY may be sent to the configured model endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated low-privilege provider key, verify config.yaml writing_model.base_url before each run, and avoid sensitive reference documents.
+
+Risk: The security summary reports a preset-loading path traversal risk.
+
+Mitigation: Do not run the skill on draft directories or preset selections from untrusted sources until preset path handling is fixed.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-writing)
+- [Writing script usage](artifact/references/usage.md)
+- [WeChat long-form structure template](artifact/references/structure-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown article drafts, prompt JSON, and concise setup or execution guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can write draft.md, emit prompt JSON without calling an LLM, and strip source-path citations for downstream review.]
+
+## Skill Version(s):
+
+1.0.26 (source: ClawHub server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

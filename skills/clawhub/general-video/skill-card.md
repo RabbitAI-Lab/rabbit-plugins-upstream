@@ -1,43 +1,55 @@
-## Description: <br>
-Author or edit custom HyperFrames video compositions for longer or multi-scene pieces, brand and sizzle reels, montages, static loops, static title cards, footage remixes, and freeform builds when no specialized workflow fits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Author or edit a custom HyperFrames composition when no specialized workflow fits, or when BRIEF.md sets flow: companion.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative operators use this skill to plan, build, verify, and optionally render HyperFrames video projects from a brief or existing project state. It is suited to custom video compositions that need staged assets, design adherence, motion planning, review gates, and project-scoped file generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can run disclosed HyperFrames CLI commands and create or modify project files. <br>
-Mitigation: Review the planned commands and generated files before execution, and keep work scoped to the intended HyperFrames project directory. <br>
-Risk: Provider sign-in, billing, or render approval may be required for some media and rendering steps. <br>
-Mitigation: Confirm authentication status, billing impact, and render approval before provider actions or final rendering. <br>
-Risk: Larger videos may delegate scene work to scoped workers that generate composition HTML and motion sidecars. <br>
-Mitigation: Use the generated frame packets as bounded inputs and verify all scene files, motion JSON, and final HyperFrames checks before rendering. <br>
+## Use Case:
 
+Developers and creative operators use this skill to plan, build, edit, validate, and render custom HyperFrames video compositions, including longer multi-scene pieces, brand reels, montages, static loops, title cards, footage remixes, and companion-led video builds.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/general-video) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/heygen-com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and project files such as BRIEF.md, STORYBOARD.md, HTML compositions, and motion JSON sidecars] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create project-scoped HyperFrames files and bounded frame-packet files for delegated scene work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+Risk: The workflow asks the agent to run and update HyperFrames through unpinned online npx commands, which can change what code or instructions run later.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing and trusting the HyperFrames package and registry path; prefer a pinned, reviewed local HyperFrames CLI and avoid automatic skill updates during normal work.
+
+Risk: Media provider actions may involve sign-in, billing, or authenticated services.
+
+Mitigation: Review provider sign-in status and any billing-related media action before continuing.
+
+## Reference(s):
+
+- [Skill source](artifact/SKILL.md)
+- [Frame worker role delta](artifact/sub-agents/frame-worker.md)
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/general-video)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, project file edits, HTML composition code, and JSON motion sidecar files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a single agent workflow stream for HyperFrames projects and may create bounded frame packet files for delegated scene work.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

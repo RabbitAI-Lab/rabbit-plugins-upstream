@@ -1,47 +1,70 @@
-## Description: <br>
-Keap API integration with managed OAuth for managing contacts, companies, tags, tasks, orders, opportunities, campaigns, email, and related CRM and marketing automation resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Keap API integration with managed OAuth for managing contacts, companies, tags, tasks, orders, products, opportunities, subscriptions, affiliates, users, campaign sequences, automations, and transactional email in CRM and marketing automation workflows.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Keap through Maton-managed OAuth, inspect CRM data, and prepare approved changes to contacts, companies, tags, tasks, orders, opportunities, campaigns, and marketing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can mediate broad access to Keap CRM and marketing automation data through Maton. <br>
-Mitigation: Install it only when Maton-mediated Keap access is intended, protect MATON_API_KEY, and keep the key out of logs and shared prompts. <br>
-Risk: Requests may affect the wrong Keap account when multiple Maton connections exist. <br>
-Mitigation: Specify the intended Maton connection before making account-specific requests. <br>
-Risk: Write operations can send email or change contacts, tags, orders, products, opportunities, campaigns, and other CRM records. <br>
-Mitigation: Review the target resource and intended effect with the user before approving any create, update, delete, email send, order/product change, or campaign sequence change. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent read and manage Keap CRM and marketing automation records through Maton-managed OAuth. It supports contact, company, tag, task, order, product, opportunity, subscription, affiliate, user, campaign sequence, automation, and transactional email workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/keap) <br>
-- [Keap Developer Portal](https://developer.infusionsoft.com/) <br>
-- [Keap REST API V2 Documentation](https://developer.infusionsoft.com/docs/restv2/) <br>
-- [Keap Getting Started Guide](https://developer.infusionsoft.com/getting-started/) <br>
-- [Keap OAuth 2.0 Authentication](https://developer.infusionsoft.com/authentication/) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with REST endpoints and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Keap OAuth account through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can perform account-level Keap API writes, including sends, campaign enrollment, billing-related changes, and deletions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth with the narrowest scopes available and confirm exact records, recipients, payloads, and effects before allowing any write.
+
+Risk: Transactional email and campaign sequence operations can contact people outside the account and may not be reversible after execution.
+
+Mitigation: Review recipient lists, subject lines, message bodies, campaign identifiers, and sequence effects with the user before execution.
+
+Risk: Raw API passthrough can reach endpoints beyond the documented surface if the connection permits them.
+
+Mitigation: Default to documented read/list calls and use undocumented paths only when the user requests the specific call and approves the resulting action.
+
+Risk: Fallback API-key use increases credential exposure risk compared with the managed CLI flow.
+
+Mitigation: Prefer Maton OAuth through the CLI; when a Maton API key is unavoidable, keep it out of logs, files, shell history, and command arguments.
+
+## Reference(s):
+
+- [Keap Skill on ClawHub](https://clawhub.ai/byungkyu/skills/keap)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton](https://maton.ai)
+- [Keap Developer Portal](https://developer.infusionsoft.com/)
+- [Keap REST API V2 Documentation](https://developer.infusionsoft.com/docs/restv2/)
+- [Keap Getting Started Guide](https://developer.infusionsoft.com/getting-started/)
+- [Keap OAuth 2.0 Authentication](https://developer.infusionsoft.com/authentication/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, text]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance is oriented around Maton CLI and API calls, with read-first behavior and confirmation before writes.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,62 @@
-## Description: <br>
-Proxy Aiops helps agents inspect, analyze, and safely operate Traefik, Caddy, and HAProxy reverse proxies, including routes, upstream health, certificates, 5xx RCA, audited writes, and undo workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Proxy AIops helps agents inspect and operate Traefik, Caddy, and HAProxy reverse proxies with route, upstream, certificate, traffic, configuration, RCA, governed write, and undo workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and SRE teams use this skill to observe reverse-proxy state, troubleshoot 502/503/504 errors, investigate backend health and certificate expiry, and make governed Caddy or HAProxy changes with audit and undo support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make outage-causing reverse-proxy changes while relying on external account permissions and agent judgment rather than an internal read-only control. <br>
-Mitigation: Start with read-only or tightly scoped proxy credentials where possible, keep admin APIs private, and require explicit workflow approval for Caddy config loads/deletes and HAProxy drain or weight changes. <br>
-Risk: Plaintext legacy proxy secret environment variables may expose credentials. <br>
-Mitigation: Use the encrypted secrets store and avoid plaintext PROXY_<TARGET>_SECRET variables. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to investigate reverse-proxy routing, backend health, TLS expiry, traffic errors, and configuration state across Traefik, Caddy, and HAProxy. It can also guide audited, reversible Caddy configuration changes and HAProxy server state or weight changes.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/AIops-tools/Proxy-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API Calls] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute read and governed write workflows through proxy-aiops tools, depending on the connected agent and operator permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence) <br>
+Risk: The skill can give an agent live write access to Caddy configuration and HAProxy server state, which could disrupt traffic if misused.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only or least-privileged proxy accounts, use dry-run flows, and require human approval outside the tool before Caddy config or HAProxy state changes.
+
+Risk: Authenticated proxy APIs and the master password can expose sensitive operational control if configured broadly.
+
+Mitigation: Use HTTPS or a protected tunnel for non-loopback APIs, avoid storing the master password in broadly readable MCP config, and lock down ~/.proxy-aiops.
+
+Risk: Full Caddy config replacement and destructive config edits can affect every service behind the proxy.
+
+Mitigation: Capture a config snapshot before changes, prefer targeted edits, use the recorded undo flow when rollback is needed, and validate route and error behavior after each change.
+
+## Reference(s):
+
+- [Proxy AIops source repository](https://github.com/AIops-tools/Proxy-AIops)
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/proxy-aiops)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured operational findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include proxy health summaries, RCA findings, dry-run write plans, audit or undo references, and platform-specific teaching errors.]
+
+## Skill Version(s):
+
+0.9.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

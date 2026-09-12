@@ -1,6 +1,6 @@
 # 企业情报 · 七步工作流执行手册
 
-> 所有请求带 Header：`X-API-Key` + `X-Client: company-intel/1.0.0`。
+> 所有请求带 Header：`X-API-Key` + `X-Client: company-intel/1.0.2`。
 > 工具参数速查见 `api-quick.md`。每步都有「降级策略」——数据缺失时照做，不要中断也不要编造。
 > 总原则：**查不到 ≠ 没有**。任何一步数据缺失都要在报告「数据边界」里标注，绝不硬编。
 

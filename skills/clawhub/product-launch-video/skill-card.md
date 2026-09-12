@@ -1,47 +1,58 @@
-## Description: <br>
-Turns a product or marketing URL, pasted script, or brief into a product launch or promotional video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a product or marketing URL, pasted script, or brief into a product launch / promo video - SaaS promos, feature reveals, product demos, app and company launches. Use when the user wants to market, launch, promote, or reveal a product; the default for any commercial URL. Site tours / showcases of a website route here too - the brief carries the show-it-as-is intent. Unclear -> /hyperframes.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers, marketers, and creative operators use this skill to capture product context, plan a launch story, build HyperFrames HTML compositions, and render a promotional MP4 for product reveals, SaaS promos, demos, site showcases, and company launches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can run a networked self-update that changes installed skills or shared HyperFrames dependencies before user approval. <br>
-Mitigation: Review the release before installation and use an explicit update policy so dependency or skill updates are deliberate and auditable. <br>
-Risk: The workflow uses network services for product capture and media retrieval, including voice, music, and sound-effect paths when credentials or providers are available. <br>
-Mitigation: Use offline or signed-out paths when appropriate, provide only scoped credentials, and avoid sending sensitive product URLs, assets, or briefs to network services unless approved. <br>
-Risk: Generated HTML may load GSAP from jsDelivr unless changed. <br>
-Mitigation: Review generated HTML before deployment and vendor, pin, or allowlist external browser dependencies according to the target environment's policy. <br>
+## Use Case:
 
+Marketing teams, product teams, and agents use this skill to turn a product URL, launch brief, pasted script, or website showcase request into a structured HyperFrames promo video project with storyboard, script, frame compositions, captions, audio metadata, and final render steps.
 
-## Reference(s): <br>
-- [Product Launch Video ClawHub listing](https://clawhub.ai/heygen-com/skills/product-launch-video) <br>
-- [Story design](references/story-design.md) <br>
-- [Visual design](references/visual-design.md) <br>
-- [Motion language](references/motion-language.md) <br>
-- [Cut catalog](references/cut-catalog.md) <br>
-- [Frame worker](sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown plans and scripts, JSON metadata, shell commands, HTML frame compositions, caption/audio artifacts, and rendered video files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are project-scoped under videos/<project>; the workflow may create hyperframes.json, BRIEF.md, STORYBOARD.md, SCRIPT.md, frame.md, audio_meta.json, caption_groups.json, compositions/frames/*.html, index.html, snapshots, and renders/video.mp4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.18 (source: server release metadata) <br>
+Risk: Normal setup can run unpinned remote CLI code and update globally installed skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Trust the HyperFrames CLI and update source before use, prefer a pinned CLI version, separately approve global skill updates, and run the workflow in an isolated workspace.
+
+Risk: The workflow can crawl supplied URLs, write many project files, use available media credentials or API keys, and start a local preview service before rendering.
+
+Mitigation: Review the target URL and credential availability before execution, limit secrets to the intended media providers, and inspect generated files and preview output before rendering.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/product-launch-video)
+- [Story Design](references/story-design.md)
+- [Visual Design](references/visual-design.md)
+- [Motion Language](references/motion-language.md)
+- [Cut Catalog](references/cut-catalog.md)
+- [Frame Worker Delta](sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands plus generated project files such as BRIEF.md, STORYBOARD.md, SCRIPT.md, HTML frame compositions, index.html, audio metadata, captions, snapshots, and rendered video output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coordinates a multi-step HyperFrames workflow that captures source material, builds a design system, drafts story and script, delegates per-frame HTML composition work, assembles captions/audio, checks the result, and renders MP4 output.]
+
+## Skill Version(s):
+
+1.0.36 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

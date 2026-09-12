@@ -1,44 +1,57 @@
-## Description: <br>
-Extract a clean plain-text transcript from existing YouTube captions - native Node.js, zero npm dependencies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extract a clean plain-text transcript from existing YouTube captions - native Node.js, zero npm dependencies.
 
-## Publisher: <br>
-[jwestburg](https://clawhub.ai/user/jwestburg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jwestburg](https://clawhub.ai/user/jwestburg)
 
-## Use Case: <br>
-External users and developers use this skill to extract existing YouTube captions as clean transcript text for summarization, search, quote extraction, timestamped notes, or JSON handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs the local yt-dlp binary against user-provided YouTube URLs, creating a local binary supply-chain trust boundary. <br>
-Mitigation: Install only if the local yt-dlp source and PATH location are trusted; review the yt-dlp installation path before use. <br>
-Risk: Using yt-dlp on private or client-sensitive videos may disclose access patterns to YouTube or process sensitive third-party content. <br>
-Mitigation: Avoid private or client-sensitive videos unless that access is appropriate and authorized. <br>
-Risk: Extracted captions may be third-party copyrighted content and auto-generated captions may be inaccurate. <br>
-Mitigation: Prefer summaries and brief quotes, respect platform terms and rights, and note auto-generated caption uncertainty when known. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to extract existing captions from a supported single-video YouTube URL for summarization, quote review, search, or structured JSON handoff.
 
-## Reference(s): <br>
-- [YouTube Transcript Contract](references/youtube-transcript-contract.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/jwestburg/skills/youtube-transcript-native-node) <br>
-- [Publisher Profile](https://clawhub.ai/user/jwestburg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Plain text transcript, timestamped text, JSON transcript object, or concise Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May identify auto-generated captions when known; refuses transcripts larger than 2,000,000 characters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: frontmatter and server-resolved release evidence) <br>
+Risk: The skill invokes a local yt-dlp binary to access YouTube for user-provided videos.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when yt-dlp comes from a trusted install path and the user has approved that dependency.
+
+Risk: Private or client-sensitive videos may be inappropriate to access through YouTube and yt-dlp.
+
+Mitigation: Avoid those videos unless the user confirms that access is appropriate.
+
+Risk: Returned titles and captions are third-party content that may be inaccurate or adversarial.
+
+Mitigation: Treat transcript text as data for analysis, not instructions for the agent to follow.
+
+## Reference(s):
+
+- [YouTube Transcript Contract](references/youtube-transcript-contract.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, guidance]
+
+**Output Format:** [Plain text transcript, timestamped plain text, JSON transcript object, or compact Markdown response guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18+ and a trusted yt-dlp binary on PATH; extracts existing captions only and does not transcribe audio.]
+
+## Skill Version(s):
+
+1.1.27 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

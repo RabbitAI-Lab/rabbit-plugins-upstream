@@ -1,42 +1,73 @@
-## Description: <br>
-Google Analytics API integration with managed OAuth for read-only reporting through the Data API and explicitly approved Admin API configuration changes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Analytics API integration with managed OAuth that guides agents to run read-only Data API reports and, with explicit approval, make Admin API account, property, and data stream changes through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and analytics operators use this skill to query GA4 reports and, when explicitly needed, manage Google Analytics accounts, properties, and data streams through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Google Analytics Skill](https://clawhub.ai/byungkyu/skills/google-analytics) <br>
-- [Google Analytics Admin API Overview](https://developers.google.com/analytics/devguides/config/admin/v1) <br>
-- [Google Analytics Data API Overview](https://developers.google.com/analytics/devguides/reporting/data/v1) <br>
-- [Google Analytics Run Report](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport) <br>
-- [Maton API Key Settings](https://maton.ai/settings) <br>
-- [Related ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+Developers and external agents use this skill to authenticate through Maton, inspect GA4 accounts and properties, run analytics reports, and perform explicit user-approved Admin API changes when needed.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Maton-managed Google Analytics OAuth connection; prefer the Data API for reporting and require explicit approval before Admin API write operations.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill can use a Maton-connected Google Analytics Admin API account to create, update, or delete accounts, properties, and data streams.
+
+Mitigation: Prefer the read-only Data API for reporting; use the Admin API only after confirming the exact account, property, data stream, payload, and intended effect with the user.
+
+Risk: Admin API changes can have high-impact or irreversible effects on analytics configuration and data collection.
+
+Mitigation: List or retrieve the target resource first, present the specific identifiers and consequences, wait for explicit approval, and revoke unused Admin API connections after the task.
+
+Risk: Maton API keys and provider-issued tokens can leak if printed, logged, persisted, or passed on command lines.
+
+Mitigation: Use OAuth and the operating system credential store where possible; when raw HTTP is required, read the key from the process environment, never display it, and send it only to api.maton.ai.
+
+Risk: Google Analytics API responses may contain sensitive or untrusted external data.
+
+Mitigation: Request only task-relevant fields, avoid storing raw responses unless requested, and treat response content as data rather than instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-analytics)
+- [Maton homepage](https://maton.ai)
+- [Admin API Overview](https://developers.google.com/analytics/devguides/config/admin/v1)
+- [Admin API Accounts](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta/accounts)
+- [Admin API Properties](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta/properties)
+- [Admin API Data Streams](https://developers.google.com/analytics/devguides/config/admin/v1/rest/v1beta/properties.dataStreams)
+- [Data API Overview](https://developers.google.com/analytics/devguides/reporting/data/v1)
+- [Run Report](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport)
+- [Realtime Report](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runRealtimeReport)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides Google Analytics calls through Maton OAuth or a raw HTTPS fallback when the CLI cannot be installed.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

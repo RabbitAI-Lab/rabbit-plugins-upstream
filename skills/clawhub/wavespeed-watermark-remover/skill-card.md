@@ -1,40 +1,62 @@
-## Description: <br>
-Remove watermarks, logos, captions, and text overlays from images and videos using WaveSpeed AI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents remove watermarks, logos, captions, and text overlays from user-owned or licensed images and videos with WaveSpeed AI.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and external users use this skill to generate WaveSpeed API examples and configuration guidance for removing watermarks, logos, captions, and text overlays from image or video media they are authorized to edit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables watermark, logo, caption, and overlay removal without meaningful authorization or rights-use limits. <br>
-Mitigation: Use only for media the user owns or is clearly authorized to edit, and do not remove attribution, copyright notices, platform marks, subtitles, disclaimers, or provenance indicators from third-party content. <br>
-Risk: Media may be uploaded to WaveSpeed and API usage may incur costs. <br>
-Mitigation: Validate media sources before upload, avoid untrusted user-provided URLs, protect WAVESPEED_API_KEY, and review WaveSpeed pricing before processing images or videos. <br>
+## Use Case:
 
+External users, developers, and content operations teams use this skill to route eligible image or video watermark-removal requests through WaveSpeed AI. It is intended for media the user owns or is licensed to modify, with guardrails against removing third-party copyright, attribution, or preview marks.
 
-## Reference(s): <br>
-- [WaveSpeed API access keys](https://wavespeed.ai/accesskey) <br>
-- [ClawHub release page](https://clawhub.ai/chengzeyi/wavespeed-watermark-remover) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JavaScript and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include WaveSpeed model IDs, API key setup, media URL handling, pricing notes, and error-handling examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Media is uploaded to WaveSpeed's cloud service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only process media the user is comfortable sending to WaveSpeed and that the user owns or is licensed to modify.
+
+Risk: Watermark removal can be misused to strip third-party copyright, attribution, or stock preview marks.
+
+Mitigation: Confirm ownership or license before running the model, refuse unclear or infringing requests, and avoid outputs that misrepresent authorship or licensing.
+
+Risk: The documented setup uses global npm and npx commands that may install changing package versions.
+
+Mitigation: Pin reviewed package versions where possible and run the CLI or MCP server in a least-privileged environment.
+
+Risk: Authentication material may be exposed if users paste keys into chat or commands are run in shared environments.
+
+Mitigation: Use `wavespeed login` or a scoped `WAVESPEED_API_KEY` environment variable and never ask the user to paste secrets into the conversation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-watermark-remover)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration]
+
+**Output Format:** [Markdown with inline bash commands and parameter tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces WaveSpeed CLI or MCP invocation guidance and result URLs; media processing happens through WaveSpeed's cloud service.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

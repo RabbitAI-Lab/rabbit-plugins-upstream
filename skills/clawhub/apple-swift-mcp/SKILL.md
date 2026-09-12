@@ -18,17 +18,37 @@ Requires **macOS 14+ on Apple Silicon**. Intel users can build from source (`swi
 ## Tools
 
 ### Calendar / Reminders
-- `calendar` — list, search, create, update, delete events
+- `calendar` — list, search, create, update, delete events. `list`/`search`
+  only ever look inside one window: `fromDate` + `toDate`, or `fromDate` +
+  `daysAhead` (pass one, not both; default 7 days for `list`, 30 for
+  `search`, maximum 366). Every response names the window it searched and,
+  when more matched than `limit` held, the total and the `offset` for the
+  next page — so an empty answer means nothing was scheduled in that window,
+  never that the calendar is clear beyond it. A window longer than the
+  maximum is refused rather than quietly shortened.
 - `reminders` — list reminder lists and items; create, complete, delete
 
 ### Contacts / Maps
-- `contacts` — search by name, phone, or email
+- `contacts` — search, get, create, update, delete. Emails, phones and
+  addresses are edited one entry at a time (`add` / `remove` / `replace`),
+  so an edit never rewrites the whole list. Writes need *full* Contacts
+  access. A card with anything in its Notes field cannot be written through
+  the Contacts framework at all — not just its note, **every** field —
+  without the `com.apple.developer.contacts.notes` entitlement. An `update` or `delete` on
+  such a card is now replayed automatically through Contacts.app, which does
+  hold the entitlement; it needs Automation access to Contacts.app, and the
+  reply says so when it happens. The replay covers name, organization, job
+  title and note, and **declines** an edit touching emails/phones/addresses or
+  a birthday (`create` with a note is still refused outright) — those cannot be expressed faithfully in AppleScript, so a
+  declined edit writes nothing rather than part of itself
 - `maps` — directions, search nearby places
 
-### Mail / Messages / Notes (AppleScript-backed)
-- `mail` — search, read, send, reply, forward; Messages.app-style threading
+### Mail / Messages / Notes
+- `mail` — search, read, send; discover accounts/mailboxes. Search reads
+  Mail's Envelope Index directly (needs Full Disk Access), so it is fast
+  on large accounts and returns results **newest first**.
 - `messages` — send iMessage / SMS, query `chat.db` for history, group chats
-- `notes` — list, search, read, create notes
+- `notes` — list, search (optionally with bodies inline), get a full note (pageable), folders, create, update, delete
 
 ### Photos (PhotoKit + AppleScript)
 - `photos` — list/search assets and albums, get asset detail, favorite/organize/import/export, get a JPEG rendition, set title/description/keywords, free-text search
@@ -45,3 +65,14 @@ Optional user config (set in Claude Desktop → Settings → MCP):
 - Binary is arm64-only because some transitive MCP SDK deps (swift-collections, swift-service-lifecycle) don't declare x86_64.
 - EventKit / Contacts / MapKit-backed tools are orders of magnitude faster than the equivalent AppleScript path.
 - Messages tool reads `chat.db` directly for history; sending uses AppleScript.
+- `mail search` takes multiple terms in one call — prefer that over one call
+  per term:
+  - `invoice overdue` — both (implicit AND)
+  - `invoice OR receipt` — either (`OR` must be uppercase)
+  - `"past due"` — quoted phrase
+  - `from:` / `to:` / `subject:` — field scoping, combinable with AND
+- A `mail` timeout comes back as an explicit error, never as an empty result
+  list. If you see "the search completed and matched no messages", the search
+  really did finish and find nothing. If you see "Timed out", nothing was
+  retrieved and the query needs narrowing — do not report it as "no mail
+  found".

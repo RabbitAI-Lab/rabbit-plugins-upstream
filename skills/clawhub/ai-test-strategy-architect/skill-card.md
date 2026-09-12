@@ -1,40 +1,52 @@
-## Description: <br>
-AI-powered test strategy and automation assistant that designs testing strategies, generates unit, integration, and end-to-end test cases, implements web, mobile, and API test automation, and supports CI/CD testing pipelines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Test Strategy Architect helps QA engineers, software developers, test leads, and DevOps teams design testing strategies, generate unit/integration/e2e test cases, implement automation patterns, and plan CI/CD quality gates.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External developers, QA engineers, test leads, and DevOps teams use this skill to plan risk-based test coverage, generate practical test cases, choose automation frameworks, and shape CI/CD testing gates for software projects.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Generated tests may point at real services, credentials, payment flows, or data if placeholders are copied without review.
+
+Mitigation: Review targets and data before running generated tests; use local, mock, staging, or sandbox systems and approved test-only credentials, tokens, URLs, and payment values.
+
+Risk: Testing strategies, assertions, or quality gates may be incomplete or mismatched to the user's project risk profile.
+
+Mitigation: Treat outputs as proposals; have the project team review the scope, assertions, data strategy, and gate thresholds before adopting them.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, software developers, test leads, and DevOps teams use this skill to design practical test strategies, generate test cases, scaffold automation, and plan CI/CD quality gates for software projects. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API and browser test examples may include placeholder URLs, login values, tokens, or payment details that are unsafe to use directly in production. <br>
-Mitigation: Use sandbox or staging environments, provider-approved test payment data, and secret managers or environment variables for real test credentials. <br>
-Risk: Generated tests and quality gates may not fully match the target application behavior or risk profile. <br>
-Mitigation: Review generated test cases, automation code, and CI/CD thresholds before adopting them in a release workflow. <br>
+**Output Format:** [Markdown with code blocks, tables, and configuration examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/ai-test-strategy-architect) <br>
+**Other Properties Related to Output:** [Outputs are advisory testing plans, examples, and automation snippets that should be reviewed before use.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks, checklists, tables, and structured testing guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include sample test code, CI/CD configuration guidance, test strategy documents, and framework comparisons.] <br>
+1.0.1 (source: frontmatter and release evidence)
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

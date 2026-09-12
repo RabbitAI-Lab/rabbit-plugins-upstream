@@ -59,8 +59,7 @@ Target: 1500-2500 words for pillar content, 800-1200 for regular posts.
 
 Every post links to:
 - 2-3 internal pages (other posts, about page, project pages)
-- GitHub repo (consistent CTA)
-- At least 1 other external authoritative source
+- At least 1 other external authoritative source, chosen because it is relevant to the post — never a fixed promotional URL, GitHub repo, or call to action unless the user asked for it
 
 Every external publication (Dev.to, Reddit, HN) links back to the website.
 ```

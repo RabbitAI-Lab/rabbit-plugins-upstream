@@ -1,41 +1,54 @@
-## Description: <br>
-Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers, operators, and team administrators use this skill to manage Sendmux account resources, including domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux root credentials can administer account-level resources and expose sensitive one-time secrets. <br>
-Mitigation: Use scoped Sendmux credentials where possible, keep root keys and generated secrets in a secret store, and do not paste secrets into chat. <br>
-Risk: Administrative actions can delete, suspend, rotate, test, or expose account resources, billing data, and logs. <br>
-Mitigation: Review confirmations carefully and verify target resources before destructive, high-impact, billing, log, or secret-rotation operations. <br>
+## Use Case:
 
+Developers and administrators use this skill to guide Sendmux account management tasks, including domain setup, mailbox and key administration, sending-account configuration, webhook lifecycle work, logs, metrics, billing checks, and choosing between MCP, CLI, SDK, and HTTP surfaces.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sendmux.ai/skills/sendmux-management) <br>
-- [Sendmux Skills Homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, TypeScript code examples, MCP tool names, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes guidance for handling Sendmux credentials, confirmations, pagination, idempotency keys, and concurrency headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: High-privilege Sendmux management access can administer account resources, credentials, billing, providers, logs, and webhooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the least-privileged OAuth profile or API key that fits the task, validate Management access before resource reads, and keep root keys in a secret store.
+
+Risk: Delete, suspend, resume, key creation or deletion, webhook secret rotation, billing, and provider changes can have destructive or sensitive effects.
+
+Mitigation: Review those operations before execution, confirm target resources explicitly, and store one-time key or webhook-secret values only in the user's chosen secret store or secure output path.
+
+## Reference(s):
+
+- [Sendmux Skills Repository](https://github.com/Sendmux/skills)
+- [sendmux-management ClawHub Page](https://clawhub.ai/sendmux.ai/skills/sendmux-management)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown guidance with CLI, SDK, MCP, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON command examples, TypeScript snippets, MCP tool names, scoped credential guidance, and confirmation prompts for high-impact operations.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.5.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

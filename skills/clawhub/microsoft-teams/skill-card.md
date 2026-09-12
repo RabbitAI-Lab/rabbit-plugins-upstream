@@ -1,45 +1,78 @@
-## Description: <br>
-Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts via Microsoft Graph API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Teams API integration with managed OAuth for managing teams, channels, messages, meetings, recordings, and transcripts via Microsoft Graph.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to make Microsoft Teams requests through Maton's managed OAuth proxy, including listing teams and channels, sending channel or chat messages, scheduling meetings, and retrieving meeting recordings or transcripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Teams messages, chats, meetings, recordings, transcripts, and metadata are routed through Maton's OAuth proxy. <br>
-Mitigation: Install only when Maton is trusted for the connected Teams account and the organization allows this data path. <br>
-Risk: A leaked MATON_API_KEY or unintended OAuth connection selection could expose or change Teams resources in the connected account. <br>
-Mitigation: Keep MATON_API_KEY private, specify the Maton-Connection header when multiple accounts exist, and revoke unused connections. <br>
-Risk: Write-capable API calls can create, update, or delete Teams channels, messages, meetings, or connections. <br>
-Mitigation: Require explicit user approval after checking the exact team, channel, message, meeting, or connection and the intended effect. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to work with Microsoft Teams resources through Microsoft Graph using Maton-managed authentication. It supports listing and managing teams, channels, messages, chats, meetings, recordings, transcripts, attendance reports, and related account context.
 
-## Reference(s): <br>
-- [Microsoft Teams API Overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview) <br>
-- [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/byungkyu/microsoft-teams) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP routes, shell commands, and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include requests that read or modify Microsoft Teams resources; write actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: The generic API passthrough can use the connected Microsoft account beyond the documented Teams actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Microsoft OAuth scopes possible, specify the intended connection, and avoid passthrough endpoints outside the Teams task.
+
+Risk: Write, delete, send, and scheduling operations can change Teams data or notify other people.
+
+Mitigation: Default to read and list calls, then confirm the exact target, payload, and expected effect before any POST, PUT, PATCH, or DELETE request.
+
+Risk: Connection deletion is irreversible and can break automation using that connection.
+
+Mitigation: List connections, match the exact connection ID with the user, and omit destructive shortcuts unless the user has already confirmed that specific connection.
+
+Risk: Raw HTTP fallback requires handling a long-lived Maton API key.
+
+Mitigation: Prefer OAuth through the CLI; when raw HTTP is required, never print, log, persist, or pass the key on a command line, and send it only to api.maton.ai.
+
+Risk: Microsoft Teams API responses can include personal or organizational data.
+
+Mitigation: Extract only the fields needed for the task and avoid dumping raw responses into logs, files, or unnecessary user-visible output.
+
+Risk: Messages and other Teams content may contain untrusted instructions or adversarial text.
+
+Mitigation: Treat returned content as data, never execute or eval it, and do not let it choose endpoints, recipients, or follow-up actions without validation.
+
+## Reference(s):
+
+- [ClawHub Microsoft Teams Skill](https://clawhub.ai/byungkyu/skills/microsoft-teams)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Microsoft Teams API Overview](https://learn.microsoft.com/en-us/graph/api/resources/teams-api-overview)
+- [Microsoft Graph API Reference](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Microsoft Graph Channel Resource](https://learn.microsoft.com/en-us/graph/api/resources/channel)
+- [Microsoft Graph ChatMessage Resource](https://learn.microsoft.com/en-us/graph/api/resources/chatmessage)
+- [Microsoft Graph Team Resource](https://learn.microsoft.com/en-us/graph/api/resources/team)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a Microsoft Teams connection; responses may include personal or organizational data.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

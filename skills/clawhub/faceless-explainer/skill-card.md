@@ -1,45 +1,62 @@
-## Description: <br>
-Turns arbitrary text into a faceless explainer video with invented visuals such as typography, abstract graphics, diagrams, and data visualization for topic explainers, concept breakdowns, how-tos, and listicles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns arbitrary text such as an article, notes, a topic, or a brief into a faceless explainer video with invented per-scene visuals such as typography, abstract graphics, diagrams, and data visualizations.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External creators, video producers, and agent operators use this skill to turn text, notes, topics, or briefs into HyperFrames explainer videos with storyboard, narration, invented visuals, HTML frame compositions, captions, and a final MP4. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill tells the agent to silently update global HyperFrames skills from the network during normal use. <br>
-Mitigation: Require explicit approval before running update commands, and review the updated global skill set before continuing with video generation. <br>
-Risk: Generated HTML or caption output may rely on CDN dependencies, which can matter in offline or locked-down rendering environments. <br>
-Mitigation: Review generated HTML and CDN references before deployment, and replace or approve dependencies according to the target environment's policy. <br>
+## Use Case:
 
+External users and developers use this skill to turn source text into a HyperFrames faceless explainer workflow, including a durable brief, storyboard, script, audio metadata, frame compositions, captions, transitions, and a final rendered video.
 
-## Reference(s): <br>
-- [Faceless Explainer ClawHub page](https://clawhub.ai/heygen-com/skills/faceless-explainer) <br>
-- [Story design](artifact/references/story-design.md) <br>
-- [Visual design](artifact/references/visual-design.md) <br>
-- [Motion language](artifact/references/motion-language.md) <br>
-- [Cut catalog](artifact/references/cut-catalog.md) <br>
-- [Frame worker delta](artifact/sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown project files, JSON metadata, shell commands, HTML frame compositions, captions, and rendered MP4 artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates project-local video assets under videos/<project>; audio and media behavior depends on HyperFrames, HeyGen sign-in status, and available local fallbacks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: Mutable remote tooling may change behavior during installation or workflow execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, prefer pinned HyperFrames tooling, and approve updates only when the exact source being fetched is trusted.
+
+Risk: File-path handling may write outside the intended project when project files such as STORYBOARD.md or audio_meta.json are untrusted.
+
+Mitigation: Run the skill only in a sandbox or disposable project and avoid untrusted project files until path containment is fixed.
+
+Risk: The workflow may use HeyGen or local audio tooling and save project briefs and preferences for later reuse.
+
+Mitigation: Use only appropriate project content, review saved preferences and generated files, and remove sensitive material before reuse or sharing.
+
+## Reference(s):
+
+- [Faceless Explainer ClawHub skill page](https://clawhub.ai/heygen-com/skills/faceless-explainer)
+- [Story design](artifact/references/story-design.md)
+- [Visual design](artifact/references/visual-design.md)
+- [Motion language](artifact/references/motion-language.md)
+- [Cut catalog](artifact/references/cut-catalog.md)
+- [Frame worker](artifact/sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated project files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces project artifacts such as BRIEF.md, STORYBOARD.md, SCRIPT.md, audio_meta.json, HTML frame compositions, captions, transition updates, index.html, and renders/video.mp4 when the workflow is executed.]
+
+## Skill Version(s):
+
+1.0.30 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,58 @@
-## Description: <br>
-Animate characters from images using driving videos with WaveSpeed AI's Wan 2.2 Animate model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Animates characters from images using driving videos with WaveSpeed AI's Wan 2.2 Animate model, supporting animate and replace modes with 480p or 720p outputs.
 
-## Publisher: <br>
-[chengzeyi](https://clawhub.ai/user/chengzeyi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wavespeed](https://clawhub.ai/user/wavespeed)
 
-## Use Case: <br>
-Developers and creators use this skill to generate WaveSpeed AI calls that animate a character from an image with a driving video, either by transferring motion or replacing the video subject. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using this skill can send selected prompts, images, videos, or media URLs to WaveSpeed AI and may incur generation costs. <br>
-Mitigation: Use a trusted WaveSpeed account, avoid sensitive media unless provider terms are acceptable, and monitor API usage. <br>
-Risk: API keys may be exposed if copied into source files, prompts, or logs. <br>
-Mitigation: Store WAVESPEED_API_KEY in environment variables or a secret manager and avoid committing credentials. <br>
-Risk: Untrusted media URLs can introduce privacy or content-handling risk. <br>
-Mitigation: Use trusted image and video sources and validate URLs before sending them to the provider. <br>
+## Use Case:
 
+Developers and creative operators use this skill to animate an image character from a reference video or replace a video subject with an image character while preserving motion and scene.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chengzeyi/wavespeed-wan-22-animate) <br>
-- [WaveSpeed API keys](https://wavespeed.ai/accesskey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with JavaScript and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to produce WaveSpeed API usage examples, parameter guidance, and security notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill asks users to run unpinned npm tools that can use stored WaveSpeed credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, prefer pinned package versions, and use scoped or revocable WaveSpeed credentials.
+
+Risk: Image and video inputs are sent to WaveSpeed for processing and may include sensitive media.
+
+Mitigation: Do not upload private or proprietary images or videos unless the user is comfortable sending them to WaveSpeed.
+
+Risk: Video generation can incur usage-based costs.
+
+Mitigation: Check pricing before runs and start with lower-resolution test runs when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wavespeed/skills/wavespeed-wan-22-animate)
+- [WaveSpeed MCP server](https://github.com/WaveSpeedAI/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces WaveSpeed CLI or MCP usage guidance that returns generated video output URLs or downloaded files.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

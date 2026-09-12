@@ -17,7 +17,7 @@ installer:
 argument-hint: "[ceph question or describe your cluster task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CEPH_AIOPS_CONFIG"],"bins":["ceph-aiops"],"config":["~/.ceph-aiops/config.yaml","~/.ceph-aiops/secrets.enc"]},"optional":{"env":["CEPH_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CEPH_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Ceph-AIops","emoji":"🐙","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["ceph-aiops","uvx"]},"optional":{"env":["CEPH_AIOPS_CONFIG","CEPH_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Ceph-AIops","emoji":"🐙","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Ceph operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Works against vanilla ceph-mgr (cephadm / hypervisor-bundled Ceph / MicroCeph); no croit and no Kubernetes dependency.
   All write operations are audited to a local SQLite DB under ~/.ceph-aiops/ (relocatable via CEPH_AIOPS_HOME).
@@ -64,6 +64,15 @@ uv tool install ceph-aiops
 ceph-aiops init       # interactive wizard: mgr host/port/username + encrypted Dashboard password
 ceph-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@aiops-tools/ceph-aiops
+openclaw skills info ceph-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

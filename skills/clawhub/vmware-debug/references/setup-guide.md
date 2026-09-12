@@ -6,7 +6,7 @@ is a pure, offline correlation engine. There is no `config.yaml` and no `.env`.
 ## Install
 
 ```bash
-uv tool install vmware-debug
+uv tool install vmware-debug==1.11.4
 vmware-debug categories      # verify it runs
 ```
 
@@ -15,7 +15,7 @@ vmware-debug categories      # verify it runs
 ```json
 {
   "command": "uvx",
-  "args": ["--from", "vmware-debug", "vmware-debug-mcp"]
+  "args": ["--from", "vmware-debug==1.11.4", "vmware-debug-mcp"]
 }
 ```
 
@@ -31,19 +31,30 @@ routes fixes to (vmware-aiops, vmware-pilot).
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with,
 > endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.**
 
-1. **Source Code** — https://github.com/zw008/VMware-Debug (MIT).
+1. **Source Code** — https://github.com/vmware-skills/VMware-Debug (MIT).
 2. **Credentials** — none. debug holds no secrets and connects to nothing.
-3. **Network** — none. All tools are local pure functions over event data the
-   agent supplies.
-4. **Writes** — none. debug only diagnoses and recommends; remediation is routed
+3. **Network** — none. The correlation tools are local pure functions over
+   event data the agent supplies; the case tools read and write local files.
+4. **Writes** — only to the local investigation ledger under `$OPS_HOME`
+   (the seven [WRITE] `case_*` tools). Evidence, gaps, hypotheses and grade
+   history are only ever added to; `timeline.md` is regenerated from the evidence and
+   `case.json` holds the current grade and state. Nothing is written to any
+   VMware system: debug only diagnoses and recommends; remediation is routed
    to vmware-aiops / vmware-pilot, where confirmation/approval/audit live.
+   Case data is sensitive: each case folder (`$OPS_HOME/cases/<case-id>/`, default
+   `~/.vmware/cases/`) is created owner-only (`0700`) and holds the submitted
+   evidence — host names, addresses, log and event text. There is no automatic
+   retention limit: `case_close` marks a case closed and keeps its files; delete
+   the folder to remove a case.
 5. **No cross-skill coupling** — events arrive as plain dicts (the event
    envelope); debug imports no other skill package at runtime.
 6. **Environment scoping** — policy rules can scope by environment, and skills
    that connect to a VMware estate may declare `environment:` (`production` /
    `staging` / `lab`) per target in their own `config.yaml` as an optional label
    an environment-scoped `deny` rule can match on. debug has no config and no
-   connection to declare one about, so it reports a constant `local`. Since it
-   ships no operation above read risk, nothing here is gated either way.
+   connection to declare one about, so it registers no environment resolver —
+   it has no basis to answer for any target. Its tools do not pass through the
+   policy engine either, so no policy rule, environment-scoped or not, applies
+   to them.
 7. **Static analysis** — `uvx bandit -r vmware_debug/` (release bar:
    0 Medium+).

@@ -1,44 +1,53 @@
-## Description: <br>
-Use when someone wants a person on camera speaking a script: a lip-synced host, spokesperson, or narrated avatar from a portrait photo. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a person on camera speaking a script - lip-synced host, spokesperson, or narrated avatar from a portrait photo.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to prepare one Pruna p-video-avatar generation for a portrait-based talking-head clip, including prompt drafting, media upload, API request construction, and confirmation gates before a paid call. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow sends portrait images, scripts or audio, prompts, voice settings, and language choices to Pruna's API and may incur paid generation costs. <br>
-Mitigation: Confirm PRUNA_API_KEY availability, media inputs, script or audio, voice settings, language, resolution, and prompts with the user before making any API call. <br>
-Risk: Using the skill for multi-scene continuity, silent B-roll, or motion transfer can produce the wrong workflow and mismatched expectations. <br>
-Mitigation: Use this skill for one p-video-avatar prediction per invocation and redirect multi-scene, B-roll, and motion-transfer requests to the specialized Pruna skills named in the artifact. <br>
-Risk: A weak or reused prompt can drift from the user's intended speaker, host beat, or approved wording. <br>
-Mitigation: Draft a fresh, faithful video prompt for the clip, keep the portrait identity and script or audio fixed, and show the prompt and voice fields before posting when wording is not locked. <br>
+## Use Case:
 
+External users and developers use this skill to prepare a single Pruna p-video-avatar prediction that turns a portrait, script or narration audio, and prompt settings into a lip-synced talking-head video clip.
 
-## Reference(s): <br>
-- [ClawHub p-video-avatar Skill Page](https://clawhub.ai/pruna-ai/skills/p-video-avatar) <br>
-- [Pruna Files API Endpoint](https://api.pruna.ai/v1/files) <br>
-- [Pruna Predictions API Endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with curl examples and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a single-stream agent workflow for one Pruna p-video-avatar prediction; the generated video is produced by Pruna's API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill sends portrait images, scripts, and narration audio to Pruna for video generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the user is comfortable with Pruna processing those inputs and has approved the generation details.
+
+Risk: The skill instructs agents to install multiple external Pruna skills with unpinned npx commands.
+
+Mitigation: Review or pin referenced skill installs before running them, especially in environments with private files, secrets, or persistent agent skill directories.
+
+## Reference(s):
+
+- [p-video-avatar ClawHub release](https://clawhub.ai/pruna-ai/skills/p-video-avatar)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON request bodies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY and user confirmation before creating paid predictions.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,66 @@
-## Description: <br>
-Operates self-hosted Prometheus, Alertmanager, Grafana, and Grafana Loki observability stacks for queries, alert triage, dashboard and datasource inspection, bounded log reads, root-cause analyses, and guarded operational writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Governed self-hosted observability operations for Prometheus, Alertmanager, Grafana, and Loki, including PromQL and LogQL reads, alert and target triage, RCA workflows, dashboards, and audited guarded writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-SREs, platform engineers, and developers use this skill to inspect and troubleshoot self-hosted observability stacks, including PromQL and LogQL reads, alert root-cause analysis, scrape health checks, dashboard operations, and time-boxed operational changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes high-impact write actions without a required approval or policy gate. <br>
-Mitigation: Install with least-privilege service accounts, start with read-only Grafana and Prometheus permissions, use dry-run before writes, and avoid unattended dashboard deletion or Prometheus config reload unless an external approval process controls those actions. <br>
-Risk: Operational RCA and remediation guidance can be misleading if an agent acts on partial or unverified observability data. <br>
-Mitigation: Confirm current stack state with tool results, treat RCA output as advisory, check truncation indicators on bounded reads, and verify risky changes against the target system before execution. <br>
+## Use Case:
 
+Developers, SREs, and platform engineers use this skill to inspect and operate self-hosted Prometheus, Alertmanager, Grafana, and Loki stacks. It helps query metrics and logs, triage alerts and scrape failures, investigate dashboard and datasource health, and perform audited operational writes when the connected account permits them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/observability-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Observability-AIops) <br>
-- [Capability matrix](references/capabilities.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with operational summaries, tool-result interpretation, and inline shell commands or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bounded observability query results, RCA findings, dry-run guidance, and remediation steps; Loki reads are selector-, lookback-, and line-limited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can interact with write-capable Prometheus, Alertmanager, and Grafana APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with least-privilege read-only service accounts, grant write scopes only when needed, use dry-run where available, and rely on server-side permissions as the enforcement boundary.
+
+Risk: The skill handles credentials and authenticated observability endpoints, and the security evidence notes unsafe HTTP examples.
+
+Mitigation: Use HTTPS with certificate verification for authenticated targets, keep verify_ssl enabled outside labs, use the encrypted secret store, and migrate any legacy plaintext token environment variables.
+
+Risk: The security evidence notes an unpinned external installer.
+
+Mitigation: Install a pinned and reviewed package version before enabling the skill in production workflows.
+
+Risk: RCA and alert-noise analyses are heuristic and may produce incorrect operational interpretations.
+
+Mitigation: Verify recommendations against raw PromQL, LogQL, alert, rule, and target outputs before changing silences, dashboards, or service configuration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/observability-aiops)
+- [Project homepage](https://github.com/AIops-tools/Observability-AIops)
+- [Capability matrix](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text with inline shell commands, query examples, configuration guidance, and tool-result analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bounded PromQL or LogQL queries, RCA findings, dashboard or alert identifiers, dry-run guidance, audit context, and next-step operational recommendations.]
+
+## Skill Version(s):
+
+0.10.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

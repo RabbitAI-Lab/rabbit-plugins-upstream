@@ -1,44 +1,66 @@
-## Description: <br>
-Winskill is a Windows Server operations toolbox that helps agents diagnose disk usage, IIS, services, Windows Update, performance, security logs, registry startup items, storage, networking, certificates, firewall rules, Docker, Kubernetes, and guided repair workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Windows server operations toolbox that helps agents diagnose and manage disk usage, IIS, services, updates, performance, security audits, networking, backups, containers, multi-server administration, monitoring, trend prediction, and alerting with PowerShell-centered guidance.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Windows administrators, operations engineers, and support agents use this skill to generate PowerShell-based diagnostic and maintenance guidance for Windows Server environments. It is intended for local server triage, audit, cleanup, and confirmed repair workflows rather than unattended changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repair and cleanup flows can stop services, reset networking, clear caches, or delete temporary files. <br>
-Mitigation: Run diagnosis-only steps first, review the proposed command list and impact, require explicit user confirmation, and schedule changes during a maintenance window. <br>
-Risk: Some procedures require administrator privileges on Windows servers and may affect availability. <br>
-Mitigation: Limit execution to authorized administrators, confirm backups or restore points where applicable, and avoid production execution without change approval. <br>
-Risk: The release makes read-only and offline safety claims that do not cover every repair behavior. <br>
-Mitigation: Treat the skill as a repair-capable administrative toolbox and review each generated command before running it. <br>
+## Use Case:
 
+Windows administrators and IT operations teams use this skill to ask an agent for operational diagnostics, audit checks, PowerShell command guidance, and confirmed remediation workflows across Windows Server environments. It is suited to routine server maintenance, incident triage, monitoring setup, compliance checks, and multi-server administration.
 
-## Reference(s): <br>
-- [Winskill ClawHub skill page](https://clawhub.ai/fyniujin/skills/winskill) <br>
-- [Docker Engine on Windows Server documentation](https://docs.docker.com/engine/install/windows-server/) <br>
-- [Install kubectl on Windows documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with PowerShell command blocks, tables, and Chinese-language operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes read-only diagnostic flows plus confirmed administrator repair and cleanup procedures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Advanced modules can create scheduled tasks or make persistent operational changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review modules 28, 30, and 31 before installation, test outside production first, require explicit confirmation for changes, and verify scheduled task cleanup afterward.
+
+Risk: Remote multi-server workflows can store credentials and run commands across servers.
+
+Mitigation: Use least-privilege, non-shared credentials; restrict WinRM access; and review each remote command before execution.
+
+Risk: Monitoring and alerting workflows may expose host, metric, threshold, or webhook details.
+
+Mitigation: Store webhook URLs in environment variables, limit access to generated output files, and rotate any webhook that may have been exposed.
+
+## Reference(s):
+
+- [Skill definition and module overview](artifact/SKILL.md)
+- [CIS Benchmark checks](artifact/references/compliance/cis-benchmark.yaml)
+- [等保 2.0 checks](artifact/references/compliance/dp-2.0.yaml)
+- [Monitoring thresholds](artifact/references/thresholds.yaml)
+- [Automated remediation guide](artifact/references/modules/module-27-自动化修复向导.md)
+- [Performance baseline and trend analysis](artifact/references/modules/module-28-性能基线-&-趋势分析.md)
+- [Remote multi-server management](artifact/references/modules/module-30-远程多服务器管理.md)
+- [Lightweight scheduled monitoring](artifact/references/modules/module-31-轻量常驻监控.md)
+- [Trend prediction](artifact/references/modules/module-32-趋势预测.md)
+- [Alert push configuration](artifact/references/modules/module-33-告警推送.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with PowerShell command blocks, configuration snippets, diagnostic summaries, and operational checklists.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended for Windows PowerShell 5.1+ workflows; several modules require administrator approval or explicit user confirmation before changes are made.]
+
+## Skill Version(s):
+
+3.3.0 (source: frontmatter and server release evidence, released 2026-09-11)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

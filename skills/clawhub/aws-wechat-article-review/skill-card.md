@@ -1,47 +1,57 @@
-## Description: <br>
-Reviews WeChat public-account articles before publication by checking sensitive words, typos, political and platform compliance, writing quality, AI-flavored prose signals, image markers, and required publishing elements, then outputs an actionable revision list. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助公众号编辑、自媒体作者和合规人员在发布前检查敏感词、错别字、政治合规、平台规范、写作规范和 AI 味，并输出可执行修改清单。
 
-## Publisher: <br>
-[aiworkskills](https://clawhub.ai/user/aiworkskills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aiworkskills](https://clawhub.ai/user/aiworkskills)
 
-## Use Case: <br>
-External WeChat editors, self-media authors, and compliance reviewers use this skill to review draft articles before publication and receive a prioritized list of required and suggested fixes. It supports content review before formatting and final review before publishing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports that the skill under-discloses a finalization-time Python command from a neighboring aws-wechat-article-writing skill that edits draft files. <br>
-Mitigation: Install the related skill suite only from a trusted source, review the sibling Python script before use, and run the skill only in the intended local article workspace. <br>
-Risk: The skill can write article files and review records during its review and finalization workflow. <br>
-Mitigation: Keep drafts under version control or backups, review proposed changes before finalization, and limit execution to the article workspace. <br>
+## Use Case:
 
+External content editors, self-media authors, and compliance reviewers use this skill to review WeChat public-account drafts before publication. It supports content review and final review workflows, producing issue lists and finalization guidance for article files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/aiworkskills/aws-wechat-article-review) <br>
-- [Publisher profile](https://clawhub.ai/user/aiworkskills) <br>
-- [Declared project homepage](https://aiworkskills.cn) <br>
-- [Declared source repository](https://github.com/aiworkskills/wechat-article-skills) <br>
-- [Review checklist](references/checklist.md) <br>
-- [Review output format](references/output-format.md) <br>
-- [AI flavor check methodology](references/ai-flavor-check.md) <br>
-- [AI flavor check samples](references/ai-flavor-check-samples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown review results, revision checklists, and local file or command instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write review records and finalized article files in the local article workspace after the required review flow completes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.24 (source: ClawHub release metadata) <br>
+Risk: The skill can write finalized article files and append configured embed placeholders, which may change publish-ready content beyond review comments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in a trusted article workspace, inspect .aws-article/config.yaml and article.yaml before finalization, and explicitly opt out of embeds when they are not wanted.
+
+Risk: The skill may instruct the agent to run a Python citation-stripping script from a sibling package despite a review-only disclosure.
+
+Mitigation: Confirm the sibling package is expected and review the command before allowing finalization.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/aiworkskills/skills/aws-wechat-article-review)
+- [Review checklist](references/checklist.md)
+- [Review output format](references/output-format.md)
+- [AI flavor check methodology](references/ai-flavor-check.md)
+- [AI flavor check calibration samples](references/ai-flavor-check-samples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands]
+
+**Output Format:** [Markdown review reports, checklist tables, file finalization guidance, and occasional inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce review.md and finalized article.md in the article workspace when the workflow reaches final approval.]
+
+## Skill Version(s):
+
+1.0.25 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,73 @@
-## Description: <br>
-Dropbox API integration with managed OAuth for files, folders, search, metadata, and cloud storage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dropbox API integration with managed OAuth for managing files and folders, searching content, retrieving metadata, and working with file revisions through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Dropbox files and folders through Maton-managed OAuth, including listing, searching, uploading, downloading, moving, deleting, and reading metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, upload, move, and delete Dropbox data through Maton-managed OAuth. <br>
-Mitigation: Confirm exact Dropbox paths before uploads, moves, deletes, and batch operations. <br>
-Risk: The skill requires a sensitive MATON_API_KEY and can return temporary Dropbox download links. <br>
-Mitigation: Avoid sharing logs containing MATON_API_KEY or temporary links, and revoke unused Dropbox connections when finished. <br>
-Risk: Dropbox access is brokered through Maton rather than directly through Dropbox credentials in the skill. <br>
-Mitigation: Install only when the operator trusts Maton to broker Dropbox access. <br>
+## Use Case:
 
+Employees, external users, developers, and automation agents use this skill to inspect, search, upload, download, move, copy, delete, and manage Dropbox files and folder metadata through a connected Maton account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/dropbox-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Dropbox HTTP API overview](https://www.dropbox.com/developers/documentation/http/overview) <br>
-- [Dropbox Developer Portal](https://www.dropbox.com/developers) <br>
-- [Dropbox API Explorer](https://dropbox.github.io/dropbox-api-v2-explorer/) <br>
-- [DBX File Access Guide](https://developers.dropbox.com/dbx-file-access-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with Python, JavaScript, curl, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; Dropbox content endpoints use binary request bodies with Dropbox-API-Arg headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill can access Dropbox account, file, folder, metadata, and content data through a connected Maton account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if Maton and the package source are trusted, prefer OAuth, grant the narrowest available Dropbox scopes, and use read/list calls before making changes.
+
+Risk: Write operations such as upload, move, copy, delete, restore, tag changes, and connection deletion can alter or remove Dropbox resources.
+
+Mitigation: Confirm the exact account, connection, file paths, payload, and intended effect with the user before any write, delete, sharing, or connection-changing operation.
+
+Risk: The Maton API passthrough may reach Dropbox endpoints beyond the examples documented in the skill when the connected account authorizes them.
+
+Mitigation: Treat the documented endpoints as the intended surface, apply the same confirmation rules to every passthrough call, and avoid broader scopes or endpoints when a narrower request satisfies the task.
+
+Risk: API keys, provider-issued tokens, temporary download links, and raw API responses may expose credentials or personal Dropbox data.
+
+Mitigation: Do not print, persist, log, or transmit credentials; keep scoped tokens in memory only for the current request sequence; and minimize response fields shown or stored.
+
+Risk: External Dropbox content may contain adversarial instructions or data that could influence follow-up actions.
+
+Mitigation: Treat returned Dropbox content as untrusted data, do not execute or follow instructions from fetched content, and pass external values as discrete validated arguments.
+
+## Reference(s):
+
+- [ClawHub Dropbox Skill](https://clawhub.ai/byungkyu/skills/dropbox-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Dropbox HTTP API Overview](https://www.dropbox.com/developers/documentation/http/overview)
+- [Dropbox Developer Portal](https://www.dropbox.com/developers)
+- [Dropbox API Explorer](https://dropbox.github.io/dropbox-api-v2-explorer/)
+- [DBX File Access Guide](https://developers.dropbox.com/dbx-file-access-guide)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent guidance and commands for Maton-mediated Dropbox API calls; API responses may include Dropbox account, file, folder, metadata, link, and content data.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

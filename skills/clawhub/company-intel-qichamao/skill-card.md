@@ -1,50 +1,67 @@
-## Description: <br>
-Generates company intelligence reports from bidding and tendering data, covering company profile, business focus, customers and suppliers, bidding strength, competitors, geographic footprint, and public-risk references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates bid-data-based company intelligence reports covering business profile, customer and supplier relationships, tender-winning strength, competitors, public risk signals, and optional company comparisons.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External users and business analysts use this skill to investigate one company or compare two companies through public bidding activity, contract relationships, competitor overlap, and public-risk references. It is intended for company background research and commercial due diligence support, not for project bid/no-bid decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends company queries to a third-party vendor service. <br>
-Mitigation: Install only when that vendor data flow is acceptable, and avoid submitting sensitive or confidential company research terms. <br>
-Risk: The skill stores a vendor API key and generated company reports on disk. <br>
-Mitigation: Prefer a manually supplied API key, restrict access to the local configuration and report directory, and remove generated reports when they are no longer needed. <br>
-Risk: Auto-registration uses a device-derived identifier for free-trial deduplication. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY to bypass auto-registration if device fingerprinting is a concern. <br>
-Risk: Generated reports may preserve login-bypassing signed links and contact details. <br>
-Mitigation: Do not forward HTML or Markdown reports unless the signed links and any contact information are acceptable to share. <br>
+## Use Case:
 
+External users and business analysts use this skill to investigate a named company from a Chinese public procurement and bidding-data perspective. It helps produce single-company due diligence reports or two-company comparisons with cited data boundaries, cost estimates, and optional shareable HTML output.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/company-intel-qichamao) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Automatic registration flow](artifact/references/auto-register.md) <br>
-- [Vendor API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Vendor account and recharge portal](https://ai.zhiliaobiaoxun.com/?ch=s116) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, API Calls, Guidance] <br>
-**Output Format:** [Markdown report plus optional generated HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include signed vendor links, absolute local report paths, cited public-risk links, and data-boundary disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Company names and query terms are sent to Zhiliaobiaoxun APIs, and usage depends on its account and credit system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data sharing is acceptable, and inform users of estimated credit consumption before running a report.
+
+Risk: Automatic registration can collect a device identifier and store an API key locally.
+
+Mitigation: Prefer a user-provided ZLBX_API_KEY; if no key exists, get explicit user consent before registration and verify local permissions on ~/.zlbx/config.json.
+
+Risk: Generated HTML reports can contain signed company or bid links and contact details that are suitable only for the intended audience.
+
+Mitigation: Review generated reports before sharing, preserve API-returned link semantics, and avoid sharing signed links or contact information beyond the intended recipients.
+
+Risk: Public company risk sections can affect real organizations if phrased as unsupported allegations.
+
+Mitigation: Use only sourced, factual language for public risk signals, separate facts from inference, and include data-boundary disclaimers.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/company-intel-qichamao)
+- [API Quick Reference](references/api-quick.md)
+- [Company Intelligence Workflow](references/workflow.md)
+- [Report Template](references/report-template.md)
+- [Auto-Registration Flow](references/auto-register.md)
+- [Zhiliaobiaoxun API Base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun Account and Registration API](https://ai.zhiliaobiaoxun.com/web-api/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report in conversation, plus optional self-contained HTML report file generated from structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration; API-returned company and bid links may include signed access parameters and should be handled as shareable links.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

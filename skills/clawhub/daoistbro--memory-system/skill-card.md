@@ -1,39 +1,53 @@
-## Description: <br>
-自研三层记忆恢复系统。解决session重启后"忘记一切"的问题，提供永久记忆、今日记忆、临时记忆的完整架构。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A local three-layer memory recovery skill that helps agents restore permanent, daily, and session context after restarts.
 
-## Publisher: <br>
-[daoistbro](https://clawhub.ai/user/daoistbro) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[daoistbro](https://clawhub.ai/user/daoistbro)
 
-## Use Case: <br>
-Developers and agent operators use this skill to recover local work context after session restarts by reading permanent, daily, and session memory files. It supports continuity workflows where memory is intentionally stored and reviewed in local Markdown files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Intentional local memory retention can preserve personal or work context and shape future agent behavior. <br>
-Mitigation: Review memory files periodically, keep secrets and highly private details out of them, and delete or edit entries that should not be reused later. <br>
-Risk: The recovery script prints local memory file contents into the active session. <br>
-Mitigation: Run it only in trusted workspaces and inspect the memory directory before use when sensitive context may be present. <br>
+## Use Case:
 
+Developers and agent users use this skill to preserve and recover local working context, preferences, decisions, and session notes across agent restarts.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with bash command snippets and local shell output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads local memory files when the recovery script is run; no API credentials were detected in the release evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: package.json and server release metadata) <br>
+Risk: The skill stores and reloads personal or work context such as preferences, relationships, directories, and decisions on disk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in workspaces where that context may be stored locally, keep the memory directory private, avoid secrets, and periodically inspect or delete memory files.
+
+Risk: Recovered memory can reintroduce stale, sensitive, or untrusted notes into a new session.
+
+Mitigation: Treat recovered memory as reference notes rather than trusted instructions, and review important recovered context before acting on it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/daoistbro/skills/memory-system)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and a shell script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads local memory Markdown files when the recovery script is run.]
+
+## Skill Version(s):
+
+1.0.0 (source: package.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

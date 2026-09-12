@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/telegram-api",
   "slug": "telegram-api",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1781739755927,
-  "contentHash": "829e730096aa52335f45aaad26c5176a9732883bd2ad7fd6761c670171cc411f",
-  "fetchedAt": "2026-07-26T18:27:31.736Z"
+  "version": "1.2.4",
+  "updatedAt": 1789070177116,
+  "contentHash": "e43e01df6444a1e3d37bf67eb1d256b4995fa0f88e439c5f22d21565a43bccda",
+  "fetchedAt": "2026-09-12T11:46:05.674Z"
 }

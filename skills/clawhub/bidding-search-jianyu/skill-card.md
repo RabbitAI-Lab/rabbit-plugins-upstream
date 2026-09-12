@@ -1,47 +1,62 @@
-## Description: <br>
-This skill helps agents query Jianyu/Zhiliaobiaoxun bidding data for tender search, company analysis, market aggregation, price trends, and potential bidder recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Jianyu/Zhiliaobiaoxun tender, bidding, company, and market data, then summarizes opportunities, competitors, pricing trends, and account status in charts or Markdown tables.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Procurement, sales, market intelligence, and bid teams use this skill to find tender opportunities, analyze buyers and suppliers, compare competitors, inspect company bidding activity, and summarize market trends from Jianyu/Zhiliaobiaoxun data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement searches and returned contact details can include sensitive business information. <br>
-Mitigation: Avoid submitting confidential strategy or non-public deal information, and treat returned contact information as sensitive business contact data. <br>
-Risk: The skill requires a ZLBX_API_KEY and sends procurement queries to the Jianyu/Zhiliaobiaoxun service. <br>
-Mitigation: Install only if you trust the service for these searches, and use a dedicated API key with appropriate access controls. <br>
-Risk: Broad company-name matching can mix related entities when a user needs exact-company results. <br>
-Mitigation: Ask for exact-company searches when entity scope matters, especially for legal, competitive, or account-specific analysis. <br>
+## Use Case:
 
+External users, procurement teams, and business development analysts use this skill to find tender opportunities, inspect company bidding activity, identify competitors or likely bidders, and analyze market pricing trends from vendor data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/bidding-search-jianyu) <br>
-- [Jianyu API service](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool_name}) <br>
-- [Jianyu API key portal](https://ai.zhiliaobiaoxun.com/?ch=s23) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, api calls, guidance] <br>
-**Output Format:** [Markdown summaries, tables, query plans, and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY for authenticated third-party API requests and emphasizes clear tables or charts for data analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence) <br>
+Risk: The skill uses vendor remote APIs and may show vendor referral or recharge links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if that vendor interaction is acceptable, and review account balance or daily consumption before heavy use.
+
+Risk: Optional auto-registration can send a hashed MAC-derived device identifier and store an API key locally.
+
+Mitigation: Configure ZLBX_API_KEY manually to avoid auto-registration, and protect ~/.zlbx/config.json as a local secret file if local storage is used.
+
+Risk: Server-controlled notices and returned tender or contact data may affect user-facing answers.
+
+Mitigation: Review returned data before acting on it, do not expose API keys, and respect masked contact fields without trying to recover hidden details.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/bidding-search-jianyu)
+- [标讯搜索类工具 API 详情](references/api-search.md)
+- [企业分析类工具 API 详情](references/api-company.md)
+- [市场分析类工具 API 详情](references/api-market.md)
+- [账户查询类工具 API 详情](references/api-account.md)
+- [SKILL 自动注册详细流程](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON request examples, and concise setup or troubleshooting guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or an approved local auto-registration flow before vendor API use.]
+
+## Skill Version(s):
+
+2.0.3 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

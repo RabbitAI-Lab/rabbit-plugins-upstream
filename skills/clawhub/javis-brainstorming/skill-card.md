@@ -1,42 +1,51 @@
-## Description: <br>
-Creates pending HiJavis to-do cards from brainstorm-worthy voice or keyboard units, carrying a ready-to-paste prompt that hands captured transcript context to Claude's content-brainstorming flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brainstorming turns recent HiJavis voice or keyboard transcripts with a discernible idea into a pending calendar to-do card containing a ready-to-paste prompt for Claude's content-brainstorming flow.
 
-## Publisher: <br>
-[samuel-wei](https://clawhub.ai/user/samuel-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samuel-wei](https://clawhub.ai/user/samuel-wei)
 
-## Use Case: <br>
-External HiJavis users use this skill to turn voice notes or keyboard input into pending brainstorm cards that preserve the source session and provide a prompt for a Claude brainstorming session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can examine every completed HiJavis voice or keyboard unit when enabled, so sensitive conversations may be processed while it decides whether a card is warranted. <br>
-Mitigation: Enable it only for users comfortable with broad transcript review, and review generated pending cards and chat digests before confirming or acting on them. <br>
-Risk: The skill can create pending calendar cards and chat summaries without a pre-run confirmation. <br>
-Mitigation: Use the Calendar tab Confirm/Discard gate to discard unwanted cards and avoid treating generated prompts as final output without review. <br>
+## Use Case:
 
+External HiJavis users use this skill to capture brainstorm-worthy voice notes or typed thoughts as pending calendar cards, then open the card's chat prompt to continue the planning session in Claude.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samuel-wei/skills/javis-brainstorming) <br>
-- [HiJavis iPhone App](https://apps.apple.com/us/app/hijavis/id6745134765) <br>
-- [to-do card contract](references/todo-card-contract.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [JSON payloads and Markdown digest text with Node.js shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates at most one pending to-do card per brainstorm-worthy unit; no card is emitted when no discernible goal is found.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata and package.json) <br>
+Risk: The skill can read recent private voice or keyboard transcripts and can create pending brainstorm cards before the user confirms them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable it only with the intended internal Javis service, limit the gateway token to transcript-read and card/chat-write permissions, and review pending cards before confirming them.
+
+## Reference(s):
+
+- [Brainstorming ClawHub skill page](https://clawhub.ai/samuel-wei/skills/javis-brainstorming)
+- [to-do card contract](references/todo-card-contract.md)
+- [HiJavis iPhone app](https://apps.apple.com/us/app/hijavis/id6745134765)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Text]
+
+**Output Format:** [JSON command output, pending to-do card payloads, and Markdown chat digests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May emit no card when the transcript does not contain a clear brainstorm-worthy goal or request.]
+
+## Skill Version(s):
+
+0.6.3 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

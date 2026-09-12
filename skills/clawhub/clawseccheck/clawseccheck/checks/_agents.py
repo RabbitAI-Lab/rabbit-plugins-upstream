@@ -14,7 +14,10 @@ from ..catalog import (
     Finding,
 )
 from ..collector import (
+    LIMIT_DOMAIN_AGENTS,
+    LIMIT_DOMAIN_CONFIG,
     Context,
+    agent_roster,
     dig,
 )
 from ..textnorm import (
@@ -35,11 +38,15 @@ from ._shared import (
     _finding,
     _has_approval_gate,
     _hint,
+    _key_advice,
     _resolved_channel_nodes,
+    _surface_absent,
     _trifecta_legs,
+    _unclassified_leg_verbs,
     _web_fetch_enabled,
     _wildcard_group_gap,
 )
+from ..invocation import command_prefix
 
 
 # Phrases that prove the bootstrap ORDERS the agent to obey external content (FAIL).
@@ -135,14 +142,15 @@ def _has_subagents(cfg: dict) -> bool:
         return True
     if dig(cfg, "agents.defaults.subagents"):
         return True
-    agent_list = dig(cfg, "agents.list")
-    if isinstance(agent_list, list):
-        if len(agent_list) > 1:
-            # Multiple agents in the list implies subagent delegation
+    # B-699: through `agent_roster`, so a 2026.8.1 `agents.entries` roster is seen too.
+    # Reading only `agents.list` made a multi-agent config look like a single-agent one.
+    roster = agent_roster(cfg)
+    if len(roster) > 1:
+        # Multiple agents in the roster implies subagent delegation
+        return True
+    for agent in roster:
+        if dig(agent.entry, "subagents"):
             return True
-        for agent in agent_list:
-            if isinstance(agent, dict) and dig(agent, "subagents"):
-                return True
     return False
 
 
@@ -258,7 +266,7 @@ def check_agent_separation(ctx: Context) -> Finding:
             "assessed from config alone (per-agent tool config exists, but it can't "
             "show session-granted runtime tools, so it can't fully stand in for each "
             "agent's real legs).",
-            "If you run more than one agent, run 'clawseccheck --ask', have each agent "
+            f"If you run more than one agent, run '{command_prefix()} --ask', have each agent "
             "list its real tools under 'agents', then re-run with '--attest <file>'.",
         )
     rostered = [(a["name"], _agent_legs(a["tools"])) for a in agents]
@@ -274,6 +282,29 @@ def check_agent_separation(ctx: Context) -> Finding:
             "must not also hold sensitive-data and outbound/exec tools. Move one leg to "
             "a separate agent the untrusted-input agent cannot drive.",
             evidence=[f"{n}: holds all 3 legs" for n in trifecta_agents],
+        )
+    # B-563: only now may "no agent holds all three" mean anything. A verb neither
+    # classifier recognises contributes False to every leg, so an unrecognised roster
+    # counts DOWN to a clean separation verdict. Report what could not be read instead
+    # of a PASS the evidence does not support (Golden Rule #4).
+    unreadable = [(a["name"], _unclassified_leg_verbs(a["tools"])) for a in agents]
+    unreadable = [(name, verbs) for name, verbs in unreadable if verbs]
+    if unreadable:
+        return _finding(
+            "B45",
+            UNKNOWN,
+            "Privilege separation could not be assessed: some attested verb names were "
+            "not recognised by either tool classifier, and an unrecognised verb counts "
+            "as holding no trifecta leg — so 'no agent holds all three' would be an "
+            "artefact of the taxonomy, not a finding about your agents.",
+            "Re-run '--attest' listing each agent's tools under names that say what the "
+            "tool does (for example 'fs_write' or 'shell' rather than a product name). "
+            "Where a verb's capability is genuinely broad, assume it holds the leg and "
+            "separate the agents accordingly.",
+            evidence=[
+                f"{name}: {len(verbs)} unclassifiable verb(s): {', '.join(verbs)}"
+                for name, verbs in unreadable
+            ],
         )
     return _finding(
         "B45",
@@ -321,6 +352,34 @@ def check_delegation_reassembly(ctx: Context) -> Finding:
             "share the same data-vs-instruction contract.",
         )
     if not r["reachable"]:
+        # B-563: "not reachable" is only meaningful if the legs were readable. An
+        # unrecognised verb holds no leg, so it can remove the entry point the walk
+        # starts from, or the sensitive/outbound end it looks for, and the walk then
+        # reports a clean graph it never actually traversed. Same fail-open shape as
+        # B45's PASS branch. The wall-tier PASS below is NOT gated: it already found
+        # reachability, so classification was good enough to get there.
+        unreadable = [
+            (a["name"], _unclassified_leg_verbs(a["tools"]))
+            for a in _attest.attested_agents(ctx.attestation)
+        ]
+        unreadable = [(name, verbs) for name, verbs in unreadable if verbs]
+        if unreadable:
+            return _finding(
+                "B47",
+                UNKNOWN,
+                "Cross-agent trifecta reassembly could not be assessed: some attested verb "
+                "names were not recognised by either tool classifier. An unrecognised verb "
+                "holds no leg, which can hide both the untrusted-input agent the traversal "
+                "starts from and the sensitive/outbound agents it looks for — so 'the "
+                "trifecta does not reassemble' would describe the taxonomy, not your graph.",
+                "Re-run '--attest' listing each agent's tools under names that say what the "
+                "tool does (for example 'fs_write' or 'shell' rather than a product name), "
+                "so the delegation walk can see which agent holds which leg.",
+                evidence=[
+                    f"{name}: {len(verbs)} unclassifiable verb(s): {', '.join(verbs)}"
+                    for name, verbs in unreadable
+                ],
+            )
         return _finding(
             "B47",
             PASS,
@@ -391,6 +450,15 @@ def check_multiagent_exposure(ctx: Context) -> Finding:
     PASS    — multi-agent topology present but none of the warn conditions apply, or a gate
               exists.
     UNKNOWN — no multi-agent topology (single agent; A1 already covers that case).
+              F-140: this branch sets ``not_applicable`` when — and only when — the
+              config locus was read COMPLETELY (``_surface_absent``) and still declares
+              no delegation. ``_has_subagents`` reads nothing but ``ctx.config``
+              (agents.subagents / agents.defaults.subagents / agents.list[i].subagents),
+              so config-locus completeness is the whole proof obligation here; an absent,
+              unparseable, or truncated config degrades the flag back to ordinary UNKNOWN.
+              Unlike B18 below there is no disk corroborator to wait on — B46 models a
+              purely DECLARED topology, so LIMIT_DOMAIN_AGENTS is deliberately not
+              consulted.
     """
     cfg = ctx.config
     if not _has_subagents(cfg):
@@ -400,6 +468,7 @@ def check_multiagent_exposure(ctx: Context) -> Finding:
             "No multi-agent / subagent delegation detected in config — multi-agent "
             "trifecta exposure does not apply (single-agent trifecta is covered by A1).",
             "—",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
     # Untrusted ingress = open/allowlist/paired (authenticated sender != trusted
     # content), matching the trifecta input leg computed in _trifecta_legs(); an
@@ -457,6 +526,12 @@ def check_sender_identity(ctx: Context) -> Finding:
              group history injected into model context).
     PASS   — channels exist and neither dangerous flag is set.
     UNKNOWN — no channels configured (cannot assess).
+              F-140: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and ``channels`` still resolves to no LIVE channel — either the
+              key is absent entirely, or every declared channel carries
+              ``enabled: false`` (B-041), which matches no sender and therefore cannot
+              carry a sender-identity weakness. ``_channels`` reads ``ctx.config`` and
+              nothing else, so config-locus completeness is the whole proof obligation.
     """
     # B-041: assess only live channels — a channel with enabled:false matches nobody,
     # so its dangerouslyAllowNameMatching/history flags are not a live bypass (a §5
@@ -472,6 +547,7 @@ def check_sender_identity(ctx: Context) -> Finding:
             UNKNOWN,
             "No channels configured — sender identity hardening not applicable.",
             "—",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     fail_ev: list[str] = []
@@ -545,6 +621,11 @@ def check_session_visibility(ctx: Context) -> Finding:
               (one session can read other sessions' transcripts).
     PASS    — dmScope is per-peer-ish AND visibility is "self" or "tree".
     UNKNOWN — no session config (not applicable).
+              F-140: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and NEITHER ``session`` NOR ``tools.sessions`` is a dict —
+              i.e. the whole session-isolation surface this check models is genuinely
+              undeclared, not merely unreadable. Both loci are plain ``ctx.config``
+              reads, so config-locus completeness is the whole proof obligation.
     """
     cfg = ctx.config
     session_cfg = cfg.get("session")
@@ -557,6 +638,7 @@ def check_session_visibility(ctx: Context) -> Finding:
             UNKNOWN,
             "No session config — session isolation not applicable.",
             "—",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     dm_scope = session_cfg.get("dmScope") if isinstance(session_cfg, dict) else None
@@ -761,7 +843,8 @@ def _disk_subagent_disclosure(ctx: Context) -> "Finding | None":
         "delegation that has since been removed "
         "from config rather than a hidden capability that is still live.",
         "If subagent delegation is intentional, declare it explicitly under "
-        "agents.subagents / agents.defaults.subagents / agents.list so the normal "
+        "agents.subagents / agents.defaults.subagents / "
+        f"{_key_advice(ctx, 'agents.list', 'agents.entries')} so the normal "
         "approval-gate check (this same B18) applies to it going forward. If it is not "
         "intentional, use the child_session_key values below to find out what spawned "
         "these runs before assuming the capability is gone — it may simply be unrecorded "
@@ -771,14 +854,75 @@ def _disk_subagent_disclosure(ctx: Context) -> "Finding | None":
 
 
 def check_subagents(ctx: Context) -> Finding:
-    """Subagents can inherit elevated/exec tools without human approval."""
+    """Subagents can inherit elevated/exec tools without human approval.
+
+    F-140 — why this check's ``not_applicable`` needs TWO loci, not one. B18 is the only
+    migrated check with a disk corroborator: B-296 layered ``_disk_subagent_disclosure``
+    on top of the config read, so "no subagent delegation" is a claim about
+    ``ctx.config`` AND about the state DB's ``subagent_runs`` registry. Config-locus
+    completeness alone would let a host whose state DB could not be parsed
+    (``subagent_runs_parse_error``) — the exact case where spawns may have happened and
+    we cannot see them — still assert proven surface absence. So the flag additionally
+    requires LIMIT_DOMAIN_AGENTS (the domain collector.py already reserves for this very
+    disclosure) to be untruncated and the registry parse to have succeeded.
+
+    Note ``subagent_runs_found=False`` is deliberately NOT disqualifying: that means the
+    state DB or the table is absent, which is the ordinary shape on a host that has never
+    run a subagent, and treating it as "unknown" would make the flag unreachable on
+    exactly the clean single-agent configs it exists to describe. What must never be
+    swallowed is a registry that EXISTS and could not be read.
+
+    Only the config-derived "no subagent delegation configured" branch is migrated. The
+    later ``UNKNOWN`` branch ("subagents configured but no elevated/exec tools detected")
+    is NOT not-applicable: the delegation surface demonstrably EXISTS there, the check
+    simply judges its risk low, and flagging it would assert absence of a surface this
+    same call just proved present.
+    """
     cfg = ctx.config
 
     if not _has_subagents(cfg):
         disk_finding = _disk_subagent_disclosure(ctx)
         if disk_finding is not None:
             return disk_finding
-        return _finding("B18", UNKNOWN, "No subagent delegation configured.", "—")
+        # B-709: `_disk_subagent_disclosure` returns None both for "genuinely nothing to
+        # disclose" AND for the two degraded-read causes it deliberately stays silent on
+        # (config_parse_error, subagent_runs_parse_error — see its own docstring). The flat
+        # "No subagent delegation configured." literal below is only true in the first
+        # case; asserting it over a read that FAILED would be exactly the fail-open shape
+        # GR#4 forbids. Distinguish the two causes here, engine-side UNKNOWN (B-399), and
+        # keep the wording honest about which one fired instead of claiming absence.
+        if ctx.config_parse_error:
+            return _finding(
+                "B18",
+                UNKNOWN,
+                "openclaw.json could not be parsed, so it was never consulted for "
+                "subagent delegation — this is not the same as delegation being absent.",
+                "Fix openclaw.json so it is valid JSON and owner-readable, then re-run "
+                "the audit.",
+                engine_degraded=True,
+            )
+        if ctx.subagent_runs_parse_error:
+            return _finding(
+                "B18",
+                UNKNOWN,
+                "The OpenClaw state database's subagent_runs registry exists but could "
+                "not be read completely, so recorded spawns could not be checked "
+                "against config — this is not the same as no spawns having occurred.",
+                "Re-run the audit once the state database is not being actively "
+                "written to; if this persists, the subagent_runs table (or an "
+                "individual row's outcome_json) may be corrupt.",
+                engine_degraded=True,
+            )
+        return _finding(
+            "B18",
+            UNKNOWN,
+            "No subagent delegation configured.",
+            "—",
+            not_applicable=(
+                _surface_absent(ctx, LIMIT_DOMAIN_CONFIG, LIMIT_DOMAIN_AGENTS)
+                and not ctx.subagent_runs_parse_error
+            ),
+        )
 
     tools = _enabled_tools(cfg)
     has_elevated = bool(dig(cfg, "tools.elevated.allowFrom"))
@@ -806,8 +950,9 @@ def check_subagents(ctx: Context) -> Finding:
         "B18",
         WARN,
         "Subagents can be spawned and may inherit elevated/exec tools without human approval.",
-        "Set tools.exec.mode to 'ask'/'allowlist' (or tools.exec.security='ask') "
-        "so subagent-triggered elevated/exec actions need explicit human sign-off.",
+        "Set tools.exec.mode to 'ask' so a subagent-triggered elevated/exec action is "
+        "put to you when it is not on the allow list, or tools.exec.ask='always' to be "
+        "asked before every one.",
     )
 
 
@@ -819,22 +964,31 @@ def check_subagents_allow_agents(ctx: Context) -> Finding:
     spawn target; the default restricts spawning to the requesting agent only.
 
     UNKNOWN — neither defaults nor any per-agent allowAgents is configured.
+              B-362: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and neither locus is configured. Grounded in the docstring's
+              own citation (docs.openclaw.ai/agents/subagents): with allowAgents unset
+              ANYWHERE, OpenClaw's own default restricts spawning to the requesting
+              agent only, so the wildcard-delegation surface this check grades
+              genuinely does not exist — not merely an unassessed risk. Both loci
+              (``agents.defaults.subagents.allowAgents`` and each
+              ``agents.list[].subagents.allowAgents``) are plain ``ctx.config`` reads,
+              so config-locus completeness is the whole proof obligation.
     WARN    — any allowAgents list contains '*'.
     PASS    — all allowAgents use explicit non-'*' lists.
     """
     cfg = ctx.config
     defaults_allow = dig(cfg, "agents.defaults.subagents.allowAgents")
-    agent_list = dig(cfg, "agents.list") or []
     offenders = []
     if isinstance(defaults_allow, list) and "*" in defaults_allow:
         offenders.append('agents.defaults.subagents.allowAgents contains "*"')
-    for i, agent in enumerate(agent_list):
-        if not isinstance(agent, dict):
-            continue
-        per = dig(agent, "subagents.allowAgents")
+    for agent in agent_roster(cfg):
+        per = dig(agent.entry, "subagents.allowAgents")
         if isinstance(per, list) and "*" in per:
-            name = agent.get("name", str(i))
-            offenders.append(f'agents.list[{name}].subagents.allowAgents contains "*"')
+            # B-699: the agent's own NAME, in the container this config actually uses --
+            # `labelled`, not `path`. A position is true but not informative, and the same
+            # distinction is what B351's own test caught when `path` was used there.
+            name = agent.entry.get("name") or agent.id or agent.index
+            offenders.append(f'{agent.labelled(name)}.subagents.allowAgents contains "*"')
     if offenders:
         return _finding(
             "B72",
@@ -847,7 +1001,7 @@ def check_subagents_allow_agents(ctx: Context) -> Finding:
             evidence=offenders,
         )
     has_config = isinstance(defaults_allow, list) or any(
-        isinstance(a, dict) and dig(a, "subagents.allowAgents") is not None for a in agent_list
+        dig(a.entry, "subagents.allowAgents") is not None for a in agent_roster(cfg)
     )
     if not has_config:
         return _finding(
@@ -857,6 +1011,7 @@ def check_subagents_allow_agents(ctx: Context) -> Finding:
             "restricts subagent spawning to the requesting agent only.",
             "The default is safe; only configure agents.defaults.subagents.allowAgents "
             "if you explicitly need cross-agent delegation.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
     return _finding(
         "B72",
@@ -967,6 +1122,14 @@ def check_untrusted_context(ctx: Context) -> Finding:
               model prompt (prompt-injection surface).  Never FAIL — this is a
               hardening advisory, not a broken config.
     UNKNOWN — no channels configured; cannot assess.
+              B-362: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and ``channels`` still resolves to no real provider entry
+              (same locus and same "no channels" test as B25/B26's sibling
+              check_sender_identity — see its F-140 note). With no channel configured
+              at all there is no untrusted-sender ingress for contextVisibility to
+              gate, so absence here is genuine inapplicability, not an unassessed
+              risk. The whole read is ``ctx.config``, so config-locus completeness is
+              the entire proof obligation.
     """
     cfg = ctx.config
     channel_map = dig(cfg, "channels")
@@ -983,6 +1146,7 @@ def check_untrusted_context(ctx: Context) -> Finding:
             "No channels configured — cannot assess untrusted-context exposure.",
             "Set channels.defaults.contextVisibility to 'allowlist' or 'allowlist_quote' "
             "before enabling any channel.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     # B-283 (c): resolution is account -> channel -> channels.defaults -> "all", matching
@@ -1078,6 +1242,13 @@ def check_wildcard_group_ingress(ctx: Context) -> Finding:
               allowFrom restricting it. Advisory only — never FAIL, since a public/
               community bot may intentionally accept any group.
     UNKNOWN — no channels configured; cannot assess.
+              B-362: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and ``channels`` still resolves to no real provider entry —
+              same locus, same "no channels" test, as B26 above. With no channel
+              configured there is no group-ingress surface for a wildcard entry to
+              exist on, so absence here is genuine inapplicability. The read is
+              ``ctx.config`` only, so config-locus completeness is the whole proof
+              obligation.
 
     B-297: the predicate itself now lives in `checks/_shared.py`
     (`_wildcard_group_gap` / `_resolved_channel_nodes`) so the risk engine's ingress
@@ -1097,6 +1268,7 @@ def check_wildcard_group_ingress(ctx: Context) -> Finding:
             "No channels configured — cannot assess wildcard group-ingress exposure.",
             "If you enable a channel with group support, set allowFrom (channel-level "
             "or per-group) before allowing a wildcard ('*') group entry.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     affected: list[str] = []

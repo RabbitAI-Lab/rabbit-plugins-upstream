@@ -1,0 +1,56 @@
+{
+  "input_type": "brand_product",
+  "name_type": "specific_product",
+  "name": "星河洁面乳",
+  "brand": "青禾",
+  "date": "2026-08-13",
+  "repeats": 1,
+  "is_demo": true,
+  "questions": [
+    {
+      "id": "Q01",
+      "prompt": "温和洁面乳有哪些？",
+      "intent": "温和清洁"
+    },
+    {
+      "id": "Q02",
+      "prompt": "预算百元的洁面乳推荐？",
+      "intent": "预算选择"
+    }
+  ],
+  "combinations": [
+    {
+      "name": "DOUBA",
+      "thinking_enabled": 0
+    },
+    {
+      "name": "TXYB",
+      "thinking_enabled": 0
+    },
+    {
+      "name": "TXYBA",
+      "thinking_enabled": 0
+    },
+    {
+      "name": "TYQWA",
+      "thinking_enabled": 0
+    },
+    {
+      "name": "TYQWA",
+      "thinking_enabled": 1
+    }
+  ],
+  "target_keys": [
+    "qinghe-star"
+  ],
+  "body_product": {
+    "aliases": [
+      "星河洁面乳"
+    ]
+  },
+  "sources": [
+    {
+      "path": "raw.example.jsonl"
+    }
+  ]
+}

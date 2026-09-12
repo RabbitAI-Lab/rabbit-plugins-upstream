@@ -1,45 +1,64 @@
-## Description: <br>
-Helps agents operate DingTalk Docs through the official DingTalk Docs MCP Server, including document creation, reading, updates, search, export, permission management, and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A cross-platform agent skill for reading, pushing, syncing, exporting, and managing DingTalk cloud documents through the official DingTalk Document MCP Server.
 
-## Publisher: <br>
-[cpsean](https://clawhub.ai/user/cpsean) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cpsean](https://clawhub.ai/user/cpsean)
 
-## Use Case: <br>
-Developers, operators, and knowledge workers use this skill to connect an MCP-capable agent to DingTalk Docs and manage cloud documents from natural-language requests. It is intended for DingTalk Docs workflows such as pushing local markdown, pulling cloud content, editing documents, exporting files, and managing document nodes and permissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify DingTalk Docs content, files, nodes, exports, and permissions using the user's account permissions. <br>
-Mitigation: Require explicit user confirmation before write, delete, export, upload, move, copy, rename, or permission-management actions, and summarize the target and change before execution. <br>
-Risk: The DingTalk MCP StreamableHttp URL contains sensitive credentials. <br>
-Mitigation: Treat the URL as a credential, avoid repeating it after configuration, and keep local MCP configuration files out of version control. <br>
-Risk: Overwrite or delete operations may affect the wrong document if the target is ambiguous. <br>
-Mitigation: Resolve and confirm document titles, node locations, and operation modes before destructive or replacing changes; deletion should be described as moving the item to the recycle bin. <br>
+## Use Case:
 
+Developers and knowledge workers use this skill to operate DingTalk knowledge-base documents from an MCP-capable agent, including document creation, synchronization, export, search, file upload/download, and permission management.
 
-## Reference(s): <br>
-- [Dingtalk Docs Skill on ClawHub](https://clawhub.ai/cpsean/dingtalk-docs-skill) <br>
-- [DingTalk AI Hub MCP Page](https://aihub.dingtalk.com/#/detail?mcpId=9629&detailType=marketMcpDetail) <br>
-- [DingTalk Developer Getting Started](https://open.dingtalk.com/document/dingstart/dingtalk-developer) <br>
-- [MCP Tools Reference](artifact/references/mcp-tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with inline shell commands, configuration snippets, and DingTalk document links when available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide the agent to call DingTalk Docs MCP tools and to request user confirmation before write, delete, export, upload, or permission changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The DingTalk MCP URL can contain a personal API key and may be stored in persistent agent configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact MCP configuration before approving setup; prefer project-local configuration only when the secret-bearing file is ignored by Git, or use a user-level secret mechanism with restrictive permissions. Rotate the URL if it is ever committed, logged, or shared.
+
+Risk: Write, delete, export, upload, download, and permission actions operate on real DingTalk cloud data.
+
+Mitigation: Approve only specific intended changes, require explicit confirmation for cloud writes and management actions, and communicate data flow and consequences before execution.
+
+Risk: Uploads move local file bytes to DingTalk cloud storage, while exports and downloads can create portable copies or temporary signed links.
+
+Mitigation: Disclose the destination or copy/share risk before transfer, use DingTalk-issued upload URLs only, and remind users that exported files and signed links can be further shared.
+
+Risk: Reading cloud document content brings potentially sensitive DingTalk data into the current agent context.
+
+Mitigation: Read only the documents needed for the current task, confirm ambiguous targets before fetching content, and avoid writing fetched content to unrelated files.
+
+## Reference(s):
+
+- [DingTalk Document MCP Server](https://aihub.dingtalk.com/#/detail?mcpId=9629&detailType=marketMcpDetail)
+- [DingTalk Docs](https://alidocs.dingtalk.com)
+- [DingTalk Developer Getting Started](https://open.dingtalk.com/document/dingstart/dingtalk-developer)
+- [MCP tool reference](references/mcp-tools.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with inline shell commands, JSON configuration snippets, and operation guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce DingTalk document links, local files, downloaded or exported files, and MCP setup instructions after user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

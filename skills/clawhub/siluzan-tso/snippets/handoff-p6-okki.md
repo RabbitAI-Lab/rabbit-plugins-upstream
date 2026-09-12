@@ -33,7 +33,7 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 
 **returnSchema**: 仅回传 exitCode、manifestFile、writtenFiles、outlineFiles、stderrTail、summary（无编造数字）。
 
-## 阶段 B · 写 xlsx（委派本阶段时使用）
+## 阶段 B · 写叙事 JSON + okki-render（委派本阶段时使用）
 
 **snapDir**: 同上（拉数已完成）
 
@@ -41,11 +41,20 @@ siluzan-tso google-analysis -a <mediaCustomerId> --start <S> --end <E> --json-ou
 
 - 禁止在脚本中写死业务数字；数值只来自落盘 JSON
 - 禁止跳过 outline；先读 `*.outline.txt` 再读 JSON
+- 禁止 Agent 手写 / 脚本写 xlsx；必须走 `google-analysis okki-render`
 
 **任务**:
 
-1. Read `report-templates/okki-weekly-google-client.md` 中 xlsx 版式与 **§对外客户话术**（默认 7 条模板；主 Agent 若指定自定义话术则从其指示）。
-2. 编写并执行 Node/Python 脚本，产出 `.xlsx` + 客户话术；**每个 Sheet 数据表末须写「分析」**（总结 + 建议，见模板各 Sheet「表末「分析」」行）。
-3. 设备/国家 Sheet 必须用 `campaign-device` / `campaign-geo-matched` 落盘文件。
+1. Read `report-templates/okki-weekly-google-client.md` 中 **§标准四步流程** 与 **§对外客户话术**（默认 7 条模板；主 Agent 若指定自定义话术则从其指示）。
+2. 按 `assets/okki-weekly-report.schema.json` 写 `okki-weekly-report.json`：只填 `meta` + `narrative.sheetAnalysis`（5 Sheet，各 summary≥1 / suggestions≥1）+ `narrative.review`（固定 5 维：账户/关键词/搜索字词/设备/国家，每维 overview+summary+suggestion）。表为空也须写分析。
+3. 执行：
+   ```bash
+   siluzan-tso google-analysis okki-render \
+     --data ./okki-weekly-report.json \
+     --snapshot-dir <snapDir> \
+     --out ./okki-weekly-report.xlsx
+   ```
+   失败则按 stderr 补 JSON 后重跑，不得改用手写表。
+4. 设备/国家必须来自 `campaign-device` / `campaign-geo-matched`（由 render 校验）。
 
-**returnSchema**: 产出文件路径列表 + 脚本 exitCode；勿贴 xlsx 二进制内容。
+**returnSchema**: xlsx 路径 + `okki-render` exitCode + 客户话术文本；勿贴 xlsx 二进制。

@@ -1,0 +1,71 @@
+{
+  "version": "1.1.0",
+  "decision_id": "dec-7f3a9c2e",
+  "timestamp": "2026-08-22T12:00:00Z",
+  "agent_id": "agent-correctover-01",
+  "session_id": "sess-2026-08-22-001",
+  "tool": "http.request",
+  "action": "POST",
+  "request": {
+    "url": "https://api.internal.example.com/v1/charges",
+    "method": "POST",
+    "body": {
+      "amount": 4999,
+      "currency": "USD",
+      "capture": true
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "charge_id": "ch_8a2f",
+      "captured": true
+    }
+  },
+  "checks": {
+    "structure": {
+      "status": "pass",
+      "detail": "structure check pass"
+    },
+    "schema": {
+      "status": "pass",
+      "detail": "schema check pass"
+    },
+    "latency": {
+      "status": "pass",
+      "detail": "latency check pass"
+    },
+    "cost": {
+      "status": "pass",
+      "detail": "cost check pass"
+    },
+    "identity": {
+      "status": "pass",
+      "detail": "identity check pass"
+    },
+    "integrity": {
+      "status": "pass",
+      "detail": "integrity check pass"
+    },
+    "security": {
+      "status": "pass",
+      "detail": "security check pass"
+    }
+  },
+  "verdict": "allow",
+  "reason": "7/7 checks passed; request matched allow-list pattern; no injection or SSRF indicators",
+  "policy_id": "pol-prod-v3",
+  "policy_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "content_hash": "9dff2be41aa2d14c2b1dafe2e73c0bd496b0aef4fc4eb76fbdfd00504131852b",
+  "previous_receipt_hash": null,
+  "issuer": "correctover-ccs",
+  "public_key_id": "k916a98237c8f",
+  "nonce": "n0123456789abcdef",
+  "latency_ms": 0.38,
+  "metadata": {
+    "region": "us-east-1",
+    "tier": "p0",
+    "client_version": "1.1.0"
+  },
+  "signature": "O/nyP6Oht9HlVO5hTI6wqFPnQ+HTqftcQMl6JUPAS+yuaKwxONUl6h4xZgjn1tcGEwPbkQOdGQftWmiyvwYUCw=="
+}

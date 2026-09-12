@@ -1,45 +1,61 @@
-## Description: <br>
-获取今日微博、抖音、百度热搜排行榜，帮助用户一站式查询实时热门话题。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches current Weibo, Douyin, and Baidu hot-search rankings and returns agent-friendly JSON for a concise trending-topic summary.
 
-## Publisher: <br>
-[php737](https://clawhub.ai/user/php737) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[php737](https://clawhub.ai/user/php737)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve current trending-topic lists from Weibo, Douyin, and Baidu, then summarize or analyze those topics for a quick view of public online trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts Weibo, Douyin, and Baidu when invoked and depends on their public pages or API responses. <br>
-Mitigation: Run it only where those outbound requests are permitted, and treat empty or failed platform results as expected behavior when upstream responses change or are unavailable. <br>
-Risk: The returned topics are volatile third-party public content and may be incomplete, sensitive, or unsuitable for direct user-facing decisions. <br>
-Mitigation: Review and contextualize results before summarizing them or using them in downstream decisions. <br>
-Risk: Runtime behavior depends on Python packages such as requests and lxml. <br>
-Mitigation: Verify and install required Python dependencies in the execution environment before running the skill. <br>
+## Use Case:
 
+External users and agents use this skill to retrieve current Chinese trending topics across Weibo, Douyin, and Baidu, identify cross-platform overlap, and produce a concise Markdown digest.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/php737/today-trending) <br>
-- [Publisher profile](https://clawhub.ai/user/php737) <br>
-- [Weibo hot search](https://weibo.com/hot/search) <br>
-- [Baidu realtime trends](https://top.baidu.com/board?tab=realtime) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON object printed to standard output, with platform names mapped to ranked topic-title lists.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill accepts a JSON request containing a platform value of weibo, douyin, baidu, or all.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill makes live requests to public Weibo, Douyin, and Baidu endpoints, so network access, endpoint availability, or upstream response changes can affect results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it in an environment where those requests are acceptable and review platform status fields before relying on the generated summary.
+
+Risk: Output is Chinese-first and summarizes fast-changing public trends, which may be incomplete or stale shortly after fetching.
+
+Mitigation: Use the fetched timestamp and source URLs when reviewing time-sensitive topics or sharing results.
+
+Risk: The runtime must provide the needed Python packages and a compatible Python command.
+
+Mitigation: Confirm the Python runtime and dependencies before installing or invoking the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/php737/skills/today-trending)
+- [Publisher profile](https://clawhub.ai/user/php737)
+- [Weibo hot search](https://weibo.com/hot/search)
+- [Baidu realtime hot board](https://top.baidu.com/board?tab=realtime)
+- [Douyin hot search endpoint](https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [JSON from the script followed by a human-facing Markdown summary rendered by the agent.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python and runtime access to public Weibo, Douyin, and Baidu endpoints; failed platforms return empty lists while other platforms can still succeed.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

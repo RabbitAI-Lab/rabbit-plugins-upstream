@@ -17,7 +17,7 @@ installer:
 argument-hint: "[pid / table / index name or describe your DBA task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["POSTGRES_AIOPS_CONFIG"],"bins":["postgres-aiops"],"config":["~/.postgres-aiops/config.yaml","~/.postgres-aiops/secrets.enc"]},"optional":{"env":["POSTGRES_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"POSTGRES_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Postgres-AIops","emoji":"🐘","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["postgres-aiops","uvx"]},"optional":{"env":["POSTGRES_AIOPS_CONFIG","POSTGRES_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Postgres-AIops","emoji":"🐘","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed PostgreSQL DBA operations. The governance harness (audit, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Connects via psycopg 3 and reads the system catalogs and pg_stat_* views.
   All write operations are audited to a local SQLite DB under ~/.postgres-aiops/ (relocatable via POSTGRES_AIOPS_HOME).
@@ -62,6 +62,15 @@ uv tool install postgres-aiops
 postgres-aiops init       # interactive wizard: connection + encrypted password
 postgres-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@aiops-tools/postgres-aiops
+openclaw skills info postgres-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

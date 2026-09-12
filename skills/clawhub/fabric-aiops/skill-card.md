@@ -1,48 +1,66 @@
-## Description: <br>
-Fabric Aiops helps agents inspect and operate controller-managed network fabrics across Cisco Meraki, Cisco Catalyst Center, Arista CloudVision Portal, and UniFi Network, including health analysis, inventory reads, guarded remediation commands, audit logs, and undo support where available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+fabric-aiops helps agents operate controller-managed network fabrics across Cisco Meraki, Cisco Catalyst Center, Arista CloudVision Portal, and UniFi Network with read workflows, health analysis, and guarded remediation actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Network operators, SREs, and infrastructure engineers use this skill to query controller-managed fabrics, triage WAN and fleet health, inspect inventory and clients, and run explicitly governed remediation actions when they have appropriate controller permissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make live production network changes through controller APIs using persisted credentials. <br>
-Mitigation: Use read-only or tightly scoped controller accounts by default, require external approval for write-capable use, and test against non-production controllers before enabling live remediation. <br>
-Risk: There is no built-in read-only mode or approval gate inside the skill itself. <br>
-Mitigation: Enforce authorization through the connected controller account and the supervising agent workflow; use dry-run previews and double confirmation for state-changing CLI commands. <br>
-Risk: Non-interactive use can expose the master password through environment handling if configured carelessly. <br>
-Mitigation: Avoid non-interactive master-password exposure unless necessary, keep runtime environments tightly scoped, and rely on the encrypted secret store rather than plaintext fallback credentials. <br>
-Risk: The artifact states that controller API paths are mock-tested and have not yet been exercised against live controllers. <br>
-Mitigation: Run fabric-aiops doctor and validate workflows in a lab or non-production controller before relying on the skill for production operations. <br>
+## Use Case:
 
+Network operators, SREs, and developers use this skill to inspect managed network fabrics, diagnose WAN and fleet health issues, detect configuration drift, and run controlled remediation through supported controller APIs.
 
-## Reference(s): <br>
-- [Fabric-AIops GitHub repository](https://github.com/AIops-tools/Fabric-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, controller query results, JSON-like tool outputs, and remediation previews] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include live controller observations, ranked health analyses, dry-run remediation previews, audit references, and undo guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release evidence) <br>
+Risk: The skill can execute write operations against production network infrastructure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only controller credentials by default and enable write-capable credentials only under an external change-control process.
+
+Risk: The package source is installed remotely and should be trusted before use.
+
+Mitigation: Review the package source and release metadata before installation, and restrict deployment to environments where the publisher and dependency path are acceptable.
+
+Risk: Exported master passwords can become long-lived operational secrets.
+
+Mitigation: Avoid long-lived FABRIC_AIOPS_MASTER_PASSWORD exports and prefer short-lived, scoped execution contexts for non-interactive runs.
+
+Risk: The included verification status says the platform API paths have not yet been exercised against live controllers.
+
+Mitigation: Run fabric-aiops doctor and validate workflows in a low-risk or read-only environment before relying on live remediation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/fabric-aiops)
+- [Project homepage](https://github.com/AIops-tools/Fabric-AIops)
+- [Capabilities reference](references/capabilities.md)
+- [Setup and security guide](references/setup-guide.md)
+- [CLI reference](references/cli-reference.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured command guidance for network-fabric operations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include controller-derived analysis, dry-run remediation previews, audit-oriented guidance, and explicit unsupported-platform messages.]
+
+## Skill Version(s):
+
+0.11.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

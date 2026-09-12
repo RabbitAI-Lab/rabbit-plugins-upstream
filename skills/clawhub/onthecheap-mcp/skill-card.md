@@ -1,41 +1,55 @@
-## Description: <br>
-Finds free and cheap things to do in supported US cities, including daily event listings with times, prices and venues plus searchable deals, festivals, kids activities and local guides from the On the Cheap network. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find free and cheap things to do in a US city, including daily event listings with times, prices, and venues, plus searchable deals, festivals, kids activities, and local guides from the On the Cheap network.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and agents use this skill to answer local activity and deal requests for supported US cities by selecting a city site, listing daily events, searching posts, and retrieving full article details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Event availability, prices, and deal terms may change after retrieval. <br>
-Mitigation: Verify details with the listing source before making plans or presenting firm commitments. <br>
-Risk: Using the wrong site key or reusing category and location IDs across sites can return unrelated local results. <br>
-Mitigation: Name the intended city, call otc_list_sites when unsure, and resolve categories or locations for the selected site. <br>
+## Use Case:
 
+External users and agents use this skill to find current free or inexpensive local events, deals, festivals, family activities, and local guide content across supported US city sites in the On the Cheap network.
 
-## Reference(s): <br>
-- [On the Cheap network](https://livingonthecheap.com) <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/onthecheap-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or concise text with event and deal listings, source details, and follow-up guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only public event and deal results for selected supported sites; event availability and prices should be verified because listings can change.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+Risk: Event and deal availability can change after results are retrieved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify dates, prices, venues, and availability with the linked source before making plans.
+
+Risk: City, category, and location identifiers are site-specific, so using the wrong site or filter can return unrelated results.
+
+Mitigation: Resolve the intended city first and discover category or location IDs for that same site before filtering.
+
+## Reference(s):
+
+- [On the Cheap](https://livingonthecheap.com)
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/onthecheap-mcp)
+- [Publisher profile](https://clawhub.ai/user/chrischall)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text responses with event, deal, article, venue, price, and source details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only local events and deals guidance; no credentials required.]
+
+## Skill Version(s):
+
+0.4.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

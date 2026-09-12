@@ -1,44 +1,69 @@
-## Description: <br>
-Monitoring Aiops helps agents operate SolarWinds Orion, Paessler PRTG, and Zabbix monitoring environments with NOC overviews, read-only queries, alert triage, health checks, maintenance actions, and audited guarded writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitoring AIops helps agents operate SolarWinds Orion, Paessler PRTG, and Zabbix monitoring environments for NOC overview, alert triage, health checks, read-only SWQL queries, and guarded maintenance or suppression writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and NOC teams use this skill to inspect monitoring state, triage alerts, run SolarWinds SWQL checks, and coordinate controlled maintenance actions across SolarWinds Orion, PRTG, and Zabbix. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured credentials can make real production monitoring changes without a built-in read-only or approval gate. <br>
-Mitigation: Install with least-privilege monitoring accounts, preferably read-only by default, and grant write permissions only to operators who intentionally need suppression, maintenance, unmanage, remove, or delete-maintenance actions. <br>
-Risk: Audit annotations and risk-tier labels record activity but do not authorize or block actions. <br>
-Mitigation: Treat audit records as accountability evidence and enforce authorization through monitoring-platform permissions and agent operating policy. <br>
+## Use Case:
 
+Developers, NOC engineers, and infrastructure operators use this skill to inspect monitoring state, triage alert storms, answer common SWQL questions, and carry out audited maintenance actions across SolarWinds Orion, PRTG, and Zabbix. It is intended for legitimate monitoring operations with account-level permissions controlling whether write actions can succeed.
 
-## Reference(s): <br>
-- [Monitoring AIops homepage](https://github.com/AIops-tools/Monitoring-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured monitoring summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include monitoring observations, tool-call guidance, setup steps, and operational cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: ClawHub release evidence) <br>
+Risk: Write-capable monitoring credentials can allow an agent to suppress alerts, pause monitoring, delete maintenance windows, or remove SolarWinds nodes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only SolarWinds, PRTG, or Zabbix accounts by default and grant write-capable credentials only for approved maintenance workflows.
+
+Risk: TLS verification can be disabled for lab or self-signed environments.
+
+Mitigation: Enable verify_ssl for production targets and avoid carrying lab TLS settings into operational monitoring configurations.
+
+Risk: Secrets passed through command-line values or persistent environment variables can be exposed outside the encrypted store.
+
+Mitigation: Prefer the encrypted secret store and interactive secret prompts; avoid command-line --value usage and long-lived secret environment variables.
+
+Risk: Maintenance and suppression actions can hide active problems if they are left in place.
+
+Mitigation: Prefer time-boxed maintenance windows, inspect muted or unmanaged objects after maintenance, and use undo records where available.
+
+Risk: The artifact states mocked platform responses have been exercised but live NOC validation is still needed.
+
+Mitigation: Run monitoring-aiops doctor and validate behavior against non-production or read-only live targets before relying on operational actions.
+
+## Reference(s):
+
+- [Monitoring AIops homepage](https://github.com/AIops-tools/Monitoring-AIops)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and monitoring result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call configured SolarWinds, PRTG, or Zabbix APIs through the skill's CLI or MCP tools and may produce audited write or undo actions when permitted by the connected account.]
+
+## Skill Version(s):
+
+0.10.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

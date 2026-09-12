@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/minio-aiops",
   "slug": "minio-aiops",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1784635232983,
-  "contentHash": "ff159001a10a61a214fd00632ec57b6d3c9ef4af8ab34565f6e31122a246b012",
-  "fetchedAt": "2026-07-26T18:09:05.746Z"
+  "version": "0.12.1",
+  "updatedAt": 1789208112287,
+  "contentHash": "8ce94a762cd1b97adcc6cb79c12626351c793ea75ef68c7fb38063b67787a9a6",
+  "fetchedAt": "2026-09-12T11:41:28.877Z"
 }

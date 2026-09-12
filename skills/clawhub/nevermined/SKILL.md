@@ -108,7 +108,7 @@ After they sign in, the browser is redirected to `http://127.0.0.1:<port>/callba
 
 **Option B — manual paste (works anywhere).** Ask your human to open [nevermined.app](https://nevermined.app), sign in, create an API Key (Settings → Global NVM API Keys → **+ New API Key**), and paste it back. Or, once signed in, open `https://nevermined.app/auth/cli` with no `callback_url` to see the key on screen.
 
-**Store the key and reuse it.** Never fabricate a key; the placeholder is `sandbox:your-api-key`. Full docs: https://nevermined.ai/docs/getting-started/get-your-api-key
+**Store the key and reuse it.** Never fabricate a key; the placeholder is `sandbox:your-api-key`. Full docs: https://nevermined.ai/docs/agents-guide/get-api-key
 
 ## A2 · Check your payment methods
 
@@ -195,7 +195,7 @@ curl -X POST -H "Authorization: Bearer $NVM_API_KEY" -H "Content-Type: applicati
         "x402AccessToken": "<accessToken>"
       }' \
   https://api.sandbox.nevermined.app/api/v1/x402/settle
-# → { "success": true, "creditsRedeemed": "1", "remainingBalance": "999", "transaction": "0x...", "network": "eip155:84532" }
+# → { "success": true, "billingModel": "credits", "creditsRedeemed": "1", "remainingBalance": "999", "transaction": "0x...", "network": "eip155:84532" }
 ```
 
 - **Pay with a card instead:** set `"scheme": "nvm:card-delegation"` and `"network": "stripe"` (or `braintree`/`visa`) in both `accepted` and `accepts[0]`.
@@ -203,7 +203,11 @@ curl -X POST -H "Authorization: Bearer $NVM_API_KEY" -H "Content-Type: applicati
 - **Which scheme does a plan use?** `GET {API_BASE}/api/v1/protocol/plans/<PLAN_ID>` (public) returns the plan's metadata and pricing so you can pick `nvm:erc4337` vs `nvm:card-delegation` before paying. When buying from a protected agent, its `402` tells you instead.
 - **Note the field rename:** `/permissions` returns `accessToken`; pass that value as `x402AccessToken` in `/settle` and `/verify`.
 - **Dry run first (optional):** `POST /api/v1/x402/verify` with the same `{ paymentRequired, x402AccessToken }` body → `{ "isValid": true }`.
-- **Proof of purchase** = `success: true` with `creditsRedeemed` > 0 and a `remainingBalance` (and, for crypto, an on-chain `transaction`).
+- **Proof of purchase depends on `billingModel`** — read it first, it is always in the response.
+  - `"credits"`: `success: true` **and** `creditsRedeemed > 0` (and, for crypto, an on-chain `transaction`).
+  - `"pay-as-you-go"`: `success: true` **and** a non-empty `orderTx` (fiat rails) or `transaction` (crypto rails). These plans hold no credit balance, so `creditsRedeemed` and `remainingBalance` are **always the string `"0"` even on a charge that succeeded** — `creditsRedeemed > 0` there reports a real charge as a decline, and on a card rail that invites a retry of a payment that already went through.
+  - Both fields are **strings**: `"0"` is truthy while `Number("0") > 0` is false, so two plausible checks disagree.
+  - **No `billingModel` at all?** The deployment predates the discriminator — apply the `credits` rule, never pay-as-you-go.
 - **Card budget caveat:** a card settle may not immediately move the delegation's `amountSpentCents`/`remainingBudgetCents` — use the settle receipt + the A5 plan balance as the source of truth for card spend, not the delegation budget.
 
 **Calling a protected agent directly** (the common case): just send the access token as the `payment-signature` header to the agent's endpoint — the agent's own `402` response **is** your `paymentRequired`, and the agent verifies + settles for you. You only call `/settle` yourself when topping up a plan with no protected endpoint to hit.
@@ -246,7 +250,7 @@ curl -H "Authorization: Bearer $NVM_API_KEY" \
   https://api.sandbox.nevermined.app/api/v1/delegation/<DELEGATION_ID>/transactions
 ```
 
-SDK: `payments.plans.getPlanBalance(planId)` (`PlanBalance.balance` is a `bigint` in TS / `int` in Python). The `creditsRedeemed`/`remainingBalance` you get back from `/settle` (or the decoded `payment-response` header) is also a live proof of your balance after a purchase.
+SDK: `payments.plans.getPlanBalance(planId)` (`PlanBalance.balance` is a `bigint` in TS / `int` in Python). The `creditsRedeemed`/`remainingBalance` you get back from `/settle` (or the decoded `payment-response` header) is also a live proof of your balance after a purchase — **on a `credits` plan**. On a `pay-as-you-go` plan both read `"0"` regardless of what was charged; there is no balance to prove.
 
 ## A6 · Register a plan + agent (as a seller)  *(fully programmatic — SDK-first)*
 
@@ -335,7 +339,7 @@ export NVM_API_KEY="sandbox:your-api-key"
 
 | Variable | Required | Description |
 |---|---|---|
-| `NVM_API_KEY` | Yes | Your Nevermined API key — see [Get Your API Key](https://nevermined.ai/docs/getting-started/get-your-api-key) |
+| `NVM_API_KEY` | Yes | Your Nevermined API key — see [Get Your API Key](https://nevermined.ai/docs/agents-guide/get-api-key) |
 | `NVM_ENVIRONMENT` | Yes | `sandbox` for testing, `live` for production |
 | `NVM_PLAN_ID` | Yes | The plan ID from registration |
 | `NVM_AGENT_ID` | Sometimes | Required for MCP servers and plans with multiple agents |
@@ -585,7 +589,7 @@ Nevermined supports several plan types:
 
 Each plan can be priced in **crypto** (`getERC20PriceConfig`, `getEURCPriceConfig`, `getNativeTokenPriceConfig`) or **fiat** (`getFiatPriceConfig` — Stripe / Braintree / Visa Trusted Agent). The selected price helper determines the x402 scheme used at runtime.
 
-For fiat plans, the active provider is selected per plan via the `fiatPaymentProvider` metadata field (`'stripe'`, `'braintree'`, or `'visa'`). Sellers using Braintree must connect a Braintree merchant account with at least one child merchant account in the plan's currency. Sellers offering Visa Trusted Agent plans must complete Stripe Connect onboarding (Visa delegations settle through Stripe Connect) — see [`braintree-onboarding`](/docs/products/payments/braintree-onboarding) for the Braintree seller setup and [`card-enrollment`](/docs/products/payments/card-enrollment) for the buyer-side flow.
+For fiat plans, the active provider is selected per plan via the `fiatPaymentProvider` metadata field (`'stripe'`, `'braintree'`, or `'visa'`). Sellers using Braintree must connect a Braintree merchant account with at least one child merchant account in the plan's currency. Sellers offering Visa Trusted Agent plans must complete Stripe Connect onboarding (Visa delegations settle through Stripe Connect) — see [`braintree-onboarding`](/products/payments/braintree-onboarding) for the Braintree seller setup and [`card-enrollment`](/products/payments/card-enrollment) for the buyer-side flow.
 
 **Visa caveat for SDK builders.** Visa delegation creation is browser-only — it requires `consumerPrompt` + `assuranceData` produced by an in-browser WebAuthn ceremony embedded by Visa VTS. The SDK can **consume** an existing Visa delegation by passing its `delegationId` to `DelegationConfig`, but calling `createDelegation` / `create_delegation` with `provider: 'visa'` is rejected by the backend (`BCK.VISA.0014`). For any SDK code path that needs a Visa delegation, instruct the user to create it in the Nevermined webapp and pass the resulting ID back to the agent.
 
@@ -890,7 +894,7 @@ curl -X POST http://localhost:3000/chat \
 - **Card enrollment & delegation**: [nevermined.ai/docs/solutions/card-delegation](https://nevermined.ai/docs/solutions/card-delegation)
 - **Nevermined App**: [nevermined.app](https://nevermined.app) — register agents, create plans, manage subscriptions
 - **API discovery (per environment)**: `GET {API_BASE}/api/v1/rest/docs-json` (OpenAPI JSON)
-- **MCP Search Server**: `https://docs.nevermined.app/mcp` — search Nevermined docs from any MCP client
+- **MCP Search Server**: `https://nevermined.ai/docs/mcp` — search Nevermined docs from any MCP client
 - **Tutorials**: [github.com/nevermined-io/tutorials](https://github.com/nevermined-io/tutorials)
 - **Discord**: [discord.com/invite/GZju2qScKq](https://discord.com/invite/GZju2qScKq)
 - **TypeScript SDK**: `@nevermined-io/payments` on npm

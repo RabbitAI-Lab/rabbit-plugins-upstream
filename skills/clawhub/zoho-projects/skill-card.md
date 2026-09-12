@@ -1,46 +1,63 @@
-## Description: <br>
-Zoho Projects API V3 integration with managed OAuth for managing projects, tasks, milestones, tasklists, users, comments, and team collaboration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Projects API V3 integration with managed OAuth for managing projects, tasks, milestones, tasklists, and team collaboration.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an authorized Zoho Projects account through Maton-managed OAuth, inspect project data, and prepare or execute approved project, task, milestone, tasklist, comment, and user API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Zoho Projects data through a Maton-managed OAuth connection. <br>
-Mitigation: Connect only the intended Zoho account and use the Maton-Connection header when more than one connection exists. <br>
-Risk: Create, update, and delete calls can change project data. <br>
-Mitigation: Review the target resource and intended effect before approving any POST, PATCH, or DELETE request. <br>
-Risk: MATON_API_KEY is a sensitive credential. <br>
-Mitigation: Keep the API key out of logs, shared terminal output, and committed files. <br>
+## Use Case:
 
+Developers and agents use this skill to connect to Zoho Projects through Maton-managed OAuth, inspect project resources, and perform project, task, milestone, tasklist, and collaboration actions with confirmation for writes.
 
-## Reference(s): <br>
-- [Zoho Projects on ClawHub](https://clawhub.ai/byungkyu/zoho-projects) <br>
-- [byungkyu publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton](https://maton.ai) <br>
-- [Zoho Projects API V3 Documentation](https://projects.zoho.com/api-docs) <br>
-- [Zoho Projects Developer Portal](https://www.zoho.com/projects/help/rest-api/zohoprojectsapi.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline HTTP endpoints and Python, JavaScript, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and user-authorized Zoho Projects OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Long-lived Maton API keys can be exposed through environment variables, command history, logs, or pasted output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer Maton OAuth, use expected Maton package sources, do not print or persist credentials, and only use the raw HTTP API-key fallback when the CLI cannot be installed.
+
+Risk: Write operations can create, update, or delete Zoho Projects resources in the wrong account or with the wrong payload.
+
+Mitigation: Review the Zoho account and scopes, specify the intended connection when needed, list resources first, and confirm the exact resource and payload before any create, update, or delete action.
+
+Risk: Fetched project content can include untrusted text that attempts to steer subsequent agent actions.
+
+Mitigation: Treat API response content as data, not instructions, and use it only after validating endpoint choices, resource identifiers, and intended effects.
+
+## Reference(s):
+
+- [Zoho Projects API V3 Documentation](https://projects.zoho.com/api-docs)
+- [Zoho Projects Developer Portal](https://www.zoho.com/projects/help/rest-api/zohoprojectsapi.html)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-projects)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON request examples, SDK snippets, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a user-authorized Zoho Projects connection; write operations require explicit confirmation.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
