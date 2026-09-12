@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-js-node-rowbinary",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-js-node-rowbinary",
+  "branch": "main",
+  "pushedAt": "2026-09-10T12:40:47Z",
+  "contentHash": "a1dabf095b5ded199a322b4e63af33e84ae898c26890a5a18213025d88996a87",
+  "fetchedAt": "2026-09-12T11:41:38.326Z"
+}
