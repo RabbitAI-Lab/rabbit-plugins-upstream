@@ -1,49 +1,66 @@
-## Description: <br>
-Cicd Aiops helps agents operate self-managed GitLab and self-hosted Gitea CI/CD servers for pipeline, runner, artifact, release, branch-protection, and RCA workflows with governed read and write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CICD AIops helps agents inspect and operate self-managed GitLab and self-hosted Gitea CI/CD servers, including pipelines, runners, artifacts, repository hygiene, RCA workflows, and governed write actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and SREs use this skill to inspect self-managed GitLab/Gitea CI/CD state, triage failed pipelines and runner queues, assess artifact bloat and stale work, and prepare governed actions such as retrying pipelines, pausing runners, updating branch protection, or deleting old artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact CI/CD writes using configured GitLab or Gitea access tokens. <br>
-Mitigation: Start with read-only or tightly scoped tokens, require separate human approval before write actions, and widen token scopes only after validating the target setup. <br>
-Risk: Artifact deletion is irreversible even when audit records capture destroyed counts and bytes. <br>
-Mitigation: Use dry runs first, set an explicit age threshold, and review the deletion scope before confirming any artifact deletion. <br>
-Risk: Governance depends on token scope, local audit logs, and agent/operator behavior rather than an enforced approval gate or read-only mode. <br>
-Mitigation: Use server-side permissions as the primary control, review the audit log for write activity, and configure agent policy to avoid write tools during observe-only sessions. <br>
-Risk: The artifact states the REST paths are mock-validated and not yet recorded as end-to-end tested against a live server. <br>
-Mitigation: Run `cicd-aiops doctor` and verify representative read and write dry-run workflows against a non-production self-managed GitLab or Gitea instance before production use. <br>
+## Use Case:
 
+Developers and CI/CD operators use this skill to diagnose failed pipelines, runner capacity, artifact storage, stale work, and branch protections on self-managed GitLab or self-hosted Gitea instances. They can use its CLI or MCP tools to prepare or execute governed remediation while preserving audit records.
 
-## Reference(s): <br>
-- [CICD-AIops homepage](https://github.com/AIops-tools/CICD-AIops) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/cicd-aiops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API-derived CI/CD summaries, RCA classifications, dry-run write plans, and configuration steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence) <br>
+Risk: The release installs external code without trusted provenance recorded for this version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and use an exact pinned package version or trusted provenance when deploying.
+
+Risk: The skill can perform high-impact GitLab or Gitea changes, including irreversible artifact deletion and branch-protection changes.
+
+Mitigation: Use a read-only or narrowly scoped token by default and require an explicit local approval process before live writes.
+
+Risk: Providing the master password directly in MCP configuration can expose sensitive credentials through client configuration handling.
+
+Mitigation: Avoid storing the master password directly in MCP config where possible and prefer environment handling appropriate to the deployment.
+
+Risk: Some platform surfaces are GitLab-only or have incomplete storage visibility on Gitea, which can lead to misleading conclusions if ignored.
+
+Mitigation: Check platform support labels, truncation indicators, and null fields before interpreting runner, pipeline, artifact, or storage results.
+
+## Reference(s):
+
+- [CICD-AIops GitHub repository](https://github.com/AIops-tools/CICD-AIops)
+- [cicd-aiops ClawHub listing](https://clawhub.ai/zw008/skills/cicd-aiops)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Analysis]
+
+**Output Format:** [Markdown with inline shell commands and structured tool-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include CI/CD RCA findings, command recommendations, configuration snippets, and risk notes for governed write operations.]
+
+## Skill Version(s):
+
+0.10.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

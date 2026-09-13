@@ -1,52 +1,76 @@
-## Description: <br>
-Google Merchant Center API integration with managed OAuth for reading and administering products, inventories, data sources, promotions, account settings, conversions, and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Merchant Center API integration with managed OAuth for reading and, with explicit user approval, modifying Merchant Center products, inventories, data sources, promotions, account settings, conversions, and reports.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to inspect and manage Google Merchant Center resources through a Maton-authenticated connection. It is intended for Merchant Center administration workflows that may include read operations, reporting, and explicitly approved writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Merchant Center writes can affect live products, inventory, promotions, account settings, and conversions. <br>
-Mitigation: Require explicit user approval with specific account and resource identifiers before any create, update, or delete operation. <br>
-Risk: Requests may target the wrong Merchant Center account or connection. <br>
-Mitigation: Verify the account ID and use the intended connection before approving writes, especially when multiple Google Merchant connections exist. <br>
-Risk: The MATON_API_KEY can expose access to connected Merchant Center workflows if mishandled. <br>
-Mitigation: Store MATON_API_KEY as a secret, keep it out of logs and chats, rotate it if compromised, and revoke unused Maton or Google connections. <br>
-Risk: Overbroad Google Merchant permissions can increase business impact if an agent action is approved incorrectly. <br>
-Mitigation: Use least-privilege Merchant Center access and default to read-only checks before proposing changes. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to query and administer Google Merchant Center accounts through Maton-authenticated CLI or HTTP calls. It supports approved automations that run Merchant Center actions on schedules or supported source events.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-merchant) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Google Merchant API overview](https://developers.google.com/merchant/api/overview) <br>
-- [Google Merchant API reference](https://developers.google.com/merchant/api/reference/rest) <br>
-- [Products guide](https://developers.google.com/merchant/api/guides/products/overview) <br>
-- [Data sources guide](https://developers.google.com/merchant/api/guides/data-sources/overview) <br>
-- [Reports guide](https://developers.google.com/merchant/api/guides/reports/overview) <br>
-- [Product data specification](https://support.google.com/merchants/answer/7052112) <br>
-- [Maton settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, Python, JavaScript, HTTP, and JSON examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an authorized Google Merchant Center connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence) <br>
+Risk: The skill can modify or delete Google Merchant Center business data through authenticated write operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval with exact resource identifiers, payload, and intended effect before any POST, PUT, PATCH, or DELETE operation.
+
+Risk: Long-lived API keys can leak through environment variables, logs, shell history, or command-line arguments when raw HTTP is used.
+
+Mitigation: Prefer OAuth through the Maton CLI and use raw HTTP only when the CLI cannot be installed; never print, persist, or pass the API key on a command line.
+
+Risk: Triggers and destinations can create persistent automated forwarding or unattended actions.
+
+Mitigation: Use platform-owned destinations by default, disclose destination host and payload fields, require separate approval for each persistent destination, and delete unused automations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-merchant)
+- [Maton Homepage](https://maton.ai)
+- [Merchant API Overview](https://developers.google.com/merchant/api/overview)
+- [Merchant API Reference](https://developers.google.com/merchant/api/reference/rest)
+- [Products Guide](https://developers.google.com/merchant/api/guides/products/overview)
+- [Data Sources Guide](https://developers.google.com/merchant/api/guides/data-sources/overview)
+- [Reports Guide](https://developers.google.com/merchant/api/guides/reports/overview)
+- [Product Data Specification](https://support.google.com/merchants/answer/7052112)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Mail Trigger Reference](references/google-mail/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell, HTTP, JSON, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI commands, raw HTTP examples, OAuth and API key handling guidance, and approval checkpoints for write-capable operations.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-discover-azure",
   "slug": "agent-bom-discover-azure",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946318407,
-  "contentHash": "839e1c61b30b2ce58173755949083af4bb8fc0bd7a9b4c249d76a4a0a8998029",
-  "fetchedAt": "2026-07-26T18:04:21.218Z"
+  "version": "0.104.0",
+  "updatedAt": 1788987577260,
+  "contentHash": "3f2e76e8a4f0748ff4386f0f4f012997ed715e4905f2c08e3c66c150ccfae7a0",
+  "fetchedAt": "2026-09-13T13:05:10.649Z"
 }

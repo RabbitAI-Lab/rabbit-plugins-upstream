@@ -1,44 +1,62 @@
-## Description: <br>
-Red-team auditor for LLM benchmarks that detects contamination, exploit patterns, and evaluation fragility and produces robustness reports with severity scores, proof-of-concept exploits, and mitigations. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Offline defensive robustness auditor for LLM benchmarks that detects contamination, temporal gaps, selection and few-shot artifacts, judge bias, hidden-instruction payloads, TS-guessing, and paired score-comparison uncertainty with deterministic stdlib Python tooling.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-Developers, benchmark authors, and evaluation teams use this skill to audit LLM benchmarks and eval pipelines they are authorized to test. It helps identify contamination, scoring artifacts, judge injection, benchmark-specific fine-tuning, and related robustness risks before relying on leaderboard results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can generate or discuss adversarial benchmark prompts and proof-of-concept exploits. <br>
-Mitigation: Use it only for defensive audits of benchmarks or eval pipelines you are authorized to test, and do not use the outputs to inflate public leaderboard scores. <br>
-Risk: Generated audit reports may include incorrect or misleading robustness judgments if the benchmark, corpus, model endpoint, or scorer is misconfigured. <br>
-Mitigation: Review findings before acting on them, reproduce high-severity results, and validate proposed mitigations against the target evaluation pipeline. <br>
-Risk: Local reports and exploit artifacts may contain sensitive benchmark details, canary strings, or model-evaluation data. <br>
-Mitigation: Store generated reports in approved locations, restrict sharing to the audit team, and remove sensitive test items before publishing summaries. <br>
+## Use Case:
 
+Developers, evaluation engineers, and benchmark maintainers use this skill to audit LLM benchmark datasets and result artifacts for offline robustness risks, produce defensible JSON or Markdown reports, and route CI decisions from documented exit codes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/benchmark-robustness-auditor) <br>
-- [Publisher profile](https://clawhub.ai/user/orionshaowswmw) <br>
-- [Moltchurch Tenets](https://molt.church) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown report with inline shell commands, JSON/CSV report artifacts, and proof-of-concept code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include severity scores, estimated score-inflation deltas, exploit proof-of-concepts, detection tests, and mitigations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence; skill frontmatter lists 1.0.0) <br>
+Risk: Benchmark and corpus JSONL files may contain sensitive local evaluation data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep inputs local, restrict access to generated reports and ledgers, and avoid sharing raw JSONL artifacts outside the evaluation boundary.
+
+Risk: The default BENCHSCAN_LEDGER path is current-directory relative and can collide in shared workspaces.
+
+Mitigation: Set BENCHSCAN_LEDGER to a controlled per-project or CI path before running report, trend, or audit commands.
+
+Risk: scripts/selftest.sh executes hardcoded local shell and Python snippets.
+
+Mitigation: Run the self-test only from the trusted released package after normal package review and scanning.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/orionshaowswmw/skills/benchmark-robustness-auditor)
+- [Operations Guide](docs/operations.md)
+- [Integration Guide](docs/integration.md)
+- [Evidence Grounding](docs/evidence.md)
+- [Manifest](manifest.json)
+- [Changelog](CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON report contracts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces compact JSON outputs from benchscan subcommands, optional Markdown reports, documented exit codes, and hash-chained trend ledger entries.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release evidence, frontmatter, manifest, and changelog dated 2026-09-06)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

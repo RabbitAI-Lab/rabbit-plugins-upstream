@@ -13,6 +13,46 @@ Ref-based actions run in two modes, Playwright-style:
 
 `--headed` is a global flag and also applies to every `batch` entry.
 
+### Reading the result of an action
+
+A successful action reports what happened, not just that it ran:
+
+| Field | Meaning |
+|-------|---------|
+| `data.steps` | Each mechanism attempted, in order, with `outcome` (`succeeded`/`skipped`) and `verified` |
+| `data.disposition.delivery` | `delivered_verified` when the effect was observed, `delivered_unverified` when the application claimed success without an observable change |
+| `data.post_state` | The target element's state after the action, when the action has one |
+| `data.surfaces` | Overlays the application had open once the action settled |
+
+Stateful actions (`set-value`, `type`, `clear`, `check`, `uncheck`, `toggle`, `expand`, `collapse`) read fresh state after execution. An observed mismatch returns `ACTION_FAILED` with `error.details.kind: post_action_verification`; a failed read preserves its original error code. Missing evidence alone returns successful `delivered_unverified` with `details.verification_scope: unavailable` and `verification_reason: insufficient_evidence`. Inspect `post_state`, `after_action`, and the delivery disposition before deciding what to do next. `toggle` requires readable before/after checked state; check/uncheck and expand/collapse require the requested final state. Do not blindly repeat an action with uncertain or unverified delivery, especially `toggle`, which could undo the first change.
+
+Headed typing may change the selection when it focuses an inactive field. A range read before that focus change cannot verify insertion into a nonempty field, so the result remains explicitly unverified rather than reporting a false contradiction.
+
+Secure text is intentionally redacted: a successfully delivered text write can return `delivered_unverified` with `verification_scope: unavailable` and `verification_reason: secure_field`, without exposing the value or claiming verification. This exception does not turn a native delivery error into success.
+
+Check `data.surfaces` before assuming an action finished the job. An action that
+opens a sheet, menu, or alert leaves the application waiting on that overlay, and
+the next command must target it:
+
+```json
+{ "ok": true, "command": "set-value",
+  "data": { "action": "set-value", "surfaces": [{ "id": "focused-window", "type": "sheet" }] } }
+```
+
+Reach into that overlay with `find --surface sheet` rather than searching the
+window. A `delivered_unverified` result with a surface still open usually means
+the application is waiting for a confirmation the action did not deliver.
+
+On macOS, headed clicks on native menu-bar items use AXPress because these items have no ordinary owning window. Other headed ref clicks retain physical target verification. An enabled cursor overlay travels to and highlights that verified target alongside the real pointer.
+
+### Visual click debugging
+
+On macOS, `click REF --debug --screenshot /tmp/click-visual.html` writes a local
+HTML artifact with the highlighted pre-dispatch target, an after-command window
+capture, and the original command result. It neither enables `--headed` nor
+proves delivery from the screenshot. See [Visual debug](commands-observation.md#visual-debug)
+for role-group checkbox filters, permissions, new-file requirements, and failure handling.
+
 ### `--wait-for` / `--wait-for-gone` (global)
 
 Three global flags poll the accessibility tree until a compact selector matches (or, with `--wait-for-gone`, until it no longer matches), then return a snapshot envelope:
@@ -31,9 +71,9 @@ agent-desktop click @s8f3k2p9:e5 --wait-for-gone "progressindicator" --wait-time
 
 **Selector grammar:** one `role:text` string split on the first `:`. Examples: `"button:Submit"` (role + text), `"button"` (role only), `":Saved!"` (text only). Matching uses the same `find` matcher (`node_matches`); text searches name, value, and description.
 
-**Supported commands:** `snapshot` plus all 18 ref-resolving actions (`click`, `type`, `set-value`, `scroll`, `hover`, `drag`, …) — 19 commands total. Other commands (`find`, `launch`, …) return `INVALID_ARGS`. Workaround: `snapshot --app Foo -w "button:Login"`.
+**Supported commands:** `snapshot`, `press`, and all 18 ref-resolving actions (`click`, `type`, `set-value`, `scroll`, `hover`, `drag`, …). Other commands (`find`, `launch`, …) return `INVALID_ARGS`. Workaround: `snapshot --app Foo -w "button:Login"`.
 
-**Post-action waits** poll the **acted-on ref's own window** (`entry.source_window_id`, scoped to `entry.source_app`), not the frontmost window — critical in headless and multi-window apps where the terminal or a sibling window has focus. The action result is preserved under `after_action` in the returned envelope.
+**Post-action waits** for ref actions poll the **acted-on ref's own window** (`entry.source_window_id`, scoped to `entry.source_app`). For `press`, `--app` scopes the observation to that app; without it, observation uses the frontmost app. The action result is preserved under `after_action` in the returned envelope.
 
 **Success shape:** a match returns the full snapshot envelope (`app`, `window`, `ref_count`, `snapshot_id`, `tree`) plus `elapsed_ms` and `matched_selector`. The one exception is `--wait-for-gone` when the target **app or window has itself closed**: there is no tree left to capture, so the success payload is the compact `{ "matched_selector", "gone": true, "target_absent": true, "elapsed_ms" }`. On timeout the `wait_timeout` error `details` carry `last_error` (when a poll errored) and the `snapshot_id` of the last tree built.
 
@@ -63,7 +103,7 @@ When the actionability preflight blocks an action, the error envelope carries th
 
 **`receives_events` failures.** When a hit test at the target's center point lands on a different element, `receives_events` fails with `reason: "occluded by <role>"` and a structured `occluder` object on that check: `{ "role", "name", "bounds" }` (the element that actually received the hit, when it can be identified). The target's own bounds have not changed — something else is now on top of them. Recovery is to bring the target's window or element to the front (or dismiss whatever is covering it), then retry; blind-retrying without changing z-order will fail the same way again.
 
-Every ref-resolving action accepts `--timeout-ms` (default `5000`), but it budgets different things. For the dispatch actions (`click`, `double-click`, `triple-click`, `right-click`, `clear`, `focus`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll-to`, `type`, `set-value`, `select`, `scroll`) it is the actionability-wait budget: they poll roughly every 100ms until the target becomes actionable, then fail with `TIMEOUT` once the budget is exhausted — unless the block is a terminal check (`supported_action`/`policy`/`editable`), which fails fast on the first attempt with `ACTION_NOT_SUPPORTED`/`POLICY_DENIED` rather than waiting out the budget. For `hover` and `drag`, the same budget covers ref resolution, live visibility/bounds, stability, and `receives_events`. Transient misses, app-unresponsive reads, and occlusion are polled until recovery or `TIMEOUT`; terminal errors are returned immediately with their original code.
+Every ref-resolving action accepts `--timeout-ms` (default `5000`), but it budgets different things. For the dispatch actions (`click`, `double-click`, `triple-click`, `right-click`, `clear`, `focus`, `toggle`, `check`, `uncheck`, `expand`, `collapse`, `scroll-to`, `type`, `set-value`, `select`, `scroll`) it is the actionability-wait budget: they poll roughly every 100ms until the target becomes actionable, then fail with `TIMEOUT` once the budget is exhausted — unless the block is a terminal check (`supported_action`/`policy`/`editable`), which fails fast on the first attempt with `ACTION_NOT_SUPPORTED`/`POLICY_DENIED` rather than waiting out the budget. For `hover` and `drag`, the same budget covers ref resolution, live visibility/bounds, stability, and `receives_events`. Transient misses, app-unresponsive reads, and occlusion are polled until recovery or `TIMEOUT`; terminal errors are returned immediately with their original code. If every poll completed traversal but one or more required native live reads failed, the command instead returns `ACTION_FAILED` with `details.kind: "live_read_incomplete"` and `retryable: false`; re-snapshot and use a fresh ref rather than treating incomplete evidence as an ordinary timeout.
 
 **Implicit scroll-into-view.** Standard ref actions whose `Action` declares a scroll precondition attempt `AXScrollToVisible` before dispatch. The pointer resolver for `hover` and `drag` independently makes one scroll attempt when a ref endpoint is not visibly bounded, then re-resolves and fails closed if it is still not visible. Use the standalone `scroll-to` command when you need an explicit, verifiable scroll result.
 
@@ -76,7 +116,7 @@ Click commands use semantic AX activation in strict headless mode. Pass `--heade
 agent-desktop click @s8f3k2p9:e5
 agent-desktop click @e5 --snapshot <snapshot_id>
 ```
-Primary activation. Headless uses `AXPress`; `--headed` performs a physical click first and reports `physical_synthetic` in `data.steps`.
+Primary activation. Headless tries the activation the element actually publishes — `AXPress`, `AXOpen`, or `AXConfirm` — and, for a row whose activation is selection, writes the container's selection instead. `--headed` performs a physical click first and reports `physical_synthetic` in `data.steps`. Delivery is judged by observing the application, not by the accessibility return code, so `data.steps` reports each attempt and `disposition.delivery` distinguishes `delivered_verified` from `delivered_unverified`.
 
 ### double-click
 ```bash
@@ -105,11 +145,15 @@ agent-desktop type @s8f3k2p9:e2 "multi line\ntext"
 ```
 Headless `type` uses `AXSelectedText` without focusing the app or synthesizing keys. Pass `--headed` to focus the target and synthesize keyboard input. Use `set-value` when direct semantic value assignment is the intended interaction.
 
+When the value and selection are readable, insertion checks the resulting value. A mismatch or unavailable readback returns `ACTION_FAILED`; inspect the current state and delivery disposition before writing again. Secure-field redaction is the explicit exception described above: a delivered write remains unverified rather than failing solely because its value is hidden.
+
 ### set-value
 ```bash
 agent-desktop set-value @s8f3k2p9:e2 "new value"
 ```
 Sets the value directly via the AX value attribute. Faster than `type` but may not trigger all UI callbacks. Use for text fields, text areas, and sliders.
+
+`delivered_verified` confirms the target element's value, not an application commit or a dependent document change. The result details identify `verification_scope: element_value` and `application_commit: not_verified`. For example, changing a spreadsheet's row-count text field does not prove the table resized; verify the table or target its native incrementor. A readable cell without `SetValue` is not directly editable: activate it and target the editor it exposes.
 
 ### clear
 ```bash
@@ -205,6 +249,25 @@ agent-desktop press cmd+a --app "TextEdit"
 |------|-------------|
 | `--app` | Target application; key delivery is PID-targeted, and `--headed` additionally focuses its exact window first |
 
+`press` reports `delivered_unverified`: delivery does not prove the shortcut produced the intended UI. Use the global CLI selector flags to wait for an expected accessible element in the requested app after sending the key once:
+
+```bash
+agent-desktop press cmd+s --app "TextEdit" --wait-for "button:Save" --wait-timeout 5000
+```
+
+`--wait-for-gone "button:Save"` waits for disappearance instead. Success returns the observed selector result plus the original key delivery under `after_action`; it does not prove an unrelated effect such as audio playback. A timeout retains the delivered result and is unsafe to retry blindly. These global flags apply to the CLI, not batch item arguments or the C ABI.
+
+For a new window, keep the press and event wait in one batch so the baseline is captured before delivery:
+
+```bash
+agent-desktop --headed batch '[
+  {"command":"press","args":{"combo":"cmd+k","app":"GarageBand"}},
+  {"command":"wait","args":{"event":"window-opened","window":"Musical Typing","app":"GarageBand","timeout":5000}}
+]' --stop-on-error
+```
+
+Use the actual window title for the current app language. To check a window that may already be open, use `wait --window "Musical Typing" --app "GarageBand" --timeout 5000`. A failed wait does not make the preceding press safe to repeat.
+
 **Key names:** `return`, `escape`, `tab`, `space`, `delete`, `up`, `down`, `left`, `right`, `f1`-`f12`
 **Modifiers:** `cmd`, `ctrl`, `alt`, `shift` — combine with `+`
 
@@ -243,10 +306,13 @@ agent-desktop --headed drag --from @s8f3k2p9:e1 --to @s8f3k2p9:e5 --drop-delay 8
 | `--duration` | Drag duration in milliseconds (movement from source to destination) |
 | `--drop-delay` | Milliseconds to hold over the destination before releasing; default 500 |
 | `--timeout-ms` | Actionability wait budget in ms before failing with `TIMEOUT`; default 5000 |
+| `--wait-for-scope` | Window a `--wait-for`/`--wait-for-gone` verification polls: `to` (drop target, default) or `from` (pickup). Needed when the confirmation appears only in the destination window of a cross-window drag |
 
 Can mix ref and coordinate sources (e.g., `--from @s8f3k2p9:e1 --to-xy 400,500`).
 
 With `--headed`, a ref-addressed `--from` must focus the source's exact window before mouse-down and fails before delivery if focus cannot be confirmed. The destination app is never pre-focused because raising it could cover the source point. Coordinate-only drags never attempt focus. For cross-app two-ref drags, keep the destination window visible; both endpoints still undergo live visibility, stability, and hit-test checks.
+
+A drag's `--wait-for`/`--wait-for-gone` verification observes one endpoint's window. The default scope is `to` (the drop target, where the drop's effect usually appears); use `--wait-for-scope from` when the confirmation is source-side (e.g. the dragged row leaving the source list). When the chosen endpoint is coordinate-only (`--from-xy`/`--to-xy`, which carry no window identity), the wait falls back to the other endpoint's window, then to the focused window.
 
 macOS drop targets often need the dragged item to dwell over them before they register as the drop destination — too short and the gesture lands as a drag with no drop. The default 500ms dwell suits most targets; raise `--drop-delay` (e.g. 800–1200) for sluggish destinations like list reorders or cross-window drops. The dwell posts continuous drag events over the destination so it stays highlighted, rather than a dead pause.
 
@@ -292,6 +358,19 @@ Synthesizes a scroll-wheel event at absolute coordinates and requires `--headed`
 | `--modifiers` | | Held modifiers: `shift`, `meta`, `ctrl`, `alt` (repeatable; `cmd`/`command` aliases are accepted) |
 
 ## Choosing the Right Command
+
+### Agent cursor presentation
+
+Enable it once per session with `session start --cursor` or `cursor-overlay enable`. Interaction commands inherit styling. For macOS harness subagents, use `session start --cursor --multi-agent` and global `--agent-id` or `AGENT_DESKTOP_AGENT_ID` on each worker. Each ID gets an independent cursor within the same snapshot namespace. Configure optional per-agent styling with `--agent-id <id> cursor-overlay enable`; action-specific cursor flags remain unsupported.
+
+- The cursor stays alive between eligible headless or headed actions and travels from its previous destination.
+- The action waits for it to land before it dispatches, capped at 900 ms.
+- A click plays a ripple and flashes an accent outline around the element.
+- Headed actions retain each agent’s overlay while using the real OS cursor. Physical clicks present at the verified input point. Raw pointer commands also present the selected agent’s cursor and keep their headed-only behavior. The existing interaction lease serializes physical input; independent overlays do not create additional OS pointers.
+
+Drags reuse the cursor overlay’s curved motion. With the overlay enabled, its cursor and accent-colored trail follow the actual pointer while the button is held, including the destination dwell, then the trail fades after release. The existing ripple setting (`--no-ripple`) and Reduce Motion disable the trail. `--duration` controls travel only (default 300 ms); `--drop-delay 1000` holds over the destination for one second before releasing.
+
+See `commands-system.md` for the style flags.
 
 | Goal | Preferred | Alternative |
 |------|-----------|-------------|

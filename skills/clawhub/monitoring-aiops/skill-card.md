@@ -1,44 +1,62 @@
-## Description: <br>
-Monitoring Aiops helps agents operate SolarWinds Orion, Paessler PRTG, and Zabbix monitoring environments with NOC overviews, read-only queries, alert triage, health checks, maintenance actions, and audited guarded writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+monitoring-aiops helps operations teams inspect and operate SolarWinds Orion, PRTG, and Zabbix monitoring environments with NOC overviews, read-only SWQL, alert rollups, health checks, and guarded maintenance actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and NOC teams use this skill to inspect monitoring state, triage alerts, run SolarWinds SWQL checks, and coordinate controlled maintenance actions across SolarWinds Orion, PRTG, and Zabbix. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured credentials can make real production monitoring changes without a built-in read-only or approval gate. <br>
-Mitigation: Install with least-privilege monitoring accounts, preferably read-only by default, and grant write permissions only to operators who intentionally need suppression, maintenance, unmanage, remove, or delete-maintenance actions. <br>
-Risk: Audit annotations and risk-tier labels record activity but do not authorize or block actions. <br>
-Mitigation: Treat audit records as accountability evidence and enforce authorization through monitoring-platform permissions and agent operating policy. <br>
+## Use Case:
 
+Developers, site reliability engineers, and NOC operators use this skill to triage monitoring state, answer SolarWinds SWQL questions, review PRTG and Zabbix health data, and perform audited maintenance actions across supported monitoring platforms.
 
-## Reference(s): <br>
-- [Monitoring AIops homepage](https://github.com/AIops-tools/Monitoring-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured monitoring summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include monitoring observations, tool-call guidance, setup steps, and operational cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: ClawHub release evidence) <br>
+Risk: Write-capable monitoring actions can acknowledge alerts, suppress monitoring, alter maintenance windows, unmanage nodes, or remove nodes without an enforced skill-side approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only monitoring accounts by default, require external change approval before write-capable credentials are enabled, and rely on dry-run, double confirmation, time-boxing, audit logs, and undo where available.
+
+Risk: Credential, TLS, and install hardening gaps could expose monitoring secrets or run an unreviewed release.
+
+Mitigation: Enable TLS certificate verification in production, avoid secrets in command-line arguments or shell history, protect ~/.monitoring-aiops, and pin the package or plugin to a reviewed version.
+
+Risk: Behavior is documented as tested against mocked SolarWinds, PRTG, and Zabbix responses and still needing live NOC verification.
+
+Mitigation: Run doctor and limited live checks against non-production or low-impact targets before relying on the skill for operational changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/monitoring-aiops)
+- [Project homepage](https://github.com/AIops-tools/Monitoring-AIops)
+- [Capabilities reference](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Setup guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and monitoring-operation recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include monitoring observations, triage steps, bounded query results, setup instructions, and proposed guarded write actions.]
+
+## Skill Version(s):
+
+0.10.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

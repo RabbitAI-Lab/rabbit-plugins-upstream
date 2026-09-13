@@ -1,44 +1,60 @@
-## Description: <br>
-WeChat-Awesome helps Chinese-language WeChat publishers restructure user-provided source material into a Markdown article draft, cover-image prompt, and self-check report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+微信公众号写作助手。200+篇实战验证的爆文结构引擎。你投喂素材，它输出MD文件+封面图提示词+自查报告。内置17条写作基因、品牌简称、平台合规、10项自查清单。不接受无素材请求，不是内容生成器。
 
-## Publisher: <br>
-[adsorgcn](https://clawhub.ai/user/adsorgcn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adsorgcn](https://clawhub.ai/user/adsorgcn)
 
-## Use Case: <br>
-External content creators and editors use this skill to turn their own articles, data, notes, screenshots, or other source material into WeChat-ready structured drafts. It supports article angle selection, outline planning, Markdown drafting, cover-image prompt generation, and a publication-oriented self-check. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated drafts can contain inaccurate facts, unsupported numbers, rights-sensitive material, or WeChat compliance issues if the supplied material is incomplete or unsuitable. <br>
-Mitigation: Review facts, numbers, quotes, source rights, and platform compliance before publication, and avoid providing private drafts or business data unless appropriate for the AI workspace. <br>
-Risk: The skill is designed to restructure provided material, not to create unsupported articles from an empty request. <br>
-Mitigation: Provide concrete source material and add personal experience, voice, and missing data where the skill marks placeholders. <br>
+## Use Case:
 
+External Chinese-language content creators use this skill to restructure their own source material into WeChat public-account article drafts, cover-image prompts, and self-check reports. It is intended for users who already provide source material, angle choices, and final editorial review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/adsorgcn/wechat-awesome) <br>
-- [Publisher profile](https://clawhub.ai/user/adsorgcn) <br>
-- [iLang homepage](https://ilang.ai) <br>
-- [iLang Markdown formatter](https://ilang.cn/md) <br>
-- [AutoCode GitHub repository](https://github.com/ilang-ai/autocode) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown article draft with a cover-image prompt and self-check checklist] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-provided source material; does not execute code or access external accounts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Drafts may be incomplete or misleading if the provided source material lacks facts, data, or personal context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Markdown draft and self-check report before publishing, and fill any marked data or personal-experience placeholders yourself.
+
+Risk: Source material may contain confidential or sensitive information.
+
+Mitigation: Only provide material you are comfortable sharing with the active AI session.
+
+Risk: Optional formatting or image-generation tools are separate services selected by the user.
+
+Mitigation: Review each optional tool's terms and data-handling behavior before using it with publication material.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/adsorgcn/skills/wechat-awesome)
+- [Publisher profile](https://clawhub.ai/user/adsorgcn)
+- [iLang homepage](https://ilang.ai)
+- [iLang Markdown formatter](https://ilang.cn/md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown article draft, image prompt text, and self-check report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-provided source material and asks the user to review, fill marked placeholders, and confirm before publishing.]
+
+## Skill Version(s):
+
+1.1.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

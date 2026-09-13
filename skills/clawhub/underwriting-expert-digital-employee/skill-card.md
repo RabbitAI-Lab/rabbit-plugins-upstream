@@ -1,45 +1,58 @@
-## Description: <br>
-Supports insurance professionals with health disclosure review, medical underwriting assessment, underwriting decision explanation, follow-up outreach, and sales recording quality review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports insurance underwriting staff with health review, medical risk assessment, underwriting conclusion explanation, follow-up planning, and double-recording quality checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance underwriting, operations, and quality teams use this skill to structure applicant risk review, interpret underwriting outcomes, prepare follow-up communications, and produce review-ready reports that require qualified human approval before business use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may support live customer contact through phone or message workflows. <br>
-Mitigation: Require explicit human approval before outreach, confirm the intended recipient and contact channel, and respect opt-out or no-contact signals. <br>
-Risk: The skill references external systems and MCP tools for customer data, underwriting rules, OCR, ASR, calling, and messaging. <br>
-Mitigation: Enable only intentionally authorized tools and pause workflows when required systems or rule sources are unavailable. <br>
-Risk: Audit logs and reports may include sensitive customer, health, financial, or recording data. <br>
-Mitigation: Redact personal data, define retention limits, and review logs before storage or sharing. <br>
-Risk: Underwriting, medical, compliance, and customer-intent outputs can be incomplete or incorrect if source data or rules are missing. <br>
-Mitigation: Treat outputs as advisory, require qualified human review, and mark missing evidence before business use. <br>
+## Use Case:
 
+Insurance underwriting employees use this skill as an internal reference workflow to draft health risk reviews, medical underwriting assessments, underwriting conclusion explanations, follow-up plans, and double-recording QA reports for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/underwriting-expert-digital-employee) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Structured Markdown reports, templates, checklists, and follow-up guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are advisory and require human review before real-world insurance, compliance, or customer-contact decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill includes customer calling and message-sending workflow language that may conflict with its no-automation claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only inside a controlled insurance underwriting environment and do not grant CRM, notification, call, or message-sending tool access unless outreach steps require explicit per-action human approval and remove automatic execution language.
+
+Risk: The workflow may involve customer, health, medical, financial, or other sensitive personal data.
+
+Mitigation: Redact customer and health data before use, follow data minimization, and keep any required records only in approved institutional systems.
+
+Risk: Draft underwriting conclusions, premium adjustments, exclusions, deferrals, or refusal rationales could be treated as final business decisions.
+
+Mitigation: Require qualified underwriting personnel to review source materials, institutional rules, and all generated outputs before any business action or customer communication.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/underwriting-expert-digital-employee)
+- [ClawHub publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown reports, checklists, risk assessments, suggested wording, and follow-up guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are internal drafts that require human review before use with customers or business systems.]
+
+## Skill Version(s):
+
+2.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

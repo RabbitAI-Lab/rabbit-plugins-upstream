@@ -1,47 +1,73 @@
-## Description: <br>
-Basecamp API integration with managed OAuth for managing projects, to-dos, messages, schedules, documents, and team collaboration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Basecamp API integration with managed OAuth for managing projects, to-dos, messages, schedules, documents, and team collaboration.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Basecamp 4 through Maton's managed OAuth gateway for project, to-do, message, schedule, document, and team collaboration workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on Maton to mediate access to a connected Basecamp account. <br>
-Mitigation: Install only when Maton is trusted for the account, review the connected Basecamp permissions, and keep MATON_API_KEY private. <br>
-Risk: Write operations can create, update, archive, trash, or post Basecamp content. <br>
-Mitigation: Require explicit user confirmation before each write operation, including the target resource and intended effect. <br>
-Risk: Multiple Basecamp connections can cause requests to affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one Basecamp connection exists. <br>
+## Use Case:
 
+External users and developers use this skill to work with Basecamp through a Maton-managed connection for project, to-do, message, schedule, document, and collaboration workflows. The skill defaults to read/list operations and requires user confirmation for writes, new connections, hosted functions, triggers, and persistent destinations.
 
-## Reference(s): <br>
-- [ClawHub Basecamp Skill](https://clawhub.ai/byungkyu/skills/basecamp) <br>
-- [Basecamp 4 API Documentation](https://github.com/basecamp/bc3-api) <br>
-- [Basecamp Authentication Guide](https://github.com/basecamp/bc3-api/blob/master/sections/authentication.md) <br>
-- [Basecamp API Endpoint Reference](https://github.com/basecamp/bc3-api#endpoints) <br>
-- [Related Maton API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton API Key Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and a Basecamp OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Authenticated Basecamp access can expose or modify project, message, schedule, document, and collaboration data available to the authorized connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, confirm the exact account and connection before use, default to read/list operations, and require explicit approval before any write.
+
+Risk: Hosted functions, triggers, and destinations can become persistent automation that continues running or forwarding events after setup.
+
+Mitigation: Create or update automation only after clear approval, disclose destination host and payload scope, prefer platform destinations, and remove functions or destinations when no longer needed.
+
+Risk: Raw API keys are long-lived credentials and can be exposed through environment variables, logs, or copied commands.
+
+Mitigation: Use OAuth and the operating system credential store where possible; avoid raw API keys unless necessary and rotate any key that was printed, committed, or pasted.
+
+## Reference(s):
+
+- [ClawHub Basecamp Skill](https://clawhub.ai/byungkyu/skills/basecamp)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Basecamp 4 API Documentation](https://github.com/basecamp/bc3-api)
+- [Basecamp Authentication Guide](https://github.com/basecamp/bc3-api/blob/master/sections/authentication.md)
+- [Basecamp API Reference](https://github.com/basecamp/bc3-api#endpoints)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, code examples, JSON snippets, and API endpoint references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Basecamp connection; writes and persistent automation require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

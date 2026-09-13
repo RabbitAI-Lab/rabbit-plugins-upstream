@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/remote-node-ssh",
   "slug": "remote-node-ssh",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778492379127,
-  "contentHash": "34434418215c18162233c66f7c3b268809168c78733254e38b63162d99ddb3d9",
-  "fetchedAt": "2026-07-26T19:37:35.673Z"
+  "version": "1.1.0",
+  "updatedAt": 1788938209346,
+  "contentHash": "a38a909dc4e926695338786cf08047f8e6415e341b6b9a90f5086fcf668bd585",
+  "fetchedAt": "2026-09-13T13:07:25.753Z"
 }

@@ -1,19 +1,21 @@
 ---
 name: siteagent-elementor-studio
-version: 1.3.2
+version: 1.5.0
 license: MIT
 description: Helps with WordPress + Elementor work via the elementor-mcp MCP server — building new pages, editing existing ones, inspecting site state, or exploring what's possible. Auto-detects Elementor Pro (native Form, Theme Builder, Loop Grid, Popups, Dynamic Tags, Sticky/Motion vs free-tier workarounds) AND the page engine (classic vs Elementor 4 atomic/V4 — atomic uses add-flexbox/add-atomic-* tools since classic writes don't persist on a V4 page). Detects ACF + Crocoblock/JetEngine for dynamic-data binding (Tier-0; bind ACF via Pro dynamic tags, place Jet widgets via add-widget with runtime-verified types). On atomic (V4) sites, authors the Elementor 4 design system — Global Classes, Variables (design tokens), and per-element Interactions — and recovers from the fork's schema-in-error and governance responses. Asks what the user wants before acting. Use when the user references the Elementor MCP, invokes `/siteagent-elementor-studio`, or runs `mcp__elementor__elementor-mcp-*` tools. Also covers initial install of the MCP Adapter + elementor-mcp plugins, app-password auth wiring, schema-loading discipline, and the widget-vs-HTML decision tree. SKIP for Bricks, Divi, Beaver Builder, or non-Elementor WordPress builds.
 permissions:
   shell: "Runs the bundled setup script (files/setup-elementor-mcp.sh) — only on explicit user confirmation. It shells out to curl/unzip/zip/python3 and, for Local sites, drives Local by Flywheel's bundled WP-CLI (plugin install/activate) against the running site's PHP + MySQL socket."
   network:
-    - "GitHub release download over HTTPS from the trusted Digitizers/elementor-mcp repo (api.github.com + release asset host) — the elementor-mcp plugin zip; unpinned (latest) by default, pin with EMCP_PIN_VERSION"
-    - "The target WordPress site's REST API (/wp-json/ — auth check, plugin list/install, MCP route verification) over the site's own scheme (Local http:// or live https://)"
+    - "GitHub release download over HTTPS from the trusted Digitizers/elementor-mcp repo (api.github.com + release asset host) — the elementor-mcp plugin zip; unpinned (latest) by default, pin with EMCP_PIN_VERSION. The zip is checked against the sha256 the API reports for the asset before it is unpacked or installed; EMCP_EXPECTED_SHA256 supplies an out-of-band digest instead"
+    - "The target WordPress site's REST API (/wp-json/ — auth check, plugin list/install, MCP route verification). Plaintext http:// is refused for a non-local host unless that exact host is named in WP_ALLOW_HTTP, because the run sends a reusable application password on every request"
   filesystem:
-    - "Writes .mcp.json in the current working directory (embeds a reusable Basic-Auth WordPress credential) and appends .mcp.json to .gitignore there"
+    - "Writes .mcp.json in the current working directory, created mode 600 before the credential is written (it embeds a reusable Basic-Auth WordPress credential), and appends .mcp.json to .gitignore there"
     - "Reads Local by Flywheel site paths + bundled WP-CLI/PHP binaries; creates a temp working dir for the plugin zip"
   env:
     - "WP_URL / WP_USERNAME / WP_APP_PASSWORD (when used to supply the target site + Application Password auth)"
     - "EMCP_PIN_VERSION (optional — pin the elementor-mcp release tag instead of latest)"
+    - "EMCP_EXPECTED_SHA256 (optional — verify the plugin zip against a digest obtained out of band, rather than the one the release API reports alongside the URL)"
+    - "WP_ALLOW_HTTP (comma-separated host list — permits plaintext http for exactly those hosts; a blanket value is not a hostname and permits nothing)"
 ---
 
 # SiteAgent Elementor Studio Skill
@@ -61,10 +63,18 @@ That's it for unprompted tool calls. **Anything that creates, modifies, or delet
 
 > **Engine:** this skill drives our fork `Digitizers/elementor-mcp` (v1.24.0, up to 118 tools, Elementor 4.x-correct), a single self-contained plugin — no Freemius, no phone-home. **Never run it alongside the paid "MCP Tools for Elementor (Premium)" — same class names → fatal.** Details + switch commands → `references/engine-and-premium.md`.
 
-If the user has a WordPress site but no `.mcp.json` and no `elementor` MCP loaded:
+If the user has a WordPress site but no **working** `elementor` MCP connection — either no `.mcp.json` at all, or only this kit's committed placeholder config (values like `"WP_URL": "${WP_URL:-}"` with those env vars unset) and no `mcp__elementor__elementor-mcp-*` tools loaded:
+
+> In the placeholder case there are two fixes, not one: **export `WP_URL` / `WP_USERNAME` / `WP_APP_PASSWORD`** (the committed config reads them — fastest in this repo's checkout or a cloud session), or run the wizard below from a **separate per-site project directory** (it refuses to write credentials into the tracked placeholder file).
 
 1. **Check whether they're using Local-by-Flywheel or a live host.** Setup paths differ.
-2. **Run the bundled setup script** at `~/.claude/scripts/setup-elementor-mcp.sh` — it handles plugin install, auth wiring, and `.mcp.json` generation interactively for both flavors.
+2. **Run the bundled setup script** from the loaded skill's directory — it handles plugin install, auth wiring, and `.mcp.json` generation interactively for both flavors. The skill's base directory is announced when this skill loads (look for the filesystem path in the skill load message). Replace `<skill-dir>` with that announced path:
+   ```bash
+   bash "<skill-dir>/setup-elementor-mcp.sh"
+   ```
+   Keep the quotes — plugin-cache paths can contain spaces (e.g. a Windows
+   profile named `First Last`), and an unquoted substitution splits the path.
+   **If `<skill-dir>/setup-elementor-mcp.sh` is not found** (e.g., from a manual `INSTALL.sh` run instead of plugin-marketplace), use the fallback path for manual installations:
    ```bash
    bash ~/.claude/scripts/setup-elementor-mcp.sh
    ```
@@ -133,6 +143,16 @@ available tools:
 You may also call `detect-elementor-version` (reliable on current releases — it
 returns whether atomic is supported). The old v1.5.0 schema bug is fixed; still,
 tool-presence is the most direct signal.
+
+> **Which elementor-mcp PLUGIN version am I on?** Some behaviour below branches on
+> it, and `detect-elementor-version` answers about *Elementor*, not the plugin.
+> Call **`server-info`**: it returns `plugin_version` (plus registered-vs-exposed
+> tool counts and what is withholding the rest). It is always registered and
+> cannot be disabled, so **its absence is itself the answer** — no `server-info`
+> means the site is on **1.28.0 or older**. Use it for the one branch that needs it —
+> whether `update-atomic-widget` can restyle in place (1.28.1+). Nothing else should
+> depend on the version: for the universal atomic tools, pass raw `$$type` values, which
+> are correct on every build.
 
 > ⚠️ **Antigravity / tight tool caps.** Antigravity caps MCP tools at ~100. The
 > full Pro+atomic set is ~113, so atomic tools can get truncated and never reach
@@ -311,10 +331,13 @@ Elementor 4 uses an atomic/V4 data model — classic widget writes don't persist
 > `settings.classes` (a typed list of class ids the element wears) **and** a separate
 > top-level `styles` map holding each class's definition. Every id in `settings.classes`
 > must resolve to a local `styles` entry or a Global Class `g-` id, or it styles nothing.
-> The dedicated helpers build the local `styles` map for you **at creation**. Note
-> `update-atomic-widget` merges `settings` only — it **cannot** write the top-level `styles`
-> map, so restyle by (re)creating with a style-capable helper / universal `add-atomic-widget`,
-> or point `settings.classes` at a Global Class. Full pattern → `references/atomic-v4.md`.
+> The dedicated helpers build the local `styles` map for you **at creation**. To restyle an
+> element that already exists (check the plugin version with `server-info` — absent means
+> ≤1.28.0): on plugin **1.28.1+** pass flat style params to
+> `update-atomic-widget` and it merges them into the base variant; on **older builds** it
+> merged `settings` only and could not write the `styles` map, so restyle there by
+> (re)creating with a style-capable helper / universal `add-atomic-widget`, or point
+> `settings.classes` at a Global Class. Full pattern → `references/atomic-v4.md`.
 
 ### Converting a classic (V3) design to atomic (V4)
 

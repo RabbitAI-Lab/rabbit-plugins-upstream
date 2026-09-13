@@ -1,47 +1,62 @@
-## Description: <br>
-Firewall Aiops helps agents inspect and operate OPNsense and pfSense firewalls, including health checks, rules, NAT, aliases, VPN, DHCP, firewall logs, RCA workflows, and governed write operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firewall AIops helps agents inspect and operate OPNsense and pfSense firewalls across health, rules, NAT, VPN, DHCP, logs, root-cause analyses, and audited governed writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to query OPNsense or pfSense firewall state, investigate gateway, rule, and blocked-traffic issues, and perform audited firewall changes during planned operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact firewall writes, apply operations, reconfiguration, and reboot can run when the connected API account has permission, and the skill does not provide an in-tool approval or read-only gate. <br>
-Mitigation: Use a read-only OPNsense or pfSense API account by default, grant write scope only during planned change windows, and require explicit operator confirmation before write, apply, reconfigure, or reboot actions. <br>
-Risk: Firewall credentials and local configuration can expose administrative access if stored or handled incorrectly. <br>
-Mitigation: Keep ~/.firewall-aiops protected, use the encrypted secrets store, avoid the legacy plaintext secret environment variable, and rotate or migrate secrets when needed. <br>
-Risk: Production firewall access can be weakened by insecure transport settings or unverified API behavior. <br>
-Mitigation: Enable SSL verification for production targets and validate connectivity and platform behavior with firewall-aiops doctor before relying on operational results. <br>
+## Use Case:
 
+Network operators, SREs, and security engineers use this skill to observe OPNsense or pfSense firewall state, diagnose WAN, rule, traffic, VPN, DHCP, and NAT issues, and perform governed firewall changes when authorized.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/firewall-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Firewall-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured tool guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include firewall observations, RCA findings, dry-run previews, audit-oriented change guidance, and rollback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can perform high-impact firewall writes without an enforceable read-only or approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a read-only OPNsense or pfSense API account, grant write permissions only during an intentional change window, and keep console recovery available for high-risk operations.
+
+Risk: The skill needs access to firewall credentials and stores local firewall state under the user's firewall-aiops directory.
+
+Mitigation: Protect the local firewall-aiops directory, use the encrypted secret store, avoid legacy plaintext secret environment variables, and keep the master password out of logs and shared shells.
+
+Risk: TLS verification or plaintext transport choices can weaken protection for firewall API traffic.
+
+Mitigation: Enable TLS verification in production and use plaintext HTTP only when TLS is terminated by a trusted proxy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/firewall-aiops)
+- [Project homepage](https://github.com/AIops-tools/Firewall-AIops)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured text with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include firewall observations, RCA findings, dry-run previews, audit-oriented guidance, and rollback steps.]
+
+## Skill Version(s):
+
+0.12.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

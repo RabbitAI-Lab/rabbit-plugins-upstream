@@ -1,43 +1,64 @@
-## Description: <br>
-Uno CLI lets an agent search for external tools, inspect schemas, authenticate with Uno, and call selected tools through a command-line client. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+On-demand tool client for the Uno tool gateway at agentools.uno that helps an agent search for a specific external tool, preview a planned invocation, and run a user-approved call.
 
-## Publisher: <br>
-[lxyd-ai](https://clawhub.ai/user/lxyd-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lxyd-ai](https://clawhub.ai/user/lxyd-ai)
 
-## Use Case: <br>
-Developers and agent operators use this skill when an agent needs real-time data or actions from external services through a search, inspect, authenticate, and call workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent broad authenticated access to external tools and services. <br>
-Mitigation: Install only when the publisher and clawdtools.uno are trusted, and require explicit user confirmation before calls that spend credits, change keys, publish content, or modify third-party data. <br>
-Risk: Credentials such as UNO_API_KEY, login output, and ~/.uno/credentials.json can grant access to the Uno account. <br>
-Mitigation: Treat all credential material as secret, prefer a dedicated low-privilege account or API key, and avoid exposing credential values in logs or chat. <br>
-Risk: The API base URL can be changed with a flag or environment variable. <br>
-Mitigation: Verify the configured API base URL before authentication or tool calls, especially when using UNO_API_URL or --base-url. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill when built-in tools do not cover a narrow real-time lookup or service action. It guides the agent through checking credentials, searching the Uno gateway, previewing the selected tool call, and proceeding only after explicit user approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lxyd-ai/uno-cli) <br>
-- [Uno homepage](https://clawdtools.uno) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3.8+, Uno authentication, and access to https://clawdtools.uno unless the API base URL is explicitly overridden.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata) <br>
+Risk: The skill uses a broad external tool gateway that may access connected services or spend credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for explicit user requests, check account credits before heavier use, and require a dry-run preview plus explicit approval for every real call.
+
+Risk: Executable behavior depends on the externally installed uno-cli PyPI package.
+
+Mitigation: Pin and verify the uno-cli package version before use, and review upgrades before relying on new behavior.
+
+Risk: Some artifact instructions do not consistently preserve the approval-before-call model.
+
+Mitigation: Apply the stricter safety posture from server evidence: search, dry-run preview, user approval, then a single real call.
+
+Risk: Write, send, purchase, key deletion, logout, and disconnect actions can affect user data, accounts, or spending.
+
+Mitigation: Summarize the intended action in plain language and get explicit user confirmation immediately before invoking these actions.
+
+## Reference(s):
+
+- [Uno homepage](https://agentools.uno)
+- [Uno CLI PyPI package](https://pypi.org/project/uno-cli/)
+- [ClawHub skill page](https://clawhub.ai/lxyd-ai/skills/uno-cli)
+- [Publisher profile](https://clawhub.ai/user/lxyd-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended to show one user-visible action at a time, including dry-run preview JSON before real external calls.]
+
+## Skill Version(s):
+
+1.2.1 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

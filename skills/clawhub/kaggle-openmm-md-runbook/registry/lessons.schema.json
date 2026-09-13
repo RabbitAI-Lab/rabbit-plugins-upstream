@@ -1,0 +1,25 @@
+{
+ "required": [
+  "id",
+  "date",
+  "symptom",
+  "fix"
+ ],
+ "optional": [
+  "root_cause",
+  "source",
+  "confidence",
+  "promoted_to"
+ ],
+ "confidence_enum": [
+  "hypothesis",
+  "observed",
+  "verified"
+ ],
+ "rules": [
+  "append-only: never edit/delete existing entries",
+  "confidence=verified requires --human-approved",
+  "ids are LSN-0001, LSN-0002, ... assigned by learn.py",
+  "entries are promoted into traps.json/errors.json only by a human at publish time"
+ ]
+}

@@ -1,45 +1,67 @@
-## Description: <br>
-Klaviyo API integration with managed OAuth for accessing profiles, lists, segments, campaigns, flows, events, metrics, templates, catalogs, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Klaviyo API integration with managed OAuth for accessing and managing profiles, lists, segments, campaigns, flows, events, metrics, templates, catalogs, webhooks, tags, coupons, images, forms, reviews, and account settings.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and marketing teams use this skill to query and manage Klaviyo customer profiles, campaigns, flows, events, metrics, catalogs, webhooks, and related marketing resources through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive marketing and customer data in the connected Klaviyo account. <br>
-Mitigation: Install only if you trust Maton with the Klaviyo account, keep MATON_API_KEY secret, and use an account with the minimum practical Klaviyo permissions. <br>
-Risk: Write, send, webhook, bulk subscription, suppression, or import operations can change customer data or marketing behavior. <br>
-Mitigation: Confirm the exact resource, ID, account, and intended effect with the user before executing any sensitive or mutating operation. <br>
-Risk: Requests may target the wrong Klaviyo account when multiple OAuth connections exist. <br>
-Mitigation: Use the Maton-Connection header to select the intended connection whenever more than one Klaviyo account is available. <br>
+## Use Case:
 
+External users, marketers, and developers use this skill to manage Klaviyo customer data, email marketing assets, and approved automations through Maton-authenticated API calls.
 
-## Reference(s): <br>
-- [ClawHub Klaviyo Skill](https://clawhub.ai/byungkyu/skills/klaviyo) <br>
-- [Klaviyo API Documentation](https://developers.klaviyo.com) <br>
-- [Klaviyo API Reference](https://developers.klaviyo.com/en/reference/api_overview) <br>
-- [Klaviyo Developer Portal](https://developers.klaviyo.com/en) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python/bash code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Klaviyo account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata) <br>
+Risk: The skill can access sensitive Klaviyo customer and marketing data through a Maton-authenticated connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton access to the Klaviyo account is intended, prefer OAuth, keep authorization scopes narrow, and avoid logging or sharing full profile responses.
+
+Risk: Write operations and persistent automations can change marketing data or trigger real customer-facing actions.
+
+Mitigation: Review every write, connection creation, hosted function, trigger, and automation destination before approving it.
+
+Risk: Raw HTTP fallback can expose long-lived credentials through environment variables, shell history, CI logs, or shared transcripts.
+
+Mitigation: Use the CLI and OS credential store where possible; if raw HTTP is required, keep API keys out of logs, files, and shared command transcripts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/klaviyo)
+- [Maton Homepage](https://maton.ai)
+- [Klaviyo API Documentation](https://developers.klaviyo.com)
+- [Klaviyo API Reference](https://developers.klaviyo.com/en/reference/api_overview)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell, Python, JSON, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance emphasizes read/list calls by default, explicit approval before writes, OAuth preference, scoped connections, and careful handling of customer data.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,58 @@
-## Description: <br>
-Prepares Dataify builder requests for Crunchbase scraper tools rooted at crunchbase_company_by-url, including tool selection, saved parameter lookup, and curl generation for scraperapi.dataify.com/builder. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect structured Crunchbase company profiles from one or more known Crunchbase company URLs.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External developers and data operators use this skill to prepare Dataify Crunchbase scraper builder requests, choose the URL or keyword tool, provide parameter values, and receive a curl command that uses DATAIFY_API_TOKEN. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated requests use a Dataify API token, and persistent shell startup configuration can expose credentials if handled carelessly. <br>
-Mitigation: Use session-only environment variables or managed secret storage when appropriate, and avoid committing, logging, or sharing DATAIFY_API_TOKEN. <br>
-Risk: Builder requests send selected scraper parameters and any supplied business data to Dataify's scraperapi.dataify.com endpoint. <br>
-Mitigation: Review parameters before execution and avoid including secrets or unnecessary sensitive business data. <br>
+## Use Case:
 
+External users and agents use this skill to submit known Crunchbase organization URLs to Dataify, wait for the asynchronous collection task, and return structured company profile results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-crunchbase-company-by-url) <br>
-- [Dataify Dashboard](https://dashboard.dataify.com?utm_source=skill) <br>
-- [Dataify builder endpoint](https://scraperapi.dataify.com/builder) <br>
-- [Tool parameters catalog](artifact/references/tool-params.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generates Dataify builder curl requests and can normalize spider_parameters JSON through the bundled helper script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill requires a Dataify API token and sends requested company targets to Dataify.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that credential and target data sharing are acceptable, keep the token in environment variables, and never paste the token into chat.
+
+Risk: Generated curl commands and user-supplied values can be unsafe when inputs are not trusted or shell-escaped.
+
+Mitigation: Review generated commands before execution, use trusted inputs, and prefer direct script submission or preview mode over manually editing shell commands.
+
+Risk: The artifact includes broader scraping workflows and keyword modes beyond the Crunchbase URL-focused release description.
+
+Mitigation: Use only the Crunchbase organization URL workflow for this release and avoid generic research or keyword modes unless separately reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-crunchbase-company-by-url)
+- [Tool parameter catalog](references/tool-params.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DATAIFY_API_TOKEN and may return a task ID with a resume command if collection does not complete within the wait window.]
+
+## Skill Version(s):
+
+1.3.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

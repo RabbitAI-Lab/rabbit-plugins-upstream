@@ -1,42 +1,57 @@
-## Description: <br>
-Provides an insurance claims workflow reference framework covering case intake, document handling, medical review, liability assessment, settlement checks, fraud screening, adjudication, and closure communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a human-reviewed insurance claims workflow reference covering intake, document handling, medical review, liability assessment, adjustment checks, fraud-risk detection, adjudication review, and closure communications.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance claims professionals use this skill as a structured reference for claims intake, material analysis, medical review, liability assessment, settlement review, fraud risk checks, adjudication support, and customer communications. Outputs require human review before any real-world claims decision or operational action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may involve broad access to customer, medical, claims-system, credential, notification, closure, archival, and logging workflows. <br>
-Mitigation: Use only in a controlled insurance-operations environment with approved tools, secure secret management, intentionally granted and monitored permissions, and a documented logging and retention policy. <br>
-Risk: Case registration, notification, closure, and archival actions can affect real claims workflows. <br>
-Mitigation: Require explicit human approval before those actions and review outputs before relying on them for operational decisions. <br>
-Risk: Live API keys or other secrets could be exposed if pasted into chat. <br>
-Mitigation: Do not paste live API keys into chat; use managed secret storage and scoped credentials. <br>
+## Use Case:
 
+Insurance claims employees use this skill as a reference workflow for drafting and checking claim intake records, material review outputs, medical and liability assessments, adjustment summaries, fraud-risk notes, adjudication recommendations, and customer communications. Outputs are drafts and must be reviewed and acted on only by authorized personnel in the institution's controlled systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/claim-expert-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance, structured report templates, JSON examples, and inline shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human review; some workflows assume approved insurance operations tools and controlled access to claims, policy, notification, calculation, and archival systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: target metadata and SKILL.md frontmatter) <br>
+Risk: The authoritative security verdict is suspicious because the workflow includes contradictory references to local logs, retention, and high-impact claims actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a controlled insurance environment after removing or overriding local file, log, and retention instructions and confirming that institution systems handle all audit trails.
+
+Risk: Claims-system, notification, archive, fraud, customer-history, and medical-history actions can affect customers, money, or sensitive records.
+
+Mitigation: Require explicit authorized human approval for every claims-system query, notification, archive, fraud review, customer-history lookup, and medical-history action.
+
+Risk: Claims workflows may process personal, medical, financial, and customer business data.
+
+Mitigation: Apply data minimization and masking before use, and keep any retention or external communication within approved institutional systems and policies.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/claim-expert-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with structured claim workflow drafts, checklists, risk notes, and JSON-style examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [All outputs require human review before use and should avoid direct handling of sensitive customer, medical, or payment data unless the data is minimized and authorized.]
+
+## Skill Version(s):
+
+2.1.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

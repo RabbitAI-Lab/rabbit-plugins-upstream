@@ -1,44 +1,59 @@
-## Description: <br>
-aigate helps agents guide setup and use of a self-hosted OpenAI-compatible AI gateway that aggregates model providers, local inference, MCP tools, browser automation, media services, storage, search, messaging, and a web UI behind one endpoint. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Self-hosted AI platform that lets an agent use a single OpenAI-compatible endpoint for model routing, MCP tool use, browser automation, media generation, transcription, storage, code execution, search, messaging, forecasting, job queueing, and a web UI.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use this skill when they want an agent to explain, configure, run, or call a Docker Compose based self-hosted AI gateway with OpenAI-compatible routing and optional tool services. It is suited to trusted local or private deployments where the operator wants one endpoint instead of wiring each provider and service independently. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The gateway can expose broad capabilities through one bearer token, including code execution, browser automation, messaging, storage, and provider credentials when enabled. <br>
-Mitigation: Use aigate only as a trusted private gateway, keep AIGATE_TOKEN strong and secret, and provide it only to agents that are fully trusted for the requested task. <br>
-Risk: A single master token may grant more access than a task needs if per-service tokens are not separated. <br>
-Mitigation: Split high-risk services into separate per-service tokens before giving an agent access, and enable only the services required for the workflow. <br>
-Risk: Exposing the gateway directly can widen the impact of credential misuse. <br>
-Mitigation: Keep the service private, avoid publishing port 4000 directly, and use a protected tunnel or authenticating reverse proxy for remote access. <br>
+## Use Case:
 
+Developers and engineers use this skill when they want an agent to help operate a self-hosted AI gateway that aggregates model providers and tool services behind one endpoint. It is suited for trusted single-operator or controlled deployments where broad endpoint capability is intentional.
 
-## Reference(s): <br>
-- [ClawHub aigate page](https://clawhub.ai/psyb0t/skills/aigate) <br>
-- [aigate setup](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/aigate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Docker Compose commands, curl examples, environment variable names, endpoint paths, and operational cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.15.3 (source: server release metadata) <br>
+Risk: A single bearer token can provide broad access to code execution, browsing, messaging, storage, and provider-backed model services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Split per-service tokens before giving credentials to an agent, enable only the required services, and provide credentials only for the specific user-approved task.
+
+Risk: Exposing the gateway directly can make a high-capability endpoint reachable outside the trusted host.
+
+Mitigation: Run on an isolated trusted host or VM and avoid direct public exposure of port 4000; use a protected tunnel or authenticating gateway when remote access is required.
+
+Risk: Local environment and service configuration files can contain plaintext secrets.
+
+Mitigation: Protect .env, mailbox, and Telethon files, keep them out of source control, and review file permissions before deployment.
+
+## Reference(s):
+
+- [aigate ClawHub release](https://clawhub.ai/psyb0t/skills/aigate)
+- [aigate setup](references/setup.md)
+- [Publisher profile](https://clawhub.ai/user/psyb0t)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration steps, and endpoint examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference local environment variables, Docker Compose services, HTTP endpoints, and bearer tokens supplied by the operator.]
+
+## Skill Version(s):
+
+5.2.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

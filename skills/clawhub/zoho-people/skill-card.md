@@ -1,51 +1,81 @@
-## Description: <br>
-Zoho People API integration with managed OAuth for managing employees, departments, designations, attendance, leave, and arbitrary Zoho People forms, including custom forms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho People API integration with managed OAuth for managing employees, departments, designations, attendance, leave, and custom HR forms.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, HR operators, and developers use this skill to make targeted Zoho People API requests for employee, department, designation, attendance, leave, and custom form workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive HR records may be exposed through broad employee, attendance, leave, or custom form reads. <br>
-Mitigation: Use the least-privileged Zoho connection available, request only specific records needed for the task, and avoid broad exports unless there is a clear business need. <br>
-Risk: Create, update, or delete operations can change HR records. <br>
-Mitigation: Review the target resource and intended effect with the user before approving any write operation. <br>
-Risk: Requests may target the wrong Zoho People account when multiple Maton connections exist. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header whenever multiple Zoho People connections are available. <br>
-Risk: Maton brokers access to the connected Zoho People account and requires a Maton API key. <br>
-Mitigation: Install only if Maton is trusted for this account, protect MATON_API_KEY as a credential, and rotate or revoke access if it is exposed. <br>
+## Use Case:
 
+Developers and automation operators use this skill to read, create, update, and query Zoho People HR data through Maton-managed OAuth. It is suited for Zoho People tasks involving employee records, departments, designations, attendance, leave, and configured forms when the user explicitly requests the data or operation.
 
-## Reference(s): <br>
-- [ClawHub Zoho People Skill Page](https://clawhub.ai/byungkyu/skills/zoho-people) <br>
-- [Zoho People API Overview](https://www.zoho.com/people/api/overview.html) <br>
-- [Zoho People Get Bulk Records API](https://www.zoho.com/people/api/bulk-records.html) <br>
-- [Zoho People Fetch Forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html) <br>
-- [Zoho People Insert Record API](https://www.zoho.com/people/api/insert-records.html) <br>
-- [Zoho People Update Records API](https://www.zoho.com/people/api/update-records.html) <br>
-- [Zoho People Attendance Entries API](https://www.zoho.com/people/api/attendance-entries.html) <br>
-- [Zoho People Add Leave API](https://www.zoho.com/people/api/add-leave.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Zoho People connection; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Zoho People can expose sensitive HR records, including employee personal data and custom form data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Access only records the user explicitly requests, prefer least-privilege OAuth scopes, and avoid bulk retrieval unless clearly justified.
+
+Risk: Write operations can create, update, or delete HR records or trigger downstream workflow effects.
+
+Mitigation: Default to read and list calls, then require explicit approval for every POST, PUT, PATCH, or DELETE with the target resource, payload, and intended effect.
+
+Risk: Hosted functions, triggers, and destinations can run or forward data persistently after setup.
+
+Mitigation: Create automation only when the user asks for it, keep destinations inside approved Maton-hosted functions unless the user names another host, and use a dedicated Maton account with only the needed connection.
+
+Risk: API keys and connection credentials could be exposed if printed, stored in files, or passed through shell environments.
+
+Mitigation: Prefer OAuth over API keys, use the operating system credential store through the Maton CLI, and do not print, export, or embed credentials.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-people)
+- [Maton Homepage](https://maton.ai)
+- [Zoho People API Overview](https://www.zoho.com/people/api/overview.html)
+- [Get Bulk Records API](https://www.zoho.com/people/api/bulk-records.html)
+- [Fetch Forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html)
+- [Insert Record API](https://www.zoho.com/people/api/insert-records.html)
+- [Update Record API](https://www.zoho.com/people/api/update-records.html)
+- [Attendance API](https://www.zoho.com/people/api/attendance-entries.html)
+- [Leave API](https://www.zoho.com/people/api/add-leave.html)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may reference sensitive HR records and should be limited to fields the user explicitly requests.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

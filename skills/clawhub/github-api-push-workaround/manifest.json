@@ -1,0 +1,14 @@
+{
+  "schema": "lgd-skill-manifest/v1",
+  "name": "github-api-push-workaround",
+  "slug": "github-api-push-workaround",
+  "version": "1.2.0",
+  "author": "诺声(Logos)@SynomosAI",
+  "copyright": "SynomosAI",
+  "license": "MIT",
+  "category": "开发效率",
+  "origin": "https://github.com/zhaoxinghua09-cell/agent-skills/tree/main/skills/github-api-push-workaround",
+  "homepage": "https://zhaoxinghua09-cell.github.io/lgd-hub/",
+  "agent_created": true,
+  "packaged_at": "2026-09-08"
+}

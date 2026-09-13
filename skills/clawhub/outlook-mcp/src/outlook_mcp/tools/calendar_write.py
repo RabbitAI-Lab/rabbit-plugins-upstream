@@ -6,6 +6,7 @@ from typing import Any
 
 from outlook_mcp.config import Config
 from outlook_mcp.permissions import CATEGORY_CALENDAR_WRITE, check_permission
+from outlook_mcp.tools._recurrence import build_event_recurrence
 from outlook_mcp.validation import validate_datetime, validate_email, validate_graph_id
 
 
@@ -19,7 +20,7 @@ async def create_event(
     attendees: list[str] | None = None,
     is_all_day: bool = False,
     is_online: bool = False,
-    recurrence: str | None = None,
+    recurrence: dict | str | None = None,
     *,
     config: Config,
 ) -> dict:
@@ -27,6 +28,10 @@ async def create_event(
 
     Validates inputs, builds a Graph Event object, and posts via
     graph_client.me.events.post().
+
+    ``recurrence`` accepts a Graph recurrence object, a JSON string of one, or
+    a shorthand ("daily", "weekdays", "weekly", "monthly", "yearly"). Setting
+    it makes the created event a series master rather than a single occurrence.
     """
     check_permission(config, CATEGORY_CALENDAR_WRITE, "outlook_create_event")
 
@@ -78,6 +83,9 @@ async def create_event(
             att.email_address.address = email
             event.attendees.append(att)
 
+    if recurrence:
+        event.recurrence = build_event_recurrence(recurrence, start=start)
+
     response = await graph_client.me.events.post(event)
 
     return {
@@ -95,18 +103,65 @@ async def update_event(
     end: str | None = None,
     location: str | None = None,
     body: str | None = None,
+    recurrence: dict | str | None = None,
+    remove_recurrence: bool = False,
+    attendees: list[str] | None = None,
+    is_all_day: bool | None = None,
     *,
     config: Config,
 ) -> dict:
     """Update an existing calendar event.
 
-    Only patches changed fields.
+    Only patches changed fields. ``None`` means "leave alone" for every
+    argument, so ``False`` and ``[]`` are real instructions, not absences.
+
+    ``attendees`` **replaces the whole collection** — Graph has no add-one
+    operation, so pass the full intended list, and expect Outlook to email
+    invitations to everyone on it and cancellations to anyone dropped. ``[]``
+    removes them all. This is the one argument here with an outward-facing
+    side effect.
+
+    ``is_all_day`` requires ``start`` and ``end`` in the *same* call — Graph
+    returns ``ErrorInvalidRequest: Missing parameters: Event.Start`` for a
+    lone isAllDay patch — and both must fall on midnight boundaries. We reject
+    the incomplete call locally rather than pass through that error.
+
+    There is deliberately no ``is_online`` here. Graph accepts ``isOnlineMeeting``
+    on a personal (consumer) account and silently ignores it — a created or
+    patched event comes back ``isOnlineMeeting: False, onlineMeetingProvider:
+    'unknown'``. Teams meetings need a work/school account, which this server
+    does not target. Adding the parameter would only ship a convincing no-op.
+
+    Setting ``recurrence`` turns a single event into a series, or replaces the
+    pattern of an existing one. It takes the same shapes as ``create_event``.
+    Graph anchors the range on the series master's start, so when ``start``
+    isn't part of the same patch the event's current start is read first.
+    Passing ``None`` leaves any existing recurrence untouched — this is a
+    partial patch.
+
+    ``remove_recurrence=True`` turns a series master back into a single event,
+    keeping the first occurrence's time. It is a separate flag rather than a
+    sentinel value on ``recurrence`` because ``None`` there already means
+    "leave alone", and the two are mutually exclusive.
+
+    It has to go through ``additional_data``: Graph clears a series with an
+    explicit ``"recurrence": null``, but the SDK omits a field set to ``None``
+    from the payload entirely, so ``event.recurrence = None`` is a silent
+    no-op. ``test_setting_event_recurrence_none_would_not_have_worked`` pins
+    that; if kiota ever starts emitting explicit nulls, it fails and this can
+    be simplified.
     """
     check_permission(config, CATEGORY_CALENDAR_WRITE, "outlook_update_event")
     event_id = validate_graph_id(event_id)
 
+    validated_attendees = None
+    if attendees is not None:
+        validated_attendees = [validate_email(e) for e in attendees]
+
+    from msgraph.generated.models.attendee import Attendee
     from msgraph.generated.models.body_type import BodyType
     from msgraph.generated.models.date_time_time_zone import DateTimeTimeZone
+    from msgraph.generated.models.email_address import EmailAddress
     from msgraph.generated.models.event import Event
     from msgraph.generated.models.item_body import ItemBody
     from msgraph.generated.models.location import Location
@@ -136,6 +191,45 @@ async def update_event(
         event.body = ItemBody()
         event.body.content = body
         event.body.content_type = BodyType.Text
+
+    if validated_attendees is not None:
+        event.attendees = []
+        for email in validated_attendees:
+            att = Attendee()
+            att.email_address = EmailAddress()
+            att.email_address.address = email
+            event.attendees.append(att)
+
+    if is_all_day is not None:
+        if start is None or end is None:
+            raise ValueError(
+                "is_all_day requires start and end in the same call; Graph rejects a lone "
+                "isAllDay patch with 'Missing parameters: Event.Start'. Both must be "
+                "midnight boundaries, e.g. start=2026-10-22T00:00:00Z, end=2026-10-23T00:00:00Z"
+            )
+        event.is_all_day = is_all_day
+
+    if remove_recurrence:
+        if recurrence is not None:
+            raise ValueError(
+                "Pass either recurrence or remove_recurrence, not both — they ask for "
+                "opposite things"
+            )
+        # The SDK drops `event.recurrence = None`; additional_data survives
+        # serialization as an explicit JSON null, which is what Graph needs.
+        event.additional_data = {**(event.additional_data or {}), "recurrence": None}
+
+    if recurrence is not None:
+        anchor = start
+        if anchor is None:
+            current = await graph_client.me.events.by_event_id(event_id).get()
+            anchor = getattr(getattr(current, "start", None), "date_time", None)
+            if not anchor:
+                raise ValueError(
+                    "Could not read the event's current start to anchor the recurrence "
+                    "range; pass `start` alongside `recurrence`."
+                )
+        event.recurrence = build_event_recurrence(recurrence, start=anchor)
 
     response = await graph_client.me.events.by_event_id(event_id).patch(event)
 

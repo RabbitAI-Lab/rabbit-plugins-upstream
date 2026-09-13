@@ -1,47 +1,74 @@
-## Description: <br>
-Brevo API integration with managed OAuth for email marketing, transactional emails, SMS, contacts, CRM, campaigns, lists, and templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brevo API integration with managed OAuth for email marketing, transactional emails, SMS, contacts, and CRM.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Brevo through Maton-managed OAuth, including sending email, managing contacts and lists, creating campaigns, and working with templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive MATON_API_KEY and uses Maton to proxy Brevo API traffic and manage OAuth for the connected Brevo account. <br>
-Mitigation: Keep MATON_API_KEY private, avoid sharing terminal output that may reveal it, and install only when the user trusts Maton for Brevo API access. <br>
-Risk: Write, send, update, and delete operations can affect contacts, lists, campaigns, templates, senders, and outgoing email. <br>
-Mitigation: Require explicit user approval before write or send actions, and confirm recipients, lists, campaign IDs, resource IDs, and expected effects first. <br>
-Risk: Requests may target the wrong Brevo account when multiple OAuth connections exist. <br>
-Mitigation: Use the Maton-Connection header to specify the intended connection when multiple Brevo accounts are available. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to work with Brevo accounts through Maton-managed OAuth, including email marketing, transactional email, SMS, contacts, lists, templates, campaigns, and CRM workflows. The skill defaults to read and list operations and requires user confirmation for writes, new connections, hosted functions, triggers, and persistent destinations.
 
-## Reference(s): <br>
-- [ClawHub Brevo release](https://clawhub.ai/byungkyu/brevo-api) <br>
-- [Brevo API Overview](https://developers.brevo.com/) <br>
-- [Brevo API Key Concepts](https://developers.brevo.com/docs/how-it-works) <br>
-- [Brevo OAuth 2.0](https://developers.brevo.com/docs/integrating-oauth-20-to-your-solution) <br>
-- [Manage Contacts](https://developers.brevo.com/docs/synchronise-contact-lists) <br>
-- [Send Transactional Email](https://developers.brevo.com/docs/send-a-transactional-email) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API examples and inline shell or Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Brevo OAuth connection managed by Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Brevo writes can send email, change contacts, alter templates or lists, and affect campaigns in the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, confirm the exact Brevo account and connection, and obtain explicit user approval before any POST, PUT, PATCH, DELETE, campaign send, or new connection.
+
+Risk: Long-lived API keys or environment variables can expose account access beyond the immediate task.
+
+Mitigation: Prefer Maton OAuth and operating-system credential storage; use raw HTTP or MATON_API_KEY only where the CLI cannot be installed and avoid logging or persisting credentials.
+
+Risk: Hosted functions, triggers, and destinations can create persistent automation or data forwarding flows.
+
+Mitigation: Review the function, trigger, destination host, payload fields, and persistence with the user before creation or updates, and keep destinations on Maton-controlled endpoints unless the user explicitly approves an external host.
+
+## Reference(s):
+
+- [Brevo API Overview](https://developers.brevo.com/)
+- [Brevo API Key Concepts](https://developers.brevo.com/docs/how-it-works)
+- [Manage Contacts](https://developers.brevo.com/docs/synchronise-contact-lists)
+- [Send Transactional Email](https://developers.brevo.com/docs/send-a-transactional-email)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/brevo-api)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline code blocks, JSON examples, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose authenticated Brevo API calls, Maton CLI commands, hosted function snippets, trigger configuration, and safety checks for user approval.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

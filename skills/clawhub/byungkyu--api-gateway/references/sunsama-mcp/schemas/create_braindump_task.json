@@ -1,6 +1,6 @@
 {
   "name": "create_braindump_task",
-  "description": "Create a task in the backlog with a time bucket",
+  "description": "Create a task in the user's Sunsama backlog (\"braindump\") with a rough time horizon rather than a date. Use this when the user wants something captured for later in Sunsama and names no specific day; it does not schedule the task, does not put it on a calendar, and does not place it on a particular day's plan, and is not a route into another app's task list. `timeBucket` is that horizon and must come from the enum, so pick the one the user's own wording implies rather than guessing a date.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -21,6 +21,9 @@
         ]
       }
     },
-    "required": ["title", "timeBucket"]
+    "required": [
+      "title",
+      "timeBucket"
+    ]
   }
 }

@@ -1,42 +1,56 @@
-## Description: <br>
-Access Vibo event music planning through an MCP server for events, timelines, song requests, playlists, guest activity, and connected music exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access your Vibo (vibodj.com) event music planning via MCP.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and event hosts use this skill to let an agent inspect and manage Vibo event music planning, including timeline sections, requested songs, playlists, guest participation, and Spotify or Apple Music exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can depend on Vibo passwords, access tokens, refresh tokens, or captured browser sessions. <br>
-Mitigation: Keep `.mcp.json`, environment variables, and `~/.vibo-mcp/session.json` private, avoid committing them, and rotate Vibo credentials or sessions if exposed. <br>
-Risk: Write tools can modify event songs, comments, sections, guests, notifications, and connected music exports. <br>
-Mitigation: Review dry-run previews first and only rerun mutating tools with `confirm: true` when the proposed change is intended. <br>
+## Use Case:
 
+External users and event hosts use this skill to let an agent inspect and update Vibo event music plans, including timelines, song requests, playlists, guest participation, and exports to connected music services.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp) <br>
-- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp) <br>
-- [Vibo](https://vibodj.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with JSON configuration snippets, tool guidance, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP tool calls that read or mutate Vibo account and event data; mutating tools are described as confirm-gated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: Setup can require Vibo account credentials or captured browser tokens, including tokens saved in ~/.vibo-mcp/session.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, reviewed package version; avoid storing real passwords in project .mcp.json files; keep MCP configs containing secrets out of source control; and rotate or delete exposed Vibo tokens.
+
+Risk: The recommended npx setup installs an unpinned MCP package at runtime.
+
+Mitigation: Pin and review the package version before installing or deploying the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp)
+- [Vibo](https://vibodj.com)
+- [npm package](https://www.npmjs.com/package/vibo-mcp)
+- [Source link from artifact](https://github.com/chrischall/vibo-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration examples and MCP tool usage notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Mutating Vibo tools are described as confirm-gated dry runs unless confirm is explicitly true.]
+
+## Skill Version(s):
+
+1.8.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,39 @@
-# Legacy State Migration
+# Legacy State Migration 2.1
 
-Do not force migration during active risky work. The v2 execution loop can read legacy project state.
+Legacy projects are supported, but normal execution no longer stays indefinitely in a many-file compatibility mode.
 
-## Legacy Mapping
-
-| Legacy file | v2 role |
-| --- | --- |
-| `TARGET.md` | Higher-authority outcome and Non-Goals |
-| `ACCEPTANCE.md` | Higher-authority criteria |
-| `WORK_ORDER.md` or indexed Work Order | Current scope authority |
-| `STATUS.md` | Current evidence input, not scope authority |
-| `NEXT_ACTIONS.md` | Candidate next action |
-| `PENDING.md` | Blockers, decisions, and later ideas |
-| `EVALUATION.md` | Historical decisions |
-| `LOOP_RUNS.jsonl` | Append-only execution evidence |
-| `LOOP_STATE.md` | Lite predecessor to Active Packet |
-
-## Adopt V2
-
-1. Preserve historical files.
-2. Create `Docs/ACTIVE_PACKET.md`.
-3. Link to current authoritative TARGET, ACCEPTANCE, and Work Order.
-4. Copy only the current stage projection, not history.
-5. Resolve conflicts before execution.
-6. Continue appending concise records to `LOOP_RUNS.jsonl`.
-7. Stop expanding redundant status journals.
-
-## Legacy-Only Execution
+## Bootstrap Rule
 
 When no Active Packet exists:
 
-- read target, acceptance, current Work Order, latest status, blockers, and one next action;
-- use their existing state enums;
-- write only to files already established by the project;
-- recommend migration at a natural boundary, not during an urgent repair.
+1. run read-only Legacy Bootstrap;
+2. locate Docs case-insensitively;
+3. inspect canonical current files and explicit links only;
+4. detect authority, route, decision, and delivery-class conflicts;
+5. write one packet only when coherent and explicitly invoked with `--write`;
+6. preserve all legacy history unchanged.
 
-If scope authority is ambiguous, stop as `Invalid State`.
+Conflicts produce exit code 2 and zero writes. Resolve them through governance before execution.
+
+## Legacy Mapping
+
+| Legacy file | 2.1 role |
+| --- | --- |
+| `TARGET.md` | higher-authority outcome and Non-Goals |
+| `ACCEPTANCE.md` | criteria and evidence requirements |
+| active `WORK_ORDER*.md` | current scope authority |
+| `STATUS.md`, `CMS.md`, role instructions | current-state candidates, not higher authority |
+| `NEXT_ACTIONS.md` | candidate next action |
+| `PENDING.md` | blockers, decisions, later ideas |
+| QA files | preserved decisions; later superseding decision wins but must remain explicit |
+| `LOOP_RUNS.jsonl` | append-only evidence; legacy rows are summarized, not rewritten |
+
+## After Migration
+
+- Use Active Packet as the current projection.
+- Stop routine writes to duplicate status journals.
+- Keep one current Work Order only when it owns stable scope.
+- Keep one final independent QA decision for Standard/Full work.
+- Archive only at a natural release/month boundary; do not delete history.
+
+If authority fingerprint changes, stop execution and align before refreshing the packet.

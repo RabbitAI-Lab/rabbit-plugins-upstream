@@ -1,43 +1,60 @@
-## Description: <br>
-Discover restaurants on Tock through MCP, including metros, venue search, venue details, bookable experiences, prices, party sizes, and availability dates and times. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover restaurants on Tock via MCP by listing cities, searching metros, retrieving venue details, checking bookable experiences, and reading availability from a browser session.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to the tock-mcp server for read-only Tock restaurant discovery, availability lookup, and reservation or profile review through their signed-in browser session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The MCP server and fetchproxy extension can read Tock pages from the user's browser session, including profile and reservation data when those tools are invoked. <br>
-Mitigation: Install and run it only with a Tock session the user is comfortable exposing to the MCP workflow, and review the external npm package and browser extension before deployment. <br>
-Risk: Booking and payment remain outside the skill, but returned availability or reservation information may influence user decisions. <br>
-Mitigation: Treat tool output as read-only discovery data and complete booking, cancellation, and payment directly on Tock's website. <br>
+## Use Case:
 
+Developers and agent users use this skill to configure and operate a Tock MCP server for restaurant discovery, venue details, bookable experiences, availability checks, reservation/profile reads, and post-booking verification.
 
-## Reference(s): <br>
-- [tock-mcp npm package](https://www.npmjs.com/package/tock-mcp) <br>
-- [tock-mcp source repository](https://github.com/chrischall/tock-mcp) <br>
-- [fetchproxy browser extension](https://github.com/chrischall/fetchproxy) <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/tock-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline JSON and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides an agent to use read-only MCP tools and leaves booking, cancellation, and payment actions to Tock's website.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server release metadata) <br>
+Risk: The skill asks users to run mutable third-party MCP code and a fetchproxy browser extension.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the npm package and extension before installing, prefer a pinned reviewed version or commit, and run the MCP server with least privilege.
+
+Risk: Pairing with a signed-in Tock browser tab can expose account profile and reservation information to the integration.
+
+Mitigation: Use a dedicated browser profile or account where appropriate, sign in only when account tools are needed, and review returned profile and reservation data before sharing it.
+
+Risk: Booking actions occur outside the skill and can be misread if only a success screen or immediate reservation check is used.
+
+Mitigation: Treat bookings as attempted until a confirmation artifact is captured and tock_verify_reservation returns confirmed after allowing for backend lag.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/tock-mcp)
+- [tock-mcp npm package](https://www.npmjs.com/package/tock-mcp)
+- [tock-mcp source](https://github.com/chrischall/tock-mcp)
+- [fetchproxy extension](https://github.com/chrischall/fetchproxy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [MCP tool outputs include restaurant, availability, reservation, profile, verification, and healthcheck data; compact view removes media fields where supported.]
+
+## Skill Version(s):
+
+0.5.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

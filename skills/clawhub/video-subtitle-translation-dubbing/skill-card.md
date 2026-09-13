@@ -1,41 +1,51 @@
-## Description: <br>
-Openclaw Skill Videotranslate translates video subtitles and can generate dubbed audio, producing translated subtitle files and multi-track MKV videos. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Multi-language video subtitle translation and automatic dubbing skill (supports English, Chinese, Japanese, Spanish, French, German, Korean, etc.).
 
-## Publisher: <br>
-[zbjincheng](https://clawhub.ai/user/zbjincheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zbjincheng](https://clawhub.ai/user/zbjincheng)
 
-## Use Case: <br>
-Developers and video localization teams use this skill to translate subtitles and optionally synthesize dubbed audio for input videos when configured with trusted translation and TTS providers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Video subtitle text and generated audio requests may be sent to configured translation and TTS endpoints. <br>
-Mitigation: Use trusted provider URLs, scoped API keys, and provider terms that match the sensitivity of the media being processed. <br>
-Risk: The skill reads user-provided video or subtitle paths and writes translated subtitle and MKV output files. <br>
-Mitigation: Run it in a controlled workspace and review input paths, output locations, and generated media before sharing or relying on the results. <br>
+## Use Case:
 
+Developers and video localization workflows use this skill to translate subtitles and optionally synthesize target-language dubbing for source videos. It produces a translated subtitle file and a muxed MKV video with source and target audio or subtitle tracks according to the selected processing mode.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zbjincheng/skills/video-subtitle-translation-dubbing) <br>
-- [Server-resolved source repository](https://github.com/zbjincheng/openclaw-skill-videotranslate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Configuration] <br>
-**Output Format:** [Translated subtitle files, multi-track MKV video files, and progress/status text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an output video path and an output subtitle path; dubbing output depends on processing mode and configured providers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: ClawHub release metadata) <br>
+Risk: Subtitles, TTS text, and provider API keys can be sent to configured external endpoints, including unencrypted HTTP URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted HTTPS translation and TTS endpoints, avoid processing sensitive or unauthorized media unless the provider is approved for that data, and scope API keys to minimum permissions and spend limits.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zbjincheng/skills/video-subtitle-translation-dubbing)
+- [Skill homepage](https://github.com/zbjincheng/openclaw-skill-videotranslate)
+- [OpenClaw project](https://github.com/OpenClaw)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Text, Configuration]
+
+**Output Format:** [Result object with file paths to translated UTF-8 SRT/VTT subtitle output and muxed MKV video output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires local video input and ffmpeg/ffprobe; translation and dubbing modes may call configured translation and TTS services with subtitle or speech text.]
+
+## Skill Version(s):
+
+0.1.4 (source: frontmatter, manifest.yaml, pyproject.toml, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

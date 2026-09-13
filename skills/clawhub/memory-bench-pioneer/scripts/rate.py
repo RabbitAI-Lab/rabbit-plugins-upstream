@@ -2,12 +2,26 @@
 """
 memory-bench rate — Retrieval quality assessment with LLM-as-judge.
 
-Runs standardized queries against the memory system, uses an external LLM
-to judge relevance (not the retrieval system itself), computes standard IR
-metrics, and supports ablation runs.
+Runs standardized queries against the memory system, judges the relevance of
+what comes back, computes standard IR metrics, and supports ablation runs.
+
+DATA FLOW — read this before running:
+    --judge local   (DEFAULT) Retrieved memory excerpts go to a LOCAL embedding
+                    server at http://127.0.0.1:8900/embed. Nothing leaves the
+                    machine. Excerpts are redacted first anyway: that server is
+                    a separate process with its own logs.
+    --judge openai  Sends the benchmark query AND up to 300 REDACTED characters
+                    of each RETRIEVED MEMORY to api.openai.com (gpt-4o-mini).
+                    OFF unless you ask for it. Before the first request it
+                    prints the exact request body and waits for confirmation at
+                    a terminal.
+
+This script WRITES to your memory database: it creates/extends a `retrieval_log`
+table and inserts one row per benchmark query (benchmark query text, ratings and
+metrics — never your memory content).
 
 Usage:
-    python3 rate.py [--queries N] [--db PATH] [--ablation] [--judge openai|local]
+    python3 rate.py [--queries N] [--db PATH] [--ablation] [--judge local|openai]
 
 Metrics computed:
     - RAR (Recall Accuracy Ratio): fraction of top-k rated ≥3
@@ -90,11 +104,13 @@ def get_algorithm_version() -> str:
         import subprocess
         ws = Path.home() / ".openclaw" / "workspace"
         result = subprocess.run(
-            ["git", "log", "--oneline", "-1", "--", "skills/agent-memory-ultimate/"],
+            ["git", "log", "-1", "--format=%h", "--", "skills/agent-memory-ultimate/"],
             capture_output=True, text=True, cwd=ws, timeout=5
         )
         if result.returncode == 0 and result.stdout.strip():
-            return result.stdout.strip()[:12]
+            # Short SHA ONLY. An --oneline slice would carry part of a private
+            # commit subject into a report that gets published as a public PR.
+            return result.stdout.strip().split()[0][:12]
     except Exception:
         pass
     return "unknown"
@@ -157,11 +173,53 @@ def bootstrap_ci(values, n_boot=1000, alpha=0.05):
         "ci_high": round(hi, 4),
     }
 
-# --- LLM-as-Judge ---
+# --- Redaction, the canonical request, and consent ---
 
-def judge_with_openai(query: str, result_content: str, api_key: str) -> int:
-    """Use OpenAI API to judge relevance. Returns 1-5 rating."""
-    import urllib.request
+import re
+
+# Best-effort scrubbing of the highest-risk tokens before anything is transmitted.
+# This is a filter, not a guarantee — see the consent notice printed below.
+REDACTIONS = [
+    (re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+"), "[EMAIL]"),
+    (re.compile(r"\b(?:sk|pk|ghp|gho|ghu|ghs|xox[baprs])[-_][A-Za-z0-9_-]{10,}"), "[KEY]"),
+    (re.compile(r"\b[A-Fa-f0-9]{32,}\b"), "[HEX]"),
+    (re.compile(r"(?<![\w.])\+?\d[\d ().-]{8,}\d(?![\w.])"), "[PHONE]"),
+    (re.compile(r"(?:[A-Za-z]:\\|/(?:home|Users)/)[^\s\"']+"), "[PATH]"),
+    (re.compile(r"://[^/\s:@]+:[^/\s@]+@"), "://[CREDS]@"),
+]
+
+EXCERPT_CHARS = 300
+
+def redact(text: str) -> str:
+    """Strip obvious secrets/PII from text bound for anywhere but this process."""
+    for pattern, placeholder in REDACTIONS:
+        text = pattern.sub(placeholder, text)
+    return text
+
+def excerpt(content) -> str:
+    """The only way a memory excerpt is produced. Truncate, then redact.
+
+    Every consumer goes through here: the external judge, the LOCAL judge, and
+    the terminal. Localhost is not the same thing as this process — the
+    embedding server keeps its own logs — and terminal output ends up in agent
+    transcripts, so neither gets raw memory content either. Redaction is
+    idempotent, so applying it again downstream costs nothing.
+    """
+    if not isinstance(content, str):
+        content = str(content)
+    return redact(content[:EXCERPT_CHARS])
+
+OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
+OPENAI_MODEL = "gpt-4o-mini"
+
+def build_openai_payload(query: str, result_content: str) -> dict:
+    """Build the request body. THE single place one is constructed.
+
+    The consent preview renders whatever this returns and judge_with_openai()
+    sends whatever this returns, so the bytes approved are the bytes sent. A
+    preview written separately from the sender is free to drift; this one has
+    nowhere to drift to.
+    """
     prompt = f"""Rate the relevance of this retrieved memory to the query on a scale of 1-5.
 
 1 = Completely irrelevant
@@ -172,19 +230,83 @@ def judge_with_openai(query: str, result_content: str, api_key: str) -> int:
 
 Query: "{query}"
 
-Retrieved memory (first 300 chars): "{result_content[:300]}"
+Retrieved memory (first {EXCERPT_CHARS} chars): "{excerpt(result_content)}"
 
 Respond with ONLY a single digit 1-5, nothing else."""
 
-    data = json.dumps({
-        "model": "gpt-4o-mini",
+    return {
+        "model": OPENAI_MODEL,
         "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 3,
         "temperature": 0,
-    }).encode()
+    }
+
+def render_openai_preview(payload: dict, n_requests: int, sample_is_real: bool) -> str:
+    """Render the consent notice around the verbatim request body."""
+    body = json.dumps(payload, indent=2, ensure_ascii=False)
+    body = "\n".join("    " + line for line in body.splitlines())
+    origin = (
+        "The excerpt above is REAL content from your database, already redacted."
+        if sample_is_real else
+        "Your first queries returned nothing, so the excerpt above is a\n  placeholder. Real runs put real memory content in that slot."
+    )
+    return f"""
+╔══════════════════════════════════════════════════════════════════════════╗
+║  EXTERNAL JUDGING — your memory content will leave this machine          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+  You chose --judge openai. Up to {n_requests} requests like this one will be sent
+  to a third party. Below is the EXACT body of the first, built by the same
+  function that will send it:
+
+  POST {OPENAI_ENDPOINT}
+  Authorization: Bearer <your OPENAI_API_KEY — not shown, never logged>
+  Content-Type: application/json
+
+{body}
+
+  {origin}
+  Redaction covers emails, phone numbers, key-shaped strings, long hex blobs,
+  home paths and URL credentials. That is pattern matching, NOT comprehension —
+  assume anything else in an excerpt is transmitted verbatim.
+
+  OpenAI's API terms and retention policy apply to that data, not ours.
+  The default judge (--judge local) sends nothing off this machine.
+"""
+
+def confirm_external_judge(preview: str, assume_yes: bool) -> bool:
+    """Explicit opt-in gate. Returns True only on an unambiguous yes.
+
+    A terminal is required either way. --yes-send-to-openai removes the
+    keystroke, never the human — so an agent running this unattended has no
+    way to switch external judging on, which is what the documentation
+    promises and what the flag used to quietly break.
+    """
+    print(preview)
+    if not sys.stdin.isatty():
+        print("  ✋ Refusing: no terminal to confirm on. Nothing was sent.")
+        print("     --yes-send-to-openai also requires a terminal — it skips the")
+        print("     keystroke, not the human. To benchmark unattended use")
+        print("     --judge local, which transmits nothing.")
+        return False
+    if assume_yes:
+        print("  ✓ Consent given on the command line (--yes-send-to-openai).")
+        return True
+    try:
+        answer = input("  Type 'send' to proceed, anything else to abort: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print()
+        return False
+    return answer.lower() == "send"
+
+# --- LLM-as-Judge ---
+
+def judge_with_openai(query: str, result_content: str, api_key: str) -> int:
+    """Use OpenAI API to judge relevance. Returns 1-5 rating."""
+    import urllib.request
+    data = json.dumps(build_openai_payload(query, result_content)).encode()
 
     req = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
+        OPENAI_ENDPOINT,   # the same constant the consent preview printed
         data=data,
         headers={
             "Authorization": f"Bearer {api_key}",
@@ -206,7 +328,7 @@ def judge_with_embeddings(query: str, result_content: str) -> int:
     NOTE: This is weaker than LLM-judge. Marked in output."""
     try:
         import urllib.request
-        data = json.dumps({"texts": [query, result_content[:300]]}).encode()
+        data = json.dumps({"texts": [query, excerpt(result_content)]}).encode()
         req = urllib.request.Request(
             "http://127.0.0.1:8900/embed",
             data=data,
@@ -302,7 +424,7 @@ def run_assessment(conn, test_queries, judge_fn, judge_method, strategy="hybrid"
         # Judge each result
         ratings = []
         for j, r in enumerate(results[:5]):
-            content = r.get("content", str(r))[:300] if isinstance(r, dict) else str(r)[:300]
+            content = excerpt(r.get("content", r) if isinstance(r, dict) else r)
             rating = judge_fn(query, content)
             ratings.append(rating)
             print(f"    [{j+1}] rating={rating} | {content[:60]}...")
@@ -381,8 +503,17 @@ def main():
     parser.add_argument("--queries", type=int, default=30, help="Number of queries (default: 30, from test set)")
     parser.add_argument("--db", help="Path to memory database")
     parser.add_argument("--testset", help="Path to test set JSON")
-    parser.add_argument("--judge", choices=["openai", "local"], default="openai",
-                        help="Judge method: openai (GPT-4o-mini) or local (embedding similarity)")
+    parser.add_argument("--judge", choices=["openai", "local"], default="local",
+                        help="Judge method: local (DEFAULT, on-machine embeddings, "
+                             "nothing transmitted) or openai (GPT-4o-mini — SENDS "
+                             "retrieved memory excerpts to api.openai.com; requires "
+                             "confirmation)")
+    parser.add_argument("--yes-send-to-openai", action="store_true",
+                        help="Skip only the typed confirmation for --judge openai. "
+                             "A terminal is STILL required: this flag does not "
+                             "enable external judging in an unattended run. Pass "
+                             "it only if you accept that retrieved memory excerpts "
+                             "are sent to OpenAI.")
     parser.add_argument("--ablation", action="store_true",
                         help="Run with AND without spreading activation for comparison")
     parser.add_argument("--api-key", help="OpenAI API key (or set OPENAI_API_KEY env)")
@@ -408,8 +539,33 @@ def main():
         args.judge = "local"
 
     if args.judge == "openai":
+        # Build the real first request BEFORE asking. Retrieval is local, so it
+        # costs nothing externally, and it means consent is given against the
+        # actual bytes rather than a description of them.
+        sample_query, sample_content, sample_is_real = test_queries[0]["query"], "", False
+        for q in test_queries[:3]:
+            results, _ = run_recall(conn, q["query"], use_activation=True)
+            if results:
+                r = results[0]
+                sample_query = q["query"]
+                sample_content = r.get("content", r) if isinstance(r, dict) else r
+                sample_is_real = True
+                break
+        if not sample_is_real:
+            sample_content = "<a real memory excerpt from your database goes here>"
+
+        # main pass + optional ablation pass + the 5-query reliability check
+        n_requests = len(test_queries) * 5 * (2 if args.ablation else 1) + 25
+        preview = render_openai_preview(
+            build_openai_payload(sample_query, sample_content), n_requests, sample_is_real)
+
+        if not confirm_external_judge(preview, args.yes_send_to_openai):
+            print("\n🛑 External judging declined. Nothing was sent.")
+            print("   Re-run with --judge local to benchmark without leaving this machine.")
+            conn.close()
+            sys.exit(1)
         judge_fn = lambda q, r: judge_with_openai(q, r, api_key)
-        judge_method = "openai/gpt-4o-mini"
+        judge_method = f"openai/{OPENAI_MODEL}"
     else:
         judge_fn = judge_with_embeddings
         judge_method = "local/embedding-similarity"
@@ -430,9 +586,9 @@ def main():
         for q in irr_queries:
             results, _ = run_recall(conn, q["query"], use_activation=True)
             for r in results[:5]:
-                content = r.get("content", str(r))[:300] if isinstance(r, dict) else str(r)[:300]
+                content = excerpt(r.get("content", r) if isinstance(r, dict) else r)
                 try:
-                    o_rating = judge_with_openai(q["query"], content, api_key)
+                    o_rating = judge_with_openai(q["query"], content, api_key)  # redacted inside
                     l_rating = judge_with_embeddings(q["query"], content)
                     openai_ratings_flat.append(o_rating)
                     local_ratings_flat.append(l_rating)

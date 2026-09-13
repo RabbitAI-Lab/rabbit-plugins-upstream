@@ -1,0 +1,2 @@
+ALERT
+2026-09-01 21:30:01 | 上次排程运行未成功: 结果码 255 (未知), 时间 2026/9/1 20:10:00; 排程存在会主动杀任务的反模式: DisallowStartIfOnBatteries=true(电池供电时根本不启动); StopIfGoingOnBatteries=true(跑到一半切电池即被杀); StopOnIdleEnd=true(用户一动鼠标/空闲结束即被杀) -> 以管理员运行 一键修复排程.bat 修复

@@ -1,44 +1,63 @@
-## Description: <br>
-Fathom API integration with managed OAuth for accessing meeting recordings, transcripts, summaries, action items, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fathom API integration with managed OAuth for accessing meeting recordings, transcripts, summaries, action items, and approved webhook notifications.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to retrieve and search Fathom meeting content, manage OAuth-backed Fathom connections, and create or delete webhook notifications for new meeting data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Fathom meeting recordings, transcripts, summaries, action items, and related account data. <br>
-Mitigation: Install only for the intended Fathom account, keep MATON_API_KEY private, and confirm the active connection before retrieving meeting content. <br>
-Risk: Webhook and destination_url callbacks can send meeting content to external endpoints. <br>
-Mitigation: Before approving callbacks, verify the destination URL, endpoint ownership, fields to be sent, and how to delete the webhook later. <br>
-Risk: Create, update, and delete operations can change Fathom connections or webhooks. <br>
-Mitigation: Require explicit user approval for every write operation and confirm the target resource and intended effect. <br>
+## Use Case:
 
+Employees and developers use this skill to connect a Fathom account through Maton, retrieve or search meetings and recordings, and configure explicitly approved meeting-data automation.
 
-## Reference(s): <br>
-- [Fathom API Documentation](https://developers.fathom.ai) <br>
-- [Fathom LLM Reference](https://developers.fathom.ai/llms.txt) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown with endpoint descriptions, JSON examples, and Python or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Meeting recordings, transcripts, summaries, and webhook payloads can contain highly sensitive participant and business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth with the narrowest available scope, default to read-only operations, and avoid logging or storing raw meeting responses unless the user explicitly needs that output.
+
+Risk: Webhook and destination_url flows can send meeting content to an external host or create ongoing delivery of future recordings.
+
+Mitigation: Require explicit approval for the exact destination host, payload flags, and ongoing scope before enabling callbacks or webhooks; keep transcript forwarding off unless it is necessary.
+
+Risk: API-key fallback can expose a long-lived credential if copied into shell history, logs, or child process environments.
+
+Mitigation: Prefer OAuth; when an API key is unavoidable, keep it in the credential store or a narrowly scoped runtime environment and rotate it if exposed.
+
+## Reference(s):
+
+- [Fathom API Documentation](https://developers.fathom.ai)
+- [Fathom LLM Reference](https://developers.fathom.ai/llms.txt)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/fathom-api)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown guidance with inline shell, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands operate through Maton OAuth or API-key credentials and may return sensitive Fathom meeting data.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

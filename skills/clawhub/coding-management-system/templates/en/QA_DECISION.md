@@ -1,23 +1,30 @@
-# QA Decision
+# Independent QA Decision
 
 Packet / Work Order:
 
-Reviewer:
+Reviewer and independent task:
 
 Date:
 
+Delivery class: Runtime / Contract / Governance / Artifact / Mixed
+
 Decision: Accepted / Accepted With Risk / Failed / Blocked
+
+## Independence Check
+
+- Reviewer did not implement or stage-review this delivery:
+- Authority and target fingerprint reviewed:
 
 ## Criteria And Evidence
 
-| Criterion | Evidence reviewed | Result | Gap |
-| --- | --- | --- | --- |
+| Criterion | Class | Evidence reviewed | Result | Gap |
+| --- | --- | --- | --- | --- |
 
-## User-Flow Result
+## Runtime Or Artifact Result
 
 ## Scope And Alignment
 
-## Risks
+## Risks And Carry Count
 
 ## Required Correction
 

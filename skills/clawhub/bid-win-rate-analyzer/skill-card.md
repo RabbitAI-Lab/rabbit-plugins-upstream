@@ -1,53 +1,71 @@
-## Description: <br>
-Assists bid teams in estimating win probability for a specific tender by analyzing buyer history, likely competitors, fit, pricing signals, and bid risks from procurement data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assists bid teams in estimating bid win probability, identifying likely competitors, assessing buyer history, checking pricing benchmarks, and producing a decision report grounded in vendor bid-history data.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External bid, sales, and business development teams use this skill to decide whether to pursue a tender, how to price competitively, and which competitors or buyer patterns may affect win probability. It is intended for decision support and produces a traceable report based on available procurement data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create persistent credentials and read a stored API key from the local environment or configuration. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY where possible, keep credentials out of chat, and review local credential storage before installation. <br>
-Risk: Automatic trial registration can transmit platform, CPU architecture, and a hashed MAC identifier. <br>
-Mitigation: Only approve auto-registration after accepting that data transfer, or configure ZLBX_API_KEY manually to bypass registration. <br>
-Risk: Generated HTML reports may contain sensitive commercial analysis and signed source links that can open without a normal login. <br>
-Mitigation: Treat reports as confidential business documents, limit sharing, and remove or expire signed links before broader distribution. <br>
-Risk: Bid recommendations can be misleading if procurement data is incomplete, stale, or not representative of the tender. <br>
-Mitigation: Review the report's data gaps, date ranges, and cited records before making commercial decisions. <br>
-Risk: Analysis involving real companies or public agencies can create reputational or legal risk if inferred signals are phrased as accusations. <br>
-Mitigation: Keep facts and inferences separate, use neutral signal-based wording, and have a human review sensitive claims before sharing. <br>
+## Use Case:
 
+External bid teams, procurement consultants, and business developers use this skill to decide whether to pursue a specific tender, estimate competitive position, and prepare a data-backed bid strategy. It is intended for normal commercial bid analysis workflows where users can provide a tender link, title, or file.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-win-rate-analyzer) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Reference](references/auto-register.md) <br>
-- [ZhiLiaoBiaoXun API](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [ZhiLiaoBiaoXun Trial and Account Portal](https://ai.zhiliaobiaoxun.com/?ch=s67) <br>
-- [ZhiLiao Business Intelligence Portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, guidance] <br>
-**Output Format:** [Markdown decision report with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citation details and signed source links returned by the procurement data API; complete mode may write an HTML report under ~/zlbx-bid-decision-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill may use a vendor-hosted bid-analysis service and API key for normal operation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when use of the Zhiliaobiaoxun service is acceptable, and prefer a user-supplied ZLBX_API_KEY when available.
+
+Risk: Auto-registration can send platform, CPU architecture, and a MAC-address hash to the vendor after user consent.
+
+Mitigation: Review the auto-registration prompt before approving it, or preconfigure ZLBX_API_KEY to skip auto-registration.
+
+Risk: API keys and generated bid reports may be stored locally, and reports can contain commercially sensitive bid analysis.
+
+Mitigation: Protect local credential files and report output directories, and delete generated reports when they are no longer needed.
+
+Risk: Generated reports may include signed vendor links and vendor branding or referrals.
+
+Mitigation: Review shared reports before redistribution and treat signed links as sensitive access URLs.
+
+Risk: Bid recommendations can be incomplete or misleading if source data is missing, stale, or ambiguous.
+
+Mitigation: Use the report as decision support, preserve cited data gaps and disclaimers, and independently verify material bid decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-win-rate-analyzer)
+- [Workflow](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Report template](artifact/references/report-template.md)
+- [Auto-registration flow](artifact/references/auto-register.md)
+- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliaobiaoxun AI platform](https://ai.zhiliaobiaoxun.com/?ch=s73)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown bid decision report with optional self-contained HTML report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cited bid/company records, signed vendor links, local report file paths, and cost/credit usage notes.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

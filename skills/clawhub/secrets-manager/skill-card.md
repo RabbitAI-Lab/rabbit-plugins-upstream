@@ -1,44 +1,60 @@
-## Description: <br>
-Secrets Manager is an encrypted local secret store for OpenClaw agents that uses AES-256-GCM authenticated encryption, per-secret random IVs, a chmod 0600 master-key file, rotation and audit commands, and opt-in plaintext output controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encrypted local secret store for OpenClaw agents. AES-256-GCM authenticated encryption with per-secret random IVs, master key in restricted-permission .master-key file. Store, retrieve, rotate, and audit secrets. Safe command injection writes to a restricted temp file by default and requires explicit confirmation before printing resolved commands. Losing the master key makes stored secrets unrecoverable.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agent operators use this skill to store, retrieve, rotate, audit, and inject local secrets for OpenClaw workflows without external dependencies. It is intended for local file-based secret management, not as a replacement for a production vault or OS keychain. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Default --inject can leave a plaintext resolved command in /tmp/secrets-inject-*.sh even though documentation and output imply automatic cleanup. <br>
-Mitigation: Avoid default --inject for important credentials, or remove the generated /tmp/secrets-inject-*.sh file immediately after use. <br>
-Risk: The skill is a local file-based secrets store with master-key material stored in .master-key. <br>
-Mitigation: Protect and back up .master-key, restrict access to the secrets directory, and use a real vault or OS keychain for production credentials. <br>
-Risk: Raw retrieval and explicit inject-to-stdout modes can expose plaintext secrets to logs, terminal history, CI output, or agent transcripts. <br>
-Mitigation: Use masked output by default and reserve --get --raw or --inject-stdout --confirm-expose for tightly controlled private processes. <br>
+## Use Case:
 
+Developers and agent operators use this skill to store, retrieve, rotate, audit, and inject local secrets for OpenClaw workflows while keeping default display output masked.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/secrets-manager) <br>
-- [Publisher profile](https://clawhub.ai/user/jlacroix82) <br>
-- [Artifact README](artifact/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text output, chmod-0600 shell script files for command injection, and JavaScript module return values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores encrypted secret records and master-key material as local files; raw secret output and resolved injected commands can expose plaintext when explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: server release metadata and artifact clawhub.yaml) <br>
+Risk: Credential values may be exposed through argv, persistent temp scripts, or audit output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and fix credential handling before storing high-value production credentials; prefer masked output and default temp-file injection until the release has been remediated.
+
+Risk: The release requests shell and elevated permissions that may be broader than necessary.
+
+Mitigation: Limit deployment to reviewed environments, constrain the storage directory, and confirm that elevated permissions are only used for restrictive file-permission enforcement.
+
+Risk: The local master key is required to recover stored secrets.
+
+Mitigation: Back up the master key to a secure location and test recovery before relying on the store for important credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/secrets-manager)
+- [Publisher profile](https://clawhub.ai/user/jlacroix82)
+- [README](artifact/README.md)
+- [Vetting report](artifact/VET-REPORT.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Files, Configuration]
+
+**Output Format:** [CLI text output, masked secret values by default, and restricted-permission temp shell scripts for command injection]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May emit plaintext secrets only when explicitly requested through raw retrieval or confirmed stdout injection.]
+
+## Skill Version(s):
+
+1.1.19 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -34,6 +34,13 @@ few seconds." But first know the *delivery mode*, because the density rules flex
   count as presented); the slide shows the *phrase*, the speaker says the
   *sentence*. **The default.** One-idea-per-slide, few-words, big "read-from-the-back" type, "more
   slides not denser," and "spoken prose lives in speaker notes" all apply *here*.
+  🔴 **The notes say what the slide does NOT.** Mayer's redundancy principle: when the
+  narration repeats text the audience is already reading, the two compete and recall drops —
+  the notes are the *next* layer (the why, the caveat, the example, the answer to the
+  question this page invites), never a prose copy of the page. Measured across 253 real
+  noted slides in this repo, at most 0.71 of a notes block is verbatim slide text and the
+  median is 0.11; `canon_probe.py` gates `NOTES ECHO SLIDE` above that, but the point is to
+  write them as a different layer, not to clear a number.
 - **Read-alone** (leave-behind, pre-read, emailed status, reference / appendix deck) — **no speaker**,
   so each slide must carry the sentence a speaker would otherwise say: **self-contained, complete
   lines and legitimately denser slides are the deliverable, not a flaw**; size type to arm's-length
@@ -510,7 +517,7 @@ ask of each element "is there suitable, balanced space around it, or is it crowd
   it): tie every flip to a repeating family (all dividers dark, dark cover+closer bookends). On a
   generated-identity deck the rule is stricter still — see generated-template.md: rhythm comes from
   imagery strength, never from abandoning the plate on one page.
-- **No large empty region — fill the slide, balanced.** A slide that's mostly blank (content
+- **No large LEFTOVER empty region — fill the slide, balanced.** *(The qualifier is load-bearing: a composed void — one dominant element with air deliberately around it — is design, and the lint now tells the two apart by typographic dominance + object count rather than by ink alone. What follows is about the leftover kind.)*  A slide that's mostly blank (content
   huddled in one corner or the top third, a wide empty band down a side or across the bottom) reads
   as unfinished — don't ship it. **Default fix: ENRICH the content** — add the supporting detail,
   example, sub-point, caption, mini-diagram, or data the point actually deserves so the slide earns

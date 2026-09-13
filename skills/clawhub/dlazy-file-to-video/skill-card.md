@@ -1,43 +1,60 @@
-## Description: <br>
-Converts PPT, Word, Excel, PDF, and other documents into explainer, report, courseware, or training videos through dLazy's hosted file-to-video agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts PPT, Word, Excel, PDF, and other documents into explainer, report, courseware, or training video workflows through dLazy's hosted file-to-video agent.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to run dLazy's file-to-video workflow, upload selected documents, and continue project-scoped video generation sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, project context, and attached files are sent to dLazy's hosted service. <br>
-Mitigation: Use only with documents approved for that service and avoid uploading confidential files unless the organization has approved dLazy. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Protect the local config file and rotate or revoke the API key from the dLazy dashboard when access changes. <br>
+## Use Case:
 
+External users, employees, and developers use this skill to turn source documents into project-scoped video generation tasks, including explainers, report broadcasts, courseware, and training videos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-file-to-video) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and streamed CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference dLazy project IDs and user-selected local files uploaded through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: The skill uses a pinned npm CLI and depends on a third-party package supply chain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer on-demand npx use when possible and review the package or source before installation.
+
+Risk: Selected documents, prompts, and attached files are sent to dLazy hosted services.
+
+Mitigation: Avoid uploading sensitive documents unless dLazy's service terms and data handling fit the user's requirements.
+
+Risk: The dLazy API key is stored locally or supplied through an environment variable.
+
+Mitigation: Rotate or revoke the API key when it is no longer needed and keep local credential files protected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-file-to-video)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May initiate dLazy CLI calls that stream hosted agent responses and upload user-selected files to dLazy media storage.]
+
+## Skill Version(s):
+
+1.3.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

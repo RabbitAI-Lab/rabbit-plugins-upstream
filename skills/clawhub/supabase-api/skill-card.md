@@ -1,46 +1,74 @@
-## Description: <br>
-Supabase API integration with managed authentication for database tables, auth users, and storage buckets through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supabase API integration with managed authentication for accessing database tables through PostgREST, managing auth users, and working with storage buckets.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect and operate connected Supabase projects, including PostgREST table access, auth user management, and storage bucket operations. It is intended for Supabase workflows that need managed Maton authentication through MATON_API_KEY. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change data in a connected Supabase project through Maton. <br>
-Mitigation: Install only if Maton is trusted with the project and prefer staging or least-privileged projects for exploration. <br>
-Risk: POST, PUT, PATCH, and DELETE operations can modify production data, auth users, or storage resources. <br>
-Mitigation: Review the target resource, filters, and intended effect before approving any write operation. <br>
-Risk: When multiple Supabase connections exist, requests may target the wrong project if the connection is ambiguous. <br>
-Mitigation: Specify the intended connection explicitly before executing project-specific requests. <br>
+## Use Case:
 
+Developers and operators use this skill to query Supabase database tables, manage authentication users, handle storage buckets, and set up approved Maton-hosted automation against a connected Supabase project.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Supabase REST API Guide](https://supabase.com/docs/guides/api) <br>
-- [PostgREST Documentation](https://postgrest.org/en/stable/) <br>
-- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api) <br>
-- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API operations act through Maton against the selected connected Supabase project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can affect Supabase databases, auth users, storage buckets, functions, and triggers through a connected Maton account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable granting Maton access to the selected project, prefer least-privilege or staging projects for experiments, and confirm writes, auth-admin actions, bucket visibility changes, functions, and triggers before execution.
+
+Risk: Long-lived credentials or raw response data can be exposed if copied into environment variables, command lines, logs, or files.
+
+Mitigation: Prefer OAuth and the operating system credential store, avoid exporting MATON_API_KEY unless the CLI cannot be installed, rotate any exposed key, and extract only task-relevant response fields.
+
+Risk: PostgREST writes can unintentionally update or delete more rows than intended if filters are missing or incorrect.
+
+Mitigation: Default to read and list calls, verify identifiers and filters with a GET first, and proceed with POST, PUT, PATCH, or DELETE only after explicit user approval.
+
+## Reference(s):
+
+- [ClawHub Supabase Skill](https://clawhub.ai/byungkyu/skills/supabase-api)
+- [Maton Homepage](https://maton.ai)
+- [Supabase REST API Guide](https://supabase.com/docs/guides/api)
+- [PostgREST Documentation](https://postgrest.org/en/stable/)
+- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api)
+- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, configuration examples, and API guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Supabase API request guidance and safety checks for reads, writes, connections, functions, and triggers.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,14 @@
+{
+  "schema": "lgd-skill-manifest/v1",
+  "name": "eu-ai-act-companion",
+  "slug": "eu-ai-act-companion",
+  "version": "1.1.0",
+  "author": "诺声(Logos)@SynomosAI",
+  "copyright": "SynomosAI",
+  "license": "MIT",
+  "category": "AI合规",
+  "origin": "https://github.com/zhaoxinghua09-cell/agent-skills/tree/main/skills/eu-ai-act-companion",
+  "homepage": "https://zhaoxinghua09-cell.github.io/lgd-hub/",
+  "agent_created": true,
+  "packaged_at": "2026-09-08"
+}

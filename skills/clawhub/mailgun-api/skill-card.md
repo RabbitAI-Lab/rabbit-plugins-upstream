@@ -1,44 +1,78 @@
-## Description: <br>
-Mailgun API integration with managed OAuth for sending, receiving, tracking, and managing email resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailgun API integration with managed OAuth for sending, receiving, tracking, and administering transactional email through approved Mailgun connections.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Mailgun through Maton-managed OAuth for sending messages and managing domains, routes, templates, mailing lists, suppressions, events, tracking settings, webhooks, and credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send email and change Mailgun routing, webhook, tracking, and credential settings when given access. <br>
-Mitigation: Confirm the exact domain, recipient, route destination, webhook URL, tracking setting, or credential change before approving any write operation. <br>
-Risk: The MATON_API_KEY grants access through Maton to the connected Mailgun account. <br>
-Mitigation: Install only when Maton is trusted for this account, store the key as a protected secret, and use the intended Maton connection when multiple connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Mailgun accounts through Maton-managed authentication, including email sending, domain management, routes, templates, mailing lists, suppressions, and approved automations.
 
-## Reference(s): <br>
-- [ClawHub Mailgun Skill](https://clawhub.ai/byungkyu/mailgun-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Mailgun API Documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview) <br>
-- [Mailgun API Reference](https://mailgun-docs.redoc.ly/docs/mailgun/api-reference/intro/) <br>
-- [Mailgun Postman Collection](https://www.postman.com/mailgun/mailgun-s-public-workspace/documentation/ik8dl61/mailgun-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and a valid MATON_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Installing Maton tooling or SDKs from an untrusted channel can expose the user's environment to supply-chain risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the Maton CLI or SDK only from trusted distribution channels and keep versions pinned until intentionally reviewed.
+
+Risk: Long-lived API keys can leak through environment variables, logs, shell history, crash dumps, or copied output.
+
+Mitigation: Prefer OAuth, use API keys only when the CLI cannot be installed, never print or persist keys, and rotate any key that was exposed.
+
+Risk: Mailgun write, delete, webhook, hosted function, or trigger actions can change email delivery behavior or create persistent automation.
+
+Mitigation: Confirm the exact account, connection, target, payload, persistence, and destination before approving any sensitive or state-changing action.
+
+Risk: Mailgun responses can contain personal or business data such as names, addresses, message content, or document details.
+
+Mitigation: Extract only the fields needed for the task and avoid logging or storing raw response bodies unless the user explicitly requests it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/mailgun-api)
+- [Publisher profile](https://clawhub.ai/user/byungkyu)
+- [Maton homepage](https://maton.ai)
+- [Mailgun API Documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview)
+- [Mailgun API Reference](https://mailgun-docs.redoc.ly/docs/mailgun/api-reference/intro/)
+- [Mailgun Postman Collection](https://www.postman.com/mailgun/mailgun-s-public-workspace/documentation/ik8dl61/mailgun-api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly trigger reference](references/calendly/triggers.md)
+- [GitHub trigger reference](references/github/triggers.md)
+- [Google Mail trigger reference](references/google-mail/triggers.md)
+- [HubSpot trigger reference](references/hubspot/triggers.md)
+- [Linear trigger reference](references/linear/triggers.md)
+- [Notion trigger reference](references/notion/triggers.md)
+- [Slack trigger reference](references/slack/triggers.md)
+- [Stripe trigger reference](references/stripe/triggers.md)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code blocks, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Mailgun and Maton API guidance; actions run only through the user's authenticated connection and require approval for writes, new connections, hosted functions, and triggers.]
+
+## Skill Version(s):
+
+1.2.5 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

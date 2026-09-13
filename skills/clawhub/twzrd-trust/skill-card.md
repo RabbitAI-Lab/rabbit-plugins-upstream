@@ -1,48 +1,66 @@
-## Description: <br>
-Checks Solana wallets and x402 sellers before payment by returning readiness, trust, merchant, and receipt-verification guidance from TWZRD's observed payment corpus. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TWZRD Trust helps agents discover x402 payment endpoints and evaluate seller wallet risk before signing payments using readiness cards, merchant cards, wallet scores, gate checks, and receipt verification.
 
-## Publisher: <br>
-[twzrd-sol](https://clawhub.ai/user/twzrd-sol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twzrd-sol](https://clawhub.ai/user/twzrd-sol)
 
-## Use Case: <br>
-Developers and agent operators use this skill to preflight Solana wallet and x402 seller payments, check merchant and wallet trust signals, decide whether to proceed, and verify TWZRD receipts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can influence whether an agent signs or sends Solana/x402 payments. <br>
-Mitigation: Require explicit workflow approval before acting on payment decisions or changing payment routing. <br>
-Risk: Paid x402 trust and merchant calls can spend USDC on Solana. <br>
-Mitigation: Run the free preflight and merchant-card checks first, then require operator approval before paid endpoints are called. <br>
-Risk: The skill may involve network calls, optional package installs, MCP setup, facilitator routing changes, and canonical skill refreshes. <br>
-Mitigation: Approve endpoint changes, package installs, MCP additions, routing changes, and refreshes before execution. <br>
+## Use Case:
 
+External agents, developers, and payment-integrating teams use this skill to check x402 sellers and wallet payment risk before signing or settling USDC-on-Solana payments. It provides guidance for preflight checks, merchant-card review, gate enforcement, and receipt verification.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/twzrd-sol/skills/twzrd-trust) <br>
-- [Canonical Skill Source](https://intel.twzrd.xyz/skill.md) <br>
-- [TWZRD Service Homepage](https://intel.twzrd.xyz) <br>
-- [TWZRD MCP Endpoint](https://intel.twzrd.xyz/mcp) <br>
-- [TWZRD OpenAPI 3.1 Descriptor](https://intel.twzrd.xyz/openapi.json) <br>
-- [TWZRD x402 Descriptor](https://intel.twzrd.xyz/.well-known/x402) <br>
-- [TWZRD Facilitator Support](https://intel.twzrd.xyz/supported) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with curl and npx shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses TWZRD HTTP and optional MCP endpoints; no API key is required; paid x402 calls may spend USDC on Solana.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release evidence; artifact metadata version 1.8) <br>
+Risk: The skill combines wallet and payment workflows with actions that can affect whether an agent signs or refuses a payment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing and require manual approval for wallet, funding, payment, and auto-pay commands.
+
+Risk: Some package execution paths are unpinned or allow broad version ranges, which can change the code an agent runs.
+
+Mitigation: Prefer pinned package versions, locked environments, and reviewed dependency updates before running payment-related commands.
+
+Risk: The canonical skill URL can change over time, so automatic replacement could alter behavior without review.
+
+Mitigation: Do not allow automatic skill replacement from the canonical URL without a manual diff and provenance check.
+
+Risk: Seller wallets, prices, and intent fields may be disclosed to TWZRD during trust checks.
+
+Mitigation: Treat those fields as shared with TWZRD and avoid sending sensitive intent details unless disclosure is acceptable.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/twzrd-sol/skills/twzrd-trust)
+- [Canonical Skill Definition](https://intel.twzrd.xyz/skill.md)
+- [TWZRD Intel Service](https://intel.twzrd.xyz)
+- [TWZRD MCP Endpoint](https://intel.twzrd.xyz/mcp)
+- [TWZRD OpenAPI](https://intel.twzrd.xyz/openapi.json)
+- [TWZRD x402 Descriptor](https://intel.twzrd.xyz/.well-known/x402)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline bash, TypeScript, JSON, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires curl for core examples; optional Node packages, wallet tooling, and MCP endpoint configuration are described for payment-gate workflows.]
+
+## Skill Version(s):
+
+1.13.25 (source: server release metadata and skill frontmatter metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

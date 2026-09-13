@@ -1,43 +1,64 @@
-## Description: <br>
-Blender 3D Modeling helps agents use AgentPMT's cloud Blender service to render 3D model previews, convert model formats, check or repair printability, slice models for printing, and run reviewed Blender Python scripts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Blender 3D Modeling gives agents access to AgentPMT-hosted headless Blender workflows for rendering model views and turntables, converting 3D formats, checking and repairing printability, slicing for printing, and running scoped Blender Python scripts.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers, designers, and agents use this skill to submit 3D assets to AgentPMT-hosted Blender actions for rendering, file conversion, 3D-printability checks, mesh repair, slicing, and controlled Blender Python automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: 3D model files and related prompts are sent to AgentPMT's remote Blender service. <br>
-Mitigation: Use the skill only for assets that may be shared with AgentPMT, and avoid placing secrets or sensitive data in models, prompts, scripts, or logs. <br>
-Risk: The run_script action executes custom Blender Python and can upload files written to OUTPUT_DIR. <br>
-Mitigation: Run only scripts that were written or reviewed for the task, keep them narrowly scoped, and save only intended outputs. <br>
+## Use Case:
 
+Developers, technical artists, product teams, game asset teams, and 3D printing users can use this skill to process existing 3D model files through remote Blender actions. It supports preview renders, turntable videos, file conversion, printability analysis and repair, G-code generation, and custom Blender Python workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/agentpmt/skills/blender-3d-modeling) <br>
-- [AgentPMT Marketplace Page](https://www.agentpmt.com/marketplace/blender-3d-modeling) <br>
-- [Action Schema](artifact/schema.md) <br>
-- [AgentPMT Account Setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples and action parameter details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Remote actions may return task IDs, status JSON, signed file URLs, rendered images or videos, converted model files, G-code, and printability metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: 3D model files or public model URLs are sent to AgentPMT for remote Blender processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for files the user is comfortable sharing with AgentPMT, and avoid including secrets or confidential material in prompts, filenames, URLs, or metadata.
+
+Risk: The run_script action executes custom Blender Python in the provider's environment.
+
+Mitigation: Review scripts before execution, keep scripts scoped to the requested output, and do not run code copied from untrusted prompts or files.
+
+Risk: The security evidence flags unpinned setup install commands.
+
+Mitigation: Prefer the ClawHub or OpenClaw setup path over unpinned npx fallback commands.
+
+Risk: Automated mesh repair, slicing, and generated G-code may be unsuitable as source-of-truth production or printer input without review.
+
+Mitigation: Review repaired models, printability results, slice previews, and generated G-code before using them for manufacturing or printing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/agentpmt/skills/blender-3d-modeling)
+- [AgentPMT marketplace product](https://www.agentpmt.com/marketplace/blender-3d-modeling)
+- [AgentPMT publisher profile](https://clawhub.ai/user/agentpmt)
+- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with JSON action parameters and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to call remote AgentPMT actions that can return task IDs, JSON status, signed file URLs, rendered images, videos, model files, G-code, and Blender-generated artifacts.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,6 @@
 """Tests for calendar write tools."""
 
+from datetime import date
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -15,6 +16,19 @@ from outlook_mcp.tools.calendar_write import (
 
 _CFG = Config(client_id="test")
 _CFG_RO = Config(client_id="test", read_only=True)
+
+
+def _created(subject: str, event_id: str = "AAMkAGnew="):
+    """Mock Graph response for a successful event POST."""
+    resp = MagicMock()
+    resp.id = event_id
+    resp.subject = subject
+    return resp
+
+
+def _posted(mock_client):
+    """The Event object handed to me.events.post()."""
+    return mock_client.me.events.post.call_args[0][0]
 
 
 def _make_event_builder():
@@ -86,6 +100,124 @@ class TestCreateEvent:
         assert result["status"] == "created"
         mock_client.me.events.post.assert_called_once()
 
+    async def test_create_event_ignores_no_recurrence(self):
+        """No recurrence argument leaves the Event's recurrence unset (regression guard)."""
+        mock_client = AsyncMock()
+        mock_client.me.events.post = AsyncMock(return_value=_created("Lunch"))
+
+        await create_event(
+            mock_client,
+            subject="Lunch",
+            start="2026-04-15T12:00:00Z",
+            end="2026-04-15T13:00:00Z",
+            config=_CFG,
+        )
+
+        assert _posted(mock_client).recurrence is None
+
+    async def test_create_event_sets_recurrence_from_dict(self):
+        """#41: a Graph-shape recurrence dict reaches the posted Event as PatternedRecurrence."""
+        from msgraph.generated.models.day_of_week import DayOfWeek
+        from msgraph.generated.models.patterned_recurrence import PatternedRecurrence
+        from msgraph.generated.models.recurrence_pattern_type import RecurrencePatternType
+
+        mock_client = AsyncMock()
+        mock_client.me.events.post = AsyncMock(return_value=_created("Weekly sync"))
+
+        await create_event(
+            mock_client,
+            subject="Weekly sync",
+            start="2026-09-07T12:30:00Z",
+            end="2026-09-07T13:30:00Z",
+            recurrence={
+                "pattern": {"type": "weekly", "interval": 1, "daysOfWeek": ["monday", "friday"]},
+                "range": {"type": "noEnd", "startDate": "2026-09-07"},
+            },
+            config=_CFG,
+        )
+
+        posted = _posted(mock_client)
+        assert isinstance(posted.recurrence, PatternedRecurrence)
+        assert posted.recurrence.pattern.type is RecurrencePatternType.Weekly
+        assert posted.recurrence.pattern.days_of_week == [DayOfWeek.Monday, DayOfWeek.Friday]
+
+    async def test_create_event_sets_recurrence_from_json_string(self):
+        """The workaround shape from #41 — a JSON string — now produces a real series."""
+        import json
+
+        from msgraph.generated.models.recurrence_pattern_type import RecurrencePatternType
+
+        mock_client = AsyncMock()
+        mock_client.me.events.post = AsyncMock(return_value=_created("Weekly sync"))
+
+        await create_event(
+            mock_client,
+            subject="Weekly sync",
+            start="2026-09-07T12:30:00Z",
+            end="2026-09-07T13:30:00Z",
+            recurrence=json.dumps(
+                {
+                    "pattern": {"type": "weekly", "interval": 1, "daysOfWeek": ["monday"]},
+                    "range": {"type": "noEnd", "startDate": "2026-09-07"},
+                }
+            ),
+            config=_CFG,
+        )
+
+        assert _posted(mock_client).recurrence.pattern.type is RecurrencePatternType.Weekly
+
+    async def test_create_event_expands_the_documented_shorthand(self):
+        """The docstring has advertised "weekly" since 1.0 — make it mean something."""
+        from msgraph.generated.models.day_of_week import DayOfWeek
+        from msgraph.generated.models.recurrence_pattern_type import RecurrencePatternType
+
+        mock_client = AsyncMock()
+        mock_client.me.events.post = AsyncMock(return_value=_created("Standup"))
+
+        await create_event(
+            mock_client,
+            subject="Standup",
+            start="2026-09-07T09:00:00Z",  # a Monday
+            end="2026-09-07T09:15:00Z",
+            recurrence="weekly",
+            config=_CFG,
+        )
+
+        posted = _posted(mock_client)
+        assert posted.recurrence.pattern.type is RecurrencePatternType.Weekly
+        assert posted.recurrence.pattern.days_of_week == [DayOfWeek.Monday]
+
+    async def test_create_event_rejects_an_unknown_shorthand(self):
+        """Silently dropping an unparseable recurrence is what caused #41."""
+        mock_client = AsyncMock()
+        mock_client.me.events.post = AsyncMock(return_value=_created("Nope"))
+
+        with pytest.raises(ValueError, match="daily"):
+            await create_event(
+                mock_client,
+                subject="Nope",
+                start="2026-09-07T09:00:00Z",
+                end="2026-09-07T09:15:00Z",
+                recurrence="biweekly",
+                config=_CFG,
+            )
+
+        mock_client.me.events.post.assert_not_called()
+
+    async def test_create_event_checks_permission_before_building_recurrence(self):
+        """Read-only mode must short-circuit before any recurrence parsing."""
+        mock_client = AsyncMock()
+
+        with pytest.raises(ReadOnlyError):
+            await create_event(
+                mock_client,
+                subject="Weekly sync",
+                start="2026-09-07T12:30:00Z",
+                end="2026-09-07T13:30:00Z",
+                recurrence="biweekly",
+                config=_CFG_RO,
+            )
+
 
 class TestUpdateEvent:
     async def test_update_event_patches_fields(self):
@@ -120,6 +252,320 @@ class TestUpdateEvent:
                 subject="Nope",
                 config=_CFG_RO,
             )
+
+    async def test_update_event_ignores_no_recurrence(self):
+        """Omitting recurrence leaves it unset on the patch (regression guard)."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(mock_client, event_id="AAMkAG123=", subject="X", config=_CFG)
+
+        assert builder.patch.call_args[0][0].recurrence is None
+        builder.get.assert_not_called()
+
+    async def test_update_event_sets_recurrence_with_explicit_start(self):
+        """Patching start + recurrence together needs no extra round trip."""
+        from msgraph.generated.models.day_of_week import DayOfWeek
+        from msgraph.generated.models.recurrence_pattern_type import RecurrencePatternType
+
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client,
+            event_id="AAMkAG123=",
+            start="2026-09-07T12:30:00Z",
+            end="2026-09-07T13:30:00Z",
+            recurrence="weekly",
+            config=_CFG,
+        )
+
+        patched = builder.patch.call_args[0][0]
+        assert patched.recurrence.pattern.type is RecurrencePatternType.Weekly
+        assert patched.recurrence.pattern.days_of_week == [DayOfWeek.Monday]
+        builder.get.assert_not_called()
+
+    async def test_update_event_reads_current_start_when_none_given(self):
+        """Recurrence alone: Graph needs the range anchored on the event's own start."""
+        from msgraph.generated.models.day_of_week import DayOfWeek
+
+        current = MagicMock()
+        # Graph returns 7 fractional digits, which datetime.fromisoformat rejects on 3.10.
+        current.start = MagicMock(date_time="2026-09-07T12:30:00.0000000", time_zone="UTC")
+
+        builder = _make_event_builder()
+        builder.get = AsyncMock(return_value=current)
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client, event_id="AAMkAG123=", recurrence="weekly", config=_CFG
+        )
+
+        builder.get.assert_awaited_once()
+        patched = builder.patch.call_args[0][0]
+        assert patched.recurrence.pattern.days_of_week == [DayOfWeek.Monday]
+        assert patched.recurrence.range.start_date == date(2026, 9, 7)
+
+    async def test_update_event_accepts_a_graph_recurrence_object(self):
+        from msgraph.generated.models.recurrence_pattern_type import RecurrencePatternType
+
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client,
+            event_id="AAMkAG123=",
+            start="2026-09-07T12:30:00Z",
+            recurrence={
+                "pattern": {"type": "absoluteMonthly", "interval": 1, "dayOfMonth": 7},
+                "range": {"type": "numbered", "numberOfOccurrences": 3},
+            },
+            config=_CFG,
+        )
+
+        patched = builder.patch.call_args[0][0]
+        assert patched.recurrence.pattern.type is RecurrencePatternType.AbsoluteMonthly
+        assert patched.recurrence.range.number_of_occurrences == 3
+
+    async def test_update_event_errors_when_start_cannot_be_resolved(self):
+        """Better a named error than a Graph 400 on a series with no anchor."""
+        current = MagicMock()
+        current.start = None
+
+        builder = _make_event_builder()
+        builder.get = AsyncMock(return_value=current)
+        builder.patch = AsyncMock()
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        with pytest.raises(ValueError, match="start"):
+            await update_event(
+                mock_client, event_id="AAMkAG123=", recurrence="weekly", config=_CFG
+            )
+
+        builder.patch.assert_not_called()
+
+    async def test_update_event_rejects_bad_recurrence_before_patching(self):
+        builder = _make_event_builder()
+        builder.patch = AsyncMock()
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        with pytest.raises(ValueError, match="daily"):
+            await update_event(
+                mock_client,
+                event_id="AAMkAG123=",
+                start="2026-09-07T12:30:00Z",
+                recurrence="biweekly",
+                config=_CFG,
+            )
+
+        builder.patch.assert_not_called()
+
+    async def test_update_event_leaves_new_fields_unset_when_omitted(self):
+        """Critical: omitting them must not force False/empty onto the event."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(mock_client, event_id="AAMkAG123=", subject="X", config=_CFG)
+
+        patched = builder.patch.call_args[0][0]
+        assert patched.attendees is None
+        assert patched.is_all_day is None
+        assert patched.is_online_meeting is None
+
+    async def test_update_event_replaces_attendees(self):
+        """Graph replaces the whole collection — we send exactly what the caller gave."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client,
+            event_id="AAMkAG123=",
+            attendees=["alice@test.com", "bob@test.com"],
+            config=_CFG,
+        )
+
+        patched = builder.patch.call_args[0][0]
+        assert [a.email_address.address for a in patched.attendees] == [
+            "alice@test.com",
+            "bob@test.com",
+        ]
+
+    async def test_update_event_empty_attendee_list_clears_them(self):
+        """[] is a real instruction ("no attendees"), distinct from None ("don't touch")."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(mock_client, event_id="AAMkAG123=", attendees=[], config=_CFG)
+
+        assert builder.patch.call_args[0][0].attendees == []
+
+    async def test_update_event_validates_attendee_emails(self):
+        builder = _make_event_builder()
+        builder.patch = AsyncMock()
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        with pytest.raises(ValueError):
+            await update_event(
+                mock_client,
+                event_id="AAMkAG123=",
+                attendees=["alice@test.com", "not-an-email"],
+                config=_CFG,
+            )
+
+        builder.patch.assert_not_called()
+
+    async def test_update_event_sets_is_all_day_with_bounds(self):
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client,
+            event_id="AAMkAG123=",
+            start="2026-10-22T00:00:00Z",
+            end="2026-10-23T00:00:00Z",
+            is_all_day=True,
+            config=_CFG,
+        )
+
+        assert builder.patch.call_args[0][0].is_all_day is True
+
+    async def test_update_event_rejects_all_day_without_bounds(self):
+        """Live Graph returns "Missing parameters: Event.Start" — name it here instead."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock()
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        with pytest.raises(ValueError, match="start and end"):
+            await update_event(
+                mock_client, event_id="AAMkAG123=", is_all_day=True, config=_CFG
+            )
+
+        builder.patch.assert_not_called()
+
+    async def test_update_event_can_turn_all_day_off(self):
+        """False is an instruction too — must not be swallowed as "unset"."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client,
+            event_id="AAMkAG123=",
+            start="2026-10-22T00:00:00Z",
+            end="2026-10-23T00:00:00Z",
+            is_all_day=False,
+            config=_CFG,
+        )
+
+        assert builder.patch.call_args[0][0].is_all_day is False
+    async def test_remove_recurrence_sends_an_explicit_null(self):
+        """The SDK DROPS `event.recurrence = None` — it must go via additional_data.
+
+        Asserting on the serialized JSON, not on the attribute: the whole failure
+        mode here is a payload the SDK silently omits, and an attribute-level
+        assertion would stay green through exactly that bug.
+        """
+        from kiota_serialization_json.json_serialization_writer import (
+            JsonSerializationWriter,
+        )
+
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client, event_id="AAMkAG123=", remove_recurrence=True, config=_CFG
+        )
+
+        writer = JsonSerializationWriter()
+        builder.patch.call_args[0][0].serialize(writer)
+        assert '"recurrence": null' in writer.get_serialized_content().decode()
+
+    async def test_setting_event_recurrence_none_would_not_have_worked(self):
+        """Pins why additional_data is used. If kiota ever starts serializing an
+        explicit None, this fails and the workaround can be simplified."""
+        from kiota_serialization_json.json_serialization_writer import (
+            JsonSerializationWriter,
+        )
+        from msgraph.generated.models.event import Event
+
+        event = Event()
+        event.subject = "x"
+        event.recurrence = None
+
+        writer = JsonSerializationWriter()
+        event.serialize(writer)
+        assert "recurrence" not in writer.get_serialized_content().decode()
+
+    async def test_omitting_remove_recurrence_sends_no_recurrence_key(self):
+        """A partial patch must not blank a series just because it edited the subject."""
+        from kiota_serialization_json.json_serialization_writer import (
+            JsonSerializationWriter,
+        )
+
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(mock_client, event_id="AAMkAG123=", subject="X", config=_CFG)
+
+        writer = JsonSerializationWriter()
+        builder.patch.call_args[0][0].serialize(writer)
+        assert "recurrence" not in writer.get_serialized_content().decode()
+
+    async def test_remove_recurrence_conflicts_with_setting_one(self):
+        builder = _make_event_builder()
+        builder.patch = AsyncMock()
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        with pytest.raises(ValueError, match="both"):
+            await update_event(
+                mock_client,
+                event_id="AAMkAG123=",
+                start="2026-09-07T12:30:00Z",
+                recurrence="weekly",
+                remove_recurrence=True,
+                config=_CFG,
+            )
+
+        builder.patch.assert_not_called()
+
+    async def test_remove_recurrence_needs_no_extra_round_trip(self):
+        """Unlike setting one, clearing needs no start anchor — don't GET the event."""
+        builder = _make_event_builder()
+        builder.patch = AsyncMock(return_value=MagicMock(id="AAMkAG123="))
+        mock_client = MagicMock()
+        mock_client.me.events.by_event_id = MagicMock(return_value=builder)
+
+        await update_event(
+            mock_client, event_id="AAMkAG123=", remove_recurrence=True, config=_CFG
+        )
+
+        builder.get.assert_not_called()
 
 
 class TestDeleteEvent:

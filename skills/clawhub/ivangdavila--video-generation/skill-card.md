@@ -1,46 +1,65 @@
-## Description: <br>
-Create AI videos with Sora 2, Veo 3, Seedance, Runway, and modern APIs using reliable prompt and rendering workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create AI videos with Sora 2, Veo 3, Seedance, Runway, and modern APIs using reliable prompt and rendering workflows.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers, creators, and production teams use this skill to choose AI video providers, write motion prompts, and build async generation workflows with model routing and fallback guidance. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Prompts, rendering parameters, and optional reference media may be sent to third-party AI video providers. <br>
-Mitigation: Use only providers approved for the content, avoid sending sensitive media unless the provider is trusted, and choose the local open-source workflow when external upload is not acceptable. <br>
-Risk: Local memory or history files may retain project preferences, prompts, costs, or output notes. <br>
-Mitigation: Avoid saving sensitive details in ~/video-generation/memory.md or history.md, and review or delete those files periodically. <br>
-Risk: Long renders, retries, and premium model rerenders can consume provider credits quickly. <br>
-Mitigation: Draft short clips first, use lower-cost tiers for validation, and set spend limits on provider accounts. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/video-generation) <br>
-- [Skill manifest](artifact/SKILL.md) <br>
-- [Model snapshot](artifact/benchmarks.md) <br>
-- [Async API patterns](artifact/api-patterns.md) <br>
-- [Setup guide](artifact/setup.md) <br>
-- [Open-source local video models](artifact/open-source-video.md) <br>
+## Use Case:
 
+Developers, creators, and production teams use this skill to choose video-generation providers, write shot-focused prompts, and build reliable asynchronous rendering workflows across hosted and local model options.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend third-party provider API calls, model IDs, local memory files, and fallback routing.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release and frontmatter) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Prompts, rendering parameters, and any selected reference media may be sent to third-party video providers.
+
+Mitigation: Use only providers trusted for the content being generated and avoid submitting sensitive media unless provider terms and project requirements allow it.
+
+Risk: Provider preferences, shot recipes, costs, and optional run history may be retained locally under ~/video-generation/.
+
+Mitigation: Review memory.md and history.md periodically and remove entries that should not be retained.
+
+Risk: Generated video URLs from provider APIs may expire before downstream export or review.
+
+Mitigation: Download completed outputs promptly and preserve job metadata needed for audits or reruns.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/video-generation)
+- [Skill Homepage](https://clawic.com/skills/video-generation)
+- [AI Video Generation Skill Definition](artifact/SKILL.md)
+- [Setup - AI Video Generation](artifact/setup.md)
+- [API Patterns - AI Video Generation](artifact/api-patterns.md)
+- [Model Snapshot](artifact/benchmarks.md)
+- [OpenAI Sora 2](artifact/openai-sora.md)
+- [Google Veo 3.x](artifact/google-veo.md)
+- [Runway Gen-4 API](artifact/runway.md)
+- [Open-Source Local Video Models](artifact/open-source-video.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include provider routing advice, prompt structures, API workflow patterns, and local preference-memory setup guidance.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

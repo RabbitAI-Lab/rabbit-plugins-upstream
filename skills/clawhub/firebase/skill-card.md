@@ -1,44 +1,76 @@
-## Description: <br>
-Firebase Management API integration with managed OAuth for managing Firebase projects, web apps, Android apps, iOS apps, and Google Analytics links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firebase Management API integration with managed OAuth for managing Firebase projects, web apps, Android apps, iOS apps, app configurations, and Google Analytics links.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and manage Firebase projects and apps through Maton-managed OAuth. It is useful for listing projects, creating or updating app registrations, retrieving app configuration, and linking Google Analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton can act on the connected Firebase account through the OAuth connection. <br>
-Mitigation: Install only if you trust Maton with the connected Firebase projects, use the least-privileged connection available, and periodically review or revoke Maton OAuth connections you no longer need. <br>
-Risk: Create, update, and delete operations can change Firebase projects and app registrations. <br>
-Mitigation: Confirm the target resource and intended effect before executing write or delete actions, and specify the intended Maton connection when multiple Firebase connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an authenticated Firebase account through Maton and perform approved Firebase Management API tasks such as listing projects, creating or managing apps, retrieving app configurations, and linking Google Analytics. It also documents how approved Firebase actions can be wrapped in hosted functions or trigger-driven automation.
 
-## Reference(s): <br>
-- [Firebase Skill on ClawHub](https://clawhub.ai/byungkyu/firebase) <br>
-- [Maton](https://maton.ai) <br>
-- [Firebase Management API Overview](https://firebase.google.com/docs/projects/api/workflow_set-up-and-manage-project) <br>
-- [Firebase Management REST API Reference](https://firebase.google.com/docs/reference/firebase-management/rest) <br>
-- [Firebase Projects Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API paths, JSON examples, and inline shell, Python, and JavaScript snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a Firebase OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Write operations, connection creation, hosted functions, and trigger destinations can modify Firebase resources or create persistent automation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list operations, confirm the target resource and effect before any write, and require separate explicit approval for each new connection, function, invocation, trigger, or destination.
+
+Risk: Long-lived API keys and broad Firebase OAuth scopes can expose more access than the task requires.
+
+Mitigation: Prefer OAuth, use least-privilege Firebase scopes, avoid exporting MATON_API_KEY when the CLI can be used, and rotate any key that was printed, committed, or pasted.
+
+Risk: Trigger destinations and event payloads can continuously forward personal, private, or payment-related data.
+
+Mitigation: Use narrow trigger scopes, forward only required fields, avoid public inspection endpoints, do not place credentials in destination headers or templates, and prefer api.maton.ai or *.maton.app destinations unless the user approves a named external host.
+
+## Reference(s):
+
+- [ClawHub Firebase skill](https://clawhub.ai/byungkyu/skills/firebase)
+- [Maton homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Firebase Management API Overview](https://firebase.google.com/docs/projects/api/workflow_set-up-and-manage-project)
+- [Firebase Management REST API Reference](https://firebase.google.com/docs/reference/firebase-management/rest)
+- [Firebase Projects Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects)
+- [Firebase Web Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.webApps)
+- [Firebase Android Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.androidApps)
+- [Firebase iOS Apps Resource](https://firebase.google.com/docs/reference/firebase-management/rest/v1beta1/projects.iosApps)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses authenticated Firebase and Maton operations; write operations, new connections, hosted functions, and persistent trigger destinations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

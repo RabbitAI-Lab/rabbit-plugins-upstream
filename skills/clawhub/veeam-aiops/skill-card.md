@@ -1,47 +1,70 @@
-## Description: <br>
-Governed Veeam Backup & Replication operations for health overview, diagnostics, job control, restore workflows, repository capacity checks, infrastructure inventory, async session tracking, and undo-aware audited actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Veeam Backup & Replication environments through CLI and MCP tools for health checks, diagnostics, backup job control, restores, repository and backup inventory, and session monitoring.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, backup operators, and infrastructure teams use this skill to inspect and operate Veeam Backup & Replication environments through CLI or MCP workflows with audit logging, dry-run previews, and undo records for reversible writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact backup and restore writes, including stopping jobs or sessions and starting irreversible VM restores. <br>
-Mitigation: Use a dedicated least-privilege Veeam account, begin with read-only permissions where possible, and require an operational approval process before enabling write-capable credentials. <br>
-Risk: Master passwords or Veeam credentials could be exposed if placed in committed MCP configuration, shell history, CI logs, or persistent plaintext environment files. <br>
-Mitigation: Inject secrets through a secret manager or ephemeral environment, keep the encrypted store outside version control, and avoid committing MCP configs that contain `VEEAM_AIOPS_MASTER_PASSWORD`. <br>
-Risk: The skill relies on account permissions and agent discipline rather than a built-in approval gate for MCP write tools. <br>
-Mitigation: Configure the Veeam account with only the permissions each workflow needs and instruct the agent to avoid write tools unless an operator has explicitly approved the action. <br>
+## Use Case:
 
+Backup administrators, SREs, and IT operators use this skill to inspect Veeam Backup & Replication health, triage failed sessions and repository capacity, manage backup jobs, and start or monitor restores through audited CLI or MCP workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/veeam-aiops) <br>
-- [Veeam-AIops homepage](https://github.com/AIops-tools/Veeam-AIops) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI and MCP workflows may return Veeam environment data, audit status, dry-run previews, undo identifiers, and risk-tier labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: Agents can invoke high-impact Veeam write and restore operations, and the skill does not provide a tool-enforced read-only mode or approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege Veeam account, prefer read-only roles for diagnostics, and restrict write-tool use in the supervising agent policy.
+
+Risk: Restore and session-stop actions can be irreversible or lack an undo token.
+
+Mitigation: Require operators to review dry-run previews, confirm the target object outside the model response, and rely on Veeam-side permissions for final authorization.
+
+Risk: Credential exposure is possible if plaintext environment variables or hardcoded master passwords are used in automation.
+
+Mitigation: Use the encrypted secret store, avoid plaintext .env credentials and hardcoded MCP config secrets, and rotate credentials when onboarding or changing operators.
+
+Risk: TLS verification can be disabled for self-signed lab certificates, which can weaken production connections.
+
+Mitigation: Keep TLS verification enabled outside lab environments and validate Veeam server connectivity with the doctor command before operational use.
+
+Risk: Unpinned or unverified package resolution can introduce supply-chain uncertainty for production use.
+
+Mitigation: Pin and verify the package version before production deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/veeam-aiops)
+- [Project homepage](https://github.com/AIops-tools/Veeam-AIops)
+- [Agent guardrails](references/agent-guardrails.md)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with CLI examples, operational guidance, and structured MCP/tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include audited Veeam operation results, dry-run previews, truncation indicators, and risk-tier context.]
+
+## Skill Version(s):
+
+0.15.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

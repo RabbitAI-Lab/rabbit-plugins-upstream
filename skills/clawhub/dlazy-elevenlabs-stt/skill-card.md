@@ -1,43 +1,56 @@
-## Description: <br>
-ElevenLabs scribe_v1 speech-to-text with auto language detection and optional speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs scribe_v1 speech-to-text with automatic language detection and optional speaker diarization for subtitles, transcription, and meeting notes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to submit audio URLs or local audio files to dLazy's hosted ElevenLabs speech-to-text wrapper and receive transcription-oriented JSON results. It supports common transcription workflows such as subtitles, meeting notes, language detection, and optional speaker diarization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audio files, audio URLs, prompts, and parameters are processed through dLazy cloud infrastructure. <br>
-Mitigation: Use the skill only with audio that is appropriate for dLazy processing and review the service terms before submitting sensitive content. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration when the user logs in. <br>
-Mitigation: Use npx for non-persistent CLI execution when preferred, pass DLAZY_API_KEY per invocation when suitable, and rotate or revoke keys that are no longer needed. <br>
+## Use Case:
 
+Developers and agent users can invoke this skill to submit audio URLs or local audio files to dLazy's hosted ElevenLabs STT wrapper and receive transcription results for subtitles, transcripts, or meeting notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async runs may return a generateId for polling with dlazy status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Audio files, prompts, and parameters are sent to dLazy-hosted services for transcription.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with recordings approved for dLazy processing, and avoid confidential, regulated, or sensitive audio unless organizational policy allows it.
+
+Risk: The skill relies on the external @dlazy/cli npm package and a dLazy API key stored locally or supplied by environment variable.
+
+Mitigation: Install only from trusted package sources, prefer npx or a restricted environment when avoiding global installs, and rotate or revoke the API key if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files, Shell commands, Configuration]
+
+**Output Format:** [JSON response containing generated transcription output, with optional saved result assets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports synchronous waiting, asynchronous task polling, dry-run cost estimates, and saving returned assets to a local path.]
+
+## Skill Version(s):
+
+1.3.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,20 +1,39 @@
 #!/usr/bin/env bash
-# memory-bench submit — Create a PR with benchmark data to the research fork.
+# memory-bench submit — Publish a benchmark report as a PUBLIC pull request.
 #
-# Usage: submit.sh <report.json> [--contributor GITHUB_USER]
+# Usage: submit.sh <report.json> [github-username] [--dry-run] [--yes]
+#
+#   --dry-run   Show exactly what would be uploaded, then stop. Nothing leaves
+#               your machine. Do this first.
+#   --yes       Skip only the typed confirmation. A terminal is STILL required:
+#               this does not let an unattended agent publish.
+#
+# THIS UPLOADS. It forks a public repo, pushes a branch to YOUR fork, and opens
+# a pull request containing the report file. A merged PR is public and permanent.
 #
 # Prerequisites: gh CLI authenticated, git configured.
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FORK_REPO="globalcaos/clawdbot-moltbot-openclaw"
 BENCH_DIR="benchmarks/memory-bench"
 
-REPORT="$1"
-CONTRIBUTOR="${2:-}"
+REPORT=""
+CONTRIBUTOR=""
+DRY_RUN=0
+ASSUME_YES=0
+
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run) DRY_RUN=1 ;;
+        --yes|-y)  ASSUME_YES=1 ;;
+        *) if [ -z "$REPORT" ]; then REPORT="$arg"; else CONTRIBUTOR="$arg"; fi ;;
+    esac
+done
 
 if [ -z "$REPORT" ] || [ ! -f "$REPORT" ]; then
-    echo "❌ Usage: submit.sh <report.json> [github-username]"
+    echo "❌ Usage: submit.sh <report.json> [github-username] [--dry-run] [--yes]"
     exit 1
 fi
 
@@ -40,11 +59,116 @@ TIMESTAMP=$(date -u +%Y%m%d-%H%M%S)
 BRANCH="bench/${CONTRIBUTOR}-${TIMESTAMP}"
 FILENAME="${CONTRIBUTOR}-${INSTANCE_ID}-${TIMESTAMP}.json"
 
-echo "📊 Memory Bench Submission"
-echo "   Contributor: $CONTRIBUTOR"
-echo "   Instance:    $INSTANCE_ID"
-echo "   Branch:      $BRANCH"
+# --- Build every public artifact ONCE, before asking. The preview then shows
+# --- the actual commit message and PR body, not a description of them.
+SUMMARY=$(python3 -c "
+import json, sys
+r = json.load(open(sys.argv[1]))
+m = r['memory_stats']['memories']
+ret = r['retrieval_stats']
+print(f\"- **Active memories:** {m['total_active']}\")
+print(f\"- **Deleted memories:** {m['total_deleted']}\")
+print(f\"- **Embedding coverage:** {m['embedding_coverage']*100:.1f}%\")
+print(f\"- **Type distribution:** {m['type_distribution']}\")
+print(f\"- **Association count:** {r['memory_stats']['associations']['total']}\")
+if ret.get('available'):
+    print(f\"- **Retrieval queries logged:** {ret['total_queries']}\")
+    for cfg, data in ret.get('by_config', {}).items():
+        print(f\"  - {cfg}: n={data.get('query_count','N/A')}, ndcg={(data.get('ndcg') or {}).get('mean','N/A')}\")
+else:
+    print('- **Retrieval stats:** Not available (retrieval_log table not found)')
+print(f\"- **Consolidation runs:** {r['memory_stats']['consolidation']['total_runs_in_period']}\")
+" "$REPORT" 2>/dev/null || echo '(see report JSON for details)')
+
+PERIOD=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['collection_period_days'])" "$REPORT" 2>/dev/null || echo '?')
+ACTIVE=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['memory_stats']['memories']['total_active'])" "$REPORT" 2>/dev/null || echo '?')
+
+COMMIT_MSG="bench: add memory-bench report from $CONTRIBUTOR ($INSTANCE_ID)
+
+Automated submission via memory-bench skill.
+Collection period: $PERIOD days
+Active memories: $ACTIVE
+"
+
+PR_TITLE="bench: memory-bench report from $CONTRIBUTOR"
+PR_BODY="## Memory Bench Report
+
+**Contributor:** @$CONTRIBUTOR
+**Instance ID:** \`$INSTANCE_ID\`
+**Collection period:** $PERIOD days
+
+### Summary
+$SUMMARY
+
+### Co-authorship
+
+This data contributes to the research papers at:
+- [ENGRAM (Context Compaction)](https://github.com/globalcaos/clawdbot-moltbot-openclaw/blob/main/docs/papers/context-compaction.md)
+- [CORTEX (Agent Memory)](https://github.com/globalcaos/clawdbot-moltbot-openclaw/blob/main/docs/papers/agent-memory.md)
+
+By submitting benchmark data, you are eligible for co-authorship per [#13991](https://github.com/openclaw/openclaw/issues/13991).
+
+---
+*Automated submission via \`memory-bench\` skill.*"
+
+echo "📊 Memory Bench Submission — PREVIEW"
+echo "════════════════════════════════════════════════════════════════"
+echo "  Destination : https://github.com/$FORK_REPO  (PUBLIC repository)"
+echo "  Action      : fork → push branch '$BRANCH' to YOUR fork → open a PR"
+echo "  File        : $BENCH_DIR/reports/$FILENAME"
 echo ""
+echo "  ─── THE REPORT FILE, IN FULL ───"
+echo ""
+VALID=1
+python3 "$SCRIPT_DIR/report_schema.py" "$REPORT" --contributor "$CONTRIBUTOR" || VALID=0
+echo ""
+echo "  ─── THE COMMIT MESSAGE ───"
+echo ""
+printf '%s\n' "$COMMIT_MSG" | sed 's/^/    /'
+echo "  ─── THE PULL REQUEST ───"
+echo ""
+echo "    Title: $PR_TITLE"
+echo ""
+printf '%s\n' "$PR_BODY" | sed 's/^/    /'
+echo ""
+echo "  Also updated in the PR: $BENCH_DIR/INDEX.json (an aggregate line naming"
+echo "  your contributor name, instance id, date and memory count)."
+echo "════════════════════════════════════════════════════════════════"
+echo ""
+
+if [ "$VALID" -ne 1 ]; then
+    echo "❌ Refusing to publish: the report does not match the expected schema."
+    echo "   The errors above list every field involved. Regenerate the report"
+    echo "   with collect.py, or remove the offending fields. Nothing was uploaded."
+    exit 1
+fi
+
+if [ "$DRY_RUN" -eq 1 ]; then
+    echo "🔍 Dry run — nothing was uploaded. Drop --dry-run to submit for real."
+    exit 0
+fi
+
+# A terminal is required either way. --yes drops the keystroke, never the
+# human — an agent running this unattended has no path to publishing.
+if [ ! -t 0 ]; then
+    echo "✋ Refusing to publish: no terminal to confirm on."
+    echo "   --yes also requires a terminal; it skips the typed word, not the"
+    echo "   person. Use --dry-run to inspect what would be published."
+    exit 1
+fi
+
+if [ "$ASSUME_YES" -eq 1 ]; then
+    echo "  ✓ Consent given on the command line (--yes)."
+    echo ""
+else
+    printf "  Type 'publish' to open the public PR, anything else to abort: "
+    read -r CONFIRM
+    if [ "$CONFIRM" != "publish" ]; then
+        echo "🛑 Aborted. Nothing was uploaded."
+        exit 1
+    fi
+    echo ""
+fi
 
 # Verify gh auth
 if ! gh auth status &>/dev/null; then
@@ -79,9 +203,9 @@ cp "$REPORT" "$BENCH_DIR/reports/$FILENAME"
 
 # Update aggregate index
 python3 -c "
-import json, glob, os
+import json, glob, os, sys
 
-reports_dir = '$BENCH_DIR/reports'
+reports_dir = os.path.join(sys.argv[1], 'reports')
 reports = []
 for f in sorted(glob.glob(os.path.join(reports_dir, '*.json'))):
     try:
@@ -105,19 +229,14 @@ index = {
     'unique_contributors': len(set(r['contributor'] for r in reports)),
     'reports': reports,
 }
-with open('$BENCH_DIR/INDEX.json', 'w') as f:
+with open(os.path.join(sys.argv[1], 'INDEX.json'), 'w') as f:
     json.dump(index, f, indent=2)
 print(f'✅ Index updated: {len(reports)} reports, {index[\"unique_instances\"]} instances')
-"
+" "$BENCH_DIR"
 
 # Commit
 git add "$BENCH_DIR/"
-git commit -m "bench: add memory-bench report from $CONTRIBUTOR ($INSTANCE_ID)
-
-Automated submission via memory-bench skill.
-Collection period: $(python3 -c "import json; print(json.load(open('$REPORT'))['collection_period_days'])" 2>/dev/null || echo '?') days
-Active memories: $(python3 -c "import json; print(json.load(open('$REPORT'))['memory_stats']['memories']['total_active'])" 2>/dev/null || echo '?')
-"
+git commit -m "$COMMIT_MSG"
 
 # Push to contributor's fork
 echo "📤 Pushing to your fork..."
@@ -128,43 +247,8 @@ echo "📝 Creating pull request..."
 PR_URL=$(gh pr create \
     --repo "$FORK_REPO" \
     --head "$CONTRIBUTOR:$BRANCH" \
-    --title "bench: memory-bench report from $CONTRIBUTOR" \
-    --body "## Memory Bench Report
-
-**Contributor:** @$CONTRIBUTOR
-**Instance ID:** \`$INSTANCE_ID\`
-**Collection period:** $(python3 -c "import json; print(json.load(open('$REPORT'))['collection_period_days'])" 2>/dev/null || echo '?') days
-
-### Summary
-$(python3 -c "
-import json
-r = json.load(open('$REPORT'))
-m = r['memory_stats']['memories']
-ret = r['retrieval_stats']
-print(f\"- **Active memories:** {m['total_active']}\")
-print(f\"- **Deleted memories:** {m['total_deleted']}\")
-print(f\"- **Embedding coverage:** {m['embedding_coverage']*100:.1f}%\")
-print(f\"- **Type distribution:** {m['type_distribution']}\")
-print(f\"- **Association count:** {r['memory_stats']['associations']['total']}\")
-if ret.get('available'):
-    print(f\"- **Retrieval queries logged:** {ret['total_queries']}\")
-    for strat, data in ret.get('by_strategy', {}).items():
-        print(f\"  - {strat}: avg_score={data.get('avg_score','N/A')}, avg_latency={data.get('avg_latency_ms','N/A')}ms\")
-else:
-    print('- **Retrieval stats:** Not available (retrieval_log table not found)')
-print(f\"- **Consolidation runs:** {r['memory_stats']['consolidation']['total_runs_in_period']}\")
-" 2>/dev/null || echo '(see report JSON for details)')
-
-### Co-authorship
-
-This data contributes to the research papers at:
-- [ENGRAM (Context Compaction)](https://github.com/globalcaos/clawdbot-moltbot-openclaw/blob/main/docs/papers/context-compaction.md)
-- [CORTEX (Agent Memory)](https://github.com/globalcaos/clawdbot-moltbot-openclaw/blob/main/docs/papers/agent-memory.md)
-
-By submitting benchmark data, you are eligible for co-authorship per [#13991](https://github.com/openclaw/openclaw/issues/13991).
-
----
-*Automated submission via \`memory-bench\` skill.*" \
+    --title "$PR_TITLE" \
+    --body "$PR_BODY" \
     2>&1)
 
 echo ""

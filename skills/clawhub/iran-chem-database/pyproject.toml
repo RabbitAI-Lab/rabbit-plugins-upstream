@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iran-chem-db"
+version = "1.0.0"
+description = "HTTrack-powered live crawling database of Iranian research-grade chemical molecules"
+readme = "README.md"
+license = { text = "MIT-0" }
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "sqlalchemy>=2.0",
+    "psycopg2-binary>=2.9",
+    "alembic>=1.13",
+    "redis>=5.0",
+    "celery>=5.4",
+    "beautifulsoup4>=4.12",
+    "lxml>=5.2",
+    "parsel>=1.9",
+    "pdfplumber>=0.11",
+    "PyMuPDF>=1.24",
+    "openpyxl>=3.1",
+    "pandas>=2.2",
+    "playwright>=1.45",
+    "rdkit>=2024.03",
+    "pubchempy>=1.0.4",
+    "hazm>=0.9",
+    "parsivar>=0.2",
+    "langdetect>=1.0.9",
+    "streamlit>=1.36",
+    "dash>=2.17",
+    "plotly>=5.22",
+    "PyYAML>=6.0",
+    "python-dotenv>=1.0",
+    "requests>=2.32",
+    "httpx>=0.27",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-asyncio>=0.23", "ruff>=0.5"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = [
+    "integration: requires a live PostgreSQL/Redis (self-skips when absent)",
+    "network: requires outbound network access",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["alembic/versions"]
+
+[tool.ruff.lint]
+# Bug-focused rules: pycodestyle errors (E), pyflakes (F), warnings (W),
+# bugbear (B). Style modernization (UP/I) is intentionally NOT enabled to
+# avoid churn on the pre-existing codebase; enable per-file if desired.
+select = ["E", "F", "W", "B"]
+ignore = [
+    "E501",  # line length is enforced by formatter, not linter
+    "B008",  # FastAPI `Depends(...)` in route defaults is the canonical idiom
+    "E402",  # deferred imports are intentional (avoid import cycles)
+    "E701",  # semicolon one-liners in the dashboard are cosmetic
+    "E702",  # same — cosmetic, dashboard metric rows
+    "E741",  # short loop var `l` is a pre-existing style choice
+]

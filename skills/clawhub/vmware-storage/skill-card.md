@@ -1,45 +1,62 @@
-## Description: <br>
-Use this skill to manage VMware storage tasks such as datastore browsing, deployable image scans, iSCSI target configuration, and vSAN health and capacity checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage VMware vSphere storage tasks including datastore browsing, deployable image discovery, iSCSI target configuration, and vSAN health and capacity checks.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, infrastructure engineers, and VMware administrators use this skill to inspect datastores, find deployable images, configure iSCSI targets, and review vSAN health and capacity from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change VMware storage configuration, including iSCSI targets, which may affect host or datastore availability. <br>
-Mitigation: Restrict use to VMware administrators, use a dedicated least-privilege vSphere account, review policy gates, and run dry-run before iSCSI changes. <br>
-Risk: Credentials and local audit logs may contain sensitive operational data. <br>
-Mitigation: Keep ~/.vmware-storage/.env at 600 permissions or inject secrets from a manager, and treat ~/.vmware/audit.db as sensitive operational data. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to inspect datastores, locate deployable images, manage iSCSI targets, and check vSAN health and capacity from an agent through the local vmware-storage CLI or MCP server.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage) <br>
-- [Project homepage](https://github.com/zw008/VMware-Storage) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [VMware Storage Capabilities](references/capabilities.md) <br>
-- [Operating vmware-storage with a local / small model](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI/MCP workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local VMware storage administration guidance; write operations should use dry-run, policy gates, and audit logging.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: Privileged VMware storage changes can affect host storage configuration or make LUN-backed VMs inaccessible.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege VMware service accounts, preview iSCSI writes with dry-run, require explicit approval or double confirmation, and enforce environment-scoped deny rules before production writes.
+
+Risk: Runtime installation and local configuration can expose infrastructure credentials or weakened TLS settings.
+
+Mitigation: Use a verified vmware-storage runtime, enable TLS certificate verification, prefer a secret manager over plaintext .env passwords, and keep .env permissions owner-only.
+
+Risk: doctor --skip-auth can bypass authentication and connectivity checks, giving incomplete diagnostic confidence.
+
+Mitigation: Treat --skip-auth only as a partial diagnostic and verify authentication and connectivity before relying on the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage)
+- [Project homepage](https://github.com/vmware-skills/VMware-Storage)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [VMware Storage Capabilities](references/capabilities.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, configuration snippets, and JSON-shaped tool result expectations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [MCP storage tools return structured results or list envelopes; write workflows should preview changes with dry-run and require explicit confirmation.]
+
+## Skill Version(s):
+
+1.9.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
