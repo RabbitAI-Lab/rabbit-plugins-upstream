@@ -1,0 +1,7 @@
+interface:
+  display_name: "ProPaymun IA Architect"
+  short_description: "Product-led IA, sitemaps, and user flows"
+  brand_color: "#5B4BDB"
+  default_prompt: "Use $propaymun-information-architecture as my product and IA decision partner. Help me turn ordinary product context into a clear, evidence-aware architecture, product sitemap, or user flow. Use plain language, give one coherent useful pass when the context is sufficient, and ask only when a consequential decision has no responsible reversible default. At a useful pause, summarize the current stage before offering optional continuations."
+policy:
+  allow_implicit_invocation: true

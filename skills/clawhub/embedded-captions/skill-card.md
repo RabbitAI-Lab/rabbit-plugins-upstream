@@ -1,52 +1,63 @@
-## Description: <br>
-Adds captions or subtitles to an existing single-subject talking-head video, including readable lower-third captions, cinematic embedded captions, VFX-style captions, and catalog-driven visual identities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adds readable or cinematic captions to an existing single-subject talking-head video while preserving the source footage, using local transcription, subject matting, style selection, preview QA, and final video rendering.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External creators, developers, and video production agents use this skill to add readable or art-directed captions to single-speaker talking-head clips while preserving the source footage except for caption overlays and documented theme reactions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Silent update instructions can change shared tooling before the user reviews the release. <br>
-Mitigation: Require explicit confirmation before running skill-update commands and pin the reviewed release in controlled environments. <br>
-Risk: The workflow may perform network fetches or run package tools through npx or uvx. <br>
-Mitigation: Run it only in environments where those fetches and package executions are permitted, or preinstall and pin the required tools. <br>
-Risk: The artifact can load GSAP from a CDN. <br>
-Mitigation: Prefer a bundled, reviewed local GSAP asset when network-loaded browser scripts are not acceptable. <br>
-Risk: Generated files can overwrite project outputs. <br>
-Mitigation: Use an isolated project directory for each render and review generated files before preserving or publishing them. <br>
+## Use Case:
 
+Developers and content-production agents use this skill to add subtitles, embedded caption moments, or VFX-style caption treatments to eligible talking-head clips without changing the underlying footage. It is intended for single-subject videos that pass the skill's clip, speech, transcript, and preview-quality gates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/embedded-captions) <br>
-- [Catalog](CATALOG.md) <br>
-- [Rail Reference](references/rail.md) <br>
-- [Composition Craft](references/composition-craft.md) <br>
-- [DNA Registry](dna/README.md) <br>
-- [Themes Guide](themes/README.md) <br>
-- [Reference Bar](references/reference-bar.md) <br>
-- [Aesthetic Principles](references/aesthetic-principles.md) <br>
-- [GSAP CDN Script](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, and generated project files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create caption planning JSON, preview assets, rendered caption layers, and final video files inside the selected project directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The workflow can update globally installed skills before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the update step with the operator, run in a restricted project environment, and review or pin the updater path before processing user footage.
+
+Risk: Runtime dependencies or remote browser scripts may be fetched during a workflow presented as local.
+
+Mitigation: Pre-provision required model and runtime assets, pin dependency sources, and block remote script loads when handling sensitive videos.
+
+Risk: Incorrect transcription, poor matting, or unsuitable source footage can produce misleading or unreadable captions.
+
+Mitigation: Apply the skill's clip refusal gates, sanity-check transcripts, and review preview frames before rendering final video.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/embedded-captions)
+- [CATALOG.md](CATALOG.md)
+- [Rail track](references/rail.md)
+- [Composition craft](references/composition-craft.md)
+- [DNA registry](dna/README.md)
+- [Theme mode](themes/README.md)
+- [GSAP runtime](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces project configuration, preview artifacts, and captioned video outputs through the described local workflow.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

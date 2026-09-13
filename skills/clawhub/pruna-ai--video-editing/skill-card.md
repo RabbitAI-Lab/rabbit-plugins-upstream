@@ -1,48 +1,72 @@
-## Description: <br>
-Use when assembling or polishing already-rendered clips with ffmpeg: concat, crossfades, burned captions and subtitles, text/logo overlays, before/after sliders, background music beds, platform export, or multi-layer HTML combination videos with Hyperframes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when assembling or polishing already-rendered clips with ffmpeg -- concat, crossfades, burned captions and subtitles, text/logo overlays, before/after sliders, background music beds, platform export -- or when composing a multi-layer HTML combination video with Hyperframes; not for AI video generation, prompt craft, or model-based video edits.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and media teams use this skill to assemble and polish finished local media into social, promo, or product videos using ffmpeg-oriented workflows. It helps with clip stitching, transitions, captions, overlays, music beds, comparison layouts, Hyperframes handoff, and export presets without claiming AI video generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Optional installs can add third-party tooling or related skills beyond the local ffmpeg workflow. <br>
-Mitigation: Review optional install commands before execution and install only the components needed for the current editing task. <br>
-Risk: Caption alignment and generated music workflows may upload media or prompts to external paid services through separate skills. <br>
-Mitigation: Use those optional steps only for media the user is comfortable uploading, and prefer local or already-approved assets when privacy or cost is a concern. <br>
+## Use Case:
 
+Developers, creators, and media operators use this skill to assemble and polish finished local media into reels, showcases, comparisons, captioned videos, and platform-ready exports. It guides post-production workflows using local ffmpeg/ffprobe, optional caption alignment, and optional HyperFrames composition for designed multi-layer videos.
 
-## Reference(s): <br>
-- [Assembly and concat](references/assembly-concat.md) <br>
-- [Transitions (xfade)](references/transitions.md) <br>
-- [Captions and subtitles](references/captions.md) <br>
-- [Overlays (text and logo)](references/overlays.md) <br>
-- [Comparison sliders](references/comparison-sliders.md) <br>
-- [Background music (bed mix)](references/background-music.md) <br>
-- [Combination videos (Hyperframes)](references/combination-hyperframes.md) <br>
-- [Export presets](references/export-presets.md) <br>
-- [Hyperframes](https://github.com/heygen-com/hyperframes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands, ffmpeg filter examples, and small configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill produces instructions and command proposals for local post-production; generated media files are produced only when an agent follows those commands in the user's environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: Unattended or unpinned external installs can change the agent environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review install commands before running them and prefer pinned versions or reviewed commits.
+
+Risk: Broad full-suite installs can add more tooling than the task requires.
+
+Mitigation: Avoid broad --full-depth or full-suite installs unless those companion skills are actually needed.
+
+Risk: External render tools may run with access to the project environment.
+
+Mitigation: Run render tooling in a project-limited environment without unnecessary secrets.
+
+Risk: ffmpeg commands that include -y can overwrite existing media outputs.
+
+Mitigation: Use new output filenames or remove -y when preserving prior media matters.
+
+## Reference(s):
+
+- [Assembly and concat](references/assembly-concat.md)
+- [Transitions](references/transitions.md)
+- [Captions and subtitles](references/captions.md)
+- [Overlays](references/overlays.md)
+- [Comparison sliders](references/comparison-sliders.md)
+- [Background music](references/background-music.md)
+- [Narrated showcase](references/narrated-showcase.md)
+- [Combination videos](references/combination-hyperframes.md)
+- [Social use-case reels](references/social-usecase-reel.md)
+- [Motion composition craft](references/motion-composition-craft.md)
+- [Export presets](references/export-presets.md)
+- [HyperFrames](https://github.com/heygen-com/hyperframes)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with ffmpeg, ffprobe, ASS subtitle, HTML, JSON, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local media workflows, install commands, project layouts, render checks, and post-production validation steps.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

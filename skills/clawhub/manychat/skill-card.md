@@ -1,47 +1,76 @@
-## Description: <br>
-ManyChat API integration with managed authentication for managing subscribers, tags, custom fields, flows, and Facebook Messenger messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ManyChat API integration with managed authentication for managing subscribers, tags, custom fields, Facebook Messenger messages, and bot automation through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to ManyChat through Maton-managed authentication, inspect ManyChat page and subscriber data, manage tags and fields, and send approved messages or flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses MATON_API_KEY and Maton connection URLs to access a connected ManyChat account. <br>
-Mitigation: Keep MATON_API_KEY and connection URLs private, scope them to the intended account, and rotate credentials if they are exposed. <br>
-Risk: The skill can modify subscriber records, tags, custom fields, bot fields, and send messages or flows. <br>
-Mitigation: Require explicit user approval before write or send operations and verify the account, recipient or subscriber IDs, message text, changed fields or tags, and consent basis. <br>
-Risk: Multiple ManyChat connections can cause actions to target the wrong account. <br>
-Mitigation: Use the Maton-Connection header when multiple connections exist and confirm the intended connection before approving account changes. <br>
+## Use Case:
 
+Developers and automation builders use this skill to connect an agent to ManyChat through Maton, inspect account and subscriber data, manage tags and custom fields, send approved messages, and build approved hosted automations.
 
-## Reference(s): <br>
-- [ClawHub ManyChat listing](https://clawhub.ai/byungkyu/manychat) <br>
-- [ManyChat API Documentation](https://api.manychat.com/swagger) <br>
-- [ManyChat API Key Generation Guide](https://help.manychat.com/hc/en-us/articles/14959510331420) <br>
-- [ManyChat Dev Program](https://help.manychat.com/hc/en-us/articles/14281269835548) <br>
-- [Maton](https://maton.ai) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline HTTP paths, JSON examples, and Python or JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a configured ManyChat connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: ManyChat account access and stored Maton credentials can expose subscriber, messaging, tag, and automation data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth when possible, create or select the exact connection with user approval, choose only needed scopes, and remove stale or unused connections.
+
+Risk: Write operations and message sends can modify ManyChat state or contact users.
+
+Mitigation: Default to read and list calls, then obtain explicit confirmation before POST, PUT, PATCH, DELETE, imports, tag changes, custom-field updates, flow sends, or message sends.
+
+Risk: Hosted functions and triggers can turn a one-time ManyChat action into ongoing automation.
+
+Mitigation: Deploy only user-authored or user-reviewed handlers, use DENY_ALL network policy unless specific hosts are approved, minimize forwarded fields, and delete functions or triggers when no longer needed.
+
+Risk: Raw HTTP mode requires handling a long-lived Maton API key in the process environment.
+
+Mitigation: Use raw HTTP only where the CLI cannot be installed, never print or persist the key, send it only to api.maton.ai, and rotate it if it is exposed.
+
+## Reference(s):
+
+- [ManyChat API Documentation](https://api.manychat.com/swagger)
+- [ManyChat API Key Generation Guide](https://help.manychat.com/hc/en-us/articles/14959510331420)
+- [ManyChat Dev Program](https://help.manychat.com/hc/en-us/articles/14281269835548)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, Python snippets, and API endpoint descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, raw HTTPS request examples, hosted function handlers, trigger configuration guidance, and least-privilege approval prompts.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release metadata; artifact frontmatter version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -15,18 +15,19 @@
 
 ---
 
-**Sogni Creative Agent Skill** plugs into the agent runtime you already use — Claude Code, [OpenClaw](https://github.com/OpenClaw/OpenClaw), [Hermes Agent](https://hermes-agent.nousresearch.com/), [Manus AI](https://manus.im), and others — and gives it production-quality image, video, and music generation through a single CLI: `sogni-agent`.
+**Sogni Creative Agent Skill** plugs into the agent runtime you already use — Claude Code, [goose](https://goose-docs.ai/), [OpenClaw](https://github.com/OpenClaw/OpenClaw), [Hermes Agent](https://hermes-agent.nousresearch.com/), [Manus AI](https://manus.im), and others — and gives it production-quality image, video, and music generation through a single CLI: `sogni-agent`.
 
-It ships three ways:
+It ships four ways:
 
 - a standalone Node.js CLI (`sogni-agent`)
 - a skill source that any [`SKILL.md`](./SKILL.md)-aware agent can load
+- a local MCP stdio server (`sogni-agent-mcp`) for goose, Claude Desktop, Codex, and other MCP clients
 - a published [OpenClaw](https://github.com/OpenClaw/OpenClaw) plugin
 
 With this skill, an agent can:
 
 - generate images from prompts and edit/restyle existing images
-- create videos from text, images, audio, or reference video (LTX-2.3, WAN 2.2, Seedance 2.0, HappyHorse 1.1)
+- create videos from text, images, first/last frames, audio, or source video (LTX-2.5), with LTX-2.3 retained for voice ID, transition, and 10Eros workflows
 - turn an image folder into a visually deduplicated, music-backed seamless loop with one plugin skill invocation
 - generate instrumental music or full songs with lyrics
 - run hosted creative workflows including storyboard-driven video
@@ -46,10 +47,12 @@ With this skill, an agent can:
   - [Claude Code plugin](#claude-code-plugin)
   - [OpenAI Codex CLI](#openai-codex-cli)
   - [Hermes Agent](#hermes-agent)
+  - [goose](#goose)
   - [OpenClaw plugin](#openclaw-plugin)
   - [ChatGPT (Custom GPT)](#chatgpt-custom-gpt)
   - [Manus / other SKILL.md frameworks](#manus--other-skillmd-frameworks)
   - [Manual install from source](#manual-install-from-source)
+  - [Host launchers](#host-launchers)
   - [Verify your install](#verify-your-install)
   - [Upgrading safely from inside an agent](#upgrading-safely-from-inside-an-agent)
 - [Claude Desktop](#claude-desktop)
@@ -61,7 +64,7 @@ With this skill, an agent can:
   - [Quality presets](#quality-presets)
   - [Recommended models](#recommended-models)
 - [Video Sizing & Aspect Ratios](#video-sizing--aspect-ratios)
-- [LTX-2.3 Prompting Guide](#ltx-23-prompting-guide)
+- [LTX-2.x Prompting Guide](#ltx-2x-prompting-guide)
 - [Photobooth (Face Transfer)](#photobooth-face-transfer)
 - [Personas, Memory, and Personality](#personas-memory-and-personality)
 - [Hosted API Modes](#hosted-api-modes)
@@ -183,15 +186,52 @@ Restart Codex (or start a new session) and ask it to "generate an image of a sun
 
 ### Hermes Agent
 
-[Hermes Agent](https://hermes-agent.nousresearch.com/) loads skills from `~/.hermes/skills/<category>/<name>/SKILL.md`. The `npx` installer places this skill at `~/.hermes/skills/media/sogni-creative-agent-skill/`:
+[Hermes Agent](https://hermes-agent.nousresearch.com/) can install the dedicated,
+security-scannable bundle directly from its Skills Hub (via skills.sh):
+
+```bash
+hermes skills install skills-sh/sogni-ai/sogni-creative-agent-skill/sogni-creative-agent-skill
+npm install -g @sogni-ai/sogni-creative-agent-skill@latest
+sogni-agent-hermes doctor
+```
+
+Then `/reset` the Hermes session so it picks up the new skill. The Hub bundle
+lives at
+[`.agents/skills/sogni-creative-agent-skill/`](./.agents/skills/sogni-creative-agent-skill/)
+and contains only the agent instructions and the references they load, keeping
+the CLI runtime and development files outside Hermes' skill security scan.
+
+For a combined CLI + personal-skill setup, the `npx` installer still places the
+skill at `~/.hermes/skills/media/sogni-creative-agent-skill/`:
 
 ```bash
 npx setup-sogni-agent-skill --only=hermes
 ```
 
-Start Hermes once before running the installer so `~/.hermes/` exists. If the selected local runtime is not detected, setup exits before installing anything.
+Start Hermes once before running the installer so `~/.hermes/` exists. If the
+selected local runtime is not detected, setup exits before installing anything.
 
-Then `/reset` your Hermes session so it picks up the new skill. (You can also install manually: copy [`SKILL.md`](./SKILL.md) into `~/.hermes/skills/media/sogni-creative-agent-skill/SKILL.md`, or use `hermes skills install` if your build supports it.)
+### goose
+
+[goose](https://goose-docs.ai/) supports both Agent Skills and MCP extensions. Pick one integration per installation so goose does not receive duplicate Sogni instructions and tools.
+
+To install the skill globally:
+
+```bash
+npx skills add Sogni-AI/sogni-creative-agent-skill --global --agent goose --skill sogni-creative-agent-skill --yes
+npm install -g @sogni-ai/sogni-creative-agent-skill@latest
+sogni-agent-goose doctor
+```
+
+The skill is discovered from goose's global skill directories and uses the `sogni-agent-goose` launcher for host attribution.
+
+To run the MCP extension directly instead:
+
+```bash
+goose session --with-extension "npx -y --package @sogni-ai/sogni-creative-agent-skill@latest sogni-agent-mcp"
+```
+
+The same command can be added permanently from `goose configure` as a Command-line Extension. Once the public listing is accepted, it can also be installed from the [goose Extensions directory](https://goose-docs.ai/extensions/). The MCP package is self-contained; it reads `SOGNI_API_KEY` from the extension environment or the existing `~/.config/sogni/credentials` file.
 
 ### OpenClaw plugin
 
@@ -254,6 +294,21 @@ gh repo clone Sogni-AI/sogni-creative-agent-skill
 cd sogni-creative-agent-skill
 npm install
 ```
+
+### Host launchers
+
+The package installs one launcher shim per host alongside `sogni-agent`. Each shim is the same CLI with the same flags and output — it only tags the request with the agent framework that ran it, so Sogni can tell a Codex render from a Claude Code render:
+
+| Host | Command | Reported framework |
+| --- | --- | --- |
+| Hermes | `sogni-agent-hermes` | `hermes-agent` |
+| goose | `sogni-agent-goose` | `goose` |
+| OpenAI Codex CLI | `sogni-agent-codex` | `codex` |
+| Claude Code | `sogni-agent-claude-code` | `claude-code` |
+| OpenClaw | `sogni-agent` | `openclaw` (detected from `OPENCLAW_PLUGIN_CONFIG`) |
+| Anything else | `sogni-agent` | `unknown` |
+
+The Claude Code and Codex plugin surfaces already pin their launcher, and OpenClaw is detected automatically. Goose and Hermes skill installs should use their matching launchers wherever the docs say `sogni-agent`. Everything works normally through bare `sogni-agent` — the render is just attributed to `unknown`. Falling back to `sogni-agent` is always safe if a shim is not on `PATH`.
 
 ### Verify your install
 
@@ -341,12 +396,20 @@ You can also skip the file and export `SOGNI_API_KEY` in your environment.
 
 ### Filesystem path overrides
 
-Defaults live under `~/.config/sogni/` for credentials, last-render metadata, personas, memories, and personality. Override individual paths with:
+Defaults live under `~/.config/sogni/` for credentials, last-render metadata, personas, memories, and personality.
+
+**Running several agents at once** (Claude Code, Codex, OpenCode, hermes, ...) works out of the box: each process leases its own stable app ID from a persistent slot pool in `~/.config/sogni/app-ids/`, so concurrent runs never fight over one socket identity (SWITCH_CONNECTION 4015) and routine runs do not create unnecessary IDs (error 4061). Leases are released on exit and reclaimed automatically if a process dies. Long-lived daemons should pin their own `SOGNI_APP_ID` to stay out of the shared pool, and each harness can set its own `SOGNI_LAST_RENDER_PATH` so `--last` stays per-tool. Override individual paths with:
 
 | Variable | Purpose |
 |----------|---------|
 | `SOGNI_CREDENTIALS_PATH` | Custom credentials file |
-| `SOGNI_LAST_RENDER_PATH` | Where last-render state is persisted |
+| `SOGNI_APP_ID` | Pinned app ID (ephemeral/container homes and long-lived daemons; skips the pool) |
+| `SOGNI_APP_ID_PATH` | Legacy single app-ID file mode for callers that manage their own concurrency |
+| `SOGNI_APP_ID_POOL_DIR` | Persistent app-ID slot pool for concurrent agents (default: `~/.config/sogni/app-ids/`) |
+| `SOGNI_APP_ID_POOL_MAX` | Maximum concurrent app-ID slots (default: 32) |
+| `SOGNI_LAST_RENDER_PATH` | Where last-render state is persisted; give each agent harness its own file so `--last` never reads another tool's render |
+| `SOGNI_MODEL_CATALOG_URL` | Model catalog API base URL (default: `https://api.sogni.ai/v1/model-catalog`) |
+| `SOGNI_MODEL_CATALOG_CACHE_PATH` | Base path for the five-minute model catalog caches and ETags |
 | `SOGNI_MEDIA_INBOUND_DIR` | Directory used by `--list-media` |
 | `OPENCLAW_CONFIG_PATH` | OpenClaw config file location |
 | `FFMPEG_PATH` | Custom `ffmpeg` binary |
@@ -399,10 +462,49 @@ sogni-agent --video -m seedance2 --workflow t2v \
   --ref-audio https://cdn.example.com/music.m4a \
   "Use @Image1 for product identity, @Video1 for camera movement, and @Audio1 for music rhythm"
 
-# Image-to-video (i2v)
+# Alibaba Wan 3 unified video (2-30s, fixed 30fps, native audio, 480P/720P/1080P)
+sogni-agent --video -m wan3 --target-resolution 1080 --duration 8 \
+  'A presenter walks through a detailed studio and says "Welcome."'
+sogni-agent --video -m wan3 --ref first.png --ref-end last.png \
+  "Move smoothly between the supplied endpoint frames"
+sogni-agent --video -m wan3 --workflow ia2v --ref presenter.png --ref-audio dialogue.mp3 \
+  "Use Image 1 for the presenter and Audio 1 for the performance"
+sogni-agent --video -m wan3 --workflow r2v --ref-video motion.mp4 \
+  "Use Video 1 as loose motion and pacing guidance for a new rainy-night scene"
+sogni-agent --video -m wan3 --smart-duration --wan3-ratio 9:16 --no-expand-prompt \
+  --reference-file-url https://cdn.example.com/brief.pdf \
+  "Use the supplied brief exactly"
+
+# Wan 3.0 Enhanced through MuleRouter (smart/fixed 2-30s, 30fps, native audio)
+sogni-agent --video -m wan3-enhanced --target-resolution 1080 --duration 8 \
+  --wan3-ratio 16:9 'A presenter says "Welcome." in a detailed studio'
+sogni-agent --video -m wan3-enhanced --workflow i2v --ref first.png --ref-end last.png \
+  -c wardrobe.png "Keep the endpoint frames and use Image 1 for wardrobe detail"
+
+# MiniMax H3 Standard, 8-step Balanced, 4-step LightX2V Turbo, and FastH3 Turbo video
+sogni-agent --video -m minimax-h3 --duration 10 "<three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-i2v --ref first.png --duration 8 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-r2v --ref identity.png -c wardrobe.png \
+  --ref-video motion.mp4 --ref-audio voice.m4a \
+  "<six-field Ref2VA prompt>"
+sogni-agent --video -m minimax-h3-balanced --duration 8 "<three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-flf2v-balanced --ref first.png --ref-end last.png --duration 8 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-turbo --duration 8 "<three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-turbo --sampler sa_solver --duration 8 "<A/B variant of the same H3 prompt>"
+sogni-agent --video -m minimax-h3-flf2v-turbo --ref first.png --ref-end last.png --duration 8 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-fasth3-turbo --duration 8 "<three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-fasth3-i2v-turbo --ref first.png --duration 8 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent --video -m minimax-h3-fasth3-flf2v-turbo --ref first.png --ref-end last.png --duration 8 "<FLF2V preamble plus three-field H3 prompt>"
+
+# Image-to-video (i2v; defaults to wan_v2.2-14b-fp8_i2v_lightx2v)
 sogni-agent --video --ref cat.jpg "gentle camera pan"
 
-# Image+audio-to-video (auto-routes to LTX-2.3 ia2v)
+# Animate two images together (first frame → last frame; defaults to
+# ltx25-22b-int8_i2v_distilled using the standard first/last-frame template)
+sogni-agent --video --ref first.png --ref-end last.png \
+  "the opening frame flows smoothly into the final frame"
+
+# Image+audio-to-video (auto-routes to LTX-2.5 ia2v)
 sogni-agent --video --ref cover.jpg --ref-audio song.mp3 \
   "music video with synchronized motion"
 
@@ -435,6 +537,11 @@ sogni-agent --list-api-models
 sogni-agent --list-models
 sogni-agent --search-models spicy
 sogni-agent --list-models --model-media image --model-tag uncensored
+
+# Live LoRA catalog discovery (IDs, strength ranges, bipolar directions)
+sogni-agent --list-loras --lora-catalog-model krea2_turbo_fp8_scaled
+sogni-agent --search-loras lighting
+sogni-agent --json --list-loras --lora-category character
 
 # Durable hosted chat run with SSE progress events
 SOGNI_SKILL_USE_SDK_TRANSPORT=1 sogni-agent --durable-chat \
@@ -501,9 +608,13 @@ Run `sogni-agent --help` for the full CLI. Below are the options and tables most
 | `--video` | Generate video instead of image |
 | `--music` | Generate music/audio instead of image |
 | `--lyrics`, `--bpm`, `--keyscale`, `--timesig` | Music generation controls |
-| `--ref`, `--ref-audio`, `--ref-video` | Image/audio/video references; HTTPS refs are forwarded as URL context for Seedance |
+| `--ref`, `-c`, `--ref-audio`, `--ref-video` | Frame/loose image/audio/video references; audio/video repeat for H3 r2v and Seedance loose refs |
 | `--target-resolution <px>` | Target the short side, preserving aspect ratio |
-| `--workflow <type>` | Force `t2v`, `i2v`, `s2v`, `ia2v`, `a2v`, `v2v`, or animate workflows |
+| `--workflow <type>` | Force `t2v`, `i2v`, `r2v`, `s2v`, `ia2v`, `a2v`, `v2v`, or animate workflows |
+| `--wan3-ratio`, `--smart-duration`, `--reference-file-url`, `--reference-link-url`, `--watermark` | Wan 3 adaptive/fixed ratio, smart timing, document/web context, and watermark controls |
+| `--expand-prompt`, `--no-expand-prompt` | Enable provider prompt expansion for direct Wan 3 video, or preserve the exact submitted prompt |
+| `--generate-audio`, `--no-generate-audio` | Keep/strip MiniMax H3's track, enable/disable Wan 3 native audio, or control generated-keyframe workflows |
+| `--sampler <name>` | Image/music sampler; LightX2V FL2VA H3 Turbo accepts `euler`, `er_sde`, or `sa_solver` and defaults to `er_sde` on Socket. Ref2VA Turbo and FastH3 Turbo accept Euler only. The CLI omits this field unless explicitly set. |
 | `--api-chat` | Use `/v1/chat/completions` with Sogni creative-agent tools |
 | `--api-workflow` | Start a `/v1/creative-agent/workflows` durable workflow with explicit `input.steps`; optional `storyboard-video` preset |
 | `--workflow-input <json\|@path>` | Explicit durable workflow input JSON. Use `@path` to load JSON from a file. |
@@ -516,6 +627,8 @@ Run `sogni-agent --help` for the full CLI. Below are the options and tables most
 | `--list-models [query]`, `--search-models <query>` | List or search currently available Supernet image, video, and audio models |
 | `--model-media <type>`, `--model-network <network>` | Filter live model discovery by media or Fast/Relaxed network |
 | `--model-tag <tag>` | Filter by an official catalog tag such as `spicy` or `uncensored`; repeat for AND matching |
+| `--list-loras [query]`, `--search-loras <query>` | List or search the live LoRA catalog with each LoRA's hard range, recommended range, default, and slider direction |
+| `--lora-catalog-model <id>`, `--lora-category <category>` | Filter LoRA discovery to one model's compatible LoRAs or one catalog category |
 | `--list-replays [n]`, `--get-replay <id>`, `--ingest-replay <json\|@path>` | Manage Sogni Intelligence replay records (use `@path` to load JSON from a file) |
 | `--persona <name>` | Use a saved persona |
 | `--concat-videos <out> <clips...>` | Stitch clips locally with FFmpeg |
@@ -541,7 +654,7 @@ Skip remembering model IDs — `--quality` / `-Q` selects the right model, steps
 |--------|-------|-------|------|-------|
 | `fast` | `z_image_turbo_bf16` | 8 | 512×512 | ~5–10s |
 | `hq` | `z_image_turbo_bf16` | default | 768×768 | ~10–15s |
-| `pro` | `flux2_dev_fp8` | 40 | 1024×1024 | ~2 min |
+| `pro` | `qwen_image_2512_fp8` | 20 | 1024×1024 | ~30 sec |
 
 Explicit `--model` overrides the preset's model. Explicit `-w`/`-h` overrides dimensions.
 
@@ -553,50 +666,84 @@ Prefer `-Q fast|hq|pro` for images and automatic workflow routing for video. Pas
 |------|----------------------|
 | Default images | `z_image_turbo_bf16` |
 | OpenAI GPT Image generation, editing, or strong text rendering | `gpt-image-2` |
-| Highest-quality images | `flux2_dev_fp8` (or `-Q pro`) |
+| Highest-quality images | `qwen_image_2512_fp8` (or `-Q pro`) |
 | Image editing | `qwen_image_edit_2511_fp8_lightning` |
+| Deterministic image upscaling through 16K | `rtx_vsr_pro` via `--upscale` |
+| Promptless video upscaling to 1080p/1440p | `flashvsr_v1.1_tiny_long_bf16` via `--upscale-video` |
 | Dark Beast Krea 2 images | `dark_beast_krea2_fp8` |
 | Identity-preserving Krea image edits | `krea2_identity_edit_v1_2` |
 | Uncensored identity-preserving Krea edits | `dark_beast_krea2_identity_edit_v1_2` |
 | Photobooth face transfer | `coreml-sogniXLturbo_alpha1_ad` |
 | Direct music generation | `ace_step_1.5_xl_turbo` (or `--music-model turbo`) |
 | Music with stronger lyric handling | `ace_step_1.5_xl_sft` (or `--music-model sft`) |
-| Text-to-video with native dialogue/audio | `ltx23-22b-fp8_t2v_distilled` |
-| Image+audio-to-video | `ltx23-22b-fp8_ia2v_distilled` |
-| Audio-to-video | `ltx23-22b-fp8_a2v_distilled` |
-| Video-to-video with ControlNet | `ltx23-22b-fp8_v2v_distilled` |
+| MiniMax H3 text-to-video with native stereo audio | `minimax-h3` or `minimax-h3-t2v` |
+| MiniMax H3 image-to-video | `minimax-h3-i2v` |
+| MiniMax H3 first-frame → last-frame video | `minimax-h3-flf2v` with `--ref A --ref-end B` |
+| MiniMax H3 reference-to-video | `minimax-h3-r2v` with up to 9 images, 3 videos, 3 audios / 12 files total |
+| MiniMax H3 Balanced text-to-video | `minimax-h3-balanced` or `minimax-h3-t2v-balanced` |
+| MiniMax H3 Balanced image-to-video | `minimax-h3-i2v-balanced` with `--ref` |
+| MiniMax H3 Balanced first-frame → last-frame video | `minimax-h3-flf2v-balanced` with `--ref A --ref-end B` |
+| MiniMax H3 Balanced reference-to-video | `minimax-h3-r2v-balanced` with up to 9 images, 3 videos, 3 audios / 12 files total |
+| MiniMax H3 LightX2V Turbo text-to-video | `minimax-h3-turbo` or `minimax-h3-t2v-turbo` |
+| MiniMax H3 LightX2V Turbo image-to-video | `minimax-h3-i2v-turbo` with `--ref` |
+| MiniMax H3 LightX2V Turbo first-frame → last-frame video | `minimax-h3-flf2v-turbo` with `--ref A --ref-end B` |
+| MiniMax H3 Ref2VA Turbo reference-to-video | `minimax-h3-r2v-turbo` with up to 9 images, 3 videos, 3 audios / 12 files total |
+| MiniMax H3 FastH3 Turbo text-to-video | `minimax-h3-fasth3-turbo` or `minimax-h3-fasth3-t2v-turbo` |
+| MiniMax H3 FastH3 Turbo image-to-video | `minimax-h3-fasth3-i2v-turbo` with `--ref` |
+| MiniMax H3 FastH3 Turbo first-frame → last-frame video | `minimax-h3-fasth3-flf2v-turbo` with `--ref A --ref-end B`; FastH3 has no R2V mode |
+| Text-to-video with native dialogue/audio | `ltx25` (Distilled) or `ltx25-22b-int8_t2v_dev` (Dev/HQ) |
+| Explicit uncensored image-to-video on 30GB+ GPUs | `ltx23-eros` with `--no-filter` |
+| Image or first/last frames to video | `ltx25-i2v` (FLF shares the I2V model ID) |
+| Image+audio-to-video | `ltx25-ia2v` |
+| Audio-to-video | `ltx25-a2v` |
+| Video-to-video with ControlNet/edit templates | `ltx25-v2v` |
 | Seedance text-to-video | `seedance2` for up to native 4K; `seedance2-mini` for the lower-cost 720p path; `seedance2-fast` for the legacy 720p fast path |
 | Seedance video-to-video without ControlNet | `seedance2-v2v` |
+| Seedance 2.5 single clip up to 30s (480p/720p only) | `seedance2-5` (`seedance2-5-ia2v` / `seedance2-5-v2v` for image+audio and v2v/editing) |
+| Wan 3 unified text, frame, reference, audio, or video generation | `wan3` / `wan3.0-video` |
+| Wan 3.0 Enhanced text, frame, reference, audio, or video generation | `wan3-enhanced` / `wan3.0-spicy-video` |
 | Face lip-sync with uploaded audio | `wan_v2.2-14b-fp8_s2v_lightx2v` |
 
-`gpt-image-2` supports flexible OpenAI image sizes up to 3840 px on either edge, max 3:1 aspect ratio, and total pixels from 655,360 to 8,294,400; the API snaps dimensions to valid multiples of 16. For image editing with `gpt-image-2`, you can pass up to 16 context images. Krea 2 Identity Edit (`krea2_identity_edit_v1_2`) and Dark Beast Krea 2 Identity Edit (`dark_beast_krea2_identity_edit_v1_2`) use `-c/--context`, support 1-2 references, 512-2048 px output, 8-12 steps, and guidance 1.
+`gpt-image-2` supports flexible OpenAI image sizes up to 3840 px on either edge, max 3:1 aspect ratio, and total pixels from 655,360 to 8,294,400; the API snaps dimensions to valid multiples of 16. For image editing with `gpt-image-2`, you can pass up to 16 context images. For likeness-preserving edits of a referenced person or character, agents default to Krea 2 Identity Edit (`krea2_identity_edit_v1_2`) unless you explicitly choose another model. It and Dark Beast Krea 2 Identity Edit (`dark_beast_krea2_identity_edit_v1_2`) use `-c/--context`, accept 1-2 references at 512-2048 px, and leave execution defaults to the current model tier.
 
 Music generation uses `--music` and outputs `mp3` by default. `--audio` remains the video-reference alias for `--ref-audio`; use `--music` or `--generate-music` for direct audio-only generation.
+
+Seedance 2.5 loose-reference operations use an explicit task contract. `reference` accepts any loose image/video/audio set (including audio-only); `edit` and `extend` require `@Video1` through `--ref-video` and reject first/last-frame anchors. Edit inherits the source aspect ratio and requires its source duration, while extend inherits the ratio and uses the requested continuation duration:
+
+```bash
+sogni-agent --video -m seedance2-5 --seedance-task-type reference --ref-audio voice.m4a "Use @Audio1 to guide a new performance"
+sogni-agent --video -m seedance2-5-v2v --seedance-task-type edit --ref-video source.mp4 --duration 8 --target-resolution 720 "Edit @Video1 while preserving its subject and timing"
+sogni-agent --video -m seedance2-5-v2v --seedance-task-type extend --ref-video source.mp4 --duration 8 --target-resolution 720 "Extend @Video1 after its ending"
+```
 
 ---
 
 ## Video Sizing & Aspect Ratios
 
-- **WAN models** use dimensions divisible by 16, min 480 px, max 1536 px.
-- **LTX family** (`ltx2-*`, `ltx23-*`) uses dimensions divisible by 64. The current wrapper caps non-WAN video dimensions at 2048 px on the long side.
-- **Seedance** runs at fixed 24 fps and supports 4–15 s durations. Full `seedance2` supports native 4K via `--target-resolution 2160`; `seedance2-mini` and `seedance2-fast` remain capped to the 720p lower-resolution path. Other default/WAN paths support up to 10 s; LTX and WAN animate workflows support up to 20 s.
+- **WAN 2.2 models** use dimensions divisible by 16, min 480 px, max 1536 px.
+- **Wan 3** (`wan3.0-video`) is a Premium Spark Alibaba model with fixed 30 fps, fixed or smart 2–30 s output, native audio, 480P/720P/1080P tiers, and `adaptive`, `16:9`, `4:3`, `1:1`, `3:4`, or `9:16` output. It accepts one first frame plus an optional last frame, or loose references up to 10 images, 5 videos, and 5 audio clips. It can also use one public document (PDF/Office/text/Markdown/Keynote/Pages/Numbers, up to 100 MB; PDF/DOCX/DOC/PPTX/PPT/Keynote/Pages up to 50 pages) or one public webpage; file and link context are mutually exclusive and cannot be combined with first/last anchors. Each video/audio reference is 1–15 s and each modality's clips total at most 15 s. Video references condition a new generation; Alibaba exposes no edit/extend task mode or task-type field, so use a dedicated video-to-video model when source-preserving editing is required. Provider prompt expansion defaults on; `--no-expand-prompt` preserves the exact prompt. Watermark defaults off. Send no negative prompt, steps, guidance, sampler, scheduler, ControlNet, or mask. Sogni retail rates before subscription discounts are $0.065/$0.13/$0.26 per output second at 480p/720p/1080p (as of 2026-08).
+- **Wan 3.0 Enhanced** (`wan3.0-spicy-video`; MuleRouter provider ID `w3.0-video`; aliases `wan3-enhanced`, `wan3-spicy`) runs at fixed 30 fps with fixed or smart 2–30 s output, native audio, prompt expansion, 480P/720P/1080P, and `adaptive`, `16:9`, `9:16`, `1:1`, `4:3`, or `3:4`. It accepts either first/last-frame anchors or up to 10 image, 5 video, and 5 audio loose references; the two modes cannot be mixed. It has no document/web context, watermark, negative prompt, source-video edit, or extend mode. Standard PAYG is $0.08/$0.16/$0.32 per output second at 480P/720P/1080P (as of 2026-09). Existing paid subscribers receive a one-time $10 Unlimited / $20 Unlimited Pro model credit through September 1, 2026 00:00 UTC (August 31 at 5:00 PM PT); this is a launch credit, not subscription coverage.
+- **MiniMax H3 Standard, Balanced, LightX2V Turbo, and FastH3 Turbo** use a 32 px grid, fixed 24 fps, native 32 kHz stereo audio, 124–362 frames (`124 + n×17`, i.e. 5.17–15.08 s), and a 1,032,192-pixel render cap. Standard, Balanced, LightX2V FL2VA Turbo, and FastH3 normally default to 1344×768 or 768×1344; Ref2VA Turbo defaults to 960×544. Standard uses 20 steps; Balanced uses fixed 8-step Euler/simple acceleration, with LightX2V for FL2VA and Larry v4 for Ref2VA; both Turbo engines use 4 steps. FL2VA H3 Turbo defaults to `er_sde` on Socket and permits `euler`, `er_sde`, or `sa_solver`; Ref2VA Turbo and the separate FastVideo VSA FastH3 engine use Euler/simple only. The CLI omits the sampler unless `--sampler` is passed. FastH3 is about 2x faster than LightX2V Turbo and up to 6x faster than Standard for comparable 768p, 15-second requests; it supports T2V/I2V/FLF2V, never R2V. Guidance 1 is fixed and there is no negative-prompt input. Every Ref2VA tier accepts up to 9 images, 3 videos, and 3 audios, capped at 12 files; at least one visual reference is required. FastH3 keeps the FastVideo engine when an H3 LoRA is attached: base jobs require 23 GB and jobs with an H3 LoRA require 32 GB. The other FL2VA/Balanced/Turbo and image-only R2V paths require 32 GB-class workers, while video-conditioned R2V requires above 40 GB. See `references/video-prompting.md` § MiniMax H3 Prompting for the exact contracts.
+- **LTX family** (`ltx2-*`, `ltx23-*`, `ltx25-*`) uses dimensions divisible by 64. The current wrapper caps non-WAN video dimensions at 2048 px on the long side.
+- **Seedance** runs at fixed 24 fps. The 2.0 family (`seedance2`, `seedance2-mini`, `seedance2-fast`) supports 4–15 s durations; full `seedance2` supports native 4K via `--target-resolution 2160` while `seedance2-mini` and `seedance2-fast` remain capped to the 720p lower-resolution path. `seedance2-5` renders 4–30 s single clips but caps at 480p/720p (no 1080p or 4K). Other default/WAN paths support up to 10 s; LTX and WAN animate workflows support up to 20 s.
 - For spoken dialogue, budget roughly 3 words per second plus about 1 second for each meaningful acting beat or pause. Keep quoted speech under the model's hard per-clip word budget.
 - The script auto-normalizes video sizes to satisfy these constraints.
 - Use `--target-resolution <px>` for bare resolution requests like "720p" — it targets the short side and preserves the inherited aspect ratio.
 - Natural-language aspect requests like "portrait", "square", "16:9", or "9:16" are inferred when width/height aren't explicitly set. Combined requests like "720p 9:16" keep the requested short side while applying the requested shape.
 - For i2v (and any workflow using `--ref` / `--ref-end`), the client wrapper resizes the reference image with strict aspect-fit (`fit: inside`) and uses the *resized* dimensions as the final video size. Because that resize uses rounding, a "valid" requested size can still produce an invalid final size (example: `1024×1536` requested, but ref becomes `1024×1535`). `sogni-agent` detects this for local refs and auto-adjusts to a nearby safe size.
-- **LTX-2.3 two-keyframe morph:** when the LTX-2.3 i2v model `ltx23-22b-fp8_i2v_distilled` gets **both** a start frame (`--ref`) and an end frame (`--ref-end`), it auto-applies the ValiantCat transition/morph LoRA (lora id `transition`, trigger word `zhuanchang`, strength ~1.0) and morphs the first image into the last in a single render — no bridge clip or `--concat-videos` needed. The sogni-client SDK example feeds the two frames as its `image` / `end-image` arguments and additionally exposes manual `transition` / `transition-strength` SDK arguments.
+- **LTX-2.5 first/last-frame default:** `--ref` + `--ref-end` with no `-m` uses `ltx25-22b-int8_i2v_distilled` and the dedicated FLF workflow template. It shares the I2V public model ID and does not attach the LTX-2.3 transition LoRA. Pin `ltx23-22b-fp8_i2v_distilled` explicitly only when the legacy transition-LoRA behavior is required.
+- **Private mature-theme creativity:** optional uncensored LTX-2.3 video models are available for adults who explicitly want them. They remain opt-in and are not part of ordinary model recommendations; the agent loads their specialized guidance only for a relevant request.
 - Pass `--strict-size` to fail instead — the script will print a suggested size.
 
-V2V defaults mirror Sogni Chat workflow tuning: `canny`, `pose`, and `depth` use ControlNet strength `0.85` with detailer assist; `detailer` uses strength `1.0`. Use `-m seedance2-v2v` for Seedance V2V without ControlNet. Seedance accepts public HTTPS image, video, and audio references that pass CLI URL safety checks; localhost and private-network URLs are rejected before forwarding. Audio references must be paired with an image or video reference.
+V2V defaults mirror Sogni Chat workflow tuning: `canny`, `pose`, and `depth` use ControlNet strength `0.85` with detailer assist; `detailer` uses strength `1.0`. LTX 2.5 `pose` requires both `--ref-video` for the motion/pose sequence and `--ref` for the subject appearance; explicit LTX 2.3 rollback keeps its existing optional-image behavior. Use `-m seedance2-v2v` for Seedance V2V without ControlNet. Seedance accepts public HTTPS image, video, and audio references that pass CLI URL safety checks; localhost and private-network URLs are rejected before forwarding. The 2.0 family requires audio references to be paired with an image or video; Seedance 2.5 reference mode permits audio-only input.
 
-The LTX-2.3 v2v model `ltx23-22b-fp8_v2v_distilled` also supports two extra control modes: **`outpaint`** extends/expands the video canvas (e.g. make a vertical clip widescreen, or add space in a direction) — it is positional and mask-free, anchored with a position (`center|top|bottom|left|right`) and an optional target aspect ratio (`16:9|9:16|1:1|4:3|3:4|21:9`), and the canvas only grows, never crops; **`inpaint`** regenerates a masked region of the source video and **requires a mask image** (white pixels = region to regenerate) in direct CLI/SDK mode. The hosted `video_to_video` tool selects these with `controlMode` `outpaint`/`inpaint` and can derive an inpaint mask when the user did not upload one. The direct CLI and sogni-client SDK example expose them via `--control-type` / `control-type` (`canny|pose|depth|detailer|outpaint|inpaint`), with `--outpaint-position` for outpaint and `--mask` for inpaint. See `references/video-editing.md` for details.
+The LTX-2.5 v2v selector `ltx25-v2v` supports two extra control modes: **`outpaint`** extends/expands the video canvas (e.g. make a vertical clip widescreen, or add space in a direction) — it is positional and mask-free, anchored with a position (`center|top|bottom|left|right`) and an optional target aspect ratio (`16:9|9:16|1:1|4:3|3:4|21:9`), and the canvas only grows, never crops; **`inpaint`** regenerates a masked region of the source video and **requires a mask image** (white pixels = region to regenerate) in direct CLI/SDK mode. The hosted `video_to_video` tool selects these with `controlMode` `outpaint`/`inpaint` and can derive an inpaint mask when the user did not upload one. The direct CLI and sogni-client SDK example expose them via `--control-type` / `control-type` (`canny|pose|depth|detailer|outpaint|inpaint`), with `--outpaint-position` for outpaint and `--mask` for inpaint. Pin `ltx23-v2v` only for rollback. See `references/video-editing.md` for details.
 
 ---
 
-## LTX-2.3 Prompting Guide
+## LTX-2.x Prompting Guide
 
-When you use `ltx23-22b-fp8_t2v_distilled`, do **not** feed it short tag prompts like `"cinematic drone shot over tropical cliffs"`. LTX-2.3 renders more reliably from a dense natural-language scene description.
+When you use LTX-2.5 or an LTX-2.3 rollback model, do **not** feed it short tag prompts like `"cinematic drone shot over tropical cliffs"`. LTX renders more reliably from a dense natural-language scene description.
 
 - Write one unbroken paragraph — no line breaks, bullets, headers, or tag blocks.
 - Use 4–8 flowing present-tense sentences describing one continuous shot, not a montage.
@@ -612,7 +759,7 @@ When you use `ltx23-22b-fp8_t2v_distilled`, do **not** feed it short tag prompts
 ```text
 User ask: "make a 4k video of a woman in a neon alley"
 
-LTX-2.3 prompt: "A medium cinematic shot frames a woman in her 30s standing in a rain-soaked neon alley at night, violet and amber signs reflecting across the wet pavement while warm steam drifts from street vents. She wears a dark trench coat with damp strands of black hair clinging near her cheek as light glances across the fabric texture and the brick walls behind her. She turns toward the camera and steps forward with measured focus, one hand tightening around the strap of her bag while rain taps softly on the metal fire escape and a distant train hum rolls through the block. The camera performs a slow push-in as her jaw sets and her breathing steadies, maintaining smooth stabilized motion and a tense urban-thriller mood."
+LTX prompt: "A medium cinematic shot frames a woman in her 30s standing in a rain-soaked neon alley at night, violet and amber signs reflecting across the wet pavement while warm steam drifts from street vents. She wears a dark trench coat with damp strands of black hair clinging near her cheek as light glances across the fabric texture and the brick walls behind her. She turns toward the camera and steps forward with measured focus, one hand tightening around the strap of her bag while rain taps softly on the metal fire escape and a distant train hum rolls through the block. The camera performs a slow push-in as her jaw sets and her breathing steadies, maintaining smooth stabilized motion and a tense urban-thriller mood."
 ```
 
 ---
@@ -747,7 +894,7 @@ Use `--token-type auto` to retry native Sogni models with SOGNI tokens when SPAR
 sogni-agent --token-type auto "a dragon eating tacos"
 ```
 
-Tries SPARK first, then falls back to SOGNI if the balance is too low. Vendor models such as GPT Image 2, Seedance, and HappyHorse require Premium Spark eligibility and never use SOGNI fallback. If usable balance is still insufficient, buy Spark Packs at https://docs.sogni.ai/pricing/#spark-packs.
+Tries SPARK first, then falls back to SOGNI if the balance is too low. Vendor models such as GPT Image 2, Seedance, HappyHorse, and Wan 3 require Premium Spark eligibility and never use SOGNI fallback. If usable balance is still insufficient, buy Spark Packs at https://docs.sogni.ai/pricing/#spark-packs.
 
 On a **Sogni Unlimited** subscription, Sogni-hosted generation is covered by the plan instead of spending tokens — see the next section.
 
@@ -766,37 +913,38 @@ On a **Sogni Unlimited** subscription, Sogni-hosted generation is covered by the
 
 App Store and Google Play prices may differ from web pricing due to platform fees. A 3-day free trial is available once per account (a payment method is required and the subscription converts to paid when the trial ends unless cancelled first).
 
+Plan pricing, included features and models, usage allowances, fair-use controls, and other limits are subject to change at Sogni AI's discretion, subject to applicable law. Sogni will provide advance notice of material changes affecting an active paid subscription when required. Treat the live plan catalog and checkout as authoritative.
+
 ### What the subscription covers
 
 - **Covered:** Sogni-hosted models on the Supernet — image, video, and music generation, including worker-hosted premium models. Covered renders bill to the subscription and do not spend Spark or SOGNI.
-- **Not covered (Premium Spark only):** external-vendor models — **GPT Image 2** (`gpt-image-2`), **Seedance 2.0 / Seedance 2.0 Mini / Seedance 2.0 Fast** (`seedance-2-0`, `seedance-2-0-mini`, `seedance-2-0-fast`), and **HappyHorse 1.1** (`happyhorse-1.1-t2v`, `happyhorse-1.1-i2v`, `happyhorse-1.1-r2v`). These always require Premium Spark eligibility even with an active subscription; they never bill to the subscription and never fall back to SOGNI.
+- **Not subscription-covered:** external-vendor models — **GPT Image 2** (`gpt-image-2`), **Seedance 2.0 / Seedance 2.0 Mini / Seedance 2.0 Fast / Seedance 2.5** (`seedance-2-0`, `seedance-2-0-mini`, `seedance-2-0-fast`, `seedance-2-5`), **HappyHorse 1.1** (`happyhorse-1.1-t2v`, `happyhorse-1.1-i2v`, `happyhorse-1.1-r2v`), **Wan 3** (`wan3.0-video`), and **Wan 3.0 Enhanced** (`wan3.0-spicy-video`). They never fall back to SOGNI. Wan 3.0 Enhanced may use its separate launch-credit ledger before PAYG; that credit does not make the model subscription-covered.
 - **Token choice stays yours:** selecting SOGNI (`--token-type sogni`) opts a job out of subscription coverage and spends SOGNI instead. Coverage applies when the active token is Spark.
 
 By default the CLI sends no `billingMode`/coverage hint; the server decides coverage from the account's verified entitlement and the resolved model, and a subscription claim is never honored without a server-verified entitlement. `--billing-mode` makes the choice explicit when you need it: `subscription` requires Unlimited coverage (the job fails instead of spending tokens), `tokens` opts out of coverage and bills Spark/SOGNI, and `auto` states the default server behavior explicitly.
 
+Do not use `tokenType: "spark"` by itself to determine that Spark paid for a render. `tokenType` is also the quote/accounting denomination for covered jobs. The server's separate `paymentModel` is authoritative: `subscription` means it skipped the artist Spark/SOGNI debit, while `paid_spark`, `free_spark`, and `sogni` identify token-funded paths. Some client result summaries do not expose `paymentModel`; in that case the payment source is unknown from that result alone. A request that completes successfully with `--billing-mode subscription` was covered—if coverage is unavailable, the server returns `4078` or `4080` instead of silently spending Spark.
+
 With an active subscription, the CLI also skips its client-side "insufficient SPARK" pre-flight for covered video renders — a low token balance no longer blocks jobs the plan pays for. Vendor models and `--billing-mode tokens` keep the pre-flight, and the server remains authoritative either way.
 
-### Free-trial usage limits
+### Free-trial access
 
-Trials include anti-abuse evaluation limits so the full plan experience is reserved for paid periods. As shipped (server-tunable): up to **30 jobs per UTC day**, a **100-render lifetime trial allowance**, images up to **~1.1 MP**, video up to **5 s / 720p**, and — for programmatic/API callers — a single allowed model (Z-Image Turbo). Full plan limits apply once the trial converts to paid. Cancelling during the trial ends Unlimited access immediately and prevents the first charge.
+Trials include evaluation limits on generation volume, media size, and API access. Full plan limits apply once the trial converts to paid. Cancelling during the trial prevents the first charge and keeps trial access, with the same trial limits, until the original trial end date.
 
-### Fair-use throttling
+### Fair-use scheduling
 
-Unlimited is fair-use, not unmetered. Limits are per UTC day and reset at UTC midnight; only successfully completed renders count toward the daily thresholds (failed / cancelled / retried renders do not).
+Unlimited is fair-use, not unmetered. Published plan limits are:
 
-- **Concurrent renders (base):** Unlimited — 4 images / 1 video in flight; Unlimited Pro — 16 images / 4 videos. Up to 512 jobs may be queued per account.
-- **Daily slot decay** (active-concurrency ceiling drops as completed renders climb, per UTC day):
-  - Unlimited images: 4 → 2 → 1 → 0 at 1024 / 2048 / 3072 completed.
-  - Unlimited video: 1 → 0 at 32 completed.
-  - Unlimited Pro images: 16 → 8 → 4 → 1 at 2048 / 4096 / 6144 completed (never fully cut off).
-  - Unlimited Pro video: 4 → 2 → 1 → 0 at 32 / 64 / 128 completed.
-- **Queue priority:** paid Spark and SOGNI jobs are dispatched ahead of subscription jobs; Unlimited Pro outranks Unlimited, which outranks free Spark. When a subscription exceeds its fast-lane fair-use allowance, further jobs run best-effort in the lowest-priority standard queue until capacity resets — they still complete, just later. Subscription jobs cannot target specific workers.
+- **Unlimited:** up to 4 concurrent image jobs and 1 concurrent video job, or 2 video jobs with fast/turbo models; queue up to 64 media, including up to 8 videos.
+- **Unlimited Pro:** up to 16 concurrent image jobs and 4 concurrent video jobs, with standard MiniMax H3 limited to 2; queue up to 192 media, including up to 24 videos.
+
+Actual throughput varies with demand, available Supernet capacity, and fair-use controls. Sustained high-volume or automated use may be delayed or rate-limited. Unlimited Pro receives higher subscription queue priority than Unlimited, and Premium Spark remains available for fastest paid priority. Subscription jobs cannot target specific workers.
 
 ### Billing states & cancellation
 
 - **Active / trialing:** covered renders run normally.
 - **Cancellation (paid):** Unlimited access continues until the end of the period already paid for; it simply does not renew.
-- **Cancellation (during trial):** access ends immediately and no charge is made.
+- **Cancellation (during trial):** no charge is made, and trial access continues until the original trial end date. Cancelling does not extend the trial or make the account eligible for another one.
 - **Grace / payment retry:** if a renewal payment fails, the provider retries it and **Unlimited access is paused** during the retry window — covered renders are declined with a renewal-retry error, and access resumes automatically once payment succeeds. You can keep rendering with Spark or SOGNI in the meantime.
 - **Refunds:** mid-term refunds are not offered by default; App Store / Google Play purchases follow the store's refund process, and Stripe (web) refunds are handled by Sogni support.
 
@@ -806,7 +954,7 @@ When a generation cannot bill to the subscription, the CLI surfaces a structured
 
 | Code | Meaning | What to do |
 | --- | --- | --- |
-| `4078` | Unlimited billing is not available for this generation (a vendor model that the subscription never covers, or no verified entitlement). | Use Premium Spark for vendor models (GPT Image 2 / Seedance / HappyHorse), or reconnect and retry for a transient entitlement read. |
+| `4078` | Unlimited billing is not available for this generation (a vendor model that the subscription never covers, or no verified entitlement). | Use Premium Spark for vendor models (GPT Image 2 / Seedance / HappyHorse / Wan 3), or reconnect and retry for a transient entitlement read. |
 | `4079` | Maximum queued jobs reached for the plan. | Wait for queued jobs to finish, then submit more. |
 | `4080` | Renewal payment is being retried; Unlimited access is paused. | Pay for this render with Spark or SOGNI (`--token-type spark` / `sogni`) for now. **Do not auto-retry the covered job** — access resumes on its own once renewal succeeds. |
 | `4081` | The feature requires a higher subscription plan. | Upgrade to Unlimited Pro. |

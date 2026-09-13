@@ -30,9 +30,9 @@ import os
 import sys
 import requests
 from base64 import b64encode
-from security import warn_insecure_wp_url
+from security import error_result, exit_on_error_result, require_secure_wp_url
 
-def get_jetengine_fields(url, username, password, post_id, field_name=None):
+def get_jetengine_fields(url, username, password, post_id, field_name=None, include_private=False):
     """Get JetEngine fields (stored as postmeta)"""
     
     credentials = f"{username}:{password}"
@@ -53,17 +53,20 @@ def get_jetengine_fields(url, username, password, post_id, field_name=None):
             
             # JetEngine fields can have various naming conventions
             # Common patterns: no prefix, 'jet_' prefix, or custom field group names
-            # We'll return all meta that doesn't start with underscore (private meta)
-            jetengine_fields = {k: v for k, v in meta.items() if not k.startswith('_')}
+            # Private meta (leading underscore) is hidden unless include_private is set
+            jetengine_fields = (
+                dict(meta) if include_private
+                else {k: v for k, v in meta.items() if not k.startswith('_')}
+            )
             
             if field_name:
                 return {field_name: jetengine_fields.get(field_name)}
             return jetengine_fields
         else:
             error_data = response.json() if response.headers.get('content-type', '').startswith('application/json') else {}
-            return {"error": f"HTTP {response.status_code}", "details": error_data}
+            return error_result(f"HTTP {response.status_code}", details=error_data)
     except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
+        return error_result(str(e))
 
 def set_jetengine_fields(url, username, password, post_id, fields_dict, rest_base="posts"):
     """Set JetEngine fields (via postmeta).
@@ -90,9 +93,9 @@ def set_jetengine_fields(url, username, password, post_id, fields_dict, rest_bas
             return response.json()
         else:
             error_data = response.json() if response.headers.get('content-type', '').startswith('application/json') else {}
-            return {"error": f"HTTP {response.status_code}", "details": error_data}
+            return error_result(f"HTTP {response.status_code}", details=error_data)
     except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
+        return error_result(str(e))
 
 def main():
     parser = argparse.ArgumentParser(description='Read/write JetEngine fields')
@@ -128,7 +131,7 @@ def main():
         print(json.dumps({"error": "App password required (--app-password or WP_APP_PASSWORD env var)"}),
               file=sys.stderr)
         sys.exit(1)
-    warn_insecure_wp_url(args.url)
+    require_secure_wp_url(args.url)
 
     try:
         # Set operation
@@ -137,16 +140,20 @@ def main():
             result = set_jetengine_fields(args.url, args.username, args.app_password, 
                                          args.post_id, fields)
             print(json.dumps(result, indent=2))
+            exit_on_error_result(result)
         elif args.field and args.value:
             fields = {args.field: args.value}
             result = set_jetengine_fields(args.url, args.username, args.app_password, 
                                          args.post_id, fields)
             print(json.dumps(result, indent=2))
+            exit_on_error_result(result)
         # Get operation
         else:
             result = get_jetengine_fields(args.url, args.username, args.app_password, 
-                                         args.post_id, args.field)
+                                         args.post_id, args.field,
+                                         include_private=args.list_all)
             print(json.dumps(result, indent=2))
+            exit_on_error_result(result)
             
     except json.JSONDecodeError as e:
         print(json.dumps({"error": f"Invalid JSON: {e}"}), file=sys.stderr)

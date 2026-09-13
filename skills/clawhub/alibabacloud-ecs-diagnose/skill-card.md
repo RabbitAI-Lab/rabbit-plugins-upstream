@@ -1,45 +1,72 @@
-## Description: <br>
-Comprehensive Alibaba Cloud ECS instance diagnostics skill that performs systematic troubleshooting across cloud platform status checks and optional guest OS diagnostics via Cloud Assistant. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive Alibaba Cloud ECS instance diagnostics skill that performs cloud platform status checks and optional GuestOS diagnostics through Cloud Assistant for connectivity, performance, disk, network, and instance-status issues.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers, SREs, and cloud operators use this skill to diagnose Alibaba Cloud ECS connectivity, performance, disk, status, and system-event issues by combining read-only platform checks with optional Cloud Assistant guest OS diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill combines diagnostics with high-impact remediation paths and remote command execution on ECS instances. <br>
-Mitigation: Start with the read-only RAM policy, use a dedicated least-privilege role, keep Cloud Assistant execution disabled unless needed, and require explicit review before firewall, EIP, instance lifecycle, password, reboot, or guest OS commands. <br>
-Risk: Diagnostic access can expose sensitive cloud environment details if commands or reports are handled carelessly. <br>
-Mitigation: Review commands before execution, never print access keys or secrets, and keep sensitive values out of diagnostic reports. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to diagnose standard Alibaba Cloud ECS instances and disks when users report connectivity failures, SSH timeouts, degraded performance, disk space or disk I/O issues, abnormal status, or system event alerts.
 
-## Reference(s): <br>
-- [Related Commands](references/related-commands.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Remote Connection Diagnose Design](references/remote-connection-diagnose-design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown diagnostic report with inline shell commands and remediation recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires confirmed Alibaba Cloud region and ECS instance identifiers; deep diagnostics require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.3 (source: server release evidence) <br>
+Risk: The skill can install or update mutable Aliyun CLI plugins and optional Python SDK dependencies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation path and dependency setup before use; require controlled plugin and dependency approval in sensitive environments.
+
+Risk: Deep diagnostics can run commands inside cloud instances through Cloud Assistant.
+
+Mitigation: Require explicit approval before Cloud Assistant execution and use a least-privilege RAM role with only the permissions needed for the selected diagnostic workflow.
+
+Risk: Alibaba Cloud credentials are required for cloud API calls.
+
+Mitigation: Configure credentials outside the agent session, avoid command-line secrets, and never print or request access key values in conversation.
+
+Risk: The artifact includes high-impact remediation examples for cloud infrastructure changes.
+
+Mitigation: Treat remediation commands as manual recommendations and require user approval before any infrastructure-changing action is run.
+
+## Reference(s):
+
+- [Acceptance Criteria: alibabacloud-ecs-diagnose](references/acceptance-criteria.md)
+- [Aliyun CLI Installation & Configuration Guide](references/cli-installation-guide.md)
+- [EBS Performance Diagnosis Events Reference](references/ebs-diagnosis-events.md)
+- [Alibaba Cloud ECS Disk Performance / IO Bottleneck Diagnostic Guide](references/ebs-disk-performance-diagnose-design.md)
+- [RAM Policies for ECS Diagnostics Skill](references/ram-policies.md)
+- [Related CLI Commands](references/related-commands.md)
+- [Alibaba Cloud ECS Remote Connection / Service Access Diagnostic Guide](references/remote-connection-diagnose-design.md)
+- [Verification Methods for ECS Diagnostics](references/verification-method.md)
+- [Aliyun CLI Plugin Mode](https://www.alibabacloud.com/help/cli/user-guide/use-alibaba-cloud-cli-in-plugin-mode)
+- [ECS API Reference](https://www.alibabacloud.com/help/ecs/developer-reference/api-overview)
+- [Cloud Assistant Documentation](https://www.alibabacloud.com/help/ecs/user-guide/cloud-assistant-overview)
+- [Cloud Monitor ECS Metrics](https://www.alibabacloud.com/help/cms/developer-reference/metrics-of-ecs)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, API calls, Guidance]
+
+**Output Format:** [Markdown diagnostic report with inline shell commands and JSON excerpts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires confirmed Alibaba Cloud region and ECS instance or disk identifiers; deep diagnostics may run Cloud Assistant commands after approval.]
+
+## Skill Version(s):
+
+0.0.4 (source: server release metadata and references/manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

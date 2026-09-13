@@ -1,42 +1,55 @@
-## Description: <br>
-当用户询问数据库或操作系统相关知识、需要基于 BIC-QA 知识库检索专业资料时使用。调用官方 API 需要有效凭据，详见正文 Setup <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BIC-QA helps agents answer database and operating-system questions through the BIC-QA Open API with reusable multi-turn sessions.
 
-## Publisher: <br>
-[bbsyd2](https://clawhub.ai/user/bbsyd2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bbsyd2](https://clawhub.ai/user/bbsyd2)
 
-## Use Case: <br>
-Developers and agents use this skill to query the BIC-QA knowledge base for database and operating-system answers through the official HTTPS API. It is most useful when the agent has a configured BIC-QA API key and a question that can be mapped to a supported database or OS topic. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a BIC-QA API key and includes a plaintext config-file setup option. <br>
-Mitigation: Use a dedicated, rotatable API key, avoid committing it to repositories, and prefer an environment variable or OS-backed secret manager when available. <br>
-Risk: The skill depends on an external API for database and operating-system answers. <br>
-Mitigation: Stop when credentials are missing or the API fails, and avoid substituting unsupported model knowledge for the BIC-QA result. <br>
+## Use Case:
 
+Developers, database administrators, and operations engineers use this skill to ask BIC-QA knowledge-base questions about database systems, operating systems, troubleshooting, operations, and performance optimization while preserving context across related follow-ups.
 
-## Reference(s): <br>
-- [BIC-QA Homepage](https://www.bic-qa.com) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/bbsyd2/bic-qa) <br>
-- [Publisher Profile](https://clawhub.ai/user/bbsyd2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls, markdown] <br>
-**Output Format:** [Markdown with inline bash and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided BIC-QA API key; API responses are expected as JSON with an answer field such as result.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Questions are sent to the BIC-QA service using the user's API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when sending those questions to BIC-QA is acceptable for the user's environment.
+
+Risk: API keys and local session state can be exposed if stored in shared, world-writable, or project-tracked locations.
+
+Mitigation: Keep the API key file private, avoid shared state paths, and add project-local state directories to .gitignore.
+
+## Reference(s):
+
+- [BIC-QA homepage](https://www.bic-qa.com)
+- [BIC-QA Open API quick reference](references/api.md)
+- [ClawHub skill page](https://clawhub.ai/bbsyd2/skills/bic-qa)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with shell commands and BIC-QA API responses summarized for the user]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses should be based on the BIC-QA service output and may include a short local session identifier.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

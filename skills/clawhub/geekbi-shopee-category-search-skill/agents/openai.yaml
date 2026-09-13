@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云 Shopee 类目研究"
+  short_description: "查询 Shopee 类目层级并结合商品样本研究品类"
+  default_prompt: "使用 $geekbi-shopee-category-search-skill 查询 Shopee 类目并分析类目商品机会。"

@@ -1,0 +1,132 @@
+{
+  "skill": "sandbox-selfheal-guard",
+  "version": "3.0.8",
+  "gguf_magic": "GGUF",
+  "state_dir_env": "SELFHEAL_HOME",
+  "state_dir_default": "~/.selfheal",
+  "models": {
+    "scout": {
+      "file": "Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "bytes": 484220320,
+      "url": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "role": "fastest, casual chat, light-swarm",
+      "default_tps": 34,
+      "ctx": 2048,
+      "timeout": {
+        "base_s": 30,
+        "per_token_ms": 30,
+        "max_s": 150
+      },
+      "sha256": "9acfc1e001311f34b4252001b626f2e466d592a42065f66571bff3790d4e1b14"
+    },
+    "spark": {
+      "file": "Qwen2.5-0.5B-Instruct-Q5_K_M.gguf",
+      "bytes": 420086080,
+      "url": "https://huggingface.co/second-state/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/Qwen2.5-0.5B-Instruct-Q5_K_M.gguf",
+      "role": "general instruct",
+      "default_tps": 30,
+      "ctx": 2048,
+      "timeout": {
+        "base_s": 30,
+        "per_token_ms": 34,
+        "max_s": 150
+      },
+      "sha256": "3450d966e73cd5ae9c92f493ed56fb60b5d6dbed0f945652e6cc6ce54ea143d3"
+    },
+    "forge": {
+      "file": "Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf",
+      "bytes": 397808288,
+      "url": "https://huggingface.co/bartowski/Qwen2.5-Coder-0.5B-Instruct-GGUF/resolve/main/Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf",
+      "role": "code",
+      "default_tps": 31,
+      "ctx": 2048,
+      "timeout": {
+        "base_s": 30,
+        "per_token_ms": 33,
+        "max_s": 150
+      },
+      "sha256": "0128e77564e43d40682f82d7ebe8a9abdf0c24c8f55fa85629f8cc156b1b6560"
+    },
+    "sage": {
+      "file": "DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf",
+      "bytes": 1117320800,
+      "url": "https://huggingface.co/bartowski/DeepSeek-R1-Distill-Qwen-1.5B-GGUF/resolve/main/DeepSeek-R1-Distill-Qwen-1.5B-Q4_K_M.gguf",
+      "role": "deep reasoning",
+      "default_tps": 14,
+      "ctx": 4096,
+      "timeout": {
+        "base_s": 45,
+        "per_token_ms": 72,
+        "max_s": 300
+      },
+      "sha256": "1741e5b2d062b07acf048bf0d2c514dadf2a48f94e2b4aa0cfe069af3838ee2f"
+    }
+  },
+  "llama": {
+    "repo_dir_default": "~/llama.cpp",
+    "build_flags": [
+      "-DGGML_NATIVE=ON",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "build_flags_fallback": [
+      "-DGGML_NATIVE=OFF",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "build_targets": [
+      "llama-completion",
+      "llama-cli",
+      "llama-bench"
+    ],
+    "binaries_preferred": [
+      "llama-completion",
+      "llama-cli"
+    ],
+    "feature_detect_flags": [
+      "--flash-attn",
+      "--no-warmup"
+    ],
+    "threads_default": 2,
+    "trusted_remotes": [
+      "github.com/ggml-org/llama.cpp",
+      "github.com/ggerganov/llama.cpp (legacy canonical)"
+    ],
+    "trust_override_env": "SELFHEAL_LLAMA_ANY_REMOTE=1"
+  },
+  "circuit_breaker": {
+    "max_attempts": 3,
+    "cooldown_s": 1800
+  },
+  "cache": {
+    "max_entries": 256,
+    "ttl_s": 604800
+  },
+  "light_swarm": {
+    "casual_max_words": 8,
+    "casual_max_tokens": 120
+  },
+  "evidence": {
+    "verified_utc": "2026-09-06",
+    "byte_sizes": "HTTP HEAD x-linked-size confirmed all 4 model URLs (302 -> 200)",
+    "gguf_magic": "HTTP range 0-3 on all 4 URLs returned bytes 47 47 55 46 'GGUF'",
+    "qwen3_filename_fix": "HF API siblings of bartowski/Qwen_Qwen3-0.6B-GGUF list Qwen_Qwen3-0.6B-Q4_K_M.gguf; the v2 filename Qwen3-0.6B-Q4_K_M.gguf returns HTTP 404 (15-byte body)",
+    "cmake_ggml_native": "llama.cpp docs/build.md: -DGGML_NATIVE=ON (LLAMA_* options deprecated)",
+    "llama_completion_binary": "ggml-org/llama.cpp discussion #17618 (2025-11-30): llama-cli migrated to llama-completion example; prefer llama-completion, fall back to llama-cli",
+    "speed_params": "sibling skill edge-cpu-gguf-tuner v2 measurements on a 2-core Arena sandbox (t=2, flash-attn on, f16 KV)",
+    "sha256_pin": "HF LFS oids via /api/models/<repo>/paths-info/main (content-addressed); verified at every download, deep re-verify with SELFHEAL_DEEP_VERIFY=1"
+  },
+  "consent": {
+    "mode_env": "SELFHEAL_MODE",
+    "default": "check",
+    "fix_mode_permits": [
+      "apt install via sudo -n",
+      "npx shim creation",
+      "llama.cpp rebuild",
+      "model download",
+      "cache/state writes"
+    ],
+    "network_endpoints": [
+      "huggingface.co"
+    ],
+    "rationale": "registry behavioral scan 2026-09-06 flagged auto system-package changes/downloads/persistent cache; consent-first gating added"
+  }
+}

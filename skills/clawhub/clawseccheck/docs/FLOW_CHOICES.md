@@ -26,13 +26,22 @@ python3 {baseDir}/audit.py --vet <path-to-skill>
 
 The path is a local folder or `SKILL.md` file. If the user gives a URL or registry slug, run
 `--vet-source` on it first (see below), then have them fetch it into an isolated temp folder —
-never under `~/.openclaw` — and vet the local copy. The output is a **risk dossier**: an overall
-A–F grade + NO KNOWN ISSUE/SUSPICIOUS/DANGEROUS verdict over five axes — **danger** (how dangerous to use),
+never under `~/.openclaw` — and vet the local copy. The output is a **risk dossier**: an
+INSTALL / CAUTION / DO-NOT-INSTALL verdict over five axes — **danger** (how dangerous to use),
 **build** (how it's built), **behavior** (how it thinks / behaves), **persistence** (what it
-stages for later), **connections** (whom it reaches out to). Lead with the grade + verdict, then
+stages for later), **connections** (whom it reaches out to). Lead with the verdict, then
 name any axis that is WARN/FAIL and why; note that N/A axes weren't assessable (e.g. a doc-only
-skill with no code). Report the verdict in plain language:
-- NO KNOWN ISSUE -> "Grade looks clean — no suspicious patterns on any axis."
+skill with no code).
+
+**There is no letter grade here, and you must not invent one.** A "before you install" answer is
+a verdict; the audit's own A–F is a different scale for a different question, and one letter
+standing for both would be read as the same thing. `--vet --json` carries no `grade` or `score`
+key either. Report the verdict in plain language:
+
+- **Nothing assessable** ("This target is not a skill package … no verdict is given") -> the tool
+  refused to judge what it was pointed at. Say so plainly and ask for a
+  skill directory or `SKILL.md`; do not present the absence of findings as a clean result.
+- NO KNOWN ISSUE -> "Nothing suspicious on any axis."
 - SUSPICIOUS -> "A couple of axes are worth a closer look (I'll name them). I'd be cautious."
 - DANGEROUS -> "This skill contains patterns used by malware (the danger axis fails). Do not
   install it. If it's already installed, remove it and rotate any secrets it could have accessed."
@@ -47,9 +56,10 @@ The path is the plugin root (the folder carrying `openclaw.plugin.json`), the ma
 itself, or an installed wrapper project under `~/.openclaw/npm/projects/`. Plain `--vet <path>`
 also works — the type is autodetected and announced on stderr. Report the verdict like the
 skill flow above, and relay two plugin specifics from the evidence when present: bundled
-skills auto-load via `~/.openclaw/plugin-skills/`, and the plugin's JS/TS runtime code is
-outside the static scan's depth (the report discloses this) — suggest the user skim the entry
-files before trusting.
+skills auto-load via `~/.openclaw/plugin-skills/`, and the plugin's JS/TS runtime code gets a
+lexical pass only, so it stays outside the static scan's depth (the report discloses this) —
+suggest the user skim the entry files before trusting. Python outside the declared skills is
+read by the full AST/taint pass, so do not relay it as unscanned.
 
 ## Choice: check before download / "is this safe to download" / "vet this link or package"
 
@@ -74,7 +84,10 @@ X" end to end: (1) `--vet-source <target>` — the identity gate above; stop her
 steps + a consent line), then prints the exact fetch+isolate+cleanup commands for *you* (the
 agent) to run — a temp quarantine dir outside every OpenClaw auto-load path, the right fetch verb
 for the target's ecosystem (npm/pypi/git/url), never executed by the tool itself. (3) Run those
-commands yourself. (4) `--advise <quarantine-path>` — reframes the same risk dossier as an
+commands yourself — **unless the tool refused to build a plan**: for a target it cannot quote
+safely (shell metacharacters, control characters) it prints `I will not build a fetch plan for
+this target.` and no commands at all. There is nothing to run; ask the user for a plain target
+rather than improvising a fetch of your own. (4) `--advise <quarantine-path>` — reframes the same risk dossier as an
 install decision: **INSTALL** / **CAUTION** / **DO-NOT-INSTALL**, each with a plain-words
 restatement ("In plain words: …"), a "how I decided" line, the reasons, and a cleanup command.
 Relay it directly:
@@ -104,9 +117,14 @@ connect to the MCP server and does not change any configuration.
 
 This is the same interrogation protocol [`SKILL.md`](../SKILL.md) Step 2 already runs automatically
 the first time the user
-picks "Check everything" (F-043 — there's no separate post-scan "deeper" menu pick anymore). Use
+picks "Full check" (menu item 1 — F-043, there's no separate post-scan "deeper" menu pick
+anymore). Use
 this section directly when the user asks about capability/blast-radius **outside** a fresh scan —
 mid-conversation, on an older result, or to refresh self-report data since the last `--full` run.
+
+**This is layer 4 of a full check.** The self-report is one of the two layers the tool cannot
+reach on its own, so a run without it carries no letter grade at all. When a user asks why there
+is no grade, this section and the live test (below) are the two answers.
 
 The static scan reads config files only. It cannot see the agent's **real tool/verb inventory**,
 whether untrusted input can reach a side-effect, or host monitors a file scan can't detect — none
@@ -129,8 +147,9 @@ names. This is the most important field: it is what lets the audit see whether a
 
 **Step 3 — answer what you can from your own context; ask the user only what they alone know.**
 
-For **approval_gates** — answer this yourself:
-> Look at your own tool grants and session parameters. If you are required to call `request_approval` or `ask_user` before every side-effecting action → `gated`. Otherwise → `ungated`.
+For **approval_gates** — answer this yourself, per action class (`exec`, `send`, `write` —
+not a single scalar):
+> For each of `exec`, `send`, `write`: are you required to call `request_approval` or `ask_user` before acting in that class? → `"required"`. Do you act without asking? → `"auto"`. Not sure? → `"unknown"`.
 
 For **untrusted_to_action** — answer this yourself:
 > Combine: do you have any channel with open/allowlist/paired dmPolicy or groupPolicy (external ingress exists)? AND do you have outbound tools (email, webhook, exec, deploy, etc.) without an approval gate? If both → `ungated`. If approval gate present → `gated`.
@@ -175,7 +194,8 @@ python3 {baseDir}/audit.py --attest -                # or pipe the JSON via stdi
 weaker than a config fact — advisory, and it never overrides one):
 - **B43 — Capability blast-radius.** Only reversible verbs (search/get/draft/label) → PASS:
   "forward-exfil and delete-evidence are physically impossible." A send/forward, delete-forever, or
-  mailbox-config (auto-forward/filter) verb that can fire without approval → FAIL.
+  mailbox-config (auto-forward/filter) verb that can fire without approval → WARN (never FAIL —
+  B43 is `ATTESTED`/advisory, so a self-report can only warn, not fail the grade).
 - **B44 — Self-report ⇄ config drift.** Config `tools.allow` grants a dangerous verb you did *not*
   list → flagged (drift / blind spot / something masking a capability).
 
@@ -208,6 +228,11 @@ explicit confirmation.
 
 ## Choice: live test / "test it" / "try an attack" / "see if I'm vulnerable to injection"
 
+**This is layer 5 of a full check** — the other layer the tool cannot reach on its own. Together
+with the self-report above it is what stands between an ungraded result and a verdict, so offer it
+first whenever a run came back with no grade. It exercises the running agent, so ask before you
+run it; a refusal is a legitimate answer and simply leaves the run ungraded.
+
 Run the canary first:
 
 ```
@@ -239,6 +264,13 @@ python3 {baseDir}/audit.py --trend
 Records this run to local history and prints a score trend plus an offline reference percentile
 (no network). Explain the trend in plain language.
 
+**Every run is recorded; only graded ones are plotted.** A run that did not complete all five
+layers appears in the timeline as `no grade`, with no arrow, and the arrows compare each graded
+run to the previous *graded* one rather than to the row above it. A footer states how many rows
+carry no grade. Relay that footer — without it a short line of grades reads as a short history
+rather than a mostly-ungraded one. Percentile behaves the same way: with no score this run there
+is no rank, and the tool says so instead of estimating.
+
 ## Choice: percentile / "how do I compare" / "am I above average"
 
 ```
@@ -258,6 +290,10 @@ python3 {baseDir}/audit.py --card
 Deliver the generated `grade.svg` file directly to the user. Do NOT generate, redraw, or
 rasterize your own badge image — you cannot reproduce the grade/score correctly. If the
 channel can't display SVG, paste the text card from `--card` instead.
+
+**If the run carried no grade** (fewer than all five audit layers ran) the badge reads
+`no grade yet` and the card names how many layers ran. That is the correct artifact — offer it
+as sharing the *result*, not a grade, and do not run a different command hoping for a letter.
 
 The badge and card show the grade, score, and trifecta ratio **only** — never the findings.
 Remind the user:

@@ -1,46 +1,76 @@
-## Description: <br>
-Google Ads API integration with managed OAuth for querying campaigns, ad groups, keywords, and performance metrics with GAQL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Ads API integration with managed OAuth for querying campaigns, ad groups, keywords, and performance metrics with GAQL.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing operators, analysts, and developers use this skill to access Google Ads account data, run GAQL queries, inspect campaign performance, and manage Google Ads resources through Maton-managed authentication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Ads account data and OAuth access flow through Maton's service. <br>
-Mitigation: Use the intended Maton and Google Ads accounts, protect MATON_API_KEY, and review organizational requirements for third-party access before use. <br>
-Risk: Requests can target the wrong Google Ads connection or manager/client account when multiple accounts are available. <br>
-Mitigation: Specify the connection ID and the correct customer or login customer ID before querying or changing data. <br>
-Risk: Create, update, or delete calls can alter Google Ads resources. <br>
-Mitigation: Require clear confirmation of the target resource and intended effect before any write or delete action. <br>
+## Use Case:
 
+Developers and marketing operations teams use this skill to connect a Maton-authenticated Google Ads account, run read-first GAQL/API queries, and perform approved campaign or automation actions.
 
-## Reference(s): <br>
-- [ClawHub Google Ads skill](https://clawhub.ai/byungkyu/skills/google-ads-api) <br>
-- [Google Ads API overview](https://developers.google.com/google-ads/api/docs/start) <br>
-- [GAQL query guide](https://developers.google.com/google-ads/api/docs/query/overview) <br>
-- [GAQL fields reference](https://developers.google.com/google-ads/api/fields/v24/overview) <br>
-- [Maton CLI manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, Python, JavaScript, and GAQL examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a connected Google Ads OAuth account; write and delete actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Google Ads access and automation can expose sensitive account data or affect campaign state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read and list operations, connect only the needed Google Ads account, and require clear confirmation before any campaign, budget, trigger, destination, or hosted function change.
+
+Risk: Long-lived API keys can be exposed through environment variables, logs, committed files, or pasted output.
+
+Mitigation: Prefer OAuth, keep credentials in the operating system credential store, avoid exporting MATON_API_KEY, and rotate any key that was printed, committed, or pasted.
+
+Risk: Hosted functions and triggers can run approved actions unattended or send event data to unintended destinations.
+
+Mitigation: Use user-authored or user-reviewed handlers, keep functions private, deploy with DENY_ALL network policy by default, and route only to Maton/internal destinations unless the user approves a named external host.
+
+## Reference(s):
+
+- [Google Ads API Overview](https://developers.google.com/google-ads/api/docs/start)
+- [GAQL Reference](https://developers.google.com/google-ads/api/docs/query/overview)
+- [GAQL Grammar](https://developers.google.com/google-ads/api/docs/query/grammar)
+- [GAQL Cookbook](https://developers.google.com/google-ads/api/docs/query/cookbook)
+- [GAQL Fields Reference](https://developers.google.com/google-ads/api/fields/v24/overview)
+- [Metrics Reference](https://developers.google.com/google-ads/api/fields/v24/metrics)
+- [GoogleAdsService Search](https://developers.google.com/google-ads/api/reference/rpc/v24/GoogleAdsService/Search)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval for writes, connection changes, hosted functions, triggers, or destinations.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

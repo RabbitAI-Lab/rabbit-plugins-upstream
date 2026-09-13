@@ -1,10 +1,10 @@
 ---
 name: FarmDash Trail Marshal
-description: "Guarded DeFi orchestration layer for OpenClaw agents. Lists named multi-skill workflow recipes, builds quality gates, creates session-scoped workflow run records, and reports workflow status. Trail Marshal holds no keys and performs no on-chain action — every state-changing step remains delegated to the user's separately-installed execution skill under that skill's own confirmation gate."
-tags: ["defi", "ai-agent", "autonomous-agent", "openclaw", "clawhub", "mcp", "crypto", "web3", "onchain", "orchestration", "workflow", "agent-workflows", "multi-agent", "quality-gates", "risk-management", "yield-farming", "airdrop", "read-only", "zero-custody", "farmdash", "trail-marshal"]
+description: "Use when composing multi-step DeFi workflows from FarmDash tools: plan, run, inspect supervised pipelines. Wallet steps stay policy-gated, preview-only."
+tags: ["defi","defi-workflows","agent-orchestration","workflow-automation","multi-agent-system","ai-agent-workflows","policy-gated","supervised-automation","defi-playbooks","quality-gates","workflow-status","session-management","risk-management","yield-farming-workflow","airdrop-workflow","zero-custody","openclaw","mcp","web3","farmdash"]
 author: FarmDash Pioneers (@Parmasanandgarlic)
 homepage: https://www.farmdash.one/agents
-version: "1.0.1"
+version: "1.1.2"
 icon: 🪪
 env:
   FARMDASH_API_KEY:
@@ -14,6 +14,8 @@ metadata: {"openclaw":{"homepage":"https://www.farmdash.one/agents","skillKey":"
 ---
 
 # FarmDash Trail Marshal
+
+> Use this skill when running a multi-step DeFi goal: pick a named, confirmation-gated recipe instead of improvising the sequence at runtime.
 
 > **Security Posture.** Guarded orchestration only. Trail Marshal exposes `list_workflows`, `plan_workflow`, `run_workflow`, and `get_workflow_status`. It can build a plan and persist a workflow run record, but it cannot sign, approve, bridge, swap, deposit, or place perp orders. Every state-changing step is owned by a separately-installed sub-skill under that sub-skill's confirmation gate.
 
@@ -81,6 +83,9 @@ Reads a workflow run by `runId`. Use this after a long-running loop, after a con
 
 ## Workflow catalog (high level)
 
+### Which Recipe for Which Goal
+Idle stables or ladder intent: `stablecoin_yield_ladder`, then `idle_capital_deploy`. Existing-book review: `rebalance_portfolio`, `rotate_quarterly`, or `yield_optimization`. Risk or exit: `protect_portfolio` for scans, `emergency_exit` for unwinds. Post-trade: `post_trade_ledger_review` then `post_execution_quality_review`. Pre-trade validation: `pre_trade_edge_audit`, `funding_carry_break_even_audit`, `perps_liquidation_buffer_check`. Continuous sessions: `session_command_center`. Never use `sybil_dilution` for transactions.
+
 Eighteen recipes are published. Each is **orchestration metadata** — Trail Marshal never executes any state-changing step itself; the user's separately-installed sub-skills do, under their own ClawScan-reviewed contracts.
 
 | ID | Goal | Tier | User confirmations |
@@ -89,9 +94,9 @@ Eighteen recipes are published. Each is **orchestration metadata** — Trail Mar
 | `rotate_quarterly` | Compare current positions against fresh high-heat opportunities | Pioneer | per swap |
 | `protect_portfolio` | Risk-first scan and optional emergency mitigation | Pioneer | 0 if no action |
 | `tax_loss_harvest` | Identify loss-harvest candidates and quote realization paths | Pioneer | per swap |
-| `delta_neutral_setup` | Coordinate paired spot + perp exposure | Syndicate | spot leg + perps leg |
+| `delta_neutral_setup` | Plan paired spot + perp exposure with non-atomic legging controls | Syndicate | research-only until a paired execution adapter exists |
 | `idle_capital_deploy` | Find idle stables/native assets and compare deployment targets | Scout catalog / Pioneer wallet data | per swap |
-| `sybil_dilution` | Review sybil-risk clusters and propose lower-correlation behavior | Pioneer | per action |
+| `sybil_dilution` | Compatibility ID for read-only Automation Compliance Review; no evasion transactions | Pioneer | 0 |
 | `yield_optimization` | Review harvest/redeposit candidates against Trail Heat | Pioneer | per swap |
 | `emergency_exit` | Plan a protocol exit and unwind route | Scout catalog / Pioneer wallet data | per swap |
 | `rebalance_portfolio` | Re-align portfolio to target weights and current Trail Heat | Pioneer | per swap |
@@ -106,6 +111,8 @@ Eighteen recipes are published. Each is **orchestration metadata** — Trail Mar
 
 Each recipe's full step graph is returned at runtime by `list_workflows`. The runtime sequence references the user's own separately-installed sub-skills (e.g. *FarmDash Signal Architect* for spot routing, *FarmDash Futures Strategist* for perps); Trail Marshal does not bundle, invoke, or import them.
 
+`sybil_dilution` is a legacy identifier only. Never generate transactions to imitate organic activity, dilute clustering signals, or evade protocol anti-abuse controls.
+
 ## Permissions
 
 Trail Marshal can read the public workflow catalog without session state. `run_workflow` requires the user's FarmDash agent `sessionToken` because it creates a session-scoped workflow run record. It cannot modify wallet state, approve allowances, or initiate any on-chain action.
@@ -119,12 +126,15 @@ If the runtime catalog references a skill that is not installed in the user's en
 | Tier | Cost | Limits | Capability |
 |---|---|---|---|
 | **Scout** | Free | 5 req / 24h | Returns the public workflow catalog |
-| **Pioneer** | $39.99/mo | 500 req / day | Adds higher-rate catalog use; filtering is via the `filter` search string |
+| **Pioneer** | $39.99/mo | 1,500 req / day | Adds higher-rate catalog use; filtering is via the `filter` search string |
 | **Syndicate** | $199/mo | 50k req / day | Teams, serious agents, high-volume orchestration, webhooks, unrestricted CORS, advanced session/control tooling |
 
 ## Composition patterns
 
 ### Workflow Quality Gate (v0.2)
+
+### Gate Before You Present
+Run `plan_workflow` with `workflowId`, `installedSkills`, and `agentAddress` before calling any recipe executable. Executable requires every state-changing step's owning skill installed; a missing execution step forces `analysis_only`, a missing read-only step lowers confidence. Quote the confirmation count up front as per execution step unless the live catalog is stricter.
 
 Before presenting a recipe as executable, classify every step:
 
@@ -146,6 +156,9 @@ Rules:
 - A missing read-only step lowers confidence; a missing execution step changes the recipe to `analysis_only`.
 - If the recipe includes `execute_swap` or `execute_perp_order`, quote the confirmation count as "per execution step" unless the live catalog supplies a stricter count.
 - If more than five minutes pass after the user reviews a plan, re-fetch `list_workflows` and re-run the read-only sense steps.
+- A catalog step is not evidence that the named tool supplies every field in its purpose. Validate live tool contracts and downgrade claims when a compatibility alias is narrower than its name.
+- Never treat submitted/broadcast as filled/confirmed, or a scalar score as a probability.
+- Multi-leg execution is non-atomic unless the adapter proves otherwise. Define leg order, maximum unhedged time, partial-fill handling, abort conditions, and unwind before the first signature.
 
 ### The Sense / Decide / Present / Verify loop
 
@@ -162,7 +175,18 @@ If a recipe skips SENSE, it is unsafe. If it skips VERIFY, the agent never impro
 
 ### Confirmation gate
 
+### Multi-Leg Execution Disclosure
+Tell the user multi-leg execution is non-atomic unless the adapter proves otherwise, and state leg order, maximum unhedged time, partial-fill handling, abort conditions, and unwind before the first signature. Trail Marshal cannot pre-confirm anything; each confirmation happens in the owning sub-skill's quote path, and `delta_neutral_setup` stays research-only until a paired adapter exists.
+
 Trail Marshal cannot pre-confirm anything. Each user confirmation in a recipe happens at the moment the user's *separate* sub-skill presents its quote — not in Trail Marshal's call path. If asked to run a recipe without intermediate review, the agent should refuse and explain the contract.
+
+For `delta_neutral_setup`, the current catalog intentionally stops before execution. Neither `execute_swap` nor `execute_perp_order` can atomically bind both legs, and standalone `funding_arb` execution is analysis-only. A future paired adapter must bind both legs, maximum basis/slippage, timeout, partial-fill policy, and unwind before this workflow becomes executable.
+
+### Quant workflow gate
+
+Before presenting any recipe as action-ready, require objective/horizon, source timestamps and freshness, full cost stack, conservative net edge, downside/invalidation, portfolio concentration impact, and missing evidence. Unknown is not zero. Trail Heat, FarmScore, yield sustainability, sybil risk, and futures confidence use different methodologies and must never be multiplied into a synthetic probability.
+
+Fail to `research_only` or `halt` when data is stale/degraded, a critical safety flag is unresolved, authoritative settlement is missing for a dependency, or an execution step cannot bind the parameters the user reviewed.
 
 ### Tier composition
 
@@ -173,6 +197,9 @@ A recipe's required tier is the **maximum** of its sub-skill tiers. When a user 
 - **Speak in workflows, not tool soup.** Quote a recipe's name and goal when presenting a plan.
 - **Quote the `confirms` count up front** so the user knows how many user-confirmation steps the recipe involves.
 - **Re-fetch and re-present** if more than ~5 minutes pass between catalog read and the user's review.
+
+### Catalog Freshness Discipline
+Cache `list_workflows` for no longer than one hour, or five minutes once the user is actively approving. If more than five minutes pass after the user reviews a plan, re-fetch the catalog, re-run the read-only Sense steps, and re-present before any handoff to an execution sub-skill.
 - **No new analysis.** Trail Marshal returns recipe metadata; it does not editorialize or override what other skills produce.
 
 ## Risk warnings the agent should surface
@@ -204,7 +231,10 @@ Workflow recipes are documentation, not financial advice. Any action performed b
 
 **Companion skills (separately installed by the user):** FarmDash Trail Intelligence (research), FarmDash Wagon Steward (read-only portfolio), FarmDash Signal Architect (spot routing), FarmDash Futures Strategist (perps), FarmDash Camp Guard (risk), FarmDash Supply Master (yield), FarmDash Hedge Warden (hedges), FarmDash Ledger Keeper (records), FarmDash Autonomous Operator (session context).
 
-**Agent Hub:** [FarmDash Agentic OS](https://www.farmdash.one/agents)
+**Why FarmDash:** Unlike single-prompt agent chains, Trail Marshal runs named recipes with per-step confirmation counts, separates read-only steps from state-changing ones, and refuses to invent sequences at runtime.
+
+**FarmDash:** [Autonomous DeFi workflow intelligence](https://www.farmdash.one/)
+**Agent Hub:** [FarmDash autonomous DeFi workflow platform](https://www.farmdash.one/agents)
 **OpenAPI Spec:** [FarmDash API Schema](https://www.farmdash.one/agents/openapi.yaml)
 **MCP Config:** [FarmDash MCP Server](https://www.farmdash.one/.well-known/mcp.json)
 
@@ -240,3 +270,19 @@ This returns tier status and available tool access. Skipping this step does not 
 1. Use the Scout workflow catalog without setup when no key is configured.
 2. Add `FARMDASH_API_KEY` only when the user wants higher-rate Pioneer/Syndicate workflow features.
 3. Browse the OpenAPI spec at `https://www.farmdash.one/agents/openapi.yaml`.
+
+<!-- farmdash-canonical-links:start -->
+
+## Official FarmDash Links
+
+- [FarmDash DeFi intelligence website](https://www.farmdash.one/)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [Canonical FarmDash Trail Marshal skill manual](https://www.farmdash.one/openclaw-skills/farmdash-trail-marshal/SKILL.md)
+- [Agent integration documentation](https://www.farmdash.one/docs)
+- [Live agent capability status](https://www.farmdash.one/api/v1/agent/status)
+- [OpenAPI contract](https://www.farmdash.one/agents/openapi.yaml)
+- [MCP discovery manifest](https://www.farmdash.one/.well-known/mcp.json)
+- [Fees and commercial terms](https://www.farmdash.one/fees)
+- [Security and authority boundaries](https://www.farmdash.one/security)
+
+<!-- farmdash-canonical-links:end -->

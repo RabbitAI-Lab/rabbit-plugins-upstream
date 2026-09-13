@@ -1,45 +1,60 @@
-## Description: <br>
-Turns product photos, product details, or ecommerce listing links into polished product demo, showcase, or ad video workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns product photos, product links, specifications, manuals, or catalog content into product demo, showcase, or advertising video requests through the pinned dLazy product-to-ecommerce-video workflow.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, creators, ecommerce operators, and agents use this skill to route product-video requests through the dLazy CLI for product demos, shopping ads, and cross-border ecommerce videos. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached product files may be sent to dLazy hosted services for processing. <br>
-Mitigation: Review product data before upload and avoid sending confidential or restricted files unless the user's dLazy account and service terms allow it. <br>
-Risk: The dLazy CLI may store an organization-scoped API key in local user configuration. <br>
-Mitigation: Use npx for non-persistent execution when appropriate, protect the local config file, and rotate or revoke the API key from dLazy if exposure is suspected. <br>
-Risk: Generated product videos or ad concepts may contain inaccurate or non-compliant product claims. <br>
-Mitigation: Review generated outputs against product specifications, advertising rules, and brand requirements before publication. <br>
+## Use Case:
 
+External users, creators, marketers, and ecommerce teams use this skill to ask a hosted dLazy agent to create product demo, showcase, and advertising videos from product images, links, specifications, manuals, or catalogs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-product-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference project-scoped dLazy chat sessions, attached product files, and hosted product-video generation results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: Installing and running the pinned npm CLI introduces ordinary package-install risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI source or npm package before installation when high assurance is required, and avoid running npm or the CLI with administrator privileges.
+
+Risk: Prompts and attached files are sent to dLazy services and local files may be uploaded to dLazy media storage.
+
+Mitigation: Only attach files intended for upload to dLazy, and avoid submitting sensitive product or customer data unless the service terms and organization policy allow it.
+
+Risk: The dLazy API key is stored locally or supplied through an environment variable.
+
+Mitigation: Protect the local CLI configuration, use OS-user file permissions, and rotate the dLazy API key if compromise is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-product-video)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and streamed CLI text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a pinned dLazy CLI package and may reference hosted product-video generation projects.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

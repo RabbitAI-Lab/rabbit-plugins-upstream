@@ -1,45 +1,59 @@
-## Description: <br>
-Evalanche is a multi-EVM agent wallet skill for onchain identity, x402 payments, cross-chain liquidity, gas funding, perpetual trading, prediction markets, and DeFi operations across EVM and Avalanche networks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evalanche helps agents operate a multi-EVM wallet for identity, payments, swaps, bridges, DeFi operations, perpetuals, prediction markets, and Avalanche validator workflows across supported chains.
 
-## Publisher: <br>
-[ijaack](https://clawhub.ai/user/ijaack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ijaack](https://clawhub.ai/user/ijaack)
 
-## Use Case: <br>
-Developers and agent operators use this skill to equip agents with wallet, MCP, and SDK workflows for balances, transactions, swaps, bridges, staking, market data, prediction markets, and chain management. It is intended for agents that are explicitly allowed to operate crypto wallets and pay network or venue costs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can sign transactions, trade, bridge, stake, approve spending, withdraw funds, and upgrade contracts. <br>
-Mitigation: Install it only for agents that are explicitly allowed to operate funded wallets, and require review for every tool call that can move funds or change contract state. <br>
-Risk: Wallet keys or mnemonic material can expose funded accounts if reused or stored on a shared or compromised host. <br>
-Mitigation: Use a fresh low-balance wallet or isolated mnemonic, avoid treasury keys, and maintain a plan to rotate or delete the persistent keystore. <br>
-Risk: External CLI resolution for Polymarket workflows could execute an unintended binary if PATH is compromised. <br>
-Mitigation: Pin the Polymarket CLI path with EVALANCHE_POLYMARKET_CLI_BIN before enabling authenticated Polymarket tools. <br>
-Risk: HTTP MCP mode can expose wallet capabilities beyond the local agent boundary if network controls are weak. <br>
-Mitigation: Prefer stdio mode where possible; if HTTP mode is used, keep it local and require an authentication token plus host-level access controls. <br>
+## Use Case:
 
+Developers and external agent builders use Evalanche to give autonomous agents wallet, market, bridge, trading, and DeFi capabilities across EVM and Avalanche networks. It is intended for agents that need to query markets, manage balances, sign transactions, execute transfers or trades, and interact with supported onchain protocols.
 
-## Reference(s): <br>
-- [Evalanche source and homepage](https://github.com/iJaack/evalanche) <br>
-- [ClawHub skill page](https://clawhub.ai/ijaack/skills/evalanche) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, configuration details, and tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe actions that spend funds or submit transactions; review wallet operations before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.12.0 (source: ClawHub release evidence) <br>
+Risk: The skill can exercise broad financial and administrative authority, including transfers, approvals, trades, bridge operations, validator actions, and proxy upgrades.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it in an isolated, low-privilege environment with dedicated low-balance wallets, and require explicit human review before value-moving or administrative actions.
+
+Risk: External execution and install defaults can introduce supply-chain or path-resolution risk.
+
+Mitigation: Pin and verify the evalanche package and platform-cli versions, and set EVALANCHE_POLYMARKET_CLI_BIN to a trusted absolute path.
+
+Risk: Private keys and mnemonics can expose primary funds if reused with an autonomous agent.
+
+Mitigation: Avoid sharing primary private keys or mnemonics; use dedicated agent wallets and managed secrets where available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ijaack/skills/evalanche)
+- [Evalanche homepage](https://github.com/iJaack/evalanche)
+- [Evalanche source](https://github.com/iJaack/evalanche)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code and shell command examples; runtime tool responses may include quotes, balances, positions, transaction hashes, and status text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js and may use wallet secrets, network RPCs, external market APIs, optional CLI binaries, and gas-funded onchain transactions.]
+
+## Skill Version(s):
+
+1.13.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

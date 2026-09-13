@@ -1,48 +1,79 @@
-## Description: <br>
-Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and interacting with users through a connected Telegram bot. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Telegram Bot API integration with managed authentication for sending messages, managing chats, handling updates, and building approved bot automations through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected Telegram bot through Maton-managed authentication, including sending content, reading bot updates, managing chats, and configuring commands or webhooks. It requires a valid Maton API key and user approval before write or delete operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Exposed credentials could allow unauthorized access to Maton-managed Telegram bot operations. <br>
-Mitigation: Keep MATON_API_KEY private, store it only in approved secret handling, and avoid printing or committing it. <br>
-Risk: A request can affect the wrong bot, chat, message, webhook, command, or connection. <br>
-Mitigation: Check the exact target and effect before execution, and include the Maton-Connection header when more than one bot is connected. <br>
-Risk: Write, delete, webhook, command, or connection changes can alter Telegram bot behavior or user-visible content. <br>
-Mitigation: Require explicit user approval before sends, deletes, webhook changes, command changes, or connection changes. <br>
+## Use Case:
 
+External developers and operators use this skill to let an agent work with Telegram bots through Maton-managed authentication. It supports bot messaging, chat administration, update handling, webhook setup, hosted functions, and scheduled or event-driven automation when the user explicitly approves those actions.
 
-## Reference(s): <br>
-- [ClawHub Telegram Bot Skill](https://clawhub.ai/byungkyu/skills/telegram-api) <br>
-- [Telegram Bot API Documentation](https://core.telegram.org/bots/api) <br>
-- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods) <br>
-- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options) <br>
-- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup) <br>
-- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY; use Maton-Connection when more than one Telegram bot is connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Authorizing the connection lets Maton operate the Telegram bot within the bot token's allowed capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Connect only the bot needed for the task, prefer read-only checks first, and revoke unused connections promptly.
+
+Risk: Sends, edits, deletes, forwards, and bot command changes can affect chats or disclose message content.
+
+Mitigation: Require explicit user approval for each write, including the target chat, resource identifiers, payload, and intended effect.
+
+Risk: Webhooks, triggers, hosted functions, and destinations can create persistent forwarding or repeated actions until removed.
+
+Mitigation: Approve automation separately, use user-provided destinations only, narrow event scopes, inspect existing webhook state first, and remove automation when no longer needed.
+
+Risk: Telegram messages, webhook payloads, and trigger events may contain sensitive or adversarial content.
+
+Mitigation: Treat external data as untrusted, do not execute or interpolate it into commands, and avoid logging full raw responses unless the user explicitly asks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/telegram-api)
+- [Maton homepage](https://maton.ai)
+- [Telegram Bot API Documentation](https://core.telegram.org/bots/api)
+- [Telegram Bot API Available Methods](https://core.telegram.org/bots/api#available-methods)
+- [Telegram Bot API Formatting Options](https://core.telegram.org/bots/api#formatting-options)
+- [Telegram Bot API Inline Keyboards](https://core.telegram.org/bots/api#inlinekeyboardmarkup)
+- [Telegram Bot API Bot Commands](https://core.telegram.org/bots/api#setmycommands)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with bash, JSON, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval for connection creation, writes, deletes, webhooks, hosted functions, triggers, and destinations.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

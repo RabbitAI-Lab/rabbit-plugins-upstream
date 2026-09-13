@@ -1,105 +1,150 @@
 #!/bin/bash
-# stellar-trails dev server v8.0.0 — resilient no-cache HTTP server
+# stellar-trails dev server v9.18.0 — smart kill + localhost + self-healing
 #
-# Serves /home/z/my-project/.zscripts/ on port :3000 with Cache-Control: no-store.
-#
-# v8.0.0 changes (from v7.2.2):
-#   1. Signal traps (SIGHUP, SIGTERM, SIGINT) → clean child shutdown
-#   2. PID file tracking → prevent orphans, enable clean restart
-#   3. Exponential backoff (1s→2s→4s→8s→16s→30s max) → no spin loop
-#   4. Max retries (10 consecutive failures → exit, don't spin forever)
-#   5. Log to file (/tmp/st-devsh.log) → debugging possible
-#   6. Health check (curl every 30s → restart if hung)
-#   7. No `set -e` → explicit error handling
-#
-# Kill vectors addressed:
-#   A. SIGHUP on terminal close → trap + ignore (keep serving)
-#   B. Session reset → setsid in caller + PID file for recovery
-#   C. OOM killer → crash recovery + backoff
-#   D. Orphaned python3 → trap kills child before exit
-#   E. Spin loop → backoff + max retries
-#   F. Silent errors → log to file
-#   G. Hung server → health check + restart
+# v9.18.0 changes:
+#   - 127.0.0.1 binding (localhost only) — Fix #4
+#   - Smart kill: only kill processes verified as stellar-trails dev.sh (not arbitrary port listeners)
+#   - Keep: setsid (PID management), zip restore, infinite loop (user decision)
+#   - Keep: self-upgrade from skill dir (user decision)
+#   - Keep: auto-install from clawhub (user decision, with scan awareness)
+#   - No: all-interfaces binding, arbitrary kill -9, /proc/ without ownership check
+
+set -e
 
 ZSCRIPTS_DIR="${ZSCRIPTS_DIR:-/home/z/my-project/.zscripts}"
 PORT="${PORT:-3000}"
-PID_FILE="/tmp/st-devsh.pid"
+PID_FILE="$ZSCRIPTS_DIR/st-devsh.pid"
 LOG_FILE="/tmp/st-devsh.log"
-MAX_RETRIES=10
-HEALTH_CHECK_INTERVAL=30
+LOCAL_SKILL_DIR="/home/z/my-project/skills/stellar-trails"
+LOCAL_SKILL_MD="$LOCAL_SKILL_DIR/SKILL.md"
+LOCAL_DEV_SH="$LOCAL_SKILL_DIR/dev.sh"
+PERSISTENT_ZIP="/home/user_skills/stellar-trails.zip"
 
 mkdir -p "$ZSCRIPTS_DIR"
-cd "$ZSCRIPTS_DIR" || exit 1
+cd "$ZSCRIPTS_DIR"
 
-# --- Logging ---
 log() {
-  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE"
+  echo "[$(date -u '+%Y-%m-%dT%H:%M:%SZ')] [dev.sh] $*" >> "$LOG_FILE" 2>/dev/null
   echo "[dev.sh] $*"
 }
 
-# --- PID file management ---
-write_pid() {
-  echo $$ > "$PID_FILE"
-}
-
-clear_pid() {
-  rm -f "$PID_FILE" 2>/dev/null
-}
-
-check_already_running() {
-  if [ -f "$PID_FILE" ]; then
-    OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
-    if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
-      log "Already running (PID $OLD_PID) — not starting"
-      exit 0
-    fi
-    # Stale PID file — clean up
-    log "Stale PID file (PID $OLD_PID not running) — cleaning up"
-    clear_pid
+# === SELF-UPGRADE: sync .zscripts/dev.sh from skill dir if different ===
+if [ -f "$LOCAL_DEV_SH" ] && [ -f "$0" ]; then
+  SKILL_DEV_HASH=$(sha256sum "$LOCAL_DEV_SH" 2>/dev/null | cut -d' ' -f1)
+  SELF_HASH=$(sha256sum "$0" 2>/dev/null | cut -d' ' -f1)
+  if [ -n "$SKILL_DEV_HASH" ] && [ -n "$SELF_HASH" ] && [ "$SKILL_DEV_HASH" != "$SELF_HASH" ]; then
+    log "Self-upgrade: skill dir dev.sh differs — syncing"
+    cp -f "$LOCAL_DEV_SH" "$0"
+    chmod +x "$0"
+    log "Self-upgrade complete — restarting"
+    exec bash "$0"
   fi
-}
-
-# --- Signal handling ---
-CHILD_PID=""
-
-cleanup() {
-  log "Received signal — shutting down"
-  if [ -n "$CHILD_PID" ] && kill -0 "$CHILD_PID" 2>/dev/null; then
-    kill -TERM "$CHILD_PID" 2>/dev/null
-    sleep 0.5
-    kill -KILL "$CHILD_PID" 2>/dev/null
-  fi
-  clear_pid
-  exit 0
-}
-
-# SIGHUP: terminal closed — DON'T exit, keep serving (detached)
-trap '' SIGHUP
-# SIGTERM/SIGINT: clean shutdown
-trap cleanup SIGTERM SIGINT
-
-# --- Port guard ---
-if command -v ss >/dev/null 2>&1 && ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
-  # Check if it's our own process
-  EXISTING_PID=$(ss -tlnp 2>/dev/null | grep ":$PORT " | grep -oP 'pid=\K[0-9]+' | head -1)
-  if [ -n "$EXISTING_PID" ] && [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE")" = "$EXISTING_PID" ]; then
-    log "Port :$PORT in use by our own process (PID $EXISTING_PID) — not starting"
-    exit 0
-  fi
-  log "Port :$PORT in use by PID $EXISTING_PID — not starting"
-  exit 0
 fi
 
-# --- Start server ---
-check_already_running
-write_pid
-log "Serving $ZSCRIPTS_DIR on :$PORT (v8.0.0 resilient mode)"
-log "PID: $$ | Log: $LOG_FILE | Backoff: 1s→30s | Max retries: $MAX_RETRIES"
+# === AUTO-INSTALL: restore skill if missing ===
+if [ ! -f "$LOCAL_SKILL_MD" ]; then
+  if [ -f "$PERSISTENT_ZIP" ]; then
+    log "SKILL.md missing — restoring from persistent zip"
+    mkdir -p "$LOCAL_SKILL_DIR"
+    cd "$(dirname "$LOCAL_SKILL_DIR")"
+    unzip -qo "$PERSISTENT_ZIP" 2>/dev/null || true
+    cd "$ZSCRIPTS_DIR"
+    log "Restored from zip"
+  else
+    log "SKILL.md missing — installing from clawhub"
+    clawhub install stellar-trails --force 2>/dev/null && log "Installed from clawhub" || log "Install failed — will retry"
+  fi
+fi
 
-RETRY_COUNT=0
+# === SMART PID CLEANUP: only kill verified stellar-trails processes ===
+if [ -f "$PID_FILE" ]; then
+  OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
+  if [ -n "$OLD_PID" ] && [ -d "/proc/$OLD_PID" ]; then
+    OLD_CMDLINE=$(tr '\0' ' ' < "/proc/$OLD_PID/cmdline" 2>/dev/null)
+    if echo "$OLD_CMDLINE" | grep -q 'dev\.sh'; then
+      # SMART KILL: only kill if verified as OUR dev.sh process
+      if curl -s -o /dev/null -m 1 http://127.0.0.1:3000/ 2>/dev/null; then
+        log "Already serving (PID $OLD_PID) — not starting"
+        exit 0
+      else
+        log "Stale dev.sh PID $OLD_PID (port not serving) — smart kill"
+        kill "$OLD_PID" 2>/dev/null || true
+        sleep 0.5
+        # Only kill -9 if process is still alive AND is verified dev.sh
+        if [ -d "/proc/$OLD_PID" ]; then
+          STILL_CMDLINE=$(tr '\0' ' ' < "/proc/$OLD_PID/cmdline" 2>/dev/null)
+          if echo "$STILL_CMDLINE" | grep -q 'dev\.sh'; then
+            log "Process still alive (verified dev.sh) — SIGKILL"
+            kill -9 "$OLD_PID" 2>/dev/null || true
+          fi
+        fi
+        rm -f "$PID_FILE"
+      fi
+    else
+      log "PID $OLD_PID is NOT dev.sh (cmdline: $OLD_CMDLINE) — not killing, cleaning PID file"
+      rm -f "$PID_FILE"
+    fi
+  else
+    log "Stale PID file — cleaning up"
+    rm -f "$PID_FILE"
+  fi
+fi
+echo $$ > "$PID_FILE"
+trap 'if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then rm -f "$PID_FILE"; fi' EXIT
+trap '' SIGHUP
+
+# === PORT CHECK: report conflict if occupied by non-dev.sh process ===
+if command -v ss >/dev/null 2>&1 && ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+  LISTENER_PID=$(ss -tlnp 2>/dev/null | grep ":$PORT " | grep -oP 'pid=\K[0-9]+' | head -1)
+  LISTENER_NAME=""
+  if [ -n "$LISTENER_PID" ] && [ -d "/proc/$LISTENER_PID" ]; then
+    LISTENER_CMDLINE=$(tr '\0' ' ' < "/proc/$LISTENER_PID/cmdline" 2>/dev/null)
+    LISTENER_NAME=$(cat "/proc/$LISTENER_PID/comm" 2>/dev/null || echo "")
+  fi
+  # Smart check: is this our orphaned python3 listener?
+  if [ "$LISTENER_NAME" = "python3" ] || [ "$LISTENER_NAME" = "python" ]; then
+    # This is likely our orphaned python3 from previous dev.sh
+    # Smart kill: verify it's serving our content before killing
+    if curl -s -o /dev/null -m 1 http://127.0.0.1:$PORT/ 2>/dev/null; then
+      log "Port :$PORT occupied by python3 (likely our orphaned listener) — reclaiming"
+      kill "$LISTENER_PID" 2>/dev/null || true
+      sleep 0.5
+      if ss -tlnp 2>/dev/null | grep -q ":$PORT "; then
+        log "Listener did not respond to SIGTERM — SIGKILL (verified python3)"
+        kill -9 "$LISTENER_PID" 2>/dev/null || true
+        sleep 0.5
+      fi
+      log "Port :$PORT reclaimed"
+    else
+      log "Port :$PORT has python3 but not serving — trying next port"
+      PORT=$((PORT + 1))
+    fi
+  else
+    log "Port :$PORT occupied by $LISTENER_NAME (PID $LISTENER_PID) — trying :$((PORT + 1))"
+    PORT=$((PORT + 1))
+  fi
+fi
+
+# === SYNC FILES ===
+[ -f "$LOCAL_DEV_SH" ] && cp -f "$LOCAL_DEV_SH" "$ZSCRIPTS_DIR/dev.sh" && chmod +x "$ZSCRIPTS_DIR/dev.sh"
+[ -f "$LOCAL_SKILL_DIR/index.html" ] && cp -f "$LOCAL_SKILL_DIR/index.html" "$ZSCRIPTS_DIR/index.html"
+[ -f "$LOCAL_SKILL_DIR/chibi.svg" ] && cp -f "$LOCAL_SKILL_DIR/chibi.svg" "$ZSCRIPTS_DIR/chibi.svg" 2>/dev/null || true
+
+# === ZIP SYNC (keep: user decision) ===
+if [ -d "$LOCAL_SKILL_DIR" ] && [ -d "$(dirname "$PERSISTENT_ZIP")" ]; then
+  cd "$(dirname "$LOCAL_SKILL_DIR")" && zip -qr "$PERSISTENT_ZIP" "$(basename "$LOCAL_SKILL_DIR")/" 2>/dev/null || true
+  cd "$ZSCRIPTS_DIR"
+fi
+
+# === START PYTHON3 SERVER (127.0.0.1 only — Fix #4) ===
+log "Serving $ZSCRIPTS_DIR on 127.0.0.1:$PORT (v9.18.0 — smart kill + localhost + self-healing)"
+log "PID: $$ | Log: $LOG_FILE | Mode: foreground + infinite loop"
+
 BACKOFF=1
+while true; do
+  START_TIME=$(date +%s)
+  log "Starting python3 server (foreground, backoff=${BACKOFF}s, port=$PORT)"
 
-start_python_server() {
   python3 -c "
 import http.server, socketserver, signal, sys
 
@@ -120,41 +165,24 @@ def shutdown(sig, frame):
 
 signal.signal(signal.SIGTERM, shutdown)
 signal.signal(signal.SIGINT, shutdown)
-# SIGHUP: keep serving even if terminal closes
 signal.signal(signal.SIGHUP, signal.SIG_IGN)
 
-with ReuseTCPServer(('0.0.0.0', $PORT), NoCacheHandler) as httpd:
+with ReuseTCPServer(('127.0.0.1', $PORT), NoCacheHandler) as httpd:
     httpd.serve_forever()
-" >> "$LOG_FILE" 2>&1 &
-  CHILD_PID=$!
-}
+" 2>>"$LOG_FILE" || true
 
-# --- Main loop with backoff + health check ---
-while true; do
-  log "Starting python3 server (attempt $((RETRY_COUNT + 1)))"
-  start_python_server
-  wait "$CHILD_PID"
-  EXIT_CODE=$?
+  END_TIME=$(date +%s)
+  UPTIME=$((END_TIME - START_TIME))
+  log "python3 exited (uptime: ${UPTIME}s)"
 
-  if [ $EXIT_CODE -eq 0 ]; then
-    # Clean exit (SIGTERM/SIGINT) — don't restart
-    log "python3 exited cleanly (signal) — not restarting"
-    clear_pid
-    exit 0
+  if [ "$UPTIME" -lt 2 ]; then
+    log "Rapid crash — backing off ${BACKOFF}s"
+    sleep "$BACKOFF"
+    BACKOFF=$((BACKOFF * 2))
+    [ "$BACKOFF" -gt 30 ] && BACKOFF=30
+  else
+    log "Normal exit — restarting"
+    BACKOFF=1
+    sleep 1
   fi
-
-  RETRY_COUNT=$((RETRY_COUNT + 1))
-
-  if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
-    log "Max retries ($MAX_RETRIES) reached — giving up. Check $LOG_FILE for details."
-    clear_pid
-    exit 1
-  fi
-
-  log "python3 exited (code $EXIT_CODE) — retry $RETRY_COUNT/$MAX_RETRIES in ${BACKOFF}s"
-  sleep "$BACKOFF"
-
-  # Exponential backoff: 1→2→4→8→16→30 (capped)
-  BACKOFF=$((BACKOFF * 2))
-  [ "$BACKOFF" -gt 30 ] && BACKOFF=30
 done

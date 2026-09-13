@@ -1,41 +1,57 @@
-## Description: <br>
-A wealth-management copilot skill for financial professionals that provides reference workflows for client opportunity scans, outreach, allocation strategy, investor education, asset diagnostics, portfolio optimization, work reviews, and ongoing investment support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A wealth-management copilot workflow covering client opportunity scans, outreach, allocation strategy, investor education Q&A, asset diagnosis, portfolio optimization, work reviews, and ongoing investor support.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals use this skill to draft client opportunity scans, outreach scripts, product briefings, investor education answers, asset diagnostics, allocation references, review summaries, and investment support content. Outputs are reference frameworks for qualified human review and do not replace financial, legal, insurance, compliance, or suitability review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive client financial information may be sent to remote MCP services despite a no-network disclosure. <br>
-Mitigation: Confirm all MCP data recipients, require client-data consent and minimization for KYC and portfolio fields, and avoid identifiable client records until the disclosure and report-export controls are corrected. <br>
-Risk: Reference workflows may be mistaken for regulated financial, legal, insurance, or compliance advice. <br>
-Mitigation: Require qualified human review before client use and keep outputs framed as reference-only analysis rather than professional advice or guarantees. <br>
+## Use Case:
 
+Employees in wealth-management roles use this skill as a reference workflow to draft client opportunity scans, outreach scripts, product briefs, market explanations, portfolio diagnostics, allocation suggestions, work reviews, and investor education content for human review in authorized institutional systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/wealth-copilot-digital-employee) <br>
-- [Qieman MCP service endpoint](https://dashscope.aliyuncs.com/api/v1/mcps/Qieman/sse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured advisory templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only output requiring human review before real-world use] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server-resolved release metadata) <br>
+Risk: Unmasked customer identifiers, account data, or other sensitive customer information may be pasted into the agent conversation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use data minimization and masking before input; avoid names, full identifiers, account numbers, and unnecessary personal details.
+
+Risk: Draft wealth-management outputs may be applied as business actions without authorized review.
+
+Mitigation: Require explicit staff approval and institutional compliance review before querying systems, generating external reports, saving outputs, or contacting customers.
+
+Risk: Financial or product guidance may be mistaken for final advice or a return commitment.
+
+Mitigation: Treat outputs as drafts for qualified professional review, and verify allocations, product details, risk disclosures, and customer suitability in institutional systems.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/wealth-copilot-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance, tables, draft scripts, checklists, and analysis reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft outputs require human review; no automatic system actions or local file writes are part of the skill.]
+
+## Skill Version(s):
+
+2.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

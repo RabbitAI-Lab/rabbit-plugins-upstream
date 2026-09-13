@@ -1,45 +1,80 @@
-## Description: <br>
-Helps agents build, edit, inspect, and troubleshoot WordPress Elementor sites through the elementor-mcp MCP server, including first-session setup and engine-aware guidance for Elementor Pro, Free, classic, and atomic/V4 sites. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents build, edit, inspect, and troubleshoot WordPress Elementor sites through the elementor-mcp MCP server, including Pro/free-path selection, classic versus Elementor 4 atomic page handling, dynamic data bindings, setup guidance, and error recovery.
 
-## Publisher: <br>
-[benkalsky](https://clawhub.ai/user/benkalsky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[benkalsky](https://clawhub.ai/user/benkalsky)
 
-## Use Case: <br>
-Developers and site builders use this skill to connect an authorized WordPress site to Elementor MCP, then build, edit, inspect, or troubleshoot Elementor pages using native widgets, design tokens, forms, dynamic data, and recovery guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup flow installs WordPress plugins and stores a reusable WordPress Application Password in local MCP configuration. <br>
-Mitigation: Install only for authorized sites, use a dedicated low-privilege Application Password, keep .mcp.json private, and revoke or rotate the password after setup or handoff. <br>
-Risk: A live contact form can send or collect visitor data before recipients and privacy terms are confirmed. <br>
-Mitigation: Confirm form recipients, notification settings, and privacy terms before enabling live contact forms. <br>
-Risk: Using the latest unpinned elementor-mcp release can change setup behavior between runs. <br>
-Mitigation: Pin EMCP_PIN_VERSION when reproducibility matters and review the plugin release before installation. <br>
+## Use Case:
 
+Developers, site builders, and agency operators use this skill to guide WordPress and Elementor page creation, editing, inspection, setup, and troubleshooting through an Elementor MCP connection. It is intended for Elementor projects, including sites that may use Elementor Pro, Elementor 4 atomic pages, ACF, or JetEngine dynamic data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/benkalsky/skills/siteagent-elementor-studio) <br>
-- [Elementor MCP plugin repository](https://github.com/Digitizers/elementor-mcp) <br>
-- [SiteAgent worker repository](https://github.com/Digitizers/SiteAgent) <br>
-- [wordpress-api-pro companion toolkit](https://github.com/Digitizers/wordpress-api-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON configuration, and MCP tool-call parameter examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Setup can write a local .mcp.json for the target WordPress site after explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence and artifact frontmatter) <br>
+Risk: The setup path persists a reusable WordPress Application Password in local MCP configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privileged WordPress account, keep the credentialed configuration out of version control, restrict file permissions, and revoke or rotate the Application Password after setup.
+
+Risk: The setup path can install remote plugin code and may use the latest release by default.
+
+Mitigation: Pin the elementor-mcp release and verify it with an independently obtained SHA-256 before installing on production or client sites.
+
+Risk: Using plaintext HTTP for a live WordPress site can expose reusable credentials.
+
+Mitigation: Use HTTPS for live sites and allow plaintext HTTP only for hosts that are explicitly named and known to be appropriate for local development.
+
+Risk: Elementor automation can create or modify live site structure.
+
+Mitigation: Review proposed changes before execution and verify page structure or rendered output after write operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/benkalsky/skills/siteagent-elementor-studio)
+- [Building on Elementor 4 (atomic / V4)](references/atomic-v4.md)
+- [Brand kit - token vocabulary & intake](references/brand-kit.md)
+- [Elementor 4 design system CRUD](references/design-system-crud.md)
+- [Dynamic data stacks](references/dynamic-data.md)
+- [Engine & the Premium plugin](references/engine-and-premium.md)
+- [When a write fails - errors, governance & self-correction](references/error-recovery.md)
+- [Forms - Elementor MCP](references/forms.md)
+- [Header / Footer](references/header-footer.md)
+- [Studio lifecycle](references/lifecycle.md)
+- [Pro-only widgets & features](references/pro-widgets.md)
+- [Section recipe library](references/recipes.md)
+- [Converting a classic design to the atomic engine](references/v3-to-v4-conversion.md)
+- [Car wash studio build pack](references/verticals/car-wash.md)
+- [Dental studio build pack](references/verticals/dental.md)
+- [Local business studio build pack](references/verticals/local-business.md)
+- [Portfolio studio build pack](references/verticals/portfolio.md)
+- [Salon studio build pack](references/verticals/salon.md)
+- [elementor-mcp repository referenced by artifact](https://github.com/Digitizers/elementor-mcp)
+- [wordpress-api-pro repository referenced by artifact](https://github.com/Digitizers/wordpress-api-pro)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline code blocks, shell commands, configuration snippets, and Elementor MCP tool-call parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide credentialed WordPress setup and Elementor MCP actions; setup and write operations are framed for explicit user confirmation.]
+
+## Skill Version(s):
+
+1.5.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

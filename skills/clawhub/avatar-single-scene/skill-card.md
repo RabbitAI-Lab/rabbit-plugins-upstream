@@ -1,40 +1,57 @@
-## Description: <br>
-Use when someone wants one polished host-on-camera beat: a speaking person with intake and approval gates before generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants one polished host-on-camera beat -- a speaking person with intake and approval gates before generation.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to plan and gate a single speaking avatar clip, including intake, approval, still generation, avatar generation, and a local generation manifest. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reference media, scripts, prompts, URLs, and prediction identifiers can include private or sensitive identity material. <br>
-Mitigation: Use only materials intended for avatar generation, obtain approval before upload, and avoid private identity data unless needed for the approved use case. <br>
-Risk: The workflow can involve paid external generation services. <br>
-Mitigation: Require explicit plan and still approvals before paid video generation, as described by the skill's approval gates. <br>
+## Use Case:
 
+External creators and teams use this skill to guide an agent through intake, approval gates, still-image preparation, and generation of a single host-on-camera avatar clip.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-single-scene) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with command examples and workflow checkpoints] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes approval gates and manifest fields; does not itself generate media without user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence release.version and artifact metadata.version) <br>
+Risk: Referenced helper skills may be installed non-interactively and can change over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the referenced Pruna skills before installation, and avoid non-interactive installs in sensitive environments.
+
+Risk: The workflow includes an overbroad instruction to name the skill in every reply.
+
+Mitigation: Treat the branding rule as scoped to the active avatar workflow rather than as a general conversation rule.
+
+Risk: Using the skill can involve provider uploads of portraits, scripts, prompts, and generated media.
+
+Mitigation: Confirm user approval before uploads and avoid submitting sensitive personal data unless the deployment's provider handling requirements are satisfied.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-single-scene)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured intake, approval checkpoints, prompt guidance, and command-oriented workflow steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce voice scripts, image and video prompts, API call plans, manifest entries, and generated media references.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

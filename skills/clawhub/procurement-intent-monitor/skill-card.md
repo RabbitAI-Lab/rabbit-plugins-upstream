@@ -1,48 +1,63 @@
-## Description: <br>
-Monitors Chinese procurement intent notices, proposed projects, and expiring contracts to help users find early procurement opportunities before formal bidding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users find early procurement opportunities by scanning proposed projects, procurement-intent notices, and expiring contracts, then ranking results by value and next action.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External business development, sales, and procurement teams use this skill to scan Chinese public procurement signals, rank opportunities, track progress, and generate shareable opportunity reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement search terms are sent to a third-party vendor API. <br>
-Mitigation: Review queries before use and avoid sending confidential opportunity names, customer lists, or internal strategy terms. <br>
-Risk: API credentials may be stored in ~/.zlbx/config.json. <br>
-Mitigation: Prefer a preconfigured environment variable when possible, restrict local file access, and rotate the key if the configuration file is exposed. <br>
-Risk: Trial auto-registration may collect a stable hashed MAC-derived device identifier after consent. <br>
-Mitigation: Require explicit user consent before registration, or preconfigure ZLBX_API_KEY to bypass auto-registration. <br>
-Risk: Generated chat output or HTML reports may include login-bypass links. <br>
-Mitigation: Share generated reports only with intended recipients and remove access links when reports need broader distribution. <br>
+## Use Case:
 
+External business development, sales, and procurement-monitoring users use this skill to discover pre-tender opportunities by industry, region, and budget, then receive ranked opportunity lists with follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/procurement-intent-monitor) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration guide](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, HTML, guidance] <br>
-**Output Format:** [Markdown opportunity lists in chat, with optional self-contained HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-consented auto-registration; may write reports under ~/zlbx-opportunity-radar-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The vendor may receive procurement search terms and, during automatic trial registration, a stable MAC-derived device hash.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a manually configured ZLBX_API_KEY when possible and avoid automatic registration unless the user accepts the privacy tradeoff.
+
+Risk: Credentials, generated reports, signed sk links, and auto-login links may be stored or displayed locally and should be treated as sensitive.
+
+Mitigation: Protect ~/.zlbx/config.json, avoid sharing signed or auto-login links broadly, and remove local reports when they are no longer needed.
+
+Risk: The security verdict is suspicious because the skill stores credentials and reports locally while enabling login-bypass links.
+
+Mitigation: Review the skill before installation and install only when the vendor data handling model is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/procurement-intent-monitor)
+- [Workflow guide](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Auto-registration flow](references/auto-register.md)
+- [Report template](references/report-template.md)
+- [Zhiliao Biaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Zhiliao Biaoxun skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown opportunity lists and optional self-contained HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ZLBX_API_KEY or local configuration for authenticated vendor API calls; full scans may consume account credits.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

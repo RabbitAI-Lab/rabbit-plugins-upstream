@@ -1,41 +1,58 @@
-## Description: <br>
-Routes broad web research, search, scraping, monitoring, media, marketplace, social, travel, jobs, maps, and competitive-intelligence requests to the smallest suitable Dataify workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route broad search, scraping, monitoring, marketplace, social, travel, jobs, and maps requests to the smallest suitable Dataify skill set.
 
-## Publisher: <br>
-[dataify-server](https://clawhub.ai/user/dataify-server) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dataify-server](https://clawhub.ai/user/dataify-server)
 
-## Use Case: <br>
-External developers and agents use this skill to translate outcome-based data collection requests into the smallest Dataify capability plan, then execute or hand off search, web unlocking, scraping, and task lifecycle steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-volume, media-download, or asynchronous Builder jobs may create unexpected cost, scope, or completion-state issues. <br>
-Mitigation: Confirm source coverage, scope, and cost drivers before those jobs, and return Builder task IDs and asynchronous state through the task lifecycle workflow. <br>
-Risk: Dataify workflows use DATAIFY_API_TOKEN and may route broad research or scraping requests across multiple sources. <br>
-Mitigation: Read the token from the environment only, never print it, and review the planned source coverage before execution. <br>
+## Use Case:
 
+External users and developers use this skill to translate broad Dataify data collection requests into a minimal capability plan and route execution to suitable search, scraping, monitoring, marketplace, social, travel, jobs, or maps workflows.
 
-## Reference(s): <br>
-- [Dataify capability map](artifact/references/capability-map.md) <br>
-- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-router) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Concise text or markdown summaries with source coverage, important limitations, and asynchronous task state when relevant.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Raw output is provided only when requested; DATAIFY_API_TOKEN should not be exposed in commands or responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+Risk: User requests can submit Dataify data collection tasks that consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review broad, high-volume, multi-page, media-download, or materially credit-sensitive requests before proceeding.
+
+Risk: The skill depends on a Dataify API token for authenticated workflows.
+
+Mitigation: Read DATAIFY_API_TOKEN from the environment, verify presence without printing it, and never include tokens in commands or output.
+
+Risk: Ambiguous collection goals can route to an unsuitable capability or source plan.
+
+Mitigation: Restate the deliverable, target sources, scope, freshness, and output format, then ask only for missing required inputs or material ambiguities.
+
+## Reference(s):
+
+- [Dataify capability map](references/capability-map.md)
+- [ClawHub skill page](https://clawhub.ai/dataify-server/skills/dataify-router)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Concise Markdown with optional shell commands, source coverage, limitations, and asynchronous task state.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May route work to external Dataify workflows and may return task IDs or collected results depending on request scope.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

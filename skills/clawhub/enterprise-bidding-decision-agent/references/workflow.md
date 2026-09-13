@@ -1,6 +1,6 @@
 # 投标决策分析 · 五步工作流执行手册
 
-> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.0`。
+> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.5`。
 > 工具参数速查见 `api-quick.md`。每步都有「降级策略」——数据缺失时照做，不要中断也不要编造。
 
 ## 模式选择

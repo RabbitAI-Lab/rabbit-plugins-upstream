@@ -2,15 +2,33 @@
 
 from __future__ import annotations
 
+from mcp.server.mcpserver.exceptions import ToolError
 
-class OutlookMCPError(Exception):
-    """Base exception for all outlook-mcp errors."""
+
+class OutlookMCPError(ToolError):
+    """Base exception for all outlook-mcp errors.
+
+    Subclasses ``ToolError`` — the SDK's "anticipated failure" — because that is
+    what decides whether the model reads our message or a bare ``Error executing
+    tool <name>``. Every error in this module is a condition we saw coming and
+    wrote a recovery hint for, so every one of them belongs on that side of the
+    line. A genuine crash must keep inheriting from ``Exception`` and stay
+    generic to the client. Guarded by ``tests/test_error_text_reaches_client.py``.
+    """
 
     def __init__(self, code: str, message: str, action: str | None = None):
         self.code = code
         self.message = message
         self.action = action
         super().__init__(message)
+
+    def __str__(self) -> str:
+        """Message plus recovery hint — this string is what the model reads.
+
+        ``action`` exists to tell an agent what to do next, so it has to be in
+        the text the client receives, not only on the attribute.
+        """
+        return f"{self.message} {self.action}" if self.action else self.message
 
 
 class AuthRequiredError(OutlookMCPError):
@@ -20,7 +38,7 @@ class AuthRequiredError(OutlookMCPError):
         super().__init__(
             "auth_required",
             "Not authenticated. No valid credential found.",
-            "Call outlook_login to authenticate with your Microsoft account.",
+            "Run `outlook-mcp auth` on the host to authenticate.",
         )
 
 
@@ -83,7 +101,7 @@ class GraphAPIError(OutlookMCPError):
             # Legacy behavior: derive action from status_code only.
             action = None
             if status_code == 401:
-                action = "Token may have expired. Try outlook_login to re-authenticate."
+                action = "Token may have expired — run `outlook-mcp auth` on the host."
             elif status_code == 429:
                 action = "Rate limited by Microsoft Graph. Wait a moment and retry."
         super().__init__(
@@ -95,6 +113,68 @@ class GraphAPIError(OutlookMCPError):
         self.error_code = error_code
 
 
+class UnencryptedTokenCacheError(OutlookMCPError):
+    """Raised when the token cache would be written in cleartext un-asked.
+
+    On Linux without libsecret, msal_extensions falls back to a plaintext cache
+    file. That fallback used to be enabled unconditionally, so a reusable Graph
+    refresh token could land on disk in the clear with only a log line to mark
+    it. Persisting a credential that way is a decision the operator gets to
+    make, so the default is now to stop and say so.
+    """
+
+    def __init__(self):
+        super().__init__(
+            "unencrypted_token_cache",
+            "Refusing to persist the token cache: this environment has no "
+            "encrypted store (Linux without libsecret/gnome-keyring), so the "
+            "cache would be written to disk in cleartext.",
+            "Either install the system packages (apt: `gnome-keyring "
+            "libsecret-1-0 python3-gi`) and re-create the venv with "
+            "`--system-site-packages`, or accept plaintext storage by setting "
+            '`"allow_unencrypted_token_cache": true` in '
+            "~/.outlook-mcp/config.json. See "
+            "https://github.com/mpalermiti/outlook-mcp/issues/7.",
+        )
+
+
+class UntrustedURLError(OutlookMCPError):
+    """Raised when a URL that would receive a Graph token isn't a Graph URL.
+
+    The delta tools hand their cursor straight back to Graph as a request URL,
+    with the mailbox bearer token attached. That cursor is caller-held state and
+    the caller is an agent that reads mail, so the cursor is untrusted input:
+    left unchecked it redirects a live full-mailbox token to any host that can
+    get a string in front of the model. Refusing is the only safe answer — there
+    is no partial-trust version of "send the token somewhere else".
+    """
+
+    def __init__(self, source: str, url: str):
+        shown = url[:120] if url else "(empty)"
+        super().__init__(
+            "untrusted_url",
+            f"Refusing to send a Microsoft Graph token to a non-Graph URL "
+            f"(from {source}): {shown!r}.",
+            "Delta cursors must be https URLs on graph.microsoft.com. Discard "
+            "this cursor and start a fresh sync by calling again with no "
+            "delta_token.",
+        )
+        self.source = source
+
+
+class ToolInputError(OutlookMCPError, ValueError):
+    """A tool argument the caller can fix, raised as an anticipated failure.
+
+    Tool modules raise plain ``ValueError`` for bad input and the server's
+    ``_wrap_tool_errors`` converts it here, so the message reaches the model
+    (SEP-1303: input validation errors are tool execution errors, not protocol
+    errors). Still a ``ValueError``, so callers catching that are unaffected.
+    """
+
+    def __init__(self, message: str):
+        super().__init__("invalid_input", message, None)
+
+
 # ── Graph error wrapper ────────────────────────────────────
 
 
@@ -103,8 +183,9 @@ class GraphAPIError(OutlookMCPError):
 _HINT_TABLE: dict[tuple[int, str | None], str] = {
     (401, None): "Token may have expired — run `outlook-mcp auth` on the host.",
     (403, "ErrorAccessDenied"): (
-        "Endpoint may not be supported for this account type. "
-        "See ROADMAP 'Investigated and not viable' for known dead-ends."
+        "Endpoint may not be supported for this account type. See "
+        "https://github.com/mpalermiti/outlook-mcp/blob/main/ROADMAP.md"
+        "#investigated-and-not-viable for known dead-ends."
     ),
     (404, "ErrorItemNotFound"): (
         "Resource not found. The ID may be stale — re-list to get current IDs."

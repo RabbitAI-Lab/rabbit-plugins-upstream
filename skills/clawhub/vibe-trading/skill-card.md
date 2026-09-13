@@ -1,39 +1,60 @@
-## Description: <br>
-Vibe Trading is a finance research toolkit for agent-assisted backtesting, factor analysis, options pricing, trade-journal analysis, shadow-account reports, and market-data workflows across multiple asset classes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vibe-Trading is a finance research skill for backtesting, factor analysis, options analysis, market-data retrieval, trade-journal analysis, shadow-account reports, and multi-agent investment research workflows.
 
-## Publisher: <br>
-[warren618](https://clawhub.ai/user/warren618) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[warren618](https://clawhub.ai/user/warren618)
 
-## Use Case: <br>
-Developers, analysts, and traders use this skill to connect an agent to Vibe Trading finance tools for market data, backtesting, factor analysis, options analysis, trade-journal review, and multi-agent research workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional external MCP server loading can broaden what the agent is able to run or access. <br>
-Mitigation: Use only trusted external MCP servers and prefer explicit enabledTools allowlists instead of wildcards. <br>
-Risk: Finance connectors and research workflows may involve market-data, broker, or LLM credentials. <br>
-Mitigation: Use trusted credentials only, keep generated configuration and strategy files inside a controlled workspace, and review connector settings before use. <br>
+## Use Case:
 
+External users and developers use this skill to run finance research workflows across equities, crypto, futures, forex, options, broker journals, and multi-agent investment teams. It helps agents produce strategy analysis, backtest outputs, market research, configuration, and reports for review.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown or structured text with optional JSON, code/configuration snippets, shell commands, and generated report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce research reports, backtest metrics, strategy files, and connector/account readouts depending on selected tools and configured credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.12 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill installs and runs an unpinned finance trading package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it in an isolated environment and pin and review the vibe-trading-ai package version before deployment.
+
+Risk: External MCP access may expose broker credentials or trade-related actions.
+
+Mitigation: Use read-only or paper-trading broker credentials by default and avoid wildcard enabledTools entries for external MCP servers.
+
+Risk: Optional write-enabled broker or public API tools can trigger live state-changing trading actions.
+
+Mitigation: Do not enable execute-write unless live trading actions are intentional and separately approved.
+
+## Reference(s):
+
+- [Vibe-Trading ClawHub Skill Page](https://clawhub.ai/warren618/skills/vibe-trading)
+- [Interactive Brokers Public MCP Endpoint](https://api.ibkr.com/v1/api/mcp-public)
+- [eToro Public API MCP](https://mcp.public-api.etoro.com)
+- [eToro MCP Skill](https://mcp.public-api.etoro.com/skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON, HTML/PDF reports, code snippets, shell commands, and configuration fragments.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include research summaries, backtest metrics, factor results, market-data responses, strategy files, and report artifacts for human review.]
+
+## Skill Version(s):
+
+0.1.15 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

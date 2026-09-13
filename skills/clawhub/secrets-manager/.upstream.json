@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/secrets-manager",
   "slug": "secrets-manager",
   "ownerHandle": null,
-  "version": "1.1.9",
-  "updatedAt": 1784775221590,
-  "contentHash": "0861413370d16f503869afa1745c6b16f7c6d4b8f92db0d09feda7eb72658186",
-  "fetchedAt": "2026-07-26T18:07:39.226Z"
+  "version": "1.1.19",
+  "updatedAt": 1789302478837,
+  "contentHash": "0253ef7017f181be053b3e7b63655fd258435439f9338301f2fb71e5ee3d0080",
+  "fetchedAt": "2026-09-13T12:48:22.502Z"
 }

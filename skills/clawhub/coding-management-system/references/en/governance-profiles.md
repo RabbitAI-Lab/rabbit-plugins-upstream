@@ -1,86 +1,68 @@
-# Governance Profiles And Files
+# Governance Profiles And Files 2.1
 
-Choose the lightest profile that controls risk. Do not use file count as a sign of rigor.
+Choose the lightest profile that controls actual risk. File count is not rigor.
 
 ## Lite
 
-Use for Small, reversible work with direct acceptance and no independent QA requirement.
+Use for Small, local, reversible work with no independent QA need.
 
 Required:
 
 - `Docs/ACTIVE_PACKET.md`
 - `Docs/LOOP_RUNS.jsonl`
 
-Keep target, scope, acceptance, stage, evidence summary, and next action in the Active Packet. A standalone agent may perform self-acceptance only when `qa_required: false`, evidence includes automatic and functional checks, and no Owner boundary is involved.
-
-Do not create Program, Dispatch, per-stage handoff, status journal, or separate QA files.
+Self-acceptance is possible only when `qa_required: false`, automatic and functional evidence both pass, and no protected boundary or material risk remains. Do not create Program, per-stage dispatch, handoff, or QA files.
 
 ## Standard
 
-Use for Medium work, an important user flow, moderate uncertainty, or work needing independent evaluation.
+Use for Medium work, an important user flow, moderate uncertainty, or independent evaluation.
 
 Required:
 
 - `Docs/ACTIVE_PACKET.md`
 - `Docs/LOOP_RUNS.jsonl`
-- one `Docs/QA_DECISION_{ID}.md`
+- one final `Docs/QA_DECISION_{ID}.md`
 
-Optional only when they own stable information:
-
-- `Docs/TARGET.md`
-- `Docs/ACCEPTANCE.md`
-- one consolidated `Docs/WORK_ORDER_{ID}.md`
-
-Do not split Work Orders unless ownership, dependency, rollback, or acceptance boundaries differ.
+Create one consolidated Work Order only when it adds stable scope or ownership. Terminal execution is `Ready for Independent Acceptance`; the execution agent cannot sign final acceptance.
 
 ## Full
 
-Use for Large, high-risk, multi-agent, architecture, migration, production, security, data-integrity, or release work.
+Use for Large, multi-agent, architecture, migration, production, security, data-integrity, or release work.
 
-Required as applicable:
+Use only the durable artifacts that apply:
 
-- `Docs/TARGET.md`
-- `Docs/ACCEPTANCE.md`
+- `Docs/TARGET.md` and `Docs/ACCEPTANCE.md`
 - `Docs/ACTIVE_PACKET.md`
-- `Docs/PROGRAM_{ID}.md`
-- ordered `Docs/WORK_ORDER_{ID}.md`
+- one Program and bounded Work Orders where ownership differs
 - `Docs/LOOP_RUNS.jsonl`
-- independent `Docs/QA_DECISION_{ID}.md`
-- `Docs/DECISIONS.md` for Owner decisions and risk debt
+- independent final QA decision
+- `Docs/DECISIONS.md` for Owner choices and risk debt
 
-Create separate handoff or rebaseline files only at real authority boundaries.
+Separate handoffs or rebaseline files exist only at real authority boundaries.
 
 ## File Creation Test
 
-Create a new file only when at least one is true:
+Create a file only when it owns at least one of these:
 
-- a new authority or ownership boundary starts;
-- an independent QA decision must be durable;
-- an Owner decision changes authorization;
-- a cross-agent or cross-team handoff cannot rely on the Active Packet;
-- a formal target rebaseline is approved;
-- the canonical active file reaches its archive threshold.
+- a new authority or ownership boundary;
+- an independent final QA decision;
+- an Owner decision changing authorization;
+- a cross-team handoff that the Packet cannot carry;
+- an approved target rebaseline;
+- an archive boundary.
 
-Otherwise update the canonical file.
+Otherwise update the canonical Packet or append one Loop record.
 
 ## Anti-Bloat Rules
 
-- One fact has one authoritative home.
-- Link to logs and artifacts; do not paste them into several Markdown files.
-- Keep `ACTIVE_PACKET.md` under roughly 200 lines.
-- Keep only one immediate next action.
-- Archive closed Work Orders and old decisions by release or month.
-- Do not append routine stage notes to `TARGET.md` or `ACCEPTANCE.md`.
-- Do not create a new Milestone for a failed test or repair.
-- Do not repeatedly copy the same target, status, pending list, and evaluation into separate files.
+- Keep new Active Packets at roughly 120 lines or fewer.
+- Keep exactly one immediate next action.
+- A stage is not a Milestone, Work Order, handoff, or file.
+- QA failure repairs the same Packet and Work Order.
+- Stop expanding duplicate STATUS, NEXT, PENDING, COMPLETED, EVALUATION, and per-stage handoff files after migration.
+- Link raw evidence and retain concise command summaries.
+- Archive old material; do not rewrite history in bulk.
 
-## Legacy Compatibility
+## Legacy Adoption
 
-Existing `STATUS.md`, `NEXT_ACTIONS.md`, `PENDING.md`, `COMPLETED.md`, `EVALUATION.md`, handoffs, and Milestone histories may remain. Treat them as compatibility inputs. Do not continue expanding all of them unless the project's established audit or regulatory process requires it.
-
-When adopting v2:
-
-1. Create one Active Packet as the current projection.
-2. Link to existing authoritative target, acceptance, and Work Order files.
-3. Mark stale or conflicting files as archived; do not rewrite history.
-4. Write new execution evidence to `LOOP_RUNS.jsonl`.
+Use Legacy Bootstrap once. It indexes names, times, and sizes before reading selected current files. When coherent, create one Active Packet and route new execution evidence to `LOOP_RUNS.jsonl`. When conflicting, write nothing and ask for one consolidated Owner decision.

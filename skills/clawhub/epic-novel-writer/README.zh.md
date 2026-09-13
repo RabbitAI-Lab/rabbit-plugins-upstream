@@ -37,6 +37,9 @@ chapter-300.md → 第 300 章
 | 文件 | 用途 |
 |------|------|
 | `SKILL.md` | 核心规则、工作流、命名规范、存档流程指引 |
+| `references/project-structure.md` | 项目目录结构定义 + 核心规则 |
+| `references/lifecycle.md` | 13 阶段完整流程详情（每阶段产出文件） |
+| `references/name-rules.md` | 命名规则（全局连续编号 + 各文件命名表） |
 | `references/archive-template.md` | 版本存档 8 步完整流程（目录结构 + 命令示例 + 检查清单） |
 | `references/world-setting-template.md` | 世界观设定模板（地理/历史/力量体系/节奏规划） |
 | `references/character-card-template.md` | 角色卡片模板（性格/背景/能力成长/登场追踪） |
@@ -125,6 +128,15 @@ clawhub install epic-novel-writer
 ```bash
 clawhub update epic-novel-writer
 ```
+
+## 🗂️ 版本记录
+
+| 版本 | 日期 | 变更 |
+|------|------|------|
+| 1.2.0 | 2026-09-13 | SKILL.md frontmatter 补全（name/version/license/中英 description/compatibility/allowed-tools）；新增 `references/lifecycle.md`（13 阶段详情）与 `references/name-rules.md`（命名规则表）；修正子文件表死链；新增 `LICENSE`（BSD 3-Clause）与 `VERSION` 文件；README 双语言文件表同步 |
+| 1.1.2 | 2026-04-27 | Removed unsupported license field from SKILL.md frontmatter (ClawHub CLI v0.8.0 defaults to MIT-0) |
+| 1.1.1 | 2026-04-27 | Fixed license field from BSD-3-Clause to MIT |
+| 1.1.0 | 2026-04-27 | 首次发布：13 阶段写作流程、全局连续编号、只读存档、人物 JSON、HTML 导引页 |
 
 ## 📄 协议
 

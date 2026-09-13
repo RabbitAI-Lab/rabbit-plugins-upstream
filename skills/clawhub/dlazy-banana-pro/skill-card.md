@@ -1,45 +1,60 @@
-## Description: <br>
-Dlazy Banana Pro lets agents generate or edit images with Nano Banana Pro through the dLazy CLI, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate/edit images with Nano Banana Pro, supporting text-to-image and image-to-image workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to request generated or edited images from dLazy's hosted Nano Banana Pro service, including prompts with optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local files may be sent to dLazy API and media storage endpoints. <br>
-Mitigation: Use only data approved for dLazy processing, avoid sensitive local files unless permitted, and confirm file paths before invocation. <br>
-Risk: Login stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The security summary notes a minor risk of broad auto-triggering. <br>
-Mitigation: Confirm user intent before running commands that upload files, call the hosted service, or consume account credits. <br>
+## Use Case:
 
+External users and developers use this skill to generate or edit images through the dLazy Nano Banana Pro CLI from prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Repository](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, images] <br>
-**Output Format:** [JSON returned by the dLazy CLI, typically containing generated image URLs or an asynchronous task ID.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy authentication; selected local input files may be uploaded to dLazy endpoints, and async jobs can be polled with a generateId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: Prompts, parameters, and selected local files may be sent to dLazy services for image generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid passing private files or sensitive prompts unless the user is comfortable sending them to dLazy.
+
+Risk: Using the skill may install or run a third-party npm CLI package.
+
+Mitigation: Review the referenced CLI package before use, or run the pinned package with npx to avoid keeping a persistent global binary.
+
+Risk: The skill requires a dLazy API key stored in local CLI configuration or supplied through an environment variable.
+
+Mitigation: Use scoped keys, rotate or revoke keys when needed, and avoid exposing API keys in prompts, logs, or shared shell history.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI output examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The underlying CLI returns generated image URLs and can save result assets when requested.]
+
+## Skill Version(s):
+
+1.2.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

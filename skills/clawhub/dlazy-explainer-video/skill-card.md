@@ -1,45 +1,55 @@
-## Description: <br>
-Turns a document, topic, or brief into a narrated explainer video by outlining, storyboarding, producing voiceover, building, and validating the result through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns documents, topics, or briefs into narrated explainer videos with outline, storyboard, voiceover, build, and validation steps.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, educators, and business users can use this skill to turn source documents, reports, topics, or briefs into narrated explainer, courseware, or training videos using the dLazy hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files may be sent to dLazy APIs or uploaded to dLazy storage. <br>
-Mitigation: Do not attach confidential documents, secrets, personal data, or regulated data unless the user is comfortable sending them to dLazy. <br>
-Risk: Installing a third-party global CLI creates persistent local software and configuration. <br>
-Mitigation: Confirm trust in the dLazy CLI and service before installing, and prefer the pinned npx invocation when a persistent global install is not needed. <br>
-Risk: The skill requires a dLazy API key saved in local configuration or passed through an environment variable. <br>
-Mitigation: Use normal secret-handling practices for the API key and rotate or revoke it from the dLazy dashboard when access should change. <br>
+## Use Case:
 
+External creators, educators, and developers use this skill to invoke the dLazy hosted CLI workflow for converting documents or briefs into explainer, courseware, report, or training videos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-explainer-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and dLazy CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may continue work across project-scoped dLazy chat sessions and may upload attached local files through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: Installing and executing a third-party CLI can introduce supply-chain and local execution risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI source and npm package before installing, and prefer npx or a local/sandboxed install when persistent global installation is not needed.
+
+Risk: The workflow stores or uses a dLazy API key and uploads user-selected files to dLazy services.
+
+Mitigation: Use DLAZY_API_KEY for per-run authentication on shared machines, rotate or revoke stored keys when needed, and upload only documents you are allowed to send to dLazy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-explainer-video)
+- [dLazy CLI source and homepage](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash command examples and CLI guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May initiate SaaS API calls through the dLazy CLI and may upload user-selected files to dLazy storage.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter reports 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

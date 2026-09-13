@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/inference-aiops",
   "slug": "inference-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635166330,
-  "contentHash": "8c874f1261182c4e28ef663c4f45ee84858619958d626be6f3d45fc77b2e537f",
-  "fetchedAt": "2026-07-26T18:09:06.976Z"
+  "version": "0.10.2",
+  "updatedAt": 1789223312262,
+  "contentHash": "8341349450181ab6e915b58064e69de3212dd979e99dc0f20a662fb7392b3ec8",
+  "fetchedAt": "2026-09-13T12:52:05.414Z"
 }

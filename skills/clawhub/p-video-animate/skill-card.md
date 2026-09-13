@@ -1,41 +1,58 @@
-## Description: <br>
-Guides an agent through using Pruna's p-video-animate API to animate a reference image with motion from a source video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a photo to move like another video -- motion transfer, dance remixes, or performance variations from a template clip.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to prepare prompts, upload source media, and call Pruna's API for motion-transfer video generation from one image and one motion-template video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill sends selected images and videos to Pruna's API with the user's PRUNA_API_KEY. <br>
-Mitigation: Use only media the user is allowed to upload and confirm credentials before making API calls. <br>
-Risk: Generated prompts or optional fields can change outputs or trigger paid API calls. <br>
-Mitigation: Review generated prompts and key parameters before submission, especially when the instruction prompt is not already locked. <br>
-Risk: The artifact exposes an optional disable_safety_checker field. <br>
-Mitigation: Be cautious with safety-check settings and keep default protections enabled unless the user has a justified need. <br>
+## Use Case:
 
+External users and developers use this skill to animate a still reference image with motion copied from a source video through Pruna's p-video-animate model. It guides input collection, prompt discipline, API submission, polling, and follow-on editing choices.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline curl examples and parameter notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a PRUNA_API_KEY and user-provided image and video URLs or uploaded Pruna file URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+Risk: The skill sends user media and prompts to a third-party Pruna API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and likenesses that the user is authorized to process, and review Pruna handling and retention terms before using sensitive or private assets.
+
+Risk: The skill recommends remote npx skill installation commands that may change over time.
+
+Mitigation: Review and pin dependency installation commands before execution in controlled environments.
+
+Risk: The optional disable_safety_checker setting could weaken model safety controls.
+
+Mitigation: Leave safety checks enabled unless there is a documented, policy-compliant reason to disable them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-video-animate)
+- [Pruna AI publisher profile](https://clawhub.ai/user/pruna-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides image and video asset upload, asynchronous prediction creation, polling, download, and optional prompt and generation settings.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -48,6 +48,53 @@ The direct-to-SDK flags remain the right call for explicit one-shot generation
 when you already know the exact model, dimensions, and prompt — use them
 whenever latency or cost rules out an LLM round-trip.
 
+## Preserve the requested work
+
+- A model/capability question is an answer, not permission to render. A script
+  or storyboard-review request ends at the draft; a storyboard-image request
+  ends at the still. The `storyboard-video` preset creates a full video, so use
+  it only when that is the requested deliverable.
+- When the user requests images, animation, and stitching together, finish those
+  stages in order unless they ask to review or select an intermediate result.
+  Treat returned artifacts as evidence of completion; do not resubmit a
+  successful stage because the assistant's summary omitted its tool call.
+- Preserve exact image prompts, visible lettering, chosen models, source
+  selection, aspect ratio, and the latest requested duration. New tasks do not
+  inherit settings from unrelated previous renders. A pure size increase uses
+  `upscale_image` for images and `upscale_video` for videos; editing requires
+  an actual source reference.
+- Separate image variations need `numberOfVariations` and a complete Dynamic
+  Prompt branch per output. Repeat shared text, branding, dialogue, and loop
+  motion in every affected branch. A single storyboard sheet instead needs all
+  requested scenes in order, with complete visual/action, camera, transition,
+  dialogue, and sound instructions. Preserve supplied titles and layout. In
+  “six 9:16 frames,” six is the count and 9:16 is the frame shape.
+- Preserve reference order and bind the correct uploaded or generated asset.
+  An original image can be a prior generated result; it is not necessarily an
+  upload. For a loop ending on the original still, bind that original as the
+  final reference. Distinguish loose audio guidance from synchronized audio.
+- Check the chosen model's duration and reference limits. A long video may fit
+  one native clip or require segments and stitching; do not silently shorten it
+  or replace an explicit model. For segmented storyboards, assign each clip its
+  own time window and scene beats while preserving locked music and timing.
+- Let the hosted runtime repair malformed calls before dispatch. A correction
+  round does not authorize a second successful render. If a result says to wait
+  for the user or all outputs failed, surface that result and stop.
+- Optional content-filter changes require the user's explicit choice. In hosted
+  chat, a supported settings tool must report success before retrying; declined
+  or unavailable confirmation leaves the setting unchanged. In direct CLI mode,
+  do not add `--no-filter` on your own. The setting cannot change GPT Image's
+  mandatory policy or resolve an unknown rejection. Attribute a rejection to a
+  provider only when the returned error supports that attribution.
+  When explicitly requested, `--no-filter` is forwarded on new durable workflow
+  starts as well as hosted chat. Resuming a workflow retains its original
+  preference; passing the flag on a resume does not change it.
+
+These are also instructions for the calling agent when it authors direct CLI
+commands or workflow JSON. The public runtime exposes local helpers and shared
+contracts; the full hosted planner, call repair, and confirmation behavior run
+on the server. Updating this skill does not deploy those server components.
+
 ## --api-chat (`POST /v1/chat/completions`)
 
 Text-first natural-language workflows through Sogni API's OpenAI-compatible
@@ -66,12 +113,18 @@ Tune with `--api-tools creative-agent|creative-tools|none`,
 `--thinking` / `--no-thinking` (forwarded as
 `chat_template_kwargs.enable_thinking`; hosted Qwen may normalize thinking
 server-side, so do not rely on `--no-thinking` as a hard suppression switch).
+The default output budget is 4,096 tokens for hosted chat (including durable
+chat) and storyboard planning. Keep enough room for every requested scene and
+complete tool arguments; `--max-tokens` overrides that budget.
+HTTP chat and storyboard-planning requests allow up to two minutes for a full
+response by default; `SOGNI_HTTP_TIMEOUT_MS` overrides this timeout. Other HTTP
+requests keep their existing timeouts.
 
 ### Hosted tool surfaces (`sogni_tools`)
 
 - `creative-tools` — the public API default when `sogni_tools` is omitted or
   true. Generation/editing tools (`generate_image`, `generate_video`,
-  `generate_music`, `edit_image`, `apply_style`, `restore_photo`,
+  `generate_music`, `generate_speech`, `edit_image`, `upscale_image`, `upscale_video`, `apply_style`, `restore_photo`,
   `refine_result`, `animate_photo`, `change_angle`, `video_to_video`,
   `stitch_video`, `orbit_video`, `dance_montage`, `sound_to_video`,
   `extend_video`, `replace_video_segment`, `overlay_video`, `add_subtitles`),
@@ -90,6 +143,19 @@ server-side, so do not rely on `--no-thinking` as a hard suppression switch).
   tools on raw API/SDK requests. In the CLI, combine with
   `--no-api-tool-execution` for text-only planning.
 
+For a pure resolution increase, call `upscale_image` with one source image and
+either `scale: 2|3|4` or `targetLongestEdge`. Use `7680` for 8K or `15360` for
+16K. The promptless NVIDIA RTX VSR path preserves the source aspect ratio,
+aligns both output edges to 8px, and returns JPG when the target exceeds 8K.
+
+For a pure resolution increase of a video, call `upscale_video` with
+`sourceVideoIndex` (generated results are 0-based; -1 is the first upload) and
+an optional `targetResolution` of 1080 or 1440. The promptless FlashVSR path
+keeps every frame, the frame rate, the aspect ratio, and the audio; the server
+reads the source metadata itself, so the model never supplies frames or fps.
+It cannot produce 4K, and it is not a substitute for `video_to_video` when the
+user asks a generative model such as Seedance to re-render the clip.
+
 ## --durable-chat (`POST /v1/chat/runs`)
 
 Long-running, LLM-in-the-loop turns persisted as chat-run records instead of a
@@ -100,6 +166,16 @@ clients. Requires `SOGNI_SKILL_USE_SDK_TRANSPORT=1`. The CLI streams assistant
 deltas plus de-duplicated per-job progress / ETA / result lines from hosted
 run events. The SDK exposes `sogni.chat.runs.{create, get, cancel,
 streamEvents}`.
+
+Durable chat runs the full creative agent with server-side tool execution.
+Use `--api-chat` for `--api-tools creative-tools|none` or
+`--no-api-tool-execution`; durable mode rejects those options before starting a
+run rather than silently ignoring them. Completed assistant snapshots reconcile
+with streamed text so each message appears once, including multi-round turns.
+
+Review returned storyboard titles, visible text, and timings against the request
+before rendering. Hosted draft generation can paraphrase supplied scene titles;
+correct the draft first when exact wording matters.
 
 ## --api-workflow (`POST /v1/creative-agent/workflows`)
 
@@ -119,6 +195,18 @@ submit inline `input.steps`; `--workflow-input <json|@path>` supplies the
   `replacementEndSeconds` when interleaving existing video slices. Workflow
   JSON can bind request media into step arguments with
   `sourceStepId: "$input_media"`.
+- LoRA steps: `generate_image`, `edit_image`, `generate_video`, and
+  `animate_photo` take an ordered `loras` array plus a positionally aligned
+  `loraStrengths` (order matters, adapters do not commute). Step arguments are
+  schema-validated before dispatch, so 1-8 entries with matching lengths or the
+  step fails with a `400` — omit `loraStrengths` entirely to apply every adapter
+  at `1.0`. LoRAs are also model-gated, and there the mismatch is silent: ids
+  the chosen model cannot load are dropped without an error, so set the
+  model in the same step — `model: krea-2-turbo` or `dark-beast-krea2` for
+  `generate_image`, `model: krea-identity-edit` or
+  `dark-beast-krea2-identity-edit` for `edit_image`, and a `minimax-h3-*`
+  `videoModel` for `generate_video` / `animate_photo`. Published ids and ranges
+  come from `GET /v1/loras/comfy?modelId=<canonical-model-id>`.
 - `--api-workflow storyboard-video` generates a storyline, creates one GPT
   Image 2 storyboard sheet, then feeds that artifact into Seedance as the
   video reference. `-Q fast|hq|pro` maps to GPT Image 2 low|medium|high
@@ -158,8 +246,8 @@ private media that must not leave the local machine.**
 
 ## Seedance reference modes (mutually exclusive)
 
-When `--video -m seedance2`, `-m seedance2-mini`, or `-m seedance2-fast` is selected, pick one mode
-per video request:
+When `--video -m seedance2`, `-m seedance2-mini`, `-m seedance2-fast`, or
+`-m seedance2-5` is selected, pick one mode per video request:
 
 - **Dedicated frame mode — `--ref` and/or `--ref-end`.** First-class
   first-frame / last-frame anchoring; the Seedance worker pins them as
@@ -170,21 +258,36 @@ per video request:
   reference"*). Each `-c/--context` image may be a **local file or an HTTPS
   URL** (PNG, JPEG, WebP, or GIF) — local files are uploaded to Sogni media
   storage automatically, so you do **not** need `--api-chat` / `--durable-chat`
-  just to attach a local loose-reference image. Supports up to 9 image refs, 3 video refs, 3 audio
-  refs, and 12 total reference assets per request (canonical caps come from
-  `SEEDANCE_REFERENCE_LIMITS` / `validateSeedanceReferenceCounts()` in
+  just to attach a local loose-reference image. The 2.0 family supports up to
+  9 image refs, 3 video refs, 3 audio refs, and 12 total reference assets per
+  request; `seedance2-5` raises the caps to 30 image / 10 video / 10 audio /
+  50 total (canonical per-model caps come from `SEEDANCE_REFERENCE_LIMITS` /
+  `validateSeedanceReferenceCounts()` in
   `@sogni-ai/sogni-intelligence-client/tools`).
 
-Combining `--ref` / `--ref-end` with `-c/--context` on Seedance is rejected
-client-side with an error pointing at the correct mode. In CLI direct-gen mode,
+Combining native `--ref` / `--ref-end` frame anchors with any loose image,
+video, or audio reference on Seedance is rejected client-side with an error
+pointing at the correct mode. The typed `--workflow ia2v` path is the explicit
+exception: there, `--ref` is sent as a loose `@Image` reference beside
+`--ref-audio`, not as `first_frame`; `--ref-end` remains invalid. In CLI direct-gen mode,
 local `-c/--context` images and the primary `--ref-audio` / `--ref-video` are
 uploaded to Sogni media storage automatically and forwarded as HTTPS URLs; only
 *additional* `--ref-audio` / `--ref-video` entries beyond the first must already
 be HTTPS URLs (use `--api-chat` / `--durable-chat` when you need to attach
 several local audio or video files in one request). Seedance accepts public
 HTTPS image, video, and audio references that pass the CLI URL safety checks;
-localhost and private-network URLs are rejected before forwarding. Audio
-references must be paired with an image or video reference.
+localhost and private-network URLs are rejected before forwarding. Seedance 2.0
+audio references must be paired with an image or video reference; Seedance 2.5
+`reference` accepts audio by itself.
+
+For direct Seedance 2.5 loose-reference operations, use
+`--seedance-task-type reference|edit|extend`. Edit and extend require
+`--ref-video`, reject `--ref`/`--ref-end` frame anchors, and inherit the source
+video's aspect ratio. Edit requires `--duration` equal to the source duration;
+extend uses the selected 4-30 second continuation duration. On hosted semantic
+tool surfaces, express the same intent with `generate_video`, `video_to_video`,
+or `extend_video`; do not pass the direct SDK's `seedanceTaskType` routing field
+as a hosted tool argument.
 
 ## Models, replays, and contract debugging
 

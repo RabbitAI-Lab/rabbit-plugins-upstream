@@ -1,45 +1,60 @@
-## Description: <br>
-Convert static character images into vivid action videos with Jimeng Dream Actor. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts static character images into vivid action videos with Jimeng Dream Actor.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Jimeng Dream Actor image-to-video generation from prompts and image or video references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to the dLazy hosted API and media storage for generation. <br>
-Mitigation: Use only prompts and media approved for third-party processing, review dLazy service terms, and avoid sending sensitive or restricted content. <br>
-Risk: The skill requires a dLazy API key and may consume billable credits. <br>
-Mitigation: Prefer scoped organization keys, rotate or revoke keys from the dLazy dashboard when no longer needed, and use dry-run or balance checks before costly runs. <br>
-Risk: A globally installed CLI persists on the local system. <br>
-Mitigation: Use the pinned npx invocation for occasional use and review the CLI source before persistent installation. <br>
+## Use Case:
 
+External users and developers use this skill to call the dLazy CLI for Jimeng Dream Actor image-to-video generation from a prompt and one reference image or video.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON response with generated media URLs or async task status, plus concise guidance for authentication, balance, and execution errors.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload selected prompts and media files to dLazy endpoints and may use billable API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected media are sent to the dLazy hosted API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pass only media needed for the current task and avoid sending sensitive content unless the user accepts the third-party cloud processing risk.
+
+Risk: The dLazy API key is stored in local CLI configuration or supplied through DLAZY_API_KEY.
+
+Mitigation: Use a revocable API key, prefer per-run DLAZY_API_KEY for sensitive environments, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: The skill runs a third-party npm CLI, with optional global installation.
+
+Mitigation: Prefer npx or a local install over a global install, keep the pinned package version, review the package source before use, and avoid administrator privileges.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown instructions with shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns generated media URLs from files.dlazy.com and can save the result asset to a local path when --save is used.]
+
+## Skill Version(s):
+
+1.3.15 (source: evidence.release.version; artifact frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,62 @@
-## Description: <br>
-Use when an agent needs to operate RapidX through MCP or CLI for portfolio reads, market reads, order preview, order submit/replace/cancel, position management, algo orders, or explicit live trading verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when an agent needs to operate RapidX through MCP or CLI for portfolio reads, market reads, order preview, order submit/replace/cancel, position management, algo orders, or explicit live trading verification.
 
-## Publisher: <br>
-[liquiditytech](https://clawhub.ai/user/liquiditytech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liquiditytech](https://clawhub.ai/user/liquiditytech)
 
-## Use Case: <br>
-Developers, traders, and operations teams use this skill to have an agent read RapidX market and portfolio state, preview orders, submit authorized order, position, and algo actions, manage automation sessions, and verify resulting state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent through real trading actions that may create financial loss. <br>
-Mitigation: Use narrow, short-lived, low-notional sessions; require preview evidence and explicit authorization before write actions; verify final state with readback. <br>
-Risk: Bulk cancel-all, close-all, or automation scopes can affect many orders or positions. <br>
-Mitigation: Enable broad actions only when explicitly intended, review preview details carefully, and keep automation scope limited to authorized symbols, actions, order types, duration, and notional caps. <br>
-Risk: Credential handling mistakes can expose secrets or leave the RapidX runtime unverified. <br>
-Mitigation: Use approved secret mechanisms, never echo secrets, verify MCP or CLI credential materialization with self-checks, and stop trading workflows when verification is stale or failing. <br>
+## Use Case:
 
+Developers and external Agent users use this skill to operate RapidX through MCP or CLI for market and portfolio reads, previewed order lifecycle actions, position and algo workflows, bounded automation, and live-trading verification.
 
-## Reference(s): <br>
-- [RapidX Capability Overview](references/capability-overview.md) <br>
-- [RapidX Skills / CLI / MCP Best Practices](references/best-practices.md) <br>
-- [LTP RapidX Trading on ClawHub](https://clawhub.ai/liquiditytech/skills/ltp-rapidx-trading) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls] <br>
-**Output Format:** [Markdown guidance with inline MCP tool names and JSON CLI command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires observed MCP or rapidx CLI evidence for trading claims; write actions require preview, explicit authorization, and readback.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: frontmatter and server release evidence) <br>
+Risk: An agent can operate RapidX with trading credentials and perform real trade writes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when agent-operated RapidX trading is intended; use manual mode for ordinary trades and require preview evidence plus explicit authorization before writes.
+
+Risk: Automation can submit matching order previews within a user-authorized session without another per-order confirmation.
+
+Mitigation: Enable automation only with tight symbol, notional, order-type, action, and time limits that the user is comfortable risking.
+
+Risk: Trading credentials or API host values could be exposed in chat, logs, or summaries.
+
+Mitigation: Use an authorized secret mechanism for credentials and do not echo full keys.
+
+Risk: Timeouts, asynchronous cancels, or changed business parameters can leave trade state uncertain.
+
+Mitigation: Query current state before retrying, keep preview and submit parameters unchanged, and verify final order, position, transaction, or algo state through readback.
+
+## Reference(s):
+
+- [RapidX Skills / CLI / MCP Best Practices](references/best-practices.md)
+- [RapidX Capability Overview](references/capability-overview.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline command examples and structured evidence expectations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires observed RapidX MCP or CLI evidence for portfolio, order, position, and trading claims; write actions require preview evidence and explicit user authorization.]
+
+## Skill Version(s):
+
+1.0.17 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

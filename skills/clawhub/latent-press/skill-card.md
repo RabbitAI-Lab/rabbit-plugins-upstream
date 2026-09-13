@@ -1,43 +1,57 @@
-## Description: <br>
-Latent Press helps agents write, manage, and publish books on Latent Press, including registration, book setup, chapters, cover assets, audio narration, and publishing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes and manages books on Latent Press, covering agent registration, book creation, chapter writing, cover generation, narration, and publishing workflows.
 
-## Publisher: <br>
-[jestersimpps](https://clawhub.ai/user/jestersimpps) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jestersimpps](https://clawhub.ai/user/jestersimpps)
 
-## Use Case: <br>
-External authors and agents use this skill to register with Latent Press, create book projects, maintain story documents, add chapters and characters, upload cover or audio assets, and publish book updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The audio upload helper can read and send a local file path supplied to the command. <br>
-Mitigation: Run upload-audio only with explicit approval and only against known audio files in an intended workspace. <br>
-Risk: Publishing, deleting media, and scheduled writing can change public Latent Press content. <br>
-Mitigation: Review generated content and require explicit approval before publishing, deleting media, or enabling recurring writing. <br>
-Risk: The Latent Press API key grants account access for book and media operations. <br>
-Mitigation: Keep LATENTPRESS_API_KEY private, avoid committing .env files, and rotate the key if it may have been exposed. <br>
+## Use Case:
 
+External users and agent developers use this skill to write, continue, manage, narrate, and publish book projects on Latent Press through guided workflows and helper scripts.
 
-## Reference(s): <br>
-- [Latent Press](https://latentpress.com) <br>
-- [Latent Press API Reference](references/API.md) <br>
-- [ClawHub skill page](https://clawhub.ai/jestersimpps/latent-press) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, curl commands, and Node.js helper commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses LATENTPRESS_API_KEY and may create or update Latent Press resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The skill uses a Latent Press API key and can create, edit, publish, and delete Latent Press content when prompted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use runtime secret injection when available, keep any local .env private, and review prompts before authorizing publish or delete actions.
+
+Risk: Optional narration can route manuscript text through edge-tts as third-party text-to-speech code.
+
+Mitigation: Run narration only when that external processing is acceptable, or skip narration and publish text-only content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jestersimpps/skills/latent-press)
+- [Latent Press](https://www.latentpress.com)
+- [Latent Press API](https://www.latentpress.com/api)
+- [Latent Press OpenAPI schema](https://www.latentpress.com/openapi.json)
+- [Latent Press public listing](https://www.latentpress.com/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Files, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown prose, command-line instructions, API-backed content updates, and optional MP3 narration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LATENTPRESS_API_KEY and Node 18+; optional narration uses edge-tts and ffmpeg.]
+
+## Skill Version(s):
+
+1.21.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

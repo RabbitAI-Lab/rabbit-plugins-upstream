@@ -36,6 +36,23 @@ class Config(BaseModel):
         ),
     )
     timezone: str = Field(default="UTC", description="IANA timezone for relative date computations")
+    attachments_dir: str = Field(
+        default="~/.outlook-mcp/attachments",
+        description=(
+            "The only directory the attachment tools may read from or write to. "
+            "Point it somewhere else to widen the surface; every path an agent "
+            "supplies is resolved and must land inside it."
+        ),
+    )
+    allow_unencrypted_token_cache: bool = Field(
+        default=False,
+        description=(
+            "Permit the OAuth token cache to be written in cleartext when no "
+            "encrypted store is available (Linux without libsecret). Off by "
+            "default: without it, authentication stops rather than silently "
+            "persisting a reusable Graph token in plaintext."
+        ),
+    )
     accounts: list[AccountConfig] = Field(default_factory=list)
     default_account: str | None = Field(default=None)
 

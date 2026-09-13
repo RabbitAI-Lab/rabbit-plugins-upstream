@@ -1,0 +1,64 @@
+{
+  "brands": [
+    {
+      "name": "青禾",
+      "aliases": [
+        "青禾"
+      ],
+      "basis": "样例品牌"
+    },
+    {
+      "name": "云朵",
+      "aliases": [
+        "云朵"
+      ],
+      "basis": "样例品牌"
+    }
+  ],
+  "products": [
+    {
+      "key": "qinghe-star",
+      "name": "青禾星河洁面乳",
+      "brand": "青禾",
+      "resolved": true
+    },
+    {
+      "key": "cloud-mild",
+      "name": "云朵轻柔洁面乳",
+      "brand": "云朵",
+      "resolved": true
+    }
+  ],
+  "cards": {
+    "product:A": {
+      "product_key": "qinghe-star",
+      "evidence_title": "青禾星河洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    },
+    "product:B": {
+      "product_key": "cloud-mild",
+      "evidence_title": "云朵轻柔洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    },
+    "jd:A": {
+      "product_key": "qinghe-star",
+      "evidence_title": "青禾星河洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    },
+    "jd:B": {
+      "product_key": "cloud-mild",
+      "evidence_title": "云朵轻柔洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    },
+    "taobao:A": {
+      "product_key": "qinghe-star",
+      "evidence_title": "青禾星河洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    },
+    "taobao:B": {
+      "product_key": "cloud-mild",
+      "evidence_title": "云朵轻柔洁面乳",
+      "basis": "合成样例同ID同明确系列"
+    }
+  }
+}

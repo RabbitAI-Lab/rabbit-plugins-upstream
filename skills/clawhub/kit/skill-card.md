@@ -1,46 +1,80 @@
-## Description: <br>
-Kit (formerly ConvertKit) API integration with managed OAuth for managing email subscribers, forms, tags, sequences, broadcasts, and custom fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kit (formerly ConvertKit) API integration with managed OAuth for managing email subscribers, forms, tags, sequences, broadcasts, custom fields, purchase records, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate Kit email marketing workflows through Maton-managed OAuth, including subscriber, tag, form, sequence, broadcast, custom field, purchase, email template, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access subscriber and customer data in the connected Kit account through Maton-managed OAuth. <br>
-Mitigation: Install only when Maton and the connected Kit account are trusted, keep MATON_API_KEY private, and scope actions to the intended account. <br>
-Risk: Write, delete, webhook, broadcast, or connection-management operations can modify email marketing resources. <br>
-Mitigation: Confirm the target resource, account connection, and intended effect with the user before executing any modifying request. <br>
-Risk: Multiple Kit connections can route requests to the wrong account if the connection is not specified. <br>
-Mitigation: Use the Maton-Connection header when multiple Kit accounts exist. <br>
+## Use Case:
 
+External users and developers use this skill to operate a Kit email marketing account through Maton-managed authentication, including subscriber, tag, form, sequence, broadcast, purchase, and webhook workflows. The skill is also used to propose carefully approved automation through Maton functions and triggers.
 
-## Reference(s): <br>
-- [Kit Skill on ClawHub](https://clawhub.ai/byungkyu/skills/kit) <br>
-- [Kit API Overview](https://developers.kit.com/api-reference/overview) <br>
-- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers) <br>
-- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags) <br>
-- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline API paths, JSON examples, and Python, JavaScript, or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence; artifact frontmatter reports 1.0) <br>
+Risk: Homebrew installation can resolve a different Maton build than the reviewed release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the pinned npm command when possible, and review any Homebrew-resolved Maton version before authenticating.
+
+Risk: Writes, webhooks, destinations, functions, and triggers can change account state or create persistent data flows.
+
+Mitigation: Approve these actions only after checking the target account, destination URL, data fields, intended effect, and persistence.
+
+Risk: Subscriber, purchase, email, CRM, payment, and trigger event data can contain personal or sensitive information.
+
+Mitigation: Retrieve only the fields needed for the task, avoid dumping raw responses, and use templates that forward the minimum required data.
+
+Risk: Raw HTTP or API-key fallback can expose a long-lived credential if handled loosely.
+
+Mitigation: Use OAuth through the Maton CLI where available, avoid exporting credentials broadly, and keep tokens out of logs, files, command lines, and destinations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/kit)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Kit API Overview](https://developers.kit.com/api-reference/overview)
+- [Kit API Subscribers](https://developers.kit.com/api-reference/subscribers/list-subscribers)
+- [Kit API Tags](https://developers.kit.com/api-reference/tags/list-tags)
+- [Kit API Forms](https://developers.kit.com/api-reference/forms/list-forms)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Authenticated Maton CLI/API operations; write actions require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

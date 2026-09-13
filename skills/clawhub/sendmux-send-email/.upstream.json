@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendmux-send-email",
   "slug": "sendmux-send-email",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1783569527642,
-  "contentHash": "f45c0020afe952df5d91eb9340d50359ac5f148f652557bd4966ffe21a5b24aa",
-  "fetchedAt": "2026-07-26T18:17:40.769Z"
+  "version": "1.0.8",
+  "updatedAt": 1789099316805,
+  "contentHash": "339f8bf8e99b4b8f42ffd142de232b6383e661a847d00e2b1435d9267d0532c3",
+  "fetchedAt": "2026-09-13T12:56:15.440Z"
 }

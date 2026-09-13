@@ -1,41 +1,52 @@
-## Description: <br>
-Bilingual EN/ZH project memory workflow for start work, checkpoint, wrap-up, and handoff. Maintains project-local Docs/ notes with target, metadata, status, compressed context, completed work, pending work, next actions, archives, and legacy migration from older Daily Workflow file names. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Daily Workflow helps agents orient, checkpoint, wrap up, and hand off project work by writing compact, evidence-backed project memory notes.
 
-## Publisher: <br>
-[englandtong](https://clawhub.ai/user/englandtong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[englandtong](https://clawhub.ai/user/englandtong)
 
-## Use Case: <br>
-Developers and project teams use this skill to keep project-local workflow memory current at start work, checkpoints, wrap-up, and handoff. It records concise project metadata, status, completed work, pending work, next actions, archives, and AI handoff notes under Docs/ so work can resume with clear context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill maintains project-local Docs/ workflow files and may record sensitive project notes if the workspace contains private context. <br>
-Mitigation: Review changes to Docs/ before sharing or committing them, and keep secrets, credentials, private customer data, full confidential documents, and large logs out of workflow notes. <br>
-Risk: Broad trigger phrases may start the workflow when the user intended a casual note rather than a file update. <br>
-Mitigation: Narrow custom trigger phrases in Docs/CONFIG.md or ask the agent to confirm before writing workflow files. <br>
+## Use Case:
 
+Developers, project maintainers, and agent operators use this skill to preserve resumable project state across work sessions. It records status, verification boundaries, blockers, risks, and exact next actions without replacing project governance or acceptance records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/englandtong/daily-workflow) <br>
-- [Security Guide](SECURITY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown files and concise text summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Maintains project-local Docs/ workflow files; no global user state is written by default.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: release evidence, SKILL.md, SECURITY.md, and _meta.json) <br>
+Risk: Generated project memory may include project context, commands, blockers, risks, and file paths that should not be shared broadly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated Docs/ files before sharing them and keep credentials, sensitive records, large logs, and confidential source excerpts out of handoff notes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/englandtong/skills/daily-workflow)
+- [SKILL.md](artifact/SKILL.md)
+- [Quickstart](artifact/QUICKSTART.md)
+- [Security Guide](artifact/SECURITY.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown files and concise chat summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes project-local Docs/ notes only when persistence is authorized; avoids secrets and preserves existing governance records.]
+
+## Skill Version(s):
+
+4.1.0 (source: server release metadata, SKILL.md, SECURITY.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,58 @@
-## Description: <br>
-团队任务管家 is a platform-neutral team task coordination skill that stores tasks in JSON files and supports natural-language task creation, reminders, overdue escalation, analytics, and multi-format export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+团队任务管家 helps agents manage a local JSON-backed team task ledger with creation, updates, comments, archiving, backups, restricted restore, and export-oriented summaries while leaving reminders, notifications, identity, and authorization to external integrations.
 
-## Publisher: <br>
-[djoldwang](https://clawhub.ai/user/djoldwang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[djoldwang](https://clawhub.ai/user/djoldwang)
 
-## Use Case: <br>
-Teams and their agents use this skill to maintain shared task records, assign owners, send platform-neutral reminders, track progress, search tasks, produce statistics, and export task data. Host integrations provide member identity mapping, notification routing, and regional workday calendars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent task files, task history, exports, and reminders can expose team work details or personal assignment data. <br>
-Mitigation: Install only in workspaces where that storage and reminder behavior is acceptable; configure file permissions, retention expectations, export access, and notification routing before use. <br>
-Risk: Ambiguous natural-language requests can create the wrong task, assignee, priority, or notification target. <br>
-Mitigation: Require confirmation for ambiguous task creation, assignment, priority, deadline, and routing decisions, and use reliable member identity mapping from the host environment. <br>
-Risk: Local JSON task storage can become inconsistent if writes fail or if multiple actors modify files without coordination. <br>
-Mitigation: Use the documented read-modify-backup-write flow, preserve .bak files for recovery, scan archives when generating IDs, and avoid unsynchronized manual edits. <br>
+## Use Case:
 
+Teams and their integration developers use this skill to maintain a shared local task ledger, record task changes and comments, archive completed work, and produce JSON, CSV, Markdown, or text summaries. Deployments must provide identity, permissions, calendar rules, notification routing, and reminder scheduling outside the skill.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/djoldwang/team-tasks) <br>
-- [Publisher profile](https://clawhub.ai/user/djoldwang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with command examples, JSON data models, text templates, and export format specifications] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces and updates local team task JSON files and can describe CSV, TXT, or JSON exports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The storage script records an actor label but does not authenticate users or enforce business permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require the integration layer to authenticate the current actor and enforce team permissions before any create, update, status, comment, export, archive, reopen, restore, or notification workflow.
+
+Risk: The skill records reminder receipts but does not schedule reminders or send notifications.
+
+Mitigation: Use an external scheduler and notification service with authorization checks and a task ID plus reminder-slot idempotency key before reporting that a message was sent.
+
+Risk: Local ledger integrity depends on all writers using the provided storage entry point and on a private local data directory.
+
+Mitigation: Keep the ledger on a local macOS or Linux filesystem owned by the runtime user, prevent other users from writing to the data and backup directories, and route all writes through scripts/task_store.py.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/djoldwang/skills/team-tasks)
+- [Safe Storage Interface](references/storage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON, CSV]
+
+**Output Format:** [Markdown guidance, shell command examples, JSON operation objects, and JSON/CSV/text task exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local files only; write operations must go through the bundled Python storage script and external integrations handle identity, permissions, reminders, and notifications.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

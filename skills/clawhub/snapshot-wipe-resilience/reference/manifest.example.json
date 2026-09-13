@@ -1,0 +1,52 @@
+{
+  "version": 2,
+  "workspace": "/home/user",
+  "_comment": "Template only: capture real values with `swr add` while the workspace is healthy, then run `swr sign`. The zero hash below is structurally valid but intentionally does not claim that the example path is healthy.",
+  "_tier_legend": {
+    "0": "credentials and shims",
+    "1": "small scripts and permissions",
+    "2": "source and dependency trees",
+    "3": "large downloads",
+    "4": "build outputs"
+  },
+  "entries": [
+    {
+      "id": "run-script",
+      "path": "run.sh",
+      "kind": "file",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "mode": "0755",
+      "tier": 1,
+      "restore": "chmod +x -- \"$HOME/run.sh\""
+    },
+    {
+      "id": "source-tree",
+      "path": "project",
+      "kind": "tree",
+      "sentinels": ["CMakeLists.txt", "src/main.c"],
+      "min_files": 2,
+      "tier": 2,
+      "tree_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "restore": "git clone --depth 1 https://example.invalid/project.git \"$HOME/project\""
+    },
+    {
+      "id": "model-blob",
+      "path": "model.gguf",
+      "kind": "blob",
+      "bytes": 123456789,
+      "headtail": "0000000000000000000000000000000000000000000000000000000000000000",
+      "tier": 3,
+      "restore": "curl --fail --location --retry 3 --continue-at - --output \"$HOME/model.gguf\" https://example.invalid/model.gguf"
+    },
+    {
+      "id": "build-output",
+      "path": "project/build/bin",
+      "kind": "tree",
+      "sentinels": ["app"],
+      "min_files": 1,
+      "tier": 4,
+      "needs": ["source-tree"],
+      "restore": "cmake --build \"$HOME/project/build\" --parallel 2"
+    }
+  ]
+}

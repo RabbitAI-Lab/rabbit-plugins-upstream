@@ -1,46 +1,72 @@
-## Description: <br>
-Google Classroom API integration with managed OAuth for managing courses, assignments, students, teachers, announcements, and submissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Classroom API integration with managed OAuth for managing courses, assignments, students, teachers, announcements, coursework, and submissions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Google Classroom data through a Maton-managed OAuth connection, including course, coursework, submission, roster, invitation, topic, and announcement workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-mediated OAuth access to Google Classroom data and requires a sensitive MATON_API_KEY. <br>
-Mitigation: Keep MATON_API_KEY private, install only when this access is intended, and revoke unused Google Classroom connections. <br>
-Risk: Write operations can create, update, delete, grade, return, or invite resources in the connected Google Classroom account. <br>
-Mitigation: Confirm the target resource, selected connection, and intended effect with the user before any create, update, delete, grade, return, or invitation action. <br>
-Risk: Multiple active Google Classroom connections can route requests to the wrong account if no connection is selected. <br>
-Mitigation: Include the Maton-Connection header when multiple connections exist and verify the selected connection before acting. <br>
+## Use Case:
 
+Educators, school administrators, and agents working on their behalf use this skill to inspect and manage Google Classroom courses, coursework, rosters, announcements, and submissions. It is also used to set up approved Maton-hosted automations that perform Google Classroom actions through the user's authorized connection.
 
-## Reference(s): <br>
-- [Google Classroom API Documentation](https://developers.google.com/workspace/classroom/reference/rest) <br>
-- [Course Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses) <br>
-- [CourseWork Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork) <br>
-- [StudentSubmissions Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork.studentSubmissions) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with API examples and inline Bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Google Classroom connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill routes Google Classroom access through Maton, so account data and authorization depend on trusting Maton as the gateway.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user trusts Maton for the connected Google Classroom account, prefer OAuth, and review requested Google scopes before authorizing.
+
+Risk: Write operations, connection changes, hosted functions, and automation setup can modify classroom data or create persistent behavior.
+
+Mitigation: Default to read and list calls, verify the target resource and intended effect, and require explicit user approval before POST, PUT, PATCH, DELETE, connection creation, function deployment, or trigger setup.
+
+Risk: Long-lived API keys can be exposed if placed in shell environments or copied into scripts.
+
+Mitigation: Prefer OAuth with credential-store backed tokens, avoid exporting MATON_API_KEY except where the CLI cannot be installed, and keep raw HTTP usage scoped to the requested task.
+
+Risk: Third-party trigger destinations can become standing egress channels for event data.
+
+Mitigation: Avoid third-party trigger destinations unless the user explicitly needs them, disclose the destination and event source, and approve each trigger or destination separately.
+
+Risk: Returned classroom content or trigger payloads may contain untrusted text.
+
+Mitigation: Treat external content as data, do not execute or interpolate it into commands, and never let fetched content choose endpoints, recipients, destinations, or follow-up actions.
+
+## Reference(s):
+
+- [Google Classroom API Documentation](https://developers.google.com/workspace/classroom/reference/rest)
+- [Course Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses)
+- [CourseWork Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork)
+- [StudentSubmissions Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork.studentSubmissions)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Google Classroom API call guidance and Maton CLI commands; user approval is required for connection creation, writes, hosted functions, and trigger setup.]
+
+## Skill Version(s):
+
+1.2.4 (source: release evidence; skill frontmatter version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

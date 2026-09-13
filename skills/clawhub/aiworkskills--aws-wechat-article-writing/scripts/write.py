@@ -536,6 +536,52 @@ def _validate_reference_path(p: Path, repo_root: Path) -> Path:
     return rel
 
 
+def build_components_block() -> str:
+    """把可用的版式组件及其选用判据写进提示词。
+
+    不写进来的后果很直接：模型不知道 `:::` 语法存在，组件做得再多也永远不会被调用。
+    每个组件带 when_to_use / when_not_to_use / anti_pattern，全部原样给模型——
+    这三项就是拦住「因为好看所以用」的判据，删掉任何一项都会让组件被滥用。
+    """
+    from pathlib import Path as _P
+    # 组件属于 formatting skill（跨 skill 引用，与套件内其它相对引用同一模式）；
+    # 套件未装齐时该目录不存在，函数返回空串，提示词里就没有组件段，不报错。
+    dirs = [_P(".aws-article/presets/components"),
+            _P(__file__).resolve().parents[2] / "aws-wechat-article-formatting"
+            / "references" / "components"]
+    # 同名时用户目录优先，所以先收内置再让用户覆盖
+    specs: dict[str, dict] = {}
+    for d in reversed(dirs):
+        if not d.is_dir():
+            continue
+        for f in sorted(d.glob("*.yaml")) + sorted(d.glob("*.yml")):
+            try:
+                spec = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+            except (OSError, yaml.YAMLError):
+                continue
+            name = str(spec.get("name") or f.stem).strip()
+            if name and spec.get("template"):
+                specs[name] = spec
+    if not specs:
+        return ""
+
+    out = ["\n## 版式组件（可选，用对了才用）\n",
+           "正文里可以用 `:::组件名[参数]` … `:::` 调用下列版式组件，会渲染成设计过的",
+           "HTML 结构。**每个组件都写了什么时候不该用和反模式，选之前先对一遍**；",
+           "拿不准就别用——普通段落永远是安全的，滥用组件比不用更伤阅读。\n"]
+    for name, spec in sorted(specs.items()):
+        out.append(f"\n### :::{name}　{spec.get('displayName', '')}")
+        for label, key in (("何时用", "when_to_use"), ("何时不用", "when_not_to_use"),
+                           ("反模式", "anti_pattern")):
+            v = str(spec.get(key) or "").strip()
+            if v:
+                out.append(f"- **{label}**：" + " ".join(v.split()))
+        ex = str(spec.get("example") or "").strip()
+        if ex:
+            out.append("```\n" + ex + "\n```")
+    return "\n".join(out) + "\n"
+
+
 def build_reference_library_block(raw_paths: list[str], cwd: Path) -> str:
     """读取业务资料库 .md，拼成系统提示「参考资料库」正文。"""
     if not raw_paths:
@@ -663,11 +709,20 @@ def build_system_prompt(
             parts.append("- 可用图片文件： " + ", ".join(image_files))
     else:
         density = _image_density_value(screening)
+        parts.append(build_components_block())
         parts.append(
             "\n## 配图标记（硬性）\n"
             f"- 配图密度必须遵循：{density}（未配置时默认每节一图）\n"
             "- 正文配图数量需尽量满足该密度规则\n"
             "- 格式：`![类型名：画面内容](placeholder)`。全角冒号 `：` 分隔两段\n"
+            "- **图注单独写**，放在括号内路径之后的引号里："
+            "`![信息图：画面内容](placeholder \"这里是图注\")`。\n"
+            "  冒号后的「画面内容」是**给生图模型的画面指令**，不会显示给读者；"
+            "图注是**给读者看的**，两者用途不同，不要互相复制。\n"
+            "- **绝大多数图不需要图注**。图注要补充画面之外的信息（数据出处、一句判断、"
+            "反常识的细节），不要复述读者眼睛已经看见的东西——"
+            "「开发者站在巨型 99.9 分数牌前望向远方」这种就是废话图注。写不出有信息量的"
+            "图注就不写第三个参数。\n"
             "  冒号前只能是：封面、信息图、氛围、流程图、对比、实证之一；"
             "  冒号后为画面内容的简短概括即可（如「淘米」「小孩钓鱼」「窗前喝水」），"
             "  也可略写细；禁止只用「配图」「示意图」等敷衍词\n"

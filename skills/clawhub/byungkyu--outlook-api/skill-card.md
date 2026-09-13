@@ -1,46 +1,79 @@
-## Description: <br>
-Outlook provides a Maton-managed Microsoft Graph integration for reading, sending, and managing Outlook mail, folders, calendar events, and contacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Outlook helps agents use Microsoft Graph through Maton-managed OAuth to read, send, and manage Outlook email, folders, calendar events, and contacts.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with a connected Outlook account through Maton, including mailbox review, email sending, folder management, calendar event operations, and contact management. It is useful when a workflow needs Outlook access through CLI commands, direct API calls, or short code examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and change email, folders, calendar events, and contacts in the connected Outlook account. <br>
-Mitigation: Install only if you trust Maton to broker Outlook access, and review recipients, message contents, folders, events, and contacts before approving write or delete actions. <br>
-Risk: When multiple Outlook accounts are connected, an action may target the wrong account. <br>
-Mitigation: Use a specific connection ID whenever more than one Outlook account is available. <br>
+## Use Case:
 
+External users and developers use this skill to connect an Outlook account, make approved Microsoft Graph calls, and optionally set up narrowly scoped Maton functions or triggers for Outlook-related workflows.
 
-## Reference(s): <br>
-- [ClawHub Outlook skill listing](https://clawhub.ai/byungkyu/skills/outlook-api) <br>
-- [Microsoft Graph API overview](https://learn.microsoft.com/en-us/graph/api/overview) <br>
-- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview) <br>
-- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar) <br>
-- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact) <br>
-- [Microsoft Graph query parameters](https://learn.microsoft.com/en-us/graph/query-parameters) <br>
-- [Maton CLI manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Outlook OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill can access sensitive Outlook mail, calendar, and contact data through an authorized Maton connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, select only the scopes needed for the task, and make read-only calls before any write action.
+
+Risk: Sending email, creating events, deleting resources, or changing connections can affect the user's Outlook account.
+
+Mitigation: Get explicit user approval for every write, send, delete, new connection, hosted function, trigger, or destination change; prefer drafts before sending mail.
+
+Risk: Triggers and external destinations can create ongoing disclosure of Outlook-adjacent or third-party app data.
+
+Mitigation: Keep triggers narrowly scoped, forward only required fields, prefer Maton-hosted destinations, and use third-party destination URLs only after the user approves the exact host and data flow.
+
+Risk: Long-lived API keys or credentials in headers, templates, logs, files, or child process environments can expose account access.
+
+Mitigation: Prefer OAuth and the operating system credential store, avoid exporting API keys, never place provider or Maton credentials in destination headers or body templates, and rotate exposed keys.
+
+## Reference(s):
+
+- [Outlook Skill Page](https://clawhub.ai/byungkyu/skills/outlook-api)
+- [Maton Homepage](https://maton.ai)
+- [Microsoft Graph API Overview](https://learn.microsoft.com/en-us/graph/api/overview)
+- [Microsoft Graph Mail API](https://learn.microsoft.com/en-us/graph/api/resources/mail-api-overview)
+- [Microsoft Graph Calendar API](https://learn.microsoft.com/en-us/graph/api/resources/calendar)
+- [Microsoft Graph Contacts API](https://learn.microsoft.com/en-us/graph/api/resources/contact)
+- [Microsoft Graph Query Parameters](https://learn.microsoft.com/en-us/graph/query-parameters)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown guidance with shell commands, code snippets, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may reference user-authorized Outlook data and should be reviewed before writes, sends, deletes, or automation changes.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

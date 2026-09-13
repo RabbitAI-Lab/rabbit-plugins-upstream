@@ -1,43 +1,63 @@
-## Description: <br>
-Guides agents writing generative prompts through a ritual seed, explicit prompt structure, scenario-axis diversity, and quality gates before paid API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when writing any generative prompt: ritual seed, explicit structure, scenario axes, and quality gates before paid API calls.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and agent operators use this skill to draft diverse prompts, rotate scenario axes, and run quality and approval gates for image, video, and audio generation before paid API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Related Pruna workflow skills and paid API calls may be used before the operator is comfortable with the workflow. <br>
-Mitigation: Review related workflow skills first and follow the skill's approval gates before advancing to paid generation steps. <br>
+## Use Case:
 
+Developers, creative operators, and external agents use this skill to draft varied image, video, and audio generation prompts, decide when to ask clarifying questions, and apply quality and approval gates before paid generation.
 
-## Reference(s): <br>
-- [Generation diversity](references/generation-diversity.md) <br>
-- [Still-image prompt flow](references/still-image-prompt-flow.md) <br>
-- [Generation quality checklist hub](references/generation-quality-checklists.md) <br>
-- [Workflow feedback gates](references/workflow-feedback-gates.md) <br>
-- [String Seed of Thought](https://pub.sakana.ai/ssot/) <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/generation-diversity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with prompt templates, checklists, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance-only skill with no executable code; emphasizes review before paid generation steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release metadata and SKILL.md metadata) <br>
+Risk: Related-skill installation commands are unpinned and auto-confirmed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each install command before execution and prefer pinned versions or a controlled installer.
+
+Risk: Downstream workflows may involve paid API calls, uploads, or changes to the installed skill suite.
+
+Mitigation: Require explicit user approval before paid API calls, uploads, or skill-suite changes.
+
+Risk: Gender and identity defaults can affect face, voice, or avatar outputs.
+
+Mitigation: Review identity-related defaults and keep user-specified identity, voice, and continuity constraints locked.
+
+## Reference(s):
+
+- [Generation Diversity](artifact/references/generation-diversity.md)
+- [Still-image Prompt Flow](artifact/references/still-image-prompt-flow.md)
+- [Generation Quality Checklist Hub](artifact/references/generation-quality-checklists.md)
+- [Workflow Feedback Gates](artifact/references/workflow-feedback-gates.md)
+- [Clarification Intake](artifact/references/clarification-intake.md)
+- [String Seed of Thought](https://pub.sakana.ai/ssot/)
+- [ClawHub Skill Page](https://clawhub.ai/pruna-ai/skills/generation-diversity)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with prompt templates, checklists, command snippets, and JSON manifest examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes human approval gates before paid generation and logs ritual_seed, axes, and prediction identifiers for traceability.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

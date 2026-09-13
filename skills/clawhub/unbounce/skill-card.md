@@ -1,43 +1,67 @@
-## Description: <br>
-Unbounce API integration with managed OAuth for building and managing landing pages, tracking leads, and analyzing conversion data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Unbounce API integration with managed OAuth for building and managing landing pages, tracking leads, and analyzing conversion data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Unbounce through Maton-managed OAuth, inspect accounts and pages, manage OAuth connections, track leads, and prepare approved create, update, or delete API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and managed OAuth to access an Unbounce account, including landing page and lead data. <br>
-Mitigation: Keep MATON_API_KEY private, install only when Maton is trusted to broker the intended Unbounce account, and review Maton's handling of lead data before use. <br>
-Risk: Create, update, or delete API calls can change Unbounce connections, pages, leads, or related account resources. <br>
-Mitigation: Confirm the exact account, page, lead, connection, and intended effect with the user before any write or delete action. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an Unbounce account through Maton, inspect accounts, pages, leads, domains, users, and related resources, and run approved changes or automations against the connected account.
 
-## Reference(s): <br>
-- [ClawHub Unbounce skill page](https://clawhub.ai/byungkyu/unbounce) <br>
-- [Maton](https://maton.ai) <br>
-- [Unbounce API Documentation](https://developer.unbounce.com/api_reference/) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and HTTP endpoint examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses MATON_API_KEY and Maton-managed OAuth; write and delete actions require explicit user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release evidence) <br>
+Risk: The Homebrew installation path is not tied to the reviewed CLI release, while the CLI may later handle OAuth, API keys, hosted functions, persistent triggers, and Unbounce business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the pinned npm CLI path, or verify the exact Homebrew formula and artifact before using the skill with credentials or business data.
+
+Risk: Writes, function deployments, trigger destinations, and local event handlers can modify data or create persistent data flows.
+
+Mitigation: Require explicit approval after confirming the target, payload, data flow, destination, and duration.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/unbounce)
+- [Maton Homepage](https://maton.ai)
+- [Unbounce API Documentation](https://developer.unbounce.com/api_reference/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell, JSON, and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe API calls that return account, landing page, lead, domain, page group, and user data from the connected Unbounce account.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

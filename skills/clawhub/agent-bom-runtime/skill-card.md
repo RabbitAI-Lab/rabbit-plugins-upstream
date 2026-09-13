@@ -1,43 +1,56 @@
-## Description: <br>
-agent-bom runtime helps agents analyze context graphs, correlate runtime audit logs with CVE findings, and query vulnerability analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI runtime security monitoring for context graph analysis, runtime audit log correlation with CVE findings, and vulnerability analytics queries.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security engineers use this skill to inspect agent runtime posture, investigate lateral movement in context graphs, correlate user-provided audit logs with CVE findings, and query vulnerability trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided runtime audit logs may contain sensitive operational details. <br>
-Mitigation: Review and minimize audit logs before providing them to the skill. <br>
-Risk: Optional ClickHouse storage can persist vulnerability analytics and runtime data. <br>
-Mitigation: Configure ClickHouse only when persistent analytics storage is intended and approved. <br>
+## Use Case:
 
+Developers and security engineers use this skill to inspect AI runtime context graphs, correlate agent audit logs with CVE findings, and query vulnerability trends or posture history.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with concise analysis and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference user-provided audit log paths and optional ClickHouse configuration; no API keys are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The documented package install is not pinned to the reviewed version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the reviewed release explicitly, for example `agent-bom==0.104.0`, before relying on this card.
+
+Risk: Runtime audit logs and optional analytics configuration can contain sensitive operational context or credential environment variable names.
+
+Mitigation: Provide only audit logs and optional ClickHouse configuration that are approved for analysis, and do not include raw credential values.
+
+## Reference(s):
+
+- [agent-bom GitHub project](https://github.com/msaad00/agent-bom)
+- [agent-bom PyPI package](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard report](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline tool-call and shell-command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference user-provided audit log paths and optional analytics configuration.]
+
+## Skill Version(s):
+
+0.104.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

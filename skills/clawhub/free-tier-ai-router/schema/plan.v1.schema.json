@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/free-tier-ai-router/schema/plan.v1.schema.json",
+  "title": "ai_router.plan.v1",
+  "description": "Plan object emitted by `router.py --plan --json` (optionally with -t/--task and -q/--quality). Shows the routing order WITHOUT making any API calls.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "task", "quality_min", "order"],
+  "properties": {
+    "schema": { "const": "ai_router.plan.v1" },
+    "task": { "enum": ["general", "code", "fast", "best"] },
+    "quality_min": { "type": "integer", "minimum": 0, "maximum": 5 },
+    "order": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["n", "provider", "model", "quality", "tier", "ready", "status"],
+        "properties": {
+          "n": { "type": "integer", "minimum": 1, "description": "Try position (1 = first attempt)." },
+          "provider": { "type": "string" },
+          "model": { "type": "string" },
+          "quality": { "type": "integer", "minimum": 0, "maximum": 5 },
+          "tier": { "enum": ["cheap", "mid", "scarce"] },
+          "ready": { "type": "boolean" },
+          "status": { "type": "string" }
+        }
+      }
+    }
+  }
+}
