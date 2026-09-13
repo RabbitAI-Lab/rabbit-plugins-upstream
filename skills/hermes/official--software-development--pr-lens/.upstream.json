@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/pr-lens",
+  "identifier": "official/software-development/pr-lens",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/pr-lens",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:45:57Z",
+  "contentHash": "93106961d91da25c4e08e87906db9e7813d463f6010ca55f7d75eb8671c34f15",
+  "fetchedAt": "2026-09-13T12:48:09.157Z"
+}

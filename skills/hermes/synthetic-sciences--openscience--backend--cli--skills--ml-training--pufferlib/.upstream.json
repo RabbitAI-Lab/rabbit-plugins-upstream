@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/pufferlib",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/pufferlib",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/pufferlib",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "11a14c32e656c94d8d87068979f1761612875cb06df1e4e72c79b5169713e2c3",
+  "fetchedAt": "2026-09-13T12:46:45.282Z"
+}

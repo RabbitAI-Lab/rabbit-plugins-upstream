@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/lambda-labs",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/lambda-labs",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/lambda-labs",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "b2983796bb162810360234c77a9470b4341b1bc2d5b09977e617ebfeb2f926b3",
+  "fetchedAt": "2026-09-13T12:46:45.261Z"
+}

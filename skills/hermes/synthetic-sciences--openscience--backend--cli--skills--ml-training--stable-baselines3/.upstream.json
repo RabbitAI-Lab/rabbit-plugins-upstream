@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/stable-baselines3",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/stable-baselines3",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/stable-baselines3",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "790a3b2be0a133b994cd19e471184d8bf291e75910ec0c2c246c23a4db736496",
+  "fetchedAt": "2026-09-13T12:46:45.298Z"
+}

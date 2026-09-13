@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/lab-hardware-cad",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/lab-hardware-cad",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/lab-hardware-cad",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "8d3c8b86d822a3e297c9c3dcdb4952ffca0a71bb665142740b5969b34ce0e4a3",
+  "fetchedAt": "2026-09-13T12:46:57.979Z"
+}

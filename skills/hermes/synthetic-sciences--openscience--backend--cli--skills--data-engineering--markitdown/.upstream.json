@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/markitdown",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/markitdown",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/markitdown",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "3ca70bcde19045545ca6286558e5dfd589780a7938178f229ba64ebf2fcf84f8",
+  "fetchedAt": "2026-09-13T12:46:45.266Z"
+}

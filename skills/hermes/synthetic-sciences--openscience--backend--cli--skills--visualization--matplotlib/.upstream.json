@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/matplotlib",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/matplotlib",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/matplotlib",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "61a1f86886dd1a0b3fdd81d77642dc89187a43e730fc6aad390d561272965c23",
+  "fetchedAt": "2026-09-13T12:46:45.267Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/hugging-face-cli",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/hugging-face-cli",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/hugging-face-cli",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "371fbe5931d830cacbaf4c94bf9fa0df58b8ad487f75849eb07e1073642f340c",
+  "fetchedAt": "2026-09-13T12:46:45.253Z"
+}

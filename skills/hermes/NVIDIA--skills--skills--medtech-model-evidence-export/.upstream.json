@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/medtech-model-evidence-export",
+  "identifier": "NVIDIA/skills/skills/medtech-model-evidence-export",
+  "repo": "NVIDIA/skills",
+  "path": "skills/medtech-model-evidence-export",
+  "branch": "main",
+  "pushedAt": "2026-09-12T15:23:23Z",
+  "contentHash": "9f6a888f80006eb139920120bab07781d876d86d6bd49fe0f78aac3186085523",
+  "fetchedAt": "2026-09-13T12:46:44.142Z"
+}

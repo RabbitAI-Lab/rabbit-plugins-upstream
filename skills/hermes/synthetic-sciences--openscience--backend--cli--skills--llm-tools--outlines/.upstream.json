@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/outlines",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/outlines",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/outlines",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "c4c6949734f73437d2980d573ee648d190a0edb0277396599a889c482d0506e2",
+  "fetchedAt": "2026-09-13T12:46:45.276Z"
+}

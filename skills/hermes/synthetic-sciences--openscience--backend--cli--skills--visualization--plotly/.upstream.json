@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/plotly",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/plotly",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/plotly",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "192286c67db3db03b06d0ab7e8481438dd447c3ccbee0985b54802017fb4c06f",
+  "fetchedAt": "2026-09-13T12:46:45.279Z"
+}

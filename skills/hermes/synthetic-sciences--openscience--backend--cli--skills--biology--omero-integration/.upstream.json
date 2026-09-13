@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/omero-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/omero-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/omero-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "2b47076c66b7286351b7534ff6a9ef1a2ccbe3e3592850253c8e74ac712653c0",
+  "fetchedAt": "2026-09-13T12:46:45.274Z"
+}

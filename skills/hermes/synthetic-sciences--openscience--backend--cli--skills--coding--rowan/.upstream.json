@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/rowan",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/rowan",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/rowan",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "838d69517829253f880952fb83eea2e185146de0fd12f227741a4e595f0a027e",
+  "fetchedAt": "2026-09-13T12:46:45.291Z"
+}

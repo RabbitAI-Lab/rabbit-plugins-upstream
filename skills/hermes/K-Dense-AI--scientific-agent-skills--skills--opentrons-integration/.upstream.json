@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/opentrons-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/opentrons-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/opentrons-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "8d39ca03130af205c3e134856d79915d34065f399df4e89415c8624f545cdbec",
+  "fetchedAt": "2026-09-13T12:46:57.998Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/hqq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/hqq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/hqq",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "068b566d6c2851f988a77dfc8a850562a5b9777d0076a1fdd51ad0681e58434b",
+  "fetchedAt": "2026-09-13T12:46:45.253Z"
+}

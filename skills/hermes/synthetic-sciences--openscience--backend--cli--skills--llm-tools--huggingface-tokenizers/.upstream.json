@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/huggingface-tokenizers",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/huggingface-tokenizers",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/huggingface-tokenizers",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "71448bad5383b4424796ddcdf54a5e14e74755057abf52fb515708211a282f76",
+  "fetchedAt": "2026-09-13T12:46:45.257Z"
+}

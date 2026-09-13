@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pydeseq2",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pydeseq2",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pydeseq2",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "fcfa450b1b2327d95bcf563ba9b816a5fa74f2c01cbf77eabf1be2cb062e15f0",
+  "fetchedAt": "2026-09-13T12:46:45.282Z"
+}

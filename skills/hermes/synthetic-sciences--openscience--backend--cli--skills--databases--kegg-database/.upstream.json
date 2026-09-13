@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/kegg-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/kegg-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/kegg-database",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "a1e0dc34d25941234a8468b0836af75382a188e444bcc469245734e361fdee40",
+  "fetchedAt": "2026-09-13T12:46:45.260Z"
+}

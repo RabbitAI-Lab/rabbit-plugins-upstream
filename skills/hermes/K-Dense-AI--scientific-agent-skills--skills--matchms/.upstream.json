@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/matchms",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/matchms",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/matchms",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "eef42f8908e8a9f399c5a03882bc41974d206dc2515c1401b770e759c7294794",
+  "fetchedAt": "2026-09-13T12:46:57.988Z"
+}

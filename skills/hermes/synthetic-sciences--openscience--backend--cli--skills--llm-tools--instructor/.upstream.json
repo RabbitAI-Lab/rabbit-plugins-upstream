@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/instructor",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/instructor",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/instructor",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "dc8d7151ccce38251209ba93b597488da5d0fa010dc6bc5ac8d0268ff060660d",
+  "fetchedAt": "2026-09-13T12:46:45.259Z"
+}

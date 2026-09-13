@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/llava",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/llava",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/llava",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "6ecae66095373216a61eade70f226988c285a22fba5e394b0b4c9f6ff1bb0f34",
+  "fetchedAt": "2026-09-13T12:46:45.264Z"
+}

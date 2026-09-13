@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/benchling-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/benchling-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/benchling-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "b568195685f66f4096d300204ca5c89d2fe762ab77fca01bf11ba300972366dc",
+  "fetchedAt": "2026-09-13T12:46:45.223Z"
+}

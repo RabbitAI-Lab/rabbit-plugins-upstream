@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/llamaindex",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/llamaindex",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/llamaindex",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "83283c453eb24726a8a81eaf17a137799cd57139ebec17859abe6f496583141b",
+  "fetchedAt": "2026-09-13T12:46:45.264Z"
+}

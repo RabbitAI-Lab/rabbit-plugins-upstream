@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/aeon",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/aeon",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/aeon",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "3ad04ddee0d0f4f782a48eef50e6006ece6c2ce3da4a6eace9dbbe08a7773dc4",
+  "fetchedAt": "2026-09-13T12:46:45.215Z"
+}
