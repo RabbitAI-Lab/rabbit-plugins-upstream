@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-curation-and-retrieval",
+  "identifier": "NVIDIA/skills/skills/paidf-curation-and-retrieval",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-curation-and-retrieval",
+  "branch": "main",
+  "pushedAt": "2026-09-12T15:23:23Z",
+  "contentHash": "5407cc92099b1c42d4b69b7cecdcb56fa3368cf0b9316505015808b986a9b979",
+  "fetchedAt": "2026-09-13T12:46:44.213Z"
+}

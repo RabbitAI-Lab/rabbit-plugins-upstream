@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/quantum/pennylane",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/quantum/pennylane",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/quantum/pennylane",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "aaa7f3d0f18679bca88a5b0a47b56c2509a5b388a577f7850a79e70218550ade",
+  "fetchedAt": "2026-09-13T12:46:45.278Z"
+}

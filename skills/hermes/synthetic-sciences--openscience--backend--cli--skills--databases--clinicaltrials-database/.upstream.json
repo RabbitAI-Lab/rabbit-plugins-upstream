@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/clinicaltrials-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/clinicaltrials-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/clinicaltrials-database",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "3ca226c6510ef819bda1751a3110056109330023d0493337151657ec09df8d64",
+  "fetchedAt": "2026-09-13T12:46:45.235Z"
+}

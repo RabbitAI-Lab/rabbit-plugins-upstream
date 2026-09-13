@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/paper-2-web",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/paper-2-web",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/paper-2-web",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "7dede2e1761c97b6345fc4d163242b6206c76f17817b4231effb15ed07c5cf21",
+  "fetchedAt": "2026-09-13T12:46:45.276Z"
+}

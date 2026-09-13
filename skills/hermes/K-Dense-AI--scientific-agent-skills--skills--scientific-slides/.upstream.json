@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-slides",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-slides",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-slides",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "2f274e085a8aded1cdf43d247b66bb9aa248ae6eb16d6dd1ed622cf36ae115b7",
+  "fetchedAt": "2026-09-13T12:46:58.029Z"
+}

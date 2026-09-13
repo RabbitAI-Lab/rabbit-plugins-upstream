@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/moe-training",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/moe-training",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/moe-training",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "ac72ec78eb22862828c20824735117aa29ae9275c6d238fee830a90ea2b334ee",
+  "fetchedAt": "2026-09-13T12:46:45.269Z"
+}

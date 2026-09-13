@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/protocolsio-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/protocolsio-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/protocolsio-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "ee16269c8370c6277bce0b6cf0e1d545678a5d4b2ee6cfd49e18d43c3b11b511",
+  "fetchedAt": "2026-09-13T12:46:45.281Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/mlflow",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/mlflow",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/mlflow",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "ca412b0cd666e071d87769c40d9c9594c4faf81ffc07ff1f663aaae980f83680",
+  "fetchedAt": "2026-09-13T12:46:45.268Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/transformers",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/transformers",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/transformers",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "f87d4594585be1685233476156b4e18c5200b2ab56f86837db9cd11d7ad2bb01",
+  "fetchedAt": "2026-09-13T12:46:45.303Z"
+}

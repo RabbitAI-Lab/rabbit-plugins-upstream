@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/grpo-rl-training",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/grpo-rl-training",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/grpo-rl-training",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "2407945c3ccfd5c6fea716c78cb10675b1edc1ebe41c62e8f097dc5437e89895",
+  "fetchedAt": "2026-09-13T12:46:45.251Z"
+}

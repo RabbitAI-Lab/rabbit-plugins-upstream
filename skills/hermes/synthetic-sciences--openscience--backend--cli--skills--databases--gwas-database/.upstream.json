@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/gwas-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/gwas-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/gwas-database",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "505d324dc5b574fa41acc54816f4906766f52b204918c3e83b445fcfca708305",
+  "fetchedAt": "2026-09-13T12:46:45.252Z"
+}

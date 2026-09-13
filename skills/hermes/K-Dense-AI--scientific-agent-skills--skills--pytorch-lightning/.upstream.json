@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pytorch-lightning",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pytorch-lightning",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pytorch-lightning",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "eb590ca66721be8d45dbafe9c744fa60c33a017ff51577a6764e6e7b06c972c1",
+  "fetchedAt": "2026-09-13T12:46:58.021Z"
+}

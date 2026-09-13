@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/slime",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/slime",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/slime",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "b7fb069ceb3006bb80f2b91808e48d09c27fcf4bec44eba0c799ffb52ffd3f82",
+  "fetchedAt": "2026-09-13T12:46:45.297Z"
+}

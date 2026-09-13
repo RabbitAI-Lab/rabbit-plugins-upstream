@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/histolab",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/histolab",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/histolab",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "83c538048bde3738119ad2f34b3c9ee35fe2820cc17acee1754cc9e81c577bc8",
+  "fetchedAt": "2026-09-13T12:46:45.252Z"
+}

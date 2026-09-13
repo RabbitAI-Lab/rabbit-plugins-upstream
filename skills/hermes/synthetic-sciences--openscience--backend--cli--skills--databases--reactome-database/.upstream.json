@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/reactome-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/reactome-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/reactome-database",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "e7e519e923f4cd8a3c3c9ac76f20d05a0c5388e1cb1752d67c693671853548ca",
+  "fetchedAt": "2026-09-13T12:46:45.289Z"
+}

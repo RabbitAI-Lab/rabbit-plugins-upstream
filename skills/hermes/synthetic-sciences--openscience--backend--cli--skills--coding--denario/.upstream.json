@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/denario",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/denario",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/denario",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "4fefeb06200fc277048c226a116ce4fbcab6b20dd6abdb99760d89f6a788386a",
+  "fetchedAt": "2026-09-13T12:46:45.240Z"
+}

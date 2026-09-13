@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/generate-image",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/generate-image",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/generate-image",
+  "branch": "main",
+  "pushedAt": "2026-09-13T12:39:06Z",
+  "contentHash": "7750aaf75cc48611e12ebe47703202c02464539a9808545836b31f442adedceb",
+  "fetchedAt": "2026-09-13T12:46:45.248Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/statsmodels",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/statsmodels",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/statsmodels",
+  "branch": "main",
+  "pushedAt": "2026-09-12T02:09:21Z",
+  "contentHash": "b1dad62cd8168f4aeeea0ac2ef571c9dbd91987ccb511123addb971883c2f046",
+  "fetchedAt": "2026-09-13T12:46:58.037Z"
+}
