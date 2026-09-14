@@ -1,0 +1,31 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # check_skill_lossless.py resolves the baseline COMMIT 864ad7f, which the
+          # migration merge made an ancestor of HEAD. A shallow checkout does not
+          # reach back to it and the check would exit 2 — "could not read the
+          # baseline", which is deliberately a different exit code from "content was
+          # lost", and is exactly the state that must not look like a pass.
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pip install -r requirements.txt pytest
+      - run: python3 -m pytest scripts/tests -q
+      - run: python3 scripts/check_skill_lossless.py --baseline 864ad7f
+      - name: market conventions
+        run: python3 scripts/check_conventions.py --ci
+      - name: Lint eval assertions
+        run: python3 evals/lint_assertions.py

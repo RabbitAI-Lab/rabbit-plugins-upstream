@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/endpoint-aiops",
   "slug": "endpoint-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635134776,
-  "contentHash": "646fff04289c0596b3bb1e00bd3d432da99c9a69c5865ca5303d0edf0b1b606e",
-  "fetchedAt": "2026-07-26T18:09:07.057Z"
+  "version": "0.10.2",
+  "updatedAt": 1789222424396,
+  "contentHash": "50fde5af5b4621dbefa7812b72282f4636b012f218bd0e7e177de7c321d59cf1",
+  "fetchedAt": "2026-09-14T14:43:42.896Z"
 }

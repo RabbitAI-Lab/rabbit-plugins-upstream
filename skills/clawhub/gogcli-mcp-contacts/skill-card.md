@@ -1,41 +1,64 @@
-## Description: <br>
-Looks up, searches, and manages Google Contacts and broader Google People API profiles through the gogcli Contacts MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user asks to look up, search, or manage Google Contacts and the broader People API (Workspace directory).
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure an MCP-backed assistant for Google Contacts and Workspace directory lookups, including contact search, profile retrieval, and manager or reports relations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can involve sensitive Google Workspace and Contacts access. <br>
-Mitigation: Install only when the publisher is trusted with Google Workspace access and review enabled scopes with `google-workspace config show`. <br>
-Risk: Write-capable Workspace actions can modify data if enabled. <br>
-Mitigation: Keep Docs, Sheets, Drive, and other write modes off unless needed, and avoid Drive readwrite unless broad Drive-file token access is acceptable. <br>
+## Use Case:
 
+External users and developers use this MCP server to let an agent search, inspect, export, and manage Google Contacts and Google Workspace People directory records through gogcli.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-contacts) <br>
-- [gogcli dependency](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON configuration blocks and inline command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP server configuration and Google Workspace tool-use guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release metadata) <br>
+Risk: The skill can access broader Google Contacts and People API data than basic personal-contact lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Google OAuth scopes possible and review requested contact and directory access before installing.
+
+Risk: Mutation tools can update, delete, or merge contacts when enabled.
+
+Mitigation: Set GOG_READONLY=1 unless edits are required, and preview dedupe operations before applying changes.
+
+Risk: A configurable remote runner can receive contact commands and OAuth access tokens.
+
+Mitigation: Do not configure GOG_RUNNER_URL unless the endpoint uses HTTPS, is controlled by you, is allowed by egress policy, and is approved to receive those commands and tokens.
+
+Risk: Generic run tools can broaden what an autonomous agent may execute through gogcli.
+
+Mitigation: Avoid exposing generic run tools to autonomous agents unless their use is reviewed and constrained.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-contacts)
+- [gogcli CLI](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [Project documentation](https://github.com/chrischall/gogcli-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON]
+
+**Output Format:** [MCP tool responses, including text, JSON, vCard export data, and setup snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return contact, People API, Workspace directory, authentication status, or command-runner output depending on the selected MCP tool.]
+
+## Skill Version(s):
+
+2.30.0 (source: package.json, manifest.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

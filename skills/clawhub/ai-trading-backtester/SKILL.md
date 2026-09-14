@@ -1,7 +1,7 @@
 ---
 name: "AI Trading Strategy Backtester"
 description: "AI-powered quantitative trading strategy backtesting assistant. Designs, codes, and evaluates trading strategies across historical market data. Supports A-share (China), Hong Kong, US equity markets. Covers mean reversion, momentum, breakout, pairs trading, and machine learning-based strategies. Built for quantitative analysts and retail traders. Keywords: trading backtest, quantitative strategy, algorithmic trading, Python backtesting, backtrader, vectorbt, trading strategy, momentum, mean reversion, pairs trading, A-share strategy, financial data, technical indicators."
-version: "5.0.0"
+version: "5.0.1"
 ---
 
 # AI Trading Strategy Backtester
@@ -9,6 +9,24 @@ version: "5.0.0"
 ## Overview
 
 An AI-powered quantitative trading strategy design and backtesting assistant that helps you transform trading ideas into fully-coded, backtested strategies. It guides you through strategy design (mean reversion, momentum, breakout, pairs trading, ML-based), implements them in Python (backtrader, vectorbt, pandas), evaluates performance across historical data for A-share, HK, and US markets, and produces risk-adjusted performance reports.
+
+## Market & Regulatory Context (as of 2026-09-14)
+
+| 事项 | 对回测的直接影响 |
+|------|----------------|
+| **程序化交易管理要求** | 高频类策略需自行计入报备、流速与异常交易约束，回测中不能假设"无限报单" |
+| **A股 T+1 与涨跌幅限制** | 当日买入不可卖出、涨跌停无法成交，回测必须对不可成交信号做剔除或顺延处理 |
+| **停牌与流动性** | 停牌期间的"信号"不可成交；小市值标的需按实际成交量限制下单规模 |
+| **交易成本口径** | 佣金、印花税、滑点合计常被低估，年换手率高时成本可吞掉全部超额收益 |
+| **数据复权与幸存者偏差** | 使用不复权价格或仅含现存标的历史，会系统性高估策略表现 |
+
+**新动态（截至 2026-09-14）：**
+- **程序化交易监管常态化**：境内市场对程序化交易的报备、交易行为监测与异常交易认定持续细化，高频与日内回转类策略的合规成本上升。回测时应把"报单频率上限""撤单率约束"纳入假设，而非只追求收益最大化。
+- **AI 选股与因子挖掘的合规关注上升**：以大模型或机器学习生成交易信号时，监管与机构风控普遍要求可解释、可复现、留痕，纯黑箱信号在实盘落地时面临额外审核成本。
+- **数据要素与另类数据应用扩展**：产业、舆情、供应链等另类数据被更广泛用于因子构建，但数据可得性的时点（point-in-time）问题更突出，回测中须严格避免引入未来信息。
+- 以上为公开信息综述，**具体规则、费率与执行口径以交易所、中国证监会及券商官方最新发布为准**。
+
+---
 
 ## Triggers
 
@@ -35,6 +53,14 @@ Collect the trading idea:
 - **Entry/Exit signals**: Technical indicators, price patterns, fundamental signals, ML predictions
 - **Position sizing**: Fixed, Kelly criterion, risk-parity, dynamic
 - **Constraints**: Max position size, long-only/short, turnover limit, slippage model
+
+**简报示例（合格）：**
+> 策略类型：动量；市场：A股（沪深300成分股）；频率：日线；标的：成分股等权；信号：20日动量排名前20%；仓位：等权，最多10只；约束：仅做多、单边成本0.15%、单票上限10%、剔除ST与上市不足60日个股；回测区间：2019-01-01 至 2026-08-31。
+
+**简报示例（不合格及原因）：**
+> "帮我做个能稳定赚钱的量化策略。"
+>
+> 缺少市场、频率、成本、仓位与约束，任何回测结果都无法验证。更关键的缺失是**没有失败条件**——合格简报应写明"什么情况下判定策略不可用"（如样本外夏普<0.5 或最大回撤>25% 即放弃）。
 
 ### Step 2: Strategy Design & Code Generation
 
@@ -80,6 +106,19 @@ class MomentumStrategy(bt.Strategy):
                 self.order_target_percent(d, 1.0 / len(rankings))
 ```
 
+**调用示例与常见坑：**
+
+```python
+cerebro = bt.Cerebro()
+cerebro.addstrategy(MomentumStrategy, lookback=20, hold_period=5, rank_percentile=0.2)
+# 关键：传入的是"回望期内的动量"，必须剔除上市不足 lookback 天的新股，
+# 否则新股会因为没有足够历史而产生极端 ROC 值，长期占据榜单前排。
+```
+
+- **坑一（未来函数）**：若在 `next()` 里用当收盘价排序并在同一根 K 线以收盘价成交，等于用到了收盘才可知的信息。A 股应改为**次日开盘或次日均价成交**。
+- **坑二（涨跌停不可成交）**：榜单里的股票当日一字涨停时无法买入，回测若照单全收会高估收益。应对方式：当日涨停则跳过，顺延至下一交易日。
+- **坑三（集中度过低）**：`1.0 / len(rankings)` 在 rankings 为空时会除零，需先判断 `if rankings:`。
+
 #### B. Mean Reversion Strategy Template
 ```python
 class MeanReversionStrategy(bt.Strategy):
@@ -112,6 +151,18 @@ class MeanReversionStrategy(bt.Strategy):
                self.rsi > self.params.rsi_overbought:
                 self.close()
 ```
+
+**调用示例与参数敏感度说明：**
+
+```python
+# rsi_oversold 从 30 调到 25，交易次数可能从 127 次降到 70 次以下，
+# 而样本外夏普从 1.12 掉到 0.6 —— 这种"微调剧变"就是过拟合信号。
+cerebro.addstrategy(MeanReversionStrategy, bb_period=20, bb_dev=2.0,
+                    rsi_period=14, rsi_oversold=30, rsi_overbought=70)
+```
+
+- **适用场景**：震荡市中表现较好；单边下跌行情里"越跌越买"会连续触发买入信号，形成典型的**均值回归陷阱**——建议叠加趋势过滤（如仅在收盘价高于 MA60 时允许开仓）。
+- **A 股注意**：T+1 制度下当日买入不能当日卖出，若策略在盘中触发卖出信号，回测中必须顺延到下一交易日，否则会虚增收益。
 
 #### C. Pairs Trading Strategy
 ```python
@@ -151,6 +202,20 @@ def pairs_trading_signals(spread, z_entry=2.0, z_exit=0.5):
     return signals
 ```
 
+**调用示例：**
+
+```python
+pairs = find_cointegrated_pairs({"600036": s_a, "601318": s_b})
+# => [("600036", "601318", -3.87)]   ADF 统计量 -3.87 < 1% 临界值，判定协整
+
+spread = s_a - 1.24 * s_b           # 1.24 来自 OLS 回归系数
+signals = pairs_trading_signals(spread, z_entry=2.0, z_exit=0.5)
+```
+
+- **关键提醒一**：`z_score` 用全样本 `mean()`/`std()` 计算会引入未来函数。实务中应使用**滚动窗口**（如过去 60 日）的均值与标准差。
+- **关键提醒二**：协整关系会衰减。建议在回测中每 N 个月重新检验一次协整，关系破裂即停止交易该配对，而不是一路持有到止损。
+- **关键提醒三**：A 股缺乏便捷的做空渠道，配对交易的"做空腿"往往无法实现，因此在 A 股使用时应明确标注为"仅做多腿的变体"，收益预期需相应下调。
+
 ### Step 3: Backtest Execution
 
 Guide the user through running the backtest:
@@ -181,20 +246,37 @@ cerebro.run()
 print(f'最终资金: {cerebro.broker.getvalue():,.2f}')
 ```
 
+**A股成本设置的正确示范：**
+
+```python
+# 佣金双边 + 印花税（卖出单边）+ 滑点，缺一项都会高估收益
+cerebro.broker.setcash(1_000_000.0)
+cerebro.broker.setcommission(commission=0.0003, stocklike=True)   # 佣金万三
+cerebro.broker.set_slippage_perc(perc=0.0005)                     # 滑点万五
+# 印花税需在卖出侧单独计入（历史口径曾为卖出单边 0.1%，以最新官方口径为准）
+```
+
+**一次性跑完的最小检查清单：**
+1. 初始资金与期末资金是否如预期变化（没变说明根本没有成交）
+2. 成交笔数是否合理（为 0 说明信号从未触发；过多说明成本被低估）
+3. 是否有信号落在停牌日或涨跌停日（有则说明缺少可交易性过滤）
+
 ### Step 4: Performance Analysis
 
 Generate comprehensive performance metrics:
 
-| Metric | Description | Target |
-|--------|-------------|--------|
-| Total Return | Cumulative return | > Benchmark |
-| Annualized Return | CAGR | > 10% (A-share), > 8% (HK/US) |
-| Sharpe Ratio | Risk-adjusted return | > 1.5 |
-| Max Drawdown | Peak-to-trough loss | < 20% |
-| Win Rate | Percentage of profitable trades | > 50% |
-| Profit Factor | Gross profit / Gross loss | > 1.5 |
-| Calmar Ratio | Annual return / Max DD | > 1.0 |
-| Sortino Ratio | Return / Downside deviation | > 1.0 |
+| Metric | Description | Target | Formula / 计算口径 | 常见误读 |
+|--------|-------------|--------|-------------------|---------|
+| Total Return | Cumulative return | > Benchmark | 期末权益/期初权益 - 1 | 忽略分红再投与复权方式差异 |
+| Annualized Return | CAGR | > 10% (A-share), > 8% (HK/US) | (终值/初值)^(252/交易日数) - 1 | 回测期不足一年时年化会严重放大 |
+| Sharpe Ratio | Risk-adjusted return | > 1.5 | (年化收益 - 无风险利率)/年化波动 | 用日收益简单乘√252 前需确认收益无自相关 |
+| Max Drawdown | Peak-to-trough loss | < 20% | max((峰值 - 当前值)/峰值) | 只看数值不看持续天数，低估心理压力 |
+| Win Rate | Percentage of profitable trades | > 50% | 盈利次数/总平仓次数 | 高胜率配低盈亏比仍可能整体亏损 |
+| Profit Factor | Gross profit / Gross loss | > 1.5 | 总盈利/总亏损 | 不含成本时会被系统性高估 |
+| Calmar Ratio | Annual return / Max DD | > 1.0 | 年化收益/最大回撤 | 回测期短时最大回撤尚未充分暴露 |
+| Sortino Ratio | Return / Downside deviation | > 1.0 | (年化收益 - 无风险利率)/下行波动 | 与夏普混用会导致横向比较失真 |
+| Turnover / 换手率 | 年化双边成交额/平均权益 | 视策略而定 | 年双边成交额/平均权益 | 常被忽略，却是成本吞噬的主因 |
+| Exposure / 持仓暴露 | 有仓位时间占比 | 视策略而定 | 持仓交易日/总交易日 | 低暴露策略的年化收益不可直接对比满仓策略 |
 
 ### Step 5: Optimization & Stress Testing
 
@@ -214,6 +296,24 @@ C. 风险分析
    - Factor exposure (momentum, size, volatility)
    - Tail risk: maximum loss scenarios
 ```
+
+**压力测试示例（A股场景）：**
+
+| 情景 | 假设 | 观察指标 |
+|------|------|---------|
+| 2015 年异常波动 | 指数快速回撤、流动性骤降、大面积停牌 | 策略最大回撤、停牌期间无法减仓的比例 |
+| 2018 年单边下跌 | 全年趋势向下 | 均值回归类策略是否连续触发买入、资金是否耗尽 |
+| 2020 年疫情冲击 | 短期急跌后快速反弹 | 止损是否被触发在最低点、反弹是否踏空 |
+| 流动性收缩 | 成交额下降 50% | 冲击成本上升后的净收益变化 |
+| 成本翻倍 | 佣金与印花税假设提高 100% | 净收益是否仍为正——若为负说明策略靠低成本存活 |
+
+**参数优化示例（Walk-forward）：**
+```
+样本划分：2019-2023 为优化期，2024-2026 为样本外
+滚动方式：每 12 个月重新优化一次参数，用下一年数据检验
+判定规则：样本外夏普 / 样本内夏普 > 0.6 视为可接受；< 0.4 判定过拟合
+```
+若样本内夏普 1.8、样本外 0.5（比值 0.28），即使样本内指标漂亮，也应判定该策略不可用。
 
 ## Input/Output Examples
 
@@ -297,14 +397,14 @@ A-share markets are subject to significant regulatory and liquidity risks.
 
 ## Strategy Templates Library
 
-| Strategy Type | Best For | Timeframe | Markets |
-|--------------|----------|-----------|---------|
-| Momentum | Trending markets | Daily/Weekly | All |
-| Mean Reversion | Range-bound markets | Intraday/Daily | All |
-| Breakout | Volatile markets | Intraday/Daily | All |
-| Pairs Trading | Market-neutral | Daily | US/HK |
-| Machine Learning | Alpha discovery | Daily | All |
-| Event-Driven | Corporate actions | Daily | A-share/US |
+| Strategy Type | Best For | Timeframe | Markets | 典型失效场景 | A股落地难点 |
+|--------------|----------|-----------|---------|------------|------------|
+| Momentum | Trending markets | Daily/Weekly | All | 急转弯行情（风格切换） | T+1 导致信号次日才可执行 |
+| Mean Reversion | Range-bound markets | Intraday/Daily | All | 单边下跌（越跌越买） | 涨跌停无法成交、T+1 |
+| Breakout | Volatile markets | Intraday/Daily | All | 假突破密集期 | 涨停排队难以建仓 |
+| Pairs Trading | Market-neutral | Daily | US/HK | 协整关系破裂 | 做空腿难以实现 |
+| Machine Learning | Alpha discovery | Daily | All |  regime 变化、特征漂移 | 可解释性与留痕要求高 |
+| Event-Driven | Corporate actions | Daily | A-share/US | 事件被提前price-in | 事件数据 point-in-time 难保证 |
 
 ## Best Practices
 
@@ -316,14 +416,21 @@ A-share markets are subject to significant regulatory and liquidity risks.
 6. **Validate with paper trading** — run live for 1-3 months before real capital
 7. **Beware of overfitting** — fewer parameters = more robust strategy
 
+**举例说明第 2 条（交易成本）为何致命：** 某日频策略年换手 20 倍，单边成本按 0.15% 计，年化成本约 6%。若策略毛年化超额为 8%，扣费后仅剩 2%，再计入滑点后大概率归零。因此**高换手策略必须先算成本再算收益**。
+
+**举例说明第 5 条（A股特性）：** 某策略在 2015 年 6-8 月期间发出减仓信号，但持仓标的中 40% 处于停牌状态，实际无法卖出。回测若假设全部成交，会把最大回撤从真实的 -45% 写成 -28%，严重低估风险。
+
+**举例说明第 6 条（模拟盘）：** 正式投入资金前，建议先做 1-3 个月模拟或小额实盘，重点验证的不是收益，而是"信号能否按回测假设成交"——实盘中的成交价、可成交量、停牌与临停，往往与回测假设差距最大。
+
 ## Risk Disclaimer
 
 This skill provides backtesting tools and historical analysis for educational and research purposes only. Backtested results are not indicative of future performance. Real trading involves significant risks including market volatility, liquidity constraints, regulatory changes, and model risk. Always consult with qualified financial advisors before making investment decisions.
-## Appendix G. Alibaba Dianjin Fusion — ai-trading-backtester v5.0.0
+## Appendix G. Alibaba Dianjin Fusion — ai-trading-backtester v5.0.1
 
 > **Source**: Alibaba Dianjin Digital Employee — `investment-advisor` (AI投资顾问) & `quant-researcher` (AI量化研究员)  
 > **Essence**: 策略回测、参数优化、风险控制、绩效评估  
 > **Integrated**: 2026-05-31
+> **Last reviewed**: 2026-09-14
 
 ---
 
@@ -345,14 +452,15 @@ This skill provides backtesting tools and historical analysis for educational an
 
 **核心指标体系**：
 
-| 指标 | 计算公式 | 优秀标准 | 及格标准 |
-|------|---------|---------|---------|
-| 年化收益率 | (终值/初值)^(252/交易日)-1 | >20% | >8% |
-| 夏普比率 | (年化收益-无风险利率)/年化波动 | >1.5 | >0.5 |
-| 最大回撤 | max((历史最高-当前)/历史最高) | <15% | <30% |
-| 胜率 | 盈利次数/总次数 | >60% | >45% |
-| 盈亏比 | 平均盈利/平均亏损 | >2.0 | >1.5 |
-| 索提诺比率 | (年化收益-无风险利率)/下行波动 | >2.0 | >1.0 |
+| 指标 | 计算公式 | 优秀标准 | 及格标准 | 易被操纵的方式 | 交叉验证指标 |
+|------|---------|---------|---------|--------------|------------|
+| 年化收益率 | (终值/初值)^(252/交易日)-1 | >20% | >8% | 缩短回测期至强年份 | 分年度收益是否稳定 |
+| 夏普比率 | (年化收益-无风险利率)/年化波动 | >1.5 | >0.5 | 剔除极端亏损交易日 | 与索提诺、Calmar 同时看 |
+| 最大回撤 | max((历史最高-当前)/历史最高) | <15% | <30% | 只报告收盘价回撤 | 回撤持续天数与恢复天数 |
+| 胜率 | 盈利次数/总次数 | >60% | >45% | 用极短止盈拉高胜率 | 盈亏比是否同步下降 |
+| 盈亏比 | 平均盈利/平均亏损 | >2.0 | >1.5 | 放宽止损拉高盈亏比 | 最大回撤是否同步恶化 |
+| 索提诺比率 | (年化收益-无风险利率)/下行波动 | >2.0 | >1.0 | 下行波动口径自行定义 | 与最大回撤交叉核对 |
+| 换手率 | 年双边成交额/平均权益 | 视策略 | 视策略 | 常常干脆不报告 | 与净收益同时报告 |
 
 **回测报告模板（Dianjin风格）**：
 
@@ -455,6 +563,17 @@ ATR仓位法（波动率调整）：
   → 仓位 = 100万 × 0.02 / (2×100) = 100股（约占总资金2%）
 ```
 
+**凯利公式的实操提醒：** 上例算出 32.5% 仓位，但凯利公式对胜率与盈亏比的估计误差极为敏感——若实际胜率是 50% 而非 55%，最优仓位会大幅下降。实务中普遍采用**半凯利或四分之一凯利**（上例取 16% 或 8%），以避免在参数高估时过度下注。
+
+**ATR 仓位法举例（跨标的比较）：**
+
+| 标的 | ATR | 单笔风险预算 2% 时的股数 | 占总资金 |
+|------|-----|----------------------|---------|
+| 高波动个股（ATR=2元，价格20元） | 2.0 | 100股 | 约2%名义，实际暴露高 |
+| 低波动蓝筹（ATR=0.3元，价格20元） | 0.3 | 667股 | 约13%名义 |
+
+同一风险预算下，低波动标的自然获得更高名义仓位，这正是波动率调整的目的：**让每笔交易的风险贡献相当，而不是让每笔交易的金额相当**。
+
 ---
 
 ### G.5 Test Case (Dianjin quality)
@@ -476,8 +595,13 @@ Quality Check:
 - ✅ 问题诊断客观（不回避缺陷）
 - ✅ 改进建议可行（有实操价值）
 - ✅ 风险提示（过拟合风险）
+
+Additional Cases:
+- TC002: "策略回测夏普 1.9，但交易次数只有 18 次" → 判定统计不显著，要求延长样本或降低参数自由度
+- TC003: "回测中未设置涨跌停过滤" → 判定存在可交易性缺陷，要求补过滤后重跑并对比差异
+- TC004: "样本外夏普 0.5，样本内 1.8" → 判定过拟合，给出缩减参数与简化规则的改法
 ```
 
 ---
 
-**End of Dianjin Fusion Content — ai-trading-backtester v5.0.0**
+**End of Dianjin Fusion Content — ai-trading-backtester v5.0.1**

@@ -2,23 +2,49 @@
 """
 memory-bench collect — Gather anonymized memory system statistics.
 
-Collects retrieval accuracy, token usage, consolidation metrics, and system
-info. All data is anonymized: no memory content, no personal information,
-no file paths. Only aggregate numbers and distribution histograms.
+Collects counts, histograms, consolidation metrics and coarse system info from
+your memory database. NO memory content, NO benchmark queries, NO file paths and
+NO hostnames are read into the report. Only aggregate numbers.
+
+Identity is OPT-IN. The report is attributed to "anonymous" unless you pass
+--contributor <name> yourself; $GITHUB_USER is never read.
+
+Token/cost totals are OPT-IN too (--include-token-stats), because they come from
+your OpenClaw usage files and say how much you spend.
+
+This script WRITES one file: a random instance UUID next to your database, at
+<db_dir>/.memory-bench-instance-id, so repeat reports can be grouped. Delete it
+to become a new anonymous instance.
 
 Usage:
     python3 collect.py [--db PATH] [--days N] [--output PATH]
+                       [--contributor NAME] [--include-token-stats]
 
-Output: JSON report file ready for PR submission.
+Output: JSON report file. Nothing is uploaded — see submit.sh for that.
 """
 import sqlite3
 import json
 import sys
 import os
+import shutil
+import subprocess
 import platform
 from pathlib import Path
 from datetime import datetime, timedelta, timezone
 from collections import Counter
+
+
+def _node_version():
+    """Return the local Node version, or None. Never uses a shell."""
+    exe = shutil.which("node")
+    if not exe:
+        return None
+    try:
+        out = subprocess.run([exe, "--version"], capture_output=True, text=True,
+                             timeout=5, check=False, shell=False)
+        return (out.stdout or "").strip() or None
+    except Exception:
+        return None
 
 def find_db():
     """Locate the cognitive memory database."""
@@ -48,7 +74,9 @@ def get_system_info() -> dict:
         "os": platform.system(),
         "arch": platform.machine(),
         "python": platform.python_version(),
-        "node": os.popen("node --version 2>/dev/null").read().strip() or None,
+        # No shell. os.popen() spawns /bin/sh and is unnecessary attack surface for
+        # one version string; shutil.which + a non-shell subprocess is equivalent and inert.
+        "node": _node_version(),
     }
 
 def collect_memory_stats(conn: sqlite3.Connection, days: int) -> dict:
@@ -313,7 +341,7 @@ def collect_retrieval_stats(conn: sqlite3.Connection, days: int) -> dict:
     return stats
 
 def collect_token_stats() -> dict:
-    """Collect token/context usage from OpenClaw session data if available."""
+    """Collect token/cost totals from OpenClaw usage files. Opt-in only."""
     stats = {"available": False}
     usage_files = [
         Path.home() / ".openclaw" / "workspace" / "memory" / "claude-usage.json",
@@ -341,7 +369,13 @@ def main():
     parser.add_argument("--db", help="Path to cognitive_memory.db")
     parser.add_argument("--days", type=int, default=14, help="Days of history to include (default: 14)")
     parser.add_argument("--output", help="Output JSON path (default: stdout)")
-    parser.add_argument("--contributor", help="Your GitHub username (for attribution)")
+    parser.add_argument("--contributor",
+                        help="OPT-IN attribution. Your GitHub username is written "
+                             "into the report and, if you submit, becomes public. "
+                             "Omit it to stay anonymous (the default).")
+    parser.add_argument("--include-token-stats", action="store_true",
+                        help="OPT-IN: include total tokens and USD spend from your "
+                             "OpenClaw usage files. Off by default.")
     args = parser.parse_args()
 
     # Find database
@@ -377,12 +411,12 @@ def main():
         "schema_version": "2.0.0",
         "collected_at": datetime.now(timezone.utc).isoformat(),
         "collection_period_days": args.days,
-        "contributor": args.contributor or os.environ.get("GITHUB_USER", "anonymous"),
+        "contributor": args.contributor or "anonymous",
         "instance_id": get_or_create_instance_id(db_path),
         "system": get_system_info(),
         "memory_stats": collect_memory_stats(conn, args.days),
         "retrieval_stats": collect_retrieval_stats(conn, args.days),
-        "token_stats": collect_token_stats(),
+        "token_stats": collect_token_stats() if args.include_token_stats else {"available": False, "opted_in": False},
         "longitudinal": {
             "prior_reports": len(prior_reports),
             "prior_dates": sorted(prior_reports)[-5:] if prior_reports else [],
@@ -401,6 +435,10 @@ def main():
         print(f"   Instance: {report['instance_id']}")
         print(f"   Memories: {report['memory_stats']['memories']['total_active']}")
         print(f"   Period: {args.days} days")
+        print(f"   Attributed to: {report['contributor']}"
+              + ("" if args.contributor else "  (anonymous — pass --contributor to attribute)"))
+        print(f"   Token/cost stats: {'INCLUDED' if args.include_token_stats else 'excluded'}")
+        print("   Nothing has been uploaded. Read the file, then run submit.sh if you want to share it.")
     else:
         print(output)
 

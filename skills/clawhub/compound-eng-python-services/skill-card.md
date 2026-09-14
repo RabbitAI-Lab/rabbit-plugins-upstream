@@ -1,40 +1,59 @@
-## Description: <br>
-Python patterns for CLI tools, async concurrency, and backend services. Use when working with Python code, building CLI apps, FastAPI services, async with asyncio, background jobs, or configuring uv, ruff, ty, pytest, or pyproject.toml. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Python patterns for CLI tools, async concurrency, and backend services.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for Python service and CLI work, including project tooling, async concurrency decisions, FastAPI structure, background jobs, resilience, observability, API design, migrations, and testing practices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Package-management, migration, and backend-service guidance may lead an agent to change dependencies, database schemas, or application behavior. <br>
-Mitigation: Review proposed code and configuration changes, run the relevant tests and scanners, and verify migration behavior before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill for Python CLI tools, FastAPI services, async concurrency, background jobs, resilience patterns, and project tooling with uv, ruff, ty, pytest, and pyproject.toml.
 
-## Reference(s): <br>
-- [Python CLI Tools](artifact/references/cli-tools.md) <br>
-- [FastAPI Services](artifact/references/fastapi.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/compound-eng-python-services) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces development guidance for Python projects; generated changes should be reviewed and tested before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.4 (source: server evidence release.version) <br>
+Risk: Generated guidance can affect dependencies, configuration, network retry behavior, or database migrations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed changes before applying them, especially when they alter external calls, persistence, migrations, or project configuration.
+
+Risk: Incorrect Python service patterns can change runtime behavior or operational reliability.
+
+Mitigation: Run the skill's documented checks, including pytest, ruff, ty, and coverage validation, before declaring implementation work complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-python-services)
+- [Publisher profile](https://clawhub.ai/user/iliaal)
+- [Python CLI Tools](references/cli-tools.md)
+- [Concurrency and resilience](references/concurrency-and-resilience.md)
+- [FastAPI Services](references/fastapi.md)
+- [Service boundaries](references/service-boundaries.md)
+- [Tooling and tests](references/tooling-and-tests.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance for agent-assisted Python service and CLI development.]
+
+## Skill Version(s):
+
+4.5.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

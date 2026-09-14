@@ -1,117 +1,210 @@
 ---
 name: tech-content-review-panel
-description: Reviews a tech, AI, or industry research/in-depth analysis long-form article before publishing, using a fixed eight-role expert panel in an evaluate-then-optimize loop. Applies to tech/AI/data deep-dives, sector judgment and research pieces, not news, marketing, docs, tutorials, or short opinion posts. Trigger when a user asks to review a finished deep-analysis draft or wants tech content to reach publish-ready quality.
-version: 1.0.0
-metadata:
-  openclaw:
-    tags:
-      - content-review
-      - editorial
-      - tech-writing
-      - quality-assurance
-      - fact-checking
-      - deep-analysis
-      - thought-leadership
-    requires:
-      bins:
-        - none
+description: Reviews a tech/AI/industry research or in-depth analysis long-form article before publishing, via a fixed eight-role expert panel (target-reader reps, quality gatekeepers incl. fact+originality check, distribution gatekeeper) in an evaluate-then-optimize loop. Applies to tech/AI/data deep-dives, sector judgment and research pieces — not news, marketing, docs, tutorials, or short opinion posts. Trigger when the user asks to 会审/评审/review a finished deep-analysis draft or wants tech content 接近完美/可发布.
+version: 1.2.0
+agent_created: true
 read_when:
-  - review this article
-  - multi-perspective critique
-  - make content publish-ready
-  - editorial review for deep-analysis draft
+  - "会审 / 评审 / review this article"
+  - "多视角挑刺 / 让内容接近完美 / 可发布质量"
+  - "tech/AI/行业深度稿成稿后的质量把关"
+slug: tech-content-review-panel
+displayName: Tech Content Review Panel
+description_zh: "技术内容评审委员会：发布前用固定八角色专家小组（目标读者代表、质量门禁含事实与原创检查、分发门禁）以先评估后优化循环，评审技术/AI/行业研究深度长文。"
+not_for:
+  - Fact-checking a single claim in isolation (use a claim-audit skill instead)
+  - Rewriting or restructuring the article itself (review only; revision guidance is advisory)
+  - News, marketing copy, documentation, tutorials, or short opinion posts
+  - Reviewing content that has no finished draft yet
 ---
 
 # Tech Content Review Panel
 
-A single reviewer misses things. This skill runs a fixed **eight-role expert review panel** over a finished tech/AI/industry deep-analysis draft, gives blunt per-role feedback, and pushes the draft toward publish-ready quality — especially for content meant to build a professional personal brand for an industry audience.
+A tech/AI/industry deep-analysis piece aimed at an industry readership and built to establish a professional personal brand is easy to miss with a single perspective. This skill provides a fixed **eight-role expert panel** that reviews a finished draft from multiple angles, giving blunt per-role feedback to push it toward publish-ready quality.
 
-**Design pattern: Evaluator-Optimizer.** The panel evaluates, the draft is revised, a re-check confirms no new issues, then it ships. A generate → evaluate → revise loop.
+**Design pattern: Evaluator-Optimizer** — the panel evaluates, you revise per the feedback, then re-check to confirm no new problems before finalizing. It is a generate → evaluate → revise loop.
 
 ## When to use
 
-**Applies to**: tech / AI / data industry deep-dives, sector judgment articles, and research pieces aimed at an industry readership.
-**Does not apply to**: news, marketing copy, product docs, tutorials, or short opinion posts — their goals and criteria differ, and this panel would misfire. If triggered on such content, stop and tell the user the skill does not apply.
+**Applies to**: tech / AI / industry research or in-depth analysis **long-form** articles aimed at an industry readership (industry deep-dives, sector judgments, research pieces).
+**Does not apply to**: news, marketing copy, product docs, tutorials, or short opinion posts — different goals and criteria mean this panel would mismatch. When such content triggers, tell the user this skill does not apply.
 
-## Workflow
+## Review workflow
 
 ### Step 1 [Deterministic] Confirm input and applicability
-- Confirm a finished draft exists (file path or full text). If only a topic or outline exists, stop and ask for a complete draft first.
-- Confirm the content form is in scope (see above). If not, stop and explain.
+- Confirm there is a finished deep-analysis draft (file path or full text). If none, stop and ask the user to finish a first draft first.
+- Judge whether the content type applies (see above). If not, stop and explain.
 
-### Step 2 [LLM] G1 fact and originality check (must pass first)
-- **Facts**: verify every number, company name, date, policy, and event. Foundational claims must be verified against a reliable source (use web search). Mark items as confirmed / to-verify / possibly-stale (watch for stale news presented as current).
-- **Originality**: search the core arguments, frameworks, and signature phrasings. Decide whether each is an independent take/deepening of a public idea (keep, add a distinguishing line if needed) or too close to an existing piece (rewrite). Every "original / first / exclusive" claim must be verified — never assert originality from impression.
+### Step 2 [LLM] G1 Fact & originality check (gate first — reject if it fails)
+- **Facts**: verify every number / company name / date / policy / event. Foundational facts must be verified online with traceable sources. Distinguish confirmed / to-verify / possibly-stale (watch timeliness — do not present old news as new).
+- **Originality**: search (WebSearch) the core argument, framework, and signature phrasing to judge whether it is "independently derived / deepened from public views" (keep, add a clarifying line if needed) or "verbatim-similar and needs rewrite" (plagiarism risk). Every "original / first / exclusive" claim must be verified — never assert originality from memory.
 
-### Step 3 [Deterministic] G2 style red-line scan (must be clean)
-- Grep the full text for banned patterns (align to the author's writing profile):
-  - "not A but B" and all paired-contrast variants
-  - marketing jargon (empower, closed-loop, end-to-end, powerful, significant, substantial)
-  - inflated/preachy/self-media tone
-  - lecturing/advice tone (you should / it is recommended / here is what to do)
-  - arguing by belittling others (most analyses / many articles / everyone assumes)
-  - writing-process meta text (in one line / further questions / this piece will)
-  - explicit commercial intent (keep a researcher stance, no selling)
-- Then read through: no AI tone, judgment-first, written and tightened.
+### Step 3 [Deterministic] G2 Style red-line scan (reject if not cleared)
+- Grep the full text for red-line phrasing (aligned with the user's long-term writing profile `negative_rules`):
+  - Contrast structures are no longer an absolute zero-tolerance gate. Allow natural, low-density contrast at judgment points (roughly <=3 occurrences per 6,500 Chinese characters), but reject formulaic repetition, contrast used as filler, and any sentence with an AI-bridge pattern. If a contrast sentence can be stated more directly without losing meaning, prefer the direct version. Never replace one contrast pattern with another during revision.
+  - For English, screen `not X but Y`, `rather than`, `instead of`, and similar forms for density and rhetorical function; do not mechanically delete natural comparative language.
+  - marketing jargon (empower / closed-loop / end-to-end / powerful / significant / substantial / build)
+  - self-aggrandizing / inspirational-influencer tone
+  - preacher / instructing tone (you should… / I suggest you… / here's what to do)
+  - putting down others' arguments (most analyses… / many articles… / everyone assumes…)
+  - writing-process meta-info (one-line wrap-up / follow-up question / this piece will… / conclusion first)
+  - explicit commercial intent (researcher posture, no pitching)
+- Then read through to confirm no AI tone, no judgment-first, no written deflection.
 
-### Step 4 [LLM] R1-R4 target-reader representatives
-- **R1 tech decision-maker**: technically-grounded exec. Flags: vague generalities, phenomena without depth, correct-but-no-new-info conclusions.
-- **R2 cross-domain senior expert**: knows both the local and the subject's market. Flags: lazy simplifications, inaccurate technical detail, arrogant framing.
-- **R3 investor / strategy analyst**: knows business logic, not the code. Flags: floating judgments without data, logic gaps, absolute conclusions without boundaries.
-- **R4 blunt veteran**: zero tolerance for marketing/AI/self-media tone. Flags: filler, inflation, lecturing, correct-but-empty prose.
+### Step 4 [LLM] R1–R4 Target-reader representatives
+- **R1 Technical decision-maker**: decision layer with a tech background in the industry. Picks on: vague generalities, phenomenon without depth, correct conclusions with no information gain.
+- **R2 Cross-domain senior expert**: understands both the local and the reader's market. Picks on: assumed simplifications, inaccurate technical details, arrogant perspective.
+- **R3 Investor / strategy analyst**: understands business logic but not details. Picks on: hanging judgments without data, logic jumps, absolute conclusions without boundaries.
+- **R4 Blunt veteran critic**: zero tolerance for marketing / AI / influencer tone. Picks on: empty clichés, grandstanding, preacher posture, correct-but-useless platitudes.
 
-### Step 5 [LLM] G3 structure and depth
-- Check against six depth moves (see references/depth-playbook.md); hit at least three: (1) puncture a taken-for-granted causal link; (2) give a layered framework that unpacks an overused concept; (3) surface a contradiction inside the subject; (4) place it in a historical lineage; (5) add a horizontal comparison; (6) name the boundary of the judgment.
-- Check structure: judgment-first, no cookie-cutter sections, has a keepable comparison table or framework.
+### Step 5 [LLM] G3 Structure & professional depth assessment
+- Against the six depth moves (see `references/depth-playbook.md`), hit at least 3: ① expose assumed causality ② decompose an overused concept with a layered framework ③ find contradictions within the argued object itself ④ place it in historical context ⑤ give a horizontal reference frame ⑥ expose the boundary of the judgment.
+- Check structure: judgment-first, no isomorphic template, has a collectable comparison table / framework.
 
-### Step 6 [LLM] T1 distribution check
-- **T1 tech media editor**: knows platform distribution. Assesses title hook (hooked yet still credible), opening retention and searchability, screenshot-worthy memorable points, multi-platform fit.
-- The tension with G2/R4 (hook vs restraint) is surfaced explicitly, not forced into agreement.
+### Step 6 [LLM] T1 Distribution assessment
+- **T1 Tech media editor**: understands platform distribution. Rates title hook (has a hook without losing professionalism), opening retention and search-crawlability, screenshot-shareable memorable points, multi-platform fit (WeChat / LinkedIn / Substack each have their own logic).
+- Surface the tension with G2 / R4 (hook vs restraint) explicitly; do not force unification.
 
 ### Step 7 [LLM] Consolidate and revise
 - Grade feedback: must-fix / suggested / optional / for-author-decision (tension items).
-- Apply all must-fix and suggested; list tension items as options for the author to decide.
+- Handle all must-fix and suggested; list options for tension items for the author to decide.
 
 ### Step 8 [Deterministic] Re-check
-- Re-run Step 2 and Step 3 after edits (facts and red-lines must not regress; re-grep red-lines to confirm clean).
+- After revision, re-run Step 2 and Step 3 (facts and red-lines must not introduce new problems from the changes; re-grep red-lines to confirm cleared).
+
+### Step R [LLM] Post-draft reader-fit test (separate from the eight-role panel)
+
+Run this after a complete draft exists, preferably after the panel revision and before final release. This is a **reading/comprehension test**, not a ninth review role and not a second eight-role panel.
+
+#### R0. Lock the article positioning before testing
+
+Record five items before collecting reader feedback:
+
+- article type and platform;
+- primary reader and intended reading task;
+- thesis / research question;
+- deliberate scope and exclusions;
+- depth, length and technicality target.
+
+Reader feedback cannot silently rewrite these locked decisions. If the positioning is still undecided, resolve it first; do not let reader reactions decide the article's subject by accident.
+
+#### R1. Select representative readers, do not always use all roles
+
+Choose 3–4 roles that match the article. Typical options:
+
+- **Domain specialist**: tests terminology, mechanism and technical credibility;
+- **Runtime / infrastructure specialist**: tests component ownership, state flow, recovery and implementation boundaries;
+- **Enterprise decision-maker**: tests whether the judgment helps architecture, procurement, governance or prioritization;
+- **Cross-domain industry reader**: tests whether a non-specialist can understand the core message without flattening the technical content.
+
+Selection is based on the article's positioning. A research report does not automatically need an investor, media editor or general reader; a highly technical piece may prioritize the first two roles and use the fourth only as a comprehension check.
+
+#### R2. Ask each reader the same five questions
+
+1. What is the article's central message in one or two sentences?
+2. What technical distinction or mechanism did you take away?
+3. Which paragraph or term could make you infer the wrong scope or conclusion?
+4. What is missing for the article's stated reading task, not for a different article?
+5. After reading, would you trust the article's positioning and continue to the evidence?
+
+Each reader must separate **misunderstanding**, **missing bridge**, **disagreement**, and **different preference**. Do not treat all negative feedback as a defect.
+
+#### R3. Triage feedback by positioning compatibility
+
+Do not average all reader opinions or adopt every suggestion. Classify each item:
+
+- **Must-fix**: the core thesis is misunderstood; a factual/technical statement is misread; scope or subject is wrongly inferred; a necessary transition blocks comprehension; a term is used inconsistently.
+- **Suggested**: at least two relevant readers identify the same comprehension barrier, and the fix strengthens the locked reading task without changing thesis, scope or depth target.
+- **Optional**: a single reader's preference, a nice-to-have example, an alternate metaphor or a distribution improvement that does not repair misunderstanding.
+- **Reject / park**: feedback that pulls the article toward another genre, adds an unsupported framework, demands a product comparison, turns a research report into a media hook, expands the article into a survey, or materially increases length without new evidence.
+
+Priority order: **factual correctness → positioning integrity → core comprehension → technical depth → elegance → distribution preference**.
+
+#### R4. Resolve conflicts explicitly
+
+When readers disagree, preserve the article's positioning. Record:
+
+- which role raised the issue;
+- whether it is a comprehension failure or a preference difference;
+- whether the proposed change changes the article's subject;
+- the chosen action and why;
+- what is intentionally not adopted.
+
+Two readers agreeing is not sufficient if the suggestion violates the locked scope. One specialist's objection is sufficient to fix a factual or technical error even if other readers did not notice it.
+
+#### R5. Limit revision scope
+
+Apply must-fixes and compatible suggested changes in one focused pass. Do not keep adding examples, tables, definitions or sections until every role is satisfied. Re-run only the affected reader test after revision; stop when the core message, intended scope and technical level are understood by the selected roles.
+
+#### Reader-fit output
+
+```text
+Positioning lock: article type / primary reader / reading task / thesis / exclusions / depth target
+Selected roles: why these roles fit
+Role findings: core message / confusion / wrong inference / missing bridge
+Consensus barriers: issues raised by 2+ relevant roles
+Decision table: keep / fix / optional / reject-or-park + reason
+Positioning drift check: pass / fail
+Post-fix targeted re-read: pass / remaining issue
+```
 
 ### Step 9 Finalize
 
+Finalize only after the selected reader-fit test passes its positioning-drift check and all unresolved items are either fixed or explicitly parked.
+
 ## Hard Rules
 
-> These cannot be violated.
+> Cannot be violated.
 
-1. **Reviewers critique hard, no self-congratulation** — finding problems beats confirming none.
-2. **G1 has highest priority** — foundational facts and originality must be web-verified, not taken from existing material or impression.
-3. **Red-line clearance is a hard gate** — both Step 3 and Step 8 must grep-confirm clean before finalizing.
-4. **Do not force the professional-vs-distribution tension into agreement** — list options for the author. A hook must not cost credibility, but content too dry to open is also a failure.
+1. **Panelists critique hard, never self-praise** — finding problems is more valuable than confirming none.
+2. **G1 has highest priority** — foundational facts and originality must be verified online; do not rely on existing material or memory alone.
+3. **Red-line clearance is a hard gate** — both Step 3 and Step 8 must scan the full text. Marketing jargon, writing-process meta-info, commercial intent, and AI-bridge patterns must be cleared. Contrast structures are reviewed for density and function, not mechanically forced to zero.
+4. **Never replace one contrast pattern with another** — when reducing a formulaic contrast sentence, use direct statements or two complete sentences; preserve a natural contrast when it carries the judgment.
+5. **Professional-vs-distribution tension is not forced into agreement** — list options for the author to decide. Principle: a hook must not sacrifice professional credibility, but must not be so professional that no one clicks.
+6. **Reader-fit feedback cannot override the positioning lock** — the reading test diagnoses misunderstanding; it does not grant every role editorial authority to expand scope, change genre, add unsupported material or flatten technical depth.
+7. **Do not average roles or chase unanimity** — fix factual/technical misreadings even if one role reports them; adopt comprehension fixes only when compatible with the intended reading task; park preference conflicts explicitly.
+8. **Scope and length are quality constraints** — do not add examples, tables, definitions or sections merely because a reader requested them. Every addition must repair a named comprehension barrier without creating a new center of gravity.
+
+## Pitfalls
+
+- 把阅读测试当成第二轮八角色会审——它只测目标读者能否正确理解，不重新评判所有事实、深度和传播问题。
+- 看到普通读者读不懂就自动降技术密度——先判断是必要术语缺少桥梁，还是文章本来就面向专业读者；不为追求人人读懂而改变文章定位。
+- 把四个角色的意见全部采纳——不同角色代表不同阅读任务，意见冲突是正常的；先看是否触及核心误解，再看是否符合定位锁。
+- 用“多数人都这样反馈”替代判断——两人重复指出也不代表可以扩篇、加新中心或越过事实证据门槛。
+- 为满足阅读测试加入未经研究支撑的案例、市场数据、成本模型或产品横评——这属于定位漂移，应拒绝或停放。
+- 阅读测试后不断加表、加例子、加定义，导致文章面面俱到却没有一条线讲透——一次集中修订后只复测受影响段落，达到“核心信息、范围、技术层级可正确理解”即停止。
 
 ## Failure Handling
 
-| Scenario | Action |
-|----------|--------|
-| No draft (only topic/outline) | Stop, ask for a complete draft first |
-| Content form out of scope (news/marketing/docs) | Stop, explain the panel only reviews deep-analysis pieces |
-| Foundational fact cannot be verified | Mark as to-verify; send back for evidence or a softened claim; do not pass |
-| Core argument collides with existing work | Judge independent-take vs verbatim overlap; rewrite the overlapping part |
-| Revision introduces a new red-line pattern | Caught by Step 8 re-check; revise again |
+| Scenario | Handling |
+|----------|----------|
+| No finished draft (only topic/outline) | Stop, ask to finish first draft before review |
+| Content type does not apply (news/marketing/docs etc.) | Stop, explain this skill only reviews deep research pieces |
+| Foundational fact cannot be verified | Mark "to-verify", reject and ask for evidence or revised judgment; do not pass |
+| Core argument collides (plagiarism risk) | Judge independent-derivation vs verbatim-similar; if similar, reject and ask to rewrite that part |
+| Revision introduces new red-line phrasing | Step 8 re-check intercepts, revise again |
 
 ## Output Format
 
 ```
-[G1 fact & originality] facts: pass/reject + originality: search result (original / independent take / collision - rewrite)
-[G2 style red-lines] pass/reject: specific sentence + line number
-[R1] value judgment + what it flags + pass or not
-[R2] [R3] [R4] same
-[G3 depth] how many moves hit + what is missing
-[T1 distribution] title hook + opening retention + memorable point + platform fit + tension with G2/R4
-[Summary] must-fix N / suggested N / optional N / for-author-decision N
+【G1 Fact & Originality】Facts: pass/reject + Originality: core-argument search result (original / independently derived / collision-needs-fix)
+【G2 Style red-line】pass/reject: specific sentence + line number
+【R1】value judgment + what it picked on + pass or not
+【R2】【R3】【R4】same as above
+【G3 Depth】how many moves hit + what's missing
+【T1 Distribution】title hook + opening retention + memorable point + platform fit + tension with G2/R4
+【Summary】must-fix N / suggested N / optional N / for-decision N
 ```
 
 ## Notes
 
-Role profiles can be tuned to a project's specific readership and writing conventions (e.g. aligning to the author's long-term writing profile). Full role definitions and depth moves live in references/depth-playbook.md.
+Role profiles can be fine-tuned per the specific project's reader composition and writing norms (e.g., align with the user's long-term writing profile). Detailed role definitions and depth moves are in `references/depth-playbook.md`.
 
----
+## 中文摘要
 
-一份中文导读：本 skill 用固定的八角色评审团（4 位目标读者代表 + 3 位质量守门人，含事实与原创核查 + 1 位传播守门人），对科技/AI/产业深度稿做成稿后的多视角会审，逼近可发布质量。核心是"评估→修订→复审"循环，红线清零是硬门槛，专业与传播的张力交给作者拍板。
+本 Skill 提供固定的**八角色专家评审团**，在科技/AI/产业深度长文成稿后做多视角会审，逼近可发布质量。设计模式为 Evaluator-Optimizer（评估→修订→复审）。
+
+- **适用**：面向行业读者、建专业 IP 的科技/AI/产业研究型或深度分析型长文；不适用新闻、营销、文档、教程、短评。
+- **流程**：八角色会审负责事实、原创、红线、结构、专业度和传播张力；会审修订后另跑一次 **reader-fit 阅读测试**，再定稿。阅读测试先锁文章定位，按文章需要选择 3–4 个代表角色，不默认全选。
+- **阅读测试硬规则**：只诊断核心信息是否被正确理解、范围是否被误读和必要桥梁是否缺失；不把所有角色意见一概采用，不为迎合读者改题、扩篇、降技术密度或加入未经研究支撑的内容。
+- **硬规则**：评审挑得狠不自我表扬；G1 优先级最高；红线清零是硬门槛（Step3/Step8 双 grep）；专业 vs 传播张力不强行统一，列选项由作者拍板。
+- 角色画像可按项目读者构成与写作规范微调；详细定义见 `references/depth-playbook.md`。

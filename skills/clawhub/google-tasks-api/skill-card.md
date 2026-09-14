@@ -1,46 +1,73 @@
-## Description: <br>
-Google Tasks API integration with managed OAuth for managing task lists and tasks with full CRUD operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Tasks API integration with managed OAuth for reading, creating, updating, and deleting task lists and tasks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read, create, update, move, clear, and delete Google Tasks task lists and tasks through Maton's managed OAuth gateway. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses configured service credentials to access Google Tasks through Maton. <br>
-Mitigation: Use scoped API tokens where available, keep MATON_API_KEY out of shared repositories and skill memory, and install the skill only when that account access is intended. <br>
-Risk: Create, update, move, clear, and delete operations can change or remove task data in the connected Google Tasks account. <br>
-Mitigation: Require explicit user approval for write operations and confirm the target task list, task, and intended effect before execution. <br>
-Risk: If multiple Google Tasks OAuth connections exist, requests may affect the wrong account or task list. <br>
-Mitigation: Specify the intended connection ID when more than one connection is active and verify opaque task list and task IDs before write operations. <br>
+## Use Case:
 
+Developers and external users use this skill to manage Google Tasks through Maton-authenticated CLI or HTTP calls. It supports routine task and task-list operations, with read/list calls as the default and explicit user confirmation before writes, deletions, new connections, or automation setup.
 
-## Reference(s): <br>
-- [Google Tasks API Overview](https://developers.google.com/workspace/tasks) <br>
-- [Google Tasks Tasks Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasks) <br>
-- [Google Tasks TaskLists Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasklists) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [ClawHub Google Tasks Skill](https://clawhub.ai/byungkyu/skills/google-tasks-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be explicitly approved before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: ClawHub release evidence) <br>
+Risk: Google Tasks data or OAuth/API credentials may be exposed if credentials or raw responses are handled carelessly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, rely on the operating system credential store, avoid exporting long-lived API keys, and display or store only the response fields needed for the user's task.
+
+Risk: Write, delete, or connection-management commands can change task data or revoke access.
+
+Mitigation: Default to read and list operations, then confirm the exact write, deletion, or connection action with the user before execution.
+
+Risk: Hosted functions and triggers can turn a one-off Google Tasks operation into ongoing automation.
+
+Mitigation: Treat functions, triggers, destinations, and exec watches as separate automation decisions that require explicit review of the code, connection, network policy, and data flow.
+
+## Reference(s):
+
+- [Google Tasks Skill Page](https://clawhub.ai/byungkyu/skills/google-tasks-api)
+- [Maton Homepage](https://maton.ai)
+- [Google Tasks API Overview](https://developers.google.com/workspace/tasks)
+- [Tasks Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasks)
+- [TaskLists Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasklists)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Google Mail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration, API calls]
+
+**Output Format:** [Markdown instructions with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the user's Maton-authenticated Google Tasks connection and may produce or display task and task-list data returned by the API.]
+
+## Skill Version(s):
+
+1.2.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

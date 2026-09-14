@@ -1,41 +1,59 @@
-## Description: <br>
-Analyzes video URLs and local video files with Google Gemini to produce transcripts, visual descriptions, summaries, and answers to user questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Watch and analyze video URLs or files using Gemini native agentic video understanding for summaries, timestamped answers, transcripts, and visual reconstruction.
 
-## Publisher: <br>
-[bill492](https://clawhub.ai/user/bill492) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bill492](https://clawhub.ai/user/bill492)
 
-## Use Case: <br>
-Developers, support teams, and agent users use this skill to inspect user-provided video URLs or files, extract structured transcripts and visual summaries, and answer follow-up questions about video content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Video content or video URLs may be sent to Google Gemini for analysis. <br>
-Mitigation: Avoid confidential, regulated, private, or unlisted videos unless that processing is acceptable for the user's account and organization. <br>
-Risk: Follow-up sessions can reuse Gemini File API handles or explicit CachedContent, which may retain processing state beyond a single question. <br>
-Mitigation: Use the documented purge option after sensitive sessions, and avoid reuse or context-cache options when durable follow-up state is not appropriate. <br>
+## Use Case:
 
+Developers and agents use this skill to analyze authorized video URLs or local video files, producing summaries, focused timestamped answers, transcripts, and visual descriptions while preserving uncertainty and audience boundaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bill492/skills/video-understanding) <br>
-- [yt-dlp supported sites](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; script output is JSON by default or raw text when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GEMINI_API_KEY, yt-dlp, ffmpeg, and Python 3.10+ with uv; optional cache and download flags can retain reusable video handles or local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata) <br>
+Risk: The skill can fetch arbitrary HTTP(S) video sources from the host network.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with trusted video sources, or deploy it where network egress blocks internal, metadata, loopback, private, and redirected destinations.
+
+Risk: Video content and prompts are sent to Google Gemini using local credentials.
+
+Mitigation: Confirm user authorization before cloud processing and avoid confidential recordings or signed URLs unless the user and organization explicitly approve that processing.
+
+Risk: Cache, history, download, and output options can retain video-derived content or remote upload handles.
+
+Mitigation: Use retention flags only when intended, store outputs in authorized locations, and use purge workflows to remove retained handles and local records when required.
+
+## Reference(s):
+
+- [Data flow and retention](references/privacy.md)
+- [ClawHub skill page](https://clawhub.ai/bill492/skills/video-understanding)
+- [Publisher profile](https://clawhub.ai/user/bill492)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; the analysis script can return formatted text, raw JSON, or optional output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video analysis may include summaries, timestamped answers, transcripts, visual descriptions, speaker labels, estimated duration, and explicit uncertainty.]
+
+## Skill Version(s):
+
+2.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

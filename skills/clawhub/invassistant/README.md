@@ -1,8 +1,7 @@
-# InvAssistant — Personal Investment Portfolio Management Framework
 
 A WorkBuddy/CodeBuddy Skill implementing a multi-asset investment strategy framework. Covers US, A-share, and HK stocks with asset-class differentiated rules, portfolio-level risk controls, and disciplined execution protocols.
 
-**Current version**: v2.3.1 (2026-06-06)
+**Current version**: v2.3.14 (2026-09-11)
 
 ## What It Does
 
@@ -27,6 +26,8 @@ Then ask WorkBuddy: "检查持仓" or "portfolio check".
 
 | Version | Date | Key Changes |
 |---------|------|-------------|
+| v2.3.14 | 2026-09-11 | Purge real tickers from sample config and inline examples (§13 D8 / P10) |
+| v2.3.13 | 2026-09-11 | D7: every balance carries an as-of and a source; corrections ship with a cash rollforward |
 | v2.3.1 | 2026-06-06 | Major cleanup: English SKILL.md, clean frontmatter, bilingual README, no personal scripts |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |

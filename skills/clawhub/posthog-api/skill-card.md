@@ -1,50 +1,80 @@
-## Description: <br>
-PostHog API integration with managed authentication for product analytics, feature flags, session recordings, experiments, and more. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostHog API integration with managed authentication for querying product analytics, managing feature flags, analyzing user behavior, viewing session recordings, and running experiments.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and analytics teams use this skill to query PostHog data through Maton-managed authentication, manage feature flags, inspect user behavior, view session recordings, and run experiments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton proxies requests to the connected PostHog account and requires a sensitive MATON_API_KEY. <br>
-Mitigation: Install only if you trust Maton to handle the account data path, and keep MATON_API_KEY private. <br>
-Risk: PostHog persons and session recordings can expose emails, identifiers, replay details, and other sensitive analytics data. <br>
-Mitigation: Minimize retrieval of persons and session recordings, and avoid exposing raw emails or replay details unless necessary. <br>
-Risk: If multiple PostHog accounts are linked, requests may affect or disclose data from the wrong connection. <br>
-Mitigation: Choose the intended connection explicitly when multiple accounts are linked. <br>
-Risk: Create, update, and delete-style API calls can change dashboards, insights, feature flags, cohorts, annotations, surveys, experiments, and related resources. <br>
-Mitigation: Approve write operations only after checking the exact project, target resource, and intended effect. <br>
+## Use Case:
 
+Developers, product analysts, and operators use this skill to access PostHog through a managed Maton connection for analytics queries, feature flag management, session recording review, dashboards, cohorts, surveys, annotations, and experiments. It defaults to read and list workflows, with explicit approval expected before connection changes, writes, hosted functions, or trigger-based automation.
 
-## Reference(s): <br>
-- [ClawHub PostHog Skill](https://clawhub.ai/byungkyu/posthog-api) <br>
-- [Maton](https://maton.ai) <br>
-- [PostHog API Overview](https://posthog.com/docs/api) <br>
-- [HogQL Documentation](https://posthog.com/docs/hogql) <br>
-- [Feature Flags](https://posthog.com/docs/feature-flags) <br>
-- [Session Replay](https://posthog.com/docs/session-replay) <br>
-- [Experiments](https://posthog.com/docs/experiments) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API paths and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are returned by the Maton-proxied PostHog service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can access sensitive PostHog analytics data, including person profiles, event streams, identifiers, and session recordings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Query the narrowest project, person, event, and time range needed; prefer aggregates; avoid retrieving session recordings unless specifically requested; and do not copy raw identifiers or recording contents outside the immediate answer.
+
+Risk: Long-lived API keys and raw HTTP usage can expose credentials through environment variables, logs, shell history, or child processes.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid exporting API keys, keep credentials in the operating system credential store, and rotate any key that was printed, committed, or pasted.
+
+Risk: Write operations or connection changes can modify PostHog state or grant new account access.
+
+Mitigation: Default to read and list calls, verify target identifiers first, and require explicit user approval for connection creation, POST, PUT, PATCH, DELETE, function deploys, and trigger changes.
+
+Risk: Hosted functions and triggers can run persistently and can use the deploying Maton account's connected services.
+
+Mitigation: Use dedicated Maton accounts or connection sets, deploy only user-authored or user-reviewed handlers, prefer DENY_ALL network policy, keep destinations inside Maton unless explicitly approved, and remove automation when it is no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/posthog-api)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [PostHog API Overview](https://posthog.com/docs/api)
+- [HogQL Documentation](https://posthog.com/docs/hogql)
+- [PostHog Feature Flags](https://posthog.com/docs/feature-flags)
+- [PostHog Session Replay](https://posthog.com/docs/session-replay)
+- [PostHog Experiments](https://posthog.com/docs/experiments)
+- [Calendly Trigger Reference](artifact/references/calendly/triggers.md)
+- [GitHub Trigger Reference](artifact/references/github/triggers.md)
+- [Google Mail Trigger Reference](artifact/references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](artifact/references/hubspot/triggers.md)
+- [Linear Trigger Reference](artifact/references/linear/triggers.md)
+- [Notion Trigger Reference](artifact/references/notion/triggers.md)
+- [Slack Trigger Reference](artifact/references/slack/triggers.md)
+- [Stripe Trigger Reference](artifact/references/stripe/triggers.md)
+- [Time Trigger Reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, JSON API examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API request paths, JSON payloads, Python or JavaScript SDK snippets, and least-privilege approval prompts.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

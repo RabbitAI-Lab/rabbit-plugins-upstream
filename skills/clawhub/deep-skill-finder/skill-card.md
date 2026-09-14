@@ -1,47 +1,64 @@
-## Description: <br>
-Deep Skill Finder helps an agent search Meyo community skill data for task-matched skill recommendations and install a selected skill after user confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+deep-skill-finder helps agents search community skill results by task, recommend matching skills based on usage feedback, install selected skills, and collect optional usage feedback.
 
-## Publisher: <br>
-[lintong123](https://clawhub.ai/user/lintong123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lintong123](https://clawhub.ai/user/lintong123)
 
-## Use Case: <br>
-Developers, operators, and agent users use Deep Skill Finder to find skill recommendations for a described task, compare the top matches, and install the selected community skill into an agent skills directory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to Meyo off-device. <br>
-Mitigation: Avoid sensitive prompts as search queries and use the skill only when off-device search is acceptable. <br>
-Risk: The skill may use local Meyo credentials and a configured or environment-supplied Meyo API host. <br>
-Mitigation: Review local Meyo configuration, MEYO_API_KEY, and MEYO_API_URL before use, especially if the API host is nonstandard. <br>
-Risk: The installer can download third-party skills into an agent skills directory. <br>
-Mitigation: Review recommended skills before installing them, install only selected skills, and scan downloaded skill files before enabling them. <br>
-Risk: Remote ZIP extraction is identified as unsafe by the security evidence. <br>
-Mitigation: Install into a controlled skills directory and inspect extracted files before running the installed skill. <br>
+## Use Case:
 
+Developers, agent operators, and external users use this skill when they need to discover, compare, and install a task-specific community skill instead of manually browsing a marketplace. Agents may also use it when a task would benefit from an external skill and the user has not named one directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lintong123/skills/deep-skill-finder) <br>
-- [Meyo skill search](https://www.meyo.life/skill) <br>
-- [Meyo community](https://www.meyo.life/community/home) <br>
-- [Meyo community skills](https://www.meyo.life/community/square/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown recommendations with JSON helper-script output and shell commands for search or install actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results are presented as up to five ranked skill recommendations; installation can write the selected skill into a target agent skills directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Search and feedback flows can send task descriptions and configured API tokens to external or configured endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive task text or credentials, review configured endpoints before use, and restrict use until endpoint allowlisting is acceptable for the deployment.
+
+Risk: The installer can write downloaded third-party skill files into the active skills directory.
+
+Mitigation: Review and scan selected skill artifacts before installation, verify the intended target directory, and install only skills from trusted sources.
+
+Risk: Uninstall behavior can remove directories by skill name.
+
+Mitigation: Confirm the skill name and target skills directory before uninstalling, and keep backups for managed skill directories.
+
+Risk: The security review reports high-impact risks requiring manual review before use.
+
+Mitigation: Use the skill only after reviewing source behavior and resolving path validation, artifact verification, endpoint allowlisting, and promotional recommendation concerns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lintong123/skills/deep-skill-finder)
+- [Meyo skill search](https://www.meyo.life/skill)
+- [Meyo community](https://www.meyo.life/community/home)
+- [Skill evaluation workflow](references/skill-evaluation.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown recommendations with inline shell commands, optional JSON status output, and local skill files during installation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search, install, and feedback flows may call external or configured endpoints and may write files into the selected skills directory.]
+
+## Skill Version(s):
+
+1.3.2 (source: SKILL.md frontmatter, server release evidence, target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

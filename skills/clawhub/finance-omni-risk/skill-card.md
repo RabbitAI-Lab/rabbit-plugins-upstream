@@ -1,43 +1,54 @@
-## Description: <br>
-Provides Chinese-first financial risk management guidance for credit, market, operational, compliance, AML/KYC, regulatory reporting, early warning, and model risk workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides comprehensive financial risk-management guidance for credit, market, operational, compliance, AML/KYC, and model-risk workflows in financial institutions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Risk, compliance, audit, and financial services teams use this skill to structure risk assessments, warning thresholds, AML/KYC checks, regulatory preparation, and model-risk controls for banks, insurers, and securities firms. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with substantial China-focused regulatory content. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial, regulatory, and compliance guidance may be incomplete, outdated, or jurisdiction-specific. <br>
-Mitigation: Treat outputs as draft guidance and verify them against current official sources before use. <br>
-Risk: Customer risk data, internal monitoring reports, or other confidential financial information could be exposed if pasted into an unapproved environment. <br>
-Mitigation: Use only approved environments and minimize, redact, or avoid confidential customer data. <br>
-Risk: Risk scores, warning levels, and remediation suggestions may be wrong or insufficient for a final business, legal, or risk decision. <br>
-Mitigation: Keep final decisions with qualified risk, compliance, legal, or governance staff. <br>
+## Use Case:
 
+Risk, compliance, audit, and financial-institution teams use this skill to structure risk frameworks, score and monitor financial exposures, prepare AML/KYC and regulatory checklists, and document model-risk controls. It is advisory and should be reviewed against current official rules before operational use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-omni-risk) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global, with China-focused regulatory examples
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with tables, checklists, and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with English financial terms where useful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: server release evidence and artifact metadata) <br>
+Risk: The skill provides advisory finance, compliance, and regulatory guidance that may become outdated or differ from binding rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify dated regulatory claims against official sources and route legal, credit, regulatory, and risk-committee decisions through qualified human review.
+
+Risk: Risk scoring templates and example thresholds may not match an institution's portfolio, jurisdiction, or model-governance requirements.
+
+Mitigation: Calibrate scoring logic with institution-specific data, document assumptions and data sources, and require human approval before operational use.
+
+## Reference(s):
+
+- [Finance Omni Risk ClawHub Skill Page](https://clawhub.ai/gechengling/skills/finance-omni-risk)
+- [Release Artifact SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown with tables, checklists, and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese primary content with retained English finance and compliance terms]
+
+## Skill Version(s):
+
+5.0.1 (source: server release evidence and artifact identity)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

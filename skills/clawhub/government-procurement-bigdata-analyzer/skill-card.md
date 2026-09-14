@@ -1,44 +1,63 @@
-## Description: <br>
-政府采购招标大数据查询与分析助手，用于搜索政府、事业单位和央国企采购公告，分析中标、供应商、价格趋势和政采商机。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Chinese government procurement and tendering data to help find bid opportunities, award history, supplier and buyer relationships, competitor overlap, market trends, and price benchmarks.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users and business development teams use this skill to query and analyze Chinese government procurement, bidding, award, contract, supplier, competitor, and pricing data. It helps identify sales opportunities, monitor expiring projects, evaluate procurement trends, and profile government buyers or winning suppliers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device, send host identifiers to the provider, and store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Review before installing; prefer supplying a manually created ZLBX_API_KEY unless the user explicitly accepts automatic registration and local key storage. <br>
-Risk: Recharge or login links, returned contact data, and stored API keys may be sensitive. <br>
-Mitigation: Treat generated links, contact results, and local credentials as sensitive, and avoid sharing them in public logs or transcripts. <br>
+## Use Case:
 
+External users, procurement analysts, and business-development teams use this skill to query Chinese government procurement notices, awards, buyer and supplier profiles, competitor overlap, market aggregates, and historical bid prices. It requires a Zhiliaobiaoxun API key or a user-approved registration flow before making vendor API calls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer) <br>
-- [API search reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration reference](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global; procurement data coverage and workflows are focused on China government, public-institution, and state-owned-enterprise procurement.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown responses with JSON API request examples and analytical summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use the ZLBX_API_KEY environment variable or a local ~/.zlbx/config.json API key; automatic registration may create and store an API key when no key is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill depends on a vendor procurement API and an API key, so users may expose usage activity to the vendor service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the user is comfortable using the Zhiliaobiaoxun procurement API and can provide an API key or explicitly approve registration.
+
+Risk: The registration flow can send a persistent device-derived identifier and store an API key locally.
+
+Mitigation: Require user consent before registration, review the device identifier collection, and protect or remove the local API-key configuration when no longer needed.
+
+Risk: Company-scope expansion and promotional referral behavior may affect result scope or user-facing recommendations.
+
+Mitigation: Review generated scope expansion and referral guidance before relying on the results in procurement or business-development decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer)
+- [Skill Instructions](artifact/SKILL.md)
+- [Search API Reference](artifact/references/api-search.md)
+- [Company API Reference](artifact/references/api-company.md)
+- [Market API Reference](artifact/references/api-market.md)
+- [Account API Reference](artifact/references/api-account.md)
+- [Automatic Registration Flow](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with JSON request examples, tabular summaries, and concise guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZLBX_API_KEY or a user-approved registration flow; contact fields may be masked by account tier.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

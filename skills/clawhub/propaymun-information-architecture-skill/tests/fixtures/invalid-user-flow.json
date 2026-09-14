@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "title": "Broken flow",
+    "artifact_type": "user-flow",
+    "artifact_version": "1.0",
+    "status": "proposed",
+    "language": "en",
+    "direction": "ltr",
+    "scope": "test",
+    "goal": "Complete task",
+    "source": {
+      "type": "minimum-semantic-substrate",
+      "reference_id": "substrate-001",
+      "version": "1.0",
+      "readiness": "provisional"
+    }
+  },
+  "actors": [
+    {"id": "user", "label": "User", "evidence_status": "Provided"}
+  ],
+  "steps": [
+    {"id": "decision", "type": "decision", "label": "Choose", "actor_id": "missing", "semantic_refs": [], "evidence_status": "Proposed"},
+    {"id": "failure", "type": "failure", "label": "Failed", "actor_id": null, "semantic_refs": [], "evidence_status": "Proposed"},
+    {"id": "orphan", "type": "success", "label": "Done", "actor_id": null, "semantic_refs": [], "terminal": true, "evidence_status": "Proposed"}
+  ],
+  "transitions": [
+    {"id": "t1", "from": "decision", "to": "failure", "kind": "main", "evidence_status": "Proposed"}
+  ],
+  "entry_step_id": "decision",
+  "success_conditions": ["Task done"]
+}

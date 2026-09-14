@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-code-usage",
   "slug": "claude-code-usage",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1778485733200,
-  "contentHash": "3cb2c30e92181f84c41796fc7d0ea6091ab21d818ee4bbf85f38e97ee95dedec",
-  "fetchedAt": "2026-07-26T20:30:32.431Z"
+  "version": "1.1.0",
+  "updatedAt": 1789016778462,
+  "contentHash": "d88c9e90e2b5b55ef478d3ef403f6886443b5775877192c2f6381d6c289ae5b1",
+  "fetchedAt": "2026-09-14T14:49:32.045Z"
 }

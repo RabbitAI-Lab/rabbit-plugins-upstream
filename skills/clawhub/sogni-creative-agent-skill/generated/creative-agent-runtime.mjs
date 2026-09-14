@@ -26,6 +26,7 @@ const GATING_POLICIES = [
                 "generate_image",
                 "edit_image",
                 "restore_photo",
+                "upscale_image",
                 "apply_style",
                 "refine_result",
                 "animate_photo",
@@ -33,7 +34,9 @@ const GATING_POLICIES = [
                 "generate_video",
                 "sound_to_video",
                 "video_to_video",
+                "upscale_video",
                 "generate_music",
+                "generate_speech",
                 "extend_video",
                 "replace_video_segment",
                 "overlay_video",
@@ -59,6 +62,7 @@ const GATING_POLICIES = [
                 "generate_image",
                 "edit_image",
                 "restore_photo",
+                "upscale_image",
                 "apply_style",
                 "refine_result",
                 "animate_photo",
@@ -66,7 +70,9 @@ const GATING_POLICIES = [
                 "generate_video",
                 "sound_to_video",
                 "video_to_video",
+                "upscale_video",
                 "generate_music",
+                "generate_speech",
                 "extend_video",
                 "replace_video_segment",
                 "overlay_video",
@@ -91,6 +97,7 @@ const GATING_POLICIES = [
                 "generate_image",
                 "edit_image",
                 "restore_photo",
+                "upscale_image",
                 "apply_style",
                 "refine_result",
                 "animate_photo",
@@ -98,7 +105,9 @@ const GATING_POLICIES = [
                 "generate_video",
                 "sound_to_video",
                 "video_to_video",
+                "upscale_video",
                 "generate_music",
+                "generate_speech",
                 "extend_video",
                 "replace_video_segment",
                 "overlay_video",
@@ -124,6 +133,7 @@ const GATING_POLICIES = [
                 "generate_image",
                 "edit_image",
                 "restore_photo",
+                "upscale_image",
                 "apply_style",
                 "refine_result",
                 "animate_photo",
@@ -131,7 +141,9 @@ const GATING_POLICIES = [
                 "generate_video",
                 "sound_to_video",
                 "video_to_video",
+                "upscale_video",
                 "generate_music",
+                "generate_speech",
                 "extend_video",
                 "replace_video_segment",
                 "overlay_video",
@@ -309,6 +321,31 @@ const GATING_POLICIES = [
         "rationale": "The planner identified uploaded-video stitching. Use stitch_video with the uploaded clips instead of rendering a fresh clip."
     },
     {
+        "policyId": "UPLOADED_BASE_VIDEO_UPSCALE",
+        "version": "1.0.0",
+        "trigger": {
+            "allOf": [
+                "has_uploaded_video",
+                "video_modification:upscale"
+            ],
+            "sources": {
+                "has_uploaded_video": "session_state",
+                "video_modification:upscale": "planner"
+            }
+        },
+        "effect": {
+            "forbid": [
+                "generate_video",
+                "animate_photo",
+                "video_to_video"
+            ],
+            "require": [
+                "upscale_video"
+            ]
+        },
+        "rationale": "The planner identified a pure resolution upscale of the uploaded video. Use the promptless upscale_video tool; do not re-render the clip with a generative model."
+    },
+    {
         "policyId": "HAS_PERSONA_AND_REQUESTS_VIDEO",
         "version": "1.0.0",
         "trigger": {
@@ -415,6 +452,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "I need more details before I can run {{toolName}}. {{missingDetail}}"
     },
     {
+        "recipeId": "upscale_image.user_input_incomplete",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "USER_INPUT_INCOMPLETE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I need more details before I can run {{toolName}}. {{missingDetail}}"
+    },
+    {
         "recipeId": "apply_style.user_input_incomplete",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -478,9 +524,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "I need more details before I can run {{toolName}}. {{missingDetail}}"
     },
     {
+        "recipeId": "upscale_video.user_input_incomplete",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "USER_INPUT_INCOMPLETE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I need more details before I can run {{toolName}}. {{missingDetail}}"
+    },
+    {
         "recipeId": "generate_music.user_input_incomplete",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "USER_INPUT_INCOMPLETE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I need more details before I can run {{toolName}}. {{missingDetail}}"
+    },
+    {
+        "recipeId": "generate_speech.user_input_incomplete",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "USER_INPUT_INCOMPLETE",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -577,6 +641,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "You have hit the credit limit for this turn. Buy Spark Packs to continue: https://docs.sogni.ai/pricing/#spark-packs"
     },
     {
+        "recipeId": "upscale_image.cost_limit_exceeded",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "COST_LIMIT_EXCEEDED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "You have hit the credit limit for this turn. Buy Spark Packs to continue: https://docs.sogni.ai/pricing/#spark-packs"
+    },
+    {
         "recipeId": "apply_style.cost_limit_exceeded",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -640,9 +713,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "You have hit the credit limit for this turn. Buy Spark Packs to continue: https://docs.sogni.ai/pricing/#spark-packs"
     },
     {
+        "recipeId": "upscale_video.cost_limit_exceeded",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "COST_LIMIT_EXCEEDED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "You have hit the credit limit for this turn. Buy Spark Packs to continue: https://docs.sogni.ai/pricing/#spark-packs"
+    },
+    {
         "recipeId": "generate_music.cost_limit_exceeded",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "COST_LIMIT_EXCEEDED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "You have hit the credit limit for this turn. Buy Spark Packs to continue: https://docs.sogni.ai/pricing/#spark-packs"
+    },
+    {
+        "recipeId": "generate_speech.cost_limit_exceeded",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "COST_LIMIT_EXCEEDED",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -739,6 +830,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "I cannot find the asset that {{toolName}} needs. {{message}} Which uploaded or generated asset did you want?"
     },
     {
+        "recipeId": "upscale_image.asset_not_found",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "ASSET_NOT_FOUND",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I cannot find the asset that {{toolName}} needs. {{message}} Which uploaded or generated asset did you want?"
+    },
+    {
         "recipeId": "apply_style.asset_not_found",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -802,9 +902,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "I cannot find the asset that {{toolName}} needs. {{message}} Which uploaded or generated asset did you want?"
     },
     {
+        "recipeId": "upscale_video.asset_not_found",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "ASSET_NOT_FOUND",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I cannot find the asset that {{toolName}} needs. {{message}} Which uploaded or generated asset did you want?"
+    },
+    {
         "recipeId": "generate_music.asset_not_found",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "ASSET_NOT_FOUND",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "I cannot find the asset that {{toolName}} needs. {{message}} Which uploaded or generated asset did you want?"
+    },
+    {
+        "recipeId": "generate_speech.asset_not_found",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "ASSET_NOT_FOUND",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -928,6 +1046,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} could not run: {{message}}"
     },
     {
+        "recipeId": "upscale_image.workflow_validation_failed",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "WORKFLOW_VALIDATION_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} could not run: {{message}}"
+    },
+    {
         "recipeId": "apply_style.workflow_validation_failed",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -991,9 +1118,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} could not run: {{message}}"
     },
     {
+        "recipeId": "upscale_video.workflow_validation_failed",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "WORKFLOW_VALIDATION_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} could not run: {{message}}"
+    },
+    {
         "recipeId": "generate_music.workflow_validation_failed",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "WORKFLOW_VALIDATION_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} could not run: {{message}}"
+    },
+    {
+        "recipeId": "generate_speech.workflow_validation_failed",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "WORKFLOW_VALIDATION_FAILED",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1090,6 +1235,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} rejected the arguments: {{message}}"
     },
     {
+        "recipeId": "upscale_image.parameter_invalid",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "PARAMETER_INVALID",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} rejected the arguments: {{message}}"
+    },
+    {
         "recipeId": "apply_style.parameter_invalid",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -1153,9 +1307,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} rejected the arguments: {{message}}"
     },
     {
+        "recipeId": "upscale_video.parameter_invalid",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "PARAMETER_INVALID",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} rejected the arguments: {{message}}"
+    },
+    {
         "recipeId": "generate_music.parameter_invalid",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "PARAMETER_INVALID",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} rejected the arguments: {{message}}"
+    },
+    {
+        "recipeId": "generate_speech.parameter_invalid",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "PARAMETER_INVALID",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1234,6 +1406,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The {{toolName}} worker failed. {{message}} Want me to try again or change the request?"
     },
     {
+        "recipeId": "upscale_image.gpu_worker_failed",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "GPU_WORKER_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} worker failed. {{message}} Want me to try again or change the request?"
+    },
+    {
         "recipeId": "apply_style.gpu_worker_failed",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -1288,9 +1469,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The {{toolName}} worker failed. {{message}} Want me to try again or change the request?"
     },
     {
+        "recipeId": "upscale_video.gpu_worker_failed",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "GPU_WORKER_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} worker failed. {{message}} Want me to try again or change the request?"
+    },
+    {
         "recipeId": "generate_music.gpu_worker_failed",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "GPU_WORKER_FAILED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} worker failed. {{message}} Want me to try again or change the request?"
+    },
+    {
+        "recipeId": "generate_speech.gpu_worker_failed",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "GPU_WORKER_FAILED",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1387,6 +1586,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The model {{toolName}} wanted is offline. {{message}} Pick a different model or try again later."
     },
     {
+        "recipeId": "upscale_image.model_unavailable",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "MODEL_UNAVAILABLE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The model {{toolName}} wanted is offline. {{message}} Pick a different model or try again later."
+    },
+    {
         "recipeId": "apply_style.model_unavailable",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -1450,9 +1658,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The model {{toolName}} wanted is offline. {{message}} Pick a different model or try again later."
     },
     {
+        "recipeId": "upscale_video.model_unavailable",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "MODEL_UNAVAILABLE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The model {{toolName}} wanted is offline. {{message}} Pick a different model or try again later."
+    },
+    {
         "recipeId": "generate_music.model_unavailable",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "MODEL_UNAVAILABLE",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The model {{toolName}} wanted is offline. {{message}} Pick a different model or try again later."
+    },
+    {
+        "recipeId": "generate_speech.model_unavailable",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "MODEL_UNAVAILABLE",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1549,6 +1775,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} needs permission you have not granted yet. {{message}}"
     },
     {
+        "recipeId": "upscale_image.permission_required",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "PERMISSION_REQUIRED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} needs permission you have not granted yet. {{message}}"
+    },
+    {
         "recipeId": "apply_style.permission_required",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -1612,9 +1847,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} needs permission you have not granted yet. {{message}}"
     },
     {
+        "recipeId": "upscale_video.permission_required",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "PERMISSION_REQUIRED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} needs permission you have not granted yet. {{message}}"
+    },
+    {
         "recipeId": "generate_music.permission_required",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "PERMISSION_REQUIRED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} needs permission you have not granted yet. {{message}}"
+    },
+    {
+        "recipeId": "generate_speech.permission_required",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "PERMISSION_REQUIRED",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1784,6 +2037,16 @@ const REPAIR_RECIPES = [
         "suggestedFollowupTool": "generate_music"
     },
     {
+        "recipeId": "generate_speech.safety_rewrite",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
+        "errorCode": "SAFETY_REJECTED",
+        "mode": "suggestFollowup",
+        "maxRetries": 1,
+        "repairNoteTemplate": "Content filter rejected the prompt for {{toolName}}. Try a softer phrasing or different scene.",
+        "suggestedFollowupTool": "generate_speech"
+    },
+    {
         "recipeId": "generate_image.provider_timeout",
         "version": "1.0.0",
         "toolName": "generate_image",
@@ -1805,6 +2068,15 @@ const REPAIR_RECIPES = [
         "recipeId": "restore_photo.provider_timeout",
         "version": "1.0.0",
         "toolName": "restore_photo",
+        "errorCode": "PROVIDER_TIMEOUT",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} timed out. {{message}} Want me to retry, or simplify the request?"
+    },
+    {
+        "recipeId": "upscale_image.provider_timeout",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
         "errorCode": "PROVIDER_TIMEOUT",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1874,9 +2146,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "{{toolName}} timed out. {{message}} Want me to retry, or simplify the request?"
     },
     {
+        "recipeId": "upscale_video.provider_timeout",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "PROVIDER_TIMEOUT",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} timed out. {{message}} Want me to retry, or simplify the request?"
+    },
+    {
         "recipeId": "generate_music.provider_timeout",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "PROVIDER_TIMEOUT",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "{{toolName}} timed out. {{message}} Want me to retry, or simplify the request?"
+    },
+    {
+        "recipeId": "generate_speech.provider_timeout",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "PROVIDER_TIMEOUT",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -1973,6 +2263,15 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The {{toolName}} run was cancelled by the user. I will stop here unless you ask me to try again."
     },
     {
+        "recipeId": "upscale_image.user_cancelled",
+        "version": "1.0.0",
+        "toolName": "upscale_image",
+        "errorCode": "USER_CANCELLED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} run was cancelled by the user. I will stop here unless you ask me to try again."
+    },
+    {
         "recipeId": "apply_style.user_cancelled",
         "version": "1.0.0",
         "toolName": "apply_style",
@@ -2036,9 +2335,27 @@ const REPAIR_RECIPES = [
         "repairNoteTemplate": "The {{toolName}} run was cancelled by the user. I will stop here unless you ask me to try again."
     },
     {
+        "recipeId": "upscale_video.user_cancelled",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "errorCode": "USER_CANCELLED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} run was cancelled by the user. I will stop here unless you ask me to try again."
+    },
+    {
         "recipeId": "generate_music.user_cancelled",
         "version": "1.0.0",
         "toolName": "generate_music",
+        "errorCode": "USER_CANCELLED",
+        "mode": "stopAndAsk",
+        "maxRetries": 0,
+        "repairNoteTemplate": "The {{toolName}} run was cancelled by the user. I will stop here unless you ask me to try again."
+    },
+    {
+        "recipeId": "generate_speech.user_cancelled",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
         "errorCode": "USER_CANCELLED",
         "mode": "stopAndAsk",
         "maxRetries": 0,
@@ -2113,12 +2430,33 @@ const PROMPT_CONTRACTS = [
         "contractId": "restore_photo_v1",
         "version": "1.0.0",
         "toolName": "restore_photo",
-        "baseDescription": "restore_photo edits or restores the ORIGINAL uploaded photograph. Use this for the first\nrestoration/edit on an upload, or when the user explicitly asks to start over from the\noriginal/source photo. Use refine_result for follow-up edits to an existing generated result.\n\nFor photos with people, front-load identity preservation before the restoration or edit.\nUse positive constraints such as preserve exact facial likeness, face structure, apparent\nage, pose, and composition. End with preservation of unmentioned details.\n\nUse Dynamic Prompt syntax only when the user explicitly asks to compare multiple restoration\napproaches. Default restoration batches should keep the same prompt and vary only by seed.",
+        "baseDescription": "restore_photo edits or restores the ORIGINAL uploaded photograph. Use this for the first\nrestoration/edit on an upload, or when the user explicitly asks to start over from the\noriginal/source photo. Use refine_result for follow-up edits to an existing generated result.\n\nFor photos with people, front-load identity preservation before the restoration or edit.\nUse positive constraints such as preserve exact facial likeness, face structure, apparent\nage, pose, and composition. End with preservation of unmentioned details.\n\nUse Dynamic Prompt syntax only when the user explicitly asks to compare multiple restoration\napproaches. Default restoration batches should keep the same prompt and vary only by seed.\nIf the user only wants a larger, higher-resolution copy without restoration or other creative\nchanges, use upscale_image instead. restore_photo is a generative edit and is not a substitute\nfor deterministic upscaling.",
         "parameterDocs": {
             "prompt": "Natural-language edit/restoration prompt. Start with identity preservation for people, then requested restoration/edit, then preserve unmentioned details.",
             "numberOfVariations": "Use 1 unless the user explicitly asks for multiple outputs or comparison options.",
             "scale": "Set only when the user asks to upscale, enlarge, or increase resolution.",
             "quality": "Omit unless the user explicitly asks for fast or high quality."
+        }
+    },
+    {
+        "contractId": "upscale_image_v1",
+        "version": "1.1.0",
+        "toolName": "upscale_image",
+        "baseDescription": "upscale_image performs promptless, deterministic NVIDIA RTX VSR enlargement of exactly one\nuploaded or generated image. Use it when the user asks for a larger copy, higher resolution,\n2x/3x/4x enlargement, 4K/8K/16K output, or more pixels while preserving the source composition.\n\nDo not invent a prompt and do not route a pure upscale through restore_photo, refine_result,\nedit_image, or apply_style. Those tools are generative and can change image content.\n\nOmit sourceImageIndex to use the latest generated image, falling back to the first upload.\nUse zero-based non-negative indices for generated results; -1 selects the first upload and\n-2 the second upload. Set either scale (2, 3, or 4) or targetLongestEdge (512-15360).\ntargetLongestEdge takes precedence. Never request a target at or below the source size.\nBoth 8px-aligned output edges must remain between 512 and 15360px. If a wide or tall source\nneeds a larger target to preserve its aspect ratio, use the minimum target returned by the tool.",
+        "parameterDocs": {
+            "sourceImageIndex": "Omit for the latest generated image, then first upload. Generated results are zero-based; -1/-2 select uploaded images.",
+            "scale": "Integer enlargement factor 2, 3, or 4. Defaults to 2 and is ignored when targetLongestEdge is set. A too-small result is rejected rather than stretched to the 512px edge minimum.",
+            "targetLongestEdge": "Explicit output longest edge in pixels, 512-15360. Use 7680 for 8K or 15360 for the 16K maximum. It must be larger than the source, and large enough that the other 8px-aligned edge remains at least 512px; aspect ratio is preserved."
+        }
+    },
+    {
+        "contractId": "upscale_video_v1",
+        "version": "1.0.0",
+        "toolName": "upscale_video",
+        "baseDescription": "upscale_video performs promptless, deterministic FlashVSR super-resolution of exactly one\nuploaded or generated video. Use it when the user asks to upscale, enlarge, sharpen, or increase\nthe resolution of an existing video, or wants a 1080p, 1440p, 2K, or HD copy of it. The output\nkeeps every source frame, the exact frame rate, the full aspect ratio, and the original audio.\n\nDo not invent a prompt and do not route a pure video upscale through video_to_video,\ngenerate_video, extend_video, or replace_video_segment; those tools re-render or edit content.\nUse video_to_video only when the user explicitly names a generative model such as Seedance for\nthe re-render. Do not use upscale_image for videos.\n\nOmit sourceVideoIndex to use the latest generated video, falling back to the most recent upload.\nUse zero-based non-negative indices for generated videos; -1 selects the first uploaded video\nand -2 the second. targetResolution is the output short edge: omit it for 1440p (or 1080p when\nthe source is too small for 1440p), and set 1080 when the user asks for 1080p or Full HD.\nThe output is at most twice the source size, so 1440p needs a source short edge of 720-768px\nand 1080p needs 540-768px. Sources must also be at most about 1344x768 pixels (768x1344 in\nportrait), 1-60 fps, and 100 MB. The server sets the maximum clip length and rejects a source\nthat is too long; never quote a length limit yourself. If the tool reports that the source is too\nlong or outside these limits, relay that error to the user instead of switching to a generative\nvideo tool. It cannot produce 4K or any size above 1440p: when the user asks for one, say so and\noffer 1440p instead of silently delivering less.",
+        "parameterDocs": {
+            "sourceVideoIndex": "Omit for the latest generated video, then the most recent upload. Generated videos are zero-based; -1/-2 select uploaded videos.",
+            "targetResolution": "Output short edge in pixels: 1440 or 1080. Omit for the default (1440, or 1080 for sources under 720px); set 1080 when the user asks for 1080p or Full HD."
         }
     },
     {
@@ -2160,7 +2498,7 @@ const PROMPT_CONTRACTS = [
         "contractId": "animate_photo_v1",
         "version": "1.0.0",
         "toolName": "animate_photo",
-        "baseDescription": "animate_photo produces video from one or more source images using LTX 2.3.\n\nVIDEO PROMPT QUOTING: In video prompts, ONLY use double quotes for spoken dialogue.\nSpeaker tags are allowed outside the quotes for screenplay-style dialogue, e.g.\nCHARACTER: \"We made it.\" Never put on-screen text, overlay text, titles, captions, signs,\nwatermarks, or any visual text in quotes — describe them without quotes (e.g. bold white text\nreading CONGRATULATIONS overlays the lower third). Quotes signal speech to the model;\nquoting non-speech text confuses audio generation.\n\nDIALOGUE DURATION: Spoken dialogue in video prompts must fit the clip duration. Estimate\nat 3 words per second for natural cinematic delivery, plus ~1 second per acting beat\n(pauses, gestures, glances between lines). If the user did NOT explicitly request a specific\nduration (using default 5s), extend the duration to fit the dialogue (max 20s). If the user\nexplicitly requested a specific duration, condense the dialogue to fit while preserving meaning.\nCheck: total dialogue words ÷ 3 + beat count ≤ clip duration.\n\nLATEST GENERATED IMAGE FOLLOW-UP: When the newest user turn asks to animate, make a video,\nor make a clip from a generated image/result (for example \"the apple\", \"this one\",\n\"the latest image\"), use animate_photo with that latest generated image. Do not inherit an\nolder Seedance model, resolution, or duration from an unrelated prior turn unless the newest\nuser turn explicitly says Seedance or confirms an immediately suggested Seedance video stage.\nLTX supports exact 2-20s durations, so honor requests like 3s exactly.\n\nWORD BUDGET PER CLIP: The handler REJECTS clips whose spoken dialogue exceeds the budget\n— there is NO auto-trim, so plan dialogue lengths up-front. Hard maximum is 3.75 spoken\nwords per second. Ceilings: 5s = 18 words, 6s = 22 words, 8s = 30 words, 10s = 37 words,\n15s = 56 words, 20s = 75 words. Aim below these ceilings. If a scene's dialogue won't fit,\ntighten the lines, raise the per-clip duration, or split into two segments — do NOT submit\nand hope it works. Spoken words inside double quotes count toward the budget; speaker tags\nand visual/action prose are free.\n\nBATCH VIDEO PER-CLIP DURATION: For a multi-segment animate_photo batch\n(sourceImageIndices + prompts) when the user states a TOTAL video length but NO per-clip\nlength, target 15 seconds per clip when dialogue is involved, and pass that duration\nexplicitly. Example: 60s total → 4 segments × 15s, NOT 6×10s or 12×5s. There is NO 3-clip\nbatch cap: sourceImageIndices supports up to 16 clips, so keep one planned batch together\nunless the user explicitly wants isolated projects or per-output settings require it.\nDo NOT split a planned 15s dialogue scene into multiple\nshorter clips just because a retry complains about word budget; keep duration=15 and tighten\nthe line. Use 5s clips only for single short motion beats or one very short spoken phrase.\nIf the user explicitly specifies a per-clip duration, honor that instead.\n\nN-VERSIONS-OF-A-VIDEO PATTERN: Avoid sequential animate_photo calls for N outputs.\nPrefer one Dynamic Prompt project when only prompt text varies, and reserve\nsourceImageIndices multi-project fan-out for source/end asset differences, isolated retry\nlifecycle, or other per-output parameter differences. Flavors:\n(A0) SAME SOURCE / PROMPT-ONLY TAKES — use sourceImageIndex, numberOfVariations=N,\nand ONE Dynamic Prompt branch in prompt: \"{full prompt 1|full prompt 2|...}\". This\nsubmits shared settings and source assets once; Sogni socket creates N jobs in one project.\n(A) SHARED CONTENT — one edit_image/generate_image call with numberOfVariations=N + {|}\nDynamic Prompts to make N distinct source images, then ONE animate_photo call with\nsourceImageIndices=[start..start+N-1] and a single shared prompt.\n(B) PER-CLIP ASSET WIRING — when each clip has DIFFERENT source images, end frames,\naudio windows, durations, dimensions, or other non-prompt parameters,\npass BOTH sourceImageIndices AND prompts (array of N strings, one per clip) in the SAME\nsingle animate_photo call. The top-level prompt is still required — pass a brief batch summary.\nFor explicit last/end-frame-only batches, reuse the image through sourceImageIndices but set\nframeRole=\"end\" and omit endImageIndex/endImageIndices. This means each listed image is the\nlast frame for its corresponding clip and no first/start frame is supplied.\nIf the user explicitly asks for Dynamic Prompt / Dynamic Template syntax, prefer flavor A0\nwhenever every output uses the same source/end assets and shared settings, even if they also\nask to stitch the completed clips afterward.\n\nCRITICAL: sourceImageIndices values MUST be read from the latest edit_image/generate_image\ntool result's startIndex field — if startIndex=3 and 4 images were generated, pass\nsourceImageIndices=[3,4,5,6], NOT [0,1,2,3]. Negative indices refer to uploaded images:\n-1 first upload, -2 second upload, -3 third upload. Use repeated -1 entries only when\nintentionally reusing the primary uploaded image. When prompts is supplied, prompts.length\nMUST equal sourceImageIndices.length.\n\nSEEDANCE UPLOADED STORYBOARD DEFAULT: If the user uploaded a storyboard, shot sheet,\nor visual trailer board and asks to make a trailer/video/movie/clip from it, do NOT use\nanimate_photo on the board image and do NOT split it into four LTX clips. Use generate_video\nwith Seedance referenceImageIndices for one continuous clip unless the user explicitly asks\nfor separate LTX clips or first-frame/last-frame animation.\n\nSCREENPLAY / STORYBOARD ANIMATE RULE: For full storyboard projects, use one\nanimate_photo batch with sourceImageIndices + prompts so each clip keeps its own exact\nscene text, stable cast anchors, and screenplay-style speaker-tagged dialogue, and all video\nclips render in parallel. Every speaking clip's video prompt must include that clip's actual\nquoted dialogue, not placeholders such as \"while speaking\", \"dialogue begins\", \"explaining\",\nor \"final line lands\". If each generated scene keyframe should be both the first and last frame\nof its own stitched segment, call animate_photo with sourceImageIndices=[start..end],\nframeRole=\"both\", prompts=[...], and OMIT endImageIndex/endImageIndices so the handler\nuses each source as its own end frame.\n\nUPLOADED REFERENCE LOOPED PROMPT-ONLY TAKES: When the user supplies one uploaded reference\nimage and asks for N clips that all reuse that same image as BOTH the first frame and last\nframe, with only the action/prompt text varying, do it in ONE Dynamic Prompt project:\nsourceImageIndex=-1, frameRole=\"both\", endImageIndex=-1, numberOfVariations=N, and prompt\nas ONE branch: \"{full prompt 1|full prompt 2|...|full prompt N}\". Do NOT use\nsourceImageIndices=[-1,-1,...] or prompts=[...] for this prompt-only shape. After the\nsingle animate_photo project completes, call stitch_video with the returned video indices\nif the user requested a final stitched video.\nEach Dynamic Prompt option must be a complete natural-language motion prompt for the video\nmodel. Do not include orchestration labels such as \"clip 1 of N\", \"overall request context\",\n\"use the uploaded image as the source frame\", \"follow the user request\", or \"make this clip\ndistinct\"; the attached first/last-frame image is already wired through arguments.\nKeep explicit shared constraints outside the branch before \"{...}\" and honor them inside every\noption: locked/static camera, subtle motion, consistent flames/embers, and silent expression-only\nphysical performance when requested. Non-speaking expressions such as yawns, smiles, kisses, or shy\nmouth-covering gestures are acceptable when they are the requested physical performance; do not\nturn them into speech, singing, or dialogue-like lip motion.\nIf the user gives avoid/no/don't constraints for a Dynamic Prompt batch, the shared prefix before\nthe branch must include their positive equivalents, such as single-subject empty background, clean\nblank surfaces, crisp sharp focus, same room/layout continuity, silent expression-only physical\nperformance, consistent flame/ember motion, and natural anatomically consistent hands. Do not place\nthose constraints only in negativePrompt or omit them from prompt.\nFor videoModel=\"wan22\", write motion-only visual prompts. WAN 2.2 does not generate audio,\nso omit soundtrack, ambience, room tone, music, hums, sighs, spoken words, voice, and SFX cues.\nFor videoModel=\"wan22\" and \"ltx23\", the prompt field is the positive prompt. Translate user\navoid/no/don't constraints into affirmative production constraints instead of copying negative\nphrasing into prompt. Examples: \"no people in background\" -> single subject focus with an empty\nbackground; \"no text\" -> clean blank surfaces; \"don't make it blurry\" -> crisp sharp focus;\n\"no weird hands\" -> natural anatomically consistent hands; \"don't change the room\" -> the same\nroom and layout remain consistent. Preserve exact quoted visible text or dialogue when the user\nexplicitly requests it, and keep surrounding surfaces blank.\n\nUPLOADED REFERENCE LOOPED SCRIPTED SKITS: When the user supplies one uploaded reference image\nand asks for several scripted/storyboard/dialogue segments to reuse that same image as BOTH\nthe first frame and last frame of each segment before stitching, do it in ONE animate_photo call:\nsourceImageIndices=[-1,-1,...], frameRole=\"both\", endImageIndex=-1 (or matching\nendImageIndices=[-1,-1,...]), duration equal to the requested per-segment duration, and\nprompts=[one full scene prompt per segment]. Each prompt must preserve the exact screenplay\nspeaker tags and quoted dialogue from that scene, e.g. HOST: \"...\" GUEST: \"...\". Do not\ndrop speaker tags, convert them to generic narration, omit the last-frame contract, analyze\nthe image first, generate new keyframes first, or split the batch into serial calls. After\nthe single animate_photo batch completes, call stitch_video with the returned video indices.\n\nFor adjacent transition chains: N images create N-1 clips — call animate_photo with\nframeRole=\"both\", sourceImageIndices=[start..end-1], endImageIndices=[start+1..end],\nprompts=[one transition prompt per adjacent pair], then stitch_video. If 5 uploaded images\nare the keyframe sequence, use sourceImageIndices=[-1,-2,-3,-4],\nendImageIndices=[-2,-3,-4,-5], frameRole=\"both\", prompts length 4, then stitch_video.\nDo NOT set endImageIndex=-1 in generated-keyframe patterns — that means every clip ends\non the primary uploaded image.\n\nUPLOADED FIRST-FRAME/LAST-FRAME TRANSITION CHAINS: If the user uploads multiple images\nand asks for a video that transitions from image to image, changes country/version every\nN seconds, or says to use first-frame/last-frame for each pair, call animate_photo directly.\nDo not call edit_image, generate_image, analyze_image, or map_assets_for_model first — the\nuploaded images are already the keyframes. For N uploaded images, create N-1 adjacent clips\nunless the user explicitly asks for a loop back to the first image. Use per-clip duration\nfrom \"every N seconds\" when present; otherwise divide the requested total by the number of\nadjacent clips. After animate_photo returns the batch videos, call stitch_video with\nthose video indices before finalizing unless the user explicitly asked to keep separate clips only.",
+        "baseDescription": "animate_photo produces video from one or more source images using LTX 2.5 by default,\nwith LTX 2.3 retained as a rollback option and for Persona Voice identity workflows.\nUse videoModel=\"wan3.0-video\" when the user explicitly requests Wan 3 first-frame or\nfirst-and-last-frame generation. Wan 3 accepts one start frame and at most one end frame,\nrenders 2-30 seconds at fixed 30 fps, and supports 480P/720P/1080P output with native audio.\n\nVIDEO PROMPT QUOTING: In video prompts, ONLY use double quotes for spoken dialogue.\nSpeaker tags are allowed outside the quotes for screenplay-style dialogue, e.g.\nCHARACTER: \"We made it.\" Never put on-screen text, overlay text, titles, captions, signs,\nwatermarks, or any visual text in quotes — describe them without quotes (e.g. bold white text\nreading CONGRATULATIONS overlays the lower third). Quotes signal speech to the model;\nquoting non-speech text confuses audio generation.\n\nDIALOGUE DURATION: Spoken dialogue in video prompts must fit the clip duration. Estimate\nat 3 words per second for natural cinematic delivery, plus ~1 second per acting beat\n(pauses, gestures, glances between lines). If the user did NOT explicitly request a specific\nduration (using default 5s), extend the duration to fit the dialogue (max 20s). If the user\nexplicitly requested a specific duration, condense the dialogue to fit while preserving meaning.\nCheck: total dialogue words ÷ 3 + beat count ≤ clip duration.\n\nLATEST GENERATED IMAGE FOLLOW-UP: When the newest user turn asks to animate, make a video,\nor make a clip from a generated image/result (for example \"the apple\", \"this one\",\n\"the latest image\"), use animate_photo with that latest generated image. Do not inherit an\nolder Seedance model, resolution, or duration from an unrelated prior turn unless the newest\nuser turn explicitly says Seedance or confirms an immediately suggested Seedance video stage.\nLTX supports exact 2-20s durations, so honor requests like 3s exactly.\n\nWORD BUDGET PER CLIP: The handler REJECTS clips whose spoken dialogue exceeds the budget\n— there is NO auto-trim, so plan dialogue lengths up-front. Hard maximum is 3.75 spoken\nwords per second. Ceilings: 5s = 18 words, 6s = 22 words, 8s = 30 words, 10s = 37 words,\n15s = 56 words, 20s = 75 words. Aim below these ceilings. If a scene's dialogue won't fit,\ntighten the lines, raise the per-clip duration, or split into two segments — do NOT submit\nand hope it works. Spoken words inside double quotes count toward the budget; speaker tags\nand visual/action prose are free.\n\nBATCH VIDEO PER-CLIP DURATION: For a multi-segment animate_photo batch\n(sourceImageIndices + prompts) when the user states a TOTAL video length but NO per-clip\nlength, target 15 seconds per clip when dialogue is involved, and pass that duration\nexplicitly. Example: 60s total → 4 segments × 15s, NOT 6×10s or 12×5s. There is NO 3-clip\nbatch cap: sourceImageIndices supports up to 16 clips, so keep one planned batch together\nunless the user explicitly wants isolated projects or per-output settings require it.\nDo NOT split a planned 15s dialogue scene into multiple\nshorter clips just because a retry complains about word budget; keep duration=15 and tighten\nthe line. Use 5s clips only for single short motion beats or one very short spoken phrase.\nIf the user explicitly specifies a per-clip duration, honor that instead.\n\nN-VERSIONS-OF-A-VIDEO PATTERN: Avoid sequential animate_photo calls for N outputs.\nPrefer one Dynamic Prompt project when only prompt text varies, and reserve\nsourceImageIndices multi-project fan-out for source/end asset differences, isolated retry\nlifecycle, or other per-output parameter differences. Flavors:\n(A0) SAME SOURCE / PROMPT-ONLY TAKES — use sourceImageIndex, numberOfVariations=N,\nand ONE Dynamic Prompt branch in prompt: \"{full prompt 1|full prompt 2|...}\". This\nsubmits shared settings and source assets once; Sogni socket creates N jobs in one project.\n(A) SHARED CONTENT — one edit_image/generate_image call with numberOfVariations=N + {|}\nDynamic Prompts to make N distinct source images, then ONE animate_photo call with\nsourceImageIndices=[start..start+N-1] and a single shared prompt.\n(B) PER-CLIP ASSET WIRING — when each clip has DIFFERENT source images, end frames,\naudio windows, durations, dimensions, or other non-prompt parameters,\npass BOTH sourceImageIndices AND prompts (array of N strings, one per clip) in the SAME\nsingle animate_photo call. The top-level prompt is still required — pass a brief batch summary.\nFor explicit last/end-frame-only batches, reuse the image through sourceImageIndices but set\nframeRole=\"end\" and omit endImageIndex/endImageIndices. This means each listed image is the\nlast frame for its corresponding clip and no first/start frame is supplied.\nIf the user explicitly asks for Dynamic Prompt / Dynamic Template syntax, prefer flavor A0\nwhenever every output uses the same source/end assets and shared settings, even if they also\nask to stitch the completed clips afterward.\n\nCRITICAL: sourceImageIndices values MUST be read from the latest edit_image/generate_image\ntool result's startIndex field — if startIndex=3 and 4 images were generated, pass\nsourceImageIndices=[3,4,5,6], NOT [0,1,2,3]. Negative indices refer to uploaded images:\n-1 first upload, -2 second upload, -3 third upload. Use repeated -1 entries only when\nintentionally reusing the primary uploaded image. When prompts is supplied, prompts.length\nMUST equal sourceImageIndices.length.\n\nSEEDANCE UPLOADED STORYBOARD DEFAULT: If the user uploaded a storyboard, shot sheet,\nor visual trailer board and asks to make a trailer/video/movie/clip from it, do NOT use\nanimate_photo on the board image and do NOT split it into four LTX clips. Use generate_video\nwith Seedance referenceImageIndices for one continuous clip unless the user explicitly asks\nfor separate LTX clips or first-frame/last-frame animation.\n\nSCREENPLAY / STORYBOARD ANIMATE RULE: For full storyboard projects, use one\nanimate_photo batch with sourceImageIndices + prompts so each clip keeps its own exact\nscene text, stable cast anchors, and screenplay-style speaker-tagged dialogue, and all video\nclips render in parallel. Every speaking clip's video prompt must include that clip's actual\nquoted dialogue, not placeholders such as \"while speaking\", \"dialogue begins\", \"explaining\",\nor \"final line lands\". If each generated scene keyframe should be both the first and last frame\nof its own stitched segment, call animate_photo with sourceImageIndices=[start..end],\nframeRole=\"both\", prompts=[...], and OMIT endImageIndex/endImageIndices so the handler\nuses each source as its own end frame.\n\nUPLOADED REFERENCE LOOPED PROMPT-ONLY TAKES: When the user supplies one uploaded reference\nimage and asks for N clips that all reuse that same image as BOTH the first frame and last\nframe, with only the action/prompt text varying, do it in ONE Dynamic Prompt project:\nsourceImageIndex=-1, frameRole=\"both\", endImageIndex=-1, numberOfVariations=N, and prompt\nas ONE branch: \"{full prompt 1|full prompt 2|...|full prompt N}\". Do NOT use\nsourceImageIndices=[-1,-1,...] or prompts=[...] for this prompt-only shape. After the\nsingle animate_photo project completes, call stitch_video with the returned video indices\nif the user requested a final stitched video.\nEach Dynamic Prompt option must be a complete natural-language motion prompt for the video\nmodel. Do not include orchestration labels such as \"clip 1 of N\", \"overall request context\",\n\"use the uploaded image as the source frame\", \"follow the user request\", or \"make this clip\ndistinct\"; the attached first/last-frame image is already wired through arguments.\nKeep explicit shared constraints outside the branch before \"{...}\" and honor them inside every\noption: locked/static camera, subtle motion, consistent flames/embers, and silent expression-only\nphysical performance when requested. Non-speaking expressions such as yawns, smiles, kisses, or shy\nmouth-covering gestures are acceptable when they are the requested physical performance; do not\nturn them into speech, singing, or dialogue-like lip motion.\nIf the user gives avoid/no/don't constraints for a Dynamic Prompt batch, the shared prefix before\nthe branch must include their positive equivalents, such as single-subject empty background, clean\nblank surfaces, crisp sharp focus, same room/layout continuity, silent expression-only physical\nperformance, consistent flame/ember motion, and natural anatomically consistent hands. Do not place\nthose constraints only in negativePrompt or omit them from prompt.\nFor videoModel=\"wan22\", write motion-only visual prompts. WAN 2.2 does not generate audio,\nso omit soundtrack, ambience, room tone, music, hums, sighs, spoken words, voice, and SFX cues.\nFor videoModel=\"wan22\", \"ltx25\", and \"ltx23\", the prompt field is the positive prompt. Translate user\navoid/no/don't constraints into affirmative production constraints instead of copying negative\nphrasing into prompt. Examples: \"no people in background\" -> single subject focus with an empty\nbackground; \"no text\" -> clean blank surfaces; \"don't make it blurry\" -> crisp sharp focus;\n\"no weird hands\" -> natural anatomically consistent hands; \"don't change the room\" -> the same\nroom and layout remain consistent. Preserve exact quoted visible text or dialogue when the user\nexplicitly requests it, and keep surrounding surfaces blank.\n\nUPLOADED REFERENCE LOOPED SCRIPTED SKITS: When the user supplies one uploaded reference image\nand asks for several scripted/storyboard/dialogue segments to reuse that same image as BOTH\nthe first frame and last frame of each segment before stitching, do it in ONE animate_photo call:\nsourceImageIndices=[-1,-1,...], frameRole=\"both\", endImageIndex=-1 (or matching\nendImageIndices=[-1,-1,...]), duration equal to the requested per-segment duration, and\nprompts=[one full scene prompt per segment]. Each prompt must preserve the exact screenplay\nspeaker tags and quoted dialogue from that scene, e.g. HOST: \"...\" GUEST: \"...\". Do not\ndrop speaker tags, convert them to generic narration, omit the last-frame contract, analyze\nthe image first, generate new keyframes first, or split the batch into serial calls. After\nthe single animate_photo batch completes, call stitch_video with the returned video indices.\n\nFor adjacent transition chains: N images create N-1 clips — call animate_photo with\nframeRole=\"both\", sourceImageIndices=[start..end-1], endImageIndices=[start+1..end],\nprompts=[one transition prompt per adjacent pair], then stitch_video. If 5 uploaded images\nare the keyframe sequence, use sourceImageIndices=[-1,-2,-3,-4],\nendImageIndices=[-2,-3,-4,-5], frameRole=\"both\", prompts length 4, then stitch_video.\nDo NOT set endImageIndex=-1 in generated-keyframe patterns — that means every clip ends\non the primary uploaded image.\n\nUPLOADED FIRST-FRAME/LAST-FRAME TRANSITION CHAINS: If the user uploads multiple images\nand asks for a video that transitions from image to image, changes country/version every\nN seconds, or says to use first-frame/last-frame for each pair, call animate_photo directly.\nDo not call edit_image, generate_image, analyze_image, or map_assets_for_model first — the\nuploaded images are already the keyframes. For N uploaded images, create N-1 adjacent clips\nunless the user explicitly asks for a loop back to the first image. Use per-clip duration\nfrom \"every N seconds\" when present; otherwise divide the requested total by the number of\nadjacent clips. After animate_photo returns the batch videos, call stitch_video with\nthose video indices before finalizing unless the user explicitly asked to keep separate clips only.",
         "parameterDocs": {
             "sourceImageIndices": "Batch source image indices. Read startIndex from prior generate_image/edit_image result. Negative = uploaded images (-1 = first upload). May be paired with frameRole=\"end\" only for explicit last/end-frame-only fan-out.",
             "prompts": "Per-clip prompt array. Length MUST equal sourceImageIndices.length when both are set.",
@@ -2182,9 +2520,9 @@ const PROMPT_CONTRACTS = [
     },
     {
         "contractId": "generate_video_v1",
-        "version": "1.1.0",
+        "version": "1.2.0",
         "toolName": "generate_video",
-        "baseDescription": "generate_video produces text-to-video clips and Seedance multimodal reference videos.\nUse for text-only video generation with no source image input. For Seedance, also use this\ntool when uploaded/generated images, videos, or audio are loose references. Use animate_photo\nonly when a non-Seedance source image must become the first frame of an LTX/WAN animation.\n\nSEEDANCE UPLOADED STORYBOARD DEFAULT: When the user uploads a storyboard, shot sheet,\nmood board, or trailer concept image and asks to make a movie trailer/video/clip from it,\ndefault to one Seedance generate_video call with referenceImageIndices=[-1]. Do not first\nextract panels with edit_image, do not generate replacement keyframes, and do not make four\nseparate LTX animate_photo clips unless the user explicitly asks for separate clips or LTX.\nUse seedance2 when premium Spark access is available; if premium access is unavailable,\nexplain the limitation or use the best non-Seedance fallback the user accepts.\n\nEXACT / INCLUDED VIDEO PROMPTS: If the user asks for a Seedance video using uploaded or\ngenerated references and says to use a prompt exactly, pass only that literal quoted prompt\nto generate_video and set skipPromptProcessing=true plus expandPrompt=false. Do not treat\nwords inside the literal prompt, such as storyboard, script, thumbnails, or panels, as a\nrequest to create a storyboard image. If the user includes a timecoded script inside a\nvideo request, keep it in the generate_video prompt. Explicit constraints like no storyboard\npanels, no subtitles, or no captions are constraints on the video render, not instructions\nto call edit_image or generate_image.\n\nSTORYTELLING / COMMERCIAL / TRAILER PROMPTS: For creative video requests, turn the brief\ninto timed, causally connected visual beats before writing the final prompt. Default social\nvideo is 15s 9:16 with a strong first 1-2s, visible escalation, payoff, and brand/CTA/final\nimage. Commercials should show audience desire/problem, transformation, proof/benefit, and\nCTA. Trailers should follow hook → world → disruption → escalation → reveal → title/CTA.\nEvery beat must be generatable: subject, setting, action, camera, lighting, audio, and text\nrole where relevant. Avoid vague \"cinematic\" filler, feature dumps, and beautiful images with\nno visible change.\n\nVIDEO PROMPT QUOTING: ONLY use double quotes for spoken dialogue in video prompts. Never\nquote on-screen text, titles, captions, or visual text elements — describe them without\nquotes. Quotes signal speech to the model and confuse audio generation.\n\nSTORYBOARD TEXT: Structural headings, section numbers, slide titles, panel titles, and\ncaptions in storyboard references may become short audio-only narration/VO or\nkey-message beats, but they are not subtitles, title cards, lower thirds, or visible\noverlays unless the user explicitly asks for visible text, on-screen text, a title\ncard, subtitle, lower third, signage, or CTA. Keep narration as separate brief phrases\nwith pauses; do not concatenate storyboard labels into run-on voiceover.\n\nDIALOGUE DURATION: Spoken dialogue must fit the clip. Estimate 3 words per second\nnatural delivery plus ~1s per acting beat. Hard maximum 3.75 words/second.\nCheck: dialogue words ÷ 3 + beats ≤ duration. Do not submit oversized dialogue.\n\nLATEST USER DURATION WINS: In follow-up turns, use the newest duration the user states,\neven if a previous assistant message mentioned a longer script/runtime. For example, if\nhistory says \"the full script is 66 seconds\" but the user now says \"do a 30 second version\",\ngenerate the 30 second version. Do not ask a clarification question just because history\ncontains another duration; treat the latest user request as the override.\n\nSEEDANCE SHORT-DURATION LIMIT: Seedance supports 4-15s clips. If the user explicitly asks\nfor Seedance below 4s, do not silently round up. Ask whether they prefer a 4s Seedance clip\nor an exact-duration LTX clip. If the user did not explicitly ask for Seedance, choose the\nmodel/tool that can satisfy the requested duration exactly.",
+        "baseDescription": "generate_video produces text-to-video clips and multimodal reference videos.\nUse for text-only video generation with no source image input. For Seedance and Wan 3, also\nuse this tool when uploaded/generated images, videos, or audio are loose references. Use\nanimate_photo when a source image must become the first frame of an LTX/WAN animation.\n\nWAN 3: Use videoModel=\"wan3.0-video\" for explicit Wan 3 requests. The same canonical model\nsupports text, up to 10 reference images, 5 reference videos, and 5 reference audios. Refer\nto loose assets in English prompts as Image 1, Video 1, and Audio 1, numbered independently\nby type. Do not bracket or @-prefix these identifiers. Wan 3 renders 2-30 seconds at fixed\n30 fps, offers 480P/720P/1080P and 16:9/4:3/1:1/3:4/9:16, and can toggle native audio.\n\nMINIMAX H3 SOURCE AUDIO: Every H3 R2V call with a reference video or audio must set\nsourceAudioPolicy. A specific/original/trending song is immutable: use reuse_exact, author\nthe official audio reuse task plus fully_copy, keep choreography on explicit source times,\nand stream-copy/remux the original soundtrack after rendering. Never substitute, recompose,\nremix, or add a copyright-avoidance mutation. H3 reference videos must themselves be exactly\n24 fps; normalize other rates without changing duration/audio timing before submission.\nRef2VA cannot guarantee edit-level beat sync.\n\nSEEDANCE UPLOADED STORYBOARD DEFAULT: When the user uploads a storyboard, shot sheet,\nmood board, or trailer concept image and asks to make a movie trailer/video/clip from it,\ndefault to one Seedance generate_video call with referenceImageIndices=[-1]. Do not first\nextract panels with edit_image, do not generate replacement keyframes, and do not make four\nseparate LTX animate_photo clips unless the user explicitly asks for separate clips or LTX.\nUse seedance2 when premium Spark access is available; if premium access is unavailable,\nexplain the limitation or use the best non-Seedance fallback the user accepts.\n\nEXACT / INCLUDED VIDEO PROMPTS: If the user asks for a Seedance video using uploaded or\ngenerated references and says to use a prompt exactly, pass only that literal quoted prompt\nto generate_video and set skipPromptProcessing=true plus expandPrompt=false. Do not treat\nwords inside the literal prompt, such as storyboard, script, thumbnails, or panels, as a\nrequest to create a storyboard image. If the user includes a timecoded script inside a\nvideo request, keep it in the generate_video prompt. Explicit constraints like no storyboard\npanels, no subtitles, or no captions are constraints on the video render, not instructions\nto call edit_image or generate_image.\n\nSTORYTELLING / COMMERCIAL / TRAILER PROMPTS: For creative video requests, turn the brief\ninto timed, causally connected visual beats before writing the final prompt. Default social\nvideo is 15s 9:16 with a strong first 1-2s, visible escalation, payoff, and brand/CTA/final\nimage. Commercials should show audience desire/problem, transformation, proof/benefit, and\nCTA. Trailers should follow hook → world → disruption → escalation → reveal → title/CTA.\nEvery beat must be generatable: subject, setting, action, camera, lighting, audio, and text\nrole where relevant. Avoid vague \"cinematic\" filler, feature dumps, and beautiful images with\nno visible change.\n\nVIDEO PROMPT QUOTING: ONLY use double quotes for spoken dialogue in video prompts. Never\nquote on-screen text, titles, captions, or visual text elements — describe them without\nquotes. Quotes signal speech to the model and confuse audio generation.\n\nSTORYBOARD TEXT: Structural headings, section numbers, slide titles, panel titles, and\ncaptions in storyboard references may become short audio-only narration/VO or\nkey-message beats, but they are not subtitles, title cards, lower thirds, or visible\noverlays unless the user explicitly asks for visible text, on-screen text, a title\ncard, subtitle, lower third, signage, or CTA. Keep narration as separate brief phrases\nwith pauses; do not concatenate storyboard labels into run-on voiceover.\n\nDIALOGUE DURATION: Spoken dialogue must fit the clip. Estimate 3 words per second\nnatural delivery plus ~1s per acting beat. Hard maximum 3.75 words/second.\nCheck: dialogue words ÷ 3 + beats ≤ duration. Do not submit oversized dialogue.\n\nLATEST USER DURATION WINS: In follow-up turns, use the newest duration the user states,\neven if a previous assistant message mentioned a longer script/runtime. For example, if\nhistory says \"the full script is 66 seconds\" but the user now says \"do a 30 second version\",\ngenerate the 30 second version. Do not ask a clarification question just because history\ncontains another duration; treat the latest user request as the override.\n\nSEEDANCE SHORT-DURATION LIMIT: Seedance supports 4-15s clips. If the user explicitly asks\nfor Seedance below 4s, do not silently round up. Ask whether they prefer a 4s Seedance clip\nor an exact-duration LTX clip. If the user did not explicitly ask for Seedance, choose the\nmodel/tool that can satisfy the requested duration exactly.",
         "parameterDocs": {
             "prompt": "Video prompt. Use double quotes ONLY for spoken dialogue. Describe visual text without quotes.",
             "duration": "Clip duration in seconds. Plan dialogue word count against the 3.75 words/second ceiling."
@@ -2194,7 +2532,7 @@ const PROMPT_CONTRACTS = [
         "contractId": "edit_image_v1",
         "version": "1.0.0",
         "toolName": "edit_image",
-        "baseDescription": "edit_image applies instruction-based edits to uploaded or generated images. Use when\nuploaded or reference images must guide identity or likeness.\n\nImage-to-Image prompt order: [IDENTITY LOCK] → [REQUESTED EDIT] → [REFERENCE ROLE\nMAPPING] → [POSE/COMPOSITION] → [STYLE] → [LIGHTING/REALISM] → [PRESERVE ALL\nUNMENTIONED DETAILS]. GOLDEN RULE: When editing a person, state which image owns\nidentity so it is not ambiguous. Describe only the DELTA — what changes. Don't\nrewrite the entire image; the base image already contains most of the truth. Default to minimal\nchange. For multi-image edits, assign one primary role per reference image (identity, pose,\noutfit, style, environment). Do not let a style/pose/clothing reference silently override the face.\nUse positive constraints — \"preserve exact facial likeness, face structure, eye shape, nose\nshape, mouth shape, jawline, skin tone, hairline, apparent age, and overall recognizability\"\n— not vague negatives like \"don't mess up the face\".\n\nUPLOADED IMAGE VARIANT SETS: When the user supplies a photo/portrait/reference image and\nasks for N distinct generated images deriving from that source while changing paired\nper-output details, prefer one edit_image call with sourceImageIndex=-1,\nnumberOfVariations=N, and ONE Dynamic Prompt branch with N complete options. Each option\nmust be a full concrete image prompt for one output, including the uploaded subject/reference\nanchor, requested pose or placement preservation, the specific changed appearance/style/role,\nclothing or surface details when relevant, setting/background, and any requested label text or\nvisual symbol. If one option is a remade original/preserved source and the rest are themed\nvariants, the original option should explicitly say to preserve the original clothing/wardrobe/outfit\nand background/setting, plus any requested added label, flag, logo, symbol, or prop.\nDo not call generate_image, analyze_image, or multiple serial edit_image calls first.\n\nSELECTION-GATED IMAGE STAGES: If the user asks for N image options and says they will pick\none before a later dance/video/animation, prefer one edit_image call with numberOfVariations=N\nand one Dynamic Prompt branch. After images are created, stop and ask the user to choose\nunless the user explicitly asked to run the later stage immediately.\n\nMULTI-PERSONA (COMBINED): When multiple personas must appear in the SAME scene, make\none edit_image call with all persona faces in one prompt and omit personaName.\nPer-persona splits (one call each with personaName set) are RARE — only when the user\nexplicitly asks for solo images of each person individually.\n\nSTORYBOARD IMAGE BATCH RULE: When rendering scene keyframes from a screenplay/storyboard,\nnumberOfVariations is only the count; the prompt should be one Dynamic Prompt branch with one\nfull keyframe prompt per scene:\n{scene 1 full keyframe prompt|scene 2 full keyframe prompt|...|scene N full keyframe prompt}.\nDo not set numberOfVariations=N with only the first scene prompt — that creates N versions of\nscene 1. For full project requests, one edit_image batch for all scene keyframes, then one\nanimate_photo batch for all video clips in parallel.\nException: if the storyboard/shot sheet is already uploaded and the user asks to make a\ntrailer/video/movie/clip from that uploaded board, do not extract panels or redraw keyframes.\nUse generate_video with Seedance references for one continuous clip unless the user explicitly\nasks for separate image keyframes or a storyboard sheet output.\n\nDIRECT UPLOADED GPT IMAGE 2 STORYBOARD SHEETS: If the user uploaded reference images and\nasks for one finished GPT Image 2 storyboard/keyframe sheet now, call edit_image directly\nwith sourceImageIndex=-1, model=\"gpt-image-2\", numberOfVariations=1, and the requested\ncanvas/aspect settings. If the user did not explicitly specify a storyboard page/canvas/sheet\nshape, default the GPT Image 2 storyboard sheet pixel dimensions to a balanced grid that hosts\nthe target cell aspect ratio natively (e.g., 12 cells with 9:16 portrait video target -> ~3:4\nportrait sheet around 1728x2304; 12 cells with 16:9 landscape video target -> ~4:3 landscape\nsheet around 2304x1728; 6 cells with 9:16 target -> ~27:32 portrait sheet around 1840x2176). Do\nNOT default the sheet to 2560x1440 landscape when cells are portrait — a landscape sheet with\na portrait-cell grid physically forces cells to ~4:3 landscape and the model will not render\n9:16 portrait rectangles inside it. Keep individual scene-cell/frame areas at the target video\naspect ratio. Do not call map_assets_for_model, analyze_image, generate_image, or a separate\nplanning tool first. The uploaded files are already available as references; describe their\nroles plainly in the edit_image prompt and generate the sheet in that call.\n\nDO NOT USE edit_image FOR UPLOADED REFERENCE LOOPED VIDEO SEGMENTS: If the user says the\nsame uploaded image/reference should be reused as the first frame and last frame of each\nscripted segment/scene/clip before stitching, they are explicitly asking to animate the\nuploaded image, not to generate new storyboard keyframes. Do not call edit_image for that\nrequest. Call animate_photo once with repeated uploaded source indices and per-scene prompts.",
+        "baseDescription": "edit_image applies instruction-based edits to uploaded or generated images. Use when\nuploaded or reference images must guide identity or likeness.\n\nImage-to-Image prompt order: [IDENTITY LOCK] → [REQUESTED EDIT] → [REFERENCE ROLE\nMAPPING] → [POSE/COMPOSITION] → [STYLE] → [LIGHTING/REALISM] → [PRESERVE ALL\nUNMENTIONED DETAILS]. GOLDEN RULE: When editing a person, state which image owns\nidentity so it is not ambiguous. Describe only the DELTA — what changes. Don't\nrewrite the entire image; the base image already contains most of the truth. Default to minimal\nchange. For multi-image edits, assign one primary role per reference image (identity, pose,\noutfit, style, environment). Do not let a style/pose/clothing reference silently override the face.\nUse positive constraints — \"preserve exact facial likeness, face structure, eye shape, nose\nshape, mouth shape, jawline, skin tone, hairline, apparent age, and overall recognizability\"\n— not vague negatives like \"don't mess up the face\".\n\nKREA IDENTITY EDIT: Use model=\"krea-identity-edit\" whenever an edit of a referenced\nperson or character must keep likeness or character identity while changing clothing,\nhair or makeup, pose or position, face/head/body, background, lighting, or visual style.\nInfer that semantic intent in any language; never route from keyword or regex matching.\nAlso use it for a non-Pro single-character sheet. An explicitly requested model always\nwins. Use model=\"dark-beast-krea2-identity-edit\" only when the user explicitly requests\nthat model, its uncensored/community variant, or dark_beast_krea2_identity_edit_v1_2.\nThese models require one reference image, accept up to two context images, and work best\nat 512-2048 px. Let the model tier and worker choose current execution defaults, and do\nnot use negative prompts. Put the primary scene/base image first and an optional\nperson/detail reference second; reference them with context_image_0 and context_image_1\nwhen model_ref tokens are needed.\n\nKREA 2 IDENTITY EDIT PROMPTING: Use a concise 1-4 sentence delta instruction instead of\nthe generic 50-200 word expansion. Name the requested change and only the details that\nmust remain fixed; do not restate the whole image or dump a facial-feature inventory.\nWith two references, assign their roles compactly: base scene/image first, then the\nperson/detail/outfit/pose/style reference. Longer structured prompts remain appropriate\nfor character sheets, grids, editorial layouts, or exact visible text.\n\nUPLOADED IMAGE VARIANT SETS: When the user supplies a photo/portrait/reference image and\nasks for N distinct generated images deriving from that source while changing paired\nper-output details, prefer one edit_image call with sourceImageIndex=-1,\nnumberOfVariations=N, and ONE Dynamic Prompt branch with N complete options. Each option\nmust be a full concrete image prompt for one output, including the uploaded subject/reference\nanchor, requested pose or placement preservation, the specific changed appearance/style/role,\nclothing or surface details when relevant, setting/background, and any requested label text or\nvisual symbol. If one option is a remade original/preserved source and the rest are themed\nvariants, the original option should explicitly say to preserve the original clothing/wardrobe/outfit\nand background/setting, plus any requested added label, flag, logo, symbol, or prop.\nDo not call generate_image, analyze_image, or multiple serial edit_image calls first.\n\nSELECTION-GATED IMAGE STAGES: If the user asks for N image options and says they will pick\none before a later dance/video/animation, prefer one edit_image call with numberOfVariations=N\nand one Dynamic Prompt branch. After images are created, stop and ask the user to choose\nunless the user explicitly asked to run the later stage immediately.\n\nMULTI-PERSONA (COMBINED): When multiple personas must appear in the SAME scene, make\none edit_image call with all persona faces in one prompt and omit personaName.\nPer-persona splits (one call each with personaName set) are RARE — only when the user\nexplicitly asks for solo images of each person individually.\n\nSTORYBOARD IMAGE BATCH RULE: When rendering scene keyframes from a screenplay/storyboard,\nnumberOfVariations is only the count; the prompt should be one Dynamic Prompt branch with one\nfull keyframe prompt per scene:\n{scene 1 full keyframe prompt|scene 2 full keyframe prompt|...|scene N full keyframe prompt}.\nDo not set numberOfVariations=N with only the first scene prompt — that creates N versions of\nscene 1. For full project requests, one edit_image batch for all scene keyframes, then one\nanimate_photo batch for all video clips in parallel.\nException: if the storyboard/shot sheet is already uploaded and the user asks to make a\ntrailer/video/movie/clip from that uploaded board, do not extract panels or redraw keyframes.\nUse generate_video with Seedance references for one continuous clip unless the user explicitly\nasks for separate image keyframes or a storyboard sheet output.\n\nDIRECT UPLOADED GPT IMAGE 2 STORYBOARD SHEETS: If the user uploaded reference images and\nasks for one finished GPT Image 2 storyboard/keyframe sheet now, call edit_image directly\nwith sourceImageIndex=-1, model=\"gpt-image-2\", numberOfVariations=1, and the requested\ncanvas/aspect settings. If the user did not explicitly specify a storyboard page/canvas/sheet\nshape, default the GPT Image 2 storyboard sheet pixel dimensions to a balanced grid that hosts\nthe target cell aspect ratio natively (e.g., 12 cells with 9:16 portrait video target -> ~3:4\nportrait sheet around 1728x2304; 12 cells with 16:9 landscape video target -> ~4:3 landscape\nsheet around 2304x1728; 6 cells with 9:16 target -> ~27:32 portrait sheet around 1840x2176). Do\nNOT default the sheet to 2560x1440 landscape when cells are portrait — a landscape sheet with\na portrait-cell grid physically forces cells to ~4:3 landscape and the model will not render\n9:16 portrait rectangles inside it. Keep individual scene-cell/frame areas at the target video\naspect ratio. Do not call map_assets_for_model, analyze_image, generate_image, or a separate\nplanning tool first. The uploaded files are already available as references; describe their\nroles plainly in the edit_image prompt and generate the sheet in that call.\n\nDO NOT USE edit_image FOR UPLOADED REFERENCE LOOPED VIDEO SEGMENTS: If the user says the\nsame uploaded image/reference should be reused as the first frame and last frame of each\nscripted segment/scene/clip before stitching, they are explicitly asking to animate the\nuploaded image, not to generate new storyboard keyframes. Do not call edit_image for that\nrequest. Call animate_photo once with repeated uploaded source indices and per-scene prompts.",
         "parameterDocs": {
             "sourceImageIndex": "Index of uploaded/generated image. Use -1 for the first uploaded image.",
             "numberOfVariations": "Number of output variants. When > 1, use a Dynamic Prompt branch with one complete prompt per output.",
@@ -2205,23 +2543,23 @@ const PROMPT_CONTRACTS = [
         "contractId": "generate_image_v1",
         "version": "1.1.0",
         "toolName": "generate_image",
-        "baseDescription": "generate_image creates images from text descriptions. Use for text-only image generation;\nuse edit_image when uploaded or reference images must guide identity/likeness.\nException: Z-image and Z-image Turbo image-to-image/enhancement requests use generate_image\nwith model=\"z-turbo\" or model=\"z-image\", sourceImageIndex=-1, and starting_image_strength;\ndo not route explicit Z-image Turbo uploaded-image enhancement to edit_image because\nedit_image does not expose Z-image models.\n\nBATCH FAN-OUT DEFAULT (READ BEFORE ANYTHING ELSE BELOW):\nWhen the user explicitly asks for N images in the CURRENT turn, set numberOfVariations=N\nin one call. Avoid multiple serial generate_image calls unless the user explicitly wants\nindependent projects, isolated approvals, or per-output settings that cannot share one project.\nDo not omit numberOfVariations and try to \"generate the next one after this finishes\".\nTrigger phrasings:\n\"draw N\", \"make N\", \"give me N\", \"show me N\", \"render N\", \"create N\", \"generate N\",\n\"N more\", \"another N\", \"N as separate\", \"N separate images\", \"N different images\",\n\"N options\", \"N takes\", \"N versions\", \"N variations\", \"N pictures of\",\n\"all at the same time\", \"in parallel\", \"side by side as separate\".\n\nTHE PRIOR TURN DOES NOT ANCHOR THE CURRENT TURN. If the prior assistant turn used\nnumberOfVariations=1 with a composite \"N subjects in one image\" prompt, and the user\nnow says \"draw N more as separate images\" / \"as separate\" / \"separately\", DO NOT carry\nover numberOfVariations=1 from the prior call. The user is correcting that interpretation;\nset numberOfVariations=N for THIS call with one self-contained prompt per image via {|}\nDynamic Prompt branches. The new turn's count + separation language always wins over the\nprevious turn's pattern.\n\nWHEN BATCH FAN-OUT DOES NOT APPLY: numberOfVariations=1 with multiple subjects packed into\nONE prompt is correct only when the user clearly wants a SINGLE composite image (e.g.\n\"draw 2 goats in a meadow\" with no separation language, or explicit \"in one image\" / \"one\npicture of N\" / \"single image\" / \"composite\" / \"sheet\" / \"side-by-side composition\").\n\nFLUX.2 PROMPT ORDER: [SUBJECT] → [ATTRIBUTES] → [ACTION/POSE] → [CAMERA/FRAMING]\n→ [ENVIRONMENT] → [LIGHTING] → [STYLE/MEDIUM] → [MATERIALS/TEXTURES] →\n[SECONDARY DETAILS]. By default, start with the main subject and concrete observable\nattributes; use mood or atmosphere first only when the user explicitly asks for that shape.\nUse concrete nouns and observable adjectives — \"soft overcast daylight\" not \"nice lighting\".\nGood defaults when user is underspecified: medium shot for portraits, wide shot for\nenvironments, eye-level angle, soft natural light for realism.\n\nDYNAMIC PROMPTS: When numberOfVariations > 1, use Dynamic Prompt syntax to make each\nvariation meaningfully different — not just seed-different. Syntax: {a|b|c} cycles\nsequentially, {@a|b|c} picks randomly, {~a|b} paired cycling across groups. Rules: (1) Vary\nONLY what the user left unspecified — lock in everything they specified. (2) Match option\ncount to numberOfVariations so every result is unique. (3) Briefly tell the user what you're\nvarying without exposing raw {|} syntax unless the user asks to inspect the prompt.\n(4) Skip when: user wants consistency, prompt is fully\nspecified, user typed their own {|} syntax, or iterating on a specific result. (5) Do not put\nthe count or the word \"versions\"/\"variations\" inside the prompt — the prompt always describes\na single image. The multiplicity comes ONLY from numberOfVariations + the {|} syntax.\nLINKED VARIANTS: when multiple attributes must stay paired per result, use ONE top-level\nDynamic Prompt branch with one complete self-contained prompt per output. Do NOT split\nlinked fields into separate Dynamic Prompt groups.\n\nSELECTION-GATED IMAGE STAGES: If the user asks for N image options and says they will pick\none before a later dance/video/animation, call generate_image once with numberOfVariations=N.\nAfter images are created, stop and ask the user to choose unless the user explicitly asked\nto run the later stage immediately.\n\nIMAGE→VIDEO DIMENSION RULE: When generating an image that will feed into a video tool\n(animate_photo, sound_to_video, etc.), the image MUST be generated at the SAME aspect\nratio and dimensions as the target video. Default video aspect ratio is 16:9 landscape —\npass aspectRatio=\"16:9\" (or the user's specified/reference ratio) so the source image\nmatches the video output. Do not generate a square image for a widescreen video. Exception:\na composite GPT Image 2 storyboard/keyframe sheet for a later Seedance video is a board,\nnot a single source frame; unless the user explicitly specifies a storyboard page/canvas/sheet\nshape, default the sheet image dimensions to a balanced grid that hosts the target\nscene-cell/frame aspect natively (portrait video target -> portrait or square sheet whose\ncolumns x rows grid produces ~9:16 cells; landscape video target -> landscape sheet whose\nrows x columns grid produces ~16:9 cells). Each scene-cell/frame area preserves the target\nvideo aspect ratio.\n\nSTORYBOARD IMAGE BATCH RULE: When rendering scene keyframes from a screenplay/storyboard,\nnumberOfVariations is only the count; the prompt should be one Dynamic Prompt branch with one\nfull keyframe prompt per scene:\n{scene 1 full keyframe prompt|scene 2 full keyframe prompt|...|scene N full keyframe prompt}.\nDo not set numberOfVariations=N with only the first scene prompt — that creates N versions of\nscene 1. For full project requests, one generate_image batch for all scene keyframes, then\none animate_photo batch for all video clips in parallel.\n\nSTORYTELLING / BRAND / SOCIAL IMAGE PROMPTS: If generating a storyboard, ad concept,\ntrailer sheet, meme, creator post, or provocative social concept, make the first frame or\npanel immediately legible. Preserve the user's requested tone and audience. Use concrete\ncomposition, persona, product/brand role, caption placement, readable required text, and a\nclear visual transformation or punchline. For provocative adult social content, keep subjects\nclearly adult and consensual, PG-13/non-explicit, and avoid minor-coded styling or school-coded\nsettings while still optimizing visual magnet, persona, caption bait, and replay/comment value.\n\nGPT IMAGE 2 STORYBOARD SHEET → SEEDANCE AUTO-PROCEED: If the user asks to run the whole\nGPT Image 2 storyboard/keyframe sheet plus Seedance workflow without approval, the FIRST\ngenerate_image call must create ONE composite storyboard/keyframe sheet, not loose concept\nart and not separate keyframes. Use model=\"gpt-image-2\", numberOfVariations=1, and a\ncompiled storyboard prompt that literally includes: \"Create exactly N sequential video\nstoryboard frames as one composite storyboard image\", \"Target final video aspect ratio: X\",\na `SCENES:` section, and exactly N concrete scene entries named `SCENE_01`, `SCENE_02`,\netc. Each scene entry must include `Visual/Action:`, `Camera/Motion:`, `Dialogue/VO:`\n(use `[no dialogue]` when silent), `Audio/SFX:`, and any reference/visible-text notes\nneeded for that scene. Do not send only a source brief, storyboard concept, or generic\nlayout instructions as the prompt; malformed compiled storyboard prompts are blocked by\nquality audit instead of being repaired at runtime. If the user does not explicitly specify\na frame count, choose N with the shared storyboard density default: at least one key visual\nbeat about every 2 seconds, rounded up and clamped to 6-16 total storyboard frames\n(for example, a 60 second commercial defaults to N=16). Unless the user explicitly specifies another\nstoryboard page/canvas/sheet shape, default the GPT Image 2 storyboard sheet pixel dimensions\nto a balanced grid that hosts the target cell aspect natively: for a 9:16 portrait video,\npick a portrait-leaning sheet whose columns x rows grid produces ~9:16 cells (e.g., 12 cells\n-> ~3:4 sheet around 1728x2304, 6 cells -> ~27:32 around 1840x2176, 9 cells -> ~9:16 around\n1504x2672); for a 16:9 landscape video, pick a landscape sheet whose rows x columns grid\nproduces ~16:9 cells (e.g., 12 cells -> ~4:3 sheet around 2304x1728). Do not force landscape\n2560x1440 when cells are portrait — a landscape sheet with a portrait-cell grid cannot host\n9:16 cells without crushing them. Preserve the requested final video aspect ratio for every\nframe area. After\nthat image completes, call generate_video once using the generated storyboard board as\n@Image1/referenceImageIndices=[0], with skipPromptProcessing=false only when the user\nexplicitly wants the storyboard text rewritten; otherwise preserve the compiled shot guide\nand use skipPromptProcessing=true, expandPrompt=false.\n\nDO NOT USE generate_image FOR UPLOADED REFERENCE LOOPED VIDEO SEGMENTS: If the user says\nthe same uploaded image/reference should be reused as the first frame and last frame of each\nscripted segment/scene/clip before stitching, they are explicitly asking to animate the\nuploaded image, not to generate new storyboard keyframes. Do not call generate_image for\nthat request. Call animate_photo once with repeated uploaded source indices and per-scene\nprompts.\n\nREUSING RESULTS: When the user asks to redo, retry, or revise (e.g., \"try a new version\",\n\"redo the video with X\"), reuse the existing source images — do NOT regenerate them unless\nthe user explicitly asks for new images or describes changes to the images themselves.\nReference the existing result indices from the prior generation. If unsure whether the user\nwants new images, ask — don't regenerate by default.",
+        "baseDescription": "generate_image creates images from text descriptions. Use for text-only image generation;\nuse edit_image when uploaded or reference images must guide identity/likeness.\nException: Z-image, Z-image Turbo, and Krea 2 Turbo image-to-image/enhancement requests\nuse generate_image with model=\"z-turbo\", model=\"z-image\", or model=\"krea-2-turbo\",\nsourceImageIndex=-1, and starting_image_strength; do not route explicit base-model\nZ-image Turbo or Krea 2 Turbo uploaded-image enhancement to edit_image because edit_image\ndoes not expose those base image-to-image models.\n\nMODEL CHOICE: If the user asks for Krea 2 Turbo, choose model=\"krea-2-turbo\". If they ask\nfor Dark Beast Krea 2, choose model=\"dark-beast-krea2\". If they ask for Dark Beast Z-Image\nTurbo, choose model=\"dark-beast-z-turbo\". If they ask for Chroma 1 HD, choose model=\"chroma1-hd\".\nIf they ask for anime or anime-style output without naming a model, choose model=\"one-obsession-v22\".\nBase Z-image and Krea 2 Turbo image-to-image/enhancement requests stay on generate_image with\nsourceImageIndex and starting_image_strength; identity-preserving Krea edits with reference\nphotos use edit_image instead.\n\nBATCH FAN-OUT DEFAULT (READ BEFORE ANYTHING ELSE BELOW):\nWhen the user explicitly asks for N images in the CURRENT turn, set numberOfVariations=N\nin one call. Avoid multiple serial generate_image calls unless the user explicitly wants\nindependent projects, isolated approvals, or per-output settings that cannot share one project.\nDo not omit numberOfVariations and try to \"generate the next one after this finishes\".\nTrigger phrasings:\n\"draw N\", \"make N\", \"give me N\", \"show me N\", \"render N\", \"create N\", \"generate N\",\n\"N more\", \"another N\", \"N as separate\", \"N separate images\", \"N different images\",\n\"N options\", \"N takes\", \"N versions\", \"N variations\", \"N pictures of\",\n\"all at the same time\", \"in parallel\", \"side by side as separate\".\n\nTHE PRIOR TURN DOES NOT ANCHOR THE CURRENT TURN. If the prior assistant turn used\nnumberOfVariations=1 with a composite \"N subjects in one image\" prompt, and the user\nnow says \"draw N more as separate images\" / \"as separate\" / \"separately\", DO NOT carry\nover numberOfVariations=1 from the prior call. The user is correcting that interpretation;\nset numberOfVariations=N for THIS call with one self-contained prompt per image via {|}\nDynamic Prompt branches. The new turn's count + separation language always wins over the\nprevious turn's pattern.\n\nWHEN BATCH FAN-OUT DOES NOT APPLY: numberOfVariations=1 with multiple subjects packed into\nONE prompt is correct only when the user clearly wants a SINGLE composite image (e.g.\n\"draw 2 goats in a meadow\" with no separation language, or explicit \"in one image\" / \"one\npicture of N\" / \"single image\" / \"composite\" / \"sheet\" / \"side-by-side composition\").\n\nIMAGE PROMPT ORDER: [SUBJECT] → [ATTRIBUTES] → [ACTION/POSE] → [CAMERA/FRAMING]\n→ [ENVIRONMENT] → [LIGHTING] → [STYLE/MEDIUM] → [MATERIALS/TEXTURES] →\n[SECONDARY DETAILS]. By default, start with the main subject and concrete observable\nattributes; use mood or atmosphere first only when the user explicitly asks for that shape.\nUse concrete nouns and observable adjectives — \"soft overcast daylight\" not \"nice lighting\".\nGood defaults when user is underspecified: medium shot for portraits, wide shot for\nenvironments, eye-level angle, soft natural light for realism.\n\nDYNAMIC PROMPTS: When numberOfVariations > 1, use Dynamic Prompt syntax to make each\nvariation meaningfully different — not just seed-different. Syntax: {a|b|c} cycles\nsequentially, {@a|b|c} picks randomly, {~a|b} paired cycling across groups. Rules: (1) Vary\nONLY what the user left unspecified — lock in everything they specified. (2) Match option\ncount to numberOfVariations so every result is unique. (3) Briefly tell the user what you're\nvarying without exposing raw {|} syntax unless the user asks to inspect the prompt.\n(4) Skip when: user wants consistency, prompt is fully\nspecified, user typed their own {|} syntax, or iterating on a specific result. (5) Do not put\nthe count or the word \"versions\"/\"variations\" inside the prompt — the prompt always describes\na single image. The multiplicity comes ONLY from numberOfVariations + the {|} syntax.\nLINKED VARIANTS: when multiple attributes must stay paired per result, use ONE top-level\nDynamic Prompt branch with one complete self-contained prompt per output. Do NOT split\nlinked fields into separate Dynamic Prompt groups. Treat every batch-wide requirement\nquantified as \"each\", \"every\", or \"all\" as a hard per-option invariant: repeat it inside\nEVERY option, including identity/pose continuity, clothing/style, the concrete setting, and\nliteral visible names, labels, captions, flags, logos, or symbols. A shared prefix or another\noption is never a substitute for a complete standalone option.\nEach option must name its actual styling, setting, accessories, and requested literal text or\nsymbol. Never emit meta-placeholders such as \"variant-specific background\", \"requested\nsymbol\", \"humorous alternate name\", or \"bake the name and symbol into the image\".\nWhen one option remakes/preserves an original and the others are themed variants, make the\noriginal option equally concrete: specify the original clothing and setting plus every\nrequested label, flag, logo, symbol, or prop; do not write only \"the original\".\n\nSELECTION-GATED IMAGE STAGES: If the user asks for N image options and says they will pick\none before a later dance/video/animation, call generate_image once with numberOfVariations=N.\nAfter images are created, stop and ask the user to choose unless the user explicitly asked\nto run the later stage immediately.\n\nIMAGE→VIDEO DIMENSION RULE: When generating an image that will feed into a video tool\n(animate_photo, sound_to_video, etc.), the image MUST be generated at the SAME aspect\nratio and dimensions as the target video. Default video aspect ratio is 16:9 landscape —\npass aspectRatio=\"16:9\" (or the user's specified/reference ratio) so the source image\nmatches the video output. Do not generate a square image for a widescreen video. Exception:\na composite GPT Image 2 storyboard/keyframe sheet for a later Seedance video is a board,\nnot a single source frame; unless the user explicitly specifies a storyboard page/canvas/sheet\nshape, default the sheet image dimensions to a balanced grid that hosts the target\nscene-cell/frame aspect natively (portrait video target -> portrait or square sheet whose\ncolumns x rows grid produces ~9:16 cells; landscape video target -> landscape sheet whose\nrows x columns grid produces ~16:9 cells). Each scene-cell/frame area preserves the target\nvideo aspect ratio.\n\nSTORYBOARD IMAGE BATCH RULE: When rendering scene keyframes from a screenplay/storyboard,\nnumberOfVariations is only the count; the prompt should be one Dynamic Prompt branch with one\nfull keyframe prompt per scene:\n{scene 1 full keyframe prompt|scene 2 full keyframe prompt|...|scene N full keyframe prompt}.\nDo not set numberOfVariations=N with only the first scene prompt — that creates N versions of\nscene 1. For full project requests, one generate_image batch for all scene keyframes, then\none animate_photo batch for all video clips in parallel.\n\nSTORYTELLING / BRAND / SOCIAL IMAGE PROMPTS: If generating a storyboard, ad concept,\ntrailer sheet, meme, creator post, or provocative social concept, make the first frame or\npanel immediately legible. Preserve the user's requested tone and audience. Use concrete\ncomposition, persona, product/brand role, caption placement, readable required text, and a\nclear visual transformation or punchline. For provocative adult social content, keep subjects\nclearly adult and consensual, PG-13/non-explicit, and avoid minor-coded styling or school-coded\nsettings while still optimizing visual magnet, persona, caption bait, and replay/comment value.\n\nGPT IMAGE 2 STORYBOARD SHEET → SEEDANCE AUTO-PROCEED: If the user asks to run the whole\nGPT Image 2 storyboard/keyframe sheet plus Seedance workflow without approval, the FIRST\ngenerate_image call must create ONE composite storyboard/keyframe sheet, not loose concept\nart and not separate keyframes. Use model=\"gpt-image-2\", numberOfVariations=1, and a\ncompiled storyboard prompt that literally includes: \"Create exactly N sequential video\nstoryboard frames as one composite storyboard image\", \"Target final video aspect ratio: X\",\na `SCENES:` section, and exactly N concrete scene entries named `SCENE_01`, `SCENE_02`,\netc. Each scene entry must include `Visual/Action:`, `Camera/Motion:`, `Dialogue/VO:`\n(use `[no dialogue]` when silent), `Audio/SFX:`, and any reference/visible-text notes\nneeded for that scene. Do not send only a source brief, storyboard concept, or generic\nlayout instructions as the prompt; malformed compiled storyboard prompts are blocked by\nquality audit instead of being repaired at runtime. If the user does not explicitly specify\na frame count, choose N with the shared storyboard density default: at least one key visual\nbeat about every 2 seconds, rounded up and clamped to 6-16 total storyboard frames\n(for example, a 60 second commercial defaults to N=16). Unless the user explicitly specifies another\nstoryboard page/canvas/sheet shape, default the GPT Image 2 storyboard sheet pixel dimensions\nto a balanced grid that hosts the target cell aspect natively: for a 9:16 portrait video,\npick a portrait-leaning sheet whose columns x rows grid produces ~9:16 cells (e.g., 12 cells\n-> ~3:4 sheet around 1728x2304, 6 cells -> ~27:32 around 1840x2176, 9 cells -> ~9:16 around\n1504x2672); for a 16:9 landscape video, pick a landscape sheet whose rows x columns grid\nproduces ~16:9 cells (e.g., 12 cells -> ~4:3 sheet around 2304x1728). Do not force landscape\n2560x1440 when cells are portrait — a landscape sheet with a portrait-cell grid cannot host\n9:16 cells without crushing them. Preserve the requested final video aspect ratio for every\nframe area. After\nthat image completes, call generate_video once using the generated storyboard board as\n@Image1/referenceImageIndices=[0], with skipPromptProcessing=false only when the user\nexplicitly wants the storyboard text rewritten; otherwise preserve the compiled shot guide\nand use skipPromptProcessing=true, expandPrompt=false.\n\nDO NOT USE generate_image FOR UPLOADED REFERENCE LOOPED VIDEO SEGMENTS: If the user says\nthe same uploaded image/reference should be reused as the first frame and last frame of each\nscripted segment/scene/clip before stitching, they are explicitly asking to animate the\nuploaded image, not to generate new storyboard keyframes. Do not call generate_image for\nthat request. Call animate_photo once with repeated uploaded source indices and per-scene\nprompts.\n\nREUSING RESULTS: When the user asks to redo, retry, or revise (e.g., \"try a new version\",\n\"redo the video with X\"), reuse the existing source images — do NOT regenerate them unless\nthe user explicitly asks for new images or describes changes to the images themselves.\nReference the existing result indices from the prior generation. If unsure whether the user\nwants new images, ask — don't regenerate by default.",
         "parameterDocs": {
-            "prompt": "Text description. Follow FLUX.2 prompt order: subject first. Use Dynamic Prompt syntax when numberOfVariations > 1.",
+            "prompt": "Text description. Put the subject first. Use Dynamic Prompt syntax when numberOfVariations > 1.",
             "numberOfVariations": "Number of distinct outputs. Use Dynamic Prompt {|} syntax to vary one attribute per image. Never put the count in the prompt itself.",
             "aspectRatio": "For ordinary images feeding a video tool, set to match the target video aspect ratio. For composite GPT Image 2 storyboard sheets, default the sheet pixel dimensions to a balanced grid that hosts the target cell aspect natively (portrait video target -> portrait/square sheet, landscape video target -> landscape sheet) unless the user explicitly specifies a storyboard page/canvas/sheet shape; keep the target video ratio inside each frame area."
         }
     },
     {
         "contractId": "video_to_video_v1",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "toolName": "video_to_video",
-        "baseDescription": "video_to_video transforms an uploaded video. Use for uploaded-video restyling, enhancement,\nupscaling/remastering, motion transfer from video to image, subject replacement, edge/pose/\ndepth-guided restyle, or explicit Seedance V2V transforms.\n\nThis tool requires an uploaded video source. Do not use it for generated video indices. For\ngenerated or uploaded partial edits use replace_video_segment; for appended time use\nextend_video; for logos/text overlays use overlay_video; for stitching use stitch_video.\n\nChoose controlMode by intent. Use detailer for quality-only enhancement without restyling.\nUse seedance-v2v only when the user asks to transform/enhance/remaster an uploaded video\nwith Seedance, including Seedance-fast uploaded-video upscale/remaster requests. For detailer,\ndescribe the original scene plus quality terms, not new content.\nUse outpaint to extend/expand the frame or change aspect ratio (positional, mask-free); set\noutpaintPosition and optionally outpaintAspectRatio. Use inpaint to regenerate a region\nwhile preserving the rest. If the user supplied a mask, set maskImageIndex; otherwise\nomit maskImageIndex so execution derives one from the source video and prompt.",
+        "baseDescription": "video_to_video transforms an uploaded video. Use for uploaded-video restyling, generative\nenhancement or remastering, motion transfer from video to image, subject replacement, edge/pose/\ndepth-guided restyle, or explicit Seedance V2V transforms. Wan 3 is not a V2V model;\nits video inputs are loose references for new generation through generate_video.\nFor a pure resolution upscale (a sharper 1080p, 1440p, 2K, or HD copy of the same video),\nuse upscale_video instead; it is promptless and keeps every frame, the frame rate, and the audio.\n\nThis tool requires an uploaded video source. Do not use it for generated video indices. For\ngenerated or uploaded partial edits use replace_video_segment; for appended time use\nextend_video; for logos/text overlays use overlay_video; for stitching use stitch_video.\n\nChoose controlMode by intent. Use detailer for generative detail enhancement without restyling\nwhen the user wants the content re-rendered rather than only more resolution.\nUse seedance-v2v only when the user asks to transform/enhance/remaster an uploaded video\nwith Seedance, including uploaded-video upscale/remaster requests that name Seedance. For detailer,\ndescribe the original scene plus quality terms, not new content.\nUse outpaint to extend/expand the frame or change aspect ratio (positional, mask-free); set\noutpaintPosition and optionally outpaintAspectRatio. Use inpaint to regenerate a region\nwhile preserving the rest. If the user supplied a mask, set maskImageIndex; otherwise\nomit maskImageIndex so execution derives one from the source video and prompt.",
         "parameterDocs": {
             "prompt": "Describe the target appearance in present tense. For detailer, describe the original content plus quality qualifiers only. For outpaint, describe what fills the new area; for inpaint, describe only the masked region.",
             "videoSourceIndex": "Uploaded video index. Omit when there is one uploaded video; use 0 for first uploaded video or -1 if using negative upload notation.",
-            "controlMode": "Pick from intent: detailer for enhance, seedance-v2v for explicit Seedance V2V, canny/depth/pose for control-net restyles, animate-move/replace for WAN Animate, outpaint to extend/expand the canvas, inpaint to regenerate a masked region.",
-            "sourceImageIndex": "Required for animate-move and animate-replace. Ignored by canny, depth, detailer, outpaint, and inpaint.",
+            "controlMode": "Pick from intent: detailer for generative enhancement, seedance-v2v for explicit Seedance V2V, canny/depth for video-only control restyles, pose for motion transfer onto a reference-image subject, animate-move/replace for WAN Animate, outpaint to extend/expand the canvas, inpaint to regenerate a masked region.",
+            "sourceImageIndex": "Required for animate-move, animate-replace, and pose when more than one image is available; the sole reference image may be auto-selected. LTX pose always needs a reference image. Ignored by canny, depth, detailer, outpaint, and inpaint.",
             "outpaintPosition": "outpaint only. Where the original frame sits in the expanded canvas (center/top/bottom/left/right); determines grow direction. Default center.",
             "outpaintAspectRatio": "outpaint only, optional. Target aspect ratio (e.g. 16:9) for the expanded canvas; the canvas only grows, never crops. Set only when the user names a target shape/orientation.",
             "maskImageIndex": "inpaint only, optional. 0-based index of an uploaded mask image (white = regenerate, black = preserve). Omit when the user did not provide a mask.",
@@ -2288,7 +2626,7 @@ const PROMPT_CONTRACTS = [
         "contractId": "sound_to_video_v1",
         "version": "1.0.0",
         "toolName": "sound_to_video",
-        "baseDescription": "sound_to_video creates audio-synced video from an audio source. Works with uploaded audio\nfiles (mp3, m4a, wav) OR previously generated music from generate_music (auto-detected).\n\nWhen the user asks to \"turn that song/music into a video\" after generate_music, use\nsound_to_video — it will automatically find the generated audio.\n\nFor music visualization (syncing video to a specific song or audio track), use the\ngenerate_music → sound_to_video pipeline. Do NOT use animate_photo or generate_video for\naudio-driven visualization.\n\nanimate_photo and generate_video produce audio natively via LTX 2.3 — never pre-generate\naudio for those tools. sound_to_video is only for when the audio IS the primary creative\ninput driving the video output.\n\nPERSONA VOICE CLIPS: Persona voice clips returned by resolve_personas are voice identity\nreferences for LTX Audio ID, not audio tracks to synchronize. If the user explicitly asks\nfor a registered/persona/reference voice or voice clone, call resolve_personas first, then\nuse generate_video with ltx23 and voicePersonaName when there is no image source, or\nanimate_photo with ltx23 and voicePersonaName when an image/source frame should be\nanimated. Do not call sound_to_video for a persona voice clip unless a separate uploaded\naudio track is the primary sync driver.",
+        "baseDescription": "sound_to_video creates audio-synced video from an audio source. Works with uploaded audio\nfiles (mp3, m4a, wav) OR previously generated music from generate_music (auto-detected).\n\nWhen the user asks to \"turn that song/music into a video\" after generate_music, use\nsound_to_video — it will automatically find the generated audio.\n\nFor music visualization (syncing video to a specific song or audio track), use the\ngenerate_music → sound_to_video pipeline. Do NOT use animate_photo or generate_video for\naudio-driven visualization.\n\nanimate_photo and generate_video produce audio natively via LTX 2.5 or LTX 2.3 — never\npre-generate audio for those tools. sound_to_video is only for when the audio IS the primary creative\ninput driving the video output.\n\nPERSONA VOICE CLIPS: Persona voice clips returned by resolve_personas are voice identity\nreferences for LTX Audio ID, not audio tracks to synchronize. If the user explicitly asks\nfor a registered/persona/reference voice or voice clone, call resolve_personas first, then\nuse generate_video with ltx23 and voicePersonaName when there is no image source, or\nanimate_photo with ltx23 and voicePersonaName when an image/source frame should be\nanimated. Do not call sound_to_video for a persona voice clip unless a separate uploaded\naudio track is the primary sync driver.",
         "parameterDocs": {
             "audioSource": "Uploaded audio file or reference to a prior generate_music result. Auto-detected when omitted after generate_music."
         }
@@ -2308,6 +2646,18 @@ const PROMPT_CONTRACTS = [
         "toolName": "generate_music",
         "baseDescription": "generate_music creates music tracks with optional lyrics, BPM, key, and style control.\n\nMUSIC CREATIVE BRIEF: Identify purpose before composing: full song, short social hook,\njingle, trailer score, background underscore, sonic logo, music video cue, or lyric video.\nDefine genre, mood, tempo/BPM, energy curve, instrumentation, vocal style, lyrical point of\nview, hook phrase, section structure, and production notes. Lyrics should be original,\nsingable, sectioned, rhythmically clear, and have a memorable hook. Brand music should make\nthe brand easier to remember without stuffing the name into every line.\n\nFor music visualization (syncing the generated track to video), chain generate_music →\nsound_to_video. Do NOT use animate_photo or generate_video for audio-driven visualization.\n\nAfter generate_music, if the user asks to \"turn that song into a video\" or similar, call\nsound_to_video next — it auto-detects the latest generated music track.",
         "parameterDocs": {}
+    },
+    {
+        "contractId": "generate_speech_v1",
+        "version": "1.0.0",
+        "toolName": "generate_speech",
+        "baseDescription": "generate_speech reads written words aloud. It is text-to-speech, not music: use\ngenerate_music for songs, instrumentals and jingles.\n\nTHE PROMPT IS THE SCRIPT. Unlike every image and video tool, prompt is not a description\nof the output — it is the literal text to be spoken, character for character. Writing \"a\ncalm woman reading the news\" produces a voice saying those seven words. Put the delivery in\nvoiceDescription and the actual copy in prompt.\n\nWRITE THE SCRIPT WHEN THE USER DOES NOT. \"Read me a haiku about rain\", \"record a podcast\nintro\" and \"say something reassuring\" are requests for words you compose and then speak.\nCompose the line and pass it as prompt. Reach for compose_script only for a long or\nstructured piece; a sentence or two is yours to write.\n\nPICK THE MODEL FROM WHAT THE USER GAVE YOU. A voice clip uploaded with \"make it sound like\nme\" is model=\"clone\" with voiceSourceIndex pointing at that upload. A described speaker who\ndoes not exist (\"an old lighthouse keeper\") is model=\"design\" with voiceDescription. Anything\nelse is model=\"voice\" — choose a voice from the roster and, if the user described a mood or\na delivery, put that in voiceDescription too.\n\nCLONING QUALITY. Set voiceTranscript whenever the words in the uploaded clip are known: it\nis the difference between a close clone and a loose one. Tell the user if their reference is\nshorter than three seconds, has music under it, or has two people talking — those are the\nthree reasons a clone comes back sounding wrong.\n\nPUNCTUATION IS PROSODY. Keep full stops, commas and question marks; they are the only pause\nand intonation control there is. Spell out numbers, dates and abbreviations the way they\nshould be read when the written form is ambiguous.\n\nTo put speech over video, generate it here and then call sound_to_video with the result.\nDo not use animate_photo or generate_video to \"say\" a line of provided text.",
+        "parameterDocs": {
+            "prompt": "The literal words to speak, verbatim. Not a description of the audio.",
+            "voiceDescription": "Delivery direction for model=\"voice\"; the speaker to invent for model=\"design\". Never sent with model=\"clone\".",
+            "voiceSourceIndex": "Index of the uploaded voice clip to clone (0-based, same numbering as other tools use for audio). Required for model=\"clone\".",
+            "voiceTranscript": "What the uploaded clip says. Optional, but it makes the clone markedly closer to the source."
+        }
     },
     {
         "contractId": "analyze_image_v1",
@@ -2354,7 +2704,7 @@ const PROMPT_CONTRACTS = [
         "contractId": "resolve_personas_v1",
         "version": "1.0.0",
         "toolName": "resolve_personas",
-        "baseDescription": "resolve_personas is the required first step when the user explicitly names a saved Persona\nor says to use a Persona Image, Persona reference photo, Persona Voice, registered voice,\nor voice clone. Do not answer in prose, ask a follow-up, or finalize before calling this\ntool when a listed Persona name is present.\n\nDIRECT PERSONA IMAGE / VOICE VIDEO: If the user says to use the Persona image/reference\ndirectly/originally, call resolve_personas first, then call animate_photo using the injected\npersona photo as an uploaded image index. For one named Persona, use sourceImageIndex=-1\nor sourceImageIndices=[-1,...] for a multi-clip batch. If Persona Voice was explicitly\nrequested, set voicePersonaName to the exact resolved Persona name and use ltx23. Use\nanimate_photo when an image/source frame should be animated. Use generate_video with\nltx23 when the user requested a persona voice video but no image source exists yet.\nDo not call sound_to_video for Persona voice clips; they are voice identity references,\nnot the audio track to synchronize. Do not generate a new image first when the user\nexplicitly requested the existing Persona image directly.\n\nMULTI-CLIP PERSONA BATCHES: If the user asks for several separate clips from the same\nPersona Image, make one animate_photo call after resolve_personas with repeated persona\nsource indices, one prompt per clip, and the requested per-clip duration. If the user asks\nto stitch the clips, call stitch_video with the returned video indices after animate_photo.",
+        "baseDescription": "resolve_personas is the required first step when the user explicitly names a saved Persona\nor says to use a Persona Image, Persona reference photo, Persona Voice, registered voice,\nor voice clone. Do not answer in prose, ask a follow-up, or finalize before calling this\ntool when a listed Persona name is present.\n\nDIRECT PERSONA IMAGE / VOICE VIDEO: If the user says to use the Persona image/reference\ndirectly/originally, call resolve_personas first, then call animate_photo using the injected\npersona photo as an uploaded image index. For one named Persona, use sourceImageIndex=-1\nor sourceImageIndices=[-1,...] for a multi-clip batch. If Persona Voice was explicitly\nrequested, set voicePersonaName to the exact resolved Persona name and use ltx23. Use\nanimate_photo when an image/source frame should be animated. Use generate_video with\nltx23 when the user requested a persona voice video but no image source exists yet.\nDo not call sound_to_video for Persona voice clips; they are voice identity references,\nnot the audio track to synchronize. Do not generate a new image first when the user\nexplicitly requested the existing Persona image directly.\n\nMULTI-CLIP PERSONA BATCHES: If the user asks for several separate clips from the same\nPersona Image, make one animate_photo call after resolve_personas with repeated persona\nsource indices, one prompt per clip, and the requested per-clip duration. If the user asks\nto stitch the clips, call stitch_video with the returned video indices after animate_photo.\n\nPERSONA IMAGE GENERATION: After resolving persona reference photos for a new persona image,\nuse edit_image rather than generate_image. Krea 2 Identity Edit and Dark Beast Krea 2 Identity\nEdit are available edit_image model choices when the request needs strong identity preservation\nfrom one or two reference photos; use concise identity locks and keep within the two-reference\nlimit.",
         "parameterDocs": {
             "names": "Persona names to load. Use the exact listed Persona name; call this before any Persona image/voice video or image generation."
         }
@@ -2407,7 +2757,7 @@ const PROMPT_CONTRACTS = [
         "contractId": "map_assets_for_model_v1",
         "version": "1.0.0",
         "toolName": "map_assets_for_model",
-        "baseDescription": "map_assets_for_model is an inspection helper for previously generated asset-manifest entries\nwhen you need exact model_ref tokens for a later prompt.\n\nDo NOT call this for ordinary uploaded image references. If the user uploaded images and\nasks GPT Image 2 to use all uploaded assets as visual references, call edit_image directly\nwith sourceImageIndex=-1 and describe the uploaded assets/roles in the prompt. Uploaded\nreference images are already available to edit_image/generate_image; mapping them first\nwastes a tool round and may violate direct-generation requests.\n\nUse this helper only when a previous tool result produced assets in the manifest and the\nnext prompt must name those prior generated assets with provider-specific tokens.",
+        "baseDescription": "map_assets_for_model is an inspection helper for previously generated asset-manifest entries\nwhen you need exact model_ref tokens for a later prompt.\n\nDo NOT call this for ordinary uploaded image references. If the user uploaded images and\nasks GPT Image 2 to use all uploaded assets as visual references, call edit_image directly\nwith sourceImageIndex=-1 and describe the uploaded assets/roles in the prompt. Uploaded\nreference images are already available to edit_image/generate_image; mapping them first\nwastes a tool round and may violate direct-generation requests.\n\nUse this helper only when a previous tool result produced assets in the manifest and the\nnext prompt must name those prior generated assets with provider-specific tokens.\n\nContext-conditioned image/edit models such as LTX 2.5, LTX 2.3, Wan, Qwen Image Edit, Krea 2 Identity\nEdit, and Dark Beast Krea 2 Identity Edit use zero-indexed model_ref tokens like\ncontext_image_0 and context_image_1. Use the helper output instead of hand-formatting those tokens.",
         "parameterDocs": {
             "model_id": "Target model for prior generated manifest refs. Do not use for plain uploaded references."
         }
@@ -2444,21 +2794,21 @@ const PROMPT_CONTRACTS = [
     },
     {
         "contractId": "enhance_prompt_v1",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "toolName": "enhance_prompt",
-        "baseDescription": "enhance_prompt enhances or adapts a source prompt into a model-ready image, video, music, or\nedit prompt. Use for prompt expansion and model-specific prompt preparation when the caller\nhas a rough idea, a revision request, or a prompt that needs to be tuned for a specific\ndownstream model or generation tool.\n\nDo not use enhance_prompt for full creative-writing artifacts. Use compose_script for\nscripts, storyboards, ad concepts, trailers, and talking-head plans. Use compose_lyrics for\nsong lyrics and compose_instrumental for instrumental music structure. Do not use\nenhance_prompt to plan a multi-step workflow — use compose_workflow or\ncompose_workflow_template instead.\n\nenhance_prompt returns prompt text. The caller is responsible for handing the enhanced\nprompt to the chosen downstream generation tool (generate_image, edit_image,\ngenerate_video, animate_photo, sound_to_video, video_to_video, generate_music, etc.).",
+        "baseDescription": "enhance_prompt authors a directly runnable image, video, or image-edit prompt in the native\nformat of one exact active destination model. Use it when the requested text deliverable is\nexplicitly a prompt for a named media model, including a commercial prompt. The caller must\nprovide destination_model and target_output; unknown, sunset, and omitted models fail closed.\n\nDo not use enhance_prompt when an exact active destination model is absent, or for music\ncomposition, lyrics, screenplays, storyboards, treatments, ad scripts, or multi-step workflow\nplans. Use compose_script for creative-writing artifacts, compose_lyrics or\ncompose_instrumental for music, and compose_workflow or compose_workflow_template for\nworkflows.\n\nenhance_prompt returns prompt text only. The caller is responsible for handing it to the\nmatching downstream generation tool.",
         "parameterDocs": {
             "prompt": "The source prompt, rough idea, or prompt revision request to enhance.",
-            "target_output": "The kind of prompt artifact to produce. One of image_prompt, video_prompt, music_prompt, edit_prompt, model_prompt, or general_prompt.",
-            "destination_model": "Optional destination model selector, such as seedance2, ltx23, wan22, flux2, gpt-image-2, or sdxl.",
-            "destination_tool": "Optional downstream generation tool, such as generate_image, edit_image, generate_video, animate_photo, sound_to_video, video_to_video, or generate_music.",
-            "prompting_type": "Optional image-prompting family when producing an image prompt. One of flux, sdxl, sd15, pony, fast, sd3, editing, or video.",
-            "model_title": "Optional human-readable target model name for image prompt guidance.",
+            "target_output": "Required model-specific artifact kind: image_prompt, video_prompt, edit_prompt, or model_prompt. Use model_prompt only when destination_model identifies the modality.",
+            "destination_model": "Required exact active model selector. Unknown and sunset models fail closed.",
+            "destination_tool": "Optional matching downstream generation tool for the authored prompt.",
+            "prompting_type": "Deprecated compatibility metadata. It never selects or overrides the prompt grammar; destination_model is authoritative.",
+            "model_title": "Deprecated compatibility label. It never selects or overrides the prompt grammar; destination_model is authoritative.",
             "style_prompt": "Optional current style, brand, or prompt context to complement without repeating.",
             "prompt_mode": "Optional model prompt adaptation mode. One of auto, preserve, expand, compress, validate, or payload.",
-            "duration_seconds": "Requested runtime in seconds (1-300) when enhancing a video or music prompt.",
+            "duration_seconds": "Requested runtime in seconds (1-300) when authoring a video prompt.",
             "aspect_ratio": "Optional target aspect ratio, such as 16:9, 9:16, 1:1, 4:5, or 21:9.",
-            "assets": "Optional available assets (max 12) the enhanced prompt may reference. Each entry needs media_type (image/video/audio) and may include id, label, role, and url.",
+            "assets": "Optional available assets (schema max 50) the prompt may reference. The exact destination model applies smaller per-modality and total limits.",
             "constraints": "Optional production, brand, model, or user constraints to preserve."
         }
     },
@@ -2487,13 +2837,13 @@ const PROMPT_CONTRACTS = [
     },
     {
         "contractId": "compose_script_v1",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "toolName": "compose_script",
-        "baseDescription": "compose_script composes scripts, storyboards, video prompts, ad concepts, trailers, social\nshorts, campaign beats, and talking-head plans. Use for creative writing artifacts where\nthe user wants prose, scenes, beats, or a script-shaped deliverable.\n\nDo not use compose_script for song lyrics — use compose_lyrics. Do not use it for simple\nprompt expansion — use enhance_prompt. Do not use it to plan a runnable multi-step\nworkflow — use compose_workflow or compose_workflow_template.\n\ncompose_script returns a creative-writing deliverable. When the script is meant to feed a\ndownstream video tool, pair it with destination_tool/destination_model so the output is\ntuned for that pipeline; the caller still has to invoke the generation tool itself.",
+        "baseDescription": "compose_script composes scripts, screenplays, storyboards, treatments, ad concepts, trailers,\nsocial shorts, campaign beats, and talking-head plans. Use it for prose, scenes, beats, or\nother script-shaped creative-writing deliverables.\n\nWhen the user explicitly asks for a directly runnable prompt for a named image or video\nmodel, use enhance_prompt instead, even when the subject is a commercial. Do not use\ncompose_script for song lyrics, instrumental composition, simple prompt authoring, or a\nrunnable multi-step workflow.\n\ncompose_script returns a creative-writing deliverable. When that deliverable will later feed\na video pipeline, destination_tool and destination_model may record the intended handoff;\nthey do not turn the result into the model's native prompt contract.",
         "parameterDocs": {
             "brief": "The creative writing brief, story idea, product concept, video idea, or revision request.",
             "script_type": "The kind of script or creative writing artifact to produce. One of video_prompt, screenplay, storyboard, ad_script, trailer, social_short, talking_head, campaign, or revision.",
-            "destination_model": "Optional destination video model selector, such as ltx23, wan22, or seedance2.",
+            "destination_model": "Optional destination video model selector, such as ltx25, ltx23, wan22, or seedance2.",
             "destination_tool": "Optional downstream tool, such as generate_video, animate_photo, sound_to_video, or video_to_video.",
             "duration_seconds": "Requested runtime in seconds (1-300) for a video prompt, social short, ad, or talking-head script.",
             "scene_count": "Requested number of scenes, shots, beats, or storyboard panels (1-12).",
@@ -2517,7 +2867,7 @@ const PROMPT_CONTRACTS = [
             "duration_seconds": "Target total duration in seconds for video-bearing plans (1-120).",
             "aspect_ratio": "Output aspect ratio. One of 1:1, 4:3, 3:4, 16:9, 9:16, 21:9.",
             "style": "Optional stylistic guidance such as \"cinematic, neon, low-key\" or \"whiteboard illustration\".",
-            "destination_models": "Optional preferred image/video/music model selectors (e.g. flux2, ltx23). Each subkey is optional.",
+            "destination_models": "Optional preferred image/video/music model selectors (e.g. qwen, ltx25, ltx23). Each subkey is optional.",
             "max_estimated_capacity_units": "Optional coarse capacity budget. If set, the planner tries to keep total estimated cost at or below this value; the API returns fits_budget=false if it cannot.",
             "include_audio": "When true, include a generate_music step in the plan. Defaults to false.",
             "return_format": "Reserved for future use; only \"json\" is supported in Phase 1. Omit if unsure."
@@ -2539,7 +2889,7 @@ const PROMPT_CONTRACTS = [
             "duration_seconds": "Target total duration in seconds for video-bearing plans (1-120).",
             "aspect_ratio": "Output aspect ratio. One of 1:1, 4:3, 3:4, 16:9, 9:16, 21:9.",
             "style": "Optional stylistic guidance such as \"cinematic, neon, low-key\" or \"whiteboard illustration\".",
-            "destination_models": "Optional preferred image/video/music model selectors (e.g. flux2, ltx23). Each subkey is optional.",
+            "destination_models": "Optional preferred image/video/music model selectors (e.g. qwen, ltx25, ltx23). Each subkey is optional.",
             "max_estimated_capacity_units": "Optional coarse capacity budget. The planner returns fits_budget=false if it cannot fit under the cap.",
             "include_audio": "When true, include a generate_music step in the example plan. Defaults to false.",
             "return_format": "Reserved for future use; only \"json\" is supported in Phase 2. Omit if unsure.",

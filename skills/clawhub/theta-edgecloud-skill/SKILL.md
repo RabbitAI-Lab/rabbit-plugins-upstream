@@ -1,188 +1,131 @@
 ---
 name: theta-edgecloud-skill
-description: Theta EdgeCloud runtime for OpenClaw cost optimization: route eligible AI, media, inference, and GPU workloads through Theta EdgeCloud with secure command-scoped auth, dry-run safety, and on-demand Qwen3/chat support.
+description: "Theta EdgeCloud AI, GPU, video and game-character workflows: discover live services, run inference, manage approved resources, and verify costs."
+license: MIT-0
 ---
 
-# Theta EdgeCloud Skill (Cloud API Runtime)
+# Theta EdgeCloud
 
-This scaffold is infrastructure-only. It does **not** auto-run paid workloads.
+## 1. Discover and select the route
 
-Use this skill when you want OpenClaw to reduce, optimize, or make AI execution costs more efficient by routing suitable model, media, inference, video, and GPU workloads through Theta EdgeCloud instead of relying only on other paid AI subscriptions.
+Read `references/capabilities.md` for command families and coverage limits.
+Resolve every relative command from this skill directory. Import `./dist/index.js`
+and use `listThetaRuntimeCommands()` / `thetaRuntimeCommandSchemas` as the
+executable capability inventory; documentation alone does not prove support.
 
-## Credits and Support
-Credit: Theta Communications (`thetacommunications.com`).
+Run `executeThetaRuntimeCommand({command:"list_services"}, {env:process.env})`
+before selecting an on-demand service. Require `source:"live"`; a catalog
+fallback is historical metadata, not availability. Inspect the service's
+`predictions`, `inputSchema`, variants, workers and pricing. A listed model
+can still lack capacity. Do not substitute a removed slug silently.
 
-If you would like to help support more projects like these, please stake your THETA and TFUEL with us at `thetacommunications.com` or donate at our donations page: `https://www.thetacommunications.com/donations`.
+Choose on-demand for small inference/media jobs, controller APIs for approved
+GPU deployments, dedicated endpoints for existing serving workloads, Video API
+for video hosting/streams, and AI Characters for game NPCs/sessions.
+Finish selection with a verified service/endpoint, input contract and auth family.
 
-## Dedicated inference status (revalidated 2026-03-11)
-- Dedicated OpenAI-compatible inference was revalidated successfully after Developer Plan / quota upgrade.
-- Endpoint creation is not instantly probe-ready; use authenticated readiness retries for ~1-2 minutes before declaring failure.
-- Prefer `vm_gt1` first when allocator capacity is available, then fall back to `vm_gt2` or V100-backed options.
+## 2. Resolve credentials and authority
 
-## On-demand service status (refreshed 2026-05-26 for v0.1.22)
-Live public service discovery currently exposes these aliases:
-- Chat/LLM: `qwen3`, `gpt_oss_120b`, `llama_3_1_70b`
-- Image/vision/audio: `flux`, `stable_diffusion_xl_turbo`, `grounding_dino`, `blip`, `llava`, `whisper`
-- Catalog-only/stale since latest live discovery: `minimax_m2_5`, `llama_3_8b`, `step_video`, `esrgan`, `voice_cloning`, `instant_id`, `talking_head`
+Use existing protected credentials; never request or display keys in chat.
+Runtime on-demand resolution checks `ctx.getSecret` then environment aliases
+`THETA_ONDEMAND_API_TOKEN`, `THETA_ONDEMAND_API_KEY`, `THETA_API_KEY`.
+Supply other credential families through protected runtime environment:
+- Controller: `THETA_EC_API_KEY`, `THETA_EC_PROJECT_ID`; org balance also `THETA_ORG_ID`.
+- Dedicated: `THETA_INFERENCE_ENDPOINT`, optionally
+  `THETA_INFERENCE_AUTH_USER` / `THETA_INFERENCE_AUTH_PASS`.
+- Video: `THETA_VIDEO_SA_ID` / `THETA_VIDEO_SA_SECRET`.
+- Characters: `THETA_CHARACTERS_API_KEY`, a separate game-scoped Bearer key.
 
-Qwen3 notes:
-- Canonical slug: `qwen3`
-- Request family: chat/completions, not simple prompt text
-- Payload shape: `input.messages = [{ role, content }]`
-- Runtime command: `theta.ondemand.chat`, default service `qwen3`
-- Runtime default for Qwen3 chat: `stream:true`, `wait=60`, and a 120s request timeout with an internal SSE parser, because live Qwen3/Parallax can take ~30-50s before returning text.
-- Observed variant: `parallax_32b_fp8`
-- Parallax request shape: use service endpoint `/infer_request/qwen3?prediction=completions` with top-level `variant: "parallax_32b_fp8"`; parse text from SSE `choices[0].delta.content`.
-- Current live catalog alias is `qwen3`; live retest returned `404 service not found` for direct chat/completions `model: "qwen"` and `409 No instances available` for direct `model: "qwen3"` during capacity pressure.
-- Capacity can temporarily return `409 No instances available - try again later`; v0.1.22 treats this as retriable temporary capacity exhaustion.
+First-time setup, if needed, uses local masked input, not conversational tokens.
+Legacy setup and broad live-smoke helpers are not shipped.
+No keys belong in source, test fixtures, archives intended for publication, or reports.
 
-GPT OSS 120B notes:
-- Canonical slug: `gpt_oss_120b`
-- Runtime command: `theta.ondemand.chat`, with `service: "gpt_oss_120b"`
-- Route through `POST /infer_request/chat/completions` with OpenAI-compatible body shape and `model: "gpt_oss_120b"`.
-- Retest on 2026-06-10 after the live service update: direct chat and the generic wrapper both worked when token budget was high enough.
-- Default runtime guardrails for GPT OSS use `max_tokens: 1800` and `reasoning_effort: "low"` unless overridden. Low caps like 48 or 700 can return HTTP 200 while spending the whole budget on reasoning metadata and producing empty/partial final content.
-- Parse final content separately from reasoning metadata:
-  - streaming SSE final content: `choices[0].delta.content`
-  - streaming reasoning metadata: `choices[0].delta.reasoning`
-  - non-streaming final content: `choices[0].message.content`
-  - non-streaming reasoning metadata: `choices[0].message.reasoning`
-- For real-estate production workflows, only use GPT OSS with supplied listing facts and a post-check that blocks unsupported claims. Live testing avoided invented prices but invented amenities/direct beach access when those facts were not supplied.
+Set `THETA_DRY_RUN=1` for lifecycle rehearsal. Dry-run blocks registered
+mutations/inference but may still perform authenticated GETs. It is not an
+offline mode. Real GPU creation/start/restart, paid sessions, storage and video
+mutations need explicit scope and spending approval. Read-only billing does not
+authorize account changes. Never replay wallet/chain transactions.
 
-## AI Agent/RAG API coverage (v0.1.22)
-Runtime commands now cover the Theta chatbot API documented by Theta's Yosemite knowledge-base example:
-- `theta.ai.agent.create`
-- `theta.ai.agent.get`
-- `theta.ai.agent.update`
-- `theta.ai.agent.list`
-- `theta.ai.agent.document.create`
-- `theta.ai.agent.document.update`
-- `theta.ai.agent.document.get`
-- `theta.ai.agent.document.list`
+## 3. Execute bounded inference
 
-Document create/update accepts provided string content only; runtime does not read local files.
+For GLM-5.3 / Flash use `theta.ondemand.chat` with service `glm_5_3` or
+`glm_5_3_flash`, `messages`, explicit `max_tokens` and `reasoning_effort`.
+The runtime uses `/infer_request/chat/completions`, not the job-style GLM route.
+Pass `tools`, `tool_choice`, `parallel_tool_calls`, and `stream` at the
+command's top level. Preserve assistant `tool_calls` and tool-message
+`tool_call_id` for continuation.
 
-## MCP-compatible aliases (v0.1.26 staged locally)
-The runtime exposes Theta MCP vocabulary aliases for migration and marketing parity:
-- `list_services`
-- `infer`
-- `get_request_status`
-- `get_upload_url`
+Read `body.infer_requests[0].output.message` separately from
+`output.tool_calls` and `metadata.reasoning`. JSON and streamed responses
+retain structured calls, including fragmented parallel arguments and
+`reasoning_content`. Check finish reason, response model and tool arguments;
+a successful HTTP response or reasoning-only result is not completion.
 
-Compatibility notes:
-- `list_services` accepts optional `category` filters: `image`, `audio`, `text`, `video`, `vision`, or `other`.
-- `infer` accepts official MCP-style `input`, `wait`, `prediction`, `variant`, and `webhook`; the runtime promotes `variant` and `webhook` into the on-demand request payload.
-- `get_upload_url` accepts both `input_field` and `input_fields` / `inputFields`.
-- `THETA_API_BASE_URL` and `THETA_ONDEMAND_API_BASE_URL` can override the on-demand API base URL; use env/secret configuration, not per-request URL overrides.
+Qwen3 retains the service-specific streaming route and optional
+`variant:"parallax_32b_fp8"`; capacity 409 is not an authentication failure.
+Older GPT-OSS/GLM-5.2 routes are compatibility entries only: discover live first.
+Do not change an OpenClaw primary/fallback model as part of an inference test.
 
-## Secrets model (ClawHub-safe)
-Do not bundle or commit API keys in this skill.
-Always prompt the user for their own keys during setup.
-Use `bash ./scripts/setup_env.sh` to collect user-supplied values into local `.env.local`.
+For media, use `infer` with live prediction-specific `input`, optional
+`prediction`, `variant`, `wait` (0–60), and explicit authorized `webhook`.
+`get_upload_url` accepts `input_field` or `input_fields`; upload only
+authorized files externally and pass returned filenames to inference.
+Runtime handlers do not execute shell commands or upload arbitrary local files.
 
-## Safety mode
-Set `THETA_DRY_RUN=1` to block mutating calls (create/delete/broadcast/etc.) while validating integration.
+Poll asynchronous jobs with `theta.ondemand.pollUntilDone` and
+`options:{timeoutMs,intervalMs,maxAttempts}`. Verify terminal success and the
+actual output (download/decode an image or inspect the requested media), not
+just submission. Presigned URLs are sensitive; omit them from public reports.
 
-## Security behavior (explicit)
-- Runtime command handlers do not execute local shell commands.
-- Runtime secret resolution uses OpenClaw secret provider first, then env fallback.
-- Runtime accepts on-demand token aliases: `THETA_ONDEMAND_API_TOKEN`, `THETA_ONDEMAND_API_KEY`, or MCP-compatible `THETA_API_KEY`.
-- Runtime command handlers do not expose local-file upload operations; use presigned upload URLs externally, then pass returned filenames to infer commands.
-- Live smoke script generates local media test assets (no third-party sample downloads).
-- All network calls are to explicit Theta API endpoints required by the invoked command.
+For paid smoke tests, use one explicit service/request at a time, synthetic
+input and small token/frame limits. Mutations and inference are never retried
+automatically; only GET reads use `THETA_HTTP_MAX_RETRIES`. After ambiguous
+timeouts, reconcile the remote job/resource before any manual retry.
+Post-call accounting cannot enforce a provider-side hard spend cap. Unknown price units/cost fields
+are unknown costs, never zero. Report tokens/units and only assert currency
+when Theta's current billing data establishes it.
 
-## What is wired
-- EdgeCloud deployment controller API
-- Dedicated inference endpoint (OpenAI-compatible)
-- Theta Video API
-- Theta On-demand Model API (`ondemand.thetaedgecloud.com`)
-- EdgeCloud client local RPC
-- Theta chain RPC + thetacli RPC
+## 4. Manage GPU, RAG, Video or Characters
 
-## v0.1.26 controller/dedicated validation updates
-- Deployment list/start/stop/delete now use singular/plural controller route fallback where Theta docs/runtime behavior has diverged (`/deployment/...` and `/deployments/...`).
-- `theta.deployments.routeProbe` checks which deployment list route works for the configured project.
-- `theta.billing.balance` reads organization balance with `THETA_ORG_ID`.
-- `theta.billing.balanceSnapshot` extracts a numeric balance value when the response shape supports it.
-- `theta.inference.ready` polls a dedicated endpoint with either:
-  - `probe: "openai"` -> `/v1/models`
-  - `probe: "gradio"` -> `/config`
-- Dedicated inference endpoint validation allows Theta-managed `*.thetaedgecloud.com` and `*.onthetaedgecloud.com` hosts; localhost/private hosts and non-HTTPS URLs remain blocked.
-- `theta.deployments.validateDisposable` is a paid/mutating validator for one disposable deployment:
-  - generates Basic Auth if missing
-  - reads optional pre/post org balance
-  - creates deployment
-  - polls OpenAI or Gradio readiness
-  - runs one small OpenAI smoke call when applicable
-  - deletes in cleanup
-  - verifies cleanup from deployment list
-  - redacts auth fields in output
-- Use `THETA_DRY_RUN=1` first. Real disposable validation can spend credits and should only run with explicit approval.
+Follow the matching section in `references/capabilities.md`.
+For GPU work: discover templates and VM types, inspect price/resources,
+validate exact project, dry-run, then create only the approved resource.
+Use base IDs to restart stopped GPU nodes. Preserve remote resource IDs and
+cleanup ownership before creating anything.
 
-## Build
-```bash
-npm install
-npm run check
-npm run build
-```
+Dedicated endpoints must be HTTPS Theta-managed hosts
+(`*.thetaedgecloud.com` or `*.onthetaedgecloud.com`); private/localhost and
+request-level endpoint overrides are rejected. Use bounded authenticated
+`theta.inference.ready` with `probe:"openai"` or `"gradio"` after deployment.
+Transient 404/502 during warm-up does not alone prove bad credentials.
 
-## First-run setup (interactive)
-```bash
-bash ./scripts/setup_env.sh
-set -a; source ./.env.local; set +a
-```
+`theta.deployments.validateDisposable` is PAID: dry-run first, approve
+template/VM/time/cost, then require readiness, inference, deletion and
+absence from the deployment list. A failed cleanup is BLOCKED, not success.
 
-## Live smoke test (budget-guarded)
-Use the helper script to execute real on-demand calls with a hard spend cap:
+For RAG, provide content strings and approved settings to existing chatbot and
+document commands; do not claim Custom Tool CRUD without an API contract.
+For Characters, use only game-key runtime commands. Dashboard login, game
+creation and key renewal are deliberately not implemented with project tokens.
 
-```bash
-set -a; source ./.env.local; set +a
-export THETA_MAX_BUDGET_USD=2.00
-export SERVICES=qwen3,flux,blip,grounding_dino,whisper
-bash ./scripts/ondemand_live_smoke.sh
-```
+## 5. Verify and hand off
 
-Useful env vars:
-- `THETA_MAX_BUDGET_USD` (default `2.00`)
-- `SERVICES` comma list
-- `THETA_WAIT_SECONDS`
-- `THETA_POLL_UNTIL_DONE`
-- `THETA_POLL_INTERVAL_SECONDS`
-- `THETA_POLL_TIMEOUT_SECONDS`
+Run `npm run check` and `npm test` from the source or complete local package
+after code changes. Test changed handlers with mocked request/response contracts,
+then bounded live calls where credentials and authorization permit.
+Use the same built artifact for source tests and installed-runtime verification.
 
-## Reliability controls (new)
-Use these env knobs to harden network behavior during live operations:
-- `THETA_HTTP_TIMEOUT_MS` (default: `20000`)
-- `THETA_HTTP_MAX_RETRIES` (default: `2`, cap: `6`)
-- `THETA_HTTP_RETRY_BACKOFF_MS` (default: `250`)
+Report separately: implemented, contract-tested, live-tested, unavailable
+credentials, missing public API contract, and paid tests not performed.
+Do not equate ClawHub latest with complete Theta feature parity.
+Do not claim “all latest features” from a news announcement alone.
 
-These controls are applied across controller, inference, video, chain/RPC, and on-demand upload paths.
+When updating this skill, compare ClawHub metadata and local source first;
+preserve local patches and a scoped recovery archive. Keep registry-origin
+metadata distinct from unpublished local revisions. Do not publish to ClawHub
+or restart Gateway without the corresponding authorization.
 
-## Validation workflow
-```bash
-npm run check
-npm test
-```
+## Credits
 
-Live-but-safe smoke (still budget guarded):
-```bash
-THETA_DRY_RUN=0 THETA_MAX_BUDGET_USD=2.00 bash ./scripts/ondemand_live_smoke.sh
-```
-
-## Theta-only OpenClaw option map (no other subscriptions)
-This scaffold supports a Theta-primary route for OpenClaw:
-
-- Content generation: `flux`, `stable_diffusion_xl_turbo`, `step_video`
-- Website chatbot/assistant features: on-demand LLMs (`qwen3`, `minimax_m2_5`, `gpt_oss_120b`, `llama_3_8b`, `llama_3_1_70b`)
-- Vision/media intelligence: `blip`, `grounding_dino`, `llava`, `whisper`
-- Video pipelines: `theta.video.*`
-- Infra management: `theta.deployments.*`, `theta.ai.*`, `theta.auth.capabilities`, `theta.billing.balance`
-
-Operational rule:
-- Use on-demand + video/controller routes as production default.
-- Dedicated endpoint chat/models are valid when the project has quota/plan support, but should use readiness retries instead of immediate fail-fast assumptions.
-
-## Next
-- Bind this scaffold into OpenClaw command handlers
-- Add signed request telemetry + structured logging
-- Add live probe tests against target deployment
+Theta Communications: https://www.thetacommunications.com
+Support: https://www.thetacommunications.com/donations

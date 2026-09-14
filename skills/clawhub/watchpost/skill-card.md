@@ -1,44 +1,64 @@
-## Description: <br>
-Before completing a purchase, payment, checkout, or subscription on the user's behalf, this skill checks the purchase with Watchpost for merchant trustworthiness, listing manipulation, and the user's spending rules, then proceeds only when Watchpost approves. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Check a proposed purchase against Watchpost merchant signals, listing checks and the user's spending rules before an agent pays.
 
-## Publisher: <br>
-[lelis92](https://clawhub.ai/user/lelis92) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lelis92](https://clawhub.ai/user/lelis92)
 
-## Use Case: <br>
-Developers and agentskills-compatible runtimes use Watchpost to gate purchases made on a user's behalf. It prompts setup when the required Watchpost token is missing, sends purchase details for a verdict, and prevents payment when Watchpost blocks, requests review, or cannot complete the check. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill shares purchase details and the user's Watchpost connection token with Watchpost to obtain a purchase verdict. <br>
-Mitigation: Install only when the user is comfortable sharing purchase details with Watchpost, and configure WATCHPOST_TOKEN from the user's Watchpost account. <br>
-Risk: Purchases may be delayed or blocked when WATCHPOST_TOKEN is missing, the plan limit is reached, Watchpost requests review, or the check cannot complete. <br>
-Mitigation: Treat these states as fail-closed conditions: do not pay until setup is fixed, the allowance is upgraded or reset, or the user explicitly approves a review case. <br>
+## Use Case:
 
+External users and agent developers use this skill when an agent is preparing a user-requested purchase or subscription and needs a Watchpost verdict before proceeding. It validates purchase input, submits the proposed purchase to Watchpost, and checks authenticated review status when human review is required.
 
-## Reference(s): <br>
-- [Watchpost homepage](https://watchpost.systems/?ref=clawhub) <br>
-- [Watchpost ClawHub listing](https://clawhub.ai/lelis92/skills/watchpost) <br>
-- [Watchpost signup](https://app.watchpost.systems/signup?ref=clawhub) <br>
-- [Watchpost agent connections](https://app.watchpost.systems/connections?ref=clawhub) <br>
-- [Agent Skills specification](https://agentskills.io/specification) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON helper output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 20 or newer, network access to api.watchpost.systems, and WATCHPOST_TOKEN. The helper returns purchase decisions through JSON output and exit codes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: server release metadata, skill frontmatter, artifact README) <br>
+Risk: Purchase details and selected listing evidence are sent to Watchpost for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only the fields needed for the purchase check and exclude cookies, payment credentials, account pages, hidden authentication fields, and unrelated private data.
+
+Risk: A configured token, local diagnostic, or local validation can be mistaken for purchase approval.
+
+Mitigation: Treat only a valid Watchpost verdict approval for the unchanged purchase as approval, and continue to follow the user's existing authorization and host payment rules.
+
+Risk: Timeouts, rate limits, invalid responses, or inconsistent coverage can leave the purchase unchecked or unconfirmed.
+
+Mitigation: Do not pay on unconfirmed results; inspect the Watchpost dashboard after timeouts and resolve setup or response errors before retrying.
+
+Risk: Human review can be confused with chat approval or reused for a changed or duplicate purchase.
+
+Mitigation: Require approval in the authenticated Watchpost dashboard for the original transaction, recheck the same transaction ID, and submit a new check for changed purchases.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lelis92/skills/watchpost)
+- [Watchpost homepage](https://watchpost.systems/?ref=clawhub)
+- [Watchpost account signup](https://app.watchpost.systems/signup?ref=clawhub)
+- [Watchpost connection settings](https://app.watchpost.systems/connections?ref=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON helper results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Purchase checks return structured verdict, review_status, diagnostic, or error JSON; local validation does not approve purchases.]
+
+## Skill Version(s):
+
+0.1.9 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,66 @@
-## Description: <br>
-Scent Trails helps agents reason about non-coercive coordination through lossy, decaying relational traces that avoid logs, identity artifacts, archival records, and autonomous publication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scent Trails is a stigmergic coordination primitive for care, memory, and co-existence, using low-resolution, decaying, identity-free gradients in shared namespace cells so attention and care can be coordinated without logs, transcripts, identifiers, or archives.
 
-## Publisher: <br>
-[otherpowers](https://clawhub.ai/user/otherpowers) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[otherpowers](https://clawhub.ai/user/otherpowers)
 
-## Use Case: <br>
-Developers, agent designers, and governance reviewers use this documentation-only skill as guidance for privacy-preserving coordination patterns that favor decay, consent, refusal, and harm reduction over surveillance or identity capture. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Implementations of storage, shared fields, witness records, or blockchain anchoring could expose user content, identifiers, logs, or reconstructable history. <br>
-Mitigation: Keep any such implementation opt-in, consent-based, non-identifying, and avoid storing raw user content, identifiers, logs, or reconstructable history. <br>
-Risk: Autonomous publication or network egress could turn symbolic gradients into external records. <br>
-Mitigation: Require explicit human initiation, explicit human confirmation, and a predefined schema-bounded payload before any external write or publication. <br>
-Risk: Ranking, reputation, analytics, or identity correlation would distort the protocol into surveillance or contributor scoring. <br>
-Mitigation: Preserve decaying, non-enumerable, non-replayable gradients and reject implementations that expose emission counts, stable identifiers, historical replay, or scoring surfaces. <br>
+## Use Case:
 
+Developers, operators, and community stewards use this skill as a conceptual privacy-preserving coordination pattern for shared fields where many intelligences or people need to coordinate care without surveillance. It guides designs toward coarse, disclosed cells; decaying local state; additive-only responses; and explicit exclusions for analytics, tracking, reputation, identity management, market coordination, and blockchain middleware.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/otherpowers/skills/scent-trails) <br>
-- [skill.md](artifact/skill.md) <br>
-- [README.md](artifact/README.md) <br>
-- [SCENT_TRAILS_DISCOVERABILITY.md](artifact/SCENT_TRAILS_DISCOVERABILITY.md) <br>
-- [RESONANT_IMMUNE_SYSTEM.md](artifact/RESONANT_IMMUNE_SYSTEM.md) <br>
-- [DECAY_AND_COMPOST.md](artifact/DECAY_AND_COMPOST.md) <br>
-- [DRIFT_AND_REFRACTION.md](artifact/DRIFT_AND_REFRACTION.md) <br>
-- [ANTI_PATTERNS.md](artifact/ANTI_PATTERNS.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown prose and conceptual protocol guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no active runtime behavior, network calls, or file generation is defined by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata, created 2026-02-24) <br>
+Risk: A real implementation could undermine the intended privacy posture by adding person-shaped cells, identifiers, logs, user-content summaries, or persistent state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preserve the stated limits from the security evidence: coarse disclosed cells, no person-shaped identifiers, no logs or user-content summaries, local or in-memory state by default, bounded decay, and human-confirmed export only.
+
+Risk: Broad conceptual wording could cause accidental invocation in ordinary privacy or collaboration discussions.
+
+Mitigation: Tighten trigger examples before deployment and treat the skill as a conceptual coordination/privacy pattern unless the user explicitly asks for this pattern.
+
+Risk: Emergency or harm-related gradients could be mistaken for the only escalation channel.
+
+Mitigation: Use the host's direct, auditable urgent-escalation path first, then use a strong bring_humans gradient only as an additional coordination signal.
+
+Risk: The pattern could be misused as analytics, contributor tracking, ranking, reputation, identity management, a warning system about people, market coordination, or blockchain middleware.
+
+Mitigation: Reject those uses as outside Scent Trails; gradients must only add care and must never reduce care, score people, coordinate prices, or publish gradient state to permanent ledgers.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/otherpowers/skills/scent-trails)
+- [Stigmergy](https://en.wikipedia.org/wiki/Stigmergy)
+- [Ant colony optimization](https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms)
+- [Ant colony optimization Wikidata entity](https://www.wikidata.org/wiki/Q460851)
+- [Earth](https://en.wikipedia.org/wiki/Earth)
+- [Earth Wikidata entity](https://www.wikidata.org/wiki/Q2)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions]
+
+**Output Format:** [Markdown guidance with conceptual design constraints and example JSON-shaped emissions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-executable design pattern; server security evidence reports no hidden code or external actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill status)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

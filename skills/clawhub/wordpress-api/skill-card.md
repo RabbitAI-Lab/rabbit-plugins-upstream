@@ -1,46 +1,74 @@
-## Description: <br>
-WordPress.com API integration with managed OAuth for managing posts, pages, sites, and site content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WordPress.com API integration with managed OAuth for creating, reading, updating, and deleting WordPress.com posts, pages, sites, and content.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to interact with WordPress.com through Maton-managed OAuth, including listing, creating, updating, and deleting posts and pages and managing site and account content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API keys and WordPress.com OAuth connections can authorize broad account and content access. <br>
-Mitigation: Install only if you trust Maton to mediate OAuth access, keep MATON_API_KEY private, and review the connected WordPress.com account before use. <br>
-Risk: Write-capable endpoints can publish, edit, delete, like or unlike content, list site users, or change account settings. <br>
-Mitigation: Require explicit user confirmation before any write operation or sensitive account action, including the target resource and intended effect. <br>
-Risk: When multiple WordPress.com connections exist, requests may affect the wrong account or site. <br>
-Mitigation: Use the Maton-Connection header for multi-account setups and confirm the target connection, site, and resource before executing requests. <br>
+## Use Case:
 
+External users and developers use this skill to manage WordPress.com site content through Maton-managed OAuth, including posts, pages, site metadata, and approved automation around hosted functions and triggers.
 
-## Reference(s): <br>
-- [ClawHub WordPress Skill](https://clawhub.ai/byungkyu/wordpress-api) <br>
-- [WordPress.com REST API Overview](https://developer.wordpress.com/docs/api/) <br>
-- [WordPress.com REST API Getting Started](https://developer.wordpress.com/docs/api/getting-started/) <br>
-- [WordPress.com REST API Reference](https://developer.wordpress.com/docs/api/rest-api-reference/) <br>
-- [WordPress.com OAuth Authentication](https://developer.wordpress.com/docs/oauth2/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid WordPress.com OAuth connection mediated by Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can create, update, or delete WordPress.com content through an authenticated user connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list operations, and confirm the exact WordPress.com target, payload, and intended effect before any write or deletion.
+
+Risk: Long-lived Maton API keys or MATON_API_KEY values can expose account access if copied into logs, files, or child processes.
+
+Mitigation: Prefer OAuth, do not persist or expose MATON_API_KEY, and use the raw HTTP path only when the CLI cannot be installed.
+
+Risk: Hosted functions and triggers run with the deploying Maton account's connected identity and may continue after the immediate task.
+
+Mitigation: Use a dedicated or minimal-connection Maton account, deploy functions with DENY_ALL network policy where possible, and delete unused functions, triggers, and destinations when finished.
+
+## Reference(s):
+
+- [WordPress.com REST API Overview](https://developer.wordpress.com/docs/api/)
+- [WordPress.com Getting Started Guide](https://developer.wordpress.com/docs/api/getting-started/)
+- [WordPress.com REST API Reference](https://developer.wordpress.com/docs/api/rest-api-reference/)
+- [WordPress.com OAuth Authentication](https://developer.wordpress.com/docs/oauth2/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/wordpress-api)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides authenticated WordPress.com API calls, connection setup, hosted functions, triggers, and least-privilege approval steps.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

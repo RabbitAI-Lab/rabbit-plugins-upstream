@@ -19,20 +19,39 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-BASE = "https://app.sentisense.ai"
+API_ORIGIN = "https://app.sentisense.ai"
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def sentisense_api_url(path, params=None):
+    """Return a validated API URL at the one origin allowed to receive the key."""
+    url = urllib.parse.urljoin(API_ORIGIN + "/", path)
+    parsed = urllib.parse.urlparse(url)
+    if (parsed.scheme != "https" or parsed.hostname != "app.sentisense.ai"
+            or parsed.netloc != "app.sentisense.ai"
+            or parsed.username is not None or parsed.password is not None
+            or parsed.port is not None):
+        raise ValueError("API URL must use https://app.sentisense.ai with no credentials or port")
+    if params:
+        url += ("&" if parsed.query else "?") + urllib.parse.urlencode(params)
+    return url
 
 
 def get(path, **params):
-    """GET {BASE}{path} with the auth header; returns parsed JSON or exits non-zero."""
+    """GET the fixed API origin with the auth header; returns parsed JSON or exits non-zero."""
     params = {k: v for k, v in params.items() if v is not None}
-    url = BASE + path + ("?" + urllib.parse.urlencode(params) if params else "")
+    url = sentisense_api_url(path, params)
     key = os.environ.get("SENTISENSE_API_KEY")
     if not key:
         sys.exit("SENTISENSE_API_KEY is not set "
                  "(free key: https://app.sentisense.ai/get-api-key)")
     req = urllib.request.Request(url, headers={"X-SentiSense-API-Key": key})
     try:
-        with urllib.request.urlopen(req, timeout=20) as r:
+        with urllib.request.build_opener(NoRedirect).open(req, timeout=20) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
         retry = e.headers.get("Retry-After")
@@ -67,10 +86,22 @@ def shaped(raw):
 
 
 def sentiment_scalar(series):
-    """Latest polarity in [-1, 1]; the float is nested at metricValue.value.value."""
+    """Latest reading of a metric series, read from the flat top-level `value`.
+
+    Every point carries `value` alongside the nested `metricValue`, and it holds the scalar
+    for every metric type. Prefer it: the nested depth is not uniform, since a value metric
+    nests at metricValue.value.value while a count metric like `mentions` puts the integer
+    at metricValue.value. The nested read stays as a fallback for a point without `value`."""
     if not series:
         return None
-    return float(series[-1]["metricValue"]["value"]["value"])
+    point = series[-1]
+    flat = point.get("value")
+    if flat is not None:
+        return float(flat)
+    nested = (point.get("metricValue") or {}).get("value")
+    if isinstance(nested, dict):
+        nested = nested.get("value")
+    return None if nested is None else float(nested)
 
 
 def out(obj):
@@ -148,6 +179,7 @@ def main():
     ticker_cmd("holders"); ticker_cmd("consensus")
     ticker_cmd("actions", ("--days", "90")); ticker_cmd("estimates")
     aa = simple("analyst-activity"); aa.add_argument("--days", default="7")
+    aa.add_argument("--action-types", default=None)  # CSV, e.g. UPGRADE,DOWNGRADE,INITIATE
     # calendar / news / stories / quotes
     ticker_cmd("earnings")
     ticker_cmd("news", ("--limit", "8"))
@@ -195,7 +227,8 @@ def main():
     elif a.cmd == "estimates":
         out(shaped(get(f"/api/v1/analyst/{TE}/estimates")))
     elif a.cmd == "analyst-activity":
-        out(shaped(get("/api/v1/analyst/activity", lookbackDays=days)))
+        out(shaped(get("/api/v1/analyst/activity", lookbackDays=days,
+                       actionTypes=getattr(a, "action_types", None))))
     elif a.cmd == "earnings":
         out(shaped(get("/api/v1/calendar/earnings", ticker=T)))
     elif a.cmd == "news":

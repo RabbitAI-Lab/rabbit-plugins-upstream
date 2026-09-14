@@ -1,43 +1,64 @@
-## Description: <br>
-Video replicate tool: extracts the first frame and audio from the source video, runs video understanding for a prompt, and returns a Seedance 2.0 replicate bundle (first frame + audio + video). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Replicates a source video by extracting its first frame and audio, using video understanding to create a prompt, and returning a Seedance 2.0 replicate bundle.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to invoke the dLazy video-replicate workflow from an agent, providing a source video and parameters to generate a Seedance 2.0 replicate bundle. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key locally, and that key may control paid credits or sensitive account access. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY where practical, rotate or revoke keys when needed, and verify that the local CLI config file is restricted to the current OS user after login. <br>
-Risk: Local media paths supplied to the skill are uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Only pass media files intended for dLazy processing and review files for sensitive content before invocation. <br>
+## Use Case:
 
+External users and developers use this skill to create a video-replication bundle from a reference video through the dLazy CLI and hosted API.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-video-replicate) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier depending on CLI options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: Installing or running @dlazy/cli requires trusting third-party npm code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked source and npm package before use, and prefer npx or an isolated environment over a privileged global install.
+
+Risk: The skill requires a dLazy API key for authenticated requests.
+
+Mitigation: Use a revocable API key, store it through the CLI auth flow or environment variable, and rotate or revoke it from the dLazy dashboard when needed.
+
+Risk: Reference videos and related media may be uploaded to dLazy-hosted services for processing.
+
+Mitigation: Avoid uploading sensitive media unless the user trusts the service and accepts the data handling path.
+
+Risk: Generated assets can be downloaded to a user-selected local path.
+
+Mitigation: Choose --save destinations deliberately and avoid overwriting important files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-replicate)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted media URLs or an asynchronous task identifier; --save can download generated assets to a local path.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

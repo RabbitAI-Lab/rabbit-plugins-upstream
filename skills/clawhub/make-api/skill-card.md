@@ -1,47 +1,76 @@
-## Description: <br>
-Make (formerly Integromat) API integration with managed authentication for managing scenarios, organizations, teams, connections, data stores, hooks, and templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Make (formerly Integromat) API integration with managed authentication for managing scenarios, organizations, teams, connections, data stores, hooks, and templates.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation operators use this skill to inspect and manage Make resources through Maton-managed authentication, including scenarios, teams, organizations, connections, webhooks, data stores, templates, and incomplete executions. It is intended for interactive API work where the agent proposes or executes calls with explicit confirmation for write operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and brokered OAuth connection to access Make resources. <br>
-Mitigation: Install only when Maton is trusted to broker the Make account, and keep MATON_API_KEY scoped and protected. <br>
-Risk: Write actions can create, update, start, stop, or delete resources in Make. <br>
-Mitigation: Before approving a write action, verify the target organization, team, scenario, hook, data store, connection, or template ID and the intended effect. <br>
-Risk: Started scenarios and created hooks or data stores may persist after the agent conversation ends. <br>
-Mitigation: Track resources created or started during the session and explicitly stop or delete anything that should not continue running. <br>
+## Use Case:
 
+Developers and automation operators use this skill to manage Make resources and build user-approved workflow automations through Maton-managed authentication.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/make-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Make API Documentation](https://developers.make.com/api-documentation) <br>
-- [Make API Reference](https://developers.make.com/api-documentation/api-reference) <br>
-- [Make Help Center](https://www.make.com/en/help) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [api calls, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline HTTP endpoints, shell commands, Python and JavaScript examples, and JSON request or response snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable; write actions can create, modify, start, stop, or delete persistent Make resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Write operations can modify Make data or create persistent resources such as scenarios, hooks, and data stores.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before every create, update, start, stop, or delete action, including the target resource, payload, and intended effect.
+
+Risk: Hosted functions run with the deploying Maton account's available connections.
+
+Mitigation: Use user-authored or user-reviewed handlers, provide a least-privilege summary before deployment or invocation, and prefer DENY_ALL network policy unless the user approves specific external hosts.
+
+Risk: Long-lived API keys can be exposed through environment variables or child processes.
+
+Mitigation: Prefer OAuth and the operating system credential store; use raw HTTP or MATON_API_KEY only where the CLI cannot be installed.
+
+Risk: Persistent trigger destinations can continuously forward future event data to a URL.
+
+Mitigation: Confirm the destination URL, data fields, persistence, cadence, and credential handling separately before creating or updating a destination.
+
+## Reference(s):
+
+- [Make API Documentation](https://developers.make.com/api-documentation)
+- [Make API Reference](https://developers.make.com/api-documentation/api-reference)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/make-api)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration, Code, Guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Make API paths, Maton CLI commands, and user approval prompts.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

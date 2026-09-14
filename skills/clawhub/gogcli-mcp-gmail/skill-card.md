@@ -1,41 +1,59 @@
-## Description: <br>
-This skill helps an agent use Gmail through gogcli for mailbox reading, organization, drafts, forwarding, autoreplies, attachments, and bulk message operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extended Gmail MCP server via gogcli with auth and full Gmail support for threads, labels, drafts, attachments, forwarding, autoreply, and bulk operations.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to work with a selected Gmail account in depth, including threads, labels, drafts, attachments, forwarding, autoreplies, and bulk archive, trash, or mark-read operations. It is appropriate only when the user intends to grant broad Gmail mailbox and account-setting authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad access to Gmail messages and account settings. <br>
-Mitigation: Review before installing for sensitive personal or business mail, and authorize only the Gmail account the user intends to expose. <br>
-Risk: The skill can support permanent deletion, forwarding, delegates, forwarding settings, filters, send-as settings, vacation responders, watch notifications, tracking, sending mail, and downloading message content. <br>
-Mitigation: Require explicit confirmation before any destructive action, message sending, forwarding, settings change, tracking action, or message-content download. <br>
+## Use Case:
 
+Developers and agent users use this skill to connect an agent to Gmail through gogcli for reading mail, managing threads and labels, creating and sending drafts, forwarding messages, running autoreplies, and handling attachments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-gmail) <br>
-- [gogcli project](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON MCP server configuration and Gmail tool-use instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can lead an agent to invoke Gmail MCP tools that read, send, modify, delete, forward, download, or change Gmail account settings after authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: The skill exposes broad Gmail, authentication, and local server-file capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted publisher, pin the package version, and use GOG_READONLY when only read access is needed.
+
+Risk: OAuth scope choices and extra services can expand the authority available to the agent.
+
+Mitigation: Avoid broad OAuth services or extraScopes unless they are required for the intended workflow.
+
+Risk: Attachment workflows can use server-side paths or signed download links.
+
+Mitigation: Run the MCP server under a dedicated OS account with limited filesystem access and review attachment delivery settings before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-gmail)
+- [gogcli project](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON MCP tool responses and shell command or configuration snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May perform Gmail side effects such as sending, drafting, deleting, labeling, forwarding, filtering, and attachment delivery.]
+
+## Skill Version(s):
+
+2.30.0 (source: server release metadata, manifest.json, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

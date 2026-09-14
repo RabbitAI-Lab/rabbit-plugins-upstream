@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/veeam-aiops",
   "slug": "veeam-aiops",
   "ownerHandle": null,
-  "version": "0.8.0",
-  "updatedAt": 1784668607819,
-  "contentHash": "75655a4ed50dbb1fbff63b4b2ab562b11abd4a7fdbb0f5a624081187b2bcc027",
-  "fetchedAt": "2026-07-26T18:08:53.330Z"
+  "version": "0.16.0",
+  "updatedAt": 1789312184244,
+  "contentHash": "44915afac1ba554154782e4f145393b10279eb790a90488b5cdb206e7b1c588e",
+  "fetchedAt": "2026-09-14T14:40:36.774Z"
 }

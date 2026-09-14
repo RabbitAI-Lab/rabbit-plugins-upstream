@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-unity-skill",
   "slug": "openclaw-unity-skill",
   "ownerHandle": null,
-  "version": "1.6.2",
-  "updatedAt": 1783509602300,
-  "contentHash": "2be7868a90d209b159306bcf541f35c634335454087f30d0da3219a377c532fb",
-  "fetchedAt": "2026-07-26T18:17:59.357Z"
+  "version": "1.7.0",
+  "updatedAt": 1788906159455,
+  "contentHash": "767fc784e5a23c70609078cd4424de80536929c78ff221019931f2c727aa98d8",
+  "fetchedAt": "2026-09-14T14:53:28.028Z"
 }

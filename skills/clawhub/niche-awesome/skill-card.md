@@ -1,42 +1,61 @@
-## Description: <br>
-Niche-Awesome guides beginners through a six-step niche research and market-validation process that produces a structured BRD for deciding what AI product to build. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Niche-Awesome guides beginners through a six-step market research process for niche product selection and market validation, ending in a structured Business Requirements Document.
 
-## Publisher: <br>
-[adsorgcn](https://clawhub.ai/user/adsorgcn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adsorgcn](https://clawhub.ai/user/adsorgcn)
 
-## Use Case: <br>
-Developers, indie hackers, and beginner AI-product builders use this skill to validate product ideas with real market searches before building. It helps turn a vague idea or product direction into a BRD covering trend validation, competitor pain points, user persona, market size, pricing, and positioning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market conclusions can be wrong if the user provides thin, biased, or fabricated search results. <br>
-Mitigation: Cross-check multiple sources and review the BRD before deciding to build or invest. <br>
-Risk: Research notes may include sensitive business ideas, personal details, or copied user reviews. <br>
-Mitigation: Avoid storing secrets or sensitive personal details unless necessary, and set retention or deletion limits for any logged research. <br>
+## Use Case:
 
+External founders, indie hackers, and product builders use this skill to validate AI product ideas through guided market research. The skill helps them collect user-supplied evidence, assess demand, pricing, competitors, and positioning, then produce a BRD for a build or no-build decision.
 
-## Reference(s): <br>
-- [Niche-Awesome on ClawHub](https://clawhub.ai/adsorgcn/niche-awesome) <br>
-- [iLang](https://ilang.ai) <br>
-- [AutoCode](https://github.com/ilang-ai/autocode) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Conversational guidance followed by a structured BRD in Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-provided search results; does not perform network requests, access files, generate code, or build products.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: target metadata) <br>
+Risk: The skill is intentionally prescriptive and may require the full research workflow even when a user wants a shorter answer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when a complete BRD workflow is desired, and set expectations that the process depends on completing each evidence-gathering step.
+
+Risk: The final market conclusions depend on the quality and breadth of user-pasted search results.
+
+Mitigation: Cross-check thin findings against additional sources and preserve the skill's rule against fabricating market data, reviews, pricing, or statistics.
+
+Risk: The artifact recommends AutoCode and ZeroCode, which are external projects outside this security review.
+
+Mitigation: Review those tools separately before using them to build or deploy products.
+
+## Reference(s):
+
+- [Niche-Awesome on ClawHub](https://clawhub.ai/adsorgcn/skills/niche-awesome)
+- [iLang](https://ilang.ai)
+- [AutoCode](https://github.com/ilang-ai/autocode)
+- [OpenClaw Skills](https://github.com/ilang-ai/ilang-openclaw)
+- [ZeroCode Trae Plugin](https://gitee.com/palmmedia/iLang-Trae-Plugin)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, Analysis]
+
+**Output Format:** [Interactive text guidance and a structured Markdown BRD]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-supplied market research results; the skill does not browse, access files, make network requests, or build products.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

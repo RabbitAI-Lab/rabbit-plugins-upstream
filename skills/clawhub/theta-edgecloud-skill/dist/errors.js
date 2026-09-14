@@ -1,4 +1,4 @@
-import { redact } from './redaction.js';
+import { redact, redactObject } from './redaction.js';
 const MAX_MESSAGE_LEN = 280;
 export function thetaError(input) {
     return input;
@@ -6,6 +6,12 @@ export function thetaError(input) {
 export function sanitizeHttpErrorMessage(message) {
     if (!message)
         return 'HTTP request failed';
+    try {
+        const parsed = JSON.parse(message);
+        if (parsed && typeof parsed === 'object')
+            message = JSON.stringify(redactObject(parsed));
+    }
+    catch { /* Plain error text is sanitized below. */ }
     let out = message
         .replace(/\s+/g, ' ')
         .replace(/\b(Bearer|Basic)\s+([A-Za-z0-9\-._~+/]+=*)/gi, (_m, scheme, token) => `${scheme} ${redact(token)}`)
@@ -45,7 +51,7 @@ export function isStructuredError(value) {
 }
 export function fromTransportError(service, endpoint, error) {
     const asAny = error;
-    const isTimeout = asAny?.name === 'AbortError';
+    const isTimeout = asAny?.name === 'AbortError' || asAny?.name === 'TimeoutError';
     const message = sanitizeHttpErrorMessage(asAny?.message ?? String(error ?? 'Network request failed'));
     return {
         code: isTimeout ? 'HTTP_408' : 'NETWORK_ERROR',

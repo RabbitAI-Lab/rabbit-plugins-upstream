@@ -1,52 +1,77 @@
-## Description: <br>
-Apollo provides managed Apollo.io API access for searching and enriching people and companies and managing contacts, accounts, and sales sequences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Apollo.io API integration with managed OAuth for searching and enriching people and companies, and for managing contacts, accounts, and sales data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Sales, growth, and revenue-operations users use this skill through an agent to prospect, enrich leads, and manage Apollo contacts, accounts, and sequences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access business-sensitive Apollo data such as contacts, accounts, opportunities, sequences, and email data. <br>
-Mitigation: Install only for agents intended to use the connected Apollo account and avoid exposing returned sales data unnecessarily. <br>
-Risk: Create, update, delete, and sequence actions can change Apollo records or outreach. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing write operations. <br>
-Risk: Person and email enrichment may consume Apollo credits. <br>
-Mitigation: Confirm enrichment requests when credit use matters and keep batch sizes intentional. <br>
-Risk: Multiple active Apollo connections can route requests to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one Apollo connection is available. <br>
+## Use Case:
 
+Developers, sales operations teams, and agents use this skill to work with Apollo.io data through Maton-managed authentication. It supports prospecting, lead enrichment, and sales-record management while defaulting to read and list actions unless the user confirms a write.
 
-## Reference(s): <br>
-- [ClawHub Apollo release](https://clawhub.ai/byungkyu/skills/apollo-api) <br>
-- [Apollo API Overview](https://docs.apollo.io/reference) <br>
-- [Search People](https://docs.apollo.io/reference/people-api-search.md) <br>
-- [Enrich Person](https://docs.apollo.io/reference/people-enrichment.md) <br>
-- [Search Organizations](https://docs.apollo.io/reference/organization-search.md) <br>
-- [Enrich Organization](https://docs.apollo.io/reference/organization-enrichment.md) <br>
-- [Create Contact](https://docs.apollo.io/reference/create-a-contact.md) <br>
-- [Apollo LLM Reference](https://docs.apollo.io/llms.txt) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, shell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Apollo access uses user-authorized credentials and may expose long-lived API keys if OAuth is not used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, keep credentials in the operating system credential store, and avoid printing, exporting, or embedding API keys.
+
+Risk: Write, sequence, or workflow actions can modify sales data or trigger downstream effects.
+
+Mitigation: Default to read and list calls, then confirm the target resource, payload, and intended effect before any write action.
+
+Risk: Hosted functions and triggers can continue running or forwarding data after setup.
+
+Mitigation: Review and approve each function or trigger separately, use restrictive network policy where possible, and delete automation when it is no longer needed.
+
+Risk: Apollo searches and enrichment can send business or personal data to a third-party service and return third-party personal data.
+
+Mitigation: Send only task-required fields, avoid unnecessary bulk collection, and treat onward use of returned personal data as a user compliance decision.
+
+## Reference(s):
+
+- [Apollo API Overview](https://docs.apollo.io/reference)
+- [Search People](https://docs.apollo.io/reference/people-api-search.md)
+- [Enrich Person](https://docs.apollo.io/reference/people-enrichment.md)
+- [Search Organizations](https://docs.apollo.io/reference/organization-search.md)
+- [Search Contacts](https://docs.apollo.io/reference/search-for-contacts.md)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Apollo API calls through the Maton CLI or raw HTTP; write actions and new connections require user confirmation.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -4,8 +4,9 @@ Base URL: `https://api.guerrillamail.com/ajax.php`
 
 ## Requirements
 
-- All requests need params: `f` (function), `ip` (end-user IP), `agent` (user-agent string)
-- Use a real browser User-Agent to avoid 403 blocks (server-side requests are rate-limited)
+- All requests need params: `f` (function), `ip`, `agent` (user-agent string)
+- `ip`: the API expects a client IP field. This client sends a fixed loopback value (`127.0.0.1`) — it does **not** send the end user's real IP address.
+- `agent`: GuerrillaMail rejects non-browser User-Agents with 403, so the client sends a static browser UA. This is a compatibility requirement of the public API, not fingerprint evasion; no credentials or PII are attached.
 - Maintain `PHPSESSID` cookie across calls — session expires after ~18 min of inactivity
 - Sessions are per-email address — each address needs its own session cookie
 

@@ -1,43 +1,53 @@
-## Description: <br>
-零配置即装即用，本地旅行一站式查询，酒店/机票/火车票/景点门票/行程规划全覆盖，数据覆盖300+城市。暑期吃喝玩乐一站式，美团旅行全攻略 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+美团旅行助手支持用自然语言查询酒店、机票、火车票、景点门票和行程规划，覆盖300+城市。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and travel-focused agents use this skill to answer Chinese-language travel requests for hotels, flights, train tickets, scenic tickets, and itinerary suggestions from a city and natural-language query. It provides information and booking links, but does not complete payment or booking transactions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User travel preferences are sent to an external travel proxy. <br>
-Mitigation: Install only when users accept sharing city, destination, dates, budget, and related travel preferences; disclose the external data sharing before use. <br>
-Risk: Declared tools, documented tool names, and the executable script interface do not line up. <br>
-Mitigation: Verify the actual callable tool name, script arguments, and environment variables in a staging agent before approving broader use. <br>
-Risk: Operational configuration may be unclear because the declared environment variable differs from the script's proxy settings. <br>
-Mitigation: Require the publisher to document the real environment variables and proxy endpoint before broader deployment. <br>
+## Use Case:
 
+External users use this skill to ask natural-language travel questions and receive hotel, flight, train ticket, scenic ticket, booking-link, and itinerary information for supported Chinese cities.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/meituan-travel-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance, API calls] <br>
-**Output Format:** [JSON returned by the script, typically rendered by the agent as travel guidance, prices, availability details, and booking links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a city and natural-language travel query; results depend on the external travel proxy and may include proxy error responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: server release evidence; artifact _meta.json reports 2.0.2) <br>
+Risk: Travel queries, city names, and itinerary details are sent to a configured proxy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data flow is acceptable and avoid submitting sensitive personal details.
+
+Risk: The release security summary flags an exposed default proxy token and configurable proxy destination.
+
+Mitigation: The publisher should remove and rotate the embedded token, align documented and implemented environment variables, and restrict proxy URLs to trusted hosts before broad use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/meituan-travel-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [JSON from the tool, typically summarized by the agent as Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include travel search results, prices, schedules, itinerary suggestions, and booking links; results depend on the configured proxy service.]
+
+## Skill Version(s):
+
+2.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

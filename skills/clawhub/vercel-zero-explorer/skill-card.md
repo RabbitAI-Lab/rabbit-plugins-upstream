@@ -1,42 +1,61 @@
-## Description: <br>
-AI-powered guide for understanding, using, and building with Vercel Zero, including syntax, .0 files, native tools, explicit effects, structured JSON diagnostics, and AI-native workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered guide for Vercel Zero - the first programming language designed specifically for AI agents. Covers Zero syntax, .0 file extension, native tools, explicit effects, structured JSON diagnostics, and AI-native development workflows. Built for AI developers, language designers, and researchers exploring the future of AI-native programming.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI agent builders, language designers, and researchers use this skill to learn Vercel Zero concepts, generate illustrative Zero snippets, and reason about AI-native development workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Technical claims and examples for Vercel Zero may become outdated or may not match the current official Zero implementation. <br>
-Mitigation: Verify guidance and code examples against current official Zero documentation before relying on them. <br>
-Risk: Generated API examples may encourage users to place secrets in prompts or sample code. <br>
-Mitigation: Use placeholders for credentials and avoid entering secrets into generated examples. <br>
+## Use Case:
 
+Developers, agent builders, and language researchers use this skill to understand Vercel Zero concepts, syntax, graph-first workflows, structured diagnostics, and AI-agent integration patterns.
 
-## Reference(s): <br>
-- [Zero Official Documentation](https://vercel.com/docs/zero) <br>
-- [Vercel Zero GitHub Repository](https://github.com/vercel-labs/zero) <br>
-- [AI Agent Programming Language Analysis](https://blog.csdn.net/irpywp/article/details/161167783) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with explanatory text, tables, and fenced code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only reference output; no executable behavior or privileged access is declared.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may activate on broad questions about Zero or AI-agent programming languages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for Vercel Zero reference tasks and verify that its guidance matches the user's requested programming language or toolchain.
+
+Risk: Zero commands, flags, and behavior change frequently.
+
+Mitigation: Check current Zero commands against official documentation before running examples.
+
+Risk: Zero is described as experimental and unsuitable for production systems or sensitive data.
+
+Mitigation: Evaluate Zero examples in an isolated, disposable workspace and avoid production or sensitive inputs.
+
+## Reference(s):
+
+- [Vercel Zero GitHub Repository](https://github.com/vercel-labs/zero)
+- [Zero Official Documentation](https://vercel.com/docs/zero)
+- [AI Agent Programming Language Analysis](https://blog.csdn.net/irpywp/article/details/161167783)
+- [InfoQ: Vercel Labs Ships Zero, a Graph-First Language Built So Agents Write the Code](https://www.infoq.com/news/2026/08/vercel-ships-zero-ai)
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/vercel-zero-explorer)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline code, shell command blocks, tables, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Zero syntax examples, command examples, and diagnostic JSON; verify current Zero commands against official documentation before running them.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

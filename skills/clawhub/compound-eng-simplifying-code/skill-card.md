@@ -1,41 +1,58 @@
-## Description: <br>
-Simplifies, polishes, and declutters code without changing behavior for requests to clean up, refactor, remove dead code or AI slop, or improve readability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Simplifies, polishes, and declutters code without changing behavior.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to make scoped, behavior-preserving simplification changes to authorized codebases. It is intended for cleanup and refactoring work where readability and maintainability improve without changing public APIs, side effects, or error behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Behavior-preserving cleanup can still change runtime behavior if edge cases, public APIs, side effects, or error paths are misunderstood. <br>
-Mitigation: Review diffs, preserve documented invariants, and run tests or type checks covering touched files and importers before accepting changes. <br>
-Risk: The skill may remove dead-looking code or simplify defensive checks that encode domain constraints. <br>
-Mitigation: Require evidence before removals, ask when intent is unclear, and keep domain-specific complexity or API changes out of scope unless explicitly authorized. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to make disciplined, behavior-preserving simplification changes, including cleanup, refactoring, dead-code removal, and readability improvements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-simplifying-code) <br>
-- [SPEC.md](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [code, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown status reports with code edits and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports scope touched, key simplifications, verification performed, and residual risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release evidence) <br>
+Risk: Simplification edits could change behavior while appearing to only improve readability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review diffs for preserved interfaces, side effects, error behavior, and domain intent, then run the relevant tests and type checks.
+
+Risk: Removing guards or workarounds can expose external hazards that tests may not exercise.
+
+Mitigation: Require evidence that the hazard precondition is handled before removing the guard; otherwise retain it and document the gap.
+
+Risk: Internal renames and broad refactors can miss non-import references such as fixtures, configuration, scripts, and documentation.
+
+Mitigation: Search for old identifiers across the workspace and account for every remaining occurrence before completion.
+
+## Reference(s):
+
+- [Orchestrated simplification](references/orchestrated-simplification.md)
+- [Simplification patterns](references/simplification-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown summary with code changes, verification notes, and optional shell command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Behavior-preserving changes with scope, simplification, verification, and residual-risk reporting]
+
+## Skill Version(s):
+
+4.5.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

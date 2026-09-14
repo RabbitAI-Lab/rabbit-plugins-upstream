@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/wallabag",
   "slug": "wallabag",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1779077218275,
-  "contentHash": "e647154630ebf30bc78cf4c75c3fed445f1ace425ade1013c94a0cfbe984a694",
-  "fetchedAt": "2026-07-26T18:53:24.252Z"
+  "version": "1.0.0",
+  "updatedAt": 1789079160357,
+  "contentHash": "d7d660b6ca8e921b283fe833b381d506a6d22ea9dc4bd0c1b783c4e11775a6bc",
+  "fetchedAt": "2026-09-14T14:47:18.837Z"
 }

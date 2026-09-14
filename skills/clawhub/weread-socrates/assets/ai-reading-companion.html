@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="und">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; media-src 'none'; font-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>WeRead Socrates · Offline Reader</title>
+  <style>
+    :root{--paper:#f4efe5;--card:#fffdf8;--ink:#28231e;--muted:#71675d;--line:#d9ccbc;--accent:#873e2b;--soft:#efe0d3;--good:#42614a;--warn:#8a6425;--danger:#8b2d2d}
+    *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.62 ui-serif,Georgia,"Songti SC",serif}
+    body.locked main{display:none}.hidden{display:none!important}.gate{min-height:100vh;display:grid;place-items:center;padding:24px}.gate.hidden{display:none}
+    .gate-card,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 26px #35271b12}
+    .gate-card{width:min(540px,100%);padding:36px;text-align:center}.app{width:min(1040px,calc(100% - 28px));margin:auto;padding:34px 0 70px}
+    header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}h1{margin:0;font-size:31px}h2{font-size:20px;margin:0 0 10px}h3{font-size:16px;margin:12px 0 7px}
+    .subtitle,.muted,small{color:var(--muted)}.card{padding:21px;margin:14px 0}.notice{background:#fff7dc;border-color:#e2cc91}.stack{display:grid;gap:9px}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{font-weight:700}input,textarea,select,button{font:inherit}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;background:white;color:var(--ink)}
+    textarea{min-height:105px;resize:vertical}button{border:0;border-radius:9px;background:var(--accent);color:white;padding:9px 15px;cursor:pointer}button.secondary{background:var(--soft);color:var(--accent);border:1px solid #dcc2b2}button.danger{background:white;color:var(--danger);border:1px solid #d7aaaa}button:disabled{opacity:.46;cursor:not-allowed}
+    .gate button{min-width:140px;margin:6px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.tabs button.active{outline:3px solid #873e2b35}.book{padding:12px;border:1px solid var(--line);border-radius:11px;background:#faf5ed}.book strong{display:block;color:var(--accent)}
+    .answer,.entry,.relation,.resume{border:1px solid #e5d9ca;border-radius:11px;padding:13px;margin:9px 0;background:#fdfaf5}.answer textarea{min-height:75px;margin-top:8px}.entry button,.relation button{float:right;padding:3px 9px}.pill{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--soft);margin:4px 4px 0 0;font-size:12px}.status{font-size:12px;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:.05em}
+    .relation.confirmed{border-left:5px solid var(--good)}.relation.candidate{border-left:5px solid var(--warn)}.viewpoint{padding:8px;border-left:3px solid var(--line);margin:7px 0}.counter{text-align:right;font-size:13px;color:var(--muted)}.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:24px}
+    @media(max-width:700px){.grid{grid-template-columns:1fr}header{display:block}header button{margin-top:9px}.gate-card{padding:24px}}
+  </style>
+</head>
+<body class="locked">
+  <section id="languageGate" class="gate" aria-labelledby="gateTitle">
+    <div class="gate-card">
+      <h1 id="gateTitle">Choose language / 选择语言</h1>
+      <p>Language must be selected explicitly.<br>必须显式选择语言后才能使用。</p>
+      <button type="button" data-language="zh">中文</button>
+      <button type="button" data-language="en">English</button>
+    </div>
+  </section>
+  <main class="app">
+    <header>
+      <div><h1 data-i18n="title"></h1><p class="subtitle" data-i18n="subtitle"></p></div>
+      <button id="changeLanguage" class="secondary" type="button" data-i18n="changeLanguage"></button>
+    </header>
+    <section class="card notice"><strong data-i18n="privacyTitle"></strong><p data-i18n="privacyText"></p></section>
+
+    <section class="card">
+      <h2 data-i18n="demoTitle"></h2>
+      <p class="muted" data-i18n="demoHint"></p>
+      <div id="demoBooks" class="grid"></div>
+    </section>
+
+    <section class="card stack">
+      <h2 data-i18n="readingTitle"></h2>
+      <label for="bookTitle" data-i18n="bookLabel"></label>
+      <input id="bookTitle" maxlength="120" autocomplete="off">
+      <label for="passage" data-i18n="passageLabel"></label>
+      <textarea id="passage" maxlength="6000"></textarea>
+      <div id="counter" class="counter">0 / 6000</div>
+      <button id="generate" type="button" data-i18n="generate"></button>
+    </section>
+
+    <section id="dialoguePanel" class="card hidden">
+      <h2 data-i18n="dialogueTitle"></h2>
+      <p class="muted" data-i18n="dialogueHint"></p>
+      <div id="questions"></div>
+      <button id="saveReflection" type="button" data-i18n="saveReflection"></button>
+    </section>
+
+    <section class="card">
+      <h2>Reader Memory v2</h2>
+      <p class="muted" data-i18n="memoryHint"></p>
+      <div class="grid">
+        <div class="stack">
+          <label for="memoryType" data-i18n="typeLabel"></label>
+          <select id="memoryType">
+            <option value="concept" data-i18n="concept"></option>
+            <option value="stance" data-i18n="stance"></option>
+            <option value="question" data-i18n="openQuestion"></option>
+            <option value="reflection" data-i18n="reflection"></option>
+          </select>
+          <label for="memoryContent" data-i18n="memoryLabel"></label>
+          <textarea id="memoryContent" maxlength="2000"></textarea>
+          <label for="memoryTags" data-i18n="tagsLabel"></label>
+          <input id="memoryTags" maxlength="240" autocomplete="off">
+          <button id="saveMemory" type="button" data-i18n="saveMemory"></button>
+        </div>
+        <div>
+          <h3 data-i18n="entriesTitle"></h3>
+          <div id="memoryList"></div>
+          <button id="clearMemory" type="button" class="danger" data-i18n="clearMemory"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="continueTitle"></h2>
+      <p class="muted" data-i18n="continueHint"></p>
+      <div id="continueList"></div>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="compareTitle"></h2>
+      <p class="muted" data-i18n="compareHint"></p>
+      <h3 data-i18n="candidateTitle"></h3>
+      <div id="candidateList"></div>
+      <h3 data-i18n="confirmedTitle"></h3>
+      <div id="relationList"></div>
+      <div class="row">
+        <select id="exportRelation" aria-label="relation"></select>
+        <button id="downloadMarkdown" type="button" data-i18n="downloadMarkdown"></button>
+        <button id="downloadPng" type="button" data-i18n="downloadPng"></button>
+      </div>
+    </section>
+    <p class="footer">weread-socrates v1.4.0 · <span data-i18n="offlineBadge"></span></p>
+  </main>
+  <script>
+  (() => {
+    "use strict";
+    const MEMORY_KEY = "weread-socrates.reader-memory.v2";
+    const LEGACY_KEYS = ["weread-socrates.reader-memory.v1", "weread-socrates.reader-memory"];
+    const MAX_ENTRIES = 300, MAX_RELATIONS = 300;
+    const $ = id => document.getElementById(id);
+    const i18n = {
+      zh:{
+        title:"微信读书 · 苏格拉底伴读",subtitle:"纯离线的深读、记忆与跨书对照",changeLanguage:"切换语言",
+        privacyTitle:"静态、离线、由你决定",privacyText:"本页可直接通过 file:// 打开，不连接网络、不调用 API 或模型、不读取账号或密钥。输入与 Reader Memory 只在当前浏览器 localStorage 中处理。候选关系不会保存；只有你确认的关系会进入 Memory。",
+        demoTitle:"1. 双书 Demo",demoHint:"点击加载内置的公版主题改写。Demo 不会自动写入 Memory。",openBook:"打开示例",
+        readingTitle:"2. 深读一段文字",bookLabel:"书名",passageLabel:"片段",generate:"生成 5 个问题",
+        dialogueTitle:"3. 苏格拉底对话",dialogueHint:"问题由本地确定性规则生成。回答后可保存为反思。",saveReflection:"保存本轮反思",
+        memoryHint:"v1 数据首次打开时自动迁移。节点和已确认关系保存在浏览器；删除节点会同步删除悬空关系。",typeLabel:"类型",concept:"概念",stance:"立场",openQuestion:"未解问题",reflection:"反思",memoryLabel:"内容",tagsLabel:"标签（逗号分隔）",saveMemory:"保存节点",entriesTitle:"已保存节点",clearMemory:"清空全部 Memory",
+        continueTitle:"继续思考",continueHint:"回到未解问题、最近立场和等待你判断的跨书候选。",compareTitle:"跨书对照",compareHint:"候选仅由本地共同标签或关键词产生且不持久化。选择关系类型、编辑理由并明确确认后才保存。",candidateTitle:"本地非持久候选",confirmedTitle:"已确认关系",
+        downloadMarkdown:"下载 Markdown",downloadPng:"下载 Canvas PNG",offlineBadge:"单文件 · file:// · 无外发",
+        empty:"暂无内容。",unknownBook:"未关联书籍",delete:"删除",candidate:"未确认候选",confirmed:"用户已确认",reason:"关系理由",confirmRelation:"我确认这条关系",saveRelation:"确认并保存",needConfirm:"请先勾选用户确认。",finalConfirm:"确认保存这条跨书关系？",confirmClear:"确认清空所有节点与关系？",saved:"已保存。",needText:"请先输入内容。",migrated:"已从 Reader Memory v1 迁移到 v2。",
+        pending:"有新的本地跨书候选等待你的判断。",recentQuestion:"未解问题",recentStance:"最近立场",recentRelation:"最近关系",selectRelation:"选择已确认关系",
+        relation:{supports:"支持",conflicts:"冲突",extends:"扩展",exemplifies:"例证"},
+        questions:["这段话最核心的主张是什么？请用自己的话重述。","哪个关键词可能有多种含义？不同定义如何改变结论？","作者依赖了哪些未说明的前提？哪一个最值得质疑？","理性的反对者会提出什么最强反例？原主张能回应吗？","检验之后，你暂时接受什么、拒绝什么，还留下什么问题？"],
+        focus:"片段焦点",reflectionPrefix:"本轮深读",compareCard:"跨书对照卡",continueQuestion:"继续思考：什么新证据会改变你对这条关系的判断？",
+        demo:[
+          {id:"demo-apology",title:"苏格拉底的申辩",author:"柏拉图",tags:["自省","判断"],passage:"未经省察的人生是否值得过，取决于我们是否愿意承认自己的无知，并在公共意见面前持续追问何为善。"},
+          {id:"demo-meditations",title:"沉思录",author:"马可·奥勒留",tags:["自省","判断"],passage:"先管理自己的判断，而不是要求世界服从愿望。外界事件未必由我决定，但我仍可检查自己赋予它的意义。"}
+        ]
+      },
+      en:{
+        title:"WeRead · Socratic Reader",subtitle:"Offline deep reading, memory, and cross-book comparison",changeLanguage:"Change language",
+        privacyTitle:"Static, offline, and user-directed",privacyText:"Open this single file with file://. It makes no network, API, model, account, or key access. Input and Reader Memory stay in this browser's localStorage. Suggestions are transient; only relations you confirm enter Memory.",
+        demoTitle:"1. Two-book demo",demoHint:"Load built-in paraphrases of public-domain themes. Demo content is not saved automatically.",openBook:"Open demo",
+        readingTitle:"2. Read a passage deeply",bookLabel:"Book title",passageLabel:"Passage",generate:"Generate 5 questions",
+        dialogueTitle:"3. Socratic dialogue",dialogueHint:"Deterministic local rules generate the questions. You may save your answers as a reflection.",saveReflection:"Save this reflection",
+        memoryHint:"v1 data migrates on first open. Entries and confirmed relations stay in this browser; deleting an entry also removes dangling relations.",typeLabel:"Type",concept:"Concept",stance:"Stance",openQuestion:"Open question",reflection:"Reflection",memoryLabel:"Content",tagsLabel:"Tags (comma-separated)",saveMemory:"Save entry",entriesTitle:"Saved entries",clearMemory:"Clear all Memory",
+        continueTitle:"Continue thinking",continueHint:"Return to open questions, recent stances, and cross-book suggestions awaiting judgment.",compareTitle:"Cross-book comparison",compareHint:"Suggestions use only shared tags or keywords and are never persisted. Choose a type, edit the reason, and explicitly confirm before saving.",candidateTitle:"Local transient suggestions",confirmedTitle:"Confirmed relations",
+        downloadMarkdown:"Download Markdown",downloadPng:"Download Canvas PNG",offlineBadge:"single file · file:// · no transmission",
+        empty:"Nothing here yet.",unknownBook:"No linked book",delete:"Delete",candidate:"Unconfirmed suggestion",confirmed:"User confirmed",reason:"Reason",confirmRelation:"I confirm this relation",saveRelation:"Confirm and save",needConfirm:"Check user confirmation first.",finalConfirm:"Save this cross-book relation?",confirmClear:"Clear all entries and relations?",saved:"Saved.",needText:"Enter some text first.",migrated:"Reader Memory v1 migrated to v2.",
+        pending:"New local cross-book suggestions await your judgment.",recentQuestion:"Open question",recentStance:"Recent stance",recentRelation:"Recent relation",selectRelation:"Select a confirmed relation",
+        relation:{supports:"supports",conflicts:"conflicts with",extends:"extends",exemplifies:"exemplifies"},
+        questions:["What is the passage's central claim? Restate it in your own words.","Which key term may have several meanings? How would each alter the conclusion?","What unstated assumptions does the author rely on? Which most deserves scrutiny?","What is the strongest counterexample a reasonable critic could offer? Can the claim answer it?","After testing it, what do you provisionally accept, reject, and leave unresolved?"],
+        focus:"Passage focus",reflectionPrefix:"Reading reflection",compareCard:"Cross-book comparison",continueQuestion:"Continue thinking: what new evidence would change your judgment of this relation?",
+        demo:[
+          {id:"demo-apology",title:"Apology",author:"Plato",tags:["self-examination","judgment"],passage:"Whether an unexamined life is worth living depends on our willingness to admit ignorance and keep asking what is good despite public opinion."},
+          {id:"demo-meditations",title:"Meditations",author:"Marcus Aurelius",tags:["self-examination","judgment"],passage:"Govern your judgment before asking the world to obey your wishes. Events may not be yours to choose, but you can still examine the meaning you assign them."}
+        ]
+      }
+    };
+    const clean=(value,max)=>String(value||"").replace(/[\u0000-\u001f\u007f]/g,"").trim().slice(0,max);
+    const uid=prefix=>`${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,9)}`;
+    function normalizeEntry(raw){
+      if(!raw||typeof raw!=="object")return null;
+      const content=clean(raw.content,6000); if(!content)return null;
+      return {id:clean(raw.id,100)||uid("entry"),type:["concept","stance","question","reflection"].includes(raw.type)?raw.type:"reflection",content,
+        tags:Array.isArray(raw.tags)?raw.tags.map(x=>clean(x,40)).filter(Boolean).slice(0,12):[],
+        bookId:clean(raw.bookId,120),bookTitle:clean(raw.bookTitle,120),author:clean(raw.author,120),createdAt:clean(raw.createdAt,40)||new Date().toISOString()};
+    }
+    function normalizeRelation(raw,entryIds){
+      if(!raw||typeof raw!=="object"||raw.confirmedByUser!==true)return null;
+      const fromEntryId=clean(raw.fromEntryId,100),toEntryId=clean(raw.toEntryId,100);
+      if(!fromEntryId||fromEntryId===toEntryId||!entryIds.has(fromEntryId)||!entryIds.has(toEntryId)||!["supports","conflicts","extends","exemplifies"].includes(raw.relationType))return null;
+      return {relationId:clean(raw.relationId,100)||uid("relation"),fromEntryId,toEntryId,relationType:raw.relationType,reason:clean(raw.reason,1000),confirmedByUser:true,createdAt:clean(raw.createdAt,40)||new Date().toISOString()};
+    }
+    function loadMemory(){
+      let source=null,migrated=false;
+      try{source=JSON.parse(localStorage.getItem(MEMORY_KEY)||"null");}catch(_){}
+      if(!source){
+        for(const key of LEGACY_KEYS){try{const old=JSON.parse(localStorage.getItem(key)||"null");if(old){source=old;migrated=true;break;}}catch(_){}}
+      }
+      const rawEntries=Array.isArray(source)?source:Array.isArray(source?.entries)?source.entries:[];
+      const entries=rawEntries.map(normalizeEntry).filter(Boolean).slice(0,MAX_ENTRIES);
+      const ids=new Set(entries.map(x=>x.id));
+      const relations=(Array.isArray(source?.relations)?source.relations:[]).map(x=>normalizeRelation(x,ids)).filter(Boolean).slice(0,MAX_RELATIONS);
+      const memory={version:2,entries,relations};
+      if(migrated){localStorage.setItem(MEMORY_KEY,JSON.stringify(memory));LEGACY_KEYS.forEach(key=>localStorage.removeItem(key));}
+      return {memory,migrated};
+    }
+    const loaded=loadMemory();
+    const state={language:null,memory:loaded.memory,migrated:loaded.migrated,questions:[],activeDemo:null};
+    const t=key=>i18n[state.language][key];
+    function persist(){localStorage.setItem(MEMORY_KEY,JSON.stringify(state.memory));}
+    function bookName(entry){return entry.bookTitle||t("unknownBook");}
+    function selectLanguage(language){
+      if(!["zh","en"].includes(language))return;
+      state.language=language;document.documentElement.lang=language;document.body.classList.remove("locked");$("languageGate").classList.add("hidden");
+      document.querySelectorAll("[data-i18n]").forEach(n=>n.textContent=t(n.dataset.i18n));
+      renderAll();if(state.migrated){alert(t("migrated"));state.migrated=false;}
+    }
+    function renderDemo(){
+      $("demoBooks").replaceChildren();
+      t("demo").forEach(book=>{const card=document.createElement("article");card.className="book";
+        const title=document.createElement("strong");title.textContent=book.title;
+        const author=document.createElement("small");author.textContent=book.author;
+        const p=document.createElement("p");p.textContent=book.passage;
+        const button=document.createElement("button");button.type="button";button.textContent=t("openBook");button.onclick=()=>{state.activeDemo=book;$("bookTitle").value=book.title;$("passage").value=book.passage;$("counter").textContent=`${book.passage.length} / 6000`;generateQuestions();};
+        card.append(title,author,p,button);$("demoBooks").append(card);});
+    }
+    function focusOf(passage){return clean(passage.split(/(?<=[。！？.!?])\s*/).find(x=>clean(x,180).length>10)||passage,180);}
+    function generateQuestions(){
+      const passage=clean($("passage").value,6000);if(!passage){alert(t("needText"));return;}
+      state.questions=t("questions").map((q,i)=>i===0?`${q}\n${t("focus")}: “${focusOf(passage)}”`:q);
+      $("questions").replaceChildren();state.questions.forEach((q,i)=>{const wrap=document.createElement("div");wrap.className="answer";
+        const prompt=document.createElement("strong");prompt.textContent=`${i+1}. ${q}`;
+        const answer=document.createElement("textarea");answer.maxLength=2000;answer.dataset.answer=String(i);
+        wrap.append(prompt,answer);$("questions").append(wrap);});
+      $("dialoguePanel").classList.remove("hidden");
+    }
+    function addEntry(type,content,tags,book){
+      const entry=normalizeEntry({id:uid("entry"),type,content,tags,bookId:book?.id||"",bookTitle:book?.title||clean($("bookTitle").value,120),author:book?.author||"",createdAt:new Date().toISOString()});
+      if(!entry)return false;state.memory.entries.unshift(entry);state.memory.entries=state.memory.entries.slice(0,MAX_ENTRIES);persist();renderAll();return true;
+    }
+    function saveReflection(){
+      const answers=[...document.querySelectorAll("[data-answer]")].map((n,i)=>clean(n.value,2000)?`${i+1}. ${state.questions[i]}\n${clean(n.value,2000)}`:"").filter(Boolean);
+      if(!answers.length){alert(t("needText"));return;}addEntry("reflection",`${t("reflectionPrefix")}\n\n${answers.join("\n\n")}`,["socratic"],state.activeDemo);alert(t("saved"));
+    }
+    function saveEntry(){
+      if(!addEntry($("memoryType").value,$("memoryContent").value,$("memoryTags").value.split(/[,，]/),state.activeDemo)){alert(t("needText"));return;}
+      $("memoryContent").value="";$("memoryTags").value="";alert(t("saved"));
+    }
+    function deleteEntry(id){state.memory.entries=state.memory.entries.filter(x=>x.id!==id);state.memory.relations=state.memory.relations.filter(x=>x.fromEntryId!==id&&x.toEntryId!==id);persist();renderAll();}
+    const keywords=value=>new Set(clean(value,2000).toLowerCase().match(/[\p{L}\p{N}]{2,}/gu)||[]);
+    function candidates(){
+      const result=[],entries=state.memory.entries;
+      for(let i=0;i<entries.length;i++)for(let j=i+1;j<entries.length;j++){
+        const a=entries[i],b=entries[j];if(!a.bookTitle||!b.bookTitle||a.bookTitle===b.bookTitle)continue;
+        const aTags=new Set(a.tags.map(x=>x.toLowerCase())),sharedTags=b.tags.filter(x=>aTags.has(x.toLowerCase()));
+        const ak=keywords(a.content),sharedWords=[...keywords(b.content)].filter(x=>ak.has(x)).slice(0,3);
+        const duplicate=state.memory.relations.some(r=>(r.fromEntryId===a.id&&r.toEntryId===b.id)||(r.fromEntryId===b.id&&r.toEntryId===a.id));
+        if(!duplicate&&(sharedTags.length||sharedWords.length))result.push({from:a,to:b,type:"extends",reason:state.language==="zh"?`共同线索：${[...sharedTags,...sharedWords].join("、")}`:`Shared cues: ${[...sharedTags,...sharedWords].join(", ")}`});
+      }
+      const demo=t("demo");
+      if(!state.memory.relations.some(r=>r.fromEntryId==="demo-entry-apology"||r.toEntryId==="demo-entry-meditations")){
+        const make=(book,id)=>({id,type:"stance",content:book.passage,tags:book.tags,bookId:book.id,bookTitle:book.title,author:book.author,createdAt:""});
+        result.push({from:make(demo[0],"demo-entry-apology"),to:make(demo[1],"demo-entry-meditations"),type:"extends",reason:state.language==="zh"?"两者都把自我审视视为判断的起点。":"Both treat self-examination as the starting point of judgment.",candidateEntries:true});
+      }
+      return result.slice(0,12);
+    }
+    function relationLabel(type){return t("relation")[type];}
+    function entryById(id){return state.memory.entries.find(x=>x.id===id);}
+    function renderMemory(){
+      $("memoryList").replaceChildren();if(!state.memory.entries.length){$("memoryList").append(Object.assign(document.createElement("p"),{textContent:t("empty"),className:"muted"}));return;}
+      state.memory.entries.forEach(e=>{const card=document.createElement("article");card.className="entry";
+        const del=document.createElement("button");del.type="button";del.className="danger";del.textContent=t("delete");del.onclick=()=>deleteEntry(e.id);
+        const meta=document.createElement("small");meta.textContent=`${e.type} · ${bookName(e)}`;
+        const content=document.createElement("div");content.textContent=e.content;const tags=document.createElement("div");
+        e.tags.forEach(tag=>{const p=document.createElement("span");p.className="pill";p.textContent=`#${tag}`;tags.append(p);});
+        card.append(del,meta,content,tags);$("memoryList").append(card);});
+    }
+    function saveRelation(candidate,type,reason,checked){
+      if(!checked){alert(t("needConfirm"));return;}if(!confirm(t("finalConfirm")))return;
+      const addCandidate=e=>{if(!entryById(e.id)){const normalized=normalizeEntry(e);if(normalized)state.memory.entries.unshift(normalized);}};
+      addCandidate(candidate.from);addCandidate(candidate.to);
+      state.memory.relations.unshift({relationId:uid("relation"),fromEntryId:candidate.from.id,toEntryId:candidate.to.id,relationType:type,reason:clean(reason,1000),confirmedByUser:true,createdAt:new Date().toISOString()});
+      state.memory.relations=state.memory.relations.slice(0,MAX_RELATIONS);persist();renderAll();
+    }
+    function renderCandidates(){
+      $("candidateList").replaceChildren();const list=candidates();if(!list.length){$("candidateList").textContent=t("empty");return;}
+      list.forEach(c=>{const card=document.createElement("article");card.className="relation candidate";
+        const status=document.createElement("div");status.className="status";status.textContent=t("candidate");
+        const title=document.createElement("h3");title.textContent=`《${bookName(c.from)}》 × 《${bookName(c.to)}》`;
+        const one=document.createElement("p");one.className="viewpoint";one.textContent=c.from.content;const two=document.createElement("p");two.className="viewpoint";two.textContent=c.to.content;
+        const select=document.createElement("select");Object.keys(t("relation")).forEach(type=>{const o=document.createElement("option");o.value=type;o.textContent=relationLabel(type);o.selected=type===c.type;select.append(o);});
+        const reason=document.createElement("textarea");reason.maxLength=1000;reason.value=c.reason;reason.setAttribute("aria-label",t("reason"));
+        const label=document.createElement("label");const check=document.createElement("input");check.type="checkbox";check.style.width="auto";label.append(check,document.createTextNode(" "+t("confirmRelation")));
+        const save=document.createElement("button");save.type="button";save.textContent=t("saveRelation");save.onclick=()=>saveRelation(c,select.value,reason.value,check.checked);
+        card.append(status,title,one,two,select,reason,label,save);$("candidateList").append(card);});
+    }
+    function deleteRelation(id){state.memory.relations=state.memory.relations.filter(x=>x.relationId!==id);persist();renderAll();}
+    function renderRelations(){
+      $("relationList").replaceChildren();$("exportRelation").replaceChildren();
+      const placeholder=document.createElement("option");placeholder.value="";placeholder.textContent=t("selectRelation");$("exportRelation").append(placeholder);
+      state.memory.relations.forEach(r=>{const a=entryById(r.fromEntryId),b=entryById(r.toEntryId);if(!a||!b)return;
+        const card=document.createElement("article");card.className="relation confirmed";const del=document.createElement("button");del.type="button";del.className="danger";del.textContent=t("delete");del.onclick=()=>deleteRelation(r.relationId);
+        const status=document.createElement("div");status.className="status";status.textContent=t("confirmed");
+        const title=document.createElement("h3");title.textContent=`《${bookName(a)}》 ${relationLabel(r.relationType)} 《${bookName(b)}》`;
+        const reason=document.createElement("p");reason.textContent=r.reason;card.append(del,status,title,reason);$("relationList").append(card);
+        const o=document.createElement("option");o.value=r.relationId;o.textContent=title.textContent;$("exportRelation").append(o);
+      });
+      if(!state.memory.relations.length)$("relationList").textContent=t("empty");
+    }
+    function renderContinue(){
+      $("continueList").replaceChildren();const items=[];
+      state.memory.entries.filter(x=>x.type==="question").slice(0,3).forEach(x=>items.push(`${t("recentQuestion")} · ${x.content}`));
+      state.memory.entries.filter(x=>x.type==="stance").slice(0,2).forEach(x=>items.push(`${t("recentStance")} · ${x.content}`));
+      state.memory.relations.slice(0,2).forEach(r=>{const a=entryById(r.fromEntryId),b=entryById(r.toEntryId);if(a&&b)items.push(`${t("recentRelation")} · ${bookName(a)} ${relationLabel(r.relationType)} ${bookName(b)}`);});
+      if(candidates().length)items.push(t("pending"));if(!items.length)items.push(t("empty"));
+      items.forEach(value=>{const div=document.createElement("div");div.className="resume";div.textContent=value;$("continueList").append(div);});
+    }
+    function selectedRelation(){
+      const r=state.memory.relations.find(x=>x.relationId===$("exportRelation").value);if(!r)return null;
+      const a=entryById(r.fromEntryId),b=entryById(r.toEntryId);return a&&b?{r,a,b}:null;
+    }
+    function comparisonMarkdown(){
+      const selected=selectedRelation();if(!selected)return"";const {r,a,b}=selected;
+      return `# ${t("compareCard")}\n\n## ${bookName(a)}\n\n${a.content}\n\n## ${bookName(b)}\n\n${b.content}\n\n**${relationLabel(r.relationType)}**\n\n${r.reason}\n\n## ${t("continueTitle")}\n\n${t("continueQuestion")}\n`;
+    }
+    function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+    function exportMarkdown(){const md=comparisonMarkdown();if(md)downloadBlob(new Blob([md],{type:"text/markdown;charset=utf-8"}),"cross-book-comparison.md");}
+    function wrap(ctx,text,x,y,width,lineHeight,maxLines){const words=String(text).split(state.language==="zh"?"":/\s+/),lines=[];let line="";
+      for(const word of words){const trial=state.language==="zh"?line+word:(line?line+" ":"")+word;if(ctx.measureText(trial).width>width&&line){lines.push(line);line=word;}else line=trial;if(lines.length>=maxLines)break;}if(line&&lines.length<maxLines)lines.push(line);lines.forEach((v,i)=>ctx.fillText(v,x,y+i*lineHeight));return y+lines.length*lineHeight;}
+    function exportPng(){
+      const selected=selectedRelation();if(!selected)return;const {r,a,b}=selected,canvas=document.createElement("canvas");canvas.width=1400;canvas.height=900;const ctx=canvas.getContext("2d");
+      ctx.fillStyle="#f4efe5";ctx.fillRect(0,0,1400,900);ctx.fillStyle="#28231e";ctx.font="bold 42px Georgia, serif";ctx.fillText(t("compareCard"),80,85);
+      ctx.font="bold 28px Georgia, serif";ctx.fillStyle="#873e2b";ctx.fillText(bookName(a),80,160);ctx.fillText(bookName(b),760,160);
+      ctx.font="24px Georgia, serif";ctx.fillStyle="#28231e";wrap(ctx,a.content,80,210,560,38,8);wrap(ctx,b.content,760,210,560,38,8);
+      ctx.fillStyle="#efe0d3";ctx.fillRect(80,560,1240,150);ctx.fillStyle="#873e2b";ctx.font="bold 30px Georgia, serif";ctx.fillText(relationLabel(r.relationType),110,610);
+      ctx.fillStyle="#28231e";ctx.font="24px Georgia, serif";wrap(ctx,r.reason,110,655,1150,34,2);ctx.font="22px Georgia, serif";wrap(ctx,t("continueQuestion"),80,790,1240,32,2);
+      canvas.toBlob(blob=>{if(blob)downloadBlob(blob,"cross-book-comparison.png");},"image/png");
+    }
+    function renderAll(){renderDemo();renderMemory();renderCandidates();renderRelations();renderContinue();}
+    document.querySelectorAll("[data-language]").forEach(b=>b.addEventListener("click",()=>selectLanguage(b.dataset.language)));
+    $("changeLanguage").onclick=()=>{state.language=null;document.documentElement.lang="und";document.body.classList.add("locked");$("languageGate").classList.remove("hidden");};
+    $("passage").oninput=()=>{$("counter").textContent=`${$("passage").value.length} / 6000`;state.activeDemo=null;};
+    $("generate").onclick=generateQuestions;$("saveReflection").onclick=saveReflection;$("saveMemory").onclick=saveEntry;
+    $("clearMemory").onclick=()=>{if(confirm(t("confirmClear"))){state.memory={version:2,entries:[],relations:[]};localStorage.removeItem(MEMORY_KEY);renderAll();}};
+    $("downloadMarkdown").onclick=exportMarkdown;$("downloadPng").onclick=exportPng;
+  })();
+  </script>
+</body>
+</html>

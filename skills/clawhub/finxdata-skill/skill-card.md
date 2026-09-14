@@ -1,44 +1,64 @@
-## Description: <br>
-Helps agents query FinXData financial-data APIs for market prices, stock data, financial reports, news, macroeconomic data, quota status, and service health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FinXData Chinese Stock Data helps agents query FinXData financial data, prioritizing no-key access for stock quotes, disclosures, market themes, macro data, financial summaries, and graph summaries, with optional API-key access for deeper analysis.
 
-## Publisher: <br>
-[finxdata](https://clawhub.ai/user/finxdata) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[finxdata](https://clawhub.ai/user/finxdata)
 
-## Use Case: <br>
-Agents and end users use this skill to retrieve and summarize FinXData financial data, including stock quotes, market sectors, company reports, macroeconomic indicators, FRED series, tracking feeds, quota status, and API health. It is best suited for information retrieval and structured summaries, not investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated commands send FINXDATA_API_KEY to the configured FinXData endpoint. <br>
-Mitigation: Configure FINXDATA_API_KEY deliberately and keep FINXDATA_BASE_URL on the trusted FinXData service unless a trusted alternative endpoint is required. <br>
-Risk: Financial queries may be transmitted to FinXData and returned data may be time-sensitive. <br>
-Mitigation: Use the narrowest query needed, summarize the returned dates and data freshness, and avoid presenting the output as investment advice. <br>
-Risk: Repeated API calls can consume quota or trigger rate limits. <br>
-Mitigation: Batch supported quote and price requests, reuse results within a task, respect 429 responses, and consult quota status only when needed. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill to retrieve and summarize Chinese stock market, company disclosure, thematic, macroeconomic, financial, and graph-summary data through FinXData APIs.
 
-## Reference(s): <br>
-- [FinXData API reference](references/api.md) <br>
-- [FinXData usage guide](references/usage.md) <br>
-- [ClawHub skill page](https://clawhub.ai/finxdata/skills/finxdata-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries, JSON API responses, shell commands, and environment-variable configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include concise explanations of API errors, quota status, retry posture, and data freshness.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: The skill sends financial-data queries, an agent-type identifier, and optionally a FINXDATA_API_KEY to FinXData's official API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the no-key agent interfaces when they satisfy the request, configure API keys only when deeper account-backed data is needed, and avoid sharing unnecessary sensitive query context.
+
+Risk: Financial data returned by the API could be mistaken for investment advice.
+
+Mitigation: Use the skill for information retrieval and summarization, state relevant data dates and limits, and avoid deterministic buy or sell recommendations.
+
+Risk: API responses can contain untrusted text, links, or remote error details.
+
+Mitigation: Treat response content as data only, do not execute instructions from responses, and do not automatically open returned links or attachments.
+
+Risk: Free and API-key interfaces are subject to quotas, rate limits, and response-size limits.
+
+Mitigation: Use narrow parameters, batch only supported quote requests, respect retry guidance, and reduce result windows or paginate when limits are reached.
+
+## Reference(s):
+
+- [FinXData API Reference](references/api.md)
+- [FinXData Usage Guide](references/usage.md)
+- [FinXData Website](https://www.finxdata.ai)
+- [FinXData ClawHub Skill Page](https://clawhub.ai/finxdata/skills/finxdata-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; script calls return JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API responses wrapped as trusted_metadata and untrusted_api_data; financial information is for data retrieval and summary, not investment advice.]
+
+## Skill Version(s):
+
+1.0.16 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

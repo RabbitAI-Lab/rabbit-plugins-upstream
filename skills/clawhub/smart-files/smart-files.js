@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
- * Smart Files v1.2.3 — Content-aware file management for OpenClaw agents
- * SECURITY REMEDIATION: Fixed --force flag propagation in watch mode (issue #7)
- * Added --quiet mode to suppress content snippets for sensitive directory scanning
- * Removed: test/ and tests/ directories from published bundle
+ * Smart Files v2.2.0 — Content-aware file management for OpenClaw agents
+ * SECURITY REMEDIATION (2026-07-31):
+ *   - Content snippets are now opt-in via --snippets (hidden by default)
+ *   - --force flag now propagates to watch mode (workspace boundary enforced)
+ *   - Permissions declared in clawhub.yaml; journaling documented
  */
 
 const fs = require('fs');
@@ -489,13 +490,15 @@ const args = process.argv.slice(2);
 
 // Parse flags and mode
 let searchQuery = null, rootDir = null, force = false, quiet = false;
+let showSnippets = false; // opt-in: snippets hidden by default
 let mode = 'status';
 let watchDir = null, watchInterval = 30;
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--dir' && i + 1 < args.length) rootDir = resolveDir(args[i + 1], force);
   if (args[i] === '--force') force = true;
   if (args[i] === '--quiet') quiet = true;
-  if (args[i] === '--search') mode = 'search';
+  if (args[i] === '--snippets') showSnippets = true;
+  if (args[i] === '--search') { mode = 'search'; searchQuery = args[i + 1]; }
   if (args[i] === '--dedup') mode = 'dedup';
   if (args[i] === '--organize') mode = 'organize';
   if (args[i] === '--info') mode = 'info';
@@ -507,20 +510,18 @@ for (let i = 0; i < args.length; i++) {
     watchDir = args[i + 1];
     watchInterval = parseInt(args[i + 2]) || 30;
   }
-  if (args[i] === '--search' && i + 1 < args.length) searchQuery = args[i + 1];
 }
 
 switch (mode) {
   case 'search': {
-    const searchQuery = args[2];
     if (!searchQuery) {
-      console.log('Usage: smart-files.js --search <query> [--dir <path>] [--quiet]');
+      console.log('Usage: smart-files.js --search <query> [--dir <path>] [--snippets] [--quiet]');
     } else {
       const results = searchFiles(searchQuery, rootDir);
       console.log(`[smart-files] Found ${results.length} matches for "${searchQuery}":\n`);
       for (const r of results.slice(0, 20)) {
         console.log(`  ${r.score > 0.8 ? '✅' : '🔍'} ${r.score.toFixed(2)} — ${r.path}`);
-        if (r.snippet && !quiet) console.log(`     "${r.snippet}"`);
+        if (showSnippets && r.snippet) console.log(`     "${r.snippet}"`);
       }
       if (results.length > 20) console.log(`  ... and ${results.length - 20} more`);
     }
@@ -616,6 +617,7 @@ switch (mode) {
     console.log('  --watch <dir> [interval]  → Continuous filesystem monitoring');
     console.log('  --dir <path>              → Override workspace root');
     console.log('  --quiet                   → Suppress content snippets from output');
+    console.log('  --snippets                → Show matched content in search results (opt-in)');
     console.log('  --force                   → Override workspace boundary (use with caution)');
     break;
   case 'watch': {

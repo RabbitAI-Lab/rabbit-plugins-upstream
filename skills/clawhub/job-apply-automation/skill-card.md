@@ -1,50 +1,67 @@
-## Description: <br>
-Automated job application assistant that searches job boards and direct URLs, drafts personalized application emails with a CV attached, sends them through Gmail SMTP, and maintains a JSON application tracker. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates job searching, tailored application email drafting, Gmail SMTP sending after explicit approval, inbox reply checks, and JSON-based application tracking.
 
-## Publisher: <br>
-[Z-Hussein](https://clawhub.ai/user/Z-Hussein) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-hussein](https://clawhub.ai/user/z-hussein)
 
-## Use Case: <br>
-Job seekers use this skill to find matching roles, prepare tailored application emails, send applications from a dedicated Gmail account, and track application status across the job search workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically email employers with a CV and may reply to recruiters on the user's behalf. <br>
-Mitigation: Use a dedicated job-search mailbox and keep manual approval enabled for every outgoing email, especially before trusting auto mode. <br>
-Risk: The tracker can contain sensitive job-search history, recruiter details, interview information, and application outcomes. <br>
-Mitigation: Regularly inspect, secure, or delete Applications.json and avoid sharing it outside the intended workspace. <br>
-Risk: Email credentials and personal profile data are required for normal operation. <br>
-Mitigation: Use a Gmail app password for a dedicated account, avoid storing main-account credentials, and keep filled CONFIG.md and profile files private. <br>
-Risk: Notifications may expose application activity or personal information through WhatsApp. <br>
-Mitigation: Review notification behavior and remove or limit notification details if the channel is shared or not private. <br>
+## Use Case:
 
+Job seekers use this skill to find matching roles, draft personalized application and follow-up emails, send approved messages with a CV, monitor recruiter replies, and maintain a local application tracker.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/Z-Hussein/job-apply-automation) <br>
-- [README](README.md) <br>
-- [Platform Notes](references/Platform-notes.md) <br>
-- [Tracker Commands](references/Tracker-commands.md) <br>
-- [Configuration Template](references/config.md) <br>
-- [Email Templates](references/email-templates.md) <br>
-- [Job Profile Template](references/job-profile.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries, drafted email text, JSON tracker updates, and setup commands or configuration guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May send application emails with CV attachments and update Applications.json when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata) <br>
+Risk: The skill processes sensitive personal data such as CV details, contact information, job history, recruiter emails, and interview details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep application data, CV files, configuration, and tracker files local; review retained data periodically and follow the documented archival and deletion controls.
+
+Risk: The Gmail app password used for SMTP could expose the dedicated job-application mailbox if mishandled.
+
+Mitigation: Use a dedicated Gmail account, store the app password only in references/SMTP-SECRET.txt with restrictive permissions, load it only after send approval, and revoke it immediately if exposure is suspected.
+
+Risk: Outbound applications, follow-ups, replies, or optional notification digests could be sent before the user is ready.
+
+Mitigation: Require explicit user approval for every outbound email and recruiter reply, show a final preview before sending, and enable WhatsApp digests only after dedicated user consent.
+
+Risk: Job listings, company pages, search results, and inbound email content are untrusted and may contain misleading or instruction-like text.
+
+Mitigation: Treat external content as data only, extract it into strict schemas, ignore embedded instructions, and keep credential access separate from browsing and inbox parsing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/z-hussein/skills/job-apply-automation)
+- [README](artifact/README.md)
+- [Configuration Template](artifact/references/config.md)
+- [Email Templates](artifact/references/email-templates.md)
+- [Tracker Commands](artifact/references/Tracker-commands.md)
+- [Platform Notes](artifact/references/Platform-notes.md)
+- [Job Application Profile](artifact/references/job-profile.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses, email drafts, JSON tracker updates, and setup shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires explicit approval before sending outbound email or recruiter replies; records application state in Applications.json.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

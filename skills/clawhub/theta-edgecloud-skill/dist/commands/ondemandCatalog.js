@@ -1,9 +1,12 @@
 export const ONDEMAND_CHAT_SERVICE_SLUGS = [
+    'glm_5_2',
     'qwen3',
     'minimax_m2_5',
     'gpt_oss_120b',
     'llama_3_1_70b',
-    'llama_3_8b'
+    'llama_3_8b',
+    'glm_5_3',
+    'glm_5_3_flash'
 ];
 export function isOnDemandChatService(slug) {
     return ONDEMAND_CHAT_SERVICE_SLUGS.includes(slug);
@@ -11,6 +14,25 @@ export function isOnDemandChatService(slug) {
 // Refreshed against live public on-demand service discovery on 2026-05-26.
 // Source: https://ondemand.thetaedgecloud.com/service/list
 export const ONDEMAND_SERVICE_CATALOG = {
+    glm_5_3: { slug: 'glm_5_3', name: 'GLM 5.3', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', notes: 'Use OpenAI-compatible chat/completions for structured tools; discover live capacity before use.' },
+    glm_5_3_flash: { slug: 'glm_5_3_flash', name: 'GLM 5.3 Flash', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', notes: 'Public catalog does not guarantee available workers.' },
+    image_to_image: { slug: 'image_to_image', name: 'Image to image', category: 'ImageRestore', requiredInputFields: [], supportsInputPresignedUrls: true, inputSchemaKind: 'service_specific', notes: 'Discover prediction-specific required fields and variants live; do not assume one input contract.' },
+    glm_5_2: {
+        slug: 'glm_5_2',
+        name: 'GLM 5.2',
+        category: 'LLM',
+        requiredInputFields: ['messages'],
+        supportsInputPresignedUrls: false,
+        defaultPrediction: 'completions',
+        inputSchemaKind: 'chat_messages',
+        variants: ['default'],
+        maxTokensDefault: 5000,
+        contextWindow: 1000000,
+        license: 'MIT',
+        pricingHint: 'live list: input=154/output=484, divisor=1000000; raw split-price units, currency unverified',
+        liveStatus: 'live-public-2026-08-05',
+        notes: 'Canonical slug is glm_5_2. Live schema includes enable_thinking. Keep opt-in for bounded, verifiable worker tasks.'
+    },
     qwen3: {
         slug: 'qwen3',
         name: 'Qwen3',

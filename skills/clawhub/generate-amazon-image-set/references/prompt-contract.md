@@ -48,6 +48,9 @@ Good:
 | Slot | |
 | Objective | |
 | Device | |
+| A+ tier / module ID / module name | |
+| Dimension source / minimum size | |
+| Alternative text | |
 | Delivery size | |
 | Generation size | |
 | Product identity | |
@@ -60,4 +63,3 @@ Good:
 | Exclusions | |
 | Missing evidence | |
 | Status | READY / NEEDS_REVIEW / BLOCKED |
-

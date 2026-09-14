@@ -1,43 +1,60 @@
-## Description: <br>
-ElevenLabs scribe_v1 speech-to-text with auto language detection and optional speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs scribe_v1 speech-to-text with auto language detection and optional speaker diarization for subtitles, transcription, and meeting notes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to submit audio URLs or local audio files to dLazy's hosted ElevenLabs speech-to-text wrapper and receive transcription-oriented JSON results. It supports common transcription workflows such as subtitles, meeting notes, language detection, and optional speaker diarization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audio files, audio URLs, prompts, and parameters are processed through dLazy cloud infrastructure. <br>
-Mitigation: Use the skill only with audio that is appropriate for dLazy processing and review the service terms before submitting sensitive content. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration when the user logs in. <br>
-Mitigation: Use npx for non-persistent CLI execution when preferred, pass DLAZY_API_KEY per invocation when suitable, and rotate or revoke keys that are no longer needed. <br>
+## Use Case:
 
+Developers, creators, and external users use this skill to invoke dLazy's ElevenLabs speech-to-text wrapper for audio transcription, optional speaker diarization, subtitle preparation, and meeting-note workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async runs may return a generateId for polling with dlazy status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill invokes a third-party SaaS CLI and may send prompts, parameters, and audio inputs to dLazy endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with audio files or URLs you are comfortable uploading to dLazy and review the dLazy CLI source or package provenance before installation if you do not already trust it.
+
+Risk: Authentication can persist a dLazy API key in the local user configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when you do not want the key stored on disk, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Global installation of the dLazy CLI adds a persistent executable to the user environment.
+
+Mitigation: Prefer npx or an isolated environment over a global install when evaluating or limiting exposure.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-stt)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy product site](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with bash examples and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local or remote audio inputs, automatic language selection between zh and en, optional speaker diarization, asynchronous task polling, and saving returned assets.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release evidence; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

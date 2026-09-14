@@ -1,0 +1,47 @@
+{
+  "meta": {
+    "title": "Broken sitemap",
+    "artifact_type": "product-sitemap",
+    "artifact_version": "1.0",
+    "status": "proposed",
+    "language": "en",
+    "direction": "ltr",
+    "scope": "test",
+    "source": {
+      "type": "minimum-semantic-substrate",
+      "reference_id": "substrate-001",
+      "version": "1.0",
+      "readiness": "provisional"
+    }
+  },
+  "destinations": [
+    {
+      "id": "a",
+      "label": "A",
+      "purpose": "Test",
+      "destination_kind": "view",
+      "parent_id": "b",
+      "semantic_refs": ["item-a"],
+      "access_scope": "public",
+      "evidence_status": "Proposed"
+    },
+    {
+      "id": "b",
+      "label": "B",
+      "purpose": "Test",
+      "parent_id": "a",
+      "semantic_refs": [],
+      "access_scope": "public",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "links": [
+    {
+      "id": "broken-link",
+      "from": "a",
+      "to": "missing",
+      "type": "cross-link",
+      "evidence_status": "Proposed"
+    }
+  ]
+}

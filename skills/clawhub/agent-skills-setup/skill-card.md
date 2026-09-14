@@ -1,48 +1,69 @@
-## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when a user wants to migrate, back up, restore, compare, or move AI-coding-agent context across Cursor, Claude Code, Codex, Cline, Copilot, Windsurf, Gemini CLI, or another supported profile, including switching computers.
 
-## Publisher: <br>
-[luckycat133](https://clawhub.ai/user/luckycat133) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luckycat133](https://clawhub.ai/user/luckycat133)
 
-## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+## Use Case:
 
+Developers and engineers use this skill to plan, preview, apply, verify, back up, restore, and compare agent context across supported AI coding tools. It focuses on reviewed skills, instructions, rules, and MCP configuration with secret redaction, rollback, and offline operation.
 
-## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Rollback can delete or replace user-writable files when run with an untrusted manifest.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run rollback only with a manifest that was just generated and verified locally.
+
+Risk: Broad all-installed operations can affect more agent context than intended.
+
+Mitigation: Use plan-only mode first and review exact source and target paths before applying.
+
+Risk: Bundles and manifests can act as sensitive local control files.
+
+Mitigation: Treat bundles and manifests as sensitive artifacts and verify them before restore or rollback.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/luckycat133/skills/agent-skills-setup)
+- [IDE registry](references/ide-registry.md)
+- [Registry v2](references/registry-v2.json)
+- [Migration safety](references/migration-safety.md)
+- [MCP migration](references/mcp-migration.md)
+- [Object migration](references/object-migration.md)
+- [Verification](references/verification.md)
+- [Documentation freshness checks](references/doc-freshness-checks.json)
+- [Agent Skills specification](https://raw.githubusercontent.com/agentskills/agentskills/main/docs/specification.mdx)
+- [Cursor rules documentation](https://docs.cursor.com/context/rules)
+- [Claude Code skills documentation](https://code.claude.com/docs/en/skills)
+- [GitHub Copilot CLI documentation](https://docs.github.com/en/copilot/how-tos/copilot-cli)
+- [Gemini CLI skills documentation](https://github.com/google-gemini/gemini-cli/blob/main/docs/skills.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, paths, JSON plans, manifests, and verification summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Offline workflow; writes require reviewed plans and explicit consent.]
+
+## Skill Version(s):
+
+0.9.3 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -28,14 +28,14 @@ Other skills only do add + remove. **bring-list** does everything:
 
 ### 🧠 Built for AI agents
 - **Step-by-step Agent Setup Guide** — your agent knows exactly how to help you set up
-- **Privacy-first credential setup** — your agent asks whether you want to share credentials in chat or enter them privately in your own terminal
+- **Private terminal setup** — passwords are entered only in your own terminal, never in chat and never stored on disk
 - **Default list support** — say "put milk on the list" without naming the list every time
 - **Partial name matching** — "einkauf" finds "Einkaufsliste"
 - **Smart argument parsing** — the agent figures out what's an item and what's a list name
 
 ### 🔒 Clean & secure
-- Clean VirusTotal + static-analysis scans — no malware
-- Credentials stored locally with `chmod 600` (owner-only), and the skill is transparent about exactly what it stores
+- Passwords are never stored; the protected token cache is owner-only
+- No malware, remote code, or third-party telemetry
 - No external services — talks directly to Bring! API
 - Fully auditable: one bash script, ~850 lines, no magic
 
@@ -72,7 +72,6 @@ Your agent handles the rest.
 ```json
 {
   "email": "your@email.com",
-  "password": "YOUR_BRING_PASSWORD",
   "default_list": "Einkaufsliste",
   "country": "DE"
 }
@@ -86,17 +85,15 @@ Your agent handles the rest.
 - **Shared lists sync instantly** — your partner sees changes in real time
 - **Lists must be created/deleted in the Bring! app** — API limitation, not ours
 - **Special characters fully supported** — umlauts, quotes, emoji, all fine
-- **Token auto-refreshes** — no manual re-login needed
+- **Token auto-refreshes** — rerun setup only if the refresh token expires
 
 ## Privacy
 
 No third-party services, no telemetry, no cloud — the skill talks **only** to Bring!'s own API (`api.getbring.com`).
 
-During setup, your agent gives you the choice:
-- **Terminal (recommended):** enter your credentials privately in your own terminal via `read -s` — they never appear in the chat.
-- **Chat (convenient):** paste them in chat. They're written straight to a local config file and never repeated by the agent — but, like any chat message, they then live in that conversation's history.
+Run `scripts/bring.sh setup` in your own terminal. It reads the password with `read -s`, uses it for that login, and never writes it to disk or accepts it in chat. The email/profile lives in `~/.config/bring/credentials.json`; the owner-only access/refresh token lives in `~/.cache/bring/token.json` and remains a secret.
 
-**Where credentials live:** your Bring! email + password are stored locally in `~/.config/bring/credentials.json` (`chmod 600`) and sent only to Bring!. The password is kept so the skill can re-login when its cached token expires, so treat that file as a secret.
+If you used an older version that stored a password in `credentials.json`, rerun setup to replace it with the password-free profile.
 
 ## License
 

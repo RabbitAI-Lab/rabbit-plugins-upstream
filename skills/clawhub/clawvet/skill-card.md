@@ -1,38 +1,58 @@
-## Description: <br>
-Code quality and safety linter for OpenClaw skills that runs six analysis passes before installation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClawVet helps agents scan third-party OpenClaw skills before installation or trust decisions and report the scanner verdict, findings, and install/review/block call.
 
-## Publisher: <br>
-[mohibshaikh](https://clawhub.ai/user/mohibshaikh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohibshaikh](https://clawhub.ai/user/mohibshaikh)
 
-## Use Case: <br>
-Developers and engineers use clawvet to scan OpenClaw skills for code quality, safety, metadata, dependency, typosquat, and semantic-analysis issues before installation or during CI review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet) <br>
-- [Server-resolved GitHub provenance](https://github.com/MohibShaikh/clawvet) <br>
+Developers and agents use ClawVet to evaluate third-party OpenClaw skills from local folders, manifests, or ClawHub slugs before installing or trusting them. It supports skill safety review by returning a grade-driven verdict, the findings behind the score, and the recommended next action.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and optional JSON scanner output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires node and npm. Security evidence says the tool may inspect local skill folders and installed skills; enable watch mode, feedback, telemetry, alerts, badges, or remote scan features only when the related local access or network calls are acceptable, and prefer pinned npm versions in automated environments.] <br>
+Global
 
-## Skill Version(s): <br>
-0.8.1 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill depends on running the external clawvet npm package.
+
+Mitigation: Use a pinned clawvet version when fixed detection rules are required, and verify npm provenance or signatures before running scans.
+
+Risk: Remote or incomplete scans may inspect only a manifest or otherwise miss referenced skill behavior.
+
+Mitigation: Stage the full skill locally and require complete local coverage before relying on a scan verdict for installation.
+
+Risk: The optional gate changes OpenClaw install policy persistently and can fail closed on skills it cannot parse.
+
+Mitigation: Review the printed gate configuration and removal steps before enabling it, and scope blocking behavior with the documented threshold option when appropriate.
+
+## Reference(s):
+
+- [ClawVet ClawHub skill page](https://clawhub.ai/mohibshaikh/skills/clawvet)
+- [Project repository listed in skill metadata](https://github.com/MohibShaikh/clawvet)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and scanner result fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include scanner fields such as riskScore, riskGrade, recommendation, finding severity, and file or line locations.]
+
+## Skill Version(s):
+
+0.12.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

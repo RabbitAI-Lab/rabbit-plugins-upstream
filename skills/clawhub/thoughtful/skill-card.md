@@ -7,38 +7,36 @@ This skill is ready for commercial/non-commercial use. <br>
 [regalstreak](https://clawhub.ai/user/regalstreak) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
 
 
 ## Use Case: <br>
-External users use this skill to turn WhatsApp messages from direct chats and selected groups into relationship-aware summaries, pending-task tracking, and communication coaching prompts. It helps the user notice replies owed, follow-ups, commitments, important dates, and conversation starters. <br>
+External users use this skill to turn selected WhatsApp direct messages and whitelisted group chats into relationship-aware summaries, pending-task reminders, and communication coaching. It helps users notice commitments, tone shifts, quiet conversations, and suggested follow-ups. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles private WhatsApp message content and relationship inferences that may be included in prompts sent to an LLM. <br>
-Mitigation: Confirm exactly which chats are included, exclude sensitive chats, and review generated prompts before using the skill with real WhatsApp data. <br>
-Risk: Summary delivery and recurring automation can send private conversation summaries to a configured Telegram destination. <br>
-Mitigation: Review and change delivery configuration, including chat or topic identifiers and cron schedules, before enabling automated summaries. <br>
-Risk: Local data files store message-derived context, tasks, contacts, summaries, and CRM state in plaintext. <br>
-Mitigation: Apply local file-permission controls and define retention or deletion practices for the data directory. <br>
+Risk: Private WhatsApp-derived content is processed by an LLM workflow and may be delivered to a Telegram destination. <br>
+Mitigation: Confirm the destination topic before enabling delivery, limit tracked chats to direct messages and groups you intend to summarize, and avoid enabling the skill unless this data flow is acceptable. <br>
+Risk: The skill stores local JSON state, message context, summaries, and prompt files that may contain sensitive relationship or conversation details. <br>
+Mitigation: Review where the data directory is stored, set an appropriate retention policy, and delete or minimize raw message context after each run when possible. <br>
+Risk: Scheduled sync and summary jobs can repeatedly process new private messages without manual review. <br>
+Mitigation: Verify the cron schedule, understand how to disable the jobs, and test a manual run before enabling recurring automation. <br>
 
 
 ## Reference(s): <br>
-- [Thoughtful ClawHub skill page](https://clawhub.ai/regalstreak/skills/thoughtful) <br>
+- [Thoughtful ClawHub listing](https://clawhub.ai/regalstreak/thoughtful) <br>
 - [Publisher profile](https://clawhub.ai/user/regalstreak) <br>
-- [Skill documentation](README.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with supporting shell commands and JSON configuration or state files] <br>
+**Output Format:** [Markdown summaries, shell commands, JSON configuration, and natural-language guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local WhatsApp-derived data to create an LLM prompt and relationship summary; review generated guidance before acting on it.] <br>
+**Other Properties Related to Output:** [Reads WhatsApp message and chat data via wacli-readonly, writes local JSON state and prompt files, and prepares summaries for LLM-assisted delivery.] <br>
 
 ## Skill Version(s): <br>
-1.3.0 (source: frontmatter and server release metadata) <br>
+1.2.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

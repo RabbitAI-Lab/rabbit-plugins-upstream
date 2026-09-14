@@ -1,43 +1,57 @@
-## Description: <br>
-Plan and execute fair GitLab hackathon participation, including Quarterly and Transcend Hackathons, by analyzing rules, selecting qualifying issues/MRs, tracking scoring levers, and keeping an exploit watchlist. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plan and execute fair GitLab hackathon participation, including Quarterly and Transcend Hackathons, by analyzing rules, selecting qualifying issues/MRs, tracking scoring levers, and keeping an exploit watchlist.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and contributors use this skill to plan fair GitLab hackathon participation, verify event requirements, select qualifying issues and merge requests, and keep contributions reviewable and rule-compliant. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated GitLab commands or recommendations may affect public issues, merge requests, labels, closures, or comments. <br>
-Mitigation: Use a GitLab token with the minimum required scope and review every glab command before execution. <br>
-Risk: Hackathon rules, dates, scoring, and prize requirements may change between runs. <br>
-Mitigation: Verify the current GitLab hackathon pages and API before optimizing work or submitting entries. <br>
+## Use Case:
 
+Developers and external contributors use this skill to plan GitLab hackathon participation, choose qualifying work, track scoring requirements, and avoid unfair or spam-like activity.
 
-## Reference(s): <br>
-- [GitLab Quarterly Hackathon](https://contributors.gitlab.com/hackathon) <br>
-- [Current GitLab Hackathon API](https://contributors.gitlab.com/api/v1/hackathons/current) <br>
-- [GitLab Transcend Hackathon](https://contributors.gitlab.com/transcend-hackathon) <br>
-- [GitLab Contribution Points](https://contributors.gitlab.com/docs/user-guide#contribution-points) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference glab, jq, curl, and a GitLab token configured with the minimum required scope.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+Risk: GitLab actions such as comments, labels, issue closures, and merge requests can affect public projects or hackathon scoring.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed GitLab actions before execution and use a token with limited scopes.
+
+Risk: Outdated event rules, dates, score values, or prize requirements can lead to ineligible or unfair participation.
+
+Mitigation: Verify current hackathon pages, API data, and contribution point guidance before acting.
+
+## Reference(s):
+
+- [GitLab Quarterly Hackathon](https://contributors.gitlab.com/hackathon)
+- [Current GitLab Hackathon API](https://contributors.gitlab.com/api/v1/hackathons/current)
+- [GitLab Transcend Hackathon](https://contributors.gitlab.com/transcend-hackathon)
+- [GitLab Contribution Points](https://contributors.gitlab.com/docs/user-guide#contribution-points)
+- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-hackathon)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires GitLab tooling and a GitLab token for commands that query or act on GitLab resources.]
+
+## Skill Version(s):
+
+1.91.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

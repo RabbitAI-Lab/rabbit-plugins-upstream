@@ -1,47 +1,60 @@
-## Description: <br>
-Manage Bring! shopping lists by helping an agent set up credentials, list available shopping lists, add or remove items, check items off, restore completed items, and run batch operations through the Bring API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Bring! shopping lists by helping an agent set up Bring!, add, view, complete, uncomplete, remove, and batch-update grocery items through the Bring API.
 
-## Publisher: <br>
-[maikimolto](https://clawhub.ai/user/maikimolto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maikimolto](https://clawhub.ai/user/maikimolto)
 
-## Use Case: <br>
-External users and agents use this skill to manage Bring shopping lists from a local shell environment. It is suited for grocery-list setup and recurring list maintenance, including default-list selection, item lookup, adding, completing, uncompleting, and removing items. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores a reusable Bring email and password locally, and the stored password can grant ongoing access to the Bring account from this machine. <br>
-Mitigation: Prefer terminal credential entry, store the file with owner-only permissions, avoid password reuse, and treat ~/.config/bring/credentials.json as a secret. <br>
-Risk: If a user chooses chat-based setup, their Bring credentials become part of the conversation history. <br>
-Mitigation: Use the terminal setup path unless the user explicitly accepts the chat-history tradeoff after being warned. <br>
-Risk: Remove and batch-remove commands delete items, and changes to shared Bring lists sync immediately to other devices. <br>
-Mitigation: Confirm destructive actions with the user before execution, especially when the target list is shared. <br>
-Risk: The skill relies on an unofficial Bring API flow that requires a direct Bring password and communicates with api.getbring.com. <br>
-Mitigation: Make sure the user has a direct Bring password, not only Google or Apple sign-in, and keep network expectations limited to Bring's API. <br>
+## Use Case:
 
+External users and their agents use this skill to set up Bring! access and manage personal or shared shopping lists from natural-language requests. It supports adding, viewing, checking off, unchecking, and removing items, including batch operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maikimolto/skills/bring-list) <br>
-- [Publisher profile](https://clawhub.ai/user/maikimolto) <br>
-- [Bring website](https://getbring.com) <br>
-- [Bring API endpoint](https://api.getbring.com/rest) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and jq; writes local credential and token files when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.7 (source: evidence.release.version and package.json) <br>
+Risk: The built-in help gives unsafe password-storage guidance that conflicts with the skill's security claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only the interactive setup flow, do not paste a Bring password into chat, and do not add a password field to ~/.config/bring/credentials.json.
+
+Risk: The skill stores a Bring refresh token locally.
+
+Mitigation: Review before installing and treat the local token cache as sensitive account material.
+
+Risk: Add, complete, and remove actions modify shopping lists immediately, including shared lists.
+
+Mitigation: Confirm the target list and destructive actions before running commands that complete or remove items.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/maikimolto/skills/bring-list)
+- [Publisher Profile](https://clawhub.ai/user/maikimolto)
+- [Bring Website](https://getbring.com)
+- [Bring API Endpoint](https://api.getbring.com/rest)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires curl and jq; uses a local Bring profile and protected token cache.]
+
+## Skill Version(s):
+
+1.2.8 (source: package.json and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

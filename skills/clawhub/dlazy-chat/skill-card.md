@@ -1,45 +1,60 @@
-## Description: <br>
-Chat with the dlazy sandbox agent, a project-scoped assistant that runs skills end-to-end over multiple turns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat with the dLazy sandbox agent, a project-scoped assistant for multi-turn work that can run skills end-to-end.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to start or continue project-scoped conversations with dLazy's hosted sandbox agent, discover available skills and projects, and run multi-turn work through the dlazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words could route ordinary chat or attached files to dLazy unintentionally. <br>
-Mitigation: Use explicit requests such as 'use dlazy chat' and review attached files before invocation. <br>
-Risk: Prompts and files passed with --files are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Avoid attaching sensitive files unless use of the dLazy hosted service is acceptable for that data. <br>
-Risk: The CLI may store a dLazy API key in the local user configuration. <br>
-Mitigation: Use npx for on-demand execution when preferred, and rotate or revoke stored API keys when access should change. <br>
+## Use Case:
 
+Developers and external users use this skill to start or continue project-scoped, multi-turn conversations with the dLazy hosted sandbox agent, including chats that reference existing projects, selected skills, and attached local files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-chat) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or terminal text with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Streams replies through the dlazy CLI; local files attached with --files are uploaded before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends prompts, options, and attached files to the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only attach files and share content that are appropriate to upload to dLazy; review organizational data-handling requirements before use.
+
+Risk: The dLazy API key is stored locally or supplied through the environment.
+
+Mitigation: Treat the API key as a credential, use least-persistent authentication where practical, and rotate or revoke it if the machine or package environment is suspected of compromise.
+
+Risk: Installing the CLI globally creates a persistent executable from an npm package.
+
+Mitigation: Review the dLazy CLI source or package before installation and prefer the pinned npx path unless a global binary is needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-chat)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Terminal chat output and Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May stream responses from the hosted dLazy agent and may reference files uploaded through the dLazy CLI.]
+
+## Skill Version(s):
+
+1.2.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

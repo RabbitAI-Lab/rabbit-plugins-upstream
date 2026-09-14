@@ -1,49 +1,64 @@
-## Description: <br>
-AI-powered active-ingredient accumulation trend assessment for medicinal herbs using high-resolution leaf images to estimate visual indicators, compare them with cultivar reference features, and report an accumulation trend level for harvest-window decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes images or videos of medicinal herb leaves to estimate active-ingredient accumulation trends from visual indicators and return a Low, Medium, High, or Peak trend assessment with harvest guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users in medicinal herb cultivation bases, GAP planting bases, herb cooperatives, and pharmaceutical raw-material operations use this skill to analyze leaf images or video and receive active-ingredient accumulation trend levels and harvest timing guidance. Agents can also query prior cloud-hosted analysis reports for the same skill workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends media and report-history requests to external services. <br>
-Mitigation: Review destination services, network policy, and data handling requirements before installation or use. <br>
-Risk: The skill can silently create or reuse a service identity and associate reports with that identity. <br>
-Mitigation: Run only in environments where this account linkage is approved, and avoid using sensitive media unless the linked cloud account is acceptable. <br>
-Risk: The skill stores authentication tokens in a local workspace database. <br>
-Mitigation: Limit workspace access, rotate or remove tokens when decommissioning the skill, and avoid shared workspaces unless token persistence is acceptable. <br>
-Risk: The skill includes unrelated pet-health or generic analysis components alongside the herb-analysis workflow. <br>
-Mitigation: Review the packaged components and exposed commands before deployment to confirm only the intended workflow is enabled. <br>
-Risk: The analysis estimates herb quality trends from visual features and does not provide chemical testing data. <br>
-Mitigation: Use results as harvest-decision support and confirm formal quality claims with appropriate chemical or regulatory testing. <br>
+## Use Case:
 
+External users and developers in medicinal herb cultivation use this skill to evaluate leaf imagery from planting bases, cooperatives, and pharmaceutical raw-material operations. It supports harvest-window decisions by producing a visual trend estimate and related report output, not formal chemical testing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call external analysis and report-history services; local inputs are limited to supported image/video formats and documented file-size constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+Risk: The skill may upload selected images or videos to a remote service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when remote media processing is acceptable, and avoid submitting sensitive imagery unless the service and data handling practices have been reviewed.
+
+Risk: The skill may silently create or reuse a local identity, query cloud report history, and retain account tokens.
+
+Mitigation: Review credential storage, token deletion, and identity/report-history controls before deployment.
+
+Risk: Release security guidance calls for moving away from development HTTP endpoints and enforcing HTTPS.
+
+Mitigation: Use reviewed production endpoints over HTTPS before broad or commercial use.
+
+Risk: The analysis estimates herbal ingredient accumulation from visual features and is not a chemical assay.
+
+Mitigation: Use the result as harvest-decision support and confirm formal quality assessments with appropriate laboratory or pharmacopeia testing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis)
+- [API Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown report or JSON-style structured analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include visual trend level, harvest timing guidance, risk notes, report links, or a history table.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

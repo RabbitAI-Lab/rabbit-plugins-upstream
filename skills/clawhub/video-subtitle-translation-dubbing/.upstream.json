@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/video-subtitle-translation-dubbing",
   "slug": "video-subtitle-translation-dubbing",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1782838413789,
-  "contentHash": "71c902d4414f995cd069c11e0e65df75dbe42222f5f3d70dc0fb0362b4ebd691",
-  "fetchedAt": "2026-07-26T18:21:54.686Z"
+  "version": "0.1.4",
+  "updatedAt": 1789229832502,
+  "contentHash": "d8a25bd928d9bfd756c59efadeee18c2d845c28abfa8d9a4ab92665bb2507a0c",
+  "fetchedAt": "2026-09-14T14:43:33.066Z"
 }

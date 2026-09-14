@@ -1,0 +1,56 @@
+{
+  "version": "1.0.1",
+  "license": "MIT-0",
+  "product_name": "ProPaymun Information Architecture",
+  "canonical_source": "SKILL.md",
+  "semantic_model": "schema/semantic-ia.schema.json",
+  "companion_models": {
+    "product_sitemap": "schema/product-sitemap.schema.json",
+    "user_flow": "schema/user-flow.schema.json"
+  },
+  "routing": "capability-first",
+  "interaction": "intent-calibrated-adaptive-sufficiency-with-stage-complete-closure",
+  "conversation_presentation": "plain-language-with-internal-status-labels-hidden",
+  "recommendation_boundary": "adjacent-product-and-growth-commitments-require-current-evidence-or-acceptance",
+  "continuation": "portable-note-default-explicit-persistence-only",
+  "canonical_handoff": "ia-reference-lock",
+  "capabilities": {
+    "core": "information-architecture",
+    "companions": ["product-sitemap", "user-flow"],
+    "standalone_companion_source": "versioned-minimum-semantic-substrate"
+  },
+  "packages": {
+    "agent_skill": {
+      "display_name": "Agent Skill Package",
+      "path": "packages/agent-skill/propaymun-information-architecture.zip",
+      "use_when": "The host can install a native Agent Skill ZIP or skill directory."
+    },
+    "workspace_kit": {
+      "display_name": "Workspace Kit",
+      "knowledge_path": "packages/workspace-kit/propaymun-ia-workspace-kit.md",
+      "instructions_path": "packages/workspace-kit/WORKSPACE_INSTRUCTIONS.md",
+      "use_when": "The host supports Projects, Gems, custom agents, persistent knowledge, or file-capable chats."
+    }
+  },
+  "visual_builder_handoff": {
+    "display_name": "Visual Builder Handoff",
+    "reference": "references/visual-builder-handoff.md",
+    "generator": "scripts/export_builder_handoff.py",
+    "targets": ["figma-make", "lovable", "generic"],
+    "requires": "semantic-ia-ready-for-intended-purpose",
+    "intents": ["ia-blueprint", "product-prototype"],
+    "outputs": ["markdown-specification", "short-launch-text"]
+  },
+  "derived_outputs": {
+    "principle": "explicit-request-only",
+    "source": "canonical-semantic-ia",
+    "requires": "ia-reference-lock-and-readiness-check",
+    "examples": ["diagram", "ui", "prototype", "document", "presentation", "technical-mapping"],
+    "unknown_capability_fallback": "portable-self-contained-handoff"
+  },
+  "legacy_download_aliases": {
+    "install/claude-ai/propaymun-information-architecture.zip": "packages/agent-skill/propaymun-information-architecture.zip",
+    "install/universal-web/propaymun-information-architecture.md": "packages/workspace-kit/propaymun-ia-workspace-kit.md",
+    "install/universal-web/PROJECT_INSTRUCTIONS.md": "packages/workspace-kit/WORKSPACE_INSTRUCTIONS.md"
+  }
+}

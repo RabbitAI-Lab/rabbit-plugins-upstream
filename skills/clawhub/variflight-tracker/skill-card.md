@@ -1,41 +1,57 @@
-## Description: <br>
-基于飞常准数据，提供航班实时动态、延误分析、舒适度评分、机场天气查询，覆盖全球航班，零配置即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于飞常准数据，提供航班实时动态、延误分析、舒适度评分、机场天气查询，覆盖全球航班，零配置即用。暑期航班实时动态
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel assistants use this skill to check real-time flight status, route delays, comfort scores, and airport weather before or during trips. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight numbers, routes, dates, and airport/weather queries are sent through the publisher's proxy service and then to VariFlight. <br>
-Mitigation: Avoid entering sensitive itinerary details unless the publisher's proxy is trusted, and review data-sharing expectations before deployment. <br>
-Risk: The source includes a reusable fallback proxy token. <br>
-Mitigation: Rotate and remove the embedded fallback token, and provide proxy credentials through the PROXY_TOKEN environment variable. <br>
+## Use Case:
 
+Travelers, travel support agents, and operations users use this skill to check live flight status, route delay conditions, comfort comparisons, and airport weather from flight numbers, routes, dates, airports, or city names.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/variflight-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown tables and summaries, with JSON error or empty-result objects] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include flight status, delay analysis, route summaries, comfort comparisons, airport weather, and flight-impact notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release evidence) <br>
+Risk: Flight numbers, routes, dates, and airport queries are sent through the publisher's fixed proxy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data flow is acceptable, and avoid submitting sensitive travel details unless the proxy operator is trusted.
+
+Risk: The source includes a shared proxy token.
+
+Mitigation: The publisher should remove and rotate the embedded token and require secure runtime configuration.
+
+Risk: Broad activation patterns can cause the skill to handle general flight or airport-weather requests.
+
+Mitigation: Review activation behavior before routine deployment and tighten routing patterns where needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/variflight-tracker)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown summaries with tables, plus JSON-formatted error messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs flight status, route status, comfort scores, and airport weather assessments for user-provided travel queries.]
+
+## Skill Version(s):
+
+1.1.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,65 @@
-## Description: <br>
-Guides agents to generate high-contrast, resonant, story-driven short video spoken scripts using a seven-step structure for hooks, narrative, viewpoint, and punchline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to generate short-video spoken scripts with contrast hooks, resonant story structure, colloquial delivery, and personal IP positioning.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators and agents use this skill to turn a persona, audience pain point, or topic into a short video spoken script with a colloquial rhythm, concrete story details, and a memorable closing line. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes an image-generation workflow that can install or run the dLazy CLI and execute terminal commands. <br>
-Mitigation: Install or run the CLI only when the user intentionally wants dLazy image generation, and require explicit user confirmation before each command. <br>
-Risk: dLazy login or API-key setup may store credentials in the local CLI configuration. <br>
-Mitigation: Use scoped credentials where possible, protect local configuration files, and rotate or revoke API keys when no longer needed. <br>
-Risk: Prompts and media paths used with the CLI may send prompt data or upload local media to dLazy services. <br>
-Mitigation: Avoid sending confidential prompts or files unless the user has approved that data transfer. <br>
+## Use Case:
 
+External creators, marketers, and content teams use this skill to draft short-video spoken scripts for character stories, audience pain points, and personal IP viewpoint content. The skill can also guide dLazy CLI setup and external generation workflows when users intentionally choose that path.
 
-## Reference(s): <br>
-- [Dlazy Text Spoken Script on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-text-spoken-script) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text script content with optional shell command and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primary script output follows a seven-step spoken-script structure; bundled dLazy CLI image-generation steps require user confirmation before terminal execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The skill is presented as a spoken-script helper but can lead an agent to install and run an external dLazy CLI workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and enable it only when the external dLazy workflow is intended.
+
+Risk: The dLazy CLI workflow requires API authentication and may store a reusable API key in local configuration.
+
+Mitigation: Use scoped credentials where possible, protect the local configuration file, and rotate or revoke keys from the dLazy dashboard when access is no longer needed.
+
+Risk: Prompts and supplied local image, video, or audio paths may be sent or uploaded to dLazy services.
+
+Mitigation: Do not provide sensitive prompts or media unless external processing is acceptable and the user has the right to upload the content.
+
+Risk: Installing or invoking npm packages introduces third-party package and account dependencies.
+
+Mitigation: Review the referenced npm package and source repository, and prefer pinned or approved installation paths in managed environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-text-spoken-script)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose with optional shell command snippets and generated media URLs when the dLazy CLI workflow is used.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should follow the seven-step spoken-script structure unless the user requests a different presentation.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release metadata; artifact frontmatter reports 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

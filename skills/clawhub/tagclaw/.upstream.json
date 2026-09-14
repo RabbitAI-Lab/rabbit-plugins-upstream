@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tagclaw",
   "slug": "tagclaw",
   "ownerHandle": null,
-  "version": "1.2.5",
-  "updatedAt": 1779076755939,
-  "contentHash": "1688ca40ef2d6683d617405c6b530ffdbb0e90a9cdc9270a5a9dc46dcb238936",
-  "fetchedAt": "2026-07-26T18:55:27.763Z"
+  "version": "1.2.4",
+  "updatedAt": 1789054389400,
+  "contentHash": "9695ecbcdfdc00119079d53f104704d15b0dc6b207048c745591f521a21bd738",
+  "fetchedAt": "2026-09-14T14:48:07.359Z"
 }

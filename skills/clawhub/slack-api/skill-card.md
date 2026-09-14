@@ -1,43 +1,83 @@
-## Description: <br>
-Slack provides Maton-managed OAuth access to Slack APIs for sending messages, managing channels, searching conversations, and automating workspace workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Slack API integration with managed OAuth for sending messages, managing channels, searching conversations, and automating Slack workflows.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Slack workspaces through Maton for messaging, channel management, user lookup, search, reactions, files, and workflow automation. Because the skill can read and modify Slack data, users should review requested actions before approval, especially destructive or private-channel operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Slack Skill](https://clawhub.ai/byungkyu/skills/slack-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Slack API Methods](https://api.slack.com/methods) <br>
-- [Slack Web API Reference](https://api.slack.com/web) <br>
-- [Slack Block Kit Reference](https://api.slack.com/reference/block-kit) <br>
-- [Slack Rate Limits](https://api.slack.com/docs/rate-limits) <br>
+Developers and operators use this skill to let an agent perform approved Slack workspace tasks through Maton, such as listing channels and users, posting or updating messages, searching messages and files, and setting up narrowly scoped Slack automations.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Slack OAuth connection managed through Maton.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.11 (source: ClawHub release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Installing the Maton CLI or SDK introduces ordinary third-party package supply-chain risk.
+
+Mitigation: Install only when Maton and the package source are trusted, and keep package versions pinned to reviewed releases.
+
+Risk: Slack OAuth scopes and connections can expose workspace messages, files, users, and channel metadata available to the connected account.
+
+Mitigation: Prefer OAuth, grant only the scopes needed for the task, specify the intended connection when multiple connections exist, and revoke unused connections.
+
+Risk: Write operations and automation setup can change Slack content or create ongoing workflows.
+
+Mitigation: Default to read and list calls, then get explicit user confirmation for every write, connection creation, hosted function, trigger, and destination change.
+
+Risk: Trigger destinations can continuously forward Slack event data or other connected-app event data to another host.
+
+Mitigation: Keep destinations on Maton-controlled endpoints unless the user explicitly approves a named third-party host, and forward only the minimum fields required.
+
+Risk: Raw API keys and event payloads may leak through logs, command lines, files, or untrusted local handlers.
+
+Mitigation: Prefer OAuth over API keys, never print or persist credentials, treat event payloads as untrusted data, and avoid local event execution unless the user provided and approved the handler.
+
+## Reference(s):
+
+- [ClawHub Slack Skill](https://clawhub.ai/byungkyu/skills/slack-api)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Slack API Methods](https://docs.slack.dev/reference/methods)
+- [Slack Block Kit Reference](https://docs.slack.dev/block-kit/)
+- [Slack Message Formatting](https://docs.slack.dev/messaging/formatting-message-text)
+- [Slack Web API Rate Limits](https://docs.slack.dev/apis/web-api/rate-limits)
+- [Slack Trigger Reference](artifact/references/slack/triggers.md)
+- [Time Trigger Reference](artifact/references/time/triggers.md)
+- [Calendly Trigger Reference](artifact/references/calendly/triggers.md)
+- [GitHub Trigger Reference](artifact/references/github/triggers.md)
+- [Gmail Trigger Reference](artifact/references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](artifact/references/hubspot/triggers.md)
+- [Linear Trigger Reference](artifact/references/linear/triggers.md)
+- [Notion Trigger Reference](artifact/references/notion/triggers.md)
+- [Stripe Trigger Reference](artifact/references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request bodies, and Python or JavaScript SDK examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, raw HTTP request examples, SDK snippets, trigger configuration guidance, and safety checks for user approval.]
+
+## Skill Version(s):
+
+1.2.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
