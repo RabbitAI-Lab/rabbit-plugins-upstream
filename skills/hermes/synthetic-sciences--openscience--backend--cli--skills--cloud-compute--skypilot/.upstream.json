@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/skypilot",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/skypilot",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/skypilot",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "51fcb6e9ff4bcf47afb51bb2c1bd824f45dec69bdd5b6238733cebbab9f79546",
+  "fetchedAt": "2026-09-14T14:12:09.849Z"
+}

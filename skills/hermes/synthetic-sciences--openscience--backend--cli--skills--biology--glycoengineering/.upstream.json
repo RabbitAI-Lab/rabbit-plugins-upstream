@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/glycoengineering",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/glycoengineering",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/glycoengineering",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "bde5c15af022de8ce232c45ad2a337e618bb0f206892354ec2fba32f4a5a8068",
+  "fetchedAt": "2026-09-14T14:12:09.751Z"
+}

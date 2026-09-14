@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/verl",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/verl",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/verl",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "a2236c6ac56baeb0ef89b877516f5a54b5c222afdb2caa8c325248cad738287f",
+  "fetchedAt": "2026-09-14T14:12:09.887Z"
+}

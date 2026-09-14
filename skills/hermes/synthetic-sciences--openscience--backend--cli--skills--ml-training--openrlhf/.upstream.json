@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/openrlhf",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/openrlhf",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/openrlhf",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "5a7f8b76ec00487c2b6c1f7096fe72e327816df5b49e599be63a74afb68065fd",
+  "fetchedAt": "2026-09-14T14:12:09.799Z"
+}

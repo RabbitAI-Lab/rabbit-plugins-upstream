@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/neuropixels-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/neuropixels-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/neuropixels-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "d875ac6275940b43c2694b364d84340fc221ef83221679249ff18f168ebd1307",
+  "fetchedAt": "2026-09-14T14:12:09.793Z"
+}

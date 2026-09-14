@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pydicom",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pydicom",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pydicom",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "189acf976e77a186769cd861451de91178dc41c909d114a257d6d1dc46965aaf",
+  "fetchedAt": "2026-09-14T14:12:09.823Z"
+}

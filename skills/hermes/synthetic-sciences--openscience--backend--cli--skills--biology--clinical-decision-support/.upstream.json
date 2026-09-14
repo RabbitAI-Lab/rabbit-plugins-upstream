@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/clinical-decision-support",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/clinical-decision-support",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/clinical-decision-support",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "a465651f7f019f4c5e8630d2f0929401ad7e874651efdc75104c1ef447d78d1b",
+  "fetchedAt": "2026-09-14T14:12:09.710Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/fluid-dynamics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/fluid-dynamics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/fluid-dynamics",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "ae0c313aaf8da0a2b7ff48df3e969e0f32af4aa317d043d336dc882c929e4bfc",
+  "fetchedAt": "2026-09-14T14:12:09.742Z"
+}

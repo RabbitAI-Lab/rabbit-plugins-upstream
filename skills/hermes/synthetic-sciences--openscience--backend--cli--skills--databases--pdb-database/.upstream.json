@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/pdb-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/pdb-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/pdb-database",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "9082d5ff11bf331f5d8b80499e2ae1604ad35a10d0943fd9258ff23195cb3348",
+  "fetchedAt": "2026-09-14T14:12:09.806Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/database-lookup",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/database-lookup",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/database-lookup",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "728df4556af4de615a66140777daa678f442366a19eacd04d3bc7bad1f38c5be",
+  "fetchedAt": "2026-09-14T14:12:09.721Z"
+}

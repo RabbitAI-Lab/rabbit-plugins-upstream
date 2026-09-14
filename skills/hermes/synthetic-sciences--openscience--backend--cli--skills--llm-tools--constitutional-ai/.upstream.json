@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/constitutional-ai",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/constitutional-ai",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/constitutional-ai",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "d2a17b0b2cbd906cf540e41e7c7cfd0b4ae01830e6c095a930f069792d21ec55",
+  "fetchedAt": "2026-09-14T14:12:09.716Z"
+}

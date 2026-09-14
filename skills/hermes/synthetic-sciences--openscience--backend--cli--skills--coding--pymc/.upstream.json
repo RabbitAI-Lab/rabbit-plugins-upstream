@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/pymc",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/pymc",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/pymc",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "dcd0dc5ba1c921820165af3eee444b541cbc2c16898329ee58edc68ed88343d1",
+  "fetchedAt": "2026-09-14T14:12:09.825Z"
+}

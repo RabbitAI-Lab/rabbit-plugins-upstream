@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/datamol",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/datamol",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/datamol",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "63773a65b3c059d65c6dd21b8df40f947c2c14656ada9bc537d801a58424a586",
+  "fetchedAt": "2026-09-14T14:12:09.723Z"
+}

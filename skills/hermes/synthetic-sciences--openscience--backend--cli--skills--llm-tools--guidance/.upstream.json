@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/guidance",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/guidance",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/guidance",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "50579b9cc540147b531ef49891e61526d7456c61c7ec9271eae845a82ea61161",
+  "fetchedAt": "2026-09-14T14:12:09.753Z"
+}

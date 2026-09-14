@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/uncertainty-and-units",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/uncertainty-and-units",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/uncertainty-and-units",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "da85a7cb061a58bb25b392fccb068092d4dde81cc03d50f397910ab4c5bba389",
+  "fetchedAt": "2026-09-14T14:12:09.876Z"
+}

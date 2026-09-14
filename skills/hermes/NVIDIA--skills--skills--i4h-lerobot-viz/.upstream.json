@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-lerobot-viz",
+  "identifier": "NVIDIA/skills/skills/i4h-lerobot-viz",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-lerobot-viz",
+  "branch": "main",
+  "pushedAt": "2026-09-13T17:33:27Z",
+  "contentHash": "fd26d522da5611bbf79c6273aae94bf110f6c7c385ab2caec3ffba435ff5fdeb",
+  "fetchedAt": "2026-09-14T14:12:08.064Z"
+}

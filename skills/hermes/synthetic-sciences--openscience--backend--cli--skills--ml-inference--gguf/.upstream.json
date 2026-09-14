@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/gguf",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/gguf",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/gguf",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "fd3d5c7d3f1bc40c8e859b0153326ac2109e10036a653a82af6ef85213d4cb63",
+  "fetchedAt": "2026-09-14T14:12:09.750Z"
+}

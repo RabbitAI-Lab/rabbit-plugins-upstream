@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/nemo-curator",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/nemo-curator",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/nemo-curator",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "0129d98c46fdb3316a1e2d1403936053f97a664aafee4167b11ec9db671aca0d",
+  "fetchedAt": "2026-09-14T14:12:09.789Z"
+}

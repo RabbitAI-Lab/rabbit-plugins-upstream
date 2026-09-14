@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/adaptyv",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/adaptyv",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/adaptyv",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "41857bba15f3569aba32d6dcb9b12d58a5d40971ced879506665a21f176cf262",
+  "fetchedAt": "2026-09-14T14:12:09.690Z"
+}

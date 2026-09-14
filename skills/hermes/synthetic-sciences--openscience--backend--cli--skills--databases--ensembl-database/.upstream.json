@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/ensembl-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/ensembl-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/ensembl-database",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "568f5f688ec004b8966d29f25fa8e3e399a262f8ec1ba9fe94a52d991110b281",
+  "fetchedAt": "2026-09-14T14:12:09.736Z"
+}

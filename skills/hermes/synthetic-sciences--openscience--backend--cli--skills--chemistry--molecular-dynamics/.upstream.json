@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molecular-dynamics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molecular-dynamics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molecular-dynamics",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "629b4d03b7e72bff7d9fd36622bdd1d625a338e4d562a4ea890ee8730fc916ad",
+  "fetchedAt": "2026-09-14T14:12:09.786Z"
+}

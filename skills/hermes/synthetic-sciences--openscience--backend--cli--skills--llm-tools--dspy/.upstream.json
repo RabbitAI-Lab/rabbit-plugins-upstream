@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/dspy",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/dspy",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/dspy",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "7e3e7fe01b9860276a6187aa405d6faac32d92086109144c718ecf0a0862f0c8",
+  "fetchedAt": "2026-09-14T14:12:09.735Z"
+}

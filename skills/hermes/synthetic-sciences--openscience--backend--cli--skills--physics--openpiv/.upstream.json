@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/openpiv",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/openpiv",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/openpiv",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "469eb991af01a0c45563c39becbd2569d867aedb38e67161b91ab08b9f9f850f",
+  "fetchedAt": "2026-09-14T14:12:09.798Z"
+}

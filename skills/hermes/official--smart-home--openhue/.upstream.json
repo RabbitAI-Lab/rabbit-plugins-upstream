@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/smart-home/openhue",
+  "identifier": "official/smart-home/openhue",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/smart-home/openhue",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:58:09Z",
+  "contentHash": "6fcb1d29a6047986063b70fbba55fac71327274a7b9fc8ee18721e28e5bf5071",
+  "fetchedAt": "2026-09-14T14:12:20.096Z"
+}

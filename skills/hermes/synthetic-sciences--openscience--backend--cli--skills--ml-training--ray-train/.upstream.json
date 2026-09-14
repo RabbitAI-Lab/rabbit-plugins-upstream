@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/ray-train",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/ray-train",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/ray-train",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "fa4790661f3763a048f01636e29cc258e85ee9c3538ed10b6296d8fde69c3eec",
+  "fetchedAt": "2026-09-14T14:12:09.834Z"
+}

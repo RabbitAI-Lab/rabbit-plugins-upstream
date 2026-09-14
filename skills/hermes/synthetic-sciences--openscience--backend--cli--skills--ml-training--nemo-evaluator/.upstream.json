@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/nemo-evaluator",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/nemo-evaluator",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/nemo-evaluator",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "d166cd12d13a73923b3b95460709a06fa1a99bb573b6107526946077c8d02c60",
+  "fetchedAt": "2026-09-14T14:12:09.790Z"
+}

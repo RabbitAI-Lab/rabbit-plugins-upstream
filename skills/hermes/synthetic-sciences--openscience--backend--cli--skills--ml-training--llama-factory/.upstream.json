@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/llama-factory",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/llama-factory",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/llama-factory",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "5f696195eb7323f5bcf7a6bf61c4f4fd512d4196c274598f4b65b219a447a12d",
+  "fetchedAt": "2026-09-14T14:12:09.774Z"
+}

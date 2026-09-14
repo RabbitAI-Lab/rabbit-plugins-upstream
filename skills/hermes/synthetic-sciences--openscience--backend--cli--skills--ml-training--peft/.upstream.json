@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/peft",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/peft",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/peft",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "4ddc5c0b5bcc241f7577995263c66ad6feeeaeaa1d5ba34d34b680c887ddaaf0",
+  "fetchedAt": "2026-09-14T14:12:09.807Z"
+}

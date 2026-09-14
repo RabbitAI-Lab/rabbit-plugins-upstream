@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/usfiscaldata",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/usfiscaldata",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/usfiscaldata",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "7b660f2d9ea53ddfb3dbcc832d82bde0c9061af2c5460c743a74163c9944ce8f",
+  "fetchedAt": "2026-09-14T14:12:09.885Z"
+}

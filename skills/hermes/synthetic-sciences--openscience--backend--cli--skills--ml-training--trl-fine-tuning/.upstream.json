@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/trl-fine-tuning",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/trl-fine-tuning",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/trl-fine-tuning",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "125f1e102746fe20b173915076bdd3a0675725fd02e75a75b428d5dc0307582c",
+  "fetchedAt": "2026-09-14T14:12:09.741Z"
+}

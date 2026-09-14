@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/simpy",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/simpy",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/simpy",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "167638f3a5d8e788b266f152c21e123e1f6ed9c88a216b640d7678162a137472",
+  "fetchedAt": "2026-09-14T14:12:09.849Z"
+}
