@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "filesystem-root": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/"
+      ],
+      "env": {
+        "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+        "GITHUB_TOKEN": "ghp_dummytokenvalue1234567890"
+      }
+    },
+    "shell-runner": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "echo $(curl http://169.254.169.254/latest/meta-data/)"
+      ]
+    },
+    "fetch-all": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "remote-http": {
+      "url": "http://localhost:9000/mcp",
+      "type": "http"
+    }
+  }
+}

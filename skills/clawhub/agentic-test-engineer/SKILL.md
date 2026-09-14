@@ -1,7 +1,7 @@
 ---
 name: "Agentic Test Engineer"
 description: "AI-powered autonomous test generation and self-healing test maintenance. Generates unit/integration/E2E tests, detects flaky tests, auto-fixes broken selectors, and maintains test coverage. Built for QA engineers and developers. Keywords: AI test automation, self-healing tests, autonomous QA, test generation, Playwright, Selenium, CI/CD testing, flaky test detection, visual AI testing, test coverage, AI-native QA."
-version: "1.0.0"
+version: "1.0.1"
 ---
 
 # Agentic Test Engineer
@@ -52,6 +52,34 @@ For test generation:
 4. Include setup/teardown fixtures
 5. Add data-driven test parameters
 
+**Worked micro-example — turning one user story into a case list**
+
+User story: *"As a policyholder, I can upload a claim document up to 10 MB."*
+
+| # | Case | Type | Input | Expected | Why it earns its place |
+|---|---|---|---|---|---|
+| 1 | Upload a 2 MB PDF | Happy | valid.pdf | Accepted, stored, ID returned | Baseline path |
+| 2 | Upload exactly 10 MB | Boundary | 10mb.pdf | Accepted | Off-by-one at the limit |
+| 3 | Upload 10 MB + 1 byte | Boundary | over.pdf | Rejected with size error | The classic boundary miss |
+| 4 | Upload 0-byte file | Edge | empty.pdf | Rejected, clear message | Empty file often crashes parsers |
+| 5 | Upload .exe renamed .pdf | Negative | fake.pdf | Rejected on content type | Extension-only validation bypass |
+| 6 | Upload while offline | Error | network drop | Retryable error, no data loss | Network path is untested by default |
+
+Rule of thumb used above: happy path 1, boundaries 2, edge 1, negative 1, error 1.
+If a generator returns 20 near-identical cases, it has enumerated values instead of risks.
+
+**Framework selection quick map**
+
+| Stack | Default choice | Add-on | Avoid when |
+|---|---|---|---|
+| Python | pytest | pytest-cov, pytest-asyncio | You need strict BDD reporting → use behave |
+| JS/TS (unit) | Vitest | @vitest/coverage-v8 | Legacy CommonJS with heavy jest mocks |
+| JS/TS (E2E) | Playwright | trace viewer | You require real Safari on old iOS |
+| Java | JUnit 5 | JaCoCo, AssertJ | You need data-driven Excel specs → TestNG |
+| Go | testing | testify, go-cover-treemap | Table-driven cases need rich diffing → gotest.tools |
+| API contract | Pact or OpenAPI schema check | Dredd | Provider is third-party and unstable → mock instead |
+
+
 ### Step 3: Self-Healing (When Triggered)
 
 When a test breaks due to UI changes:
@@ -64,6 +92,38 @@ When a test breaks due to UI changes:
    - Shadow DOM traversal
 4. Validate the fix across related tests
 5. Log the healing action for audit trail
+
+**Worked micro-example — healing a renamed submit button**
+
+```
+Broken:   await page.click('.btn-primary.submit')
+Symptom:  Timeout 30000ms exceeded, 0 elements matched
+DOM now:  <button data-testid="policy-submit" type="submit">提交保单</button>
+
+Candidate selectors, ranked by robustness:
+1. page.getByTestId('policy-submit')        <- stable by contract, best
+2. page.getByRole('button', { name: '提交保单' })  <- semantic, i18n-aware
+3. page.locator('button[type="submit"]')    <- structural, survives class changes
+4. page.getByText('提交保单')                <- brittle if copy changes
+
+Chosen: 1 (with 2 as documented fallback)
+Audit entry: { healed_at, old_selector, new_selector, confidence: 0.82,
+               evidence: "data-testid present, unique in DOM", reviewer: pending }
+```
+
+**When NOT to auto-heal (stop and escalate instead)**
+
+| Situation | Why auto-heal is dangerous | Correct action |
+|---|---|---|
+| Selector resolves to 2+ elements | Silent wrong-element clicks | Fail loudly, ask for a `data-testid` |
+| The element is a legal/financial confirmation | Wrong click has real-world cost | Require human-authored selector |
+| Failure appears only in production | May be a real defect, not a test problem | File a bug, do not heal |
+| Healing rate > 30% of a suite in one sprint | UI is churning; tests are not the problem | Escalate to the design/dev team |
+| Selector change accompanies a behaviour change | Test may now assert the wrong outcome | Re-derive assertions from the spec |
+
+Self-healing is a maintenance aid, not a substitute for a selector contract.
+If you heal the same selector twice, add a `data-testid` instead.
+
 
 ### Step 4: Flaky Test Detection
 
@@ -78,6 +138,23 @@ When a test breaks due to UI changes:
    - Root cause analysis
    - Recommended fixes (add explicit waits, mock external calls, etc.)
 
+**Root-cause taxonomy (use this to classify before proposing a fix)**
+
+| Category | Typical symptom | Diagnostic signal | Fix | How to verify the fix |
+|---|---|---|---|---|
+| Async race | Passes locally, fails in CI | Failure time clusters at start-up | Explicit waits / `expect.poll` | 50 consecutive green runs |
+| Test interdependency | Fails only in certain orders | Passes when run alone | Isolate fixtures, reset DB per test | Run in random order 10× |
+| Shared resource | Fails under parallel load | Fails more as workers increase | Unique ports/DB schemas, no shared state | Rerun at 4× worker count |
+| Time dependence | Fails at month/day boundaries | Fails on specific dates | Inject a clock, freeze time | Run with 5 faked dates |
+| External dependency | Fails randomly, no code change | Network errors in logs | Mock or contract-test the boundary | Cut network, still green |
+| Environment drift | Fails only on one runner | Version mismatch in logs | Pin versions, containerise | Compare runner fingerprints |
+| Data pollution | Fails after other suites ran | Unexpected rows present | Transaction rollback / fresh seed | Run full suite twice in a row |
+
+**Severity rule**: a test that flakes more than 1 in 100 runs should be quarantined
+within one sprint. Quarantining is not the same as deleting — keep it running in a
+non-blocking job so the signal is not lost.
+
+
 ### Step 5: Coverage Analysis
 
 1. Parse code and existing test files
@@ -85,6 +162,26 @@ When a test breaks due to UI changes:
 3. Identify untested code paths
 4. Suggest priority test cases for uncovered areas
 5. Generate coverage trend report
+
+**Coverage is a triage tool, not a target — prioritise like this**
+
+| Band | Current coverage | Risk profile | What to do first | What to ignore |
+|---|---|---|---|---|
+| Critical path | 0–40% | Payment, underwriting, auth | Tests + contract tests + alerting | Mutation score |
+| Business logic | 40–70% | Pricing, eligibility rules | Property-based tests on rules | Chasing 100% line coverage |
+| Glue / adapters | 70–90% | Controllers, mappers | Integration tests at the boundary | Unit tests per branch |
+| Generated code | any | DTOs, clients | Exclude from coverage denominators | Manual assertions |
+| Dead code | any | Unreachable | Delete it | Testing it |
+
+**Two coverage metrics that beat line coverage**
+
+1. *Mutation score* — inject small faults; a suite that still passes has blind spots.
+2. *Critical-path coverage* — coverage restricted to the modules that carry money or
+   regulatory risk. A 60% score here matters more than 95% overall.
+
+**Anti-pattern**: raising the coverage gate while the suite is flaky. You will get
+green numbers and no confidence.
+
 
 ## Input/Output Examples
 
@@ -197,15 +294,112 @@ Recommended fixes:
    }, { timeout: 10000 }).toBeGreaterThan(0);
 ```
 
+### Example 4: Coverage triage for a legacy module
+
+**Input:**
+```
+Module: premium_calculator.py, 41% coverage, 1,800 lines, no tests for 2 years.
+Where do we start? We cannot stop feature work to fix this.
+```
+
+**Output:**
+```
+Do not "add tests until 80%". Triage instead.
+
+Step 1 - Find the money paths (half a day)
+  Grep for the entry points actually called in production:
+  calculate_premium, apply_discount, validate_eligibility
+  These 3 functions are ~180 lines and carry all the risk.
+
+Step 2 - Characterisation tests first (2 days)
+  Before refactoring anything, lock in current behaviour:
+  - Snapshot 200 real historical inputs -> outputs into a fixture file
+  - Assert the module reproduces them exactly
+  This makes future refactoring safe even if today's behaviour is wrong.
+
+Step 3 - Add rule tests only where rules are unclear (3 days)
+  Boundary: age 18 / 70, health_score 0 / 100, coverage 0 / max
+  Negative: non-integer age, negative coverage, None
+  Error: missing rate table -> explicit exception, not silent 0
+
+Step 4 - Exclude the noise (1 hour)
+  # .coveragerc
+  omit = generated/*, migrations/*, */dto/*
+
+Step 5 - Set the gate where you actually are, then ratchet
+  Start the gate at 45% (today + small margin) and raise it only when a
+  pull request would otherwise pass below it. Never lower it.
+
+Realistic outcome after 1 sprint: overall ~55%, critical-path ~90%.
+The second number is the one that matters.
+```
+
+### Example 5: A test that should not be healed
+
+**Input:**
+```
+This Playwright test has been auto-healed 4 times this month. Should we heal it again?
+```
+
+**Output:**
+```
+No. Four heals in a month is a design signal, not a maintenance event.
+
+What the pattern tells us:
+- The UI is churning faster than the test contract can follow
+- There is no stable selector agreement between dev and QA
+- Each heal silently moves the test further from the original intent
+- At some point the test will pass while the feature is broken
+
+Recommended sequence:
+1. Freeze healing on this test; mark it @quarantined with an expiry date
+2. Ask the dev team to add data-testid to the 3 elements involved
+   (a 15-minute change that removes the whole problem class)
+3. Re-derive the assertions from the user story, not from the current DOM
+4. Add the selector contract to the definition-of-done for that component
+
+Escalation trigger for management:
+- If >20% of the suite needed healing this month, the cost is a process problem.
+  One engineer adding test IDs is cheaper than an agent healing forever.
+
+Healing budget rule of thumb: at most 2 heals per selector per quarter.
+Beyond that, fix the contract.
+```
+
 ## Key Capabilities
 
-| Capability | Description | Supported Frameworks |
-|------------|-------------|---------------------|
-| Test Generation | Generate tests from code/user stories | pytest, Jest, Vitest, JUnit, Playwright, Cypress |
-| Self-Healing | Auto-fix broken selectors | Playwright, Cypress, Selenium |
-| Flaky Test Detection | Diagnose intermittent failures | All major frameworks + CI logs |
-| Coverage Analysis | Measure and report test coverage | Istanbul, pytest-cov, JaCoCo |
-| API Contract Testing | Validate API schemas and responses | OpenAPI, Postman, Pact |
+| Capability | Description | Supported Frameworks | Input you must supply | Output artifact | Main false-positive risk | Human checkpoint |
+|---|---|---|---|---|---|---|
+| Test Generation | Generate tests from code/user stories | pytest, Jest, Vitest, JUnit, Playwright, Cypress | Source file + user story or API spec | Test file + case table | Assertions mirror a buggy implementation | Review expected values against the spec |
+| Self-Healing | Auto-fix broken selectors | Playwright, Cypress, Selenium | Failing selector + DOM snapshot | Ranked candidate selectors + audit entry | Selector matches the wrong element | Approve before merge |
+| Flaky Test Detection | Diagnose intermittent failures | All major frameworks + CI logs | ≥ 30 runs of history | Root-cause report + fix list | Blaming flakiness for a real defect | Confirm with a targeted rerun |
+| Coverage Analysis | Measure and report test coverage | Istanbul, pytest-cov, JaCoCo | Coverage JSON/XML | Gap list + priority order | High line coverage, low assertion quality | Pair with mutation score |
+| API Contract Testing | Validate API schemas and responses | OpenAPI, Postman, Pact | OpenAPI spec or consumer contract | Contract report + breaking-change diff | Spec itself is stale | Re-sync spec from production traffic |
+| Mutation Testing (advisory) | Assess assertion strength | mutmut, Stryker, PIT | Passing suite + source | Mutation score per module | Equivalent mutants inflate the score | Sample-review surviving mutants |
+| Visual Regression (advisory) | Catch unintended UI change | Playwright snapshots, Percy | Baseline images | Diff images + review queue | Font/AA rendering noise | Approve or reject each diff |
+
+## Ecosystem Status (as of 2026-09-10)
+
+Tooling in AI-assisted QA changes quickly. Verify each item against the
+project's official releases before relying on it.
+
+| Area | What to verify | Why it matters here |
+|---|---|---|
+| Browser automation baseline | Current Playwright / Cypress / Selenium major versions | Selector APIs and auto-waiting behaviour differ by version |
+| Visual AI / self-healing vendors | Whether the healing engine is self-hosted or SaaS | SaaS means screenshots leave your network — a blocker for regulated data |
+| CI log retention | How long your CI keeps test history | Flakiness detection needs ≥ 30 runs; short retention kills the signal |
+| Coverage format stability | JSON/XML schema of your coverage tool | Parser breaks silently on major upgrades |
+| AI-generated test review policy | Your org's rule on merging generated tests | Determines the human checkpoint that must exist |
+
+**Recent dynamics (as of 2026-09-10, verify against official sources)**
+1. Self-healing and visual-AI testing have become common features rather than
+   differentiators, which shifts the buyer question from "does it heal" to
+   "can I audit what it healed and why".
+2. More teams are treating test-suite health as a production signal: flaky-test
+   quarantine budgets and mutation scores are appearing alongside coverage gates.
+3. Data-residency concerns are pushing some regulated teams away from
+   SaaS-based visual testing toward self-hosted snapshot comparison.
+4. Every version number and tool name above is point-in-time; confirm upstream.
 
 ## Best Practices
 
@@ -217,7 +411,19 @@ Recommended fixes:
 
 ## Notes
 
-- This skill generates test code only — it does not execute tests directly
+- This skill produces test code, analysis and configuration for you to run in your own environment; the code blocks in this document are reference material, not commands this skill executes on your behalf
 - For CI/CD integration, combine with `ai-test-strategy-architect` skill
 - Self-healing suggestions prioritize semantic selectors over CSS class selectors
 - Coverage analysis requires access to test execution output files (JSON/XML format)
+
+## Changelog
+
+- **1.0.1** (2026-09-10): Added worked micro-examples to Steps 2–5 (story→case table,
+  selector healing with audit entry, flaky root-cause taxonomy, coverage triage bands).
+  Added "when NOT to auto-heal" table and coverage-priority table. Expanded the
+  capability table from 3 to 7 columns and 5 to 7 rows (input required, output artifact,
+  false-positive risk, human checkpoint). Added Examples 4–5. Added "Ecosystem Status
+  (as of 2026-09-10)". Clarified the execution-boundary note.
+- **1.0.0** (2026-05-19): Initial version.
+
+**Last Updated**: 2026-09-10

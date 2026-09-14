@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "title": "Broken",
+    "model_version": "1.0",
+    "status": "final",
+    "language": "en",
+    "direction": "sideways",
+    "scope": "test",
+    "handoff": {
+      "purpose": "review",
+      "readiness": "approved"
+    }
+  },
+  "domains": [
+    {
+      "id": "domain-a",
+      "label": "A",
+      "description": "",
+      "evidence_status": "Confirmed"
+    }
+  ],
+  "items": [
+    {
+      "id": "item-a",
+      "domain_id": "missing",
+      "label": "A",
+      "kind": "object",
+      "parent_id": "missing",
+      "evidence_status": "Maybe"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "r1",
+      "from": "item-a",
+      "to": "missing",
+      "type": "related",
+      "label": "",
+      "meaning": "",
+      "direction": "wrong",
+      "evidence_status": "Confirmed"
+    }
+  ],
+  "roles": [],
+  "permissions": [],
+  "lifecycles": [],
+  "unknowns": [
+    {
+      "id": "blocking",
+      "question": "?",
+      "blocks_handoff": true
+    }
+  ]
+}

@@ -1,42 +1,55 @@
-## Description: <br>
-Discover curated SaaS and AI-agent tools via the Tulimoa directory. Search by topic, category, pricing, MCP support, or EU hosting, and pull full detail on any tool. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover curated SaaS and AI-agent tools via the Tulimoa directory. Search by topic, category, pricing, MCP support, or EU hosting, pull full detail on any tool, and submit or edit your own listings.
 
-## Publisher: <br>
-[florianbaraz](https://clawhub.ai/user/florianbaraz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[florianbaraz](https://clawhub.ai/user/florianbaraz)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to find, compare, and research SaaS or AI-agent tools from Tulimoa's curated directory and inspect detailed listings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Searches are sent to Tulimoa. <br>
-Mitigation: Avoid using sensitive or confidential buying research terms unless sending them to Tulimoa is acceptable. <br>
-Risk: Results reflect Tulimoa's curated directory rather than the entire market. <br>
-Mitigation: Treat recommendations as directory-backed leads and compare with other sources before making important purchasing decisions. <br>
+## Use Case:
 
+External users, developers, and product evaluators use this skill to find, compare, and inspect SaaS or AI-agent tools in the Tulimoa directory. Authenticated Tulimoa users can submit or edit their own public directory listings through OAuth-backed write tools.
 
-## Reference(s): <br>
-- [Tulimoa homepage](https://tulimoa.com) <br>
-- [Tulimoa MCP endpoint](https://mcp.tulimoa.com/mcp) <br>
-- [ClawHub listing](https://clawhub.ai/florianbaraz/tulimoa) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown or structured tool-result text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only MCP lookups; search terms are sent to Tulimoa.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Discovery queries are sent to Tulimoa's remote MCP service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when sharing SaaS or AI-tool discovery queries with Tulimoa is acceptable.
+
+Risk: OAuth-backed write actions can create or modify public directory listings after admin review.
+
+Mitigation: Review listing submissions and edits before authorizing write actions.
+
+## Reference(s):
+
+- [Tulimoa homepage](https://tulimoa.com)
+- [Tulimoa MCP endpoint](https://mcp.tulimoa.com/mcp)
+- [ClawHub skill page](https://clawhub.ai/florianbaraz/skills/tulimoa)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown or structured tool results from the Tulimoa MCP server]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read tools return structuredContent with declared output schemas; listing submissions and edits require Tulimoa OAuth login.]
+
+## Skill Version(s):
+
+1.3.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

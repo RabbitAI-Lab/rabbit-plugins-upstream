@@ -1,44 +1,64 @@
-## Description: <br>
-Academic Figures generates publication-quality charts from JSON or CSV data, including 14 chart types, colorblind-safe themes, CJK support, hatching, multi-panel layouts, flow diagrams, and PNG, SVG, PDF, TIFF, or EPS output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates publication-ready scientific figures from JSON, CSV, or Excel data with local Python scripts, journal presets, accessibility sidecars, and verification gates for text overlap and font size.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to turn structured JSON or CSV datasets into journal-ready academic figures, diagrams, and statistical visualizations. It is suited for local figure generation workflows where the user controls the input data and output path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plotting workflow reads the user-selected input file and can write or overwrite the requested output file. <br>
-Mitigation: Use intentional input data and explicit output paths, and review the generated figure before sharing or submitting it. <br>
-Risk: Generic chart-generation requests may activate the skill in contexts where another visualization workflow would be more appropriate. <br>
-Mitigation: Confirm the desired output is a publication-style academic figure before running the local generator. <br>
+## Use Case:
 
+Researchers, analysts, clinicians, and developer agents use this skill to turn structured data into journal-ready figures such as bar charts, scatter plots, heatmaps, forest plots, Kaplan-Meier curves, ROC curves, PRISMA flows, funnel plots, PCA plots, and composite panels. It is also useful for producing supplementary legends, alt text, and PDF quality checks before publication or review.
 
-## Reference(s): <br>
-- [Academic Figures Skill Page](https://clawhub.ai/docsor1212/academic-figures) <br>
-- [Data Format Reference](references/data-formats.md) <br>
-- [Academic Figures Pitfalls](references/pitfalls.md) <br>
-- [Reverse-Engineering Chart Colors from Reference Images](references/reverse-engineering-colors.md) <br>
-- [academic-figures v1.5.0 Upgrade Analysis](references/v1.5-upgrade-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; generated figure files may be PNG, SVG, PDF, TIFF, or EPS.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local execution with user-selected input and output paths; generated figures use a white background for publication workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata; artifact frontmatter lists 1.5.0) <br>
+Risk: The skill runs local Python scripts that read user data files and write figure outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution, use a virtual environment, and pin dependencies for sensitive or regulated work.
+
+Risk: Users may confuse the local skill with the separately advertised Pro/cloud service.
+
+Mitigation: Keep unpublished, proprietary, or regulated data in the local workflow unless the cloud service upload, retention, and privacy terms have been reviewed.
+
+Risk: Generated publication figures can be misleading if input data, statistical settings, or journal constraints are wrong.
+
+Mitigation: Validate input data, use the documented limits and compatibility matrix, and run the PDF overlap and font-size verification gates before submission.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/academic-figures)
+- [Data formats](references/data-formats.md)
+- [Limits and compatibility](references/limits.md)
+- [Common pitfalls](references/pitfalls.md)
+- [Composite layouts](references/composite-layouts.md)
+- [FAQ](references/faq.md)
+- [Examples](examples/README.md)
+- [Scenario templates](templates/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated figure files such as PNG, SVG, PDF, TIFF, EPS, plus optional text sidecars]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local file input and output; supports JSON, CSV, TSV, Excel, journal presets, CJK fonts, alt text, supplementary legends, and PDF verification gates.]
+
+## Skill Version(s):
+
+2.5.1 (source: server release metadata and archived SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

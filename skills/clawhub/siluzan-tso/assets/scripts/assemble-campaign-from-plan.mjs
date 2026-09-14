@@ -39,7 +39,9 @@ function stripMeta(value) {
 }
 
 function normalizeMatchType(raw) {
-  const u = String(raw ?? "BROAD").trim().toUpperCase();
+  const u = String(raw ?? "BROAD")
+    .trim()
+    .toUpperCase();
   if (u === "EXACT" || u === "完全匹配" || u === "精确匹配") return "EXACT";
   if (u === "PHRASE" || u === "词组匹配" || u === "短语匹配") return "PHRASE";
   if (u === "BROAD" || u === "广泛匹配") return "BROAD";

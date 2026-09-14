@@ -1,45 +1,64 @@
-## Description: <br>
-Helps teams evaluate a specific tender, develop bidding and pricing strategy, assess competitors and buyer patterns, and generate a data-backed decision report from historical tender data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI bidding strategy advisor that analyzes a specific procurement opportunity using ZLBX historical tender and award data to produce bid/no-bid, pricing, competitor, buyer-pattern, win-probability, risk, and action guidance.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Bid, procurement, and sales teams use this skill to decide whether to pursue a tender, estimate competitive pricing bands, understand likely competitors, and produce a strategy report grounded in historical bidding records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends tender and company search terms to the vendor API and stores a local API key. <br>
-Mitigation: Use it only for queries you are comfortable sending to the vendor, keep the API key secured, and rely on preconfigured credentials when automatic registration is not desired. <br>
-Risk: Generated HTML reports may include signed links that bypass login and expose referenced tender data if shared broadly. <br>
-Mitigation: Treat generated reports as sensitive, remove or review signed links before redistribution, and share reports only with intended recipients. <br>
+## Use Case:
 
+External bidding and proposal teams use this skill to decide whether and how to bid on a specific procurement project. It helps compare buyer history, likely competitors, pricing ranges, data gaps, risks, and next actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration workflow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown decision report with optional generated HTML report file path] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; full reports typically consume 12-25 API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Sensitive bidding projects, competitor names, pricing assumptions, or procurement targets may be exposed through the skill's vendor-backed analysis workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing for sensitive bidding work and only submit project details appropriate for processing by the ZLBX service.
+
+Risk: The skill can persist an API key in ~/.zlbx/config.json.
+
+Mitigation: Prefer a preconfigured ZLBX_API_KEY where possible and check permissions on ~/.zlbx/config.json when local key storage is used.
+
+Risk: Automatic registration transmits device-identifying registration data, and generated reports include vendor-provided commercial links.
+
+Mitigation: Require user consent before automatic registration, avoid auto-registration when a key is already configured, and treat generated report links as vendor-provided content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor)
+- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun)
+- [Workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Automatic registration flow](references/auto-register.md)
+- [ZLBX API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [ZLBX AI platform](https://ai.zhiliaobiaoxun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown decision report, optional self-contained HTML report, and JSON input for the report renderer]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include cited ZLBX data links where available; exported HTML is written to a local report directory.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

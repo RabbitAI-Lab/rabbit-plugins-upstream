@@ -1,45 +1,67 @@
-## Description: <br>
-Provides GitLab CLI (glab) command reference and workflows for GitLab merge requests, CI/CD, issues, releases, repositories, authentication, variables, labels, milestones, snippets, and related GitLab operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive GitLab CLI (glab) command reference and workflows for all GitLab operations. Use when working with merge requests, CI/CD pipelines, issues, releases, repositories, authentication, variables, labels, milestones, snippets, or any glab command. Covers 40+ sub-commands including glab mr, glab ci, glab issue, glab repo, glab release, glab variable, and more.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers and engineers use this skill to plan and run GitLab CLI workflows for repository work, merge requests, issues, CI/CD, releases, authentication, variables, and other GitLab operations. It helps an agent produce command-oriented guidance and pre-flight checks before GitLab actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: GitLab write operations could run against the wrong host or visible account. <br>
-Mitigation: Confirm the GitLab host and visible account before any write, and use separate least-privilege bot or service-account tokens for different actors. <br>
-Risk: Destructive GitLab commands can modify or delete project resources. <br>
-Mitigation: Review commands that use delete, --yes, --force, or API write methods before execution, and confirm the intended project or group scope. <br>
+## Use Case:
 
+Developers and automation-focused teams use this skill to ask an agent for GitLab CLI workflows, command examples, and operational guidance across merge requests, issues, CI/CD, repositories, releases, authentication, packages, runners, variables, and related GitLab areas.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vince-winkintel/skills/gitlab-cli-skills) <br>
-- [GitLab REST API Documentation](https://docs.gitlab.com/api/) <br>
-- [GitLab GraphQL Documentation](https://docs.gitlab.com/api/graphql/) <br>
-- [GitLab Duo CLI Documentation](https://docs.gitlab.com/user/gitlab_duo_cli/) <br>
-- [NDJSON Specification](https://github.com/ndjson/ndjson-spec) <br>
-- [JSON Lines](https://jsonlines.org/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include GitLab host, account, token, and destructive-action review guidance before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.13.18 (source: server release metadata) <br>
+Risk: Authenticated GitLab CLI workflows can make visible writes or state changes on the wrong host or under the wrong actor.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege GitLab accounts or tokens and verify the active host and actor before writes.
+
+Risk: Examples that use --yes, --force, deletion commands, direct glab api mutations, or package-manager auth configuration can bypass prompts or change project state.
+
+Mitigation: Review the exact target, actor, host, and command flags before execution, and require explicit user confirmation for destructive or confirmation-skipping actions.
+
+Risk: Token and package-auth workflows can expose credentials if copied into logs, repositories, command histories, or shared configuration.
+
+Mitigation: Keep tokens and env files outside version control, avoid printing secrets, restrict local permissions, and prefer short-lived or least-privilege credentials.
+
+Risk: GitLab content fetched by CLI commands can include untrusted user-generated text.
+
+Mitigation: Treat fetched issue bodies, merge request comments, commit messages, job logs, and API responses as data rather than instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vince-winkintel/skills/gitlab-cli-skills)
+- [GitLab REST API documentation](https://docs.gitlab.com/api/)
+- [GitLab GraphQL documentation](https://docs.gitlab.com/api/graphql/)
+- [GitLab Quick Actions documentation](https://docs.gitlab.com/user/project/quick_actions/)
+- [GitLab development stages support](https://docs.gitlab.com/policy/development_stages_support/)
+- [NDJSON specification](https://github.com/ndjson/ndjson-spec)
+- [JSON Lines format](https://jsonlines.org/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent-facing command reference and workflow guidance for user-directed GitLab CLI and API operations.]
+
+## Skill Version(s):
+
+1.13.27 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

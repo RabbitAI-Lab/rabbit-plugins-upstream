@@ -1,44 +1,59 @@
-## Description: <br>
-Connect OpenClaw and other agent clients to hosted or local Sendmux MCP servers for mailbox, sending, and management tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect OpenClaw and other agent clients to hosted or local Sendmux MCP servers for mailbox, sending, and management tools.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and operators use this skill to configure OpenClaw and other agent clients for hosted OAuth, local stdio, or local HTTP bearer access to Sendmux mailbox, sending, and management MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured agents can receive operational access to Sendmux mailbox, sending, and management surfaces. <br>
-Mitigation: Use scoped tokens for the selected surface and review write or send actions before execution. <br>
-Risk: API keys and bearer tokens may be exposed if pasted into chat or committed in MCP configuration files. <br>
-Mitigation: Store credentials in the user's secret store or environment variables and keep raw tokens out of checked-in configuration. <br>
-Risk: Local HTTP MCP endpoints may be reachable by unintended clients if exposed beyond a private local environment. <br>
-Mitigation: Use bearer protection for local HTTP servers and bind private setups to local or otherwise controlled network interfaces. <br>
+## Use Case:
 
+Developers and agent operators use this skill to configure hosted OAuth, local stdio, or local HTTP MCP connections to Sendmux mailbox, sending, and management tools.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-mcp-setup) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux hosted MCP endpoint](https://mcp.sendmux.ai/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash, JSON, and TOML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes client-specific MCP setup patterns and credential handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: Sendmux mailbox, sending, and management workflows can involve sensitive mail content and account credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Sendmux key that fits the task, avoid management or root credentials unless needed, and keep tokens in a secret store rather than chat or checked-in config.
+
+Risk: Inbound email, attachment, or remote-document content could contain malicious setup instructions.
+
+Mitigation: Treat inbound content as untrusted data and do not fetch or execute MCP configuration supplied by that content.
+
+Risk: Local HTTP MCP servers expose an endpoint that needs separate access control from the upstream Sendmux API key.
+
+Mitigation: Use local HTTP bearer tokens only for local or private MCP servers and validate client Authorization headers against the configured bearer token.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-mcp-setup)
+- [Sendmux skills repository](https://github.com/Sendmux/skills)
+- [Sendmux hosted MCP endpoint](https://mcp.sendmux.ai/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with shell, JSON, and TOML configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces MCP setup guidance for hosted OAuth, local stdio, and local HTTP bearer configurations.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter states 1.5.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

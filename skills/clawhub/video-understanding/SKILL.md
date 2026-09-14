@@ -1,14 +1,18 @@
 ---
-name: video-understanding
-description: Use whenever the user provides any video URL, YouTube link, or video file, even if they only ask to watch, look at, react to, understand, analyze, summarize, transcribe, inspect, or extract answers from the video.
+name: "video-understanding"
+description: "Watch and analyze video URLs or files using Gemini native agentic video understanding for summaries, timestamped answers, transcripts, and visual reconstruction."
 metadata:
   openclaw:
     emoji: "🎬"
     requires:
-      bins: ["yt-dlp", "ffmpeg"]
-      env: ["GEMINI_API_KEY"]
+      bins: ["uv"]
     primaryEnv: "GEMINI_API_KEY"
     install:
+      - id: "uv-brew"
+        kind: "brew"
+        formula: "uv"
+        bins: ["uv"]
+        label: "Install uv (brew)"
       - id: "yt-dlp-brew"
         kind: "brew"
         formula: "yt-dlp"
@@ -21,131 +25,38 @@ metadata:
         label: "Install ffmpeg (brew)"
 ---
 
-# Video Understanding (Gemini)
+# Video Understanding
 
-Analyze videos using Google Gemini's multimodal video understanding. Supports 1000+ video sources via yt-dlp.
+Analyze video URLs or files, including casual requests to watch or react. All cloud analysis uses Gemini 3.7 Flash and native `processing: agentic`. No static fallback.
 
-## Requirements
+## Procedure
 
-- Python 3.10+ with `uv`
-- `yt-dlp` — `brew install yt-dlp` / `pip install yt-dlp`
-- `ffmpeg` — `brew install ffmpeg` (for merging video+audio streams)
-- `GEMINI_API_KEY` environment variable
+1. Identify the video, requested output, sensitivity, and intended audience. Before sending any video or prompt to Google Gemini, confirm the user authorized that cloud processing. A generic “watch this” request alone is not permission to upload private/local material. Use `--allow-cloud` only to record actual authorization, never to bypass asking. Public-video analysis explicitly requested through this Gemini skill is authorized.
+2. Check `uv` and the configured Gemini credential path. Download workflows also require `yt-dlp` and `ffmpeg` (macOS: `brew install yt-dlp ffmpeg`). Never put credentials or signed URLs in commands, chat, or logs. For authentication, destinations, and retention, read [references/privacy.md](references/privacy.md).
+3. Inspect `scripts/analyze_video.py --help`. Default output is a summary/visual overview; `--question` requests a focused answer and timestamped evidence. `--mode full` requests a transcript and full visual coverage, not guaranteed completeness.
+4. Run the smallest sufficient analysis. Local videos upload to Gemini, YouTube URLs go directly to Gemini, and other credential-free HTTPS videos download first. Confirm a valid result or explicit failure.
+5. Check timestamps, visible text, speaker attribution, chronology, and critical claims against evidence. Mark uncertainty and distinguish observation from inference. Return only the requested material to the intended audience; transcripts can contain sensitive information.
+6. Retain uploads only when authorized using `--reuse-file-cache`. A `--session-key` identifies reuse but does not save chat history. Add `--save-history --continue-chat` only with authorization to retain questions/outputs locally; YouTube follow-ups resubmit the URL.
+7. Use `--purge-cache` with the same source/session to delete retained remote handles and local history. Cleanup failures return nonzero and preserve minimal handles for retry; confirm deletion rather than assuming it.
 
-## Trigger Rule
+## Commands
 
-Use this skill first whenever the user provides a video URL, YouTube link, or video file. The trigger is the video input itself, not whether the user explicitly says "Gemini," "analyze," or "transcribe."
-
-Casual asks like "watch this," "look at this," "what is this?," "you laugh," or "what happens here?" still require this skill.
-
-## Gotchas
-
-- If the skill cannot run because `GEMINI_API_KEY` or another dependency is missing, report that blocker before falling back to local extraction.
-- Requires `yt-dlp` and `ffmpeg` installed (sanity-check with `which yt-dlp` / `which ffmpeg`).
-- Gemini File API uploads are reusable for follow-up questions while `ACTIVE`, but expire after about 48 hours.
-- Gemini explicit CachedContent can speed repeated questions, but has model-specific minimum token counts and storage billing.
-- The analyze script downloads non-YouTube videos locally first unless a valid cached Gemini file handle is reused.
-- YouTube age-restricted or private videos require authentication cookies.
-
-## Default Output
-
-Returns structured JSON:
-- **transcript** — Verbatim transcript with `[MM:SS]` timestamps
-- **description** — Visual description (people, setting, UI, text on screen, flow)
-- **summary** — 2-3 sentence summary
-- **duration_seconds** — Estimated duration
-- **speakers** — Identified speakers
-
-## Usage
-
-### Analyze a video (structured JSON output)
+After cloud authorization:
 
 ```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4"
+uv run <skill_dir>/scripts/analyze_video.py "<video-url-or-path>" --allow-cloud
+uv run <skill_dir>/scripts/analyze_video.py "<video-url-or-path>" --allow-cloud --question "What product is shown?"
+uv run <skill_dir>/scripts/analyze_video.py "<video-url-or-path>" --allow-cloud --mode full
+uv run <skill_dir>/scripts/analyze_video.py "<video-url-or-path>" --allow-cloud --session-key "<stable-key>" --reuse-file-cache --save-history --continue-chat --question "What happens after that screen?"
+uv run <skill_dir>/scripts/analyze_video.py "<video-url-or-path>" --session-key "<stable-key>" --purge-cache
 ```
 
-Local video files work too:
+## Gotchas and boundaries
 
-```bash
-uv run {baseDir}/scripts/analyze_video.py "/path/to/video.mp4"
-```
-
-### Ask a question (adds "answer" field)
-
-```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" -q "What product is shown?"
-```
-
-### Continue questions against the same video
-
-Use a stable `--session-key` for the conversation or Slack thread. `--reuse-file-cache` keeps and reuses an `ACTIVE` Gemini File API handle instead of re-uploading; stale handles automatically fall back to a fresh upload/download.
-
-```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" --session-key "slack-thread-123" --reuse-file-cache -q "Summarize this"
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" --session-key "slack-thread-123" --reuse-file-cache --continue-chat -q "What happens after the pricing screen?"
-```
-
-For long videos with repeated follow-ups, add `--use-context-cache` to try Gemini explicit CachedContent. If Gemini rejects caching, the script falls back to File API reuse.
-
-```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" --session-key "slack-thread-123" --reuse-file-cache --use-context-cache --cache-ttl-seconds 3600 -q "Find all UI errors"
-```
-
-### Override prompt entirely
-
-```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" -p "Custom prompt" --raw
-```
-
-### Download only (no analysis)
-
-```bash
-uv run {baseDir}/scripts/analyze_video.py "https://example.com/video.mp4" --download-only -o video.mp4
-```
-
-## Options
-
-| Flag | Description | Default |
-|------|-------------|---------|
-| `-q` / `--question` | Question to answer (added to default fields) | none |
-| `-p` / `--prompt` | Override entire prompt (ignores -q) | structured JSON |
-| `-m` / `--model` | Gemini model | gemini-2.5-flash |
-| `--fallback-model` | Optional fallback model for transient Gemini errors | none |
-| `-o` / `--output` | Save output to file | stdout |
-| `--keep` | Keep downloaded video file | false |
-| `--download-only` | Download only, skip analysis | false |
-| `--max-size` | Max file size in MB | 500 |
-| `--raw` | Raw text output instead of JSON | false |
-| `--reuse-file-cache` | Keep/reuse Gemini File API upload handles for follow-ups | false |
-| `--use-context-cache` | Try Gemini explicit CachedContent for repeated questions | false |
-| `--cache-ttl-seconds` | TTL for explicit CachedContent | 3600 |
-| `--cache-dir` | Local directory for cache records | `~/.openclaw/cache/video-understanding` |
-| `--session-key` | Conversation/thread key for follow-up reuse | none |
-| `--continue-chat` | Include prior cached outputs as follow-up context | false |
-| `--purge-cache` | Delete cached Gemini handles for this asset/session | false |
-
-## How It Works
-
-1. **Local video files** → Uploaded directly to Gemini File API
-2. **YouTube URLs** → Passed directly to Gemini (no download needed)
-3. **All other URLs** → Downloaded via yt-dlp → uploaded to Gemini File API → poll until processed
-4. With `--reuse-file-cache`, valid Gemini file handles are reused for follow-up questions; expired/deleted handles trigger a fresh upload/download
-5. With `--use-context-cache`, the script tries Gemini CachedContent and falls back to File API reuse if caching is unavailable
-6. Gemini analyzes video with structured prompt → returns JSON
-7. Temp local files are cleaned up automatically; remote Gemini uploads are deleted unless reuse/cache mode is enabled
-
-## Supported Sources
-
-Any URL supported by [yt-dlp](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md): Loom, YouTube, TikTok, Vimeo, Twitter/X, Instagram, Dailymotion, Twitch, and 1000+ more.
-
-## Tips
-
-- Use `-q` for targeted questions on top of the full analysis
-- Use `--session-key` plus `--reuse-file-cache` for Slack-thread follow-ups so Loom/local videos are not re-uploaded every turn
-- Use `--continue-chat` when the follow-up relies on prior wording like "that screen" or "the second speaker"
-- Use `--purge-cache` when done with a sensitive video to delete the remote Gemini handles
-- YouTube is fastest (no download step)
-- YouTube follow-ups resend the public URL and optional prior context; there is no documented durable YouTube asset handle
-- Transient Gemini 503/high-demand errors are retried; set `--fallback-model` only when that model has quota on the account
-- Large videos (10min+) work fine — Gemini File API supports up to 2GB (free) / 20GB (paid)
-- The script auto-installs Python dependencies via `uv`
+- `--prompt` replaces built-in evidence instructions, ignores `--mode`, and bypasses `--continue-chat` context. Include required evidence and uncertainty instructions yourself; it cannot accompany `--question`.
+- Supported models: `gemini-3.7-flash`, `gemini-3.6-flash`, `gemini-3.5-flash-lite`. Optional `--fallback-model` stays agentic and applies only to transient errors. Missing access is a blocker, not permission to switch providers.
+- SDK is pinned and resolved by `uv`. `--use-context-cache` is rejected; legacy `--cache-ttl-seconds` does not control File API expiry. Purge supports legacy CachedContent.
+- No history is saved by default. `--output` deliberately writes analysis to a mode-0600 file; stdout may be captured by the caller. Do not post private transcripts to a shared channel merely because processing was authorized.
+- Diagnostics omit source URLs/paths and raw provider/downloader errors. Usage, model, processing mode, and elapsed time go to stderr. Timestamps and duration are model estimates, not frame-exact measurements.
+- Any HTTP(S) video source supported by yt-dlp is eligible; there is no domain whitelist. Normal query parameters are supported. Use only sources the user authorized. This local downloader is not an SSRF isolation boundary: deployments accepting untrusted jobs must enforce network egress policy outside the skill, including redirects and extractor/CDN requests.
+- Never put signed URLs or credentials into commands; use an authorized local file instead. The downloader ignores ambient configuration.

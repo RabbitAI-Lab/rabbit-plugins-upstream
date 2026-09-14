@@ -37,7 +37,7 @@ agent-desktop snapshot --root @e12 --snapshot <snapshot_id> -i
 **Output structure:**
 ```json
 {
-  "version": "2.1",
+  "version": "2.4",
   "ok": true,
   "command": "snapshot",
   "data": {
@@ -77,7 +77,7 @@ agent-desktop snapshot --root @e12 --snapshot <snapshot_id> -i
 **Skeleton mode (`--skeleton`):**
 - Produces a shallow overview by clamping depth to `min(max_depth, 3)`
 - Truncated containers include a `children_count` field showing how many children were omitted
-- Named or described containers at the truncation boundary receive refs with empty `available_actions`, serving as drill-down targets for `--root`
+- Each truncated branch exposes its deepest safely resolvable drill target using stable text, native ID, or bounds evidence; an anonymous boundary falls back to its nearest resolvable ancestor
 
 **Root mode (`--root <REF>`):**
 - Starts tree traversal from the given ref instead of the window root
@@ -103,9 +103,39 @@ agent-desktop snapshot --root @e3 --snapshot <snapshot_id> -i
 - Use `--surface sheet` for modal dialogs
 - Use `--compact` with `-i` for maximum token efficiency
 - Combine `--max-depth 5` to limit deep trees (e.g., Xcode)
-- Use `--skeleton` first to get a high-level map, then `--root` to drill into specific regions
+- Use exact `find` first when you know the target role or name; otherwise use `--skeleton` for a high-level map, then `--root` to drill into specific regions
 - Combine `--skeleton` with `-i` and `--compact` for the most token-efficient initial overview
+- For a Chromium-based app's web contents (Slack, VS Code, Discord, and similar), `launch --cdp` plus a CDP client is a faster alternative to skeleton traversal on a fresh launch — see `references/commands-system.md`
 - Keep `snapshot_id` when commands must resolve against a specific snapshot instead of the latest snapshot pointer
+
+### Visual debug
+
+On macOS, `--debug --screenshot PATH.html` saves a local HTML viewer with window screenshots, element highlights, and ref labels. With TextEdit open:
+
+```bash
+agent-desktop snapshot --app TextEdit --skeleton -i --debug --screenshot /tmp/textedit-visual.html
+open /tmp/textedit-visual.html
+```
+
+For a click, use a real ref from your snapshot:
+
+```bash
+agent-desktop click @s8f3k2p9:e5 --debug --screenshot /tmp/click-visual.html
+```
+
+**Using the viewer**
+- Expand a role group to inspect its elements; snapshot groups start collapsed.
+- Check **Tree items**, **Buttons**, or another role to filter highlights. Multiple checked roles combine; none checked shows all. Checking does not expand the group.
+- Select an element to isolate its bounds and ref; select it again to undo. **Show all elements** resets everything. **Highlights** hides or shows the boxes.
+- Blue = action ref, amber dashed = drill anchor, gray = context, red = click target. Hidden/offscreen elements and elements without drawable bounds stay listed without boxes. List numbers are not refs.
+- Click captures have **Before click** and **After command** views. Only the before image highlights the target; screenshots are not proof of delivery or a live recording.
+
+**Important limits**
+- Both flags are required. Choose a new `.html` file in an existing directory; files are never overwritten.
+- Requires Accessibility and Screen Recording permissions. Supports window-surface `snapshot` and ref-based `click`, not batch or other commands. It does not enable `--headed`; `-v` is still separate logging.
+- Success adds `data.debug` with the artifact path and optional warning. Late capture/write failures preserve the command result; command failures preserve the original error and report artifact metadata on stderr. Preparation errors may prevent dispatch.
+- Screenshots and labels are sensitive. No session is needed. Debug snapshots retain full bounds in their persisted refmap for the viewer; JSON still omits bounds unless `--include-bounds` was requested. Debug capture is opt-in, not a byte-identical persistence mode.
+- Rebuild after viewer changes and generate a new artifact; saved HTML does not update automatically.
 
 ## find
 
@@ -122,11 +152,20 @@ agent-desktop find --app "App" --role button --name "OK" --exact
 agent-desktop find --app "App" --description "Closes the dialog"
 agent-desktop find --app "App" --native-id "submitButton"
 agent-desktop find --app "App" --state enabled --state focused=false
+agent-desktop find --root @s8f3k2p9:e4 --role textfield --value "README.md" --first
+agent-desktop find --app "Finder" --surface menubar --name "Go to Folder…" --exact --first
 ```
+
+Scope the search before widening the query. `--root` searches one ref's subtree
+and `--surface` searches an overlay; both return a single ref instead of the
+whole tree, which is the difference between a few hundred bytes and a full
+menu-bar dump.
 
 | Flag | Description |
 |------|-------------|
 | `--app` | Application name |
+| `--root REF` | Search only inside this ref's subtree instead of the whole window. Pair with `--snapshot` for a legacy bare `@eN` ref |
+| `--surface` | Search an overlay instead of the window (`menubar`, `menu`, `sheet`, `alert`, `popover`, ...). A menu bar belongs to the application, so several open windows are not ambiguous here. Cannot be combined with `--root`, which already carries its own surface |
 | `--role` | Role to match against the live tree (button, textfield, checkbox, scrollarea, window, ...). Case-insensitive; `textarea`/`textbox`/`searchfield` fold to `textfield`. When a role filter matches nothing, the response carries `roles_present` — the roles actually in the searched tree — so you can tell "none on screen" from a wrong role name and retry |
 | `--name` | Accessible name or label |
 | `--value` | Current value |
@@ -154,6 +193,8 @@ agent-desktop find --app "App" --state enabled --state focused=false
 ```
 
 Every non-count `find` response returns the `snapshot_id` that owns its refs. Pass that exact ID to later ref actions instead of relying on the mutable latest-snapshot pointer, especially when interleaving automation across apps or windows. Count-only responses create no ref namespace and omit `snapshot_id`.
+
+A match with no `ref_id` is a context match: readable text that carries no action target. A context match also carries a `bounds` object (`{ x, y, width, height }`) whenever the platform reports one, so it can still be located on screen. A match that has a `ref_id` never carries `bounds`; read those with `get --property bounds`.
 
 **Output (no match — `roles_present` hint):** when a `--role` filter matches nothing, `roles_present` lists the roles actually in the searched tree so you can tell a wrong role name from "none on screen"; this applies to all non-count selection modes — an empty match list, or a `--first`/`--last`/`--nth` miss — whenever a role filter was active, making it a role-vocabulary hint for retries.
 ```json
@@ -200,6 +241,7 @@ agent-desktop is @s8f3k2p9:e2 --property enabled
 agent-desktop is @s8f3k2p9:e3 --property checked
 agent-desktop is @s8f3k2p9:e4 --property focused
 agent-desktop is @s8f3k2p9:e5 --property expanded
+agent-desktop is @s8f3k2p9:e6 --property selected
 ```
 
 | Property | Checks |
@@ -209,6 +251,7 @@ agent-desktop is @s8f3k2p9:e5 --property expanded
 | `checked` | Checkbox/switch is checked |
 | `focused` | Element has keyboard focus |
 | `expanded` | Disclosure/tree item is expanded |
+| `selected` | Selectable element is selected |
 
 **Output:**
 ```json

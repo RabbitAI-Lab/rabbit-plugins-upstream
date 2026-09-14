@@ -1,45 +1,63 @@
-## Description: <br>
-查询场外指数基金和 ETF 联接基金的基础信息、规模费率、风险等级、基金经理、持仓、分红、区间收益、跟踪误差，并支持关键词筛选和批量比较。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries off-exchange index fund and ETF feeder fund information through Index Hub, including fund details, fees, holdings, returns, dividends, tracking error, keyword search, and batch comparison.
 
-## Publisher: <br>
-[e-fintech](https://clawhub.ai/user/e-fintech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[e-fintech](https://clawhub.ai/user/e-fintech)
 
-## Use Case: <br>
-External users and agents use this skill to answer Chinese natural-language questions about off-exchange index funds and ETF feeder funds with factual fund data, comparisons, and risk context. It is intended for information lookup and comparison, not investment advice or account operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer can save the API key persistently in plaintext shell profile and local configuration files. <br>
-Mitigation: Use a low-privilege key where possible, review or edit the installer before use, and remove saved ETF_API_KEY and fallback-key entries when they are no longer needed. <br>
-Risk: The installer replaces the installed open-fund-query skill directory. <br>
-Mitigation: Back up any existing open-fund-query installation or install to a separate skills directory before running the installer. <br>
-Risk: Fund information and comparisons could be mistaken for investment advice if the answer omits boundaries. <br>
-Mitigation: Keep outputs factual, include data dates or report periods, avoid buy or sell recommendations, and preserve the required user-facing disclaimer. <br>
+## Use Case:
 
+External users and agents use this skill to retrieve and summarize factual information about off-exchange index funds, ETF feeder funds, and related ETF reference data. It supports objective screening and comparison workflows while avoiding personalized investment advice, trading instructions, and performance promises.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/open-fund-query) <br>
-- [场外指数基金信息查询 — 接口字段权威参考](references/catalog-oef.md) <br>
-- [Index Hub API service](https://www.etf.com.cn/api/etf-api-service) <br>
-- [AI Skills access documentation](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/readme.pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Chinese Markdown answer with concise conclusions, data tables or lists, data dates, and risk disclosure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires API authorization; final answers should omit credentials, raw responses, and internal implementation details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Fund-query requests are sent to the Index Hub service at www.etf.com.cn.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when the user is comfortable with that service relationship and with sending fund-query requests to the provider.
+
+Risk: The skill requires an API key that could be exposed through command history, logs, or final answers if handled carelessly.
+
+Mitigation: Use ./install.sh and enter the key at the hidden prompt, store it in ~/.config/index-hub/api_key, and avoid displaying credentials, authorization headers, or raw configuration.
+
+Risk: Fund facts and comparisons could be misunderstood as investment advice or future performance claims.
+
+Mitigation: Keep answers factual, include the provider disclaimer, avoid personalized recommendations and trading instructions, and use the bundled answer guardrails before final output.
+
+Risk: Service outages, invalid credentials, or missing permissions can prevent current fund data from being returned.
+
+Mitigation: Use the installer smoke test where possible, and when data is unavailable explain the access or availability limit rather than fabricating fund values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/open-fund-query)
+- [Index Hub AI Skills help document](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/help.pdf)
+- [OEF catalog reference](artifact/references/catalog-oef.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text answers, with setup shell commands and internal JSON API results summarized for users.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an Index Hub API key; final user-facing answers include the provider disclaimer and should not expose credentials, raw responses, or internal service details.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

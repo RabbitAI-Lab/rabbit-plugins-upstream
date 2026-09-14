@@ -9,13 +9,13 @@ Generate a professionally curated, categorized, and rated news digest from [sre.
 
 ## Workflow
 
-1. **Scrape** — Fetch recent news from sre.news
+1. **Fetch** — Fetch recent news from the RSS feed (a daily mirror of sre.news)
 2. **Read** — Open and read each article to understand its content
 3. **Rate** — Score each article (1-5 ⭐) using the scoring rubric
 4. **Categorize** — Assign categories from the taxonomy
 5. **Format** — Generate the final markdown digest grouped by category
 
-## Step 1: Scrape sre.news
+## Step 1: Fetch Recent News
 
 Run the helper script (path relative to this skill's directory):
 
@@ -23,9 +23,9 @@ Run the helper script (path relative to this skill's directory):
 python scripts/scrape_sre_news.py [days]
 ```
 
-The script outputs a JSON array. Each item contains `title`, `url`, `source`, and optionally `date`. The `days` argument filters articles to the requested time range (default: 1 day). If date metadata is unavailable on the page, all articles are returned.
+The script fetches the RSS feed at `https://news.imzye.com/rss.xml` (a daily mirror of sre.news) and outputs a JSON array. Each item contains `title`, `url`, `source`, and `date`. The `days` argument selects how many of the most recent daily lists to include (default: 1 day).
 
-If the script output is incomplete or titles are missing, use the browser to visit `https://sre.news` directly and collect articles manually. When browsing, capture the original article title, URL, and source/publication name for each item.
+If the script output is incomplete or titles are missing, visit `https://news.imzye.com/rss.xml` or `https://sre.news` directly and collect articles manually. When browsing, capture the original article title, URL, and source/publication name for each item.
 
 ## Step 2: Read Each Article
 

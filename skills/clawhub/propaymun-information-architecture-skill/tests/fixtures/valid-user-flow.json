@@ -1,0 +1,42 @@
+{
+  "meta": {
+    "title": "Book a salon appointment",
+    "artifact_type": "user-flow",
+    "artifact_version": "1.0",
+    "status": "proposed",
+    "language": "fa-IR",
+    "direction": "rtl",
+    "scope": "customer booking MVP",
+    "goal": "رزرو یک زمان آزاد برای خدمت انتخاب‌شده",
+    "trigger": "کاربر یک خدمت و سالن را انتخاب کرده است",
+    "preconditions": ["زمان‌های آزاد قابل بازیابی‌اند"],
+    "source": {
+      "type": "minimum-semantic-substrate",
+      "reference_id": "substrate-salon-001",
+      "version": "1.0",
+      "readiness": "provisional"
+    }
+  },
+  "actors": [
+    {"id": "customer", "label": "مشتری", "evidence_status": "Provided"}
+  ],
+  "steps": [
+    {"id": "choose-slot", "type": "action", "label": "انتخاب زمان", "actor_id": "customer", "semantic_refs": ["availability"], "evidence_status": "Proposed"},
+    {"id": "slot-available", "type": "decision", "label": "زمان هنوز آزاد است؟", "actor_id": null, "semantic_refs": ["availability"], "evidence_status": "Proposed"},
+    {"id": "booking-created", "type": "success", "label": "رزرو ثبت شد", "actor_id": null, "semantic_refs": ["booking"], "state_after": "confirmed", "terminal": true, "evidence_status": "Proposed"},
+    {"id": "slot-conflict", "type": "failure", "label": "زمان دیگر آزاد نیست", "actor_id": null, "semantic_refs": ["availability"], "evidence_status": "Proposed"},
+    {"id": "choose-another", "type": "recovery", "label": "انتخاب زمان دیگر", "actor_id": "customer", "semantic_refs": ["availability"], "evidence_status": "Proposed"}
+  ],
+  "transitions": [
+    {"id": "t1", "from": "choose-slot", "to": "slot-available", "kind": "main", "evidence_status": "Proposed"},
+    {"id": "t2", "from": "slot-available", "to": "booking-created", "kind": "main", "condition": "بله", "evidence_status": "Proposed"},
+    {"id": "t3", "from": "slot-available", "to": "slot-conflict", "kind": "error", "condition": "خیر", "evidence_status": "Proposed"},
+    {"id": "t4", "from": "slot-conflict", "to": "choose-another", "kind": "recovery", "evidence_status": "Proposed"},
+    {"id": "t5", "from": "choose-another", "to": "slot-available", "kind": "main", "evidence_status": "Proposed"}
+  ],
+  "entry_step_id": "choose-slot",
+  "success_conditions": ["رزرو با شناسه یکتا و وضعیت تأییدشده ایجاد شده است"],
+  "assumptions": [],
+  "unknowns": [],
+  "validation": []
+}

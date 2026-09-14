@@ -1,42 +1,60 @@
-## Description: <br>
-Iterate automates multi-round code review and iteration by running configurable parallel review dimensions, applying atomic fixes, routing architectural fixes for approval, validating, merging, and pushing until no findings remain or a configured round limit is reached. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fully automated multi-round code iteration with configurable N-dimension parallel review, onboarding/personalization, and a cross-assistant installer/update system with mandatory SHA256 checksum verification.
 
-## Publisher: <br>
-[jingzhao-l](https://clawhub.ai/user/jingzhao-l) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jingzhao-l](https://clawhub.ai/user/jingzhao-l)
 
-## Use Case: <br>
-Developers and engineering teams use Iterate before release, during refactoring, or at iteration wrap-up to systematically review code across correctness, security, performance, architecture, tests, and related dimensions, then apply validated fixes under its workflow controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact code changes and git operations, including commits, merges, and pushes. <br>
-Mitigation: Install only for explicitly invoked automation, verify the target branch, consider setting git.push_per_round to false, and review generated commits plus the decision log before allowing remote updates. <br>
-Risk: Project-configured validation commands may run during the iteration workflow. <br>
-Mitigation: Review validation.commands and command whitelists before use so only trusted project commands are executed. <br>
+## Use Case:
 
+Developers and engineers use Iterate to have AI assistants perform multi-round code review, automated fixes, verification, and convergence before a change is delivered. It can also be used in review-only mode for read-only health checks and in defensive mode for normal incremental coding tasks.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/jingzhao-l/iterate-skill) <br>
-- [ClawHub release page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
-- [Agent Skills](https://agentskills.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured text with code edits, shell commands, configuration guidance, and decision-log entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an iterative workflow for review findings, fixes, validation results, commits, merges, pushes, and summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Installer or update paths can execute local code and install command-line tooling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the checksum-verified npx or release path, verify release checksums, and avoid curl-to-bash installation paths.
+
+Risk: Configured validation commands can execute high-impact code from the target repository.
+
+Mitigation: Review iterate.config.yaml before validation runs and allow only trusted npm, npx, make, Python, or equivalent project commands.
+
+Risk: Autonomous review and fixing can modify files and perform git operations.
+
+Mitigation: Keep auto_merge and push_per_round disabled until diffs have been reviewed, and use review-only or dry-run mode when changes are not desired.
+
+## Reference(s):
+
+- [Iterate ClawHub Release](https://clawhub.ai/jingzhao-l/skills/iterate-skill)
+- [Iterate GitHub Repository](https://github.com/jingzhao-l/iterate-skill)
+- [Iterate npm Installer](https://www.npmjs.com/package/iterate-skill-installer)
+- [Agent Skills Standard](https://agentskills.io/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries, code changes, shell command guidance, and configuration updates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May edit files and run configured validation commands unless invoked in review-only or dry-run mode.]
+
+## Skill Version(s):
+
+3.3.1 (source: frontmatter, pyproject.toml, CHANGELOG, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

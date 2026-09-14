@@ -24,7 +24,7 @@ Provides AI agents with full access to mail, calendar, contacts, and tasks via M
 
 ## Agent-friendly
 
-Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop large body fields — ~10× fewer tokens for triage scans. Graph errors are wrapped into structured `{code, message, action}` responses with recovery hints (re-auth on 401, ROADMAP pointer on 403/ErrorAccessDenied, re-list on 404, back-off on 429, retry on 503). v1.9.1 docstring audit: every `@mcp.tool()` docstring rewritten to a consistent shape with contrastive pointers for ambiguous pairs and concrete syntax examples, designed to reduce wrong-tool selection by LLMs.
+Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop large body fields — ~10× fewer tokens for triage scans. Graph errors are wrapped into structured `{code, message, action}` responses with recovery hints (re-auth on 401, ROADMAP link on 403/ErrorAccessDenied, re-list on 404, back-off on 429, retry on 503). v1.9.1 docstring audit: every `@mcp.tool()` docstring rewritten to a consistent shape with contrastive pointers for ambiguous pairs and concrete syntax examples, designed to reduce wrong-tool selection by LLMs.
 
 ## Important
 
@@ -42,7 +42,8 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
      "client_id": "YOUR-APP-CLIENT-ID",
      "tenant_id": "consumers",
      "timezone": "America/Los_Angeles",
-     "read_only": true
+     "read_only": true,
+     "attachments_dir": "~/.outlook-mcp/attachments"
    }
    ```
 4. **Register with OpenClaw** (writes to `mcp.servers` in `~/.openclaw/openclaw.json`):
@@ -56,13 +57,19 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
    ```
 6. **Restart the gateway:** `openclaw gateway restart`
 
+## Prompts (3)
+
+- `morning_brief(folder="inbox")` — today's events, unread mail and tasks due, in the cheapest order
+- `triage_folder(folder="inbox", count=50)` — one scan, sorted, applied in a single batch call
+- `catch_up(since="24h")` — what changed, via the delta path
+
 ## Tools (62)
 
 ### Auth
 - `outlook_auth_status` — Check authentication status and read-only mode
 
 ### Mail — Read
-- `outlook_list_inbox` — List messages with filters (folder, unread, sender, date)
+- `outlook_list_inbox` — List messages with filters (folder, unread, sender, date, category, Focused class)
 - `outlook_read_message` — Get full message by ID
 - `outlook_read_messages` — Bulk read up to 20 messages by ID in one `$batch` round-trip (use NOT N read_message calls)
 - `outlook_search_mail` — Search mail using KQL query
@@ -86,11 +93,11 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 - `outlook_delete_inbox_override` — Delete an override by ID
 
 ### Calendar
-- `outlook_list_events` — List events in date range (expands recurring)
-- `outlook_get_event` — Get event details
+- `outlook_list_events` — List events in date range (expands recurring); each carries `type` (seriesMaster vs one-off)
+- `outlook_get_event` — Get event details, incl. `recurrence` and `type` (`seriesMaster` etc.)
 - `outlook_list_events_delta` — List only event changes since last call within a window (massive token savings for recurring agent jobs)
-- `outlook_create_event` — Create event with attendees, recurrence, online meeting
-- `outlook_update_event` — Update event fields
+- `outlook_create_event` — Create event with attendees, online meeting; `recurrence` (shorthand or Graph object) creates a series
+- `outlook_update_event` — Update event fields incl. attendees (replaces the list, sends invites) and all-day; `recurrence` converts a single event into a series, `remove_recurrence=True` converts it back
 - `outlook_delete_event` — Delete event
 - `outlook_rsvp` — Accept, decline, or tentatively accept
 
@@ -123,8 +130,8 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 
 ### Attachments
 - `outlook_list_attachments` — List on a message
-- `outlook_download_attachment` — Download and save decoded bytes to a file
-- `outlook_send_with_attachments` — Send with files (auto upload session for >3MB)
+- `outlook_download_attachment` — Download and save decoded bytes into `attachments_dir`
+- `outlook_send_with_attachments` — Send with files read from `attachments_dir` (auto upload session for >3MB)
 - `outlook_attach_to_draft` — Add attachments to an existing draft (auto upload session for >3MB)
 - `outlook_remove_draft_attachment` — Remove a single attachment from a draft
 
@@ -149,12 +156,14 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 ## Privacy
 - Zero telemetry, zero local caching
 - Only connects to `login.microsoftonline.com` and `graph.microsoft.com`
-- Tokens stored in OS keyring (macOS Keychain, Windows Credential Store)
+- Tokens stored in the OS keyring (macOS Keychain, Windows Credential Store, libsecret on Linux). Without an encrypted store the server refuses to persist them unless `allow_unencrypted_token_cache` is set.
 - BYOID: you register your own Azure AD app — no shared client ID
 
 ## Notes
 - IDs are opaque Graph strings — get them from list/search tools, never guess
-- Dates are ISO 8601, UTC in responses, config timezone for input interpretation
+- Dates take ISO 8601 or a relative offset (`7d` ago, `+7d` from now, `now`); responses are UTC, and zone-less input is read in the config timezone
+- Attachments may only be read from or written to `attachments_dir` — put a file there before asking for it to be sent
+- Three workflow prompts ship with the server: `morning_brief`, `triage_folder`, `catch_up`
 - Mail search uses KQL syntax
 - Start with `read_only: true`, flip when comfortable
 - **Granular permissions:** For finer control, set `allow_categories` in config (e.g., `["calendar_write"]` to allow only calendar writes). See README for the 7 categories and example policies.

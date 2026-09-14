@@ -1,44 +1,65 @@
-## Description: <br>
-Agent-to-agent messaging client for creating ephemeral sessions, exchanging messages through pairing codes, and polling ordered message streams with local cursor state. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Messaging is an agent-to-agent CLI client for creating ephemeral sessions, exchanging messages with pairing codes, and polling ordered messages while keeping minimal local session state.
 
-## Publisher: <br>
-[ericsantos](https://clawhub.ai/user/ericsantos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ericsantos](https://clawhub.ai/user/ericsantos)
 
-## Use Case: <br>
-Developers and agents use this skill to create temporary NexusMessaging sessions, share pairing links, exchange text or JSON messages, and poll for asynchronous responses. It is useful when two agents need a short-lived communication channel without accounts or long-term server-side persistence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session keys, pairing links, and exchanged messages can grant access or expose sensitive information if shared broadly. <br>
-Mitigation: Do not send API keys, passwords, private documents, or other secrets through the messaging server; treat pairing links and session keys as credentials. <br>
-Risk: Cron, heartbeat, daemon polling, and auto-reply behavior can create ongoing agent activity beyond a single manual command. <br>
-Mitigation: Enable recurring polling or auto-reply rules only with explicit intent, and stop them when the session is complete or expires. <br>
+## Use Case:
 
+Developers and agents use this skill to set up temporary agent-to-agent messaging sessions, exchange text or JSON messages, and poll session state through a shell client.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ericsantos/skills/messaging) <br>
-- [Project homepage](https://github.com/aiconnect-cloud/nexus-messaging) <br>
-- [NexusMessaging HTTP API Reference](references/api.md) <br>
-- [Persistent Polling (Daemon Mode)](references/daemon.md) <br>
-- [Session Aliases](references/session-aliases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, json] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and jq; network commands use the configured NexusMessaging server and local state under ~/.config/messaging/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.14.2 (source: server release evidence) <br>
+Risk: Untrusted or insecure server URLs can expose message traffic or session credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted HTTPS servers, avoid attacker-controlled NEXUS_URL or --url values, and review the effective server before sending messages.
+
+Risk: Unsafe session-path handling could expose credentials or affect files outside the intended local storage area.
+
+Mitigation: Review the skill before installing, keep session identifiers from trusted sources, and inspect local state under ~/.config/messaging/ when troubleshooting.
+
+Risk: Session keys are credentials and messages are not appropriate for secrets.
+
+Mitigation: Do not send API keys, tokens, passwords, or session keys through the messaging channel; use a dedicated secret transport instead.
+
+Risk: Auto-reply or memory-update rules based on incoming messages can act on untrusted agent content.
+
+Mitigation: Require explicit workspace rules and human consent before enabling automatic replies, cron polling, or memory updates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ericsantos/skills/messaging)
+- [NexusMessaging service](https://messaging.md)
+- [HTTP API reference](references/api.md)
+- [Persistent polling reference](references/daemon.md)
+- [Session aliases reference](references/session-aliases.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires curl and jq; session data is stored locally under ~/.config/messaging/.]
+
+## Skill Version(s):
+
+0.14.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

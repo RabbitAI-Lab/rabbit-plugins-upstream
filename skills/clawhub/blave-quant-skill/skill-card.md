@@ -1,51 +1,68 @@
-## Description: <br>
-Blave Quant Skill gives agents a documentation-based reference for Blave market alpha data, Taiwan market data, CME/ICE futures OHLCV, and spot, futures, margin, funding, and account workflows across supported exchanges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Blave Quant helps agents retrieve Blave market alpha, Taiwan and futures market data, and use supported exchange APIs for spot, futures, and funding workflows.
 
-## Publisher: <br>
-[blave-wei](https://clawhub.ai/user/blave-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[blave-wei](https://clawhub.ai/user/blave-wei)
 
-## Use Case: <br>
-Developers and trading-focused agent users use this skill to fetch market data, build analysis, and prepare exchange API calls for supported venues. It is also used to guide order, funding, and transfer workflows that require explicit user confirmation before any write action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: High-authority exchange API credentials can place trades, manage positions, submit funding actions, or transfer funds when write permissions are enabled. <br>
-Mitigation: Use dedicated least-privilege API keys, disable withdrawals, enable IP allowlists, and only add exchange credentials for venues the user intends to use. <br>
-Risk: Marketplace strategy downloads can result in local Python code execution near trading credentials. <br>
-Mitigation: Review and security scan downloaded strategy code, isolate it in a sandbox, and do not run it on the host or near live trading credentials without approval. <br>
-Risk: Trading or funding actions can cause financial loss if executed unintentionally or with incorrect parameters. <br>
-Mitigation: Require the user to reply exactly CONFIRM for each write action, present a one-screen action summary first, and verify the result after execution. <br>
+## Use Case:
 
+Developers, analysts, and trading users use this skill to guide agents through authenticated market-data retrieval, alpha screening, backtesting support, and user-confirmed trading workflows across supported exchanges.
 
-## Reference(s): <br>
-- [Blave Quant Skill on ClawHub](https://clawhub.ai/blave-wei/skills/blave-quant-skill) <br>
-- [Blave homepage](https://blave.org) <br>
-- [Blave API reference](artifact/references/blave-api.md) <br>
-- [Blave indicator guide](artifact/references/blave-indicator-guide.md) <br>
-- [TradingView stream reference](artifact/references/tradingview-stream.md) <br>
-- [Marketplace reference](artifact/references/marketplace.md) <br>
-- [Gate.io reference](artifact/references/gateio-skill.md) <br>
-- [Binance reference](artifact/references/binance-skill.md) <br>
-- [BitMart futures reference](artifact/references/bitmart-futures-skill.md) <br>
-- [TWSE/TPEX reference](artifact/references/twse-skill.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API request examples, configuration snippets, and optional code or shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read operations can be described directly; write operations require one explicit CONFIRM per action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.15.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can guide agents to place trades, transfer funds, or submit funding actions through third-party exchange APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only keys unless trading is required, disable withdrawals, apply IP allowlists where possible, and require an explicit per-action CONFIRM before any write operation.
+
+Risk: Marketplace strategies may include untrusted Python strategy code.
+
+Mitigation: Review and scan marketplace code before use, and run downloaded strategies only in an isolated environment that does not contain exchange keys or other secrets.
+
+Risk: Supported exchange requests may include Blave broker or referral identifiers.
+
+Mitigation: Disclose broker attribution to users before use and let them decide whether the attribution behavior is acceptable for their account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/blave-wei/skills/blave-quant-skill)
+- [Blave homepage](https://blave.org)
+- [Blave API reference](references/blave-api.md)
+- [Blave indicator guide](references/blave-indicator-guide.md)
+- [Hyperliquid API reference](references/hyperliquid-api.md)
+- [Marketplace reference](references/marketplace.md)
+- [Binance API reference](references/binance-api-reference.md)
+- [BitMart futures reference](references/bitmart-futures-skill.md)
+- [OKX API reference](references/okx-api-reference.md)
+- [Bybit reference](references/bybit-skill.md)
+- [KuCoin reference](references/kucoin-skill.md)
+- [Gate.io API reference](references/gateio-api-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline code, shell commands, API-call patterns, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Blave API credentials for market data; exchange credentials are optional and should be scoped to the requested workflow.]
+
+## Skill Version(s):
+
+1.23.1 (source: server release, frontmatter, clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

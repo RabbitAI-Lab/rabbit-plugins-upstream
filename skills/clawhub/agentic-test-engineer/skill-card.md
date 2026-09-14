@@ -1,41 +1,53 @@
-## Description: <br>
-Agentic Test Engineer helps QA engineers and developers generate tests, diagnose flaky failures, repair broken UI selectors, and identify coverage gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered autonomous test generation and self-healing test maintenance. Generates unit/integration/E2E tests, detects flaky tests, auto-fixes broken selectors, and maintains test coverage. Built for QA engineers and developers.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-QA engineers and developers use this skill to generate unit, integration, E2E, and API tests from code or stories, diagnose flaky test failures, suggest selector repairs, and plan tests for uncovered code paths. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated tests or selector repairs may be incorrect, brittle, or misaligned with the intended application behavior. <br>
-Mitigation: Review generated tests and proposed self-healed selectors before committing or using them in production workflows. <br>
-Risk: The skill may need access to project code, tests, CI logs, and coverage files to provide useful guidance. <br>
-Mitigation: Install and run it only where sharing those project artifacts with the agent is acceptable. <br>
+## Use Case:
 
+QA engineers and developers use this skill to generate unit, integration, API, and end-to-end tests, diagnose flaky failures, repair broken UI selectors, and prioritize coverage gaps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/agentic-test-engineer) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks and structured recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces test code examples, selector repair options, flaky-test analysis, coverage recommendations, and reviewable workflow guidance; it does not execute tests directly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Effective use may expose project code, test logs, DOM snapshots, screenshots, and coverage files to the agent or connected tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review data-sharing boundaries before use and avoid providing regulated or sensitive artifacts unless the execution environment is approved for them.
+
+Risk: Generated tests or self-healed selectors can encode incorrect behavior or target the wrong UI element, especially in legal, financial, or production workflows.
+
+Mitigation: Keep human review in the loop before merging generated tests or selector changes, and require stable selector contracts for high-impact workflows.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/agentic-test-engineer)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Code, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with code blocks and structured recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include test cases, selector recommendations, root-cause reports, coverage triage, and configuration snippets for the user's own environment.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

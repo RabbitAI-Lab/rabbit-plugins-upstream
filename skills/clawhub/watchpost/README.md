@@ -1,41 +1,43 @@
-# `[` Watchpost skill — the safety net for your agent's spending
+# Watchpost skill
 
-A distribution artifact for the "ungoverned" open-agent path: an
-[Agent Skills](https://agentskills.io/specification) skill that teaches an agent
-(OpenClaw, Hermes, or any agentskills-compatible runtime) to run every purchase
-past Watchpost before paying, and to honor the verdict.
+This folder is the source for the Watchpost skill on ClawHub. It contains the
+skill instructions, a purchase-check helper, a review-status helper and their
+shared HTTP transport. The helpers run on Node.js 20 or newer without installing
+packages.
 
-It's a plain `SKILL.md` (frontmatter + instructions) plus one helper,
-`scripts/check-purchase.mjs`, that calls `POST /v1/verify` with the user's
-connection token and returns the verdict via its exit code (0 approve, 2 review,
-1 block/error).
+Read [SKILL.md](SKILL.md) for setup, input fields, exit codes and the review
+workflow. OpenClaw expands `{baseDir}` in the instructions; other hosts should
+resolve the scripts from this folder. The helpers submit
+checks and read status from the official Watchpost API; they do not make payments
+or approve reviews on the user's behalf.
 
-## Try it locally
+## Local troubleshooting
 
-The script targets the official hosted API (`https://api.watchpost.systems`) —
-the endpoint is hardcoded, not env-configurable, so the token can only ever go
-there. To test against a local API instead, temporarily change the `base`
-constant in `scripts/check-purchase.mjs`.
+Run an absolute path to `scripts/check-purchase.mjs` with `--help`, `--version`
+or `--doctor`. These do not require a valid connection and make no network calls.
+Doctor reports only runtime and token-format information, never the token itself.
+A successful diagnostic does not prove the token is valid on the server.
+
+If the skill is not available, check the runtime's skill status and configure
+`WATCHPOST_TOKEN` through its secret settings. OpenClaw gates skill loading on
+that variable. If execution is sandboxed, ensure the secret is available inside
+the sandbox too. Refresh the skill list or start a new session after setup.
+
+Use `--validate --file PATH` to check purchase input offline, then `--file PATH`
+to submit the same file. JSON files support paths with spaces and UTF-8 text,
+including a Windows UTF-8 BOM. Files are limited to 1,300,000 bytes. Keep them
+free of tokens, cookies, payment credentials and unrelated account data.
+
+Run the isolated regression tests from the repository root:
 
 ```bash
-# WATCHPOST_TOKEN: a real connection token from the Watchpost app → Connections.
-WATCHPOST_TOKEN=wp_your_connection_token \
-node scripts/check-purchase.mjs '{"merchant":"too-good-deals.io","title":"Premium subscription","amountMinor":19900,"currency":"USD"}'
-# → prints a "block" verdict and exits 1
+pnpm test:skill
 ```
 
-## Publish
+Tests use mock HTTP responses and dummy credentials. They do not contact the
+Watchpost API, create review notifications or consume the check allowance.
+The repository's CI runs them through `pnpm test`.
 
-Same `SKILL.md` works for both registries (both follow the Agent Skills spec):
-
-- **Install from ClawHub:** `openclaw skills install @lelis92/watchpost`.
-- **Publish an update:** `npm i -g clawhub`, then `clawhub login`, then
-	`clawhub skill publish ./ --slug watchpost --name "Watchpost" --version 0.1.7`
-	(needs a GitHub account old enough to pass ClawHub's upload gate; skills are MIT-0).
-- **agentskills.io / Hermes:** host the folder and list it in your
-  `/.well-known/agent-skills/index.json`, or submit to the registry per its docs.
-
-Publishing is an outward-facing step — do it from an account you control. The API
-endpoint is hardcoded to `https://api.watchpost.systems` in the script and is not
-env-configurable, so there's nothing to change before publishing: the user's
-token can only ever reach the official Watchpost API.
+Release metadata and registry publication are handled separately. Publish the
+reviewed contents of this folder; do not include local tokens, test output or
+registry-generated installation metadata.

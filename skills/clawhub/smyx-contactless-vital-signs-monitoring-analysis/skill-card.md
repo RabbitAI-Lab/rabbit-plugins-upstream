@@ -1,45 +1,59 @@
-## Description: <br>
-Non-contact detection of heart rate, respiration, blood oxygen, and heart rate variability using camera footage without wearable devices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Non-contact detection of heart rate, respiration, blood oxygen, and heart rate variability from camera footage, without requiring wearable devices.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze face video or image inputs for contactless vital-sign estimates and to retrieve prior monitoring reports. Results are informational health references and are not a substitute for professional medical measurement or diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face/video health data and user-linked identifiers may be sent to the provider's cloud service. <br>
-Mitigation: Use only with appropriate consent and review the provider's privacy, retention, and data-handling practices before submitting sensitive footage. <br>
-Risk: The skill can create or reuse local identity state and store tokens for future report access. <br>
-Mitigation: Run in an environment where local credential and identity state can be inspected, protected, and removed when access is no longer needed. <br>
-Risk: Vital-sign analysis results may be mistaken for medical advice. <br>
-Mitigation: Present results as informational health references only and direct users to professional medical measurement or diagnosis for health decisions. <br>
+## Use Case:
 
+External users and developers use this skill to analyze uploaded or URL-based face videos for contactless vital-sign estimates and to retrieve prior cloud-hosted analysis reports. Results are intended for health reference and are not a substitute for professional medical measurement or diagnosis.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-contactless-vital-signs-monitoring-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON health-analysis report with optional saved output file and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May retrieve cloud-hosted report history associated with internally managed user identity state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence; artifact frontmatter reports 1.0.7) <br>
+Risk: Sensitive face videos and health-related biometric data may be uploaded to cloud services, and the release includes plaintext development endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only documented HTTPS production endpoints and do not process real face videos or health data until upload, storage, retention, and access controls are documented and reviewed.
+
+Risk: The skill silently creates or reuses an identity and can retrieve cloud-hosted report history.
+
+Mitigation: Require clear user consent for identity creation and history retrieval, and verify that report access is scoped to the intended user before deployment.
+
+Risk: Reusable access tokens may be stored locally.
+
+Mitigation: Store credentials in an appropriate secret store, limit workspace sharing, and rotate or revoke test credentials after evaluation.
+
+## Reference(s):
+
+- [API 接口文档](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-contactless-vital-signs-monitoring-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON text returned from skill command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured vital-sign analysis, risk or recommendation text, report export links, and cloud history lists.]
+
+## Skill Version(s):
+
+1.0.16 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

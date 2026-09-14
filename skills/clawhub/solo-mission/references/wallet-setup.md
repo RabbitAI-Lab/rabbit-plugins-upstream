@@ -1,5 +1,10 @@
 # SOLO Mission Platform — Wallet Setup (On-Chain Missions)
 
+> ⚠️ **This is the Base wallet path — Base is closed to new mission creation.**
+> For any new on-chain mission, set up a Solana wallet instead: see
+> `references/solana-wallet.md`. This document remains accurate only for resuming
+> or managing a Base mission created before the closure.
+
 On-chain missions require a Sponsor wallet — an Ethereum EOA that signs `createTask()`,
 `cancelTask()`, `emergencyRefund()`, and `claimRefund()` on EscrowVault. All four
 functions must be called from the **same address**.

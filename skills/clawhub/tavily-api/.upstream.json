@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tavily-api",
   "slug": "tavily-api",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1781739753410,
-  "contentHash": "1c5b281b12e66d828bbe17be5080ad5404ee6e045a41296635d324b6e705e1f1",
-  "fetchedAt": "2026-07-26T18:27:34.714Z"
+  "version": "1.2.3",
+  "updatedAt": 1789289042034,
+  "contentHash": "1cc8414ca24cf3d007a761dc2c2e200edf21e3f1192e80f95c311a69c33bea63",
+  "fetchedAt": "2026-09-14T14:41:43.007Z"
 }

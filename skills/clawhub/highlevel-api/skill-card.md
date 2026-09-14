@@ -1,49 +1,77 @@
-## Description: <br>
-GoHighLevel Private Integration Token API integration with managed authentication for CRM, sales pipelines, calendars, conversations, payments, and marketing automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GoHighLevel provides managed Private Integration Token access for CRM, sales pipelines, calendars, conversations, payments, and marketing automation through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and operators use this skill to connect an agent to Maton-managed GoHighLevel Private Integration Token connections, choose agency or sub-account scope, and prepare approved API requests for CRM, pipeline, calendar, conversation, payment, and workflow tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access broad CRM, customer, pipeline, calendar, conversation, payment, and workflow data through connected GoHighLevel accounts. <br>
-Mitigation: Install only when Maton and the publisher are trusted, use least-privilege agency or sub-account tokens, and minimize sensitive reads. <br>
-Risk: Using the wrong agency or sub-account connection can route requests to an unintended scope. <br>
-Mitigation: Specify the intended Maton-Connection for each request and confirm whether the operation requires an agency token or a sub-account token. <br>
-Risk: Create, update, and delete calls can change business records or remove data. <br>
-Mitigation: Review the target resource and intended effect before approving every write or delete action. <br>
-Risk: The MATON_API_KEY and GoHighLevel Private Integration Tokens grant sensitive account access. <br>
-Mitigation: Keep credentials private, store them in environment variables or approved secret storage, and rotate or revoke them if exposed. <br>
+## Use Case:
 
+External users and developers use this skill to inspect and manage GoHighLevel contacts, opportunities, calendars, conversations, invoices, products, workflows, and related CRM data through an authenticated Maton connection. It supports read/list-first workflows and user-approved writes or automation setup.
 
-## Reference(s): <br>
-- [GoHighLevel API Documentation](https://highlevel.stoplight.io/docs/integrations/) <br>
-- [GoHighLevel Marketplace Documentation](https://marketplace.gohighlevel.com/docs/) <br>
-- [Private Integration Token Guide](https://marketplace.gohighlevel.com/docs/integrations/custom-token) <br>
-- [GoHighLevel Skill on ClawHub](https://clawhub.ai/byungkyu/highlevel-api) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with curl examples and JSON request and response snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write and delete operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can access sensitive GoHighLevel CRM and business data through the user's authorized connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for accounts where this access is acceptable, use least-privilege GoHighLevel scopes where available, and verify the intended account or location before acting.
+
+Risk: Write, delete, connection, or automation setup actions can change CRM records, messaging state, invoices, workflows, or long-running trigger behavior.
+
+Mitigation: Confirm every modifying operation with the exact resource ID, payload, destination, and intended effect before execution.
+
+Risk: API-key or raw HTTP use can expose long-lived credentials if handled outside the CLI credential store.
+
+Mitigation: Prefer OAuth through the Maton CLI, send API keys only to api.maton.ai when raw HTTP is unavoidable, and avoid logging raw responses or credentials.
+
+Risk: CLI or SDK installation does not include package hashes in the evidence.
+
+Mitigation: Install in an isolated environment and upgrade pinned tooling deliberately after reviewing release notes.
+
+## Reference(s):
+
+- [GoHighLevel Skill Page](https://clawhub.ai/byungkyu/skills/highlevel-api)
+- [Maton Homepage](https://maton.ai)
+- [GoHighLevel API Documentation](https://highlevel.stoplight.io/docs/integrations/)
+- [GoHighLevel Marketplace](https://marketplace.gohighlevel.com/docs/)
+- [Private Integration Token Guide](https://marketplace.gohighlevel.com/docs/integrations/custom-token)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include API call proposals, resource identifiers, connection guidance, and hosted automation snippets; write, delete, connection, and automation actions require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

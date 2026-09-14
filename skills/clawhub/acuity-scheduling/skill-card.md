@@ -1,49 +1,80 @@
-## Description: <br>
-Acuity Scheduling API integration with managed OAuth for managing appointments, calendars, clients, and availability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Acuity Scheduling API integration with managed OAuth for managing appointments, calendars, clients, and availability.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to connect an Acuity Scheduling account through Maton and perform scheduling workflows such as checking availability, booking, rescheduling, canceling appointments, and managing clients or calendars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, cancel, or delete appointments, clients, blocks, and connections in a connected Acuity Scheduling account. <br>
-Mitigation: Before approving write operations, confirm the exact account, resource, and intended effect with the user. <br>
-Risk: Requests could affect the wrong Acuity Scheduling account when multiple connections are available. <br>
-Mitigation: Use the Maton-Connection header to target the intended connection whenever more than one account is connected. <br>
-Risk: The skill requires a Maton API key and access to scheduling and client data. <br>
-Mitigation: Install only if you trust Maton, keep MATON_API_KEY protected, and limit use to the intended connected account. <br>
+## Use Case:
 
+Agents use this skill to help users schedule, reschedule, cancel, and inspect Acuity Scheduling appointments and availability through a Maton-managed Acuity connection. It is also useful when a user explicitly asks to create approved hosted automations around Acuity Scheduling actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/acuity-scheduling) <br>
-- [Acuity Scheduling API Quick Start](https://developers.acuityscheduling.com/reference/quick-start) <br>
-- [Appointments API](https://developers.acuityscheduling.com/reference/get-appointments) <br>
-- [Availability API](https://developers.acuityscheduling.com/reference/get-availability-dates) <br>
-- [Calendars API](https://developers.acuityscheduling.com/reference/get-calendars) <br>
-- [Clients API](https://developers.acuityscheduling.com/reference/clients) <br>
-- [OAuth2 Documentation](https://developers.acuityscheduling.com/docs/oauth2) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown with HTTP endpoints, Python and JavaScript examples, and shell configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Acuity Scheduling connection; use the Maton-Connection header when multiple accounts are connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: The skill can access and change scheduling data through the user's Acuity Scheduling connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only calls first and require explicit user approval before creating connections, writes, deletions, hosted functions, or automations.
+
+Risk: Long-lived API keys and destination headers can expose credentials or sensitive scheduling data.
+
+Mitigation: Prefer OAuth, store credentials only through the Maton credential flow, avoid embedding credentials in trigger destinations, and rotate any key that was printed, pasted, or committed.
+
+Risk: Triggers or hosted destinations can continue forwarding event or scheduling data until removed.
+
+Mitigation: Use trigger destinations only after explicit approval, keep destinations inside the Maton platform when possible, and delete automations when the task is complete.
+
+Risk: Installing the Maton CLI or SDK introduces a residual package supply-chain dependency.
+
+Mitigation: Use pinned reviewed versions and upgrade deliberately after checking release notes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/acuity-scheduling)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Acuity Scheduling API Quick Start](https://developers.acuityscheduling.com/reference/quick-start)
+- [Appointments API](https://developers.acuityscheduling.com/reference/get-appointments)
+- [Availability API](https://developers.acuityscheduling.com/reference/get-availability-dates)
+- [Calendars API](https://developers.acuityscheduling.com/reference/get-calendars)
+- [Clients API](https://developers.acuityscheduling.com/reference/clients)
+- [Acuity OAuth2 Documentation](https://developers.acuityscheduling.com/docs/oauth2)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline JSON, Python, JavaScript, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Acuity API paths, Maton CLI commands, connection IDs, hosted function examples, trigger configuration, and approval guidance.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

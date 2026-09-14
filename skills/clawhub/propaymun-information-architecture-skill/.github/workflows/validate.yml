@@ -1,0 +1,25 @@
+name: Validate skill
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild professional packages and compatibility aliases
+        run: python scripts/build_packages.py
+      - name: Verify generated packages are current
+        run: git diff --exit-code -- packages/agent-skill/propaymun-information-architecture.zip packages/workspace-kit/propaymun-ia-workspace-kit.md install/universal-web/propaymun-information-architecture.md install/universal-web/PROJECT_INSTRUCTIONS.md install/claude-ai/propaymun-information-architecture.zip
+      - name: Run deterministic tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate fixture
+        run: python scripts/validate_ia_model.py tests/fixtures/valid-semantic-ia.json

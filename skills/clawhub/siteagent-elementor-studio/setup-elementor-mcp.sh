@@ -4,7 +4,9 @@
 # WordPress site (Local-by-Flywheel or live host) and write a .mcp.json
 # in the current directory so Claude Code can drive Elementor.
 #
-# Usage:  bash ~/.claude/scripts/setup-elementor-mcp.sh
+# Usage:  bash "<skill-dir>/setup-elementor-mcp.sh"
+#         (where <skill-dir> is the skill's announced base directory)
+#         Fallback for manual installs: bash ~/.claude/scripts/setup-elementor-mcp.sh
 #
 # What it does:
 #   1. Asks Local vs live host
@@ -20,6 +22,15 @@
 
 set -uo pipefail
 
+# Absolute path to this script, for retry hints. The wizard is invoked as
+# `bash "<skill-dir>/setup-elementor-mcp.sh"` (or through ~/.claude/scripts/)
+# while the working directory is the user's PROJECT - that is where .mcp.json
+# has to land - so a hint reading `bash setup-elementor-mcp.sh` cannot be
+# copied and run: the file is not in that directory. Captured before anything
+# could change the working directory.
+SELF=${BASH_SOURCE[0]:-$0}
+case "$SELF" in /*) ;; *) SELF="$PWD/$SELF" ;; esac
+
 # ---- pretty-print helpers ----------------------------------------------------
 BOLD=$'\033[1m'; DIM=$'\033[2m'; GREEN=$'\033[32m'; YELLOW=$'\033[33m'
 RED=$'\033[31m'; CYAN=$'\033[36m'; RESET=$'\033[0m'
@@ -32,6 +43,362 @@ info()  { printf "  ${DIM}%s${RESET}\n" "$*"; }
 ask()   { printf "${BOLD}? %s${RESET} " "$*"; }
 
 abort() { fail "$1"; exit 1; }
+
+# ---- pure helpers (arg/stdin based; unit-tested via --self-test-fn) ----------
+# Same convention as new-client.sh, deliberately inline so this stays one
+# droppable file.
+
+# arg1: site URL -> host, lowercased, port and path stripped
+url_host(){
+  # A bracketed IPv6 literal (http://[::1]:8080/) must not be cut at its first
+  # colon - that returned "[", so ::1 stopped being recognised as loopback and
+  # a legitimate local URL was refused.
+  #
+  # Userinfo must not decide the host either: http://localhost:x@remote.example
+  # parsed as "localhost", so the plaintext guard waved it through while the
+  # credentials went to remote.example.
+  #
+  # The authority ends at "/", "?" OR "#" (RFC 3986, and curl agrees). Stopping
+  # only at "/" left http://evil.example?@localhost parsing as "localhost" -
+  # the same bypass through a different separator.
+  _u=$(printf '%s' "${1:-}" | sed -E 's#^https?://##')
+  _u=${_u%%[/?#]*}
+  _u=${_u##*@}
+  case "$_u" in
+    \[*) printf '%s' "${_u#[}" | sed -E 's#\].*$##' | tr '[:upper:]' '[:lower:]' ;;
+    *)   printf '%s' "$_u"      | sed -E 's#[:/].*$##' | tr '[:upper:]' '[:lower:]' ;;
+  esac
+}
+
+# arg1: host -> "yes" when it is SHAPED like a hostname or an IP literal.
+#
+# url_host has already taken the authority and lowercased it, but it does not
+# judge the characters, and a refusal reflects the host into a command the user
+# is invited to copy. "http://foo;printf PWNED" parsed to the host
+# "foo;printf pwned", which the hint then offered as
+# `WP_ALLOW_HTTP=foo;printf pwned bash "..."` - copy it and the injected
+# command runs. Letters, digits, dots, hyphens, underscores and colons (IPv6,
+# brackets already stripped) are the whole vocabulary.
+valid_host(){
+  case "${1:-}" in
+    "") printf 'no' ;;
+    *[!a-z0-9.:_-]*) printf 'no' ;;
+    *) printf 'yes' ;;
+  esac
+}
+
+# arg1: host -> "yes" when /etc/hosts maps it to a loopback address.
+#
+# This is the evidence a Local-by-Flywheel site actually leaves behind: Local
+# writes its sites into /etc/hosts at 127.0.0.1. It is stronger evidence than a
+# DNS lookup, because the system resolver consults this file FIRST - so the
+# entry decides where curl connects - and editing it needs root, at which point
+# the machine is already lost. A name with NO such entry is left to DNS/mDNS,
+# where any responder on the LAN can answer, which is the case this rules out.
+#
+# The residual limit is honest and narrow: the file can be edited after setup,
+# by root.
+# arg1 (optional, tests only): the nsswitch.conf to read.
+#
+# The hosts file is only evidence if the resolver READS it first. glibc takes
+# its order from /etc/nsswitch.conf, and a "hosts:" line that puts dns, mdns or
+# another network source before "files" means curl can get a routable address
+# without /etc/hosts ever being consulted - while a direct scan of that file
+# still says loopback. No nsswitch.conf (macOS, the BSDs) means the system
+# resolves the hosts file first by its own default, which is the case this
+# check is written around.
+hosts_file_is_authoritative(){
+  _ns="${1:-/etc/nsswitch.conf}"
+  [ -r "$_ns" ] || { printf 'yes'; return; }
+  awk '
+    # The action NSS actually takes on a successful files lookup. Default is
+    # return; each [!]STATUS=ACTION pair that covers success overrides it, and a
+    # negated pair covers success whenever its status is not success. Anything
+    # unparseable is "unknown", which the caller treats as unsafe.
+    function success_action(clause,   body, n, parts, i, tok, kv, neg, eff) {
+      eff = "return"
+      body = clause
+      sub(/^[^[]*\[/, "", body)
+      sub(/\].*$/, "", body)
+      n = split(body, parts, /[ \t]+/)
+      for (i = 1; i <= n; i++) {
+        tok = parts[i]
+        if (tok == "") continue
+        neg = 0
+        if (substr(tok, 1, 1) == "!") { neg = 1; tok = substr(tok, 2) }
+        if (split(tok, kv, "=") != 2) return "unknown"
+        if ((!neg && kv[1] == "success") || (neg && kv[1] != "success")) eff = kv[2]
+      }
+      return eff
+    }
+    /^[[:space:]]*hosts:/ {
+      line = tolower($0)
+      sub(/^[[:space:]]*hosts:/, "", line)
+      sub(/#.*/, "", line)
+
+      # Which source answers FIRST. Action clauses are not sources, so drop
+      # them before looking - and they can contain spaces, which is why this
+      # cannot be a token walk that treats "[success=continue" as a word.
+      stripped = line
+      gsub(/\[[^]]*\]/, " ", stripped)
+      n = split(stripped, tok, /[ \t]+/)
+      first = ""
+      for (i = 1; i <= n; i++) if (tok[i] != "") { first = tok[i]; break }
+
+      # Anything but files answering first is a source that can reach the
+      # network before /etc/hosts is consulted - wins, mdns, dns, resolve, or
+      # something this script has never heard of. Fail closed on ALL of them
+      # rather than keeping a list of the ones known to be dangerous.
+      if (first != "files") { print "no"; found = 1; exit }
+
+      # files can answer and STILL not decide it. The clause attached to it can
+      # override the default SUCCESS=return, so glibc carries on to the next
+      # source and can come back with a routable address. Work out the
+      # EFFECTIVE action for SUCCESS rather than looking for the spellings of
+      # it that happen to be known here - "[!UNAVAIL=continue]" says nothing
+      # about success and changes it anyway, because ! negates the status test.
+      if (match(line, /files[ \t]*\[[^]]*\]/)) {
+        if (success_action(substr(line, RSTART, RLENGTH)) != "return") {
+          print "no"; found = 1; exit
+        }
+      }
+      print "yes"; found = 1; exit
+    }
+    # No hosts: line at all -> glibc falls back to "files dns".
+    END { if (!found) print "yes" }
+  ' "$_ns"
+}
+
+# arg2 is the hosts file, for the tests; nothing in this script passes it.
+hosts_maps_to_loopback(){
+  _hh=$(printf '%s' "${1:-}" | tr '[:upper:]' '[:lower:]')
+  # On Git Bash, Local updates the WINDOWS resolver file; /etc/hosts there is a
+  # MSYS overlay that is not guaranteed to be it, so reading it would report a
+  # legitimate Local domain as unmapped and abort. (Windows path: implemented,
+  # not verified on a real machine - see the Windows note in CHANGELOG.)
+  if [ -z "${2:-}" ] && [ "$(is_windows_bash)" = "yes" ]; then
+    _hf=$(cygpath "${WINDIR:-C:\\Windows}/System32/drivers/etc/hosts" 2>/dev/null \
+          || printf '%s' "/c/Windows/System32/drivers/etc/hosts")
+  else
+    _hf="${2:-/etc/hosts}"
+  fi
+  [ -n "$_hh" ] || { printf 'no'; return; }
+  [ -r "$_hf" ] || { printf 'no'; return; }
+  # Only for the real file: a caller-supplied one is the test seam, and the
+  # resolver order says nothing about it.
+  if [ -z "${2:-}" ] && [ "$(hosts_file_is_authoritative)" != "yes" ]; then
+    printf 'no'; return
+  fi
+  # EVERY mapping for the name must be loopback, not merely one of them. The
+  # resolver hands curl all of a name's addresses, and curl tries the next one
+  # when a connection fails - so a name with both 127.0.0.1 and a LAN address
+  # reaches the LAN address the moment the local site is stopped, with the proxy
+  # bypassed and the plaintext refusal waived. Stopping at the first loopback
+  # match answered "yes" for exactly that host.
+  # A "127." PREFIX is not an address. "127.invalid" and "127.0.0.256" are not
+  # loopback and not valid, so the resolver ignores those lines and may fall
+  # through to DNS/mDNS - while a prefix match would have called the host local,
+  # bypassed the proxy and waived the plaintext refusal. Same mistake the
+  # is_local_host glob made; it needs a real dotted quad here too.
+  awk -v want="$_hh" '
+    # CANONICAL decimal octets - no leading zeros. "127.00.0.1" and
+    # "127.008.0.1" pass a loose numeric test, but resolvers disagree about
+    # them: a strict parser rejects the line outright and falls through to DNS,
+    # and one reading them as octal means something else again. An address two
+    # parsers read differently is not evidence that the traffic stays on this
+    # machine, so it does not count as loopback here.
+    function is_loopback(a,   p, i) {
+      if (a == "::1") return 1
+      if (a !~ /^127\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})$/) return 0
+      split(a, p, ".")
+      for (i = 2; i <= 4; i++) if (p[i] + 0 > 255) return 0
+      return 1
+    }
+    # The Windows resolver file is CRLF, so the last field on a line arrives as
+    # "site.local\r" and never matches - which would report a legitimate Local
+    # mapping as absent and abort the run.
+    { sub(/\r$/, "") }
+    { sub(/#.*/, "") }
+    NF < 2 { next }
+    {
+      for (i = 2; i <= NF; i++) if (tolower($i) == want) {
+        seen = 1
+        if (!is_loopback($1)) bad = 1
+      }
+    }
+    END { exit(seen && !bad ? 0 : 1) }
+  ' "$_hf" && printf 'yes' || printf 'no'
+}
+
+# arg1: host -> "yes" when the traffic provably cannot leave this machine,
+# for as long as the config written here keeps being used.
+#
+# Two things are NOT proof. A SUFFIX is not: ".local" is mDNS, and
+# "wordpress.local" commonly resolves to another machine on the LAN. And a
+# LOOKUP is not either, which is the subtler one - .mcp.json persists the
+# HOSTNAME and the credential, and the MCP server resolves that name again on
+# every later request. A name that answers 127.0.0.1 during setup can answer a
+# routable address afterwards: an /etc/hosts line removed, an mDNS answer
+# changed, a rebinding record. The credential would then travel in the clear,
+# with the opt-in never asked for, because a lookup minutes earlier had said
+# loopback.
+#
+# So only what is STABLE counts: a loopback IP literal, which resolves to
+# nothing because it is already an address, and localhost / *.localhost, which
+# are loopback by RFC 6761. Every other name - including a Local-by-Flywheel
+# .local typed into LIVE-HOST mode - needs an explicit WP_ALLOW_HTTP entry.
+#
+# Local-by-Flywheel itself is untouched: choosing Local mode sets
+# SITE_IS_LOCAL directly and never reaches the refusal this feeds.
+#
+# No lookup means no network, which keeps this helper pure and testable - and
+# retires the SIGALRM problem native Windows Python had with the resolving
+# version.
+is_local_host(){
+  _h="${1:-}"
+  case "$_h" in
+    localhost|*.localhost) printf 'yes'; return ;;
+    ::1|::|0.0.0.0) printf 'yes'; return ;;
+  esac
+  # 127.0.0.0/8 - but only as a genuine dotted quad. The glob "127.*" also
+  # matches the NAME "127.attacker.example", which curl resolves through DNS
+  # like any other host: it would have been waived past the plaintext refusal
+  # and sent the credential to whatever that name points at.
+  if [[ "$_h" =~ ^127\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$ ]]; then
+    for _octet in "${BASH_REMATCH[@]:1}"; do
+      [ "$_octet" -le 255 ] || { printf 'no'; return; }
+    done
+    printf 'yes'; return
+  fi
+  printf 'no'
+}
+
+# The local-host exemption rests on the traffic never leaving the machine. A
+# configured http_proxy breaks exactly that: curl would hand the authenticated
+# request to the proxy, in plaintext, over a real network. Every site-directed
+# request goes through here, and a local site bypasses any proxy.
+site_curl(){
+  if [ "${SITE_IS_LOCAL:-no}" = "yes" ]; then
+    curl --noproxy '*' "$@"
+  else
+    curl "$@"
+  fi
+}
+
+# arg1: site URL; env WP_ALLOW_HTTP (comma-separated hosts) ->
+#   "ok"       https, nothing to decide
+#   "local"    plaintext to a local dev host
+#   "named"    plaintext to a host the caller named
+#   "refused"  plaintext to anything else
+# A live run sends a reusable application password on every request, so this is
+# the same rule as wordpress-api-pro's WP_ALLOW_HTTP: name the host or use
+# https. A blanket value cannot work here - "1" is simply not a hostname.
+http_verdict(){
+  url="${1:-}"
+  case "$url" in http://*) ;; *) printf 'ok'; return ;; esac
+  host=$(url_host "$url")
+  # Fail closed on an authority that is unreadable or not shaped like a host.
+  # "http:///remote.example" parses to an EMPTY host, and an empty host is a
+  # substring of the allowlist's own separators (",," contains ",,"), so it
+  # matched as explicitly named - while curl normalises that URL to
+  # remote.example and sends the credential there.
+  [ "$(valid_host "$host")" = "yes" ] || { printf 'refused'; return; }
+  [ "$(is_local_host "$host")" = "yes" ] && { printf 'local'; return; }
+  allowed=",$(printf '%s' "${WP_ALLOW_HTTP:-}" | tr -d ' ' | tr '[:upper:]' '[:lower:]'),"
+  case "$allowed" in *",$host,"*) printf 'named' ;; *) printf 'refused' ;; esac
+}
+
+# stdin -> same JSON with the Basic credential replaced by a placeholder
+redact_basic_auth(){ sed -E 's#("Authorization": "Basic )[^"]*#\1<base64 of WP_USERNAME:WP_APP_PASSWORD>#'; }
+
+# "yes" when this is Git Bash / MSYS / Cygwin on Windows.
+is_windows_bash(){
+  case "$(uname -s 2>/dev/null)" in
+    MINGW*|MSYS*|CYGWIN*) printf 'yes' ;;
+    *) printf 'no' ;;
+  esac
+}
+
+# arg1: target path; arg2: content -> writes it owner-only, ATOMICALLY.
+# Exit codes: 0 ok | 2 cannot create temp | 3 cannot secure temp (POSIX modes
+# or a surviving ACL) | 7 the target is a directory
+# | 4 write failed | 5 rename failed | 6 cannot secure temp (Windows ACLs).
+#
+# The target is only ever replaced by a file that is already secured and
+# already holds the content: truncating the target first and checking
+# afterwards destroys the user's existing config on any failure.
+#
+# Windows is a separate path on purpose. Git Bash on NTFS does not implement
+# POSIX mode bits - `chmod 600` can report success while `ls -l` still shows
+# -rw-r--r-- - so verifying the mode there would reject every write and make
+# the wizard unusable on a platform this kit documents as supported. icacls is
+# the mechanism that actually restricts the file on that platform.
+write_secret_file(){
+  _target="${1:-}"; _content="${2:-}"
+  # `mv -f tmp somedir` moves INTO the directory. Left unchecked, a .mcp.json
+  # that is a directory would swallow the temp file - the helper returning 0,
+  # the wizard reporting the config written, Claude still finding nothing at
+  # that path, and a file holding the credential left inside the directory.
+  [ -d "$_target" ] && return 7
+  _dir=$(dirname "$_target")
+  _tmp=$(mktemp "$_dir/.mcp.json.XXXXXX" 2>/dev/null) || return 2
+  if [ "$(is_windows_bash)" = "yes" ]; then
+    _win=$(cygpath -w "$_tmp" 2>/dev/null || printf '%s' "$_tmp")
+    _who="${USERNAME:-$(whoami 2>/dev/null)}"
+    [ -n "$_who" ] || { rm -f "$_tmp"; return 6; }
+    # Break inheritance and grant only this user - before the secret is written.
+    #
+    # MSYS_NO_PATHCONV / MSYS2_ARG_CONV_EXCL are load-bearing: icacls is a
+    # native Windows program, so Git Bash rewrites slash-prefixed arguments as
+    # paths before launching it, turning /inheritance:r into something like
+    # C:/Program Files/Git/inheritance:r. The ACL call then fails - on the one
+    # platform this branch exists to serve.
+    MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*' \
+      icacls "$_win" /inheritance:r /grant:r "${_who}:F" >/dev/null 2>&1 \
+      || { rm -f "$_tmp"; return 6; }
+  else
+    chmod 600 "$_tmp" 2>/dev/null || { rm -f "$_tmp"; return 3; }
+    # Mode bits are not the whole permission story. A temp file created in a
+    # directory that carries an inheritable ACL inherits its entries, and
+    # `chmod` does not touch them - another principal can still read the file
+    # while `ls -l` reads -rw-------. Strip the ACL with whichever tool this
+    # platform has, then verify none survived.
+    chmod -N "$_tmp" 2>/dev/null || true
+    command -v setfacl >/dev/null 2>&1 && setfacl -b "$_tmp" 2>/dev/null || true
+    case "$(ls -l "$_tmp" 2>/dev/null | head -1)" in
+      -rw-------*) ;;
+      *) rm -f "$_tmp"; return 3 ;;
+    esac
+    # Verify by LISTING the entries, not by the flag character after the mode.
+    # On macOS that character is "+" for an ACL but "@" for extended
+    # attributes, and only one is ever shown - `com.apple.provenance` is set on
+    # ordinary new files there, so an inherited ACL routinely hides behind "@".
+    # `ls -le` prints one line per ACE; BSD only, so a shell whose ls rejects
+    # -e falls back to the "+" marker, which IS reliable on Linux (no "@").
+    if _acl=$(ls -le "$_tmp" 2>/dev/null); then
+      [ "$(printf '%s\n' "$_acl" | wc -l | tr -d ' ')" -gt 1 ] && { rm -f "$_tmp"; return 3; }
+    else
+      case "$(ls -l "$_tmp" 2>/dev/null | head -1)" in
+        -rw-------+*) rm -f "$_tmp"; return 3 ;;
+      esac
+    fi
+  fi
+  printf '%s\n' "$_content" > "$_tmp" 2>/dev/null || { rm -f "$_tmp"; return 4; }
+  mv -f "$_tmp" "$_target" 2>/dev/null || { rm -f "$_tmp"; return 5; }
+  return 0
+}
+
+# arg1: file -> sha256 hex, using whatever the machine has
+sha256_of(){
+  if command -v shasum >/dev/null 2>&1; then shasum -a 256 "$1" | awk '{print $1}'
+  elif command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | awk '{print $1}'
+  else python3 -c 'import hashlib,sys; print(hashlib.sha256(open(sys.argv[1],"rb").read()).hexdigest())' "$1"
+  fi
+}
+
+# Hidden test hook: `setup-elementor-mcp.sh --self-test-fn <fn> [args...]` runs
+# one helper and exits. Never touches the network, never prompts.
+if [ "${1:-}" = "--self-test-fn" ]; then shift; fn="$1"; shift || true; "$fn" "$@"; exit $?; fi
 
 # ---- prereq check ------------------------------------------------------------
 need() { command -v "$1" >/dev/null 2>&1 || abort "Missing required command: $1"; }
@@ -201,6 +568,26 @@ PY
     SITE_URL="http://${SITE_NAME}.local"
   fi
   [ -f "$SITE_PATH/wp-config.php" ] || abort "No wp-config.php at $SITE_PATH (is the site name correct? check Local)"
+  # wp-config.php proves the site's FILES are here. It does not prove its HTTP
+  # endpoint is: the domain comes from Local's own metadata, and a name with no
+  # /etc/hosts entry is resolved by DNS/mDNS, where any responder on the LAN can
+  # answer - and this run sends a reusable application password on every
+  # request, in plaintext. Choosing "Local" is an assertion; this checks it.
+  _local_host=$(url_host "$SITE_URL")
+  if [ "$(is_local_host "$_local_host")" != "yes" ] \
+     && [ "$(hosts_maps_to_loopback "$_local_host")" != "yes" ]; then
+    case "$(http_verdict "$SITE_URL")" in
+      named)
+        warn "Local site '$_local_host' has no loopback entry in /etc/hosts — its traffic may leave this machine, and WP_ALLOW_HTTP names it, so continuing over plaintext http."
+        ;;
+      *)
+        abort "Refusing http:// for $_local_host — Local reports this domain, but nothing on this machine maps it to loopback,
+  so the application password could travel unencrypted to whatever answers for it on the network.
+  Start the site in Local (it writes the /etc/hosts entry), or name the host explicitly:
+      WP_ALLOW_HTTP='$_local_host' bash \"$SELF\""
+        ;;
+    esac
+  fi
   ok "Site path:  $SITE_PATH"
   ok "Site URL:   $SITE_URL"
 else
@@ -208,12 +595,46 @@ else
   read -r SITE_URL
   SITE_URL="${SITE_URL%/}"
   [[ "$SITE_URL" =~ ^https?:// ]] || abort "URL must start with http:// or https://"
+  # A scheme alone is not a URL: "http:///example.com" passes the regex above and
+  # leaves no readable host. Say so here rather than letting http_verdict's
+  # refusal suggest a WP_ALLOW_HTTP entry that could never match.
+  [ "$(valid_host "$(url_host "$SITE_URL")")" = "yes" ] || abort "Could not read a hostname from $SITE_URL — check for a typo (an extra slash after the scheme, perhaps)."
+  # A live-host run sends a reusable application password on every request, so
+  # plaintext http is refused unless the host is a local dev host or the caller
+  # names it explicitly - same rule, and the same reasoning, as
+  # wordpress-api-pro's WP_ALLOW_HTTP.
+  case "$(http_verdict "$SITE_URL")" in
+    refused)
+      abort "Refusing http:// for $(url_host "$SITE_URL") — the application password would travel unencrypted.
+  Use https://, or name this host explicitly: WP_ALLOW_HTTP='$(url_host "$SITE_URL")' bash \"$SELF\""
+      ;;
+    named)
+      warn "Sending credentials over plaintext http to $(url_host "$SITE_URL") (WP_ALLOW_HTTP names it)."
+      ;;
+  esac
   ok "Site URL:   $SITE_URL"
 fi
 
 # ---- 3. Connectivity probe ---------------------------------------------------
+# Both modes land here, and only this point is guaranteed to have the final
+# SITE_URL. Setting the flag in the live-host branch alone left every
+# Local-by-Flywheel run - the common case - talking to its site through a
+# configured proxy.
+# The proxy bypass follows the same EVIDENCE the plaintext decision does, not
+# the mode the user picked. Choosing "Local" used to be enough on its own, but a
+# domain out of Local's metadata is an assertion, not proof - and bypassing the
+# proxy for a host that turns out to be on the LAN sends the credential there
+# directly. A loopback literal, an RFC 6761 localhost name, or an /etc/hosts
+# entry pointing at loopback: any of those, in either mode.
+SITE_IS_LOCAL=no
+_site_host=$(url_host "$SITE_URL")
+if [ "$(is_local_host "$_site_host")" = "yes" ] \
+   || [ "$(hosts_maps_to_loopback "$_site_host")" = "yes" ]; then
+  SITE_IS_LOCAL=yes
+fi
+
 step "3/8  Connectivity"
-HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$SITE_URL/wp-json/" || echo "000")
+HTTP_CODE=$(site_curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$SITE_URL/wp-json/" || echo "000")
 case "$HTTP_CODE" in
   200|301|302) ok "Reached WP REST API ($HTTP_CODE)" ;;
   000) abort "Could not reach $SITE_URL — is the site running?" ;;
@@ -242,7 +663,7 @@ read -rs WP_APP_PWD
 printf '\n'
 
 # Verify via /users/me
-USERS_ME=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/users/me" || echo "{}")
+USERS_ME=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/users/me" || echo "{}")
 USER_ID=$(echo "$USERS_ME" | jq_lenient '.id' 2>/dev/null || echo "")
 if [ -n "$USER_ID" ] && [ "$USER_ID" != "" ]; then
   USER_NAME=$(echo "$USERS_ME" | jq_lenient '.name')
@@ -292,7 +713,7 @@ else:
 # Updates the global $PLUGINS_JSON so plugin_is_active / plugin_is_installed
 # reflect current state instead of cached snapshot.
 refresh_plugins_json() {
-  PLUGINS_JSON=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 \
+  PLUGINS_JSON=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 \
     "$SITE_URL/wp-json/wp/v2/plugins" || echo "[]")
 }
 
@@ -323,7 +744,7 @@ if isinstance(d, list):
             print(p["plugin"]); break
 ' "$slug" 2>/dev/null)
     if [ -n "$plugin_path" ]; then
-      curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
+      site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
         -H "Content-Type: application/json" \
         -X POST "$SITE_URL/wp-json/wp/v2/plugins/$plugin_path" \
         -d '{"status":"active"}' >/dev/null
@@ -331,7 +752,7 @@ if isinstance(d, list):
   else
     info "Installing + activating $label from wordpress.org..."
     local result err
-    result=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 60 \
+    result=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 60 \
       -H "Content-Type: application/json" \
       -X POST "$SITE_URL/wp-json/wp/v2/plugins" \
       -d "{\"slug\":\"$slug\",\"status\":\"active\"}" || echo '{"code":"network_error"}')
@@ -363,7 +784,7 @@ if isinstance(d, list):
             print(p["plugin"]); break
 ' "$slug" 2>/dev/null)
   if [ -n "$plugin_path" ]; then
-    curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
+    site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
       -H "Content-Type: application/json" \
       -X POST "$SITE_URL/wp-json/wp/v2/plugins/$plugin_path" \
       -d '{"status":"active"}' >/dev/null
@@ -415,14 +836,14 @@ if isinstance(d, list):
 
   if [ "$(plugin_is_active "$slug")" = "yes" ]; then
     info "Deactivating $label..."
-    curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
+    site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
       -H "Content-Type: application/json" \
       -X PUT "$SITE_URL/wp-json/wp/v2/plugins/$plugin_path" \
       -d '{"status":"inactive"}' >/dev/null
   fi
 
   info "Deleting $label..."
-  curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
+  site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 30 \
     -X DELETE "$SITE_URL/wp-json/wp/v2/plugins/$plugin_path" >/dev/null
 
   refresh_plugins_json
@@ -441,7 +862,7 @@ install_wp_theme() {
   local label="$2"
   info "Installing $label theme from wordpress.org..."
   local result
-  result=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 60 \
+  result=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 60 \
     -H "Content-Type: application/json" \
     -X POST "$SITE_URL/wp-json/wp/v2/themes" \
     -d "{\"slug\":\"$slug\"}" 2>&1 || echo '{}')
@@ -452,8 +873,8 @@ install_wp_theme() {
 }
 
 # Fetch current state once
-PLUGINS_JSON=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/plugins" || echo "[]")
-THEME_JSON=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/themes?status=active" || echo "[]")
+PLUGINS_JSON=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/plugins" || echo "[]")
+THEME_JSON=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/wp/v2/themes?status=active" || echo "[]")
 ACTIVE_THEME=$(echo "$THEME_JSON" | python3 -c "$JQ_LENIENT_PY"'
 import sys
 d = _load(sys.stdin.read())
@@ -610,7 +1031,7 @@ ver_lt() {
   [ "$(printf '%s\n%s\n' "$1" "$2" | sort -t. -k1,1n -k2,2n -k3,3n | head -1)" = "$1" ]
 }
 
-NS_JSON=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/" || echo "{}")
+NS_JSON=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/" || echo "{}")
 HAS_MCP=$(echo "$NS_JSON" | jq_lenient_contains '.namespaces' 'mcp' 2>/dev/null || echo "no")
 HAS_OLD_ADAPTER=$(plugin_is_installed "mcp-adapter")
 EMCP_VER=$(emcp_installed_version)
@@ -688,15 +1109,55 @@ if [ "$SKIP_MCP_INSTALL" = "no" ]; then
     EM_RELEASE_API="https://api.github.com/repos/Digitizers/elementor-mcp/releases/latest"
     info "Downloading the elementor-mcp fork (bundles the MCP Adapter, latest release from the trusted Digitizers repo over HTTPS; set EMCP_PIN_VERSION to pin a tag)..."
   fi
-  EM_ZIPBALL=$(curl -s "$EM_RELEASE_API" \
+  # Take the asset's sha256 from the SAME API response as its URL, so a
+  # download mangled or swapped in transit (proxy, CDN, partial transfer) is
+  # caught before the zip is installed onto a WordPress site.
+  #
+  # Be clear about what this is NOT: the digest travels with the URL, so it
+  # proves integrity, not provenance. A compromised release would publish a
+  # matching digest for a malicious asset. Export EMCP_EXPECTED_SHA256 with a
+  # digest obtained out of band for a real provenance check.
+  EM_RELEASE_JSON=$(curl -s "$EM_RELEASE_API")
+  EM_ZIPBALL=$(printf '%s' "$EM_RELEASE_JSON" \
     | python3 -c "$JQ_LENIENT_PY"'
 import sys
 d = _load(sys.stdin.read())
 a = [a for a in d.get("assets",[]) if a["name"].endswith(".zip")]
 print(a[0]["browser_download_url"] if a else d.get("zipball_url",""))
 ')
+  EM_DIGEST=$(printf '%s' "$EM_RELEASE_JSON" \
+    | python3 -c "$JQ_LENIENT_PY"'
+import sys
+d = _load(sys.stdin.read())
+a = [a for a in d.get("assets",[]) if a["name"].endswith(".zip")]
+print((a[0].get("digest") or "").replace("sha256:","") if a else "")
+')
   [ -n "$EM_ZIPBALL" ] || abort "Could not fetch elementor-mcp download URL.${EMCP_PIN_VERSION:+ Check that EMCP_PIN_VERSION=$EMCP_PIN_VERSION is a real release tag.}"
   curl -sL -o "$WORK/elementor-mcp-src.zip" "$EM_ZIPBALL" || abort "elementor-mcp download failed."
+
+  # Verify before unzipping: the archive is about to be installed and activated
+  # as PHP on a WordPress site, so a bad one must never reach the repack step.
+  EM_EXPECTED="${EMCP_EXPECTED_SHA256:-$EM_DIGEST}"
+  if [ -n "$EM_EXPECTED" ]; then
+    EM_ACTUAL=$(sha256_of "$WORK/elementor-mcp-src.zip")
+    if [ "$EM_ACTUAL" != "$EM_EXPECTED" ]; then
+      abort "elementor-mcp download failed integrity check.
+    expected sha256: $EM_EXPECTED
+    got sha256:      $EM_ACTUAL
+  Nothing was installed. Re-run; if it persists, the download is being tampered with or the release was replaced."
+    fi
+    ok "Download verified (sha256 ${EM_ACTUAL:0:12}…)${EMCP_EXPECTED_SHA256:+ against EMCP_EXPECTED_SHA256}"
+  elif [ "${EMCP_ALLOW_UNVERIFIED:-0}" = "1" ]; then
+    warn "This release publishes no sha256 for its asset, and EMCP_ALLOW_UNVERIFIED=1 is set — installing an UNVERIFIED download."
+  else
+    abort "This release publishes no sha256 for its asset, so the download cannot be verified.
+  The archive is about to be installed and ACTIVATED as PHP on your WordPress site, so it is not installed.
+  Supply a digest obtained out of band — which is the stronger check anyway, since a release's own
+  digest travels in the same response as its URL:
+      EMCP_PIN_VERSION=<tag> EMCP_EXPECTED_SHA256=<digest> bash \"$SELF\"
+  Or, to accept an unverified download deliberately:
+      EMCP_ALLOW_UNVERIFIED=1 bash \"$SELF\""
+  fi
 
   # Repack with clean folder name (zipballs have ugly hash-suffixed dirs)
   ( cd "$WORK" && unzip -q elementor-mcp-src.zip )
@@ -785,7 +1246,7 @@ sleep 2
 
 verify_mcp_namespace() {
   local ns_json
-  ns_json=$(curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/" || echo "{}")
+  ns_json=$(site_curl -s -u "$WP_USER:$WP_APP_PWD" --max-time 10 "$SITE_URL/wp-json/" || echo "{}")
   local has_mcp has_em
   has_mcp=$(echo "$ns_json" | jq_lenient_contains '.namespaces' 'mcp' 2>/dev/null || echo "no")
   has_em=$(echo "$ns_json" | jq_lenient_contains '.routes' 'elementor-mcp-server' 2>/dev/null || echo "no")
@@ -828,7 +1289,7 @@ EOF
     else
       warn "Still not seeing the MCP namespace."
       info "Things to try, in order:"
-      info "  1. WP Admin → Plugins: deactivate then reactivate both MCP plugins"
+      info "  1. WP Admin → Plugins: deactivate then reactivate Elementor MCP"
       info "  2. Check WP Admin → Plugins for any error notices at the top"
       info "  3. WP Admin → Settings → Permalinks → Save (flushes rewrites)"
       info "  4. Restart your Local site (stop + start)"
@@ -860,10 +1321,23 @@ AUTH_B64=$(printf "%s:%s" "$WP_USER" "$WP_APP_PWD" | python3 -c "import sys,base
 
 # If .mcp.json already exists, merge (don't clobber)
 if [ -f "$MCP_FILE" ]; then
-  warn ".mcp.json already exists at $MCP_FILE"
-  ask "Overwrite? [y/N]"
-  read -r OVR
-  [[ "$OVR" =~ ^[Yy]$ ]] || { info "Leaving existing .mcp.json untouched. New config printed below."; SKIP_WRITE=1; }
+  # A git-TRACKED placeholder config (the kit's committed cloud config, secrets as
+  # ${VAR} env placeholders) must never be replaced with a real-credential file:
+  # gitignore can't protect a tracked path, and untracking it would stage the
+  # committed feature for deletion.
+  if git -C "$PROJECT_DIR" ls-files --error-unmatch .mcp.json >/dev/null 2>&1 \
+     && grep -q '"WP_URL": *"\${WP_URL' "$MCP_FILE" 2>/dev/null; then
+    warn ".mcp.json here is a committed placeholder config (tracked in git) — refusing to write credentials into it."
+    info "  Either: export WP_URL / WP_USERNAME / WP_APP_PASSWORD in your environment (the committed config reads them),"
+    info "  or run this wizard from a separate per-site project directory."
+    SKIP_WRITE=1
+    TRACKED_PLACEHOLDER=1
+  else
+    warn ".mcp.json already exists at $MCP_FILE"
+    ask "Overwrite? [y/N]"
+    read -r OVR
+    [[ "$OVR" =~ ^[Yy]$ ]] || { info "Leaving existing .mcp.json untouched. New config printed below."; SKIP_WRITE=1; }
+  fi
 fi
 
 NEW_CONFIG=$(cat <<JSON
@@ -882,8 +1356,29 @@ JSON
 )
 
 if [ "${SKIP_WRITE:-0}" != "1" ]; then
-  printf "%s\n" "$NEW_CONFIG" > "$MCP_FILE"
-  ok "Wrote $MCP_FILE"
+  # Create it 0600 BEFORE the credential lands in it: writing first and chmod-ing
+  # after leaves a window where the file is world-readable on a shared machine.
+  # Written through a 0600 temp file and renamed into place, so the credential
+  # is never in a readable file and an existing config survives any failure.
+  write_secret_file "$MCP_FILE" "$NEW_CONFIG"
+  case $? in
+    0) ;;
+    2) abort "Refusing to write credentials — could not create a temp file in $PROJECT_DIR.
+  Run this from a directory you can write to." ;;
+    3) abort "Refusing to write credentials — could not secure the file at mode 600.
+  This filesystem may not carry permission bits (a mounted share, some FAT/exFAT volumes).
+  Use a local directory you own. Your existing $MCP_FILE was left untouched." ;;
+    6) abort "Refusing to write credentials — could not restrict the file with icacls.
+  Run this from a directory on a local NTFS drive (not a network share), and check
+  that icacls is on PATH. Your existing $MCP_FILE was left untouched." ;;
+    4) abort "Refusing to write credentials — writing the config failed. Your existing $MCP_FILE was left untouched." ;;
+    7) abort "Refusing to write credentials — $MCP_FILE is a directory.
+  Remove or rename it, then re-run. (Writing into it would leave the credential in a file
+  Claude never reads.)" ;;
+    5) abort "Refusing to write credentials — could not replace $MCP_FILE.
+  It may be owned by another user, or the directory may not be writable. The existing file was left untouched." ;;
+  esac
+  ok "Wrote $MCP_FILE (mode 600)"
 
   # .mcp.json embeds a reusable Basic-Auth credential (base64 of
   # user:app-password). If we're inside a git repo, make sure it can't be
@@ -913,12 +1408,20 @@ if [ "${SKIP_WRITE:-0}" != "1" ]; then
   info "  • Use a least-privileged Application Password (only the role you need)."
   info "  • Rotate/revoke that Application Password after setup or client handoff"
   info "    (WP Admin → Users → Profile → Application Passwords → Revoke)."
-else
+elif [ "${TRACKED_PLACEHOLDER:-0}" != "1" ]; then
   echo
-  info "Suggested config:"
-  echo "$NEW_CONFIG" | sed 's/^/      /'
-  warn "SECURITY: this config embeds a reusable WordPress credential — keep it"
-  info "  out of version control and rotate/revoke the Application Password after use."
+  info "Suggested config (the credential is REDACTED — this goes to your terminal,"
+  info "scrollback and any screen share, so the real value is not printed):"
+  printf '%s\n' "$NEW_CONFIG" | redact_basic_auth | sed 's/^/      /'
+  info "  Produce the value with (it will prompt for the password, so it stays"
+  info "  out of your shell history):"
+  # GNU base64 wraps at 76 columns, so a long user:password pair comes back on
+  # several lines and pasting it into the JSON above yields an invalid config.
+  # tr -d is portable; -w0 is GNU-only.
+  info "      printf '%s:%s' '${WP_USER}' \"\$(read -rs -p 'app password: ' p; echo \"\$p\")\" | base64 | tr -d '\\n'; echo"
+  warn "SECURITY: that config embeds a reusable WordPress credential — write it"
+  info "  with mode 600, keep it out of version control, and rotate/revoke the"
+  info "  Application Password after use."
 fi
 
 # ---- final instructions ------------------------------------------------------
@@ -926,6 +1429,23 @@ if [ "$HAS_PRO" = "yes" ]; then
   printf "\n  ${BOLD}${GREEN}Elementor Pro is active${RESET} — Claude will use native ${BOLD}Form${RESET}, ${BOLD}Theme Builder${RESET},\n  ${BOLD}Loop Grid${RESET}, ${BOLD}Popups${RESET}, ${BOLD}Dynamic Tags${RESET}, and ${BOLD}Sticky/Motion${RESET} (no workaround plugins).\n"
 else
   printf "\n  ${DIM}Free Elementor — Claude will use the documented workarounds (Fluent Forms,\n  UAE/HFE headers). Activate Elementor Pro and re-run this wizard to unlock native\n  Form / Theme Builder / Loop Grid / Popups.${RESET}\n"
+fi
+
+if [ "${TRACKED_PLACEHOLDER:-0}" = "1" ]; then
+cat <<EOF
+
+  ${BOLD}${YELLOW}⚠ Site setup done — the Claude connection is NOT configured yet${RESET}
+
+  This checkout uses the committed placeholder .mcp.json, which reads the
+  connection from environment variables. The wizard did not persist your
+  credentials anywhere. Finish with:
+    export WP_URL="$SITE_URL"
+    export WP_USERNAME="$WP_USER"
+    export WP_APP_PASSWORD="<the application password you entered>"
+  Then restart Claude Code in this directory — or run this wizard again from a
+  separate per-site project directory to write a local .mcp.json instead.
+EOF
+exit 0
 fi
 
 cat <<EOF

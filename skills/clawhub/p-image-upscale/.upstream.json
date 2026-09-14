@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/p-image-upscale",
   "slug": "p-image-upscale",
   "ownerHandle": null,
-  "version": "1.0.7",
-  "updatedAt": 1784810952316,
-  "contentHash": "b6f907249ccf5b22b2cdbf09d2d3379540eda8b39f8b46c2e4ee47ffa1f2a5b6",
-  "fetchedAt": "2026-07-26T18:07:08.111Z"
+  "version": "1.0.12",
+  "updatedAt": 1789048695972,
+  "contentHash": "0b146fb0ae0f9a05d4325276281da8b2267fde9b39eab83dee53e24b8b1bc2e0",
+  "fetchedAt": "2026-09-14T14:48:19.003Z"
 }

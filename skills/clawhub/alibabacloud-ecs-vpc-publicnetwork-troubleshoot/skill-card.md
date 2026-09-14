@@ -1,48 +1,62 @@
-## Description: <br>
-Diagnoses Alibaba Cloud ECS and VPC public network connectivity failures by running bundled read-only troubleshooting scripts for ECS, security groups, NAT gateways, SNAT, routes, EIPs, DDoS status, and Cloud Firewall checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses Alibaba Cloud ECS public network access and VPC cloud service egress failures, including public IP reachability, security group blocking, NAT gateway, SNAT, route, and EIP checks.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Cloud operations engineers and support teams use this skill to diagnose public connectivity failures for a named Alibaba Cloud ECS instance or VPC cloud service VSwitch. The skill produces a diagnostic table and remediation guidance that should be reviewed before making network or security changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Alibaba Cloud credentials are read from standard sources and persisted to scripts/.sts_cache.json. <br>
-Mitigation: Use temporary STS credentials or a narrowly scoped read-only RAM role, keep the credential cache protected, and delete the cache after diagnostics. <br>
-Risk: Suggested firewall, route, NAT, SNAT, security-group, or gateway changes can alter network exposure. <br>
-Mitigation: Treat remediation output as manual guidance; require human review, change approval, and a rollback plan before applying changes. <br>
-Risk: The skill makes Alibaba Cloud API calls against user-specified cloud resources. <br>
-Mitigation: Confirm the target resource, region, and read-only diagnostic scope before execution, and do not expand beyond the confirmed resource. <br>
+## Use Case:
 
+Developers and cloud operations engineers use this skill to diagnose public connectivity failures for Alibaba Cloud ECS instances and VPC-hosted services such as DataWorks, SAE, and ACK. It guides read-only checks for account status, security groups, ACLs, routes, NAT/SNAT, EIP, DDoS, and Cloud Firewall signals.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-ecs-vpc-publicnetwork-troubleshoot) <br>
-- [Module 1: Preparation](artifact/references/module1_preparation.md) <br>
-- [Module 2: ECS Public Network](artifact/references/module2_ecs_public.md) <br>
-- [Module 3: VPC Service Public Network](artifact/references/module3_vpc_service.md) <br>
-- [Module 4: Output and Judgment](artifact/references/module4_output.md) <br>
-- [Module 5: Solutions](artifact/references/module5_solution.md) <br>
-- [RAM Policies](artifact/references/ram-policies.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown diagnostic report with JSON-derived findings, status tables, shell command invocations, and remediation guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user scope confirmation before read-only Alibaba Cloud API calls; aborts on missing parameters, credential failures, or script errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.1 (source: server release evidence) <br>
+Risk: The skill reads Alibaba Cloud credentials and writes reusable credentials to scripts/.sts_cache.json.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege read-only RAM role, prefer short-lived STS credentials, and clear the cache after use.
+
+Risk: Cached credentials can be reused across runs and may make the active account ambiguous.
+
+Mitigation: Verify the account identity before trusting results and refresh or remove cached credentials when switching accounts.
+
+Risk: A Normal result with execution notes or errors can represent a degraded or skipped check rather than a confirmed healthy state.
+
+Mitigation: Review execution notes and treat degraded checks as incomplete until the missing prerequisite is resolved and the diagnostic is rerun.
+
+## Reference(s):
+
+- [Preparation](references/module1_preparation.md)
+- [RAM Permission Declaration](references/ram-policies.md)
+- [Scenario 1: ECS Instance Public Network Access/Inbound Failure](references/module2_ecs_public.md)
+- [Scenario 2: VPC Cloud Service Cannot Access Public Network](references/module3_vpc_service.md)
+- [Output Results and Determination Specification](references/module4_output.md)
+- [Solution Module](references/module5_solution.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown diagnostic tables with inline shell commands and remediation steps; bundled scripts emit JSON used to form the report.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires region_id plus either instance_id or vswitch_id; may include execution notes when checks are degraded or skipped.]
+
+## Skill Version(s):
+
+0.0.2 (source: server release evidence and references/manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

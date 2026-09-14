@@ -1,51 +1,65 @@
-## Description: <br>
-Overview skill for OceanBase deployment and operations using obd. Routes to specialized skills for cluster management, tenant management, seekdb, and testing. Use as a starting point when the user's intent is not yet clear, or for general OceanBase obd questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route community and commercial distributed OceanBase deployment and operations through obd. Use for general or multi-domain OceanBase/obd requests, product-form discovery, or when the correct specialized skill is unclear. Route concrete work to cluster management, OBD administration, tenant management, testing, or diagnostics.
 
-## Publisher: <br>
-[oceanbase](https://clawhub.ai/user/oceanbase) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oceanbase](https://clawhub.ai/user/oceanbase)
 
-## Use Case: <br>
-Developers, database operators, and platform engineers use this skill to plan OceanBase OBD deployments and generate operational guidance for cluster lifecycle management, tenant management, seekdb HA, monitoring, backup and restore, and benchmark workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated commands can perform high-impact database and cluster actions such as tenant drop, restore, component deletion, cluster destruction, failover, and benchmark runs. <br>
-Mitigation: Require explicit user confirmation before executing these actions, review command targets and parameters, and test workflows on non-production clusters first. <br>
-Risk: Operational commands may require credentials for OceanBase, OCP, Prometheus, SSH, or backup storage. <br>
-Mitigation: Avoid pasting real passwords into chat or shell history; prefer secure secret handling and redact credentials from generated examples. <br>
-Risk: Incorrect OBD deployment or HA guidance can cause data loss, downtime, or invalid standby topology. <br>
-Mitigation: Validate cluster state, component availability, backup paths, and primary-standby requirements before applying changes. <br>
+## Use Case:
 
+Developers and database operators use this skill to plan, review, and execute OceanBase distributed deployment and operations through OBD, with routing for cluster management, OBD administration, tenant management, testing, and diagnostics.
 
-## Reference(s): <br>
-- [OceanBase Deploy ClawHub Page](https://clawhub.ai/oceanbase/oceanbase-deploy) <br>
-- [OceanBase OBD Quick Start](https://www.oceanbase.com/docs/common-obd-cn-1000000005246289) <br>
-- [OceanBase Community Mirror](https://mirrors.oceanbase.com/community/stable/el/) <br>
-- [Config File Deployment](cluster-management/references/config-deployment.md) <br>
-- [OCP CE Deployment and Takeover](cluster-management/references/ocp-ce.md) <br>
-- [Monitoring Setup](cluster-management/references/monitoring.md) <br>
-- [seekdb Install Modes](seekdb/references/install-modes.md) <br>
-- [seekdb HA Operations](seekdb/references/ha-operations.md) <br>
-- [Backup and Restore](tenant-management/references/backup-restore.md) <br>
-- [Test Command Details](testing-and-benchmark/references/test-commands.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should be treated as proposals and reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release metadata) <br>
+Risk: The security review reports that the skill can normalize persistent root SSH access changes and other privileged deployment actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval and target review before root SSH use, authorized_keys changes, package installation targets, autodeploy execution, or other persistent environment changes.
+
+Risk: The security guidance identifies wildcard tenant allowlists and empty tenant passwords as unsafe defaults for production use.
+
+Mitigation: For production tenant creation, supply a strong password and restricted allowlist instead of relying on default tenant creation behavior.
+
+Risk: The security verdict is suspicious and recommends review before real-environment installation.
+
+Mitigation: Pin the installer or repository revision, review the selected workflow before execution, and validate every high-impact operation against the resolved targets.
+
+## Reference(s):
+
+- [README](README.md)
+- [Operation Contract](references/operation-contract.md)
+- [Product and Capability Resolution](references/product-and-capability-resolution.md)
+- [Deployment Package Closure](references/deployment-package-sets.md)
+- [Completion Criteria](references/completion-criteria.md)
+- [Failure Recovery and Evidence](references/failure-recovery-and-evidence.md)
+- [Automation Execution](references/automation-execution.md)
+- [OceanBase Public Mirror](https://mirrors.oceanbase.com)
+- [Aliyun OceanBase Mirror](https://mirrors.aliyun.com/oceanbase)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include execution plans, command sequences, configuration drafts, verification steps, and operational risk notes.]
+
+## Skill Version(s):
+
+2.0.3 (source: SKILL.md frontmatter, package.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

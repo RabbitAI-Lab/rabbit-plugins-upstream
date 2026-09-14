@@ -1,42 +1,61 @@
-## Description: <br>
-AI-powered insurance customer service for China life and property insurers covering policy inquiry, claims guidance, product consultation, renewal reminders, and PIPL-compliant data handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered insurance customer service guidance for China life and property insurers, covering policy inquiry, claims guidance, product consultation, renewal reminders, escalation rules, and PIPL-aware data handling.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance customer-service teams and agent developers use this skill to draft policy inquiry flows, claims guidance, product consultation responses, renewal reminders, and privacy-aware handling patterns for China insurance workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may involve sensitive insurance customer data such as identity numbers, phone numbers, health details, bank information, recordings, and claim data. <br>
-Mitigation: Use explicit consent, collect only necessary fields, mask or encrypt sensitive data, enforce access controls, and define retention and deletion handling before production use. <br>
-Risk: Insurance rules, product terms, and PIPL obligations may change or vary by insurer and jurisdiction. <br>
-Mitigation: Verify current regulations, insurer policy terms, and compliance requirements with qualified reviewers before using outputs with customers. <br>
-Risk: Automated service flows could collect or process information before the customer intent, language preference, or recording consent is clear. <br>
-Mitigation: Add explicit intent confirmation, consent prompts, and language handling before collecting or processing personal, policy, claim, or recording data. <br>
+## Use Case:
 
+Customer service, operations, and compliance teams at China life and property insurers use this skill to draft or adapt agent guidance for policy inquiries, claims triage, product consultation, renewal reminders, complaint escalation, and privacy-aware customer conversations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/insurance-intelligent-cs) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with structured response templates and code-like examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes customer-service scripts, checklist-style guidance, and compliance handling patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Weak identity checks could expose policy existence or policy details to an unauthorized requester.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require institution-backed authentication and authorization before revealing policy existence, policy details, beneficiaries, claim status, or other sensitive insurance data.
+
+Risk: Chat flows may collect more personal data than needed, including full identity or phone details.
+
+Mitigation: Limit chat collection to the minimum fields required for the scenario, avoid requesting full identity or phone numbers in chat, and mask customer-supplied sensitive identifiers.
+
+Risk: Estimated claim amount collection could create privacy, fairness, or expectation-management issues.
+
+Mitigation: Remove the estimated amount field unless the insurer documents a specific lawful need; if retained, explain purpose, authorization, retention, and review requirements.
+
+Risk: Retention guidance may not match a deploying insurer's actual retention schedule.
+
+Mitigation: Replace example retention periods with the insurer's approved policy for each data class and jurisdiction before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-intelligent-cs)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown with bilingual guidance, tables, FAQ entries, conversation examples, and embedded code-style templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces reusable customer-service scripts and compliance guidance; does not execute tools or call external services.]
+
+## Skill Version(s):
+
+3.0.2 (source: server release metadata, target metadata, and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

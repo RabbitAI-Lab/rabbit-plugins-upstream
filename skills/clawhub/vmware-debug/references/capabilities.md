@@ -1,6 +1,9 @@
 # vmware-debug Capabilities
 
-Read-only, offline incident correlation. No network, no credentials, no writes.
+Offline incident correlation. No network, no credentials, no writes to any VMware
+system. This table covers the two stateless correlation tools; the twelve `case_*`
+investigation-ledger tools (seven of which write, to the local ledger only) are
+listed in `SKILL.md`, and their response sizes are not yet measured here.
 
 | Tool | What it returns | Typical response tokens |
 |---|---|---|
@@ -27,8 +30,15 @@ fixed in-process constant, so `total` is a real count and `limit` is `null`.
 
 ## Symptom categories
 
-`storage`, `network`, `compute`, `ha_drs`, `power_lifecycle`, `auth`, `platform`.
+`storage`, `network`, `compute`, `ha_drs`, `host_lifecycle`, `power_lifecycle`,
+`auth`, `platform`.
 See `references/routing.md` for keyword signatures and the skill each routes to.
+
+`host_lifecycle` is a host changing its own availability state — maintenance
+mode, shutdown, reboot, standby, connection loss, sync failure.
+`power_lifecycle` is the VM-level equivalent. They are separate because they are
+separate investigations: the second is a task question for vmware-aiops, the
+first is a cluster, DPM, vLCM or drift question.
 
 ## Design properties
 

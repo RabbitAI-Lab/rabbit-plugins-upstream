@@ -1,45 +1,75 @@
-## Description: <br>
-Helps agents build, edit, inspect, and troubleshoot WordPress Elementor sites through the elementor-mcp MCP server, including first-session setup and engine-aware guidance for Elementor Pro, Free, classic, and atomic/V4 sites. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents build, edit, inspect, and troubleshoot WordPress Elementor sites through the elementor-mcp MCP server, including Pro/free feature branching, classic versus Elementor 4 atomic page handling, dynamic data binding, setup guidance, and recovery from common write errors.
 
-## Publisher: <br>
-[benkalsky](https://clawhub.ai/user/benkalsky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[benkalsky](https://clawhub.ai/user/benkalsky)
 
-## Use Case: <br>
-Developers and site builders use this skill to connect an authorized WordPress site to Elementor MCP, then build, edit, inspect, or troubleshoot Elementor pages using native widgets, design tokens, forms, dynamic data, and recovery guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup flow installs WordPress plugins and stores a reusable WordPress Application Password in local MCP configuration. <br>
-Mitigation: Install only for authorized sites, use a dedicated low-privilege Application Password, keep .mcp.json private, and revoke or rotate the password after setup or handoff. <br>
-Risk: A live contact form can send or collect visitor data before recipients and privacy terms are confirmed. <br>
-Mitigation: Confirm form recipients, notification settings, and privacy terms before enabling live contact forms. <br>
-Risk: Using the latest unpinned elementor-mcp release can change setup behavior between runs. <br>
-Mitigation: Pin EMCP_PIN_VERSION when reproducibility matters and review the plugin release before installation. <br>
+## Use Case:
 
+Developers and site builders use this skill when they want an agent to set up, inspect, build, or edit Elementor pages while respecting WordPress credentials, Elementor Pro/free differences, and classic/atomic engine constraints.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/benkalsky/skills/siteagent-elementor-studio) <br>
-- [Elementor MCP plugin repository](https://github.com/Digitizers/elementor-mcp) <br>
-- [SiteAgent worker repository](https://github.com/Digitizers/SiteAgent) <br>
-- [wordpress-api-pro companion toolkit](https://github.com/Digitizers/wordpress-api-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON configuration, and MCP tool-call parameter examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Setup can write a local .mcp.json for the target WordPress site after explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence and artifact frontmatter) <br>
+Risk: The skill can control a WordPress/Elementor site and may create, modify, or delete site content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only on sites intended for agent edits, require explicit user requests for write actions, and review site changes before publishing.
+
+Risk: The setup flow stores a reusable WordPress application password in .mcp.json.
+
+Mitigation: Use a least-privileged application password, keep .mcp.json out of shared or tracked directories, and revoke or rotate the password after the build.
+
+Risk: Plain HTTP can expose WordPress credentials during MCP or REST requests.
+
+Mitigation: Prefer HTTPS, avoid WP_ALLOW_HTTP on live sites, and allow plaintext only for explicitly named local or development hosts.
+
+Risk: Downloading the latest plugin release can install mutable code.
+
+Mitigation: Pin a known release and provide an independently checked SHA-256 when practical.
+
+## Reference(s):
+
+- [SiteAgent Elementor Studio on ClawHub](https://clawhub.ai/benkalsky/skills/siteagent-elementor-studio)
+- [elementor-mcp GitHub repository](https://github.com/Digitizers/elementor-mcp)
+- [wordpress-api-pro GitHub repository](https://github.com/Digitizers/wordpress-api-pro)
+- [Engine and Premium Plugin](references/engine-and-premium.md)
+- [Building on Elementor 4 Atomic V4](references/atomic-v4.md)
+- [Elementor 4 Design System CRUD](references/design-system-crud.md)
+- [Converting Classic V3 Designs to Atomic V4](references/v3-to-v4-conversion.md)
+- [Brand Kit](references/brand-kit.md)
+- [Forms](references/forms.md)
+- [Header and Footer](references/header-footer.md)
+- [Dynamic Data Stacks](references/dynamic-data.md)
+- [Pro Widgets and Features](references/pro-widgets.md)
+- [Error Recovery](references/error-recovery.md)
+- [Section Recipe Library](references/recipes.md)
+- [Studio Lifecycle](references/lifecycle.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline code, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose MCP tool calls, WordPress/Elementor configuration steps, and generated page or widget content; setup actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.6.0 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

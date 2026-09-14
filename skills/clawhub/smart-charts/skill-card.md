@@ -1,43 +1,54 @@
-## Description: <br>
-Smart Charts reads user-supplied CSV, Excel, and JSON files, analyzes data characteristics with LLM assistance, recommends chart types, and generates interactive ECharts HTML visualizations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Smart Charts turns CSV, TSV, TXT, Excel, or JSON tabular data into standalone offline interactive ECharts HTML charts with embedded fact sheets.
 
-## Publisher: <br>
-[neuhanli](https://clawhub.ai/user/neuhanli) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[neuhanli](https://clawhub.ai/user/neuhanli)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to turn uploaded tabular data into recommended interactive charts and lightweight data summaries. It is most useful for CSV, Excel, and JSON datasets that can be parsed locally and rendered as ECharts HTML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated pandas transform code may run against user data without an explicit confirmation gate. <br>
-Mitigation: Run the skill in a constrained environment and review transform code before execution, especially for sensitive datasets. <br>
-Risk: Generated HTML loads JavaScript from public CDNs. <br>
-Mitigation: Use the generated charts only where public CDN access is acceptable, or require a trusted offline asset path before using the skill in restricted environments. <br>
+## Use Case:
 
+Developers and data-focused agents use this skill to convert supplied tabular files into interactive HTML charts, choose among supported chart types, and return captions grounded in the generated plot statistics. It is not intended for narrative reports, slide decks, backend dashboards, or non-tabular media.
 
-## Reference(s): <br>
-- [Smart Charts Skill Documentation](artifact/SKILL.md) <br>
-- [Smart Charts CLI Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/neuhanli/skills/smart-charts) <br>
-- [Publisher Profile](https://clawhub.ai/user/neuhanli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell commands, structured JSON status, and generated HTML chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated HTML loads ECharts from public CDNs and is usually written under smart_charts_output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated pandas/numpy transform code is executed locally in-process with weak resource containment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review transform code before execution and use subprocess or container isolation with CPU and memory limits in shared or production environments.
+
+Risk: Untrusted or unexpectedly large tabular inputs can increase parsing and transform risk.
+
+Mitigation: Use trusted input files, keep output directories explicit, and avoid files outside the documented size and format boundaries.
+
+## Reference(s):
+
+- [Smart Charts reference](artifact/references/REFERENCE.md)
+- [ClawHub skill page](https://clawhub.ai/neuhanli/skills/smart-charts)
+
+## Skill Output:
+
+**Output Type(s):** [HTML files, JSON summaries, Shell commands, Guidance]
+
+**Output Format:** [Standalone interactive HTML charts with JSON CLI output and concise Markdown delivery text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Charts are generated offline with bundled ECharts assets; successful runs include data previews and plot statistics for caption grounding.]
+
+## Skill Version(s):
+
+8.3.1 (source: SKILL.md frontmatter, server release metadata, target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

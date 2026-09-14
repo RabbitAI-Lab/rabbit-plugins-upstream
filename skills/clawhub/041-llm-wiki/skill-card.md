@@ -1,46 +1,62 @@
-## Description: <br>
-llm-wiki helps an agent maintain a Markdown knowledge base by ingesting source files, answering wiki-backed questions, preserving provenance, and running status, lint, link, merge, query, and index workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate an llm-wiki Markdown knowledge base by ingesting source files, answering from linked wiki pages, running maintenance commands, preserving provenance and temporal metadata, and coordinating Zotero-backed literature workflows.
 
-## Publisher: <br>
-[nemo4110](https://clawhub.ai/user/nemo4110) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nemo4110](https://clawhub.ai/user/nemo4110)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn local sources, notes, PDFs, and optional Zotero literature records into a durable Markdown wiki that supports later synthesis, search, linking, and maintenance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote embedding providers can receive page text and queries when embedding is enabled. <br>
-Mitigation: Keep embeddings disabled for sensitive content unless the user intentionally accepts the configured provider and endpoint. <br>
-Risk: MCP, SSE, and Zotero write-back integrations can affect external tools or literature libraries. <br>
-Mitigation: Treat those integrations as trusted opt-in paths, verify capability gates, and review dry runs before applying merge or sync actions. <br>
-Risk: The skill expects permission to read sources and write wiki, log, and cache files in the target repository. <br>
-Mitigation: Install it only in repositories where those file operations are allowed, and keep generated summaries out of protected source directories. <br>
+## Use Case:
 
+Developers, researchers, and knowledge workers use this skill to have an agent build, query, and maintain a durable Markdown wiki from local source files and Zotero literature while preserving source provenance and temporal context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nemo4110/skills/041-llm-wiki) <br>
-- [Karpathy llm-wiki note](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) <br>
-- [OpenAI Plugins Zotero skill](https://github.com/openai/plugins/tree/main/plugins/zotero/skills/zotero) <br>
-- [Zotero Literature Workflow Notes](docs/ZOTERO_MCP_INTEGRATION.md) <br>
-- [Source File Handling](docs/FILE_HANDLING.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and generated or updated Markdown wiki files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write wiki pages, logs, caches, and reviewed relation updates in the local workspace when the user authorizes wiki operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: ClawHub release evidence) <br>
+Risk: Supply-chain exposure from GitHub-based installation and pipe-to-shell bootstrap commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the release before installing, prefer a pinned release or commit, install in an isolated environment, and avoid pipe-to-shell bootstrap commands when possible.
+
+Risk: Credential and document-scope exposure when Zotero integration or remote embeddings are configured.
+
+Mitigation: Configure Zotero and embedding providers only after reviewing what local documents, queries, API keys, and Zotero data the workflow can access or modify.
+
+Risk: Generated wiki content can preserve incorrect or incomplete interpretations if source ingestion is not reviewed.
+
+Mitigation: Use the skill's coverage, depth, lint, dry-run, and provenance checks before treating new or updated wiki pages as reliable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nemo4110/skills/041-llm-wiki)
+- [Karpathy llm-wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)
+- [Zotero MCP integration](docs/ZOTERO_MCP_INTEGRATION.md)
+- [54yyyu/zotero-mcp](https://github.com/54yyyu/zotero-mcp)
+- [Packaging and distribution decisions](docs/PACKAGING_DISTRIBUTION.md)
+- [uv documentation](https://docs.astral.sh/uv/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command snippets and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide an agent to create or update wiki Markdown pages, logs, metadata, manifests, and optional Zotero workflow reports.]
+
+## Skill Version(s):
+
+1.5.3 (source: ClawHub release metadata; artifact frontmatter says 1.6.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

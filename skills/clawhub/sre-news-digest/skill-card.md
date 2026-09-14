@@ -1,42 +1,58 @@
-## Description: <br>
-Generate a categorized and rated Markdown news digest from sre.news for SRE, DevOps, and Solution Architecture professionals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate categorized and rated SRE, DevOps, and Solution Architecture news digests from sre.news with expert scoring and Markdown output.
 
-## Publisher: <br>
-[imzye](https://clawhub.ai/user/imzye) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[imzye](https://clawhub.ai/user/imzye)
 
-## Use Case: <br>
-SREs, DevOps engineers, Solution Architects, and developers use this skill to collect recent sre.news links, evaluate their operational relevance, and produce a concise categorized digest. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External news and article pages may contain inaccurate, stale, or irrelevant content. <br>
-Mitigation: Review the generated digest before relying on it or sharing it. <br>
-Risk: The default output path can overwrite an existing sre_news_digest.md file. <br>
-Mitigation: Choose a custom output path when an existing digest file should be preserved. <br>
+## Use Case:
 
+SRE, DevOps, and solution architecture practitioners use this skill to collect recent sre.news items, read linked articles, rate relevance, categorize topics, and generate an English Markdown digest for daily or periodic review.
 
-## Reference(s): <br>
-- [sre.news](https://sre.news) <br>
-- [SRE/DevOps News Scoring Rubric](references/scoring-rubric.md) <br>
-- [Digest Template](templates/digest_template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown digest with article links, source names, star ratings, and expert summaries; helper script output is JSON article metadata.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The digest is saved to sre_news_digest.md by default or to a user-specified path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The digest depends on a disclosed RSS mirror, so feed availability or mirror completeness can affect article selection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: For important digests, compare feed results with sre.news or the original article sources before relying on the output.
+
+Risk: The workflow asks the agent to open external article links supplied by the feed.
+
+Mitigation: Use an isolated browsing environment without sensitive sessions, avoid unrelated embedded resources, and review generated links before sharing externally.
+
+## Reference(s):
+
+- [Server-resolved GitHub source repository](https://github.com/imzye/sre-news-digest)
+- [ClawHub skill page](https://clawhub.ai/imzye/skills/sre-news-digest)
+- [SRE News](https://sre.news)
+- [SRE News RSS mirror](https://news.imzye.com/rss.xml)
+- [SRE/DevOps News Scoring Rubric](references/scoring-rubric.md)
+- [Digest Template](templates/digest_template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown digest with article links, source names, ratings, category sections, and short expert summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The helper script can also emit a JSON article list before the agent reads, rates, categorizes, and formats the digest.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

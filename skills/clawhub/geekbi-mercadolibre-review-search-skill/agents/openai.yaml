@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mercado Libre 评论搜索"
+  short_description: "查询和分析美客多真实商品评论与消费者痛点"
+  default_prompt: "使用极鲸云真实评论分析 Mercado Libre 商品口碑。"

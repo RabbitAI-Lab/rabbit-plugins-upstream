@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/today-trending",
   "slug": "today-trending",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778492151351,
-  "contentHash": "c776448d16a30c17a205a933b2e157e83fbd617a85f40692f60b897f3ddcae90",
-  "fetchedAt": "2026-07-26T19:50:59.897Z"
+  "version": "1.1.0",
+  "updatedAt": 1789197764743,
+  "contentHash": "855d7658d3033902da4462e2ad5c361d34ffc4329984097b3045ee7d435d19f5",
+  "fetchedAt": "2026-09-14T14:44:02.253Z"
 }

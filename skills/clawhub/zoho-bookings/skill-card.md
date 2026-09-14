@@ -1,48 +1,75 @@
-## Description: <br>
-Zoho Bookings API integration with managed OAuth for managing appointments, services, staff, and workspaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Bookings API integration with managed OAuth for managing appointments, services, staff, and workspaces.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, external users, developers, and operations teams use this skill to query Zoho Bookings data and perform user-approved booking, service, staff, workspace, and connection actions through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive Maton API key and managed OAuth access to Zoho Bookings. <br>
-Mitigation: Keep MATON_API_KEY private, avoid sharing outputs that expose credentials, and install only when Maton is trusted to proxy Zoho Bookings access. <br>
-Risk: Booking, service, workspace, staff, and connection write operations can change live scheduling data. <br>
-Mitigation: Review the target resource, intended account connection, and requested create, update, or delete effect before approving any write operation. <br>
-Risk: Multiple Maton connections may route requests to the wrong Zoho Bookings account if the connection is ambiguous. <br>
-Mitigation: Specify the intended Maton-Connection header when multiple active connections exist. <br>
+## Use Case:
 
+Employees, external service teams, and developers use this skill to work with Zoho Bookings through Maton-managed OAuth, including booking appointments, checking availability, and managing services, staff, and workspaces. It can also guide approved hosted functions and trigger-based automation that run Zoho Bookings actions through the user's Maton connection.
 
-## Reference(s): <br>
-- [ClawHub Zoho Bookings Skill](https://clawhub.ai/byungkyu/zoho-bookings) <br>
-- [Maton](https://maton.ai) <br>
-- [Zoho Bookings API Documentation](https://www.zoho.com/bookings/help/api/v1/oauthauthentication.html) <br>
-- [Book Appointment API](https://www.zoho.com/bookings/help/api/v1/book-appointment.html) <br>
-- [Fetch Appointments API](https://www.zoho.com/bookings/help/api/v1/fetch-appointment.html) <br>
-- [Fetch Services API](https://www.zoho.com/bookings/help/api/v1/fetch-services.html) <br>
-- [Fetch Staff API](https://www.zoho.com/bookings/help/api/v1/fetch-staff.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell commands, HTTP endpoints, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY, and a connected Zoho Bookings OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Maton credentials and Zoho Bookings OAuth grants may expose scheduling or business data if they are over-scoped, long-lived, or shared across unrelated app connections.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use Maton OAuth where possible, avoid long-lived API keys, choose only needed Zoho Bookings scopes, and prefer a dedicated Maton account with only the required connection for hosted automation.
+
+Risk: Write operations can modify appointments, services, staff, workspaces, or downstream workflows.
+
+Mitigation: Default to read and list calls, then get explicit user approval for each POST, PUT, PATCH, DELETE, connection creation, function deployment, trigger creation, or automation change.
+
+Risk: Hosted functions and trigger destinations can create persistent automation or data forwarding paths.
+
+Mitigation: Keep function network policy at DENY_ALL unless named hosts are explicitly required and approved, route this skill's trigger output only to its approved hosted function, and review or remove persistent destinations when no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-bookings)
+- [Maton Homepage](https://maton.ai)
+- [Zoho Bookings API Documentation](https://www.zoho.com/bookings/help/api/v1/oauthauthentication.html)
+- [Book Appointment API](https://www.zoho.com/bookings/help/api/v1/book-appointment.html)
+- [Fetch Appointments API](https://www.zoho.com/bookings/help/api/v1/fetch-appointment.html)
+- [Fetch Services API](https://www.zoho.com/bookings/help/api/v1/fetch-services.html)
+- [Fetch Staff API](https://www.zoho.com/bookings/help/api/v1/fetch-staff.html)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, API request examples, code snippets, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a valid Maton-managed Zoho Bookings connection.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

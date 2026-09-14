@@ -39,12 +39,12 @@ Gemini models through a single `instruct` action — the **cheap high-throughput
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"gemini","actionSlug":"instruct","config":{"model":"gemini-2.5-flash","advancedSettings":{"temperature":0},"output":{"responseFormat":"json_object"}}}' \
-  --records '[{"prompt":"<substituted classification prompt row 1>"},{"prompt":"<row 2>"}, ...]' \
+  --action '{"kind":"connector","integrationSlug":"gemini","actionSlug":"instruct"}' \
+  --records '[{"model":"gemini-2.5-flash","prompt":"<substituted classification prompt row 1>","advancedSettings":{"temperature":0},"output":{"responseFormat":"json_object"}},{"model":"gemini-2.5-flash","prompt":"<row 2>"}, ...]' \
   --wait-until-finished
 ```
 
-`prompt` goes in each record; `model`, `advancedSettings`, and `output` in `config`.
+**`model`, `prompt`, `advancedSettings`, and `output` are all *inputs*** — they go in each record, never in the action's `config`, which a top-level action does not carry at all. Settings placed there are rejected on older backends and **silently dropped** on newer ones (the call still bills, at default settings).
 
 ## Input quirks
 
@@ -65,9 +65,16 @@ cargo-ai orchestration action execute-batch \
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"gemini","actionSlug":"instruct","config":{"model":"…","output":{…}}}`. **No `connectorUuid` in `config`.** Costs above are the Cargo-credits rules; a workspace can instead attach its own Gemini key (connector config takes a single required `apiKey`) and bill Google directly.
+`{"kind":"connector","integrationSlug":"gemini","actionSlug":"instruct"}`, with `model`, `prompt`, `advancedSettings`, and `output` per record in `--records` / `--data`. **No `connectorUuid` in `config`** — and no model settings there either; inside a workflow **node** those same fields are the node's `config`. Costs above are the Cargo-credits rules; a workspace can instead attach its own Gemini key (connector config takes a single required `apiKey`) and bill Google directly.
 
 ## Pairs with
 
 - [`../references/prompt-library/index.md`](../references/prompt-library/index.md) — the library's extraction/qualification/personalization prompts port unchanged; keep `temperature: 0` for the deterministic families.
 - [`../recipes/build-tam.md`](../recipes/build-tam.md) / [`../recipes/tech-intent.md`](../recipes/tech-intent.md) — high-volume classify/extract stages where Flash throughput pays off.
+
+## Recurring use
+
+- **The recurring shape is a play node, not a scheduled re-pull:** `instruct` as the classify/score/personalize step, gated on rows newly entering the segment or newly enriched — never re-prompt the whole model each evaluation.
+- **Per-row cost compounds with cadence:** the 500-row math in Cost traps repeats every run — a daily play on `gemini-2.5-flash` is ≈15 credits/day. Keep recurring nodes on Flash; pilot on Pro, demote before scheduling.
+- **`withWebSearch` is the compounding trap in a recurring node** — 0.4 fixed per call, every run. Ground only rows whose facts actually went stale.
+- **Idempotence gate:** write the output to a dedicated column and run only where it's still empty (or where an input-changed timestamp is newer than the output's).

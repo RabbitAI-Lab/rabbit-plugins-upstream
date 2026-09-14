@@ -4,6 +4,8 @@ import { healthCheck } from '../commands/health.js';
 import { inference } from '../commands/inference.js';
 import { ondemand } from '../commands/ondemand.js';
 import { video } from '../commands/video.js';
+import { characterRoutes, characterRequest } from '../commands/characters.js';
+import { redactObject } from '../redaction.js';
 import { resolveThetaOnDemandToken } from './secretResolver.js';
 function coerceBool(value, fallback) {
     if (value === undefined)
@@ -37,15 +39,13 @@ async function buildRuntimeConfig(ctx) {
         edgecloudOrgId: env.THETA_ORG_ID ?? base.edgecloudOrgId,
         videoSaId: env.THETA_VIDEO_SA_ID ?? base.videoSaId,
         videoSaSecret: env.THETA_VIDEO_SA_SECRET ?? base.videoSaSecret,
+        charactersApiKey: env.THETA_CHARACTERS_API_KEY ?? base.charactersApiKey,
         inferenceEndpoint: env.THETA_INFERENCE_ENDPOINT ?? base.inferenceEndpoint,
         inferenceAuth: inferenceAuthUser && inferenceAuthPass
             ? { user: inferenceAuthUser, pass: inferenceAuthPass }
             : base.inferenceAuth,
         onDemandApiToken,
         onDemandApiBaseUrl: env.THETA_ONDEMAND_API_BASE_URL ?? env.THETA_API_BASE_URL ?? base.onDemandApiBaseUrl,
-        edgecloudRpcUrl: env.THETA_EDGECLOUD_RPC_URL ?? base.edgecloudRpcUrl,
-        chainRpcUrl: env.THETA_CHAIN_RPC_URL ?? base.chainRpcUrl,
-        cliRpcUrl: env.THETA_CLI_RPC_URL ?? base.cliRpcUrl,
         httpTimeoutMs: coerceInt(env.THETA_HTTP_TIMEOUT_MS, base.httpTimeoutMs, 1000, 120000),
         httpMaxRetries: coerceInt(env.THETA_HTTP_MAX_RETRIES, base.httpMaxRetries, 0, 6),
         httpRetryBackoffMs: coerceInt(env.THETA_HTTP_RETRY_BACKOFF_MS, base.httpRetryBackoffMs, 25, 10000)
@@ -84,6 +84,50 @@ function resolveProjectId(cfg, args) {
     return requireText(args.projectId ?? cfg.edgecloudProjectId, 'projectId');
 }
 const commandRegistry = {
+    'theta.deployments.startByBaseId': {
+        schema: { command: 'theta.deployments.startByBaseId', description: 'Restart stopped GPU node using its base ID', required: ['baseId'] },
+        handler: (cfg, args) => deployments.startByBaseId(cfg, resolveProjectId(cfg, args), requireText(args.baseId, 'baseId'))
+    },
+    'theta.templates.listStandard': {
+        schema: { command: 'theta.templates.listStandard', description: 'List standard templates including training GPU nodes', required: ['category'] },
+        handler: (cfg, args) => {
+            if (!['prototyping', 'serving', 'training'].includes(String(args.category)))
+                throw new Error('Invalid template category');
+            return deployments.listStandard(cfg, args.category);
+        }
+    },
+    'theta.templates.listCustom': {
+        schema: { command: 'theta.templates.listCustom', description: 'List project custom deployment templates', required: [] },
+        handler: (cfg, args) => deployments.listCustom(cfg, resolveProjectId(cfg, args))
+    },
+    'theta.video.uploadCreate': {
+        schema: { command: 'theta.video.uploadCreate', description: 'Create video upload session; does not read local files', required: [] },
+        handler: (cfg) => video.uploadCreate(cfg)
+    },
+    'theta.video.create': {
+        schema: { command: 'theta.video.create', description: 'Create video from supplied remote-source payload', required: ['payload'] },
+        handler: (cfg, args) => video.videoCreate(cfg, requireObject(args.payload, 'payload'))
+    },
+    'theta.video.get': {
+        schema: { command: 'theta.video.get', description: 'Inspect a video', required: ['videoId'] },
+        handler: (cfg, args) => video.videoGet(cfg, requireText(args.videoId, 'videoId'))
+    },
+    'theta.video.streamCreate': {
+        schema: { command: 'theta.video.streamCreate', description: 'Create a livestream', required: ['payload'] },
+        handler: (cfg, args) => video.streamCreate(cfg, requireObject(args.payload, 'payload'))
+    },
+    'theta.video.streamGet': {
+        schema: { command: 'theta.video.streamGet', description: 'Inspect a livestream', required: ['streamId'] },
+        handler: (cfg, args) => video.streamGet(cfg, requireText(args.streamId, 'streamId'))
+    },
+    'theta.video.ingestorList': {
+        schema: { command: 'theta.video.ingestorList', description: 'List stream ingestors', required: [] },
+        handler: (cfg) => video.ingestorList(cfg)
+    },
+    'theta.video.ingestorSelect': {
+        schema: { command: 'theta.video.ingestorSelect', description: 'Select stream ingestor', required: ['ingestorId', 'body'] },
+        handler: (cfg, args) => video.ingestorSelect(cfg, requireText(args.ingestorId, 'ingestorId'), requireObject(args.body, 'body'))
+    },
     'theta.health': {
         schema: { command: 'theta.health', description: 'EdgeCloud health check via controller VM listing', required: [] },
         handler: (cfg) => healthCheck(cfg)
@@ -149,6 +193,10 @@ const commandRegistry = {
             variant: args.variant,
             webhook: args.webhook,
             reasoningEffort: args.reasoning_effort,
+            enableThinking: args.enable_thinking,
+            tools: args.tools,
+            toolChoice: args.tool_choice,
+            parallelToolCalls: args.parallel_tool_calls,
             extraInput: args.extraInput,
             allowUnknownService: args.allowUnknownService
         })
@@ -174,8 +222,8 @@ const commandRegistry = {
         handler: (cfg, args) => ondemand.pollUntilDone(cfg, args.requestId, args.options)
     },
     'theta.deployments.list': {
-        schema: { command: 'theta.deployments.list', description: 'List deployments for project', required: ['projectId'] },
-        handler: (cfg, args) => deployments.list(cfg, args.projectId)
+        schema: { command: 'theta.deployments.list', description: 'List deployments for project', required: [] },
+        handler: (cfg, args) => deployments.list(cfg, resolveProjectId(cfg, args))
     },
     'theta.deployments.routeProbe': {
         schema: { command: 'theta.deployments.routeProbe', description: 'Probe singular/plural deployment list routes for project', required: [] },
@@ -269,6 +317,13 @@ const onDemandTokenCommands = new Set([
     'get_request_status',
     'get_upload_url'
 ]);
+for (const [name, route] of Object.entries(characterRoutes)) {
+    const command = `theta.characters.${name}`;
+    commandRegistry[command] = {
+        schema: { command, description: `AI Characters ${name}; game-scoped key required`, required: [...route.fields, ...(['POST', 'PUT'].includes(route.method) ? ['payload'] : [])] },
+        handler: (cfg, args) => characterRequest(cfg, name, args)
+    };
+}
 export const thetaRuntimeCommandSchemas = Object.fromEntries(Object.entries(commandRegistry).map(([cmd, reg]) => [cmd, reg.schema]));
 export function listThetaRuntimeCommands() {
     return Object.keys(commandRegistry).sort();
@@ -283,5 +338,8 @@ export async function executeThetaRuntimeCommand(args, ctx = {}) {
     if (onDemandTokenCommands.has(args.command) && !cfg.dryRun && !cfg.onDemandApiToken) {
         throw new Error('THETA_ONDEMAND_API_TOKEN missing (runtime secret/env resolver)');
     }
-    return registration.handler(cfg, args);
+    const result = await registration.handler(cfg, args);
+    // A preview must never echo credential-bearing deployment/RAG payloads.
+    return cfg.dryRun && result && typeof result === 'object'
+        ? redactObject(result) : result;
 }

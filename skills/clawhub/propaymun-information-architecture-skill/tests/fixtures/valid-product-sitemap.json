@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "title": "Salon booking product sitemap",
+    "artifact_type": "product-sitemap",
+    "artifact_version": "1.0",
+    "status": "proposed",
+    "language": "fa-IR",
+    "direction": "rtl",
+    "scope": "customer booking MVP",
+    "decision_purpose": "review destination hierarchy and access",
+    "source": {
+      "type": "minimum-semantic-substrate",
+      "reference_id": "substrate-salon-001",
+      "version": "1.0",
+      "readiness": "provisional"
+    }
+  },
+  "destinations": [
+    {
+      "id": "home",
+      "label": "خانه",
+      "purpose": "شروع جست‌وجوی خدمات",
+      "destination_kind": "root",
+      "parent_id": null,
+      "semantic_refs": ["service", "salon"],
+      "access_scope": "public",
+      "entry_contexts": ["direct", "search"],
+      "route": "/",
+      "evidence_status": "Proposed"
+    },
+    {
+      "id": "salon-detail",
+      "label": "پروفایل سالن",
+      "purpose": "بررسی خدمات، آرایشگرها و زمان آزاد",
+      "destination_kind": "detail",
+      "parent_id": "home",
+      "semantic_refs": ["salon", "stylist", "service", "availability"],
+      "access_scope": "public",
+      "entry_contexts": ["search-result", "deep-link"],
+      "route": "/salons/:id",
+      "evidence_status": "Proposed"
+    },
+    {
+      "id": "appointments",
+      "label": "نوبت‌های من",
+      "purpose": "مدیریت رزروهای کاربر",
+      "destination_kind": "workspace",
+      "parent_id": "home",
+      "semantic_refs": ["booking"],
+      "access_scope": "authenticated-customer",
+      "entry_contexts": ["account"],
+      "route": "/appointments",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "views": [
+    {"id": "appointments-upcoming", "label": "آینده", "destination_id": "appointments", "evidence_status": "Proposed"}
+  ],
+  "states": [
+    {"id": "appointments-empty", "label": "هنوز نوبتی وجود ندارد", "destination_id": "appointments", "evidence_status": "Proposed"}
+  ],
+  "capabilities": [
+    {"id": "search-salons", "label": "جست‌وجوی سالن", "destination_ids": ["home"], "semantic_refs": ["salon", "service"], "evidence_status": "Proposed"}
+  ],
+  "links": [
+    {
+      "id": "salon-to-appointments",
+      "from": "salon-detail",
+      "to": "appointments",
+      "type": "cross-link",
+      "label": "پس از رزرو",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "assumptions": [],
+  "unknowns": [],
+  "validation": []
+}

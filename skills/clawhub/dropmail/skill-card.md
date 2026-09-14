@@ -1,45 +1,63 @@
-## Description: <br>
-Manage disposable email addresses using GuerrillaMail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage disposable email addresses using GuerrillaMail for creating temporary or throwaway addresses, checking inboxes, and avoiding sharing a real email with untrusted services.
 
-## Publisher: <br>
-[cprite](https://clawhub.ai/user/cprite) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cprite](https://clawhub.ai/user/cprite)
 
-## Use Case: <br>
-External users and developers use this skill to create temporary email addresses, refresh disposable inboxes, read received messages, and remove locally tracked disposable mail when finished. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Disposable inbox traffic and message contents are handled by GuerrillaMail and cached locally. <br>
-Mitigation: Use the skill only for low-sensitivity temporary flows and remove tracked addresses and cached messages when they are no longer needed. <br>
-Risk: Mailbox sessions and message contents are stored under the user's home directory. <br>
-Mitigation: Avoid sensitive account recovery, financial, medical, or long-lived login workflows unless local storage controls meet the user's requirements. <br>
-Risk: HTTPS validation may be weakened when certificate support is unavailable. <br>
-Mitigation: Install or configure certificate support before using the skill in workflows where transport integrity matters. <br>
+## Use Case:
 
+External users and developers use DropMail to generate disposable email addresses, refresh and inspect GuerrillaMail inboxes, and remove cached mailbox state after use.
 
-## Reference(s): <br>
-- [GuerrillaMail API Reference](references/api.md) <br>
-- [GuerrillaMail API endpoint](https://api.guerrillamail.com/ajax.php) <br>
-- [ClawHub skill page](https://clawhub.ai/cprite/dropmail) <br>
-- [Publisher profile](https://clawhub.ai/user/cprite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disposable email addresses, inbox metadata, message bodies, and local cleanup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Disposable-mail traffic is routed through GuerrillaMail, and messages may contain verification codes, login links, or other sensitive content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use the disposable inbox for sensitive account recovery, financial, medical, or long-lived login flows.
+
+Risk: Inbox contents and per-email session cookies are cached under ~/.dropmail.
+
+Mitigation: Treat the local database and sessions file as sensitive, keep file permissions private, and remove disposable addresses when finished.
+
+Risk: A system-wide symlink install can be unsafe if the source directory is writable by less-trusted users.
+
+Mitigation: Prefer a user-local install, or ensure any system-wide installed copy is root-owned and not writable by less-trusted users.
+
+Risk: Email content displayed in the terminal is untrusted.
+
+Mitigation: Treat displayed messages as untrusted content and review links or instructions carefully before acting on them.
+
+## Reference(s):
+
+- [GuerrillaMail API Reference](references/api.md)
+- [Server-resolved source repository](https://github.com/cprite/dropmail)
+- [ClawHub skill page](https://clawhub.ai/cprite/skills/dropmail)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Text, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and CLI output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python 3.7+ and stores mailbox state locally under ~/.dropmail.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

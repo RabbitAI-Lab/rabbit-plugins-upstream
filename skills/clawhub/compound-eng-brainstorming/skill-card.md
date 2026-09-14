@@ -1,40 +1,61 @@
-## Description: <br>
-Pre-implementation exploration workflow for deep interviews, approach comparison, and design documentation before coding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ia-brainstorming guides pre-implementation exploration through deep interview, approach comparison, and design-doc capture for vague feature ideas or ambiguous requirements.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and product or engineering collaborators use this workflow to clarify vague feature ideas, compare implementation approaches, and capture an approved design direction before planning or coding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may inspect relevant project context and create a design record that influences later implementation. <br>
-Mitigation: Review the brainstorm output and design document before proceeding to planning or implementation. <br>
-Risk: Ambiguous requirements or uncorrected assumptions can lead to an inaccurate design direction. <br>
-Mitigation: Confirm the scope synthesis, approach trade-offs, and listed assumptions before treating the design as approved. <br>
+## Use Case:
 
+Developers and engineering teams use this workflow to clarify ambiguous feature ideas, compare implementation approaches, and produce a design handoff before planning or coding.
 
-## Reference(s): <br>
-- [Deep Interview Layer](references/deep-interview.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Conversational guidance and Markdown design documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create a design document under docs/brainstorms/ after user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release metadata) <br>
+Risk: The workflow may read project context and create design guidance that influences later implementation decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated summaries and design documents before using them for planning or implementation.
+
+Risk: Design work involving auth, payments, external APIs, or multi-tenant data can miss important security or trust-boundary concerns.
+
+Mitigation: Run an appropriate security threat-model review before planning sensitive changes.
+
+Risk: Headless use can turn unresolved assumptions into design direction if the caller does not provide a clear decision scope.
+
+Mitigation: Use headless mode only with explicit delegation and record unresolved assumptions for review.
+
+## Reference(s):
+
+- [Deep Interview Layer](references/deep-interview.md)
+- [Design capture and handoff](references/design-and-handoff.md)
+- [Interview and approach selection](references/interview-and-approaches.md)
+- [Pre-write scope synthesis](references/scope-synthesis.md)
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-brainstorming)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance and design documentation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create a docs/brainstorms design file when a durable artifact is warranted.]
+
+## Skill Version(s):
+
+4.5.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

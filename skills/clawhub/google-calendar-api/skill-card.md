@@ -1,44 +1,79 @@
-## Description: <br>
-Google Calendar API integration with managed OAuth for creating events, listing calendars, checking availability, and managing schedules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Calendar API integration with managed OAuth for creating events, listing calendars, checking availability, and managing schedules.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read and manage Google Calendar calendars, events, connections, and availability through Maton-managed OAuth and API or CLI examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Google Calendar data through Maton-mediated access. <br>
-Mitigation: Install only if Maton-mediated calendar access is acceptable, and confirm the target calendar, event, connection, and intended effect before create, update, delete, or connection-management commands. <br>
-Risk: Multiple Google Calendar connections can cause requests to affect the wrong account or calendar. <br>
-Mitigation: Specify the intended connection when multiple Google Calendar connections exist and verify the target resource before write operations. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to let an agent perform approved Google Calendar reads and writes through Maton, including event management, calendar listing, and availability checks.
 
-## Reference(s): <br>
-- [ClawHub Google Calendar Skill](https://clawhub.ai/byungkyu/skills/google-calendar-api) <br>
-- [Google Calendar API Overview](https://developers.google.com/calendar/api/v3/reference) <br>
-- [Google Calendar Events Reference](https://developers.google.com/workspace/calendar/api/v3/reference/events/list) <br>
-- [Google Calendar Free/Busy Reference](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API endpoint examples and inline bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Google Calendar OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: ClawHub release metadata) <br>
+Risk: Calendar credentials or API keys could be exposed if printed, exported, embedded in trigger destinations, or stored in files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, keep credentials in the operating system credential store, avoid long-lived API keys where possible, and never print, inspect, transmit, or embed Maton or provider credentials.
+
+Risk: Calendar writes, connection changes, and deletions can modify user schedules or grant broader account access than intended.
+
+Mitigation: Default to read and list operations, use least-privilege scopes, specify the intended account or connection, and confirm each write or connection change with the target, payload, and effect.
+
+Risk: Hosted functions, triggers, and destinations can create persistent automation or forwarding of event data.
+
+Mitigation: Use only user-reviewed functions, keep functions private, apply DENY_ALL network policy by default, prefer Maton-controlled destinations, and remove unused functions, triggers, and destinations when finished.
+
+Risk: Third-party API responses and event payloads may contain personal data or adversarial instructions.
+
+Mitigation: Treat fetched content as data, extract only fields needed for the task, avoid logging raw payloads, and do not execute or interpolate external content into commands.
+
+## Reference(s):
+
+- [ClawHub Google Calendar Skill](https://clawhub.ai/byungkyu/skills/google-calendar-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Calendar API Overview](https://developers.google.com/calendar/api/v3/reference)
+- [Google Calendar CalendarList.list](https://developers.google.com/workspace/calendar/api/v3/reference/calendarList/list)
+- [Google Calendar Events.list](https://developers.google.com/workspace/calendar/api/v3/reference/events/list)
+- [Google Calendar Events.insert](https://developers.google.com/workspace/calendar/api/v3/reference/events/insert)
+- [Google Calendar FreeBusy.query](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and HTTP examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Maton CLI commands and Google Calendar API calls; write, connection, function, trigger, and destination actions require user confirmation.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

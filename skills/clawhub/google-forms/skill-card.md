@@ -1,45 +1,75 @@
-## Description: <br>
-Google Forms API integration with managed OAuth for creating forms, adding questions, and retrieving responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Forms API integration with managed OAuth for creating forms, adding questions, and retrieving responses through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect agents to Google Forms through Maton-managed OAuth, then retrieve form data or create and update forms with user-approved API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Google Forms content and responses through a connected Google account. <br>
-Mitigation: Install only when Maton is trusted to broker the account connection, keep MATON_API_KEY private, and verify the selected connection when multiple accounts are available. <br>
-Risk: Create, update, or delete operations can change Google Forms resources. <br>
-Mitigation: Approve write operations only after checking the exact form ID, target resource, and intended change. <br>
+## Use Case:
 
+Developers and automation users use this skill to connect an authenticated Google Forms account through Maton, create or update forms, add questions, retrieve form metadata and responses, and optionally run user-approved hosted automations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-forms) <br>
-- [Google Forms API Overview](https://developers.google.com/workspace/forms/api/reference/rest) <br>
-- [Get Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/get) <br>
-- [Create Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/create) <br>
-- [Batch Update Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/batchUpdate) <br>
-- [List Responses](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms.responses/list) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with Python, JavaScript, shell command, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Maton-managed Google Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill uses Maton as the gateway for Google Forms and requires OAuth approval or a Maton API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable approving the connection, prefer OAuth with the platform credential store, select only required scopes, and avoid exporting long-lived API keys unless the CLI cannot be installed.
+
+Risk: Write operations, connection creation, hosted functions, triggers, and destinations can change resources or keep running after setup.
+
+Mitigation: Default to read and list calls, require explicit approval for each write or automation step, summarize destination, data fields, event source or schedule, and cleanup plan before creation, and delete unneeded functions or triggers when the task is complete.
+
+Risk: Persistent destinations or local event handlers can forward or process third-party event data continuously.
+
+Mitigation: Keep Google Forms automations on Maton-hosted functions where possible, use DENY_ALL network policy for hosted functions, do not forward Google Forms-derived data to destination payloads, and avoid local --exec handlers unless the user supplies and approves the handler.
+
+## Reference(s):
+
+- [Google Forms API Overview](https://developers.google.com/workspace/forms/api/reference/rest)
+- [Get Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/get)
+- [Create Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/create)
+- [Batch Update](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/batchUpdate)
+- [List Responses](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms.responses/list)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-forms)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, Python code snippets, and API request paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are task-specific agent instructions and commands; API responses may contain user data and should be minimized to the fields needed for the task.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

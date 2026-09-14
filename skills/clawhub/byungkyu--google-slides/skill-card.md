@@ -1,47 +1,70 @@
-## Description: <br>
-Google Slides API integration with managed OAuth for creating presentations, adding slides, inserting content, and managing slide formatting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Slides API integration with managed OAuth for creating presentations, adding slides, inserting content, and managing slide formatting.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Google Slides through Maton-managed OAuth, including creating presentations, managing slides, inserting text or images, and applying formatting changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-managed OAuth to access a connected Google Slides account or workspace. <br>
-Mitigation: Install only after confirming trust in Maton, connect the least-privileged Google account practical, and review requested access before authorizing the connection. <br>
-Risk: Create, update, and delete requests can change presentations, slides, and slide content. <br>
-Mitigation: Require explicit user approval before write operations and confirm the target presentation, resource, and intended effect before execution. <br>
-Risk: MATON_API_KEY grants access to the integration and could be misused if exposed. <br>
-Mitigation: Store MATON_API_KEY as a secret, do not include it in logs or shared prompts, and avoid using it in untrusted projects. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an authorized Google Slides account through Maton, inspect presentations, create or update slide content, and set up approved automations that act on Google Slides data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-slides) <br>
-- [Google Slides API overview](https://developers.google.com/slides/api/reference/rest) <br>
-- [Presentations API](https://developers.google.com/slides/api/reference/rest/v1/presentations) <br>
-- [Pages API](https://developers.google.com/slides/api/reference/rest/v1/presentations.pages) <br>
-- [BatchUpdate API](https://developers.google.com/slides/api/reference/rest/v1/presentations/batchUpdate) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API endpoint examples and inline bash, Python, JavaScript, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Authorizing a Google Slides connection can expose presentation content available to the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, select the narrowest available scopes, prefer read-only access, and confirm connection creation with the user before authorizing.
+
+Risk: Write calls and hosted automations can change presentations or continue acting after the initial setup.
+
+Mitigation: Confirm each POST, PUT, PATCH, DELETE, function deployment, trigger, and destination separately with the target resource, payload, and intended effect.
+
+Risk: Trigger destinations can create persistent forwarding of matching events, including sensitive source-system data.
+
+Mitigation: Prefer platform destinations such as api.maton.ai or *.maton.app, and use third-party destinations only after the user approves the exact host and understands what data will be sent.
+
+Risk: API-key based access can expose a long-lived credential if it is printed, logged, committed, or inherited by child processes.
+
+Mitigation: Prefer OAuth; when an API key is unavoidable, keep it out of logs and files, avoid exporting it broadly, and rotate it if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-slides)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Slides API Overview](https://developers.google.com/slides/api/reference/rest)
+- [Presentations](https://developers.google.com/slides/api/reference/rest/v1/presentations)
+- [Pages](https://developers.google.com/slides/api/reference/rest/v1/presentations.pages)
+- [BatchUpdate Requests](https://developers.google.com/slides/api/reference/rest/v1/presentations/batchUpdate)
+- [Page Layouts](https://developers.google.com/slides/api/reference/rest/v1/presentations/create#predefinedlayout)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, JSON examples, API paths, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include authenticated Maton CLI commands, raw HTTP examples, hosted function snippets, and trigger configuration guidance; writes and automations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

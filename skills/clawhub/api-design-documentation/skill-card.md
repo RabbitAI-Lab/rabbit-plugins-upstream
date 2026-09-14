@@ -1,38 +1,54 @@
-## Description: <br>
-AI-powered API design and documentation assistant that generates RESTful and OpenAPI specs, API documentation, mock-server guidance, validation feedback, and SDK code snippets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered API design and documentation assistant that generates RESTful/OpenAPI specs, writes API guides and reference documentation, creates mock-server drafts, validates API designs, and produces SDK code snippets.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, API product managers, DevOps engineers, and technical writers use this skill to design APIs, produce OpenAPI or related specifications, write developer-facing documentation, create examples, and validate API designs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated code samples, authentication examples, or mock-server snippets may not match a project's security requirements. <br>
-Mitigation: Review and harden generated examples before using them with real services. <br>
+## Use Case:
 
+Developers, API product managers, DevOps engineers, and technical writers use this skill to design APIs, produce OpenAPI or related specifications, generate documentation and code samples, draft mock-server behavior, and review API quality before release.
 
-## Reference(s): <br>
-- [Api Design Documentation on ClawHub](https://clawhub.ai/gechengling/api-design-documentation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown, YAML or JSON specifications, code snippets, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include OpenAPI, AsyncAPI, GraphQL SDL, API reference pages, tutorials, request and response examples, mock-server setup guidance, and SDK snippets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: Prompts, API examples, or source specs may contain production credentials or real customer data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Replace secrets and customer data with placeholders or synthetic values before using the skill.
+
+Risk: Generated API specs, documentation, SDK snippets, and mock-server code may be incorrect, incomplete, or unsuitable to publish as-is.
+
+Mitigation: Review generated artifacts before saving them to a repository, publishing them to a portal, or sending them to a third party.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/api-design-documentation)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, YAML, JSON, and inline code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are drafts for review, including API specifications, documentation, examples, mock-server configuration, changelog guidance, and SDK snippets.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 import { onDemandApiClient } from '../clients/ondemandApi.js';
-import { isOnDemandChatService, listOnDemandServices, ONDEMAND_SERVICE_CATALOG } from './ondemandCatalog.js';
+import { isOnDemandChatService, listOnDemandServices, ONDEMAND_CHAT_SERVICE_SLUGS, ONDEMAND_SERVICE_CATALOG } from './ondemandCatalog.js';
 import { isStructuredError } from '../errors.js';
 function getFirstInferRequest(payload) {
     if (!payload || typeof payload !== 'object')
@@ -74,10 +74,15 @@ function normalizeMessages(messages) {
         if (typeof message.role !== 'string' || !message.role.trim()) {
             throw new Error(`messages[${index}].role must be a non-empty string`);
         }
-        if (typeof message.content !== 'string' || !message.content.trim()) {
+        const toolOnly = message.role === 'assistant' && Array.isArray(message.tool_calls) && message.tool_calls.length > 0;
+        if ((typeof message.content !== 'string' || !message.content.trim()) && !toolOnly) {
             throw new Error(`messages[${index}].content must be a non-empty string`);
         }
-        return { role: message.role.trim(), content: message.content };
+        if (message.role === 'tool' && !message.tool_call_id?.trim())
+            throw new Error(`messages[${index}].tool_call_id is required`);
+        return { role: message.role.trim(), content: message.content,
+            ...(message.tool_calls ? { tool_calls: message.tool_calls } : {}),
+            ...(message.tool_call_id ? { tool_call_id: message.tool_call_id } : {}) };
     });
 }
 function resolveDefaultMaxTokens(service) {
@@ -95,6 +100,15 @@ function buildChatPayload(messages, opts = {}, service) {
     if (opts.reasoningEffort !== undefined) {
         input.reasoning_effort = opts.reasoningEffort;
     }
+    if (opts.enableThinking !== undefined) {
+        input.enable_thinking = opts.enableThinking;
+    }
+    if (opts.tools !== undefined)
+        input.tools = opts.tools;
+    if (opts.toolChoice !== undefined)
+        input.tool_choice = opts.toolChoice;
+    if (opts.parallelToolCalls !== undefined)
+        input.parallel_tool_calls = opts.parallelToolCalls;
     const payload = { input };
     if (opts.variant)
         payload.variant = opts.variant;
@@ -121,7 +135,7 @@ function summarizeLiveService(service) {
         source: 'live',
         alias: service.alias,
         name: service.name,
-        category: categorizeService(service),
+        category: categorizeOnDemandService(service),
         state: service.state,
         workloadType: service.workload_type,
         rank: service.rank,
@@ -132,6 +146,8 @@ function summarizeLiveService(service) {
         workers: service.workers,
         updateTime: service.update_time,
         pricing: prediction?.instructions,
+        inputSchema: inputVars,
+        predictions,
         openrouter: prediction?.openrouter_metadata
     };
 }
@@ -141,7 +157,7 @@ function normalizeCategory(value) {
     const normalized = value.trim().toLowerCase();
     return normalized || undefined;
 }
-function categorizeService(service) {
+export function categorizeOnDemandService(service) {
     const alias = typeof service.alias === 'string' ? service.alias.toLowerCase() : '';
     const name = typeof service.name === 'string' ? service.name.toLowerCase() : '';
     const text = `${alias} ${name}`;
@@ -153,9 +169,9 @@ function categorizeService(service) {
         return 'vision';
     if (text.includes('blip') || text.includes('grounding') || text.includes('dino'))
         return 'vision';
-    if (text.includes('flux') || text.includes('stable') || text.includes('sdxl') || text.includes('image') || text.includes('upscale'))
+    if (text.includes('flux') || text.includes('stable') || text.includes('sdxl') || text.includes('image') || text.includes('upscale') || text.includes('esrgan'))
         return 'image';
-    if (text.includes('qwen') || text.includes('gpt') || text.includes('llama') || text.includes('mistral') || text.includes('chat'))
+    if (text.includes('glm') || text.includes('qwen') || text.includes('gpt') || text.includes('llama') || text.includes('mistral') || text.includes('chat'))
         return 'text';
     return 'other';
 }
@@ -246,15 +262,15 @@ export const ondemand = {
     infer: (cfg, service, payload, opts) => cfg.dryRun ? { dryRun: true, service, payload, requestOptions: opts } : onDemandApiClient.createInferRequest(cfg, service, payload, opts),
     chat: (cfg, service, messages, opts = {}) => {
         if (!opts.allowUnknownService && !isOnDemandChatService(service)) {
-            throw new Error(`Unsupported on-demand chat service: ${service}. Known chat services: qwen3, minimax_m2_5, gpt_oss_120b, llama_3_1_70b, llama_3_8b`);
+            throw new Error(`Unsupported on-demand chat service: ${service}. Known chat services: ${ONDEMAND_CHAT_SERVICE_SLUGS.join(', ')}`);
         }
         const effectiveOpts = service === 'qwen3'
             ? { ...opts, stream: opts.stream ?? true, wait: opts.wait ?? 60 }
-            : service === 'gpt_oss_120b'
+            : ['gpt_oss_120b', 'glm_5_3', 'glm_5_3_flash'].includes(service)
                 ? { ...opts, reasoningEffort: opts.reasoningEffort ?? 'low' }
                 : opts;
         const { payload, requestOptions } = buildChatPayload(messages, effectiveOpts, service);
-        if (service === 'gpt_oss_120b') {
+        if (['gpt_oss_120b', 'glm_5_3', 'glm_5_3_flash'].includes(service)) {
             const input = payload.input;
             const body = {
                 ...input,

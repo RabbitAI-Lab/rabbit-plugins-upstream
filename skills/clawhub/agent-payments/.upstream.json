@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-payments",
   "slug": "agent-payments",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781845111738,
-  "contentHash": "ddd255068e5bdf2038a8a7c06915ab1d433a608bcb64311845876409515841d9",
-  "fetchedAt": "2026-07-26T18:26:50.428Z"
+  "version": "1.0.4",
+  "updatedAt": 1789360421593,
+  "contentHash": "ecc725050cce843aa6ee6eadaf7f8c298153308291b431afdd2a094e1f70b80c",
+  "fetchedAt": "2026-09-14T14:38:02.050Z"
 }

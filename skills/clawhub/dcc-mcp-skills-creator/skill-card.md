@@ -1,43 +1,62 @@
-## Description: <br>
-Infrastructure skill - create, validate, scaffold, and review DCC-MCP skills for the dcc-mcp-core ecosystem. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, edit or validate DCC-MCP tool skill packages (SKILL.md and tools.yaml). Use dcc-mcp-creator for complete adapter repositories.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and technical artists use this skill to create, validate, scaffold, and review DCC-MCP skill packages, including SKILL.md files, tools.yaml declarations, scripts, prompts, and taxonomy metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create files in a user-selected parent directory. <br>
-Mitigation: Review the parent directory before running create_skill and inspect generated files before deployment. <br>
-Risk: Adding generated or existing skill paths changes what the DCC-MCP server can discover. <br>
-Mitigation: Review skill paths and run validation before loading new or changed skills into an adapter. <br>
+## Use Case:
 
+Developers and technical artists use this skill to scaffold, edit, and validate DCC-MCP skill packages with current metadata, tool schemas, runtime contracts, and reference documentation.
 
-## Reference(s): <br>
-- [DCC-MCP Skills Creator homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp-skills-creator/SKILL.md) <br>
-- [DCC-MCP Skill Authoring Workflow](references/AUTHORING_WORKFLOW.md) <br>
-- [DCC-MCP Tool Contracts](references/DCC_TOOL_CONTRACTS.md) <br>
-- [ClawHub skill page](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, YAML configuration, Python code, shell commands, and structured validation reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The create_skill tool writes a new skill directory; validate_skill_dir returns a structured validation report.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.79 (source: metadata.dcc-mcp.version and release.version) <br>
+Risk: The skill can create and modify local DCC-MCP skill package files in a user-selected parent directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target parent directory before running file-writing tools, then review and validate the generated skill directory before loading it.
+
+Risk: Installing from an unreviewed moving branch, tag, or registry result can introduce unreviewed skill instructions or scripts.
+
+Mitigation: Use the verified install procedure with a full commit hash from an independent review record and stop on any verification error.
+
+## Reference(s):
+
+- [DCC-MCP Skills Creator on ClawHub](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator)
+- [Skill homepage](https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp-skills-creator/SKILL.md)
+- [Authoring Workflow](references/AUTHORING_WORKFLOW.md)
+- [DCC Tool Contracts](references/DCC_TOOL_CONTRACTS.md)
+- [Tool Runtime Contract](references/TOOL_RUNTIME_CONTRACT.md)
+- [Package Validation](references/PACKAGE_VALIDATION.md)
+- [Taxonomy Compatibility](references/TAXONOMY_COMPATIBILITY.md)
+- [Distribution Boundary](references/DISTRIBUTION.md)
+- [Verified Install](references/VERIFIED_INSTALL.md)
+- [Task Reflection](references/TASK_REFLECTION.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, JSON/YAML configuration, Python code, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or validate local DCC-MCP skill package files when the agent is authorized to use the bundled tools.]
+
+## Skill Version(s):
+
+0.19.106 (source: metadata.dcc-mcp.version and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

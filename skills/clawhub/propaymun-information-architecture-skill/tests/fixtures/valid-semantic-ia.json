@@ -1,0 +1,242 @@
+{
+  "meta": {
+    "title": "Team Knowledge Product",
+    "model_version": "2.0",
+    "status": "proposed",
+    "language": "en",
+    "direction": "ltr",
+    "scope": "Shared projects, documents, and governed knowledge",
+    "decision_intent": "Review the initial information architecture",
+    "problem_shape": "hybrid",
+    "locale_context": {
+      "country": null,
+      "region": null,
+      "jurisdiction": null,
+      "currency": null,
+      "date_system": null,
+      "operating_model": "workspace teams",
+      "evidence_status": "Unknown"
+    },
+    "handoff": {
+      "purpose": "review",
+      "readiness": "provisional"
+    }
+  },
+  "domains": [
+    {
+      "id": "domain-work",
+      "label": "Work",
+      "description": "Coordinated team activity",
+      "order": 1,
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "domain-knowledge",
+      "label": "Knowledge",
+      "description": "Documents and reusable information",
+      "order": 2,
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "domain-people",
+      "label": "People and access",
+      "description": "Membership and authority",
+      "order": 3,
+      "evidence_status": "Proposed"
+    }
+  ],
+  "items": [
+    {
+      "id": "workspace",
+      "domain_id": "domain-work",
+      "label": "Workspace",
+      "kind": "object",
+      "description": "Team-owned context",
+      "parent_id": null,
+      "attributes": [
+        "name",
+        "owner"
+      ],
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "project",
+      "domain_id": "domain-work",
+      "label": "Project",
+      "kind": "object",
+      "description": "Unit of coordinated work",
+      "parent_id": "workspace",
+      "attributes": [
+        "name",
+        "status"
+      ],
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "document",
+      "domain_id": "domain-knowledge",
+      "label": "Document",
+      "kind": "content_type",
+      "description": "Working or reference content",
+      "parent_id": null,
+      "attributes": [
+        "title",
+        "owner",
+        "status"
+      ],
+      "states": [
+        {
+          "id": "draft",
+          "label": "Draft"
+        },
+        {
+          "id": "published",
+          "label": "Published"
+        }
+      ],
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "person",
+      "domain_id": "domain-people",
+      "label": "Person",
+      "kind": "object",
+      "description": "A workspace participant",
+      "parent_id": null,
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "membership",
+      "domain_id": "domain-people",
+      "label": "Membership",
+      "kind": "record",
+      "description": "A person's role in a workspace",
+      "parent_id": null,
+      "attributes": [
+        "role",
+        "start_date",
+        "end_date"
+      ],
+      "evidence_status": "Proposed"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "project-documents",
+      "from": "project",
+      "to": "document",
+      "type": "references",
+      "label": "references",
+      "meaning": "Projects reference working documents",
+      "direction": "directed",
+      "cardinality": "many-to-many",
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "person-membership",
+      "from": "person",
+      "to": "membership",
+      "type": "has_record",
+      "label": "has membership",
+      "meaning": "A person has a governed membership record",
+      "direction": "directed",
+      "evidence_status": "Proposed"
+    },
+    {
+      "id": "membership-workspace",
+      "from": "membership",
+      "to": "workspace",
+      "type": "belongs_to",
+      "label": "belongs to",
+      "meaning": "Membership grants a role inside one workspace",
+      "direction": "directed",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "information_needs": [
+    {
+      "id": "need-find-project-document",
+      "audience_or_context": "Workspace member looking for current project knowledge",
+      "information_sought": "The working document connected to a project",
+      "entry_points": ["workspace projects", "global search"],
+      "organizing_cues": ["project name", "document title"],
+      "item_ids": ["project", "document"],
+      "access_scope": "Only documents visible in the active workspace",
+      "recovery": "Offer project filtering and query reformulation when no document is found",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "roles": [
+    {
+      "id": "role-member",
+      "label": "Member",
+      "description": "Works with accessible content",
+      "evidence_status": "Provided"
+    },
+    {
+      "id": "role-owner",
+      "label": "Workspace owner",
+      "description": "Governs the workspace",
+      "evidence_status": "Proposed"
+    }
+  ],
+  "permissions": [
+    {
+      "role_id": "role-member",
+      "item_id": "document",
+      "scope": "accessible workspace documents",
+      "actions": [
+        "view",
+        "edit"
+      ],
+      "evidence_status": "Proposed"
+    },
+    {
+      "role_id": "role-owner",
+      "item_id": "workspace",
+      "scope": "owned workspace",
+      "actions": [
+        "manage"
+      ],
+      "evidence_status": "Proposed"
+    }
+  ],
+  "lifecycles": [
+    {
+      "item_id": "document",
+      "states": [
+        {
+          "id": "draft",
+          "label": "Draft"
+        },
+        {
+          "id": "published",
+          "label": "Published"
+        }
+      ],
+      "transitions": [
+        {
+          "from": "draft",
+          "to": "published",
+          "actor_role_ids": [
+            "role-member"
+          ],
+          "condition": "review complete",
+          "evidence_status": "Proposed"
+        }
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "u-retention",
+      "question": "How long should archived documents remain?",
+      "blocks_handoff": false,
+      "evidence_status": "Unknown"
+    }
+  ],
+  "assumptions": [],
+  "conflicts": [],
+  "decisions": [],
+  "validation": []
+}
