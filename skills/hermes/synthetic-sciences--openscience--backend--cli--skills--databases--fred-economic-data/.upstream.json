@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/fred-economic-data",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/fred-economic-data",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/fred-economic-data",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "4503d87277aba0daeacdc8a528dedb0c631144aeef1c4187a4f6ba277b60c97f",
+  "fetchedAt": "2026-09-14T14:12:09.744Z"
+}

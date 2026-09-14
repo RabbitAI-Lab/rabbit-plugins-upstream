@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/gget",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/gget",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/gget",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "1c139f28834a72e47ae82520d127431542970500c0f53cf88112244975d01355",
+  "fetchedAt": "2026-09-14T14:12:09.749Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/primekg",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/primekg",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/primekg",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "a447c809dcc34a810f3d973ab3bb3830696eaa245355e3e79c68bf2559f66314",
+  "fetchedAt": "2026-09-14T14:12:09.819Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/ncats-arax",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/ncats-arax",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/ncats-arax",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "fee10f3508387b0d5bea7b017bd04149365c426e32e73866e7b674a2f3bcca92",
+  "fetchedAt": "2026-09-14T14:12:09.789Z"
+}

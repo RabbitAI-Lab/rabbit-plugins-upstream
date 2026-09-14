@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molfeat",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molfeat",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molfeat",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "1f442e6b9e86072467a698fdea39c5552de5ff0195f743e591bb440f3f515988",
+  "fetchedAt": "2026-09-14T14:12:09.788Z"
+}

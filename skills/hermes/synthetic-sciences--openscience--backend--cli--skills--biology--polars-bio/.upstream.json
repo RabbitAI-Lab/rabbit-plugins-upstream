@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/polars-bio",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/polars-bio",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/polars-bio",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "c4e7c59a374eb5b0f7a9f688023a91632e78e74984a7c48ff34cd14e5c536430",
+  "fetchedAt": "2026-09-14T14:12:09.814Z"
+}

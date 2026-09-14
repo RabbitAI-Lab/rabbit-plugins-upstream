@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/clinical-reports",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/clinical-reports",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/clinical-reports",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "9a54e093fe0bebc9dfc84a3949f43b4b4005115f732366dd6e01d0e9693e85b2",
+  "fetchedAt": "2026-09-14T14:12:09.713Z"
+}

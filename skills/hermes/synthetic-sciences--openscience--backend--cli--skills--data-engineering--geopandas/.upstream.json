@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/geopandas",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/geopandas",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/geopandas",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "b39ebde98c1aa3efa34ffd77ad58a72c09c2251da09ae04e14e112640091b6e2",
+  "fetchedAt": "2026-09-14T14:12:09.748Z"
+}

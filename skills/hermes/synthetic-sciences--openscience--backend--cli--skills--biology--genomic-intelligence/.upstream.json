@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/genomic-intelligence",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/genomic-intelligence",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/genomic-intelligence",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "ac089e93602e30f5f4e2eac15658b399fa25ea778fde469a54d6bbc9a911723f",
+  "fetchedAt": "2026-09-14T14:12:09.746Z"
+}

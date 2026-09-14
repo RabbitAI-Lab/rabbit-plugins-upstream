@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/iso-standards-readiness",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/iso-standards-readiness",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/iso-standards-readiness",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "9dc6058ecc1041bb02886a36c7028b05bbf4c983b28ad133f13c8637ffb4f4d6",
+  "fetchedAt": "2026-09-14T14:12:09.768Z"
+}

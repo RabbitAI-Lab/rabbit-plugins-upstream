@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rtvi-vlm-customize-model",
+  "identifier": "NVIDIA/skills/skills/rtvi-vlm-customize-model",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rtvi-vlm-customize-model",
+  "branch": "main",
+  "pushedAt": "2026-09-13T17:33:27Z",
+  "contentHash": "e5137e6506bf647b64bb35bd7b40e06f27b0cf84997af8f717e3fe1bfe533492",
+  "fetchedAt": "2026-09-14T14:12:08.198Z"
+}

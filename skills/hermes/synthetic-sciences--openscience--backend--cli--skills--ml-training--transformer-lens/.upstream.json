@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/transformer-lens",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/transformer-lens",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/transformer-lens",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "3393d512987575e192055b0e4bb58d355e0b1501aa472e48bef75adc57056161",
+  "fetchedAt": "2026-09-14T14:12:09.870Z"
+}

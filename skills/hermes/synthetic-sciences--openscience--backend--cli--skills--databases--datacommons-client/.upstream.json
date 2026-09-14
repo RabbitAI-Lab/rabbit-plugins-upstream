@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/datacommons-client",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/datacommons-client",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/datacommons-client",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "1eae2f63f1c470f82497043d9d6c7f692f5a0860528ae55008f3b76511629a2d",
+  "fetchedAt": "2026-09-14T14:12:09.722Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holohub-debug-build-run",
+  "identifier": "NVIDIA/skills/skills/holohub-debug-build-run",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holohub-debug-build-run",
+  "branch": "main",
+  "pushedAt": "2026-09-13T17:33:27Z",
+  "contentHash": "4b3a1102544b9dec8dbe2f40c0bbd86f6b6bee9c426b9abbc735a60267a895fb",
+  "fetchedAt": "2026-09-14T14:12:08.057Z"
+}

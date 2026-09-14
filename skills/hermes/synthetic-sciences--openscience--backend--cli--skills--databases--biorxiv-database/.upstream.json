@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/biorxiv-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/biorxiv-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/biorxiv-database",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "616a9eb2a3e02b9d5ec647e175da31bdf94351986524142fea5eac5361f99b52",
+  "fetchedAt": "2026-09-14T14:12:09.704Z"
+}

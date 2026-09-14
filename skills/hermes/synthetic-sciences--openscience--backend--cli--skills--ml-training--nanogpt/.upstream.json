@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/nanogpt",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/nanogpt",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/nanogpt",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "c38d4679beb91b3f4c26005b9197f29def2af0dbd704844b7f1f0d85b5f31f2e",
+  "fetchedAt": "2026-09-14T14:12:09.789Z"
+}

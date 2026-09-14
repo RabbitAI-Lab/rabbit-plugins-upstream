@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/document-parsing/pdf",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/document-parsing/pdf",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/document-parsing/pdf",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "1b2684d3afb6991a9571287f6690d19d575f02c4d828b9c8abeb936fca81d01b",
+  "fetchedAt": "2026-09-14T14:12:09.807Z"
+}

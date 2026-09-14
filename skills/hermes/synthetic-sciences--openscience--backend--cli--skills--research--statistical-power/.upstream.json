@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/statistical-power",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/statistical-power",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/statistical-power",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "6173378ccbca11650397e43641dc59c943270231a9c26bc97e629a0ae024bd55",
+  "fetchedAt": "2026-09-14T14:12:09.853Z"
+}

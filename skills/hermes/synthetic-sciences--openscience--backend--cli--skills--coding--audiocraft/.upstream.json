@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/audiocraft",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/audiocraft",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/audiocraft",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "6457adb905a0aa52f1c5e16393110f24d129c0a1b05f5c6147ca4ad874c05016",
+  "fetchedAt": "2026-09-14T14:12:09.697Z"
+}

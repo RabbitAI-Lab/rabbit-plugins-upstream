@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/alphafold-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/alphafold-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/alphafold-database",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "0c68e0bfc2f955d842a9edeeeaf3310bdc380a56c962591c43bab4be66a199c7",
+  "fetchedAt": "2026-09-14T14:12:09.693Z"
+}

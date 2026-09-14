@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/clip",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/clip",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/clip",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "dcdfa620d39a35e1804b3a4b1e249f5f6a2f66a53ce73c8f69c1e256d96a00da",
+  "fetchedAt": "2026-09-14T14:12:09.714Z"
+}

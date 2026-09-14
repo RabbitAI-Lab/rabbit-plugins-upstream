@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/research-grants",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/research-grants",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/research-grants",
+  "branch": "main",
+  "pushedAt": "2026-09-14T13:46:53Z",
+  "contentHash": "9ef57ee3bbb5417eceb895c2388e7ef7446b2dbc6e7ce5744c480b01f93e3aa0",
+  "fetchedAt": "2026-09-14T14:12:09.838Z"
+}

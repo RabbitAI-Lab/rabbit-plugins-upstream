@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/exploratory-data-analysis",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/exploratory-data-analysis",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/exploratory-data-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "a7bf9cb0ac4e372f8561b8a59b260bc39b3a3752d2acff653ed9643cb825b81a",
+  "fetchedAt": "2026-09-14T14:12:24.401Z"
+}
