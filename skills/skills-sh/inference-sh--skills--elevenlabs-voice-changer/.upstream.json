@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-voice-changer",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-voice-changer",
+  "branch": "main",
+  "pushedAt": "2026-09-14T12:20:29Z",
+  "contentHash": "fccaee32776faaf2441c688e253b44a5d9ee3bb32c9eccd08a6a75fd88f88899",
+  "fetchedAt": "2026-09-14T14:14:20.460Z"
+}

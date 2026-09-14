@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/agent-browser",
+  "repo": "inference-sh/skills",
+  "skillId": "agent-browser",
+  "branch": "main",
+  "pushedAt": "2026-09-14T12:20:29Z",
+  "contentHash": "9d2e41da93ba1869bf9af59b2fc7d200e1894f40b5061bbd6ef95c5e5045dadb",
+  "fetchedAt": "2026-09-14T14:14:20.317Z"
+}
