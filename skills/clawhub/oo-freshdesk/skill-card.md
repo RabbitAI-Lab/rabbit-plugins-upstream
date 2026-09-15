@@ -1,46 +1,55 @@
-## Description: <br>
-Freshdesk (freshworks.com). Use this skill for Freshdesk requests that search and read data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freshdesk helps agents inspect Freshdesk account details, tickets, ticket lists, and ticket conversations through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, support teams, and developers use this skill to read Freshdesk account details, tickets, ticket conversations, and filtered ticket lists through an OOMOL-connected Freshdesk account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Freshdesk account, and ticket or conversation reads can expose customer or business data. <br>
-Mitigation: Install and use the skill only when OOMOL is trusted for this account, and review the connected Freshdesk scopes before running read actions. <br>
-Risk: The first-time setup path includes a curl-to-shell installer for the oo CLI. <br>
-Mitigation: Use the installer only when the oo CLI is not already installed, and prefer the published OOMOL install guide for platform-specific setup. <br>
-Risk: Future connector actions may change Freshdesk state if they are tagged as write or destructive. <br>
-Mitigation: Fetch the live connector schema before execution and get explicit user confirmation for any write or destructive action payload. <br>
+## Use Case:
 
+Support, operations, and developer agents use this skill to read Freshdesk account and ticket information from a connected OOMOL account. It is suited for searching tickets, inspecting ticket details, and reviewing ticket conversations before taking any separate support action.
 
-## Reference(s): <br>
-- [Freshdesk homepage](https://www.freshworks.com/freshdesk/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Freshdesk skill page](https://clawhub.ai/oomol/oo-freshdesk) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses schema-first connector actions and may return Freshdesk data in JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include a remote shell or PowerShell installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, prefer a signed or checksum-verified installer when available, and run setup with ordinary user privileges.
+
+Risk: The skill reads Freshdesk account, ticket, and conversation data that may include support or customer information.
+
+Mitigation: Use an appropriately scoped connected account and treat this release as read-oriented unless a future version explicitly documents and scopes write actions.
+
+## Reference(s):
+
+- [ClawHub Freshdesk skill page](https://clawhub.ai/oomol/skills/oo-freshdesk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Freshdesk homepage](https://www.freshworks.com/freshdesk/)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from executed connector actions are JSON objects with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

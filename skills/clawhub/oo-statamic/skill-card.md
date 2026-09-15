@@ -1,42 +1,60 @@
-## Description: <br>
-Operate Statamic through an OOMOL-connected account to read, create, update, and delete Statamic site license data using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Statamic (statamic.com). Use this skill for ANY Statamic request: reading, creating, updating, and deleting data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and site operators use this skill to list and manage Statamic site licenses through an OOMOL-connected Statamic account, including create, update, and delete actions after inspecting the live action schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Statamic site licenses through OOMOL. <br>
-Mitigation: Review proposed create, update, or delete payloads carefully and confirm state-changing actions before execution. <br>
-Risk: First-time setup may install or authenticate the oo CLI. <br>
-Mitigation: Run the installer or login flow only when the CLI or authentication is missing and only if OOMOL is trusted for the environment. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Statamic account site licenses through OOMOL, including listing sites and creating, updating, or deleting site licenses after inspecting the live action schema.
 
-## Reference(s): <br>
-- [Statamic homepage](https://statamic.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup includes remote installer commands that could run unverified code if pasted or executed without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official package manager or verified release when possible, and review installer commands before execution.
+
+Risk: The skill can create, update, or delete Statamic site licenses.
+
+Mitigation: Inspect the live action schema and get explicit user confirmation for the exact payload and target before write or destructive actions.
+
+Risk: Using the connector routes Statamic account operations through OOMOL as an intermediary.
+
+Mitigation: Install and use the skill only when the user is comfortable with OOMOL mediating Statamic account access.
+
+## Reference(s):
+
+- [Statamic homepage](https://statamic.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-statamic)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and may return JSON responses from the Statamic connector.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

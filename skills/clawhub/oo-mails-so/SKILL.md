@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Mails"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["mails_so"]
   icon: "https://static.oomol.com/logo/third-party/Mails.so.svg"
 ---

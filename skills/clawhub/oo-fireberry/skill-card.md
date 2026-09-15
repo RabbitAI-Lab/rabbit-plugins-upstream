@@ -1,42 +1,60 @@
-## Description: <br>
-Fireberry lets an agent read, list, query, create, update, and delete Fireberry account and contact records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fireberry lets agents read, create, update, delete, list, and query Fireberry account and contact records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Fireberry account and contact records through an OOMOL-connected account, including reads, paginated lists, v3 queries, and confirmed write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Fireberry actions can change or delete account and contact records. <br>
-Mitigation: Confirm the exact action, target record, payload, and expected effect with the user before running any action tagged write or destructive. <br>
-Risk: The skill depends on an external Fireberry connection and OOMOL account permissions. <br>
-Mitigation: Before installation or use, review the skill listing and confirm that requested permissions, credentials, and external services match the intended task. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent work with Fireberry CRM records, including reading, listing, querying, creating, updating, and deleting account and contact data.
 
-## Reference(s): <br>
-- [ClawHub Fireberry skill listing](https://clawhub.ai/oomol/skills/oo-fireberry) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Fireberry homepage](https://www.fireberry.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON data with meta.executionId when executed through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: The first-time setup path documents remote shell and PowerShell installer pipelines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified method you trust, and do not let an agent run curl-to-shell or PowerShell download-to-execute commands automatically.
+
+Risk: Write and destructive actions can change or delete Fireberry account and contact records.
+
+Mitigation: Require explicit user confirmation of the exact payload, target record, and intended effect before running write or delete actions.
+
+Risk: Fireberry record queries and responses may expose business or contact data.
+
+Mitigation: Limit queries to the records needed for the task and avoid sharing returned data beyond the user's requested workflow.
+
+## Reference(s):
+
+- [Fireberry homepage](https://www.fireberry.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Fireberry skill](https://clawhub.ai/oomol/skills/oo-fireberry)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payloads; write and destructive operations require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,49 +1,64 @@
-## Description: <br>
-Diagnoses VMware/vSphere/ESXi/NSX incidents by correlating supplied event data into timelines, ranked root-cause hypotheses, and next checks while staying read-only. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill when troubleshooting VMware, vSphere, ESXi, or NSX incidents: it correlates gathered events into timelines, ranks root-cause hypotheses, suggests next checks, and records diagnostic case evidence without writing to VMware systems.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and support engineers use this skill to investigate VMware/vSphere incidents from collected events, logs, alarms, and symptoms. It helps build an incident timeline, rank likely causes, and identify the next checks without executing fixes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ranked hypotheses may be mistaken for a confirmed root cause. <br>
-Mitigation: Treat the output as diagnostic guidance; confirm the evidence and run the recommended next checks before any remediation. <br>
-Risk: Auth-related investigations may involve local configuration or .env checks. <br>
-Mitigation: Limit inspection to the required local configuration and keep any remediation in separate approval-gated tools. <br>
-Risk: The skill only correlates events supplied by the calling agent. <br>
-Mitigation: Gather real events from the relevant read-only data-source skills and preserve timestamps, sources, and severity values. <br>
+## Use Case:
 
+Developers, operators, and support engineers use this skill to diagnose VMware incidents from pre-collected events, logs, alerts, and case evidence. It helps decide what to inspect next and routes remediation to other VMware skills instead of executing fixes itself.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-debug) <br>
-- [Project homepage](https://github.com/zw008/VMware-Debug) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Unified Event Envelope](references/event-envelope.md) <br>
-- [Symptom Routing](references/routing.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-compatible diagnostic results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostic recommendations; CLI output can include JSON event timelines, spikes, hypotheses, and next checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.7 (source: ClawHub server release metadata) <br>
+Risk: The skill can direct agents toward VMware credentials, configuration files, sensitive logs, and locally persisted case data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing in environments where those materials may be reachable, use a dedicated account, limit filesystem access, and do not allow secret values to be read unless explicitly necessary.
+
+Risk: Submitted case evidence and audit records may contain host names, addresses, log text, and diagnostic conclusions that remain on disk.
+
+Mitigation: Protect or periodically delete ~/.vmware/cases and ~/.vmware/audit.db according to the environment's retention and access-control requirements.
+
+Risk: Runtime package resolution can introduce supply-chain uncertainty for a diagnostic tool used around sensitive infrastructure.
+
+Mitigation: Prefer a verified local install over runtime uvx resolution when possible.
+
+## Reference(s):
+
+- [VMware Debug homepage](https://github.com/vmware-skills/VMware-Debug)
+- [agent-guardrails.md](references/agent-guardrails.md)
+- [capabilities.md](references/capabilities.md)
+- [cli-reference.md](references/cli-reference.md)
+- [event-envelope.md](references/event-envelope.md)
+- [routing.md](references/routing.md)
+- [setup-guide.md](references/setup-guide.md)
+- [VMware-AIops issue 31](https://github.com/vmware-skills/VMware-AIops/issues/31)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with JSON tool outputs and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Diagnostic outputs may include timelines, ranked hypotheses, next checks, case ledger summaries, and local audit references.]
+
+## Skill Version(s):
+
+1.12.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

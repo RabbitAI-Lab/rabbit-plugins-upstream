@@ -1,45 +1,56 @@
-## Description: <br>
-Zendesk skill for reading, creating, and updating Zendesk data through the OOMOL `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zendesk (zendesk.com). Use this skill for ANY Zendesk request: reading, creating, and updating data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and support teams use this skill to list, inspect, create, reply to, and update Zendesk tickets, users, and organizations from an agent session through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Zendesk credentials through an OOMOL-connected account. <br>
-Mitigation: Use the server-side OOMOL credential flow and avoid handling raw Zendesk tokens in the agent session. <br>
-Risk: Write actions can create tickets, add replies, or update existing Zendesk records. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any action tagged as write. <br>
-Risk: Connector payload schemas may change or differ by connected account. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload. <br>
+## Use Case:
 
+External users and support operators use this skill to let an agent retrieve Zendesk tickets, users, and organizations, and to create, reply to, or update tickets through the oo CLI after the account connection is configured.
 
-## Reference(s): <br>
-- [Zendesk homepage](https://www.zendesk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Zendesk connection page](https://console.oomol.com/app-connections?provider=zendesk) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-zendesk) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OOMOL-connected Zendesk account; write actions require user confirmation before changing Zendesk state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing external code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the oo CLI through a verified, pinned, or signed method before using the skill.
+
+Risk: Write actions can create, reply to, or update Zendesk tickets.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running Zendesk write actions.
+
+## Reference(s):
+
+- [ClawHub Zendesk skill page](https://clawhub.ai/oomol/skills/oo-zendesk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Zendesk homepage](https://www.zendesk.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent should inspect the live connector schema before building action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

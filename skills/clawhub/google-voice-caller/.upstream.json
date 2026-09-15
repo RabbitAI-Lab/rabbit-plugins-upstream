@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-voice-caller",
   "slug": "google-voice-caller",
   "ownerHandle": null,
-  "version": "1.2.1",
-  "updatedAt": 1779078818615,
-  "contentHash": "9fcae46f3e673fbfe2419c598d232b7a6c466fa608e7938775bc2b3174eb5e56",
-  "fetchedAt": "2026-07-26T18:46:36.201Z"
+  "version": "1.2.0",
+  "updatedAt": 1789429755978,
+  "contentHash": "c5c5e8c1697e54e7a72c88a42a9d9d06ba12c15527a73ea6fd36af9c5e22ccea",
+  "fetchedAt": "2026-09-15T12:59:49.901Z"
 }

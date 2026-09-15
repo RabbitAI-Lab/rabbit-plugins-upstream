@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/drakon-agent-optimizer",
   "slug": "drakon-agent-optimizer",
   "ownerHandle": null,
-  "version": "0.13.1",
-  "updatedAt": 1784616200772,
-  "contentHash": "7af18b4bf5d24759a217bac7f1bb09130aff60e9792b111c64d92fff54f52636",
-  "fetchedAt": "2026-07-26T18:09:20.340Z"
+  "version": "0.15.0",
+  "updatedAt": 1789307722808,
+  "contentHash": "fa724d7271f3fe1bb8d9ca73eafe26676c9b34358888b2f5117f0970a914bee6",
+  "fetchedAt": "2026-09-15T13:08:43.625Z"
 }

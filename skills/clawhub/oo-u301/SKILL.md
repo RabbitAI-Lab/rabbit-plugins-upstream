@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "U301"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["u301"]
   icon: "https://static.oomol.com/logo/third-party/u301.svg"
 ---

@@ -1,45 +1,56 @@
-## Description: <br>
-Aimfox lets agents operate Aimfox through an OOMOL-connected account for reading, creating, updating, and deleting Aimfox data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aimfox lets agents read, create, update, and delete Aimfox data through OOMOL's oo CLI connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers who use Aimfox with OOMOL use this skill to inspect campaigns, leads, metrics, interactions, and labels, and to manage campaign audiences through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive Aimfox actions can change campaign audiences or remove campaign profiles. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running tagged write or destructive actions. <br>
-Risk: Aimfox action payloads are sent through the OOMOL oo connector and depend on the user's connected Aimfox account. <br>
-Mitigation: Install and use this skill only for OOMOL-connected Aimfox workflows, and review each requested action payload before approval. <br>
-Risk: The oo CLI installer and connector toolchain must be trusted before use. <br>
-Mitigation: Run the OOMOL CLI installer only when the user trusts that toolchain and needs the CLI for Aimfox access. <br>
+## Use Case:
 
+External users and developers use this skill to operate Aimfox campaigns, leads, labels, and interaction data through an OOMOL-connected account. It supports read workflows and confirmed write or destructive campaign audience changes.
 
-## Reference(s): <br>
-- [Aimfox homepage](https://aimfox.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Aimfox skill listing](https://clawhub.ai/oomol/skills/oo-aimfox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo connector schema before action payloads; write and destructive Aimfox actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that execute scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, pinned, or signed oo CLI installation path before installing.
+
+Risk: The skill can run Aimfox write and destructive actions that modify campaign audiences.
+
+Mitigation: Require explicit user confirmation of the target, payload, and effect before running write or destructive actions.
+
+## Reference(s):
+
+- [Aimfox homepage](https://aimfox.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the oo CLI to inspect live Aimfox connector schemas and run connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

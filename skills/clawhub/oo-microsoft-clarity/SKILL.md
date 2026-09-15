@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Microsoft Clarity"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["microsoft_clarity"]
   icon: "https://static.oomol.com/logo/third-party/microsoft_clarity.png"
 ---

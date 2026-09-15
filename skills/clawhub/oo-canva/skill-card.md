@@ -1,43 +1,60 @@
-## Description: <br>
-Canva (canva.com). Use this skill for any Canva request: reading, creating, and updating data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Canva (canva.com). Use this skill for Canva requests that read, create, or update Canva data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent read and manage Canva resources through an OOMOL-connected Canva account, including design creation, export jobs, asset uploads, folder operations, and metadata lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform Canva write operations such as creating designs, starting exports, uploading URL assets, creating folders, and moving folder items. <br>
-Mitigation: Review the exact action payload and expected Canva effect with the user before approving write operations. <br>
-Risk: The skill requires a connected Canva account through OOMOL and may rely on sensitive OAuth-backed credentials. <br>
-Mitigation: Install and use it only when OOMOL access is intended, and run login or connection setup only after an authentication or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate Canva through an OOMOL-connected account, including reading Canva user, design, asset, folder, and export metadata and initiating supported Canva write actions.
 
-## Reference(s): <br>
-- [Canva homepage](https://www.canva.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-canva) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may produce Canva connector responses, job identifiers, status results, and setup guidance through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata and skill frontmatter) <br>
+Risk: First-time setup instructions document remote installer commands that execute scripts from the internet without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, version-pinned installation path for the oo CLI and do not run remote installer commands blindly.
+
+Risk: The skill can perform write actions that create designs, folders, export jobs, uploads, or move folder items in Canva.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any state-changing Canva action.
+
+Risk: The skill routes Canva actions through OOMOL-managed credentials.
+
+Mitigation: Install and use it only when comfortable using OOMOL as an intermediary for Canva actions, and confirm the intended Canva account connection before use.
+
+## Reference(s):
+
+- [Canva homepage](https://www.canva.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-canva)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads; connector responses are JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas before action payload construction]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Google Address Validation"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["google_address_validation"]
   icon: "https://static.oomol.com/logo/third-party/Google%20Address%20Validation.svg"
 ---

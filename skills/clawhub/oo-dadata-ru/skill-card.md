@@ -1,45 +1,55 @@
-## Description: <br>
-DaData.ru (dadata.ru) helps agents search and read DaData.ru Suggestions API data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DaData.ru helps agents search and read DaData.ru suggestion data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect DaData.ru connector schemas and run read-only Suggestions API lookups for Russian addresses, banks, emails, full names, organizations, and individual entrepreneurs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lookup inputs such as names, addresses, emails, bank names, or organization details may be sent through OOMOL to DaData.ru. <br>
-Mitigation: Use the skill only for intended DaData.ru lookups and avoid submitting unnecessary personal or sensitive data. <br>
-Risk: First-time setup can install or authenticate the oo CLI. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-command failure and only when the user trusts the OOMOL CLI installation path. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema with oo before constructing each payload. <br>
+## Use Case:
 
+External developers and agents use this skill to retrieve DaData.ru suggestions for Russian addresses, banks, email addresses, full names, organizations, and individual entrepreneurs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dadata-ru) <br>
-- [DaData.ru homepage](https://dadata.ru) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector JSON responses when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include unverified remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing and prefer an official package manager, pinned release, or installer verified with checksum or signature checks.
+
+Risk: DaData.ru connector calls depend on OOMOL authentication, connection state, and billing state.
+
+Mitigation: Run sign-in, connection, or billing recovery steps only after the matching command failure is observed.
+
+## Reference(s):
+
+- [DaData.ru homepage](https://dadata.ru)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-dadata-ru)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before connector execution; available actions are read-style DaData.ru suggestion calls.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

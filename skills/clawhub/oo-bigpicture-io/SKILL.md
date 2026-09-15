@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BigPicture.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["bigpicture_io"]
   icon: "https://static.oomol.com/logo/third-party/bigpicture_io.png"
 ---

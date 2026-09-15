@@ -1,43 +1,55 @@
-## Description: <br>
-BugBug helps agents inspect BugBug connector schemas, read workspace data, and run BugBug tests through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BugBug helps an agent inspect action schemas, retrieve BugBug workspace test data, and run BugBug tests through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, QA engineers, and support agents use this skill to inspect BugBug action schemas, read suites, tests, profiles, and test-run data, and launch BugBug test runs through a connected workspace. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can execute BugBug tests even though its short description emphasizes searching and reading data. <br>
-Mitigation: Use it only where launching BugBug test runs is acceptable, and require explicit user confirmation before invoking run_test. <br>
-Risk: The skill depends on the oo CLI, OOMOL sign-in, and a connected BugBug account. <br>
-Mitigation: Do not initiate installation, sign-in, or connection setup proactively; perform those steps only after a matching failure and explicit user confirmation. <br>
+## Use Case:
 
+External users and developers use this skill to operate BugBug from an agent session: listing suites, tests, profiles, and historical runs, checking run status, and executing tests after schema inspection.
 
-## Reference(s): <br>
-- [BugBug homepage](https://bugbug.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub BugBug skill page](https://clawhub.ai/oomol/oo-bugbug) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected BugBug workspace; some actions can launch BugBug test runs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer commands without an independent checksum or signature.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and verify installer integrity through a trusted source before running remote install commands.
+
+Risk: The run_test action can execute BugBug tests and may consume credits or change BugBug workspace state.
+
+Mitigation: Require explicit user confirmation before run_test or any state-changing or credit-consuming action, and inspect the live action schema before sending a payload.
+
+## Reference(s):
+
+- [BugBug homepage](https://bugbug.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub BugBug skill](https://clawhub.ai/oomol/skills/oo-bugbug)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live BugBug connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

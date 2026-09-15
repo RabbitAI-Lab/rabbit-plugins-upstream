@@ -1,46 +1,55 @@
-## Description: <br>
-New Relic (newrelic.com). Use this skill for New Relic requests that read, create, update, or delete data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+New Relic (newrelic.com). Use this skill for New Relic requests that read, create, update, or delete data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, SREs, and operations teams use this skill to inspect and manage New Relic observability resources through the OOMOL new_relic connector. It supports NRQL queries, entity search, dashboards, alert policies, synthetics monitors, deployment markers, and secure credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a New Relic account through a connected API key. <br>
-Mitigation: Install only if you trust OOMOL and intend to grant this agent access to the connected New Relic account. <br>
-Risk: Write and destructive actions can create, replace, update, or delete New Relic dashboards, alert policies, NRQL conditions, monitors, secure credentials, snapshots, and deployment markers. <br>
-Mitigation: Review the exact target and payload before approving writes or deletes, and require explicit confirmation for destructive operations. <br>
-Risk: Dashboard replacement, alert-policy changes, monitor deletion, or secure-credential updates can disrupt observability workflows. <br>
-Mitigation: Inspect existing state with read actions first, fetch the live action schema before constructing payloads, and keep approvals scoped to the intended resource. <br>
+## Use Case:
 
+Developers, operators, and site reliability teams use this skill to operate New Relic from an agent session, including querying observability data and managing dashboards, alerts, monitors, deployments, and secure credentials.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-new-relic) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [New Relic](https://newrelic.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector schema and connector run commands that return JSON responses from New Relic.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The first-time setup path includes remote oo CLI installer commands that could install unverified code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install oo only through a trusted, verified method and do not allow an agent to run installer commands automatically.
+
+Risk: The skill can create, update, or delete New Relic resources.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect with the user before any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-new-relic)
+- [New Relic](https://newrelic.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include live schema inspection commands, New Relic action payload guidance, and confirmation prompts for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

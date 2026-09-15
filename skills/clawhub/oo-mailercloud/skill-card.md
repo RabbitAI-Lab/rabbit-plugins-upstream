@@ -1,43 +1,55 @@
-## Description: <br>
-Mailercloud skill for reading, creating, updating, and deleting Mailercloud data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailercloud (mailercloud.com). Use this skill for ANY Mailercloud request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Mailercloud via the OOMOL oo CLI, including contact, list, and contact-property workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Mailercloud contacts, contact properties, or recipient lists. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete Mailercloud contact properties. <br>
-Mitigation: Confirm the target and get explicit approval before running destructive actions. <br>
-Risk: Setup commands and account-connection steps affect the user's OOMOL environment. <br>
-Mitigation: Run installer, login, or connection steps only when a command fails for the matching setup or authentication reason. <br>
+## Use Case:
 
+Agents use this skill to operate Mailercloud through an OOMOL-connected account, including creating contacts and lists and managing contact properties. It is intended for Mailercloud workflows that require schema-guided reads, writes, and explicitly confirmed destructive actions.
 
-## Reference(s): <br>
-- [Mailercloud homepage](https://www.mailercloud.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official installer before execution, prefer a signed or package-manager install path when available, and install only when comfortable with OOMOL's CLI and Mailercloud access model.
+
+Risk: Write and destructive actions can create, update, or delete Mailercloud data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Mailercloud homepage](https://www.mailercloud.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailercloud)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas and returns JSON responses from oo connector commands when actions run.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

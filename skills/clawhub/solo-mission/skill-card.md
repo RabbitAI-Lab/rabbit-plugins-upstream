@@ -1,50 +1,64 @@
-## Description: <br>
-Solo Mission helps agents create and operate SOLO Mission Platform workflows, including mission creation, human hiring, conversations, media review, Base Sepolia escrow funding, settlement, and refund recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate the SOLO Mission Platform for creating missions, hiring humans, managing conversations, handling Solana on-chain escrow or manual payment workflows, recovering stuck funds, and running autonomous agent mission operations.
 
-## Publisher: <br>
-[wj-solo](https://clawhub.ai/user/wj-solo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wj-solo](https://clawhub.ai/user/wj-solo)
 
-## Use Case: <br>
-Developers and agent operators use this skill to run SOLO Mission Platform missions end to end, from setup and participant hiring through escrow funding, qualification, settlement, refunds, and media-review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants broad authority for mission creation, hiring, messaging, uploads, settlement, refunds, and signing workflows. <br>
-Mitigation: Install only for agents intended to actively operate SOLO missions and require human review before mission creation, media uploads, hiring criteria, settlement, and refund recipient details. <br>
-Risk: SOLO agent keys and local settings can expose platform access if copied into repositories or backups. <br>
-Mitigation: Use a scoped SOLO agent key and keep .claude/settings.local.json out of repositories and backups. <br>
-Risk: Raw private-key command-line signing can expose wallet secrets or authorize unintended escrow operations. <br>
-Mitigation: Prefer a managed signer or hardware/KMS-backed wallet, and do not paste PRIVATE_KEY or wallet secrets into chat. <br>
+## Use Case:
 
+Developers and operators use this skill to run SOLO missions end to end: register an agent, create and monitor missions, hire and message participants, settle work, rate participants, and manage payment or refund flows. It supports both off-chain manual payment references and on-chain escrow workflows, with new on-chain missions directed to Solana.
 
-## Reference(s): <br>
-- [Solo Mission ClawHub page](https://clawhub.ai/wj-solo/skills/solo-mission) <br>
-- [SOLO Mission REST API Reference](references/rest-api.md) <br>
-- [SOLO Mission On-Chain Reference](references/onchain.md) <br>
-- [SOLO Mission Stuck Mission Recovery](references/stuck-recovery.md) <br>
-- [SOLO Mission Wallet Setup](references/wallet-setup.md) <br>
-- [SOLO Mission API](https://api.mission.projectsolo.xyz) <br>
-- [Base Sepolia RPC](https://sepolia.base.org) <br>
-- [Foundry](https://foundry.paradigm.xyz) <br>
-- [Circle USDC Faucet](https://faucet.circle.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, files, guidance] <br>
-**Output Format:** [Markdown guidance with bash and curl examples, JSON state shapes, API request details, and configuration instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local mission state and local agent-key configuration when used by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server release metadata) <br>
+Risk: The skill can guide mission operations that affect payments, escrowed funds, refunds, and participant rewards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each mission budget, settlement deadline, refund path, and signing action before allowing the workflow to proceed.
+
+Risk: The skill relies on credentials and wallet signing material for authenticated API calls and on-chain operations.
+
+Mitigation: Use a managed, hardware, or KMS-backed signer when possible; avoid raw private keys in chat, shell variables, or process arguments; and protect or relocate the saved SOLO agent key.
+
+Risk: The setup guidance may invoke external CLI installers and blockchain tooling.
+
+Mitigation: Verify installers and tooling outside the skill flow before execution, and prefer pre-approved local or managed signing tools.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wj-solo/skills/solo-mission)
+- [SOLO Mission Platform](https://solomission.ai)
+- [SOLO Mission API](https://api.mission.projectsolo.ai)
+- [REST API Reference](references/rest-api.md)
+- [Solana Wallet Reference](references/solana-wallet.md)
+- [Stuck Mission Recovery](references/stuck-recovery.md)
+- [On-Chain Reference](references/onchain.md)
+- [Wallet Setup](references/wallet-setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with JSON examples and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local mission-state JSON, API request payloads, curl commands, wallet setup steps, and recovery instructions.]
+
+## Skill Version(s):
+
+1.1.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

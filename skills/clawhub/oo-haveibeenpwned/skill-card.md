@@ -1,45 +1,51 @@
-## Description: <br>
-Have I Been Pwned connector for searching and reading breach, paste, data-class, subscription, and latest-breach data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Have I Been Pwned lookup guidance through the OOMOL oo connector for searching breached accounts, listing paste exposures, retrieving breach records, listing data classes, and checking subscription status.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Have I Been Pwned through an OOMOL-connected account for breach records, latest breach data, subscription status, data classes, paste exposures, and breached-account searches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting a Have I Been Pwned API key through OOMOL as an intermediary. <br>
-Mitigation: Install only when that intermediary model is acceptable, and connect credentials only through the intended OOMOL account. <br>
-Risk: First-time setup includes curl-to-bash and PowerShell install commands. <br>
-Mitigation: Prefer the official install guide, inspect installer scripts before execution, and verify the source. <br>
-Risk: Breach and paste searches may reveal sensitive information about email addresses. <br>
-Mitigation: Query email addresses only when the user explicitly asks for those accounts to be checked. <br>
+## Use Case:
 
+External users and developers use this skill to run read-oriented Have I Been Pwned account, breach, paste, data-class, and subscription queries through their connected OOMOL account.
 
-## Reference(s): <br>
-- [Have I Been Pwned homepage](https://haveibeenpwned.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-haveibeenpwned) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Markdown, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL account, and a connected Have I Been Pwned API key for live connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; use a trusted package source or manually inspect and verify installer contents before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-haveibeenpwned)
+- [Have I Been Pwned homepage](https://haveibeenpwned.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

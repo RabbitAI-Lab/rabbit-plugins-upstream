@@ -8,19 +8,21 @@ How to source accounts and people on Cargo. Covers the full sourcing decision tr
 Goal → which sourcing path?
 
 Looking for COMPANIES matching ICP criteria (industry, size, geo, …)?
-  ├─ Cheapest at scale (0.05 cred/record):    salesNavigator.searchAccounts
+  ├─ Cheapest at scale (0.01 cred/record):    aiArk.searchCompanies — also lookalikes from ≤5 seed domains
+  ├─ LinkedIn-native filters (0.05 cred):     salesNavigator.searchAccounts
   ├─ Need rich filters / structured query:    peopleDataLabs.queryCompanies (3 cred)
   ├─ Tech-stack or hiring intent:             theirStack.searchCompanies / searchTechnologies / searchJobs (0.5 cred)
   ├─ Local / SMB / storefront (Maps-style):   serper.searchPlaces (1 cred)
-  ├─ Specific domain → details:               cargo.matchBusiness (0.5 cred) → cargo.enrichBusinessFirmographics
+  ├─ Specific domain → details:               aiArk.enrichCompany (0.01 cred)
   └─ Already have a domain list?              skip sourcing — go straight to enrichment
 
 Looking for PEOPLE at companies?
   ├─ Cheapest at scale (0.02 cred/record):    salesNavigator.searchLeads
+  ├─ Filters SN can't express (0.05 cred):    aiArk.searchPeople — education, skills, tenure, past company
   ├─ Rich filters / large database:           peopleDataLabs.searchPeople / queryPeople (3 cred)
   ├─ LinkedIn-anchored:                       linkedin.findProfileUrl + linkedin.enrichProfile (0.25 cred)
   ├─ "Find people I know who can intro":      theSwarm.searchWarmIntrosToCompany / Person (2 cred)
-  └─ Visitor de-anonymization:                snitcher.searchSessions (0 cred) → cargo.matchProspect
+  └─ Visitor de-anon (identifies a COMPANY):  snitcher.searchSessions (0 cred) → salesNavigator.searchLeads there
 
 Looking for INVESTOR-BACKED companies?
   └─ peopleDataLabs.queryCompanies with investor/funding filter
@@ -40,9 +42,10 @@ When the user asks for "contacts at companies matching X," **always** discover t
 | Provider | Best for | Cost (credits) |
 |---|---|---|
 | **salesNavigator** | At-scale lead/account search, LinkedIn-native filters | 0.02 (lead) / 0.05 (account) |
+| **aiArk** | Cheapest company search + lookalike seeds; people filters on education / skills / tenure / past company | 0.01 (company) / 0.05 (person) |
 | **peopleDataLabs** | Structured queries (`queryPeople` / `queryCompanies`), heavy filtering, backfill when other sources miss | 3 (flat) |
 | **theirStack** | Tech-stack signals, jobs-posted signals, "everyone hiring for role X" | 0.5 |
-| **cargo** native | `matchBusiness` / `matchProspect` for dedup; `fetchProspects` / `fetchBusinesses` for catalog browsing | 0.5 |
+| **builtwith** | Tech detection on a domain you already have; `getDomainSummary` is free | 0 / 1 |
 | **icypeas** | Cheapest people/company find when minimal filters work | 0.02 |
 | **firecrawl** | Web search + scrape when no structured provider has the data | 0.05 |
 | **serper** | Google Maps-style search for local SMBs / storefronts | 1 |
@@ -58,7 +61,7 @@ For full provider details, see the per-provider playbooks under `../provider-pla
 ```bash
 # Source — cheapest large-scale account search
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchAccounts","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchAccounts"}' \
   --records '[{"filters":{"industry":["fintech"],"countries":["US"],"sizeMin":50,"sizeMax":500}}]' \
   --wait-until-finished
 ```
@@ -70,7 +73,7 @@ If salesNavigator filters don't cover the criteria you need, fall back to people
 ```bash
 # Fan out one searchLeads per company
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
   --records "$(jq -c '[.companies[] | {filters:{accountId:.linkedinId,titles:["CTO","VP Engineering"]}}]' /tmp/companies.json)" \
   --wait-until-finished
 ```
@@ -82,16 +85,16 @@ Cap titles tightly — broad title filters dilute results.
 When you already have a domain list and need firmographics:
 
 ```bash
-# Match against cargo's catalog first (cheapest, most reliable for known companies)
+# Cheapest company enrich in the catalog — domain or LinkedIn URL, no match step
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichCompany"}' \
   --records '[{"domain":"acme.com"},{"domain":"globex.com"}]' \
   --wait-until-finished
 
-# Then enrich the matches
+# Rows that came back thin — fuller field set at 0.25
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFirmographics","config":{}}' \
-  --records '<matched output from previous step>' \
+  --action '{"kind":"connector","integrationSlug":"companyEnrich","actionSlug":"enrichByDomain"}' \
+  --records '<rows from the previous step with empty firmographics>' \
   --wait-until-finished
 ```
 
@@ -100,13 +103,13 @@ cargo-ai orchestration action execute-batch \
 ```bash
 # Find companies running a specific stack
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchCompanies"}' \
   --data '{"technologies":["snowflake","dbt"],"locations":["United States"]}' \
   --wait-until-finished
 
 # Or "everyone hiring for role X" (intent signal)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theirStack","actionSlug":"searchJobs"}' \
   --data '{"job_titles":["Head of RevOps"],"posted_at_max_age_days":30}' \
   --wait-until-finished
 ```
@@ -116,7 +119,7 @@ cargo-ai orchestration action execute \
 ```bash
 # Step 1 — query companies by investor (peopleDataLabs is the reliable source)
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies"}' \
   --data '{"query":"SELECT * FROM company WHERE summary.investors LIKE %Sequoia%"}' \
   --wait-until-finished > /tmp/portfolio.json
 

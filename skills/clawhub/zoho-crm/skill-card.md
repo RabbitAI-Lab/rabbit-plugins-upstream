@@ -1,50 +1,75 @@
-## Description: <br>
-Zoho CRM API integration with managed OAuth for managing leads, contacts, accounts, deals, and other CRM records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho CRM API integration with managed OAuth for reading, creating, updating, deleting, searching, and managing CRM records, sales pipelines, organization settings, users, and module metadata.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to interact with Zoho CRM through Maton-managed OAuth for CRM records, searches, sales pipeline workflows, organization settings, users, and module metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Zoho CRM records and organization data through Maton-proxied access. <br>
-Mitigation: Install only when Maton is trusted for the intended Zoho CRM account and keep access limited to the connected account. <br>
-Risk: A leaked MATON_API_KEY could allow unauthorized CRM access through the Maton proxy. <br>
-Mitigation: Protect MATON_API_KEY as a secret and avoid printing or storing it in logs, shared shell history, or generated output. <br>
-Risk: Using the wrong connection can apply reads or writes to the wrong Zoho CRM account. <br>
-Mitigation: When multiple connections exist, require the Maton-Connection header for the selected account. <br>
-Risk: Create, update, delete, bulk, user, or account-management operations can alter business data. <br>
-Mitigation: Require fresh user confirmation of the target resource and intended effect before executing any write or account-management action. <br>
+## Use Case:
 
+External users, employees, and developers use this skill to operate Zoho CRM through Maton-authenticated API calls, including CRM record management, searches, pipeline work, organization settings, users, and module metadata. It can also guide approved hosted functions and triggers that automate Zoho CRM actions without expanding the connected account's authorized scope.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/zoho-crm) <br>
-- [Zoho CRM API v8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/) <br>
-- [Get Records API](https://www.zoho.com/crm/developer/docs/api/v8/get-records.html) <br>
-- [Insert Records API](https://www.zoho.com/crm/developer/docs/api/v8/insert-records.html) <br>
-- [Update Records API](https://www.zoho.com/crm/developer/docs/api/v8/update-records.html) <br>
-- [Delete Records API](https://www.zoho.com/crm/developer/docs/api/v8/delete-records.html) <br>
-- [Search Records API](https://www.zoho.com/crm/developer/docs/api/v8/search-records.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions, shell commands, Python and JavaScript examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; use Maton-Connection when selecting among multiple Zoho CRM connections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: The skill can access Zoho CRM business data through the selected connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, connect only the account needed for the task, choose the narrowest available Zoho scopes, default to read/list operations, and confirm every write with the user.
+
+Risk: Raw API-key use in environments without the CLI can expose a long-lived Maton credential.
+
+Mitigation: Use OAuth and the CLI credential store when possible; when raw HTTP is unavoidable, read the key from the environment only, never print it, never persist it, and send it only to api.maton.ai.
+
+Risk: Hosted functions and triggers can run approved Zoho CRM actions without further manual steps.
+
+Mitigation: Require a user-authored or user-reviewed handler, separate approval for create/update/deploy/invoke actions, DENY_ALL network policy unless a specific host is approved, and cleanup when the automation is no longer needed.
+
+Risk: Trigger destinations can create persistent forwarding of event payloads and related business context.
+
+Mitigation: Prefer platform destinations, disclose the exact destination host and payload fields, avoid third-party destinations unless explicitly approved, and forward only the minimum fields needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/zoho-crm)
+- [Maton homepage](https://maton.ai)
+- [Zoho CRM API v8 Documentation](https://www.zoho.com/crm/developer/docs/api/v8/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, JSON examples, and API path guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit user approval for new connections, writes, hosted functions, triggers, and persistent destinations.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

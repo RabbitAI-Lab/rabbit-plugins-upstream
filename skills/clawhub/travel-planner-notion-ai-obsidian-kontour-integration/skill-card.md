@@ -1,47 +1,64 @@
-## Description: <br>
-Transform any AI agent into a world-class travel planner using Kontour AI's 9-dimension progressive planning model with structured conversation flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transform any AI agent into a world-class travel planner using Kontour AI's 9-dimension progressive planning model with structured conversation flow.
 
-## Publisher: <br>
-[skylinehk](https://clawhub.ai/user/skylinehk) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[skylinehk](https://clawhub.ai/user/skylinehk)
 
-## Use Case: <br>
-Travel agents, operators, and AI agents use this skill to capture traveler constraints, compare destinations, generate structured itineraries and budget guidance, and prepare map or sharing outputs from bundled offline travel reference data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Offline reference data may not reflect current prices, opening hours, availability, visa rules, or travel restrictions. <br>
-Mitigation: Validate live prices, hours, availability, visa requirements, and travel rules before relying on or booking an itinerary. <br>
-Risk: Generated Google Maps or Kontour links may open external websites when clicked. <br>
-Mitigation: Review generated links before sharing and use only operator-approved public planning links in final traveler-facing output. <br>
-Risk: Booking provider entries are roadmap/reference data rather than active integrations. <br>
-Mitigation: Treat booking-ready outputs as drafts and confirm searches, reservations, and payments through live provider systems. <br>
+## Use Case:
 
+External users, developers, and operators use this skill to turn natural-language travel requests into structured trip planning context, itinerary scaffolds, budget guidance, route exports, and copy-ready traveler-facing planning summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/skylinehk/skills/travel-planner-notion-ai-obsidian-kontour-integration) <br>
-- [Destination reference data](references/destinations.json) <br>
-- [Airport reference data](references/airports.json) <br>
-- [Activity reference data](references/activities.json) <br>
-- [Budget benchmarks](references/budget-benchmarks.json) <br>
-- [Booking integration roadmap](references/booking-integrations.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, structured JSON, Google Maps URLs, optional KML, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs offline with bundled reference data; generated plans should be validated against current travel facts before final use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.34 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Generated map exports can contain a fixed Kontour promotional link even though public planning links are expected to be operator-approved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated Google Maps and KML output before sharing, and remove or replace the fixed Kontour link unless it has been approved for the deployment context.
+
+Risk: Booking integrations are represented as roadmap/reference data and should not be treated as live booking support.
+
+Mitigation: Use the booking integration data only as planning structure unless a current, approved integration status and provider connection are supplied separately.
+
+Risk: Offline reference data cannot prove current hours, prices, route timing, weather, availability, or booking viability.
+
+Mitigation: Validate live travel details before presenting a plan as final or booking-ready.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/skylinehk/skills/travel-planner-notion-ai-obsidian-kontour-integration)
+- [Destinations Reference Data](references/destinations.json)
+- [Airports Reference Data](references/airports.json)
+- [Airlines Reference Data](references/airlines.json)
+- [Activities Reference Data](references/activities.json)
+- [Budget Benchmarks](references/budget-benchmarks.json)
+- [Booking Integrations Roadmap](references/booking-integrations.json)
+- [Embed Snippets](references/embed-snippets.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Structured JSON and Markdown with optional shell command usage for local planning and map export scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce trip context JSON, itinerary scaffolds, budget breakdowns, Google Maps links, KML exports, operator review packets, and traveler-facing draft responses.]
+
+## Skill Version(s):
+
+2.0.41 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

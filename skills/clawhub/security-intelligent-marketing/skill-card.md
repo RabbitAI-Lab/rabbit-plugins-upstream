@@ -1,39 +1,61 @@
-## Description: <br>
-AI-powered marketing assistant for banking and securities teams that supports customer segmentation, campaign design, content generation, A/B testing, and ROI analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps bank and securities marketing teams draft compliant financial campaign plans, customer segments, marketing content, A/B tests, and ROI analyses under pre-publication compliance review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Banking and securities marketing teams use this skill to draft segmentation approaches, campaign templates, marketing content, A/B test analysis, and ROI-oriented recommendations for regulated financial marketing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Marketing recommendations or generated campaign content could be incomplete, misleading, or unsuitable for regulated financial promotions. <br>
-Mitigation: Treat outputs as drafts and require legal or compliance review before using them in campaigns. <br>
-Risk: Customer identifiers, account details, or other sensitive banking data could be exposed if entered into prompts without authorization. <br>
-Mitigation: Avoid entering real customer identifiers or sensitive account data unless approved by the organization. <br>
+## Use Case:
 
+Financial marketing, product, operations, and compliance teams use this skill to plan regulated bank and securities campaigns, prepare draft marketing materials, review suitability and prohibited-language safeguards, compare A/B results, and analyze campaign ROI.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China-focused regulated financial marketing contexts; confirm applicable local jurisdiction before use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown guidance with example Python snippets and campaign templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be treated as drafts and reviewed for financial marketing compliance before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Draft financial marketing content could be mistaken for publication-ready material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Complete suitability checks, prohibited-language and return-claim review, and two-person compliance signoff before any external use.
+
+Risk: Customer segmentation and targeting can mishandle personal data, consent, or contact frequency.
+
+Mitigation: Use minimum necessary data, retain consent evidence, honor opt-out requirements, and apply contact-frequency controls before campaign execution.
+
+Risk: Chinese-language compliance constraints may be missed or misapplied by non-Chinese users.
+
+Mitigation: Translate the Chinese sections and have qualified legal or compliance staff review the campaign for the deployment jurisdiction.
+
+Risk: A/B testing or ROI analysis can support premature or misleading campaign decisions.
+
+Mitigation: Verify sample size, statistical significance, attribution windows, and cost definitions before relying on results.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/security-intelligent-marketing)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or structured text with campaign tables, draft copy, review checklists, A/B summaries, and ROI analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are draft marketing and compliance planning material and require legal, compliance, suitability, consent, and privacy review before external publication.]
+
+## Skill Version(s):
+
+3.0.3 (source: artifact frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

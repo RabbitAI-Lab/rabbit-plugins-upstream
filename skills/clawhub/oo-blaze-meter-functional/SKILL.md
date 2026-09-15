@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BlazeMeter Functional"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["blaze_meter_functional"]
   icon: "https://static.oomol.com/logo/third-party/blaze_meter_functional.svg"
 ---

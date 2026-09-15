@@ -1,46 +1,60 @@
-## Description: <br>
-RenderForm helps an agent operate RenderForm through the OOMOL-connected oo CLI for template lookup, usage checks, result and template listing, image or PDF rendering, and website screenshot capture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill supports RenderForm requests through the OOMOL oo CLI connector, including searching and reading data, rendering images or PDFs, and taking screenshots.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they need an agent to work with RenderForm templates, generated results, usage information, rendered images or PDFs, and website screenshots through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup guidance includes running an unverified remote installer script. <br>
-Mitigation: Install only if OOMOL is trusted; download and review the installer and verify an official checksum or signed release before running it. <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected RenderForm account. <br>
-Mitigation: Use a least-privilege RenderForm API key, keep credentials in the OOMOL connection flow, and rotate or revoke access if the connection is no longer needed. <br>
-Risk: Rendering images, PDFs, or screenshots can consume RenderForm credits or create externally hosted output files. <br>
-Mitigation: Confirm payloads for state-changing or credit-consuming actions and monitor usage before large batches. <br>
+## Use Case:
 
+Developers and agents use this skill to operate RenderForm through an OOMOL-connected account, inspect connector schemas, list templates and results, check usage, render images or PDFs, and capture website screenshots.
 
-## Reference(s): <br>
-- [RenderForm ClawHub listing](https://clawhub.ai/oomol/oo-renderform) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [RenderForm homepage](https://renderform.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return RenderForm request identifiers, file URLs, echoed request data, template details, usage summaries, result lists, or screenshot outputs through connector responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup guidance includes pipe-to-shell installer commands that can execute remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the oo CLI installer or use a trusted installation method before running setup commands.
+
+Risk: Render and screenshot actions can consume RenderForm credits or trigger external website requests.
+
+Mitigation: Confirm the exact payload, template, target URL, and expected cost impact with the user before running credit-consuming actions.
+
+Risk: Using the skill requires OOMOL to mediate RenderForm account access.
+
+Mitigation: Use the skill only when the deployment accepts OOMOL-connected credential handling for RenderForm.
+
+## Reference(s):
+
+- [RenderForm homepage](https://renderform.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [RenderForm skill page](https://clawhub.ai/oomol/skills/oo-renderform)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

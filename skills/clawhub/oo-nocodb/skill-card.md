@@ -1,44 +1,57 @@
-## Description: <br>
-Operates NocoDB through OOMOL's oo CLI connector for reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NocoDB connector skill for reading, creating, updating, and deleting NocoDB data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect NocoDB action schemas and run read, write, and destructive table or record operations through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access connected NocoDB data through sensitive credentials managed by the OOMOL connector. <br>
-Mitigation: Install only if you trust OOMOL's oo CLI and connector to access the NocoDB account. <br>
-Risk: Write and destructive actions can create, update, upsert, or permanently delete NocoDB data. <br>
-Mitigation: Before approving writes or deletes, verify the exact base, table, record IDs, payload, and intended effect. <br>
-Risk: Incorrect payloads or targets could affect the wrong NocoDB records or metadata. <br>
-Mitigation: Inspect the live action contract before building payloads and confirm state-changing commands with the user. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect NocoDB action schemas and run read, write, and delete connector actions through an authenticated OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub NocoDB skill page](https://clawhub.ai/oomol/oo-nocodb) <br>
-- [NocoDB homepage](https://nocodb.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and meta.executionId values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path recommends running remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a pinned, verifiable release or trusted package manager, and avoid the remote shell installer unless the installer delivery chain is trusted.
+
+Risk: Write and destructive actions can modify or remove NocoDB data accessible to the connected account.
+
+Mitigation: Confirm exact payloads and effects before write actions, and require explicit approval for destructive actions such as deleting records or tables.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-nocodb)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [NocoDB homepage](https://nocodb.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON action responses from the oo CLI, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ShipBob"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["ship_bob"]
   icon: "https://static.oomol.com/logo/third-party/ship_bob.png"
 ---

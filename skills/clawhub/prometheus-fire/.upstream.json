@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/prometheus-fire",
   "slug": "prometheus-fire",
   "ownerHandle": null,
-  "version": "3.1.0",
-  "updatedAt": 1779806996341,
-  "contentHash": "38536abd76699effa437e4167f431fe65303cce102c2353591b328c83b89959e",
-  "fetchedAt": "2026-07-26T18:39:40.234Z"
+  "version": "3.1.2",
+  "updatedAt": 1789363693794,
+  "contentHash": "eabeefcaaccb355f2816a238c04e9c6e712a25a4dcb00ac582e2c05d784664af",
+  "fetchedAt": "2026-09-15T13:04:28.302Z"
 }

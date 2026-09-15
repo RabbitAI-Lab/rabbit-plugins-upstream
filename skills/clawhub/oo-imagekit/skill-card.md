@@ -1,44 +1,56 @@
-## Description: <br>
-ImageKit helps an agent list, inspect, purge, and delete ImageKit media assets through the OOMOL ImageKit connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ImageKit lets agents operate an ImageKit account through the OOMOL oo CLI, including listing assets, retrieving file metadata, purging cache targets, and deleting files with confirmation safeguards.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage ImageKit media library assets from an agent session, including search, metadata lookup, cache purge, purge status checks, and file deletion with confirmation controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad ImageKit prompts could be interpreted as permission to take account-impacting actions. <br>
-Mitigation: Treat the trigger narrowly and confirm the exact payload and intended effect before approving write, purge, or delete actions. <br>
-Risk: The skill requires sensitive ImageKit-connected credentials through the OOMOL account connection. <br>
-Mitigation: Install it only for users who intend to manage ImageKit resources and keep credential handling inside the configured OOMOL connection. <br>
-Risk: Destructive actions can permanently delete files or purge cached content. <br>
-Mitigation: Require explicit user approval for destructive targets and verify identifiers or URLs before execution. <br>
+## Use Case:
 
+Developers and operators use this skill to manage ImageKit media-library assets from an agent when their OOMOL account is connected to ImageKit.
 
-## Reference(s): <br>
-- [ImageKit homepage](https://imagekit.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-imagekit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with the oo CLI --json flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use and prefer a pinned, signed, or checksum-verified release over pipe-to-shell installation.
+
+Risk: The skill can permanently delete ImageKit files and submit cache purge requests.
+
+Mitigation: Require explicit user approval of the exact target and payload before running delete or purge actions.
+
+## Reference(s):
+
+- [ImageKit homepage](https://imagekit.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub ImageKit skill page](https://clawhub.ai/oomol/skills/oo-imagekit)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live ImageKit connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

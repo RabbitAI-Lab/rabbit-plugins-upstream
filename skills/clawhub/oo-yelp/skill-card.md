@@ -1,44 +1,56 @@
-## Description: <br>
-Yelp (yelp.com) support for searching and reading Yelp business data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Yelp lets an agent search Yelp businesses and retrieve business details through the OOMOL Yelp connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Yelp businesses, retrieve business details, and look up businesses by phone through an OOMOL-connected Yelp account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Yelp account and server-side credential injection. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable intermediary for Yelp access, and confirm the OOMOL account connection before use. <br>
-Risk: First-time setup commands install or authenticate the oo CLI and may affect the user's local environment. <br>
-Mitigation: Run setup, authentication, connection, or billing commands only after the matching connector error occurs. <br>
-Risk: Connector input schemas can change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each JSON payload. <br>
+## Use Case:
 
+External users and developers use this skill to search Yelp businesses by keyword, location, or phone number and retrieve business details through an OOMOL-connected Yelp account.
 
-## Reference(s): <br>
-- [ClawHub Yelp skill page](https://clawhub.ai/oomol/oo-yelp) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Yelp homepage](https://www.yelp.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and a meta.executionId value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup flow includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before use or replace it with a pinned and verifiable CLI installation path.
+
+Risk: Yelp queries are routed through an OOMOL-connected account.
+
+Mitigation: Confirm the user intends to use OOMOL for Yelp access and that the connected account, scopes, and billing status are appropriate before retrying setup or connection failures.
+
+## Reference(s):
+
+- [ClawHub Yelp skill](https://clawhub.ai/oomol/skills/oo-yelp)
+- [Yelp homepage](https://www.yelp.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash and PowerShell command examples; connector responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Yelp action schemas before connector calls and returns execution metadata when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

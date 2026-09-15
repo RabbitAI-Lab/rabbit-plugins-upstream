@@ -1,43 +1,56 @@
-## Description: <br>
-Detect Language (detectlanguage.com). Use this skill for Detect Language requests involving language detection, supported-language lookup, and account-status retrieval through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect Language (detectlanguage.com) helps agents search and read Detect Language data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Detect Language tasks through an OOMOL-connected account, including detecting text language, checking supported languages, and reviewing account status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Text submitted for language detection may contain sensitive content and is routed through OOMOL as an intermediary to Detect Language. <br>
-Mitigation: Avoid sending sensitive text unless the user's privacy requirements permit that routing. <br>
-Risk: First-time setup may require installing the oo CLI from a remote installer. <br>
-Mitigation: Review the installer before running it when the CLI is missing. <br>
+## Use Case:
 
+External users and developers use this skill to operate Detect Language through an OOMOL-connected account for single-text language detection, batch detection, account status checks, and supported-language listings.
 
-## Reference(s): <br>
-- [Detect Language homepage](https://detectlanguage.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-detect-language) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output from the connector] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can return language detection results, supported-language lists, account status, or setup guidance depending on the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup documentation includes one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after independently verifying the installer source and contents, or prefer official package or download-and-verify installation steps.
+
+Risk: Detect Language requests are routed through OOMOL as an intermediary.
+
+Mitigation: Install and use the skill only when the user is comfortable with OOMOL mediating Detect Language requests and credentials server-side.
+
+## Reference(s):
+
+- [Detect Language homepage](https://detectlanguage.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-detect-language)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running read-only Detect Language actions through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Hacker News"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["hackernews"]
   icon: "https://static.oomol.com/logo/third-party/Hacker%20News.svg"
 ---

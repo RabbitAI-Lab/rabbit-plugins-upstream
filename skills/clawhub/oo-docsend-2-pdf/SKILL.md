@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Docsend2pdf"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["docsend_2_pdf"]
   icon: "https://static.oomol.com/logo/third-party/docsend_2_pdf.png"
 ---

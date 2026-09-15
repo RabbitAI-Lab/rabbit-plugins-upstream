@@ -1,44 +1,61 @@
-## Description: <br>
-SunoAPI lets an agent operate the SunoAPI connector through OOMOL's oo CLI for reading account data and submitting music, lyrics, MIDI, cover, video, and audio transformation tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SunoAPI (sunoapi.org) helps agents inspect live SunoAPI action schemas and run OOMOL-connected SunoAPI requests for reading, creating, and updating music-related data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators with an OOMOL-connected SunoAPI account use this skill to inspect live action schemas, submit SunoAPI generation or transformation jobs, and retrieve task details or account credit status without handling raw API credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit credit-consuming SunoAPI generation, upload, conversion, extension, and transformation actions. <br>
-Mitigation: Inspect the live schema, confirm the exact payload and likely credit use with the user before running write actions, and stop when account credits are insufficient. <br>
-Risk: The skill depends on the local oo CLI installation and the OOMOL-connected SunoAPI credential flow. <br>
-Mitigation: Install only from the documented OOMOL CLI installer, review the install command before running it, and use OOMOL server-side credentials instead of exposing raw SunoAPI tokens. <br>
+## Use Case:
 
+Developers and external users use this skill to operate SunoAPI through an OOMOL-connected account for music generation, lyrics, sounds, MIDI, covers, audio editing tasks, task status retrieval, and credit checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-sunoapi) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [SunoAPI Homepage](https://sunoapi.org) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples; connector actions return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL account, a connected SunoAPI API key, and user confirmation for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Remote SunoAPI task creation can consume credits or process user-supplied media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the exact action, payload, uploaded content, and possible credit use before generation, upload, conversion, extension, separation, cover, or similar task-submission actions.
+
+Risk: First-time setup includes shell installer commands from remote URLs.
+
+Mitigation: Use the skill only when the OOMOL CLI installation source is trusted, and inspect installer scripts before executing them.
+
+Risk: Live action schemas and account connections can change outside the skill artifact.
+
+Mitigation: Inspect the live action schema before constructing payloads and verify the OOMOL/SunoAPI account connection before relying on returned task identifiers or account state.
+
+## Reference(s):
+
+- [SunoAPI homepage](https://sunoapi.org)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub SunoAPI skill page](https://clawhub.ai/oomol/skills/oo-sunoapi)
+- [SunoAPI icon](https://static.oomol.com/logo/third-party/sunoapi.png)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include SunoAPI task identifiers, execution identifiers, action schemas, account credit information, or command guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

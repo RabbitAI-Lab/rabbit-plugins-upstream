@@ -1,45 +1,57 @@
-## Description: <br>
-This skill helps agents operate Booqable through an OOMOL-connected account for reading, creating, and updating Booqable data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Booqable (booqable.com) supports reading, creating, and updating data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Booqable schemas and run Booqable connector actions through the oo CLI for company, customer, order, and product group workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Booqable customer and order data through the connector. <br>
-Mitigation: Install it only for intended Booqable account access and review returned data before sharing or using it elsewhere. <br>
-Risk: Tagged write or destructive actions could change or remove Booqable data if approved with the wrong payload. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive operations. <br>
-Risk: Connector input fields may differ from assumptions made before execution. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing a payload. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Booqable action schemas and run company, customer, order, and product-group actions through an OOMOL-connected account. It supports read, search, and listed state-changing workflows with confirmation guidance for actions that may modify or expose business data.
 
-## Reference(s): <br>
-- [Booqable ClawHub skill page](https://clawhub.ai/oomol/skills/oo-booqable) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Booqable homepage](https://www.booqable.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Booqable account, customer, order, and product data through the connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The setup path includes an unverified remote installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing, prefer a verified package or signed release, and do not let an agent run the remote installer automatically.
+
+Risk: Booqable actions can expose customer, order, company, and product data, and at least one action is documented with a write/read inconsistency.
+
+Mitigation: Confirm any operation that could create, update, or expose customer or order data, and inspect the live action schema before constructing requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-booqable)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Booqable homepage](https://www.booqable.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing oo CLI requests; responses are JSON objects with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

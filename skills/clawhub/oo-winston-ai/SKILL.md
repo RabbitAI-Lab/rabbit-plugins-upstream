@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Winston AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["winston_ai"]
   icon: "https://static.oomol.com/logo/third-party/winston_ai.svg"
 ---

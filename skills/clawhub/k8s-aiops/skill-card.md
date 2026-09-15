@@ -1,46 +1,67 @@
-## Description: <br>
-K8s Aiops helps agents operate kubeconfig-reachable Kubernetes clusters by listing and inspecting resources, reading logs, running read-only diagnostics, and performing governed write operations such as scaling, rollouts, deletes, namespace changes, and node cordon, uncordon, or drain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+k8s-aiops provides governed Kubernetes operations through CLI and MCP tools for inspecting resources, reading logs, running diagnostics, and performing audited writes such as scale, rollout, delete, namespace, and node maintenance actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and SREs use this skill to inspect Kubernetes state, diagnose unhealthy workloads, review pod logs and events, and execute governed operational changes through CLI or MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact cluster writes using the privileges of the configured kubeconfig. <br>
-Mitigation: Use a dedicated least-privilege kubeconfig, prefer read-only RBAC by default, and grant delete, drain, rollout undo, or namespace mutation verbs only when explicitly needed. <br>
-Risk: MCP write tools can mutate real cluster state without an internal approval gate. <br>
-Mitigation: Review production or shared-cluster use before installation, scope targets and namespaces tightly, use dry-run previews where supported, and rely on Kubernetes RBAC as the enforcement boundary. <br>
-Risk: Insecure kubeconfig TLS settings can weaken the cluster connection. <br>
-Mitigation: Check kubeconfig TLS settings before use and avoid contexts that rely on insecure-skip-tls-verify for production or shared clusters. <br>
+## Use Case:
 
+Developers and Kubernetes operators use this skill to inspect kubeconfig-reachable clusters, troubleshoot pods and workloads, and execute common operations with audit and undo support where available.
 
-## Reference(s): <br>
-- [k8s-aiops homepage](https://github.com/AIops-tools/K8s-AIops) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and text with inline shell commands, CLI examples, and MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe Kubernetes API results, dry-run previews, audit behavior, undo guidance, and RBAC or kubeconfig troubleshooting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: The skill can perform high-impact Kubernetes writes including deletes, rollbacks, namespace deletion, and node drain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only ServiceAccount by default, keep write-capable kubeconfigs separate, avoid cluster-admin contexts, and reserve destructive verbs for narrowly scoped contexts.
+
+Risk: Write control depends on kubeconfig RBAC or agent judgment rather than a built-in read-only policy.
+
+Mitigation: Enforce least privilege in the Kubernetes API server and validate intended permissions with kubectl auth can-i before allowing write operations.
+
+Risk: Cluster operations can affect production availability if run against the wrong context or namespace.
+
+Mitigation: Use named targets, explicit namespaces, dry-run previews where available, and separate production credentials from diagnostic or development contexts.
+
+Risk: Local audit and undo data may contain operational details about cluster actions.
+
+Mitigation: Store k8s-aiops state in an owner-only directory, relocate it with K8S_AIOPS_HOME when needed, and protect audit records according to operational policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/k8s-aiops)
+- [Project homepage](https://github.com/AIops-tools/K8s-AIops)
+- [Issue tracker](https://github.com/AIops-tools/K8s-AIops/issues)
+- [Capabilities](references/capabilities.md)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown or text with inline shell commands and structured Kubernetes tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Kubernetes API summaries, diagnostics, dry-run previews, and audited write results; secret values are not returned.]
+
+## Skill Version(s):
+
+0.13.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

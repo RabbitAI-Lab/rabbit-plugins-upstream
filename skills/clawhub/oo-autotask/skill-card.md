@@ -1,43 +1,56 @@
-## Description: <br>
-Autotask lets an agent search and read Autotask Companies, Contacts, Tickets, entity metadata, and zone information through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Autotask (datto.com) supports Autotask search and read requests through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to let an agent retrieve and query Autotask PSA company, contact, ticket, metadata, and zone information through OOMOL-connected credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Autotask Companies, Contacts, and Tickets through the user's OOMOL-connected account. <br>
-Mitigation: Install it only when that access is intended, and review requested record IDs, filters, selected fields, and limits before execution. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL CLI when commands fail because the CLI or connection is missing. <br>
-Mitigation: Review the OOMOL CLI install and connection steps before setup, and avoid running authentication or connection commands proactively. <br>
+## Use Case:
 
+External users and support or operations teams use this skill to query Autotask Companies, Contacts, Tickets, entity metadata, and zone information through the oo CLI after their OOMOL account is connected.
 
-## Reference(s): <br>
-- [ClawHub Autotask listing](https://clawhub.ai/oomol/skills/oo-autotask) <br>
-- [Autotask PSA](https://www.datto.com/products/autotask-psa/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; runtime responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Autotask actions are described; credentials are handled through the user's OOMOL-connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The security evidence reports a suspicious verdict because first-time setup includes direct execution of remote installer scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, verify the oo CLI installer through an official trusted channel and prefer a signed or checksum-verified installation path.
+
+Risk: An agent could run first-time setup commands even when the user only needs an Autotask read or search action.
+
+Mitigation: Use the skill for Autotask read and search tasks, and run authentication, connection, billing, or installer commands only after a matching command failure or explicit user direction.
+
+## Reference(s):
+
+- [Autotask Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-autotask)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Autotask PSA](https://www.datto.com/products/autotask-psa/)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON containing data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

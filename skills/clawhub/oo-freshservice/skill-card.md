@@ -1,42 +1,55 @@
-## Description: <br>
-Freshservice enables an agent to read and create Freshservice tickets, service requests, locations, and service catalog data through the OOMOL Freshservice connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freshservice enables an agent to read Freshservice data and create tickets or service requests through OOMOL's Freshservice connector and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, support teams, and developers use this skill to list and retrieve Freshservice tickets, create tickets or service requests, and resolve Freshservice locations or service catalog items through an OOMOL-connected Freshservice account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Freshservice records through an OOMOL-connected account. <br>
-Mitigation: Install only when agent access to Freshservice is intended, and use an account with the least Freshservice permissions needed. <br>
-Risk: Ticket and service request creation can change Freshservice state. <br>
-Mitigation: Review the write payload and expected effect with the user before approving creation actions. <br>
+## Use Case:
 
+Support teams and IT operators use this skill to list and retrieve Freshservice tickets, locations, and service catalog items, and to create tickets or service requests from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Freshservice skill](https://clawhub.ai/oomol/oo-freshservice) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Freshservice homepage](https://www.freshworks.com/freshservice/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions require user confirmation of the exact payload and expected effect before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup guidance includes remote installer one-liners for installing the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; install the CLI through a trusted, reviewed, versioned process before using the skill.
+
+Risk: Write actions can create Freshservice tickets or service requests.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Freshservice skill page](https://clawhub.ai/oomol/skills/oo-freshservice)
+- [Freshservice homepage](https://www.freshworks.com/freshservice/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

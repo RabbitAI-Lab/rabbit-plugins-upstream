@@ -1,43 +1,56 @@
-## Description: <br>
-AbuseIPDB helps an agent use an OOMOL-connected AbuseIPDB account to check IP reputation, inspect CIDR blocks, retrieve reports, and read the blacklist feed through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps an agent operate AbuseIPDB through an OOMOL-connected account using the oo CLI for blacklist lookup, IP reputation checks, CIDR block inspection, and report retrieval.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, security analysts, and agents use this skill to query AbuseIPDB reputation data and prepare connector calls through an OOMOL-managed account. It supports IP checks, CIDR block inspection, detailed report lookup, and blacklist retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected AbuseIPDB account and can prompt use of the oo CLI. <br>
-Mitigation: Install or sign in to the oo CLI only when intentionally using this integration, and rely on OOMOL-managed credentials rather than handling raw AbuseIPDB tokens. <br>
-Risk: The check_block action is tagged as write-capable in the artifact. <br>
-Mitigation: Review the live schema, exact payload, and intended effect with the user before running any action tagged write. <br>
+## Use Case:
 
+Developers, security analysts, and external agents use this skill to query AbuseIPDB reputation data through an authenticated OOMOL connector without directly handling raw AbuseIPDB API tokens. It supports blacklist retrieval, single-IP checks, CIDR block inspection, and report listing.
 
-## Reference(s): <br>
-- [AbuseIPDB homepage](https://www.abuseipdb.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-abuseipdb) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup includes mutable remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a signed or package-manager installation path when available, or download and verify the installer before execution.
+
+Risk: Write-tagged connector actions can affect AbuseIPDB state or account-side behavior if run with an incorrect payload.
+
+Mitigation: Inspect the live connector schema before building payloads and confirm the exact action, payload, and expected effect before running write-tagged actions.
+
+## Reference(s):
+
+- [ClawHub AbuseIPDB skill page](https://clawhub.ai/oomol/skills/oo-abuseipdb)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [AbuseIPDB homepage](https://www.abuseipdb.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

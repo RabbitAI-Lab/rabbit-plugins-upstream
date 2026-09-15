@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes pet grooming session videos or video URLs through server-side APIs to identify stress behaviors such as struggling, panting, and tail tucking, then returns stress grading and structured observations for grooming, veterinary, and pet-care contexts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet grooming session videos or video URLs for stress behaviors such as struggling, panting, tail tucking, ear posture, and stress-level signals, returning structured observations for grooming and pet-care workflows.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External groomers, veterinary clinic staff, pet-care providers, and developers use this skill to submit grooming videos or URLs for stress-behavior analysis and to retrieve structured reports or historical report lists. The output is intended as behavior-observation support, not medical diagnosis or behavior-correction advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded grooming videos or supplied URLs are sent to the LifeEmergence/Open API service for analysis. <br>
-Mitigation: Use the skill only when sharing that footage or URL with the service is acceptable; avoid sensitive customer footage or internal URLs unless retention, deletion, and authentication terms are clear. <br>
-Risk: The skill can silently create or reuse a local identity and store service tokens in workspace data for remote history access. <br>
-Mitigation: Run it in a controlled workspace, review local token storage expectations before deployment, and clear workspace data when identity persistence is not desired. <br>
-Risk: Stress scoring could be mistaken for veterinary diagnosis or behavior-correction guidance. <br>
-Mitigation: Present results as observational support for grooming decisions and escalate health concerns to qualified veterinary staff. <br>
+## Use Case:
 
+Pet groomers, veterinary clinics, pet care teams, and agents supporting them use this skill to submit grooming videos for stress behavior analysis, receive structured stress-level observations, and retrieve prior reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-grooming-stress-behavior-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown and structured JSON-like text with report links; historical reports may be returned as Markdown tables or structured lists.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a report export link and can optionally save the returned analysis text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence, released 2026-07-12) <br>
+Risk: Remote processing of uploaded pet media and history queries may expose sensitive media or report data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when remote processing is acceptable, disclose that media and report queries are sent to the service, and confirm retention and access controls with the publisher.
+
+Risk: The skill silently creates or reuses remote identities and stores tokens locally.
+
+Mitigation: Require the publisher to disclose identity behavior, avoid silent account creation, and remove or secure local token persistence before deployment.
+
+Risk: Default configuration includes plaintext HTTP endpoints.
+
+Mitigation: Require HTTPS production endpoints and reject private or plaintext defaults before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-grooming-stress-behavior-analysis)
+- [Pet grooming stress API reference](references/api_doc.md)
+- [Shared analysis API reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with JSON structured analysis and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include stress-level observations, historical report lists, and remote report export links.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter lists 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,57 @@
-## Description: <br>
-Uploadcare (uploadcare.com). Use this skill for ANY Uploadcare request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uploadcare is a skill for handling Uploadcare requests, including reading, creating, updating, and deleting data through the OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Uploadcare through an OOMOL-connected account for file, group, and project reads, plus approved file storage and deletion actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Uploadcare state, including permanently storing files and deleting files by UUID. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before write or destructive actions. <br>
-Risk: The connected Uploadcare account may expose project, file, and group data through OOMOL's oo CLI. <br>
-Mitigation: Connect only an Uploadcare account whose access level is appropriate for agent operation. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Uploadcare files, groups, and project information through the oo CLI using an OOMOL-connected Uploadcare account. It supports read operations, permanent file storage, and destructive file deletion with explicit confirmation guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-uploadcare) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Uploadcare homepage](https://uploadcare.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON data with execution metadata when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup guidance includes remote installer commands that are not pinned or independently verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified package or pinned release, and verify checksums or signatures before running installer scripts.
+
+Risk: The skill can perform write and destructive Uploadcare actions, including permanent storage changes and file deletion.
+
+Mitigation: Confirm the exact action, target UUID or payload, and expected effect with the user before allowing write or destructive commands to run.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-uploadcare)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Uploadcare Homepage](https://uploadcare.com)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses should inspect the live connector schema before constructing action payloads and should preserve execution IDs returned under meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

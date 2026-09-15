@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Beehiiv"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["beehiiv"]
   icon: "https://static.oomol.com/logo/third-party/beehiiv.svg"
 ---

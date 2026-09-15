@@ -1,44 +1,60 @@
-## Description: <br>
-Clearout verifies email addresses and checks Clearout account credits through an OOMOL-connected Clearout account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clearout helps agents verify email addresses, check Clearout credits and limits, and classify addresses through an OOMOL-connected Clearout account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to run Clearout email verification and account-credit checks without calling the Clearout API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email verification actions may send email addresses to the OOMOL-connected Clearout service. <br>
-Mitigation: Use the skill only for explicit Clearout tasks where the user intends to verify the provided email data. <br>
-Risk: Clearout verification requests may consume account credits or encounter account limits. <br>
-Mitigation: Check available credits and daily verification limits before large or repeated verification workflows. <br>
-Risk: The connector contract can change over time. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to run Clearout email verification and account-classification actions through the oo CLI without handling raw Clearout API credentials directly.
 
-## Reference(s): <br>
-- [Clearout homepage](https://clearout.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Clearout release page](https://clawhub.ai/oomol/oo-clearout) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return execution metadata and consume Clearout account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The setup guidance includes remote installer commands without documented integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution and prefer an official pinned package or verifiable download when available.
+
+Risk: Using the skill requires signing in to OOMOL and connecting Clearout, which can persist account access outside the immediate agent run.
+
+Mitigation: Connect only the required Clearout account, review granted scopes, and revoke or rotate credentials when access is no longer needed.
+
+Risk: Email verification queries may involve personal or business contact data.
+
+Mitigation: Submit only data that the user is authorized to verify and avoid sending unnecessary bulk or sensitive address lists.
+
+## Reference(s):
+
+- [Clearout ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-clearout)
+- [Clearout Homepage](https://clearout.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions return JSON responses from the oo connector, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

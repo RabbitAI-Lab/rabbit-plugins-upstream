@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/nutanix-aiops",
   "slug": "nutanix-aiops",
   "ownerHandle": null,
-  "version": "0.7.0",
-  "updatedAt": 1784668476548,
-  "contentHash": "c85adc98a458718c4dfadfdb02e9630177a1fa83b66045f3ed86e371265b9363",
-  "fetchedAt": "2026-07-26T18:08:54.241Z"
+  "version": "0.11.3",
+  "updatedAt": 1789453025997,
+  "contentHash": "b96673a99459f13b6d7866a602a05e5959b1120f649f1da48990920fb4f7e4fe",
+  "fetchedAt": "2026-09-15T12:47:44.122Z"
 }

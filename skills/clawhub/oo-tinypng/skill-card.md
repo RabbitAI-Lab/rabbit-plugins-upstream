@@ -1,45 +1,59 @@
-## Description: <br>
-TinyPNG (tinypng.com) skill for operating TinyPNG through an OOMOL-connected account to shrink images and transform TinyPNG output images. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use TinyPNG (tinypng.com) through the OOMOL connector for image compression and output-image transformation requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to compress images from public URLs or base64 image bytes and to transform TinyPNG output images through an OOMOL-connected TinyPNG account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload or transform images through an OOMOL-connected TinyPNG account. <br>
-Mitigation: Confirm the exact image URL or image bytes and intended transformation before running shrink_image or output_image. <br>
-Risk: The security evidence says image upload and transformation actions are under-labeled as safe read-like operations. <br>
-Mitigation: Treat shrink_image and output_image as mutating external-processing actions even when the artifact does not tag them as write actions. <br>
-Risk: The skill requires a connected TinyPNG account and may encounter auth, connection, credential, or billing failures. <br>
-Mitigation: Use setup or billing steps only after the connector command fails with the matching error. <br>
+## Use Case:
 
+Developers and external users use this skill to operate TinyPNG image compression and output-image transformation through an OOMOL-connected account. It helps agents inspect live connector schemas, run TinyPNG actions with JSON payloads, and handle setup errors when authentication, connection, or billing issues occur.
 
-## Reference(s): <br>
-- [ClawHub TinyPNG Skill](https://clawhub.ai/oomol/oo-tinypng) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [TinyPNG Homepage](https://tinypng.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema checks before constructing TinyPNG action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include pipe-to-shell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and independently verify installer sources before running remote installation commands.
+
+Risk: Image compression and transformation may upload image data and affect billing or service state.
+
+Mitigation: Confirm the payload and intended effect before running TinyPNG actions, especially for user-provided images or billable operations.
+
+Risk: The security evidence reports that the skill understates risks by treating image-processing actions as read-only.
+
+Mitigation: Treat TinyPNG processing as an external write-like operation and review the skill before installation.
+
+## Reference(s):
+
+- [ClawHub TinyPNG Skill Page](https://clawhub.ai/oomol/skills/oo-tinypng)
+- [TinyPNG Homepage](https://tinypng.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return connector responses that include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

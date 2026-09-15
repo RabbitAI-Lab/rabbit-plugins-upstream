@@ -30,20 +30,24 @@ How to install, configure, and wire `vmware-harden` into your AI agent.
 ### Recommended: PyPI via `uv tool install`
 
 ```bash
-uv tool install vmware-harden
+uv tool install "vmware-harden[collectors]==1.10.9"
 vmware-harden --help
 vmware-harden mcp --help   # MCP server (CLI subcommand — recommended)
 ```
 
 This installs `vmware-harden` into a single isolated venv that `uv tool`
-manages. The MCP stdio server is the `vmware-harden mcp` subcommand; the
+manages. That isolation is why the `[collectors]` extra is named here rather
+than installed beside it: `scan` imports vmware-aiops, vmware-storage and
+vmware-nsx-security, and `uv tool install vmware-aiops` would build a *second*
+venv that harden cannot import from. Omit the extra only if this host will
+report on an existing twin DB rather than scan. The MCP stdio server is the `vmware-harden mcp` subcommand; the
 standalone `vmware-harden-mcp` console script is also installed and remains
 supported for backward compatibility.
 
 ### Source install (development)
 
 ```bash
-git clone https://github.com/zw008/VMware-Harden.git
+git clone --branch v1.10.9 https://github.com/vmware-skills/VMware-Harden.git
 cd VMware-Harden
 uv venv && source .venv/bin/activate
 uv pip install -e .
@@ -58,7 +62,7 @@ For platforms that prefer containerized MCP servers (e.g., Smithery registry, Ku
 Build and run the MCP server in a container. The image uses `python:3.12-slim` with `uv` for dependency installation and runs `python -m vmware_harden.mcp_server` on stdio (no port exposed — MCP uses stdin/stdout).
 
 ```bash
-git clone https://github.com/zw008/VMware-Harden.git
+git clone --branch v1.10.9 https://github.com/vmware-skills/VMware-Harden.git
 cd VMware-Harden
 
 # Build
@@ -94,7 +98,7 @@ Users can install via the Smithery UI or CLI without managing Python environment
 
 | Deployment | Best For |
 |------------|----------|
-| `uv tool install vmware-harden` + `vmware-harden-mcp` | Local developer workstation, single-user CLI + MCP |
+| `uv tool install vmware-harden==1.10.9` + `vmware-harden-mcp` | Local developer workstation, single-user CLI + MCP |
 | Docker image | Self-hosted agents, CI runners, isolated environments, multi-user servers |
 | Smithery | Zero-install agent integration, registry-managed discovery, hosted-MCP workflows |
 
@@ -109,8 +113,8 @@ artifacts it owns are:
 | `~/.vmware-harden/baselines/*.yaml` | User-imported baselines | `baseline import` |
 
 Override the Twin path either per-command (`--db /path/to/twin.duckdb`)
-or globally via the `VMWARE_HARDEN_DB` environment variable consumed by
-the MCP server.
+or globally via the `VMWARE_HARDEN_DB` environment variable, which the MCP
+server, every CLI command with `--db`, and `doctor` read (from 1.10.7; `~` is expanded).
 
 ### Anthropic API key for the advisor
 
@@ -131,6 +135,15 @@ Spawning the installed entry point directly (rather than `uvx --from ...`)
 avoids re-resolving PyPI on every launch and is **strongly recommended in
 corporate environments with TLS proxies** — see the workaround section
 below.
+
+**Whatever starts the server must install the `collectors` extra**, or the
+first `scan_target` fails with `CollectorDependencyError`. The Claude Code
+plugin (`.mcp.json`), the uvx example (`examples/mcp-configs/uvx-fallback.json`)
+and the `Dockerfile` all carry it from 1.10.7 on. An MCP Registry client
+cannot: the registry entry names the bare package, so a client that launches
+the server from it through uvx gets one that cannot scan — install with
+`uv tool install "vmware-harden[collectors]==1.10.9"` and point the client at
+`vmware-harden mcp` instead.
 
 Working configuration templates ship under
 `examples/mcp-configs/` in the repository.
@@ -212,12 +225,12 @@ AI agent through MCP.
 
 ## Corporate TLS workaround
 
-If `uvx --from vmware-harden vmware-harden-mcp` reports
+If `uvx --from vmware-harden==1.10.9 vmware-harden-mcp` reports
 `invalid peer certificate: UnknownIssuer`, your network has a MitM TLS
 proxy whose CA is not in `uv`'s bundled webpki store (踩坑 #25).
 
 **Preferred fix**: don't use `uvx` for the MCP server. Install once with
-`uv tool install vmware-harden` and configure the MCP client to spawn
+`uv tool install vmware-harden==1.10.9` and configure the MCP client to spawn
 `vmware-harden-mcp` directly — that path goes through your shell `PATH`
 and never hits PyPI again.
 
@@ -247,7 +260,7 @@ entire server load. Fixed across v1.5.26–1.5.28 (踩坑 #33).
 real classes:
 
 ```bash
-uv tool install --upgrade vmware-harden
+uv tool install --upgrade vmware-harden==1.10.9
 # or, if you bring your own mcp package:
 pip install -U 'mcp[cli]>=1.14'
 ```
@@ -267,7 +280,7 @@ Python 3.10+ (e.g. `uv python install 3.12`) and re-install
 > is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or
 > Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom.
 > Source code is publicly auditable at
-> [github.com/zw008/VMware-Harden](https://github.com/zw008/VMware-Harden)
+> [github.com/vmware-skills/VMware-Harden](https://github.com/vmware-skills/VMware-Harden)
 > under the MIT license.
 
 - **No credentials of its own.** All vSphere / NSX authentication lives
@@ -285,7 +298,7 @@ Python 3.10+ (e.g. `uv python install 3.12`) and re-install
   exclusively from typed Twin queries (rule id, severity, structured
   evidence). Any free-text fields are passed through `_sanitize()` —
   truncation to 500 chars and stripping C0/C1 control characters.
-- **Least privilege**: all 6 MCP tools are read-only with respect to
+- **Least privilege**: all 8 MCP tools are read-only with respect to
   managed VMware resources. Remediation execution is intentionally not
   exposed; agents that need to apply a fix must invoke **vmware-pilot**,
   which adds approval gates and audit logging.

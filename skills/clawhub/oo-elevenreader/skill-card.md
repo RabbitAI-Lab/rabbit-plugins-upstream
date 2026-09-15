@@ -1,43 +1,55 @@
-## Description: <br>
-ElevenReader lets agents use an OOMOL-connected ElevenReader account to search voices, retrieve speech models and account information, and convert text to speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenReader lets agents use an OOMOL-connected ElevenLabs account to inspect text-to-speech models and voices, read text aloud, and retrieve user or subscription information.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate ElevenReader through OOMOL from an agent, including voice search, model lookup, profile and subscription checks, and text-to-speech generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and may rely on ElevenReader credentials for connector actions. <br>
-Mitigation: Only approve setup or connection steps when the user is comfortable linking ElevenReader credentials to OOMOL, and do not repeat authentication setup unless a command fails for that reason. <br>
-Risk: Text submitted for speech generation may be sent to the connector service and converted audio is uploaded to connector transit storage. <br>
-Mitigation: Send only text that is appropriate for the connected service and review the payload before running text-to-speech actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate ElevenReader through the OOMOL connector for voice discovery, text-to-speech generation, and account status checks.
 
-## Reference(s): <br>
-- [ClawHub ElevenReader skill page](https://clawhub.ai/oomol/oo-elevenreader) <br>
-- [ElevenReader homepage](https://elevenlabs.io/text-reader) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; read_text returns generated audio through connector transit storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: The documented fallback setup includes unverified remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official versioned installer with checksum or signature verification, avoid elevated shells unless required, and do not run pipe-to-shell or Invoke-Expression installers blindly.
+
+Risk: Text submitted for speech generation is sent through OOMOL's connector to ElevenReader or ElevenLabs services.
+
+Mitigation: Install and use the skill only when the user accepts OOMOL as the connector and is comfortable sending the submitted text for speech generation.
+
+## Reference(s):
+
+- [ElevenReader skill page](https://clawhub.ai/oomol/skills/oo-elevenreader)
+- [ElevenReader homepage](https://elevenlabs.io/text-reader)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses that include generated audio references and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

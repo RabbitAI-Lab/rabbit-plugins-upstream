@@ -1,43 +1,55 @@
-## Description: <br>
-GoSquared (gosquared.com) skill for searching and reading analytics data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill handles GoSquared requests involving searching and reading data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect GoSquared project analytics, authorization metadata, realtime visitor activity, and Trends aggregates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL as an intermediary for the connected GoSquared account. <br>
-Mitigation: Install only when the user trusts OOMOL for this connection and understands that analytics and authorization metadata may be read from the connected project. <br>
-Risk: A future version could add write or destructive GoSquared actions. <br>
-Mitigation: Review future releases before deployment and require explicit user confirmation before running any action marked write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve GoSquared Now overviews, visitor time series, token authorization details, and Trends aggregate metrics through an OOMOL-connected GoSquared account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gosquared) <br>
-- [GoSquared Homepage](https://www.gosquared.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credentials and returns connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The setup flow may fetch and immediately execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, pinned, or package-manager flow that matches the user's trust requirements.
+
+Risk: The skill can access GoSquared data through an OOMOL-connected account.
+
+Mitigation: Run OOMOL login and GoSquared connection steps only when the user intentionally wants the skill to access that account's GoSquared data.
+
+## Reference(s):
+
+- [GoSquared homepage](https://www.gosquared.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gosquared)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces read-oriented GoSquared connector guidance and command payloads; command responses are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

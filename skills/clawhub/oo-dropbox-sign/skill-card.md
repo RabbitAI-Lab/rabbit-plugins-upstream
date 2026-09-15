@@ -1,43 +1,59 @@
-## Description: <br>
-Dropbox Sign helps agents read and search Dropbox Sign account, signature request, and template data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dropbox Sign (sign.dropbox.com). Use this skill for Dropbox Sign requests involving searching and reading account, signature request, and template data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve Dropbox Sign account details, inspect signature requests, and list accessible templates without handling raw Dropbox Sign API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dropbox Sign account data, signature requests, and templates may contain sensitive business information. <br>
-Mitigation: Install and use the skill only when the connected OOMOL account is permitted to access the relevant Dropbox Sign data. <br>
-Risk: Future connector actions marked write or destructive could change Dropbox Sign state. <br>
-Mitigation: Review the live action schema and require explicit user confirmation before running any write or destructive action. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Dropbox Sign through an OOMOL-connected account, retrieving account properties, signature requests, and templates through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dropbox-sign) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Dropbox Sign homepage](https://sign.dropbox.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running Dropbox Sign read and list actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted and reviewed distribution path, and avoid pipe-to-shell installation unless the installer source has been verified.
+
+Risk: The routing language is broader than the listed read-only Dropbox Sign actions.
+
+Mitigation: Use the skill for the documented get, list, and search actions unless a separate review approves state-changing Dropbox Sign operations.
+
+Risk: Connector operations depend on an OOMOL-connected Dropbox Sign account and server-side credential handling.
+
+Mitigation: Confirm the intended OOMOL account connection and inspect the live connector schema before sending payloads.
+
+## Reference(s):
+
+- [Dropbox Sign homepage](https://sign.dropbox.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Dropbox Sign skill page](https://clawhub.ai/oomol/skills/oo-dropbox-sign)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include oo CLI commands, connector schema inspection steps, JSON payload examples, and summarized Dropbox Sign read results.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

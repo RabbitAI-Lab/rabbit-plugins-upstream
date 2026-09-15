@@ -1,43 +1,56 @@
-## Description: <br>
-Use currencyapi through the OOMOL-connected `oo` CLI to convert currencies, retrieve latest or historical exchange rates, list supported currencies, and check account quota status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates the currencyapi connector through the OOMOL oo CLI to convert monetary amounts, retrieve latest or historical exchange rates, list supported currencies, and check account quota usage.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate currencyapi through an OOMOL-connected account for currency conversion, exchange-rate lookup, supported-currency discovery, and account quota checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL account with currencyapi connected and may prompt first-time CLI installation or login when the local environment is not configured. <br>
-Mitigation: Install only when currencyapi access through OOMOL is intended, and complete CLI login or provider connection only after an auth or connection error indicates it is required. <br>
-Risk: currencyapi requests may be routed through OOMOL rather than direct API calls. <br>
-Mitigation: Review the OOMOL-connected credential flow and organizational data-handling requirements before using the connector. <br>
+## Use Case:
 
+Developers and external users use this skill to have an agent retrieve currency exchange data, convert monetary amounts, and check currencyapi account quota through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-currencyapi) <br>
-- [currencyapi homepage](https://currencyapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON responses from the `oo connector run` workflow when executed with `--json`.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include direct execution of remote OOMOL CLI installer scripts from cli.oomol.com.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer or use a pinned, verified CLI installation method before running setup commands, and avoid elevated shells unless required.
+
+Risk: The skill depends on the OOMOL oo CLI and server-side credential handling for currencyapi requests.
+
+Mitigation: Install only when the OOMOL CLI delivery path and connected-account credential flow are acceptable for the deployment environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-currencyapi)
+- [currencyapi homepage](https://currencyapi.com)
+- [OOMOL oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI command examples and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and a connected currencyapi account; setup commands are only relevant after authentication or connection failures.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

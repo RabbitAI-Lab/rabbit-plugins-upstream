@@ -1,43 +1,56 @@
-## Description: <br>
-Enables agents to read Adobe Commerce product and category data through the OOMOL Adobe Commerce connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adobe Commerce connector skill for searching and reading catalog data through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Adobe Commerce categories and products from an OOMOL-connected Adobe Commerce account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected OOMOL account can expose Adobe Commerce product and category data to the agent. <br>
-Mitigation: Install only when that read access is acceptable, and use the listed read-only actions: get_category, get_product, list_categories, and list_products. <br>
-Risk: Connector action inputs can fail or produce unexpected results if payloads are built from stale assumptions. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Adobe Commerce product and category data through an OOMOL-connected account. It supports schema-first execution for read-only product and category lookup or listing tasks.
 
-## Reference(s): <br>
-- [ClawHub Adobe Commerce skill](https://clawhub.ai/oomol/skills/oo-adobe-commerce) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Adobe Commerce homepage](https://business.adobe.com/products/magento/magento-commerce.html) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use oo connector schema and oo connector run, which may return JSON data from Adobe Commerce.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The first-time setup path may run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified, versioned, checksum-checked source, and avoid letting an agent execute curl or PowerShell installer pipelines automatically.
+
+Risk: Future connector actions could change Adobe Commerce state if write or destructive operations are added.
+
+Mitigation: Keep routine use to the listed read-only get and list actions, and require explicit user confirmation for any documented write or destructive action.
+
+## Reference(s):
+
+- [Adobe Commerce homepage](https://business.adobe.com/products/magento/magento-commerce.html)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adobe-commerce)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

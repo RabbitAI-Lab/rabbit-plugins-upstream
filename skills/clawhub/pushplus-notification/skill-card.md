@@ -1,46 +1,62 @@
-## Description: <br>
-Send push notifications via the PushPlus HTTP API to WeChat, email, webhook, SMS, and other channels using a PUSHPLUS_TOKEN and shell/curl access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+pushplus sends notifications through the PushPlus HTTP API to WeChat, ClawBot, QQ bot, email, webhook, SMS, app, and related channels, with optional Open API workflows for result lookup and account or channel management.
 
-## Publisher: <br>
-[pcstx](https://clawhub.ai/user/pcstx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pcstx](https://clawhub.ai/user/pcstx)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to send user-approved PushPlus notifications for alerts, reminders, task completion messages, reports, and logs across supported channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Notifications are transmitted through the third-party PushPlus service and can expose sensitive or confidential message content. <br>
-Mitigation: Review the title, content, channel, recipient, webhook, and callback destination before approving each send; avoid transmitting passwords, API keys, personal data, or confidential logs unless explicitly accepted. <br>
-Risk: The PUSHPLUS_TOKEN is a credential required to send messages. <br>
-Mitigation: Do not display, log, store, or write the full token; mask it in any user-facing output and read only the PUSHPLUS_TOKEN line when using a .env file. <br>
-Risk: The skill can send external notifications from an agent workflow. <br>
-Mitigation: Require explicit user confirmation before each send and provide a concise summary of the message and delivery settings before executing the request. <br>
+## Use Case:
 
+Developers and agent users use this skill to send reviewed notifications, alerts, reminders, and delivery-status checks from an agent through PushPlus channels. Operators can also use it for account, topic, blacklist, bot-binding, and forwarding-rule workflows when they intentionally provide AccessKey credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pcstx/pushplus-notification) <br>
-- [PushPlus official site](https://www.pushplus.plus) <br>
-- [PushPlus single-send endpoint](https://www.pushplus.plus/send) <br>
-- [PushPlus batch-send endpoint](https://www.pushplus.plus/batchSend) <br>
-- [pushplus MCP server](https://www.npmjs.com/package/@perk-net/pushplus-mcp-server) <br>
+### Deployment Geography for Use:
 
+Global, with the cmcc new-message ClawBot channel limited to China Mobile users.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, API calls, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided PUSHPLUS_TOKEN and user confirmation before sending each message.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact metadata reports 1.1.0) <br>
+Risk: Crafted message text in shell-based request examples could execute local commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review message content before execution, use a manual install path or pinned installer, and avoid pasting arbitrary user text directly into shell templates.
+
+Risk: Notifications can transmit secrets or personal data to PushPlus and downstream channels.
+
+Mitigation: Send only reviewed content and avoid including credentials, personal data, or other sensitive material in notification bodies.
+
+Risk: AccessKey credentials allow higher-privilege account-management actions such as managing friends, blacklists, bot bindings, and forwarding rules.
+
+Mitigation: Grant or use AccessKey credentials only when those management actions are intended, and confirm destructive actions before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pcstx/skills/pushplus-notification)
+- [Artifact README](artifact/README.md)
+- [Open API reference](artifact/reference.md)
+- [PushPlus official site](https://www.pushplus.plus)
+- [PushPlus message API V1.18](https://www.pushplus.plus/doc/guide/api.html)
+- [PushPlus Open API V1.19](https://www.pushplus.plus/doc/guide/openApi.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls]
+
+**Output Format:** [Markdown guidance with curl command examples and JSON request or response bodies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PUSHPLUS_TOKEN for sending notifications; AccessKey credentials are optional and higher-privilege for account management workflows.]
+
+## Skill Version(s):
+
+1.3.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

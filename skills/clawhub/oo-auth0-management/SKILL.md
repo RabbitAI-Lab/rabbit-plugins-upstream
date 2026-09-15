@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Auth0 Management"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["auth0_management"]
   icon: "https://static.oomol.com/logo/third-party/auth0_management.svg"
 ---

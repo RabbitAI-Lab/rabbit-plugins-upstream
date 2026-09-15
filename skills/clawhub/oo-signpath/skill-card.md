@@ -1,42 +1,59 @@
-## Description: <br>
-SignPath lets an agent inspect SignPath action schemas, list signing policies, check signing request status, and submit fast hash-signing requests through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents work with SignPath by submitting hash-signing requests, checking signing request status, and listing visible signing policies through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users who manage SignPath signing workflows use this skill to inspect live connector schemas, submit fast hash-signing requests, poll signing request status, and list visible signing policies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit SignPath signing requests, including fast hash-signing requests, even though the available action list is not explicitly tagged as write-capable. <br>
-Mitigation: Require explicit user confirmation of the exact payload, signing policy, project, and expected effect before running fast_sign_hash. <br>
-Risk: The skill depends on sensitive SignPath credentials through the connected OOMOL account. <br>
-Mitigation: Use the existing OOMOL connection flow, avoid requesting or exposing raw credentials, and only revisit setup when an auth or connection error occurs. <br>
+## Use Case:
 
+Developers and release engineers use this skill to request SignPath hash signatures, monitor signing requests, and discover available signing policies from an agent. It is intended for users with an OOMOL-connected SignPath account.
 
-## Reference(s): <br>
-- [ClawHub SignPath skill page](https://clawhub.ai/oomol/oo-signpath) <br>
-- [SignPath homepage](https://signpath.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated OOMOL account with SignPath connected; connector responses may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact metadata) <br>
+Risk: The skill can submit SignPath signing requests through an OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the exact payload and effect before any fast_sign_hash or signing action.
+
+Risk: The skill documentation includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified manual or package-manager installation path instead of running pipe-to-shell installer commands.
+
+Risk: Installing the skill gives the agent access to actions available through the user's connected SignPath account.
+
+Mitigation: Review the skill before installation and use it only with SignPath access the user is comfortable delegating to the agent.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-signpath)
+- [SignPath Homepage](https://signpath.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected SignPath account; action schemas should be fetched before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

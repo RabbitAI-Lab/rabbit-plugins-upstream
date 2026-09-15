@@ -1,45 +1,56 @@
-## Description: <br>
-DingTalk Bot helps agents send DingTalk custom bot messages through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DingTalk Bot (dingtalk.com). Use this skill for DingTalk Bot requests that send supported custom bot webhook messages through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to send text, markdown, link, feed card, and action card messages to DingTalk custom bot webhooks through an OOMOL-connected DingTalk Bot account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send messages through an OOMOL-connected DingTalk webhook. <br>
-Mitigation: Review the message content, target, payload, and expected effect before approving any write action. <br>
-Risk: The optional oo CLI installer executes a remote install script. <br>
-Mitigation: Run the installer only when the CLI is needed and only if the installer source is trusted. <br>
-Risk: The skill depends on an active OOMOL account connection and server-side credentials. <br>
-Mitigation: Install it only for environments where OOMOL-managed DingTalk Bot access is intended and authorized. <br>
+## Use Case:
 
+Developers and operators use this skill to send text, markdown, link, action card, and feed card messages through a connected DingTalk custom bot webhook. It is intended for agent workflows that need schema-checked bot message payloads and user confirmation before write actions.
 
-## Reference(s): <br>
-- [DingTalk Bot ClawHub Page](https://clawhub.ai/oomol/oo-dingtalk-bot) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [DingTalk](https://www.dingtalk.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before building payloads and to confirm write actions before sending messages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path can execute remote installer code for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before use and prefer a pinned or otherwise verifiable oo CLI installation method when available.
+
+Risk: All listed actions send messages through a connected DingTalk bot.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and intended effect before executing any send action.
+
+## Reference(s):
+
+- [DingTalk Bot homepage](https://www.dingtalk.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dingtalk-bot)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces schema inspection and connector execution guidance; write actions require confirmation of the exact message payload before sending.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

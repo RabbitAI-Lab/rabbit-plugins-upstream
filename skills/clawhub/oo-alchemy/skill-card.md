@@ -1,46 +1,56 @@
-## Description: <br>
-Alchemy (alchemy.com). Use this skill for ANY Alchemy request - searching and reading data. Whenever a task involves Alchemy, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alchemy connector guidance for searching and reading Alchemy data through an OOMOL-connected account instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query Alchemy data through an OOMOL-connected account and the oo CLI. It supports read-only Ethereum mainnet requests for asset transfers, NFT ownership, NFT metadata, token balances, and token metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires trust in OOMOL and uses an OOMOL-connected Alchemy account through the oo CLI. <br>
-Mitigation: Install it only when OOMOL is trusted, review OOMOL sign-in and Alchemy connection setup before use, and rely on the server-side credential flow rather than handling raw API tokens. <br>
-Risk: Wallet or contract addresses may be sensitive or unnecessary for some requests. <br>
-Mitigation: Provide wallet or contract addresses only when they are relevant to the user's query. <br>
-Risk: Alchemy connection, authentication, or billing state can prevent connector actions from completing. <br>
-Mitigation: Use the documented setup fallbacks only after a command fails with the matching auth, connection, scope, credential, or billing error. <br>
+## Use Case:
 
+Developers and external users use this skill to query Ethereum mainnet asset transfers, NFT metadata, owner NFTs, ERC-20 balances, and token metadata through an OOMOL-connected Alchemy account.
 
-## Reference(s): <br>
-- [Alchemy skill page](https://clawhub.ai/oomol/oo-alchemy) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Alchemy homepage](https://www.alchemy.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions can run unverified remote installer scripts on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review official installation instructions, use a trusted package source, and avoid pipe-to-shell installer commands unless local code execution risk is accepted.
+
+Risk: Alchemy access is mediated through OOMOL and requires oo CLI setup and account connection.
+
+Mitigation: Install only when the user is comfortable with OOMOL-mediated access and has confirmed the account connection and billing state.
+
+## Reference(s):
+
+- [ClawHub Alchemy Skill](https://clawhub.ai/oomol/skills/oo-alchemy)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Installation Guide](https://cli.oomol.com/install-guide.md)
+- [Alchemy Homepage](https://www.alchemy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent output should inspect the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,57 @@
-## Description: <br>
-FlowiseAI (flowiseai.com) supports reading, creating, and updating data through an OOMOL-connected FlowiseAI account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FlowiseAI (flowiseai.com). Use this skill for ANY FlowiseAI request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect FlowiseAI connector schemas, fetch the protected chatflow, and send JSON prediction requests through the oo CLI. It is intended for users who have connected FlowiseAI to their OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected FlowiseAI account and OOMOL-managed credentials. <br>
-Mitigation: Install it only if you trust OOMOL and intend the agent to use your connected FlowiseAI account. <br>
-Risk: The send_message action can submit prediction requests to the protected chatflow. <br>
-Mitigation: Review and approve the exact JSON payload before running write actions. <br>
-Risk: First-time setup may install the oo CLI from an external installer. <br>
-Mitigation: Verify the oo CLI installer source before installing in managed or sensitive environments. <br>
+## Use Case:
 
+Developers and external users use this skill to operate FlowiseAI through an OOMOL-connected account, inspect action schemas, fetch the connected chatflow, and send JSON prediction requests after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-flowiseai) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [FlowiseAI homepage](https://flowiseai.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [FlowiseAI connection setup](https://console.oomol.com/app-connections?provider=flowiseai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: The setup path asks users to run unpinned remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, pinned, or checksum-checked method before using the skill.
+
+Risk: The send_message action sends a JSON prediction request to the connected FlowiseAI chatflow.
+
+Mitigation: Confirm the exact message payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [FlowiseAI homepage](https://flowiseai.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-flowiseai)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Omnisend helps agents work with Omnisend contact and segment data through the OOMOL-backed oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Omnisend helps agents read, create, update, and delete Omnisend contacts, tags, and segments through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to read Omnisend contacts and segments, create or update contacts, and manage contact tags through a connected OOMOL account. It is suited for Omnisend support, marketing operations, and workflow automation tasks that need schema-checked connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Omnisend contact data through the connected OOMOL account. <br>
-Mitigation: Install only when the publisher is trusted and the connected Omnisend account is appropriate for the task. <br>
-Risk: Write and destructive actions can update contacts or remove contact tags. <br>
-Mitigation: Review the exact payload and intended effect with the user before approving contact updates, tag changes, or destructive operations. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Omnisend contacts, tags, and segments from an agent workflow while relying on an existing OOMOL account connection.
 
-## Reference(s): <br>
-- [ClawHub Omnisend skill page](https://clawhub.ai/oomol/skills/oo-omnisend) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Omnisend homepage](https://www.omnisend.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: The setup path includes a remote installer that could execute code before users inspect it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the installer before use; prefer a pinned, verified installer or package-manager installation and avoid elevated shells.
+
+Risk: Write and destructive Omnisend actions can change contact tags or contact records.
+
+Mitigation: Inspect the live action schema and confirm the exact payload, target, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [Omnisend Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-omnisend)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Omnisend Homepage](https://www.omnisend.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions can return JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

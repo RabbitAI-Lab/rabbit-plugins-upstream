@@ -1,44 +1,55 @@
-## Description: <br>
-Glyphic (goairspeed.com). Use this skill for searching and reading Glyphic data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Glyphic (goairspeed.com). Use this skill for ANY Glyphic request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Glyphic connector schemas and retrieve calls, transcripts, summaries, media metadata, snippets, tags, playbooks, and playbook versions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve sensitive Glyphic business data, including call transcripts, summaries, media metadata, insights, tags, and playbooks. <br>
-Mitigation: Use it only with authorized Glyphic accounts and review retrieved content before sharing it outside the intended workflow. <br>
-Risk: First-time setup can require installing the oo CLI, signing in, or reconnecting the Glyphic account. <br>
-Mitigation: Run setup only when a command fails with an installation, authentication, connection, or billing error, and confirm account context before retrying. <br>
+## Use Case:
 
+Developers and agents use this skill to search and read Glyphic data through an OOMOL-connected account, including calls, transcripts, summaries, media metadata, snippets, insights, playbooks, playbook versions, and call tags.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-glyphic) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Glyphic homepage](https://www.goairspeed.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, json] <br>
-**Output Format:** [Markdown guidance with shell command examples; connector actions return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup guidance includes remote installer commands that could execute unverified code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a separately trusted, verified process, then use this skill only after oo is already installed and connected.
+
+Risk: Glyphic read actions can return call transcripts, summaries, media metadata, snippets, and insights.
+
+Mitigation: Request only user-authorized Glyphic records and keep returned call data within the intended task context.
+
+## Reference(s):
+
+- [Glyphic homepage](https://www.goairspeed.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-glyphic)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Glyphic connector actions with live schema inspection before payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

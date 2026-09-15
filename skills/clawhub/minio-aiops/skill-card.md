@@ -1,47 +1,66 @@
-## Description: <br>
-MinIO AIops helps agents diagnose and operate MinIO object storage, including capacity root-cause analysis, bucket exposure auditing, lifecycle gap analysis, healing checks, service health, per-bucket configuration reads, and governed bucket changes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MinIO AIops helps agents diagnose and operate MinIO object storage, including capacity RCA, bucket exposure audits, lifecycle gaps, healing health, WORM retention, IAM exposure, and governed bucket writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, storage operators, and agents use this skill to inspect MinIO health, capacity pressure, bucket exposure, lifecycle cleanup opportunities, healing status, and selected bucket configuration changes. It is intended for MinIO deployments where the connected access key determines what operations are permitted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent configured with write-capable MinIO credentials can perform significant bucket changes because the skill does not provide a built-in read-only or approval mode. <br>
-Mitigation: Use MinIO IAM to scope credentials to the exact task, prefer read-only keys for diagnosis, and switch to narrowly scoped write credentials only when changes are intended. <br>
-Risk: Bucket policy, lifecycle, versioning, quota, purge, and delete operations can affect production data or access. <br>
-Mitigation: Use dry-run previews where available, rely on the CLI double-confirmation path for destructive operations, review audit records, and use undo support for reversible changes. <br>
-Risk: Credential and master-password handling can expose access to the configured MinIO deployment if operational secrets are mishandled. <br>
-Mitigation: Keep secret keys in the encrypted store, protect MINIO_AIOPS_MASTER_PASSWORD, avoid plaintext legacy secret environment variables, and use separate credentials for separate targets. <br>
+## Use Case:
 
+Developers, SREs, and storage operators use this skill to triage MinIO health, capacity, exposure, lifecycle, retention, IAM, and healing issues, then perform audited maintenance changes when appropriate.
 
-## Reference(s): <br>
-- [MinIO AIops project homepage](https://github.com/AIops-tools/MinIO-AIops) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/minio-aiops) <br>
-- [minio-aiops capabilities](references/capabilities.md) <br>
-- [minio-aiops CLI reference](references/cli-reference.md) <br>
-- [minio-aiops setup & security guide](references/setup-guide.md) <br>
-- [Agent guardrails for minio-aiops](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MinIO diagnostic findings, ranked risks, suggested actions, dry-run instructions, and configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence) <br>
+Risk: The skill can change storage and IAM state and has no built-in read-only or approval gate for MCP writes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only MinIO access keys by default and grant write or admin-capable credentials only for deliberate maintenance windows.
+
+Risk: The skill runs through an external minio-aiops package that should not be installed implicitly without verification.
+
+Mitigation: Pin and verify the exact minio-aiops package release before installing or running it.
+
+Risk: Audit logs provide after-the-fact visibility rather than pre-execution approval.
+
+Mitigation: Require operator approval before write workflows and review audit and undo records after maintenance.
+
+Risk: The master password may be exposed if placed in broadly readable MCP client configuration.
+
+Mitigation: Store MINIO_AIOPS_MASTER_PASSWORD through a protected secret mechanism.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/minio-aiops)
+- [Project Homepage](https://github.com/AIops-tools/MinIO-AIops)
+- [Capabilities Reference](references/capabilities.md)
+- [Setup and Security Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with command examples and structured MinIO operations guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dry-run steps, audit and undo guidance, and truncation notes for bounded listings.]
+
+## Skill Version(s):
+
+0.12.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-Keyword.com lets agents read Keyword.com projects, groups, keywords, rankings, regions, and current-user data through the OOMOL keyword connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Keyword.com (keyword.com). Use this skill for ANY Keyword.com request \u2014 searching and reading data. Whenever a task involves Keyword.com, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve Keyword.com account, project, region, keyword, and ranking data from a connected OOMOL account without direct API token handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Keyword.com/OOMOL account and may access account-specific keyword and ranking data. <br>
-Mitigation: Grant only the expected Keyword.com permissions and keep credentials managed through OOMOL; do not expose raw tokens to the agent. <br>
-Risk: Connector schemas and account access can change or expire, causing failed commands or incorrect payload assumptions. <br>
-Mitigation: Fetch the live connector schema before each action and retry setup only after authentication, scope, credential, or billing errors. <br>
-Risk: CLI installation or authentication setup changes the local environment. <br>
-Mitigation: Run setup steps only when the CLI or connection is missing and review install or auth commands before execution. <br>
+## Use Case:
 
+External users and developers use this skill to query Keyword.com account data through an OOMOL-connected account, including user profiles, projects, regions, keywords, and keyword ranking data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-keyword) <br>
-- [Keyword.com homepage](https://keyword.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run read-only Keyword.com connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The setup path includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use and prefer a verified package-manager or manually checked CLI install.
+
+Risk: The skill requires connecting a Keyword.com account through an OOMOL-managed connector.
+
+Mitigation: Use it only when the user trusts OOMOL, understands the connector relationship, and has confirmed the intended Keyword.com connection.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-keyword)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Keyword.com](https://keyword.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution and OOMOL-managed credentials for Keyword.com access.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-Bark helps an agent read Bark server information and send Bark notifications through an OOMOL-connected Bark account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bark lets an agent inspect live Bark connector schemas and run read or notification-sending actions through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Bark from an agent, including inspecting server information and sending single-device, batch, or pre-encrypted push notifications after approval for write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Bark account and sensitive credentials handled through the OOMOL connection. <br>
-Mitigation: Install only if you are comfortable using the connected Bark account and the disclosed credential flow. <br>
-Risk: Notification actions can send messages to Bark devices or explicit device keys. <br>
-Mitigation: Confirm the exact payload and intended recipients before any write action is executed. <br>
-Risk: The oo CLI installer may run shell or PowerShell commands during setup. <br>
-Mitigation: Review the installer command and install guide before running setup on a new machine. <br>
+## Use Case:
 
+External users and agents use this skill to inspect Bark action schemas, fetch Bark server information, and send standard, batch, or pre-encrypted notifications through an OOMOL-connected Bark account.
 
-## Reference(s): <br>
-- [ClawHub Bark skill page](https://clawhub.ai/oomol/oo-bark) <br>
-- [Bark homepage](https://bark.day.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: First-time setup presents remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or a download-and-verify installation flow before running the oo CLI.
+
+Risk: Write actions can send notifications to connected Bark devices, including batch and pre-encrypted notification payloads.
+
+Mitigation: Confirm the exact payload, target devices or keys, and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Bark Skill](https://clawhub.ai/oomol/skills/oo-bark)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Bark Homepage](https://bark.day.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

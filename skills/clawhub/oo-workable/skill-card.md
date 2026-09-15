@@ -1,43 +1,56 @@
-## Description: <br>
-Provides read-only Workable candidate and job search and retrieval through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Workable helps agents search and read Workable candidate and job data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and people operations users can ask an agent to list Workable jobs and candidates or retrieve candidate and job details from a connected Workable account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve Workable candidate and job information through an OOMOL-connected account. <br>
-Mitigation: Connect only trusted OOMOL and Workable accounts, keep use to read requests, and review retrieved recruiting data before sharing it. <br>
-Risk: Workable connector contracts can change over time. <br>
-Mitigation: Inspect the live action schema before constructing payloads, as the artifact instructs. <br>
+## Use Case:
 
+Recruiting teams and agents use this skill to inspect Workable candidates and jobs through an authenticated, connected Workable account. It supports read-only list and detail retrieval workflows with optional filters.
 
-## Reference(s): <br>
-- [ClawHub Workable Skill Page](https://clawhub.ai/oomol/oo-workable) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Workable Homepage](https://www.workable.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live Workable connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted and verified source, preferably through a pinned, signed, or checksum-verified package path.
+
+Risk: The skill queries data from a connected Workable account.
+
+Mitigation: Use it only when the user intends to read Workable data from that connected account, and inspect the action schema before sending filters or identifiers.
+
+## Reference(s):
+
+- [Workable homepage](https://www.workable.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-workable)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from executed actions are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

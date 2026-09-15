@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "V2EX"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["v2ex"]
   icon: "https://static.oomol.com/logo/third-party/v2ex.png"
 ---

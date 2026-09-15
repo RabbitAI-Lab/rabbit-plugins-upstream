@@ -1,42 +1,51 @@
-## Description: <br>
-Scrapingdog helps agents search and read web, Google Search, Google Maps, and Google Scholar data through an OOMOL-connected Scrapingdog account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scrapingdog helps an agent fetch web pages and retrieve parsed Scrapingdog results for Google Search, Google Scholar, Google Maps search, Google Maps place lookup, and account usage requests through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Scrapingdog scraping, search, Maps, Scholar, and account-usage requests through the OOMOL connector without handling raw API keys. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scrapingdog requests and results flow through the OOMOL connector account, and queried URLs or search terms may be sensitive. <br>
-Mitigation: Install only after trusting OOMOL and the oo CLI, and avoid sending confidential targets or queries unless the connected account and data handling are approved. <br>
-Risk: The skill depends on a signed-in OOMOL account, a connected Scrapingdog credential, and sufficient account credit. <br>
-Mitigation: Use the documented authentication, connection-renewal, and billing-error paths only when commands fail for those reasons. <br>
+## Use Case:
 
+Developers and external users use this skill to run Scrapingdog read and search actions from an agent after their OOMOL account and Scrapingdog connection are configured.
 
-## Reference(s): <br>
-- [Scrapingdog homepage](https://www.scrapingdog.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-scrapingdog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release metadata) <br>
+Risk: First-time setup instructions include remote installer commands that execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup instructions before installation, prefer verified signed or package-manager sources for the oo CLI, and run remote installer commands only when the OOMOL distribution channel is trusted.
+
+## Reference(s):
+
+- [ClawHub Scrapingdog Skill](https://clawhub.ai/oomol/skills/oo-scrapingdog)
+- [Scrapingdog Homepage](https://www.scrapingdog.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routine actions return connector JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

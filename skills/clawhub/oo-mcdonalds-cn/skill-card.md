@@ -1,44 +1,51 @@
-## Description: <br>
-McDonald's China helps agents search and read McDonald's China city, store, menu, and product information through the OOMOL mcdonalds_cn connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+McDonald's China (open.mcd.cn) lets agents search and read McDonald's China data instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect McDonald's China locations, store business data, menus, and product details through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected McDonald's China provider account. <br>
-Mitigation: Install or authenticate the oo CLI only when needed, and connect the provider through the OOMOL account flow if an auth or connection error occurs. <br>
-Risk: Using the connector can consume paid OOMOL credits. <br>
-Mitigation: Review commands before running them and resolve HTTP 402 or insufficient-credit errors through OOMOL billing before retrying. <br>
-Risk: Connector schemas and service behavior may change over time. <br>
-Mitigation: Fetch the live action schema before constructing a payload and keep action use to the documented read-oriented lookups unless a future write action is explicitly confirmed. <br>
+## Use Case:
 
+Agents use this skill to search and read McDonald's China cities, stores, business details, menus, product search results, and product details through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-mcdonalds-cn) <br>
-- [McDonald's China homepage](https://open.mcd.cn) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release and skill metadata) <br>
+Risk: The first-time setup instructions include remote installer commands that execute downloaded shell or PowerShell content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer an official package, pinned release, checksum, or signature-verification path for installing the oo CLI.
+
+## Reference(s):
+
+- [McDonald's China homepage](https://open.mcd.cn)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mcdonalds-cn)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before actions and returns connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

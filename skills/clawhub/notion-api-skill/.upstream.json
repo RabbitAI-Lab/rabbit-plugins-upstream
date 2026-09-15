@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/notion-api-skill",
   "slug": "notion-api-skill",
   "ownerHandle": null,
-  "version": "1.0.11",
-  "updatedAt": 1782600375396,
-  "contentHash": "c69917fd789df5e8ac9001cc74519559af62173df03bcb55c61925b4e6fe81db",
-  "fetchedAt": "2026-07-26T18:22:54.444Z"
+  "version": "1.2.2",
+  "updatedAt": 1789287373991,
+  "contentHash": "1fcfc42eef0161af7b5e67da17250cf07dac96405e1e41fe9d8e6edebd3507b8",
+  "fetchedAt": "2026-09-15T13:09:51.808Z"
 }

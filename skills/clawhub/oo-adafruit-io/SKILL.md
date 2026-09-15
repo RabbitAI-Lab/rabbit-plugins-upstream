@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Adafruit IO"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["adafruit_io"]
   icon: "https://static.oomol.com/logo/third-party/adafruit_io.svg"
 ---

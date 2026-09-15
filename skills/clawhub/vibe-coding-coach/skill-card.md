@@ -1,40 +1,57 @@
-## Description: <br>
-Vibe Coding Coach helps users plan AI-assisted software projects, choose coding tools, structure prompts and workflows, debug issues, and prepare prototypes for deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vibe Coding Coach helps users plan, prompt, debug, review, and ship software with AI coding tools while managing context, quality, security, cost, and common failure modes.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users, product managers, founders, designers, students, and developers use this skill to turn app ideas into AI coding sessions, choose tools, craft prompts, debug AI-built apps, and prepare prototypes for deployment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may cause the skill to appear for general AI coding or app-building questions where its coaching is not needed. <br>
-Mitigation: Confirm that the request is about AI-assisted app-building workflow guidance before applying the skill's recommendations. <br>
-Risk: Guidance for deploying AI-generated applications can be incomplete for security-sensitive features such as authentication, payments, or private data handling. <br>
-Mitigation: Review AI-generated code and obtain qualified security or engineering review before deploying production systems with real users or sensitive data. <br>
+## Use Case:
 
+External users, founders, product managers, designers, developers, and students use this skill to choose AI coding tools, structure prompts and workflows, debug AI-built apps, and apply production-readiness checklists before shipping.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/vibe-coding-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with prompt templates, checklists, and tool recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include staged prompts, diagnostic questions, tool comparisons, and verification checklists for AI coding workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The skill may activate for broad AI-coding help requests and provide advisory guidance beyond the user's exact project context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat its responses as coaching, ask for project-specific assumptions and verification steps, and review recommendations before applying them.
+
+Risk: Users may be tempted to share secrets, production credentials, or real customer data while debugging with AI coding tools.
+
+Mitigation: Keep secrets in environment variables, use redacted or synthetic data in prompts, and avoid pasting credentials or sensitive customer data into AI sessions.
+
+Risk: AI-generated changes for authentication, payments, privacy, or other sensitive features can miss security and compliance requirements.
+
+Mitigation: Require professional review and explicit security checks before shipping sensitive features to production.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/vibe-coding-coach)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown coaching guidance with prompt templates, checklists, comparison tables, and verification steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Bilingual English and Chinese guidance; no execution, credential collection, persistence, or privileged access requested.]
+
+## Skill Version(s):
+
+3.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

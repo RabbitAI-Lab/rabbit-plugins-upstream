@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "eSignatures.com"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["esignatures_io"]
   icon: "https://static.oomol.com/logo/third-party/esignatures_io.png"
 ---

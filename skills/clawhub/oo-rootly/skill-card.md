@@ -1,46 +1,55 @@
-## Description: <br>
-Rootly (rootly.com). Use this skill for ANY Rootly request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Rootly requests that search and read Rootly data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and incident-response operators use this skill to search and read Rootly users, incidents, services, and teams through an OOMOL-connected Rootly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Rootly incident and account data may be sensitive. <br>
-Mitigation: Use the skill only for explicit Rootly tasks and treat returned incident, user, service, and team data as sensitive. <br>
-Risk: Live connector schemas may differ from assumed payload shapes. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing payloads. <br>
-Risk: Authentication, connection, scope, credential, or billing errors can block Rootly access. <br>
-Mitigation: Use the documented setup and recovery steps only after a command fails for the matching reason. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Rootly connector schemas and retrieve Rootly users, incidents, services, and teams through an authenticated OOMOL CLI connection.
 
-## Reference(s): <br>
-- [ClawHub Rootly skill page](https://clawhub.ai/oomol/skills/oo-rootly) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Rootly homepage](https://rootly.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Rootly connector responses are returned by the oo CLI as JSON when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release version and skill metadata) <br>
+Risk: The skill relies on broad authenticated OOMOL CLI access for Rootly operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user is comfortable with the agent using the authenticated OOMOL CLI, and review proposed oo commands before execution.
+
+Risk: The first-time setup guidance includes remote installer commands.
+
+Mitigation: Prefer manual installation from verified official instructions before allowing an agent to run installer commands.
+
+## Reference(s):
+
+- [ClawHub Rootly Skill](https://clawhub.ai/oomol/skills/oo-rootly)
+- [Rootly Homepage](https://rootly.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Rootly connector responses are JSON objects returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Shippo (goshippo.com). Use this skill for ANY Shippo request - reading, creating, and updating data. Whenever a task involves Shippo, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shippo (goshippo.com). Use this skill for Shippo requests involving reading, creating, and updating account data through an OOMOL-connected Shippo account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Shippo through an OOMOL-connected account for shipping workflows such as reading addresses and parcels, creating address or parcel objects, validating addresses, and checking tracking status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Shippo addresses and parcels, which changes state in the connected Shippo account. <br>
-Mitigation: Confirm write payloads and intended effects with the user before running actions tagged [write]. <br>
-Risk: Shippo workflows can expose addresses, parcel details, tracking information, and account connection state. <br>
-Mitigation: Treat shipping and account data as sensitive and share only what is needed for the user's request. <br>
-Risk: First-time setup may require installing the oo CLI or connecting a Shippo account. <br>
-Mitigation: Run setup or account connection steps only after an auth, connection, or missing-command failure and only from trusted sources. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Shippo via the OOMOL `oo` CLI, including inspecting action schemas, creating and retrieving address or parcel objects, listing account objects, validating addresses, and checking tracking status.
 
-## Reference(s): <br>
-- [Shippo homepage](https://goshippo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON responses from the OOMOL Shippo connector when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Fallback setup instructs users or agents to run remote installer scripts directly from OOMOL URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official CLI installation path before installation and prefer a pinned or verifiable installer where possible.
+
+Risk: Write actions can create Shippo address and parcel objects in the connected account.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Shippo skill page](https://clawhub.ai/oomol/skills/oo-shippo)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Shippo homepage](https://goshippo.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data object and meta.executionId when commands are run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

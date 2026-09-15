@@ -1,44 +1,57 @@
-## Description: <br>
-Enables agents to read, create, and update Atlas.so customer, account, and session data through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Atlas.so (atlas.so). Use this skill for ANY Atlas.so request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and Atlas.so operators use this skill to let an agent inspect live connector schemas, retrieve Atlas.so records, and prepare approved customer or account updates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Atlas.so customer, account, and session data through an OOMOL-connected account. <br>
-Mitigation: Connect only the intended Atlas.so account and scopes, and confirm this data access is acceptable before installing or running the skill. <br>
-Risk: Write actions can create, update, or upsert Atlas.so customer and account records. <br>
-Mitigation: Review the exact action name, target record, and JSON payload with the user before executing any write action. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Use the documented installer only when the CLI is missing, and inspect the installer before running it. <br>
+## Use Case:
 
+External users and developers use this skill to operate Atlas.so through an OOMOL-connected account, including reading customer, account, and session data and performing confirmed customer or account updates.
 
-## Reference(s): <br>
-- [Atlas.so homepage](https://atlas.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: The first-time setup path directs users to run a remote installer, which could execute arbitrary code if the source is not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a verified, versioned oo CLI release with checksums or signatures.
+
+Risk: The skill can read customer, account, and session data and can make customer or account updates through the connected OOMOL account.
+
+Mitigation: Connect Atlas.so only when that access is intended, and confirm the exact payload and effect before running write or upsert actions.
+
+## Reference(s):
+
+- [ClawHub Atlas.so skill page](https://clawhub.ai/oomol/skills/oo-atlas-so)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Atlas.so homepage](https://atlas.so)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects that include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

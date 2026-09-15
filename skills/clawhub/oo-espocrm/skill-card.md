@@ -1,43 +1,55 @@
-## Description: <br>
-EspoCRM (espocrm.com). Use this skill for ANY EspoCRM request: reading, creating, updating, and deleting data through an OOMOL-connected EspoCRM account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for EspoCRM requests to read, create, update, and delete data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to read EspoCRM users, metadata, records, and record lists, and to create, update, or delete CRM records through the OOMOL oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive EspoCRM account data through the connected OOMOL account. <br>
-Mitigation: Install it only when OOMOL is trusted with EspoCRM access and run it under an account with appropriate CRM permissions. <br>
-Risk: Write and delete actions can change or remove real CRM records. <br>
-Mitigation: Review the exact payload and intended effect before approving create, update, or delete actions. <br>
+## Use Case:
 
+Developers and operators use this skill to work with EspoCRM records, metadata, and current-user data through an OOMOL-connected account. It supports read actions directly and requires explicit user confirmation before create, update, or delete operations.
 
-## Reference(s): <br>
-- [EspoCRM homepage](https://www.espocrm.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-espocrm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agents inspect the live EspoCRM action schema before constructing connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path can run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use, prefer a trusted version-pinned oo CLI installation with checksum or signature verification, and avoid running installer commands unless setup actually fails.
+
+Risk: Create, update, and delete actions can change or remove EspoCRM data.
+
+Mitigation: Confirm the exact action, target record, payload, and expected effect with the user before running write or destructive connector actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [EspoCRM homepage](https://www.espocrm.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

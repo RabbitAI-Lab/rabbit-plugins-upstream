@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BaseLinker"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["baselinker"]
   icon: "https://static.oomol.com/logo/third-party/baselinker.svg"
 ---

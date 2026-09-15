@@ -1,43 +1,60 @@
-## Description: <br>
-Replicates a reference image or video by recreating its look and structure with the user's own subject, product, or characters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Studies a provided reference image or video and recreates its look and structure using the user's own subject, product, or characters.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, creators, and developers use this skill to ask a dLazy-hosted agent to recreate the visual style, composition, and structure of supplied reference images or videos using their own content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached reference media are sent to dLazy services for processing. <br>
-Mitigation: Install and use the skill only when sending that content to dLazy is acceptable for the task and data involved. <br>
-Risk: The dLazy API key is saved in local CLI configuration and project sessions can retain task context. <br>
-Mitigation: Use explicit new-project or continue-project commands, clear sessions when switching tasks, and rotate or revoke the API key if the local config or account is no longer trusted. <br>
+## Use Case:
 
+External users and developers use this skill to invoke the dLazy hosted video-image-replicate agent for reference-based image or video recreation. It supports project-based continuation and optional local file attachments through the dLazy CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-image-replicate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference dLazy project IDs, authentication state, uploaded media, and streamed responses from the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files are sent to the third-party dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content you intend to share with dLazy, and avoid attaching sensitive or restricted files.
+
+Risk: The dLazy API key is stored locally or supplied to the CLI.
+
+Mitigation: Use scoped organization keys where available, protect the local config file, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Installing the CLI globally adds a third-party npm package to the user's environment.
+
+Mitigation: Prefer the pinned npx invocation for on-demand use, or review the linked CLI source before global installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-image-replicate)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and streamed CLI text output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires npm or npx, dLazy authentication, and optional local file uploads through the dLazy CLI.]
+
+## Skill Version(s):
+
+1.3.16 (source: release evidence; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

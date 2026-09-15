@@ -1,45 +1,61 @@
-## Description: <br>
-AgentMail (agentmail.to) lets agents read, create, update, and delete AgentMail data through OOMOL's AgentMail connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AgentMail (agentmail.to) helps an agent read, search, create, update, send, and delete AgentMail resources through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent read, search, draft, send, label, and administer AgentMail resources through an OOMOL-connected account. It supports mail workflows as well as account resources such as inboxes, pods, domains, webhooks, metrics, API keys, and allow or block lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or remove real AgentMail resources, including mail, drafts, inboxes, domains, webhooks, API keys, and allow or block lists. <br>
-Mitigation: Review the exact action name, target resource, and JSON payload before approving any write, send, API-key, webhook, domain, inbox, or delete operation. <br>
-Risk: The skill requires a trusted OOMOL-connected account with sensitive AgentMail access. <br>
-Mitigation: Install and use the skill only when the OOMOL publisher and connected AgentMail account are trusted for the intended mail-management tasks. <br>
-Risk: Incorrect payloads could affect unintended AgentMail resources. <br>
-Mitigation: Inspect the live connector schema before each action and match payloads to the authoritative input fields. <br>
+## Use Case:
 
+Developers and operators use this skill to manage AgentMail inboxes, messages, drafts, domains, pods, webhooks, API keys, metrics, and allow or block lists from an agent workflow.
 
-## Reference(s): <br>
-- [ClawHub AgentMail skill page](https://clawhub.ai/oomol/oo-agent-mail) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [AgentMail homepage](https://agentmail.to) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions return JSON responses from the oo connector when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer payload before execution and prefer a verified manual installation path for the oo CLI.
+
+Risk: The skill can send messages, create resources, update labels, manage API keys and webhooks, and delete AgentMail data.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect before any write or destructive action.
+
+Risk: The security verdict is suspicious because of unverified remote installer scripts.
+
+Mitigation: Install only when the user trusts OOMOL and the oo CLI, and avoid letting an agent run curl-to-shell or PowerShell download-to-execute commands directly.
+
+## Reference(s):
+
+- [AgentMail homepage](https://agentmail.to)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-agent-mail)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; state-changing and destructive actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

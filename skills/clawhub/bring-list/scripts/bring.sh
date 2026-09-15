@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 # bring.sh — CLI for the Bring! Shopping Lists API
 # Requires: curl, jq
-# Auth: BRING_EMAIL + BRING_PASSWORD env vars, or ~/.config/bring/credentials.json
+# Auth: temporary BRING_EMAIL + BRING_PASSWORD env vars for login only; profile
+# preferences and tokens use protected local files, never a stored password.
 set -euo pipefail
+# Every credential, token, and temporary file created by this process starts
+# owner-only. Individual writes below also use atomic same-directory renames.
+umask 077
 
 ###############################################################################
 # Constants
@@ -20,6 +24,42 @@ BRING_COUNTRY="${BRING_COUNTRY:-DE}"
 ###############################################################################
 die()  { echo "ERROR: $*" >&2; exit 1; }
 info() { echo "$*" >&2; }
+
+ensure_private_dir() {
+  local dir="$1"
+  [[ ! -L "$dir" ]] || die "Refusing symlinked secret directory: $dir"
+  mkdir -p -m 700 -- "$dir"
+  [[ -d "$dir" && -O "$dir" && ! -L "$dir" ]] || die "Secret directory must be an owner-controlled directory: $dir"
+  chmod 700 -- "$dir"
+}
+
+# Read stdin into a private file in the destination directory, then atomically
+# replace the destination. Refuse special files and symlinks rather than
+# following them while handling credentials or tokens.
+atomic_secret_write() {
+  local target="$1" dir base tmp
+  dir="$(dirname "$target")"
+  base="$(basename "$target")"
+  ensure_private_dir "$dir"
+
+  if [[ -L "$target" || ( -e "$target" && ( ! -f "$target" || ! -O "$target" ) ) ]]; then
+    die "Refusing unsafe secret file: $target"
+  fi
+
+  tmp="$(mktemp "${dir}/.${base}.tmp.XXXXXX")" || die "Could not create private temporary file"
+  chmod 600 -- "$tmp"
+  if ! cat > "$tmp"; then
+    rm -f -- "$tmp"
+    die "Could not write private temporary file"
+  fi
+  mv -f -- "$tmp" "$target"
+  chmod 600 -- "$target"
+}
+
+write_default_list() {
+  local list_name="$1"
+  jq --arg list "$list_name" '. + {default_list: $list}' "$CRED_FILE" | atomic_secret_write "$CRED_FILE"
+}
 
 require_cmd() {
   for cmd in "$@"; do
@@ -40,24 +80,12 @@ require_cmd curl jq
 ###############################################################################
 # Credentials
 ###############################################################################
-load_credentials() {
-  # Priority: env vars > credentials file
-  if [[ -n "${BRING_EMAIL:-}" && -n "${BRING_PASSWORD:-}" ]]; then
-    :
-  elif [[ -f "$CRED_FILE" ]]; then
-    BRING_EMAIL="$(jq -r '.email // empty' "$CRED_FILE" 2>/dev/null)" || true
-    BRING_PASSWORD="$(jq -r '.password // empty' "$CRED_FILE" 2>/dev/null)" || true
-    export BRING_EMAIL BRING_PASSWORD
-  fi
-
-  if [[ -z "${BRING_EMAIL:-}" || -z "${BRING_PASSWORD:-}" ]]; then
-    die "No credentials found. Set BRING_EMAIL and BRING_PASSWORD env vars, or create $CRED_FILE with {\"email\":\"...\",\"password\":\"...\"}"
-  fi
-
-  # Load default list if configured
+load_profile() {
+  # The profile is non-secret. Passwords are never loaded from disk; an
+  # interactive setup or explicitly supplied environment variables are needed
+  # only when the refresh token has expired.
   if [[ -z "${BRING_DEFAULT_LIST:-}" && -f "$CRED_FILE" ]]; then
     BRING_DEFAULT_LIST="$(jq -r '.default_list // empty' "$CRED_FILE" 2>/dev/null)" || true
-    export BRING_DEFAULT_LIST
   fi
 
   # Load country override if configured
@@ -67,6 +95,12 @@ load_credentials() {
     if [[ -n "$cfg_country" ]]; then
       BRING_COUNTRY="$cfg_country"
     fi
+  fi
+}
+
+load_login_credentials() {
+  if [[ -z "${BRING_EMAIL:-}" || -z "${BRING_PASSWORD:-}" ]]; then
+    die "No login credentials in this session. Run 'bring.sh setup' in your own terminal; passwords are never stored on disk."
   fi
 }
 
@@ -88,9 +122,7 @@ resolve_list_arg() {
 # Token management
 ###############################################################################
 save_token() {
-  mkdir -p "$(dirname "$TOKEN_FILE")"
-  cat > "$TOKEN_FILE"
-  chmod 600 "$TOKEN_FILE"
+  atomic_secret_write "$TOKEN_FILE"
 }
 
 load_token() {
@@ -117,41 +149,44 @@ get_header() {
   jq -r ".$field // empty" "$TOKEN_FILE" 2>/dev/null
 }
 
-auth_headers() {
-  local token_type access_token uuid public_uuid
+authenticated_curl() {
+  local method="$1" url="$2"
+  shift 2
+  local token_type access_token uuid public_uuid curl_config status
   token_type="$(get_header token_type)"
   access_token="$(get_header access_token)"
   uuid="$(get_header uuid)"
   public_uuid="$(get_header publicUuid)"
 
-  echo -H "Authorization: ${token_type} ${access_token}" \
-       -H "X-BRING-API-KEY: ${API_KEY}" \
-       -H "X-BRING-CLIENT: android" \
-       -H "X-BRING-APPLICATION: bring" \
-       -H "X-BRING-COUNTRY: ${BRING_COUNTRY}" \
-       -H "X-BRING-USER-UUID: ${uuid}" \
-       -H "X-BRING-PUBLIC-USER-UUID: ${public_uuid}"
+  [[ "$BRING_COUNTRY" =~ ^[A-Za-z]{2}$ ]] || die "Invalid country code"
+  ensure_private_dir "$(dirname "$TOKEN_FILE")"
+  curl_config="$(mktemp "$(dirname "$TOKEN_FILE")/.bring-curl.XXXXXX")" || die "Could not create private curl config"
+  chmod 600 -- "$curl_config"
+  {
+    printf 'header = "Authorization: %s %s"\n' "$token_type" "$access_token"
+    printf 'header = "X-BRING-API-KEY: %s"\n' "$API_KEY"
+    printf 'header = "X-BRING-CLIENT: android"\n'
+    printf 'header = "X-BRING-APPLICATION: bring"\n'
+    printf 'header = "X-BRING-COUNTRY: %s"\n' "$BRING_COUNTRY"
+    printf 'header = "X-BRING-USER-UUID: %s"\n' "$uuid"
+    printf 'header = "X-BRING-PUBLIC-USER-UUID: %s"\n' "$public_uuid"
+  } > "$curl_config"
+
+  if curl -s -w "\n%{http_code}" --config "$curl_config" -X "$method" "$url" "$@"; then
+    status=0
+  else
+    status=$?
+  fi
+  rm -f -- "$curl_config"
+  return "$status"
 }
 
 api_call() {
   local method="$1" url="$2"
   shift 2
-  local token_type access_token uuid public_uuid
-  token_type="$(get_header token_type)"
-  access_token="$(get_header access_token)"
-  uuid="$(get_header uuid)"
-  public_uuid="$(get_header publicUuid)"
 
   local response http_code
-  response=$(curl -s -w "\n%{http_code}" -X "$method" "$url" \
-    -H "Authorization: ${token_type} ${access_token}" \
-    -H "X-BRING-API-KEY: ${API_KEY}" \
-    -H "X-BRING-CLIENT: android" \
-    -H "X-BRING-APPLICATION: bring" \
-    -H "X-BRING-COUNTRY: ${BRING_COUNTRY}" \
-    -H "X-BRING-USER-UUID: ${uuid}" \
-    -H "X-BRING-PUBLIC-USER-UUID: ${public_uuid}" \
-    "$@")
+  response=$(authenticated_curl "$method" "$url" "$@")
 
   http_code=$(echo "$response" | tail -1)
   local body
@@ -169,16 +204,22 @@ api_call() {
 # Auth commands
 ###############################################################################
 do_login() {
-  load_credentials
+  local email="${1:-${BRING_EMAIL:-}}"
+  local password="${2:-${BRING_PASSWORD:-}}"
+  if [[ -z "$email" || -z "$password" ]]; then
+    load_login_credentials
+    email="$BRING_EMAIL"
+    password="$BRING_PASSWORD"
+  fi
   local enc_email enc_pass
-  enc_email="$(urlencode "$BRING_EMAIL")"
-  enc_pass="$(urlencode "$BRING_PASSWORD")"
+  enc_email="$(urlencode "$email")"
+  enc_pass="$(urlencode "$password")"
   local response http_code
-  response=$(curl -s -w "\n%{http_code}" -X POST "${API_BASE}/v2/bringauth" \
+  response=$(printf 'email=%s&password=%s' "$enc_email" "$enc_pass" | curl -s -w "\n%{http_code}" -X POST "${API_BASE}/v2/bringauth" \
     -H "X-BRING-API-KEY: ${API_KEY}" \
     -H "X-BRING-CLIENT: android" \
     -H "X-BRING-APPLICATION: bring" \
-    -d "email=${enc_email}&password=${enc_pass}")
+    --data-binary @-)
 
   http_code=$(echo "$response" | tail -1)
   local body
@@ -204,19 +245,10 @@ do_login() {
 
 refresh_access_token() {
   local refresh_token="$1"
-  local token_type access_token uuid public_uuid
-  token_type="$(get_header token_type)"
-  access_token="$(get_header access_token)"
-  uuid="$(get_header uuid)"
-  public_uuid="$(get_header publicUuid)"
 
   local response http_code
-  response=$(curl -s -w "\n%{http_code}" -X POST "${API_BASE}/v2/bringauth/token" \
-    -H "Authorization: ${token_type} ${access_token}" \
-    -H "X-BRING-API-KEY: ${API_KEY}" \
-    -H "X-BRING-CLIENT: android" \
-    -H "X-BRING-APPLICATION: bring" \
-    -d "grant_type=refresh_token&refresh_token=${refresh_token}")
+  response=$(printf 'grant_type=refresh_token&refresh_token=%s' "$refresh_token" | \
+    authenticated_curl POST "${API_BASE}/v2/bringauth/token" --data-binary @-)
 
   http_code=$(echo "$response" | tail -1)
   local body
@@ -239,6 +271,7 @@ refresh_access_token() {
 }
 
 ensure_auth() {
+  load_profile
   if ! load_token; then
     info "No valid token found. Logging in..."
     do_login
@@ -576,86 +609,23 @@ do_complete_multi() {
   echo "Completed ${count} item(s)."
 }
 
-###############################################################################
-# Setup credentials helper
-###############################################################################
-# Available themes: grocery, home, work, school, trip, party, baby, pet, christmas, easter
-THEMES=(
-  "grocery:ch.publisheria.bring.theme.grocery"
-  "home:ch.publisheria.bring.theme.home"
-  "work:ch.publisheria.bring.theme.work"
-  "school:ch.publisheria.bring.theme.school"
-  "trip:ch.publisheria.bring.theme.trip"
-  "party:ch.publisheria.bring.theme.party"
-  "baby:ch.publisheria.bring.theme.baby"
-  "pet:ch.publisheria.bring.theme.pet"
-  "christmas:ch.publisheria.bring.theme.christmas"
-  "easter:ch.publisheria.bring.theme.easter"
-)
-
-resolve_theme() {
-  local input="${1:-grocery}"
-  input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
-  for entry in "${THEMES[@]}"; do
-    local key="${entry%%:*}"
-    local val="${entry#*:}"
-    if [[ "$key" == "$input" ]]; then
-      echo "$val"
-      return 0
-    fi
-  done
-  # Default to grocery if unknown
-  echo "ch.publisheria.bring.theme.grocery"
-}
-
-do_create_list() {
-  local name="$1"
-  local theme_key="${2:-grocery}"
-  [[ -n "$name" ]] || die "Usage: bring.sh create-list <name> [theme]"
-
-  ensure_auth
-  local uuid
-  uuid="$(get_uuid)"
-  local theme
-  theme="$(resolve_theme "$theme_key")"
-
-  local body
-  body=$(api_call POST "${API_BASE}/bringusers/${uuid}/lists" \
-    -H "Content-Type: application/x-www-form-urlencoded" \
-    -d "name=$(urlencode "$name")&theme=${theme}")
-
-  local new_uuid
-  new_uuid=$(echo "$body" | jq -r '.bringListUUID // empty')
-  echo "Created list '${name}' (theme: ${theme_key}, uuid: ${new_uuid})"
-}
-
-do_delete_list() {
-  die "The Bring! API does not support deleting lists. Please delete lists in the Bring! app."
-}
-
-###############################################################################
 do_setup() {
   echo "Bring! Credentials Setup"
   echo "========================"
   echo ""
-  echo "Your credentials will be stored in: $CRED_FILE"
+  echo "Only your email, list preference, and country are stored in: $CRED_FILE"
+  echo "Your password is used only for this login and is never written to disk."
   echo ""
   read -rp "Bring! Email: " email
   read -rsp "Bring! Password: " password
   echo ""
 
-  mkdir -p "$(dirname "$CRED_FILE")"
-  cat > "$CRED_FILE" <<EOF
-{
-  "email": "${email}",
-  "password": "${password}"
-}
-EOF
-  chmod 600 "$CRED_FILE"
-  echo "Credentials saved to $CRED_FILE"
+  jq -n --arg email "$email" '{email: $email}' | atomic_secret_write "$CRED_FILE"
+  echo "Profile saved to $CRED_FILE"
   echo ""
   echo "Testing login..."
-  BRING_EMAIL="$email" BRING_PASSWORD="$password" do_login
+  do_login "$email" "$password"
+  unset password
 
   # Show lists and ask for default
   echo ""
@@ -678,8 +648,7 @@ EOF
     local single_name
     single_name=$(echo "$lists_json" | jq -r '.lists[0].name')
     echo "Only one list found — setting '${single_name}' as default."
-    jq --arg list "$single_name" '. + {default_list: $list}' "$CRED_FILE" > /tmp/bring_conf.json && mv /tmp/bring_conf.json "$CRED_FILE"
-    chmod 600 "$CRED_FILE"
+    write_default_list "$single_name"
   elif (( list_count > 1 )); then
     read -rp "Which list should be the default? (name or number, Enter to skip): " choice
     if [[ -n "$choice" ]]; then
@@ -689,8 +658,7 @@ EOF
       else
         chosen_name="$choice"
       fi
-      jq --arg list "$chosen_name" '. + {default_list: $list}' "$CRED_FILE" > /tmp/bring_conf.json && mv /tmp/bring_conf.json "$CRED_FILE"
-      chmod 600 "$CRED_FILE"
+      write_default_list "$chosen_name"
       echo "Default list set to '${chosen_name}'."
     fi
   fi
@@ -732,8 +700,8 @@ DEFAULT LIST:
   {"email": "...", "password": "...", "default_list": "Einkaufsliste"}
 
 AUTHENTICATION:
-  Set BRING_EMAIL and BRING_PASSWORD env vars, or run 'bring.sh setup'
-  to store credentials in ~/.config/bring/credentials.json
+  Run 'bring.sh setup' in your own terminal to log in. The password is never
+  stored; only a protected refresh token and non-secret profile are kept.
 
 EXAMPLES:
   bring.sh setup
@@ -761,7 +729,7 @@ main() {
       do_setup
       ;;
     login)
-      load_credentials
+      load_profile
       do_login
       ;;
     lists)
@@ -775,7 +743,7 @@ main() {
       die "The Bring! API does not reliably support creating or deleting lists. Please manage lists in the Bring! app."
       ;;
     show)
-      load_credentials
+      load_profile
       local show_list
       if [[ "${1:-}" == "--json" ]]; then
         show_list="$(resolve_list_arg "")"
@@ -788,7 +756,7 @@ main() {
       fi
       ;;
     add)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh add [list] <item> [specification]"
       local add_list add_item add_spec
       local _try_list=""
@@ -815,7 +783,7 @@ main() {
       do_add "$add_list" "$add_item" "$add_spec"
       ;;
     add-multi)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh add-multi [list] <item1> [item2|spec] ..."
       local aml _try_aml=""
       _try_aml=$(resolve_list "$1" 2>/dev/null) || true
@@ -827,7 +795,7 @@ main() {
       do_add_multi "$aml" "$@"
       ;;
     remove)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh remove [list] <item>"
       local rm_list rm_item _try_rm=""
       if [[ $# -ge 2 ]]; then _try_rm=$(resolve_list "$1" 2>/dev/null) || true; fi
@@ -841,7 +809,7 @@ main() {
       do_remove "$rm_list" "$rm_item"
       ;;
     remove-multi)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh remove-multi [list] <item1> [item2] ..."
       local rml _try_rml=""
       _try_rml=$(resolve_list "$1" 2>/dev/null) || true
@@ -853,7 +821,7 @@ main() {
       do_remove_multi "$rml" "$@"
       ;;
     complete)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh complete [list] <item>"
       local comp_list comp_item _try_comp=""
       if [[ $# -ge 2 ]]; then _try_comp=$(resolve_list "$1" 2>/dev/null) || true; fi
@@ -867,7 +835,7 @@ main() {
       do_complete "$comp_list" "$comp_item"
       ;;
     complete-multi)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh complete-multi [list] <item1> [item2] ..."
       local cml _try_cml=""
       _try_cml=$(resolve_list "$1" 2>/dev/null) || true
@@ -879,7 +847,7 @@ main() {
       do_complete_multi "$cml" "$@"
       ;;
     uncomplete)
-      load_credentials
+      load_profile
       [[ $# -ge 1 ]] || die "Usage: bring.sh uncomplete [list] <item>"
       local unc_list unc_item _try_unc=""
       if [[ $# -ge 2 ]]; then _try_unc=$(resolve_list "$1" 2>/dev/null) || true; fi

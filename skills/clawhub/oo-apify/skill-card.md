@@ -1,43 +1,61 @@
-## Description: <br>
-Apify (apify.com). Use this skill for Apify requests involving searching, reading data, and running supported Apify connector actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Apify (apify.com). Use this skill for ANY Apify request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to access Apify actor metadata, authenticated user details, dataset items, actor run status, and to start Apify actor runs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start Apify actor runs through a connected account, which may incur cost, consume resources, or expose resulting data. <br>
-Mitigation: Require explicit approval of the actor, input payload, expected cost or resource impact, and resulting data access before using run_actor. <br>
-Risk: The security verdict is suspicious because write-capable behavior is present while safety labeling treats untagged actions as safe reads. <br>
-Mitigation: Review the skill before installation and confirm any action that changes Apify state or accesses sensitive account data. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Apify through an OOMOL-connected account, including reading actor, user, dataset, and run data and starting actor runs after confirming payloads and side effects.
 
-## Reference(s): <br>
-- [ClawHub Apify skill page](https://clawhub.ai/oomol/oo-apify) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Apify homepage](https://apify.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can start Apify actor runs that may change account state or create costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require confirmation of run_actor payloads, expected effects, and potential costs before execution.
+
+Risk: The documented first-time setup includes remote installer pipelines.
+
+Mitigation: Verify the oo CLI source and version independently before running installer commands.
+
+Risk: Apify actions and data are routed through OOMOL-connected infrastructure.
+
+Mitigation: Install only when the user accepts routing Apify activity through OOMOL and avoid sending sensitive data unless appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-apify)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Apify homepage](https://apify.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON action results from Apify through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

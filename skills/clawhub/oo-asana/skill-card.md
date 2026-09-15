@@ -1,46 +1,60 @@
-## Description: <br>
-Enables an agent to read, create, and update Asana workspaces, projects, and tasks through the OOMOL Asana connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Asana lets agents read, search, create, update, and delete Asana workspaces, projects, tasks, and related resources through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to operate Asana through an OOMOL-connected account, including workspace and project discovery, task reads, and controlled project or task creation and updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Asana account data through OOMOL-managed credentials. <br>
-Mitigation: Install only when OOMOL-connected tooling should access the user's Asana account, and review the Asana scopes before use. <br>
-Risk: Write actions can create or update Asana projects and tasks. <br>
-Mitigation: Confirm the exact target, payload, and intended effect with the user before running create or update actions. <br>
-Risk: The artifact includes a remote CLI install snippet. <br>
-Mitigation: Prefer installing the oo CLI from verified official instructions or a signed package instead of blindly piping a remote script into a shell. <br>
+## Use Case:
 
+External users and developers use this skill to operate Asana from an agent session, including reading project data and managing tasks, projects, teams, users, comments, attachments, tags, custom fields, and related workspace resources.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-asana) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Asana homepage](https://asana.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON responses with data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path recommends executing a remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a signed or package-manager source, or download and verify the installer before running it.
+
+Risk: Write and destructive Asana actions can change or remove workspace data.
+
+Mitigation: Confirm the exact target, payload, and intended effect with the user before running write or destructive actions.
+
+Risk: Action inputs may drift from documented examples as connector schemas change.
+
+Mitigation: Inspect the live action schema before constructing each payload.
+
+## Reference(s):
+
+- [Asana homepage](https://asana.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-asana)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; action results are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

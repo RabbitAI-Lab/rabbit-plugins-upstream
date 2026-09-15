@@ -18,6 +18,19 @@ allowed-tools:
 
 Guide users to convert functionality into the appropriate Claude Code automation type (Agent, Skill, Rule, Command, or Hook).
 
+## Topic Dispatch
+
+**When this skill is invoked with a topic specifier (e.g., `Skill("claudify", "improve")` or `/claudify improve`), load and follow ONLY the matching topic file below — do NOT default to the creation-wizard body (Decision Matrix / Workflow) in this SKILL.md.** A bare invocation (no topic, `agentify`, or `create`) uses the creation workflow below.
+
+| Topic arg | File | Purpose |
+|-----------|------|---------|
+| `create` / `agentify` / (none) | this SKILL.md (below) | Convert functionality into an automation (Agent/Skill/Rule/Command/Hook) |
+| `improve` | [improve.md](./improve.md) | Self-improving loop: retrospect + hook/skill review + pattern detect |
+| `persist` | [persist.md](./persist.md) | Knowledge persistence: documentation + memory save |
+| `background-polling` | [background-polling.md](./background-polling.md) | ScheduleWakeup/timeout polling discipline for 5min+ background dispatches |
+
+For `improve` / `persist` / `background-polling`, **Read that topic file and follow it** — the Decision Matrix and creation Workflow below apply only to the `create`/`agentify`/(none) creation path. For any other/unrecognized topic arg, fall back to the `create`/`agentify`/(none) creation workflow below rather than assuming a matching topic file exists.
+
 ## Decision Matrix
 
 | Type | When to use | Implementation |
@@ -172,7 +185,7 @@ Skill tool: skill: "project-automation:skill-writer"
    1. Manual sync to cache, OR
    2. New session to reload
 
-**Auto-sync hook**: `plugin-cache-sync.sh` syncs marketplace to cache on Edit/Write
+**No auto-sync hook currently exists** — verified 2026-08-18: no `plugin-cache-sync.sh` is registered in `settings.json`/`settings.local.json`, and no live copy of the script exists outside a Syncthing version-history backup. A marketplace checkout's `installPath` in `~/.claude/plugins/installed_plugins.json` can point at a cache directory that either does not exist on disk (harness apparently falls back to reading the marketplace source directly in that case) or exists but has drifted stale relative to the marketplace checkout — see `hook-kit/audit.md` Step 3-D for the detection procedure. Until that gap is closed, manually verify (`diff` the marketplace source against the cache `installPath`) after editing any plugin's hook scripts, rather than assuming this auto-sync exists.
 
 ## Output Guidelines
 
@@ -219,6 +232,8 @@ Keep responses concise:
 | Step 3: Type recommendation | Recommend only | improvements.md recording |
 | Step 4: Implementation | Direct action | **PROHIBITED** - Use `[NEEDS_REVIEW]` tag |
 | Step 5: Validation | Validation | **Auto validation** (after changes are complete) |
+
+**Scope note (HARD STOP)**: this table governs the *creation* workflow only (new agent/skill/rule/hook). It does not extend to passive, no-ask persistence steps elsewhere in this skill's topics (`improve`/`persist` RAG session/discovery-chunk store) — those follow the narrower carve-out in `persist.md`'s own "Ralph Mode" section, not this table. Do not generalize "Ralph Mode = record-only, nothing runs" from this table alone.
 
 **improvements.md recording example**
 

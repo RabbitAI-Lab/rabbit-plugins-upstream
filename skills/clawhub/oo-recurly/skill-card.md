@@ -1,46 +1,57 @@
-## Description: <br>
-Recurly lets an agent read, create, and update Recurly accounts, plans, and subscriptions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recurly (recurly.com) skill for reading, creating, and updating Recurly data through OOMOL instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect and manage Recurly billing objects through the OOMOL oo CLI without handling raw Recurly credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose customer, account, subscription, and billing data. <br>
-Mitigation: Install and use the skill only when the agent is expected to access Recurly, and treat returned billing data as sensitive. <br>
-Risk: Write actions can change billing-related data such as accounts, plans, and subscriptions. <br>
-Mitigation: Review every write payload and confirm the intended effect with the user before approving changes. <br>
-Risk: Action payloads may become incorrect if the connector contract changes. <br>
-Mitigation: Inspect the live action schema before building or running each connector payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Recurly accounts, plans, and subscriptions through an OOMOL-connected account. It supports schema-first read actions and controlled write workflows for billing-related Recurly data.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-recurly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Recurly Homepage](https://recurly.com) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Recurly Connection](https://console.oomol.com/app-connections?provider=recurly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before running Recurly actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Download and verify the OOMOL installer through a trusted, versioned method before installation.
+
+Risk: Write actions can change Recurly billing, account, plan, or subscription data.
+
+Mitigation: Fetch the live action schema and confirm the exact payload and expected effect with the user before running any write action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recurly)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Recurly homepage](https://recurly.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

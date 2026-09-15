@@ -1,45 +1,61 @@
-## Description: <br>
-IP2WHOIS lets agents use an OOMOL-connected IP2WHOIS account to look up WHOIS registration details for domains and list domains hosted on an IP address. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IP2WHOIS helps agents perform domain WHOIS registration lookups and list domains hosted on an IP address through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query IP2WHOIS through OOMOL for domain WHOIS records and IP-hosted domain lists without exposing raw API tokens to the agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-brokered IP2WHOIS API key connection. <br>
-Mitigation: Install only when the user is comfortable using OOMOL as the broker and connect only the intended IP2WHOIS account. <br>
-Risk: First-time setup includes curl-to-bash and PowerShell installer commands. <br>
-Mitigation: Review the official oo CLI installation path before running installer commands, and avoid letting an agent run them blindly. <br>
-Risk: Connector calls can fail when authentication, app connection, credentials, scopes, or billing credits are not ready. <br>
-Mitigation: Run setup steps only after a matching command failure and resolve the specific OOMOL auth, connection, credential, scope, or billing issue before retrying. <br>
+## Use Case:
 
+Developers and external users can use this skill to route IP2WHOIS tasks through the OOMOL `oo` CLI for domain registration lookups and hosted-domain searches. It is suited for read-oriented WHOIS investigation workflows that already have an OOMOL/IP2WHOIS account connection.
 
-## Reference(s): <br>
-- [ClawHub IP2WHOIS skill page](https://clawhub.ai/oomol/oo-ip2whois) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [IP2WHOIS connection settings](https://console.oomol.com/app-connections?provider=ip2whois) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill inspects the live connector schema before execution and uses OOMOL-injected credentials server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or download an installer that can be inspected and verified before execution.
+
+Risk: IP2WHOIS lookups run through the user's connected OOMOL/IP2WHOIS account and may consume account credits.
+
+Mitigation: Confirm the account connection and expected billing impact before running large or repeated lookup batches.
+
+Risk: Connector action payloads can drift from examples as live schemas change.
+
+Mitigation: Fetch the live connector schema before constructing each action payload.
+
+## Reference(s):
+
+- [ClawHub IP2WHOIS Skill](https://clawhub.ai/oomol/skills/oo-ip2whois)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL IP2WHOIS Connection](https://console.oomol.com/app-connections?provider=ip2whois)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; lookup responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-Helps agents query 1Password Events API audit events, item usage events, and sign-in attempts through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent access to 1Password Events API audit events, item usage events, and sign-in attempts through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent retrieve read-only 1Password Events API logs for audit review, item usage analysis, and sign-in investigation through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: 1Password event logs may reveal sensitive account activity even when accessed through read-only actions. <br>
-Mitigation: Install and use the skill only with an OOMOL-connected account whose 1Password Events API access is appropriate for the user's audit or investigation task. <br>
-Risk: Connector calls can fail or expose authorization gaps when the oo CLI is not installed, the user is not signed in, the connection is missing, or billing is unavailable. <br>
-Mitigation: Follow the skill's setup and recovery guidance only after a command fails with the matching authentication, connection, scope, credential, or billing error. <br>
+## Use Case:
 
+Developers, security operators, and agents use this skill to read 1Password Events API telemetry for audit review, item usage analysis, and sign-in investigation without handling raw 1Password credentials directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-one-password-events) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [1Password Events API homepage](https://1password.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides read-only connector calls and returns command output from the oo CLI, typically JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security review reports that the skill asks users or agents to run unverified remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use and prefer safer verified oo CLI installation instructions instead of piping remote scripts into a shell.
+
+Risk: The security review reports that sensitive security telemetry is routed through a third-party connector.
+
+Mitigation: Connect 1Password Events API data to OOMOL only after confirming the organization is comfortable with OOMOL processing audit and sign-in telemetry under its documented controls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-one-password-events)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [1Password Events API homepage](https://1password.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides read-only OOMOL connector calls for audit events, item usage events, and sign-in attempts.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

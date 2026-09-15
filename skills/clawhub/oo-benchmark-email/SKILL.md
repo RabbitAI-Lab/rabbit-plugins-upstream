@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Benchmark Email"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["benchmark_email"]
   icon: "https://static.oomol.com/logo/third-party/benchmark_email.svg"
 ---

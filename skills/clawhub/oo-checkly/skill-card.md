@@ -1,42 +1,56 @@
-## Description: <br>
-Checkly (checklyhq.com). Use this skill for ANY Checkly request - searching and reading data. Whenever a task involves Checkly, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Checkly through an OOMOL-connected account to retrieve checks, check results, statuses, and account details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Checkly checks, check results, check statuses, and the connected Checkly account through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL to broker the connected Checkly account. <br>
-Mitigation: Install only when OOMOL is trusted to broker the Checkly connection. <br>
-Risk: Future connector actions could write, delete, overwrite, or otherwise change Checkly state. <br>
-Mitigation: Require explicit user approval before running any future action that changes Checkly state. <br>
+## Use Case:
 
+Developers and operators use this skill to query Checkly monitoring data through an OOMOL-connected account. It supports reading checks, statuses, results, and account details using live connector schemas.
 
-## Reference(s): <br>
-- [Checkly homepage](https://www.checklyhq.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Checkly skill on ClawHub](https://clawhub.ai/oomol/skills/oo-checkly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The setup instructions include live remote installer commands that could execute unverified code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, verified method and do not allow the agent to run curl-to-shell or PowerShell remote installer commands automatically.
+
+Risk: Future or added connector actions that change Checkly state could affect monitoring configuration or data.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before any write or destructive action is run.
+
+## Reference(s):
+
+- [ClawHub Checkly skill](https://clawhub.ai/oomol/skills/oo-checkly)
+- [Checkly homepage](https://www.checklyhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Credentials are supplied server-side by OOMOL; the agent should not handle raw Checkly tokens.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

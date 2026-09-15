@@ -1,45 +1,56 @@
-## Description: <br>
-Quaderno helps agents operate Quaderno through an OOMOL-connected account to read tax, account, contact, and product data and to create, update, or delete contacts and products. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quaderno helps an agent read, create, update, and delete Quaderno account, contact, product, and tax-rate data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Quaderno tax, account, contact, and product workflows through an OOMOL-connected account. It guides agents to inspect the live connector schema before building payloads and to confirm state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Quaderno operations may touch business and financial records, including customer, tax, payment, cancellation, and delete operations. <br>
-Mitigation: Treat these operations as sensitive and require explicit user confirmation before changing business or financial records. <br>
-Risk: Write actions can change Quaderno contacts or products, and destructive actions can permanently delete contacts or products. <br>
-Mitigation: Confirm the exact payload, target record, and expected effect with the user before running write or destructive actions. <br>
-Risk: Connector schemas can define required fields and response shapes that are not known until runtime. <br>
-Mitigation: Inspect the live action schema before constructing a payload and use the schema as the authority for inputs. <br>
+## Use Case:
 
+External users and developers use this skill to operate Quaderno data through an OOMOL-connected account, including reads, tax-rate calculation, and confirmed contact or product changes.
 
-## Reference(s): <br>
-- [Quaderno homepage](https://quaderno.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quaderno) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Quaderno connector commands and JSON payloads; write and destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill metadata) <br>
+Risk: The setup guidance includes remote installer commands that execute downloaded code immediately.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path first and prefer official, versioned installer documentation with checksum or signature verification.
+
+Risk: Write actions can change Quaderno contacts or products, and destructive actions can permanently delete them.
+
+Mitigation: Confirm the exact payload, target object, and expected effect with the user before running write or delete actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quaderno)
+- [Quaderno homepage](https://quaderno.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Quaderno action schemas before request construction; write and delete actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

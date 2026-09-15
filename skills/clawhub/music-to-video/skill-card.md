@@ -1,49 +1,59 @@
-## Description: <br>
-Turn a music track, source video audio, or mood-generated track into a beat-synced lyric video, slideshow, or kinetic promo where music drives pacing and optional user media is cut to the same beat grid. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a music track into a beat-synced video, including a lyric video, slideshow, or kinetic promo, with pacing driven by the analyzed music and optional user-supplied media cut to the same beat grid.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative agents use this skill to plan and build music-grounded HyperFrames videos from a provided or generated track, optional images or videos, and beat analysis. It supports storyboard planning, frame composition, assembly, verification, and final MP4 rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill directs agents to silently update global HyperFrames skills before use. <br>
-Mitigation: Require explicit user confirmation before running any global skill update or other package-changing npx command. <br>
-Risk: The workflow can install Python dependencies, use authenticated media providers, and run render steps. <br>
-Mitigation: Confirm dependency installation, authenticated provider use, and rendering actions before execution, and keep credentials out of project-local environment files. <br>
-Risk: Some bundled visual templates use strobe-like effects that may be unsuitable for photosensitive audiences. <br>
-Mitigation: Avoid strobe templates or substitute lower-flash motion treatments when the audience may include photosensitive viewers. <br>
+## Use Case:
 
+Developers and creative operators use this skill to turn a music source, optional visual assets, and a brief into a beat-synced HyperFrames video workflow. The skill guides setup, audio analysis, storyboard planning, frame composition, assembly, verification, and MP4 rendering.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/music-to-video) <br>
-- [Frame Skeleton](references/frame-skeleton.md) <br>
-- [Planning](references/planning.md) <br>
-- [Storyboard Format](references/storyboard-format.md) <br>
-- [Template Catalog](references/template-catalog.md) <br>
-- [Motion Primitive Catalog](references/motion-primitive-catalog.md) <br>
-- [Montage](references/montage.md) <br>
-- [Frame Worker](sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown storyboards, JSON timing data, HTML/CSS/JavaScript frame files, shell commands, configuration files, and rendered video artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project files under a video workspace and a final MP4 render after verification and approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: Runtime package fetching and HyperFrames skill updates can change the code or dependencies used during execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin the HyperFrames CLI and Python dependencies, review updates separately, and run the workflow in a project-scoped sandbox.
+
+Risk: Asset staging has a path weakness that could affect where input assets are copied.
+
+Mitigation: Use only the documented --into public staging path until the traversal issue is fixed, and review staged files before rendering.
+
+## Reference(s):
+
+- [Planning](artifact/references/planning.md)
+- [Frame Skeleton](artifact/references/frame-skeleton.md)
+- [Storyboard Format](artifact/references/storyboard-format.md)
+- [Template Catalog](artifact/references/template-catalog.md)
+- [Motion Primitive Catalog](artifact/references/motion-primitive-catalog.md)
+- [Montage](artifact/references/montage.md)
+- [Frame Worker](artifact/sub-agents/frame-worker.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, storyboard files, HTML compositions, JSON audio analysis, and rendered video files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a project workflow that culminates in an assembled HyperFrames video and MP4 render.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

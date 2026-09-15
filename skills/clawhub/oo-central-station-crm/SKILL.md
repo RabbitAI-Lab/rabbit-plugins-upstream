@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "CentralStationCRM"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["central_station_crm"]
   icon: "https://static.oomol.com/logo/third-party/central_station_crm.svg"
 ---

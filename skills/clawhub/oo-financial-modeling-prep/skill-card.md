@@ -1,44 +1,55 @@
-## Description: <br>
-Financial Modeling Prep helps agents search and retrieve market, company, financial statement, valuation, calendar, and news data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Financial Modeling Prep (financialmodelingprep.com) helps agents search and read market, company, financial statement, valuation, analyst, insider, SEC, and economic data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to answer Financial Modeling Prep data requests by inspecting live connector schemas and running market, company, financial statement, valuation, calendar, and news actions through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials for an OOMOL-connected Financial Modeling Prep account. <br>
-Mitigation: Use the authenticated connector flow and do not ask users for raw API keys or tokens. <br>
-Risk: Action inputs and outputs depend on live connector schemas and authenticated execution. <br>
-Mitigation: Inspect the action schema before building payloads and confirm exact payloads before any action marked write or destructive. <br>
-Risk: Security guidance treats associated maintainer, migration, review, and notification flows as privileged. <br>
-Mitigation: Verify targets, use dry-run output where available, and confirm before writes, emails, or review-tool submissions. <br>
+## Use Case:
 
+Developers and analysts use this skill to retrieve Financial Modeling Prep data for securities research, market monitoring, financial statement review, valuation checks, economic indicator lookup, and related data queries.
 
-## Reference(s): <br>
-- [Financial Modeling Prep homepage](https://financialmodelingprep.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-financial-modeling-prep) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI and an authenticated Financial Modeling Prep connection; connector responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, use a verified or package-manager installation route where available, run setup from an unprivileged shell, and review the remote installer path.
+
+Risk: Financial Modeling Prep queries are routed through an OOMOL-connected account.
+
+Mitigation: Confirm trust in the OOMOL account connection and understand the data-routing model before sending financial data queries.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-financial-modeling-prep)
+- [Financial Modeling Prep Homepage](https://financialmodelingprep.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector commands return JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

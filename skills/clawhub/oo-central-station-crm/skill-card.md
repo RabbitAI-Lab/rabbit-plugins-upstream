@@ -1,47 +1,55 @@
-## Description: <br>
-CentralStationCRM lets an agent use an OOMOL-connected account to read, search, create, update, and delete CentralStationCRM companies, deals, people, and current-user data through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CentralStationCRM helps agents read, create, update, delete, list, and search CentralStationCRM companies, people, and deals through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and business operators use this skill to manage CentralStationCRM records from an agent session after their OOMOL account and CentralStationCRM connection are configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read business and contact data from CentralStationCRM through an OOMOL-connected account. <br>
-Mitigation: Install only when the user trusts OOMOL and the connected account has appropriate CRM access. <br>
-Risk: Write actions can create or update companies, deals, and people. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete CentralStationCRM records. <br>
-Mitigation: Confirm target identifiers and obtain explicit user approval before running delete actions. <br>
-Risk: Authentication, connection, or billing setup may require OOMOL account actions. <br>
-Mitigation: Run setup steps only after a command fails with the matching authentication, connection, scope, expiration, or billing error. <br>
+## Use Case:
 
+External users, CRM operators, and developers use this skill to manage CentralStationCRM records through an OOMOL-connected account. The skill supports read, search, create, update, and delete workflows with live schema inspection before payload construction.
 
-## Reference(s): <br>
-- [ClawHub CentralStationCRM skill listing](https://clawhub.ai/oomol/skills/oo-central-station-crm) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [CentralStationCRM homepage](https://centralstationcrm.de) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector schema and run commands when the agent follows the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the oo CLI through a versioned, verifiable package, or download and inspect the installer before running it.
+
+Risk: Create, update, and delete actions can change or remove CentralStationCRM business data.
+
+Mitigation: Require explicit user confirmation of the target record, payload, and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [CentralStationCRM homepage](https://centralstationcrm.de)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with bash and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before payload construction and returns oo CLI JSON responses when actions are run.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

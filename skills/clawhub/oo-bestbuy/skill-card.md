@@ -1,43 +1,52 @@
-## Description: <br>
-This skill lets an agent search and read Best Buy product, category, store, and review data through the OOMOL bestbuy connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Best Buy connector skill for searching and reading Best Buy product, category, review, and store data through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with an OOMOL-connected Best Buy account use this skill to inspect action schemas and run read-only Best Buy lookup actions for products, categories, stores, and reviews. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Best Buy account and can lead the agent through optional CLI installation or login setup. <br>
-Mitigation: Install and use it only when the user wants an agent to query Best Buy, and run CLI install or login steps only when intentionally setting up that connection. <br>
-Risk: The connector is described as read-only, but its results depend on live Best Buy and OOMOL service access. <br>
-Mitigation: Review returned product, store, category, and review data before relying on it for purchasing or operational decisions. <br>
+## Use Case:
 
+External users and developers use this skill to search Best Buy catalog, review, category, and store data from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-bestbuy) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Best Buy homepage](https://www.bestbuy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI; Best Buy credentials are handled through the user's OOMOL connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified, versioned install method; run remote installer commands only when the OOMOL installer endpoint and account setup are trusted.
+
+## Reference(s):
+
+- [Best Buy skill page](https://clawhub.ai/oomol/skills/oo-bestbuy)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Best Buy homepage](https://www.bestbuy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

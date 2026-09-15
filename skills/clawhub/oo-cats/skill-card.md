@@ -1,42 +1,55 @@
-## Description: <br>
-CATS (catsone.com) connector skill for searching and reading CATS data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CATS helps agents search and read CATS recruiting data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to search and read CATS recruiting data through an OOMOL-connected account, including candidates, companies, jobs, and site information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read candidate and hiring data from a connected CATS account. <br>
-Mitigation: Use it only for intended CATS read tasks, limit requests to necessary records, and treat returned recruiting data as sensitive. <br>
-Risk: The skill depends on the external oo CLI and an OOMOL account connection. <br>
-Mitigation: Review the CLI setup step, use the OOMOL connection flow for credentials, and avoid exposing raw tokens in prompts, files, or command output. <br>
+## Use Case:
 
+Recruiters, recruiting operations teams, and authorized agents use this skill to retrieve, list, and search CATS candidates, companies, jobs, and site information from a connected account.
 
-## Reference(s): <br>
-- [CATS homepage](https://catsone.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cats) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON data with execution metadata when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The first-time setup path can execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified official package or reviewed installer, and avoid letting an agent run curl-to-shell or PowerShell iex installer commands.
+
+Risk: The oo CLI can access CATS through the connected account, and the tool permission is broader than the listed read actions require.
+
+Mitigation: Install only if OOMOL is trusted, and use an OOMOL/CATS account limited to the read access needed for candidates, companies, jobs, and site information.
+
+## Reference(s):
+
+- [CATS homepage](https://catsone.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub CATS skill](https://clawhub.ai/oomol/skills/oo-cats)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON data from CATS through the oo CLI; action payloads must follow the live connector schema.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

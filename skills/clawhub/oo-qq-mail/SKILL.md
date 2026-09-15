@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "QQ Mail"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["qq_mail"]
   icon: "https://static.oomol.com/logo/third-party/qq_mail.png"
 ---

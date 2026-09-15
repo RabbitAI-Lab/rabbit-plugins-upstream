@@ -1,43 +1,55 @@
-## Description: <br>
-HelloLeads (helloleads.io). Use this skill for ANY HelloLeads request - reading, creating, and updating data. Whenever a task involves HelloLeads, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HelloLeads (helloleads.io) helps agents read, create, and update HelloLeads data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect HelloLeads connector schemas, fetch visible web form definitions, and submit confirmed web form leads through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run credentialed HelloLeads connector actions, including submitting a web form lead. <br>
-Mitigation: Use it only in a trusted ClawHub and OOMOL account context, inspect the live action schema, and confirm the exact write payload and effect before submission. <br>
-Risk: Credentialed connector access can act through the currently connected OOMOL account and HelloLeads connection. <br>
-Mitigation: Confirm the active account, connector target, and reason for the action before running commands that access or change HelloLeads data. <br>
+## Use Case:
 
+External users and developers use this skill to operate HelloLeads web form workflows through an OOMOL-connected account, including fetching form definitions and submitting supported lead data.
 
-## Reference(s): <br>
-- [ClawHub HelloLeads release page](https://clawhub.ai/oomol/oo-helloleads) <br>
-- [HelloLeads homepage](https://www.helloleads.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before request construction; command responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, pinned, verifiable installer, or download and inspect the installer script before execution.
+
+Risk: Write actions can submit lead data to HelloLeads.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [HelloLeads homepage](https://www.helloleads.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [HelloLeads skill on ClawHub](https://clawhub.ai/oomol/skills/oo-helloleads)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include live schema inspection guidance and connector command results.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

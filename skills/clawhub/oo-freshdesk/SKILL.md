@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Freshdesk"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["freshdesk"]
   icon: "https://static.oomol.com/logo/third-party/Freshdesk.svg"
 ---

@@ -1,43 +1,56 @@
-## Description: <br>
-The Bitquery skill lets agents run Bitquery V2 GraphQL read queries through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Bitquery requests involving search and data reads, routing actions through the Bitquery connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Bitquery V2 GraphQL read queries through an OOMOL-connected account while checking the live connector schema before constructing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill depends on OOMOL and Bitquery account access and may consume account credits when queries run. <br>
-Mitigation: Install and connect the oo CLI only when the user trusts OOMOL, intends to use Bitquery through the connector, and accepts account credit usage. <br>
-Risk: Bitquery requests depend on the current connector action schema and user-provided GraphQL query intent. <br>
-Mitigation: Inspect the live action schema before constructing payloads and run only user-directed read queries unless the user explicitly approves a state-changing action. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect the live Bitquery connector schema and run Bitquery V2 GraphQL HTTP queries through an OOMOL-connected account without handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bitquery) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Bitquery homepage](https://bitquery.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL bitquery connector and may return Bitquery GraphQL response data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The first-time setup path uses a remote shell installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run the installer automatically; install the CLI manually from a trusted source with version pinning or verification where possible.
+
+Risk: Connector commands run through the user's OOMOL-connected Bitquery account.
+
+Mitigation: Inspect the live action schema before building payloads and only run the intended Bitquery query against the connected account.
+
+## Reference(s):
+
+- [Bitquery homepage](https://bitquery.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bitquery)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON response envelopes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

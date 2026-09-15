@@ -1,44 +1,60 @@
-## Description: <br>
-AltText.ai (alttext.ai). Use this skill for ANY AltText.ai request - reading, creating, updating, and deleting data. Whenever a task involves AltText.ai, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate AltText.ai through an OOMOL-connected account to read image data, generate alt text, scrape pages for images, and delete image records when explicitly approved.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, content teams, and operators use this skill to manage AltText.ai image records and generate alt text through an OOMOL-connected account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting AltText.ai through OOMOL and uses account credentials through the oo CLI. <br>
-Mitigation: Before installation, confirm the user is comfortable with the OOMOL connection and the AltText.ai credential posture. <br>
-Risk: Image creation and deletion actions change the user's AltText.ai library. <br>
-Mitigation: Review the exact payload, target asset, and expected effect with the user before approving write or destructive actions. <br>
-Risk: Create and scrape actions may submit public image URLs or page content for alt-text generation. <br>
-Mitigation: Confirm the source URLs or HTML scope are intended for processing before running create_image or scrape_page. <br>
+## Use Case:
 
+Developers and content operators use this skill to inspect AltText.ai account and image records, generate alt text for publicly accessible image URLs, scrape pages for images, and manage image library entries through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [AltText.ai homepage](https://alttext.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from reviewed official documentation or a verified package-manager flow before using the skill.
+
+Risk: The skill can create AltText.ai image records and delete existing image records.
+
+Mitigation: Confirm the exact payload and intended effect before create actions, and require explicit approval for delete actions.
+
+Risk: The skill depends on OOMOL-connected account credentials and the oo CLI provider path.
+
+Mitigation: Use the skill only when the user is comfortable with OOMOL as the CLI provider and the AltText.ai account connection is expected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-alt-text-ai)
+- [AltText.ai Homepage](https://alttext.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces oo CLI commands and connector payload guidance; command responses are JSON when --json is used.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

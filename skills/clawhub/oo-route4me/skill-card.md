@@ -1,45 +1,57 @@
-## Description: <br>
-Route4Me helps agents read, create, and delete Route4Me optimization data through an OOMOL-connected Route4Me account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route4Me lets an agent inspect schemas and manage Route4Me optimizations through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate a connected Route4Me account, including listing optimizations, creating route optimization problems, and deleting selected optimization problems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a connected Route4Me account, including actions that create or delete optimization data. <br>
-Mitigation: Review the proposed payload and effect before write actions, and require explicit user approval before destructive actions. <br>
-Risk: First-time setup may run oo CLI installer or authentication commands. <br>
-Mitigation: Run setup commands only when they are intentionally needed to resolve an authentication, connection, or missing-CLI failure. <br>
-Risk: The skill depends on OOMOL-managed Route4Me credentials. <br>
-Mitigation: Install it only when the user trusts OOMOL and wants the agent to access the connected Route4Me account. <br>
+## Use Case:
 
+External users and operators use this skill to list Route4Me optimizations and, with confirmation, create or delete optimization problems through an OOMOL-connected Route4Me account.
 
-## Reference(s): <br>
-- [Route4Me homepage](https://route4me.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Route4Me ClawHub listing](https://clawhub.ai/oomol/oo-route4me) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect action schemas before running Route4Me connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup includes a remote installer script for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer source and prefer a verified package manager or signed, versioned installer before running setup commands.
+
+Risk: The skill can create or delete Route4Me optimization data.
+
+Mitigation: Inspect the live action schema, confirm exact payloads and targets with the user, and require explicit approval before write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-route4me)
+- [Route4Me Homepage](https://route4me.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Route4Me Connection](https://console.oomol.com/app-connections?provider=route4me)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions should inspect live schemas before sending JSON payloads; write and destructive operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

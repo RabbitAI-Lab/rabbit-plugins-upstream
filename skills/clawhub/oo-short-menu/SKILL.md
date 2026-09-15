@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Short Menu"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["short_menu"]
   icon: "https://static.oomol.com/logo/third-party/Short%20Menu.svg"
 ---

@@ -1,45 +1,56 @@
-## Description: <br>
-waboxapp (waboxapp.com). Use this skill for ANY waboxapp request: reading, creating, and updating data through the OOMOL waboxapp connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+waboxapp helps agents operate Waboxapp through an OOMOL-connected account using the oo CLI to check account status and send WhatsApp chats, images, links, and media.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to inspect the live waboxapp connector schema, check the connected WhatsApp account status, and send WhatsApp chats, images, links, or media through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected waboxapp account. <br>
-Mitigation: Install and run it only in a trusted ClawHub maintainer environment, and rely on OOMOL server-side credential injection instead of exposing raw tokens. <br>
-Risk: Write actions can send WhatsApp chats, images, links, and media through the connected account. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before running any action tagged as write. <br>
-Risk: Server security evidence marks the release as suspicious and says review is warranted because an autoreview helper grants nested Codex full local authority by default. <br>
-Mitigation: Review the autoreview helper before use, consider disabling YOLO behavior, and be cautious with fallback reviewer CLIs because generated diffs may be sent to those tools. <br>
+## Use Case:
 
+External users and developers use this skill to operate Waboxapp from an agent through their connected OOMOL account, including checking account status and sending WhatsApp text, image, link, and media messages after confirming write actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-waboxapp) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [waboxapp homepage](https://www.waboxapp.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Action execution returns JSON from the oo connector, including data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: First-time setup recommends remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a signed or checksum-verified oo CLI installation path before using first-time setup.
+
+Risk: send_chat, send_image, send_link, and send_media affect the connected WhatsApp account.
+
+Mitigation: Confirm the exact recipient, payload, and effect with the user before allowing any account-affecting send action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-waboxapp)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [waboxapp homepage](https://www.waboxapp.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI and live connector schemas; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

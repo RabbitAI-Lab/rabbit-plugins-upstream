@@ -1,43 +1,56 @@
-## Description: <br>
-Operates Shopify Storefront through an OOMOL-connected account for reading storefront data and creating or modifying carts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Shopify Storefront through OOMOL's shopify_storefront connector, including catalog reads and cart workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers, commerce operators, and their agents use this skill to inspect Shopify Storefront products, collections, shop metadata, and carts, and to create carts or add cart lines after confirming write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or modify Shopify Storefront carts through the connected OOMOL integration. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running cart-changing actions. <br>
-Risk: The skill depends on an OOMOL account connection and may require one-time CLI installation or account connection steps. <br>
-Mitigation: Run setup steps only when needed, and proceed only when the user trusts OOMOL and needs this connector. <br>
+## Use Case:
 
+Developers and external users use this skill when an agent needs to inspect Shopify Storefront schemas, read storefront catalog data, or perform cart workflows through an OOMOL-connected Shopify account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-shopify-storefront) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Shopify homepage](https://www.shopify.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: First-time setup includes remote installer commands without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer verified, version-pinned, or signed oo CLI installation sources before use.
+
+Risk: Cart actions can change Shopify Storefront state.
+
+Mitigation: Confirm the exact payload and expected effect before running write actions such as create_cart or add_cart_lines.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify-storefront)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Shopify Storefront Homepage](https://www.shopify.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

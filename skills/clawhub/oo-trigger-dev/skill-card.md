@@ -1,43 +1,56 @@
-## Description: <br>
-Trigger.dev helps agents operate Trigger.dev through an OOMOL-connected account for reading run data and carrying out user-approved state-changing actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trigger.dev helps agents read, create, and update Trigger.dev data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Trigger.dev action schemas, list and retrieve run data, fetch completed results, cancel or replay runs with confirmation, and trigger tasks through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credentialed Trigger.dev actions can change run state or trigger tasks. <br>
-Mitigation: Use scoped API tokens where possible and confirm exact payloads and expected effects before write or destructive actions. <br>
-Risk: Commands can fail when authentication, Trigger.dev connection scope, or billing state is missing. <br>
-Mitigation: Run setup steps only after the matching error and resolve authentication, app connection, or billing before retrying. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Trigger.dev run state, retrieve run results, replay or cancel runs, and trigger tasks through the OOMOL oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trigger-dev) <br>
-- [Trigger.dev homepage](https://trigger.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches live action schemas before constructing JSON payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and release evidence) <br>
+Risk: State-changing Trigger.dev actions, including canceling, triggering, or replaying runs, can affect live workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact task or run identifier, payload, and intended effect with the user before executing write actions.
+
+Risk: Setup instructions include remote installer pipelines and account connection steps.
+
+Mitigation: Install and connect the oo CLI only from independently trusted and verified sources; avoid running installer pipelines without review.
+
+## Reference(s):
+
+- [Trigger.dev homepage](https://trigger.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trigger-dev)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands, connector schema checks, JSON payload examples, and run-management guidance.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

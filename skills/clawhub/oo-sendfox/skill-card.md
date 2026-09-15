@@ -1,45 +1,59 @@
-## Description: <br>
-SendFox helps agents read, create, update, and delete SendFox contact and contact-list data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates SendFox through the OOMOL-connected oo CLI for reading, creating, updating, and deleting contacts and contact lists.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate SendFox accounts from an agent, including contact lookup, list management, contact creation, updates, unsubscribes, and soft-delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected SendFox account and may use sensitive credentials through OOMOL-managed connector access. <br>
-Mitigation: Grant only the account access needed for the intended task and avoid adding extra tools or credentials beyond the documented oo CLI connector flow. <br>
-Risk: Write and destructive actions can change SendFox contacts, list memberships, unsubscribe status, or soft-delete contacts and lists. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running any action marked write or destructive. <br>
-Risk: Connector schemas and account connection state can change outside the skill text. <br>
-Mitigation: Fetch the live action schema before building payloads and use first-time setup steps only after an authentication, connection, scope, or billing error occurs. <br>
+## Use Case:
 
+Developers and operators use this skill to manage SendFox contacts, contact lists, memberships, searches, custom fields, and unsubscribe state through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/oomol/oo-sendfox) <br>
-- [SendFox homepage](https://sendfox.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May issue oo CLI commands that return JSON responses from SendFox connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup directs users to execute remote installer scripts directly from the network.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installer through a safer download-and-verify flow before running it.
+
+Risk: Write and destructive SendFox actions can modify, remove, or unsubscribe contacts and lists.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before executing state-changing commands.
+
+Risk: The connector should only be used for SendFox tasks after authentication and account connection are in place.
+
+Mitigation: Limit use to SendFox requests and follow setup guidance only after an auth, connection, or missing-command failure.
+
+## Reference(s):
+
+- [SendFox homepage](https://sendfox.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing SendFox action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "CollegeFootballData"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["college_football_data"]
   icon: "https://static.oomol.com/logo/third-party/college_football_data.svg"
 ---

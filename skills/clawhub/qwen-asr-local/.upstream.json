@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/qwen-asr-local",
   "slug": "qwen-asr-local",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1779003328081,
-  "contentHash": "59bf2b88afb33e1f2795ad3b2a7c3068ac7208f312a1e015c523fcd7e4ee47db",
-  "fetchedAt": "2026-07-26T19:02:52.669Z"
+  "version": "0.1.1",
+  "updatedAt": 1789198140816,
+  "contentHash": "b97002251027ee3ee0d32a72c626ca692e950dae033ba15d98a89a2f4d1dd031",
+  "fetchedAt": "2026-09-15T13:12:22.971Z"
 }

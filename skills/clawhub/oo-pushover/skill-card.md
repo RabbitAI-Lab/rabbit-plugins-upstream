@@ -1,44 +1,61 @@
-## Description: <br>
-Enables an agent to operate Pushover through an OOMOL-connected account for notification delivery, group management, Open Client workflows, and account utilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pushover (pushover.net). Use this skill for ANY Pushover request: reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to send and manage Pushover notifications, delivery groups, client sessions, and related account utilities through an OOMOL-connected Pushover account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a Pushover-connected OOMOL account. <br>
-Mitigation: Install and use it only when that account access is acceptable for the intended workspace and task. <br>
-Risk: Authentication-related or credential-returning actions may expose, store, or rely on sensitive Pushover or Teams tokens. <br>
-Mitigation: Require explicit confirmation before actions that return or store tokens, log in a client, register a device, open a client session, or persist Team API token data. <br>
-Risk: Write or destructive actions can send notifications, change groups or teams, assign licenses, alter receipts, or acknowledge and delete messages. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to send Pushover notifications and administer Pushover users, groups, teams, licenses, receipts, Open Client sessions, and application metadata from an agent using the oo CLI.
 
-## Reference(s): <br>
-- [Pushover homepage](https://pushover.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-pushover) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions can return JSON data and may change Pushover state depending on the selected action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Credential-handling actions can return, validate, or store application and team API tokens or Open Client login material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit approval before credential-related actions, avoid exposing tokens in chat or logs, and rotate any token that is disclosed.
+
+Risk: Write and destructive actions can change Pushover delivery groups, team membership, receipts, licenses, devices, messages, or notification delivery state.
+
+Mitigation: Inspect the live action schema, confirm the exact target and payload with the user, and require explicit approval before execution.
+
+Risk: The setup section includes one-line remote installer commands that execute downloaded scripts.
+
+Mitigation: Prefer a verified installation path or independently inspect and verify the installer source before running remote install commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pushover)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Pushover Homepage](https://pushover.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses, execution identifiers, base64 image content, Pushover metadata, and credential-derived values depending on the selected action.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

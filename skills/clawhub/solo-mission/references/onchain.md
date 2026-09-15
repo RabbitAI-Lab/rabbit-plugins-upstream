@@ -1,5 +1,14 @@
 # SOLO Mission Platform — On-Chain Reference (EscrowVault)
 
+> ⚠️ **Base is closed to new mission creation** during the Solana private beta
+> migration ahead of Solana mainnet. `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` — including the
+> pre-Solana default of omitting `chain` entirely. This document remains accurate
+> only for **resuming or managing a Base mission created before the closure**
+> (funding one already in `pending_funding`, or cancelling/settling/refunding one
+> already on-chain). **For any new on-chain mission, use `chain: 'solana'` and read
+> `references/solana-wallet.md` instead — none of the mechanics below apply to it.**
+
 **Network:** Base Sepolia, chain_id `84532`, RPC `https://sepolia.base.org`  
 **EscrowVault:** address varies per mission — **never hardcode it.** Always read
 `funding_params.escrow_vault_address` (returned by `create_mission` / `get_cancel_params` /
@@ -137,7 +146,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -212,7 +221,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -229,9 +238,12 @@ The 30-minute buffer accounts for on-chain transaction time and backend processi
 `settleTask()` reverts if called after the deadline — the only recovery path is
 `emergencyRefund`.
 
-The backend calls `settleTask()` + `publishPendingRoot()` in a single operation.
-No further on-chain action needed. Reward Merkle proofs are written per participant;
-a root activation job runs automatically after a short delay. Humans see a **Claim**
+The backend calls `settleTask()` only — publishing the reward Merkle root is a
+separate, later, batched step (a scheduled dispatcher discovers settled-but-unpublished
+missions every few minutes and publishes them in groups, independent of any single
+`settle_mission` call). No further on-chain action is needed from the agent either way.
+Reward Merkle proofs are written per participant once that batch runs; a root
+activation job then runs automatically after a short delay. Humans see a **Claim**
 button on the platform once the root activates.
 
 For lottery missions the backend selects winners at this point using the revealed
@@ -242,6 +254,22 @@ Merkle tree.
 qualifying → completed   (all budget paid out)
 qualifying → refundable  (unused budget remains)
 ```
+
+**`refundable`/`refunded` alone does not tell you whether anyone was paid.** A mission with
+8 of 10 slots filled (2 slots' worth of budget refunded, 8 real people rewarded) and one with
+0 of 10 filled (the entire budget refunded, nobody rewarded) both land on this exact same
+status once the leftover is refunded — `status` cannot distinguish them. `settle_mission`'s
+response (and later `get_mission`) includes a `settlement_outcome` field that does:
+
+| `settlement_outcome` | Meaning |
+|---|---|
+| `completed` | Budget fully spent — no refund at all |
+| `completed_refundable` | Real participants were rewarded; only the unfilled slots' budget refunds |
+| `no_payout_refunded` | Nobody qualified — the entire budget bounces back |
+
+Check this field, not just `status`, before concluding a `refundable`/`refunded` mission
+"failed" — most of the time it means most of your budget went out as intended and only the
+unfilled slots refunded. Missions settled before this field shipped won't have it.
 
 ---
 
@@ -259,7 +287,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -287,7 +315,7 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "currencyapi"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["currencyapi"]
   icon: "https://static.oomol.com/logo/third-party/currencyapi.svg"
 ---

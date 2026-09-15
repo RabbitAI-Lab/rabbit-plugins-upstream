@@ -1,43 +1,55 @@
-## Description: <br>
-Runscope lets an agent inspect and read Runscope API Monitoring account, bucket, test, environment, and result data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runscope (blazemeter.com). Use this skill for ANY Runscope request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to query Runscope API Monitoring data from an OOMOL-connected Runscope account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Runscope account and monitoring data through an OOMOL-connected Runscope account. <br>
-Mitigation: Install and use it only where the agent is allowed to access that Runscope data, and keep actions scoped to the requested get and list operations. <br>
-Risk: First-time setup may require running a remote oo CLI installer if the oo CLI is not already installed. <br>
-Mitigation: Review the remote installer before running it, or install the oo CLI through an approved internal process. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Runscope API Monitoring account, bucket, test, environment, and result data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Runscope skill page](https://clawhub.ai/oomol/skills/oo-runscope) <br>
-- [Runscope API Monitoring](https://www.blazemeter.com/api-monitoring) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and artifact metadata) <br>
+Risk: The setup flow includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI from a trusted, versioned source with verification instead of piping a remote script directly into a shell.
+
+Risk: The skill accesses Runscope data through an OOMOL-connected account.
+
+Mitigation: Connect the Runscope account only when OOMOL-mediated read access to that data is intended.
+
+## Reference(s):
+
+- [Runscope on ClawHub](https://clawhub.ai/oomol/skills/oo-runscope)
+- [Runscope API Monitoring](https://www.blazemeter.com/api-monitoring)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides the agent to inspect live connector schemas before making read-only Runscope requests.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

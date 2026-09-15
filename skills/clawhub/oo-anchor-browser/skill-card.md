@@ -1,44 +1,57 @@
-## Description: <br>
-Anchor Browser (anchorbrowser.io) helps an agent read Anchor Browser project billing and metadata, inspect live connector schemas, and start browser sessions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Anchor Browser lets an agent operate Anchor Browser through the OOMOL-connected oo CLI for project metadata, billing information, and browser session actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Anchor Browser through OOMOL's connector, including checking billing details, retrieving project metadata, and starting browser sessions with schema-validated payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start an Anchor Browser session, which changes Anchor Browser state. <br>
-Mitigation: Confirm the exact payload and effect with the user before running actions tagged as write. <br>
-Risk: First-time setup may execute remote installer scripts for the oo CLI. <br>
-Mitigation: Run installer commands only when the CLI is missing and only after the user trusts OOMOL and the installer source. <br>
-Risk: Connector writes depend on the live action schema and the user's connected OOMOL account. <br>
-Mitigation: Inspect the current connector schema before execution and review schema-derived payloads before writes. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Anchor Browser action schemas, retrieve project and billing details, and start browser sessions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Anchor Browser homepage](https://anchorbrowser.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return connector response data, execution IDs, browser CDP URLs, and live-view URLs from Anchor Browser actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute code on the local machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first or prefer an official package manager or signed release, and run setup only when the oo CLI is actually missing.
+
+Risk: Starting a browser session changes Anchor Browser state and may create connection URLs.
+
+Mitigation: Confirm the exact payload and effect with the user before running the start_browser_session action.
+
+## Reference(s):
+
+- [Anchor Browser homepage](https://anchorbrowser.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Anchor Browser connection settings](https://console.oomol.com/app-connections?provider=anchor_browser)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anchor-browser)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return CDP and live-view connection URLs when starting browser sessions.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

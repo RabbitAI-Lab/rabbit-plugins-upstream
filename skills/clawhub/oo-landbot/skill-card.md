@@ -1,43 +1,56 @@
-## Description: <br>
-Landbot (landbot.io) supports reading, creating, and updating Landbot data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Landbot (landbot.io). Use this skill for ANY Landbot request, including reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Landbot through an OOMOL-connected account, including reading channels, customers, and message history. It can also prepare authenticated write actions such as sending text messages and updating typed customer fields after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated write actions can change Landbot state, including sending messages and updating customer fields. <br>
-Mitigation: Inspect the live connector schema, confirm the exact payload and effect with the user, and run only after the user approves the write action. <br>
-Risk: Setup or recovery commands can affect the active CLI authentication or connected account context. <br>
-Mitigation: Run first-time setup steps only after a matching command failure, and confirm the intended account or connection before retrying. <br>
+## Use Case:
 
+External users and operators use this skill to work with Landbot through an OOMOL-connected account, including listing channels and customers, reading customer messages, sending text messages, and updating customer fields.
 
-## Reference(s): <br>
-- [ClawHub Landbot Skill](https://clawhub.ai/oomol/skills/oo-landbot) <br>
-- [Landbot Homepage](https://landbot.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: The release uses an unsafe remote installer pattern for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI through a verifiable package or reviewed installer before running Landbot actions.
+
+Risk: The skill grants broad local oo CLI authority for connected Landbot actions.
+
+Mitigation: Review the requested action, inspect the live schema, and require explicit confirmation before any write action is run.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-landbot)
+- [Landbot Homepage](https://landbot.io)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

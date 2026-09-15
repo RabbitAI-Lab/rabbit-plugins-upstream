@@ -1,46 +1,60 @@
-## Description: <br>
-Excel (microsoft.com). Use this skill for ANY Excel request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Microsoft Excel through an OOMOL-connected account, including reading, creating, updating, and deleting workbook data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to inspect, read, create, update, sort, filter, and delete Microsoft Excel workbook data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or remove workbook data through an OOMOL-connected Excel account. <br>
-Mitigation: Review each proposed write or destructive payload, confirm the target workbook, worksheet, range, table, and effect, and require explicit user approval before execution. <br>
-Risk: Excel workbooks may contain financial, business, or personal data. <br>
-Mitigation: Limit actions to the user-approved workbook data needed for the task and inspect returned data before sharing or reusing it. <br>
-Risk: First-time setup may require installing the OOMOL CLI. <br>
-Mitigation: Review the OOMOL CLI installer before running it when the CLI is not already installed. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Excel connector schemas and run OOMOL CLI actions for workbook, worksheet, range, table, and file operations in a connected Microsoft account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-excel) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Microsoft Excel](https://www.microsoft.com/microsoft-365/excel) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The connector can read and change Excel workbook data through the user's connected Microsoft account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm exact workbook, worksheet, range, table, and payload details before any write or destructive action.
+
+Risk: Remote installer pipe commands can execute unverified code during setup.
+
+Mitigation: Use a verified, version-pinned installation path instead of running installer pipe commands blindly.
+
+Risk: File search and drive listing can expose OneDrive item metadata beyond the intended workbook.
+
+Mitigation: Limit searches and listings to the narrowest necessary scope and review returned item metadata before continuing.
+
+## Reference(s):
+
+- [ClawHub Excel Skill Page](https://clawhub.ai/oomol/skills/oo-excel)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Microsoft Excel](https://www.microsoft.com/microsoft-365/excel)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

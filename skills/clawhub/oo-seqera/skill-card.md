@@ -1,46 +1,57 @@
-## Description: <br>
-Seqera (seqera.io). Use this skill for ANY Seqera request - searching and reading data. Whenever a task involves Seqera, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an OOMOL oo CLI connector guide for reading Seqera data and launching workflows through a connected Seqera account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with Seqera through an OOMOL-connected account, including reading users, workspaces, pipelines, and workflow runs, and launching workflows when explicitly intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can launch Seqera workflows, which may change state or incur cost even though the action is not labeled as a write action in the skill text. <br>
-Mitigation: Confirm the exact payload, workspace, pipeline, and cost impact with the user before running launch_workflow. <br>
-Risk: The first-time setup instructions include remote installer commands. <br>
-Mitigation: Review the CLI installer source or use OOMOL's documented installation path before running pipe-to-shell commands. <br>
-Risk: The skill requires an OOMOL-connected Seqera account and therefore depends on sensitive credentials managed outside the skill. <br>
-Mitigation: Install only when the publisher is trusted and the user intends to operate Seqera through the OOMOL oo CLI. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Seqera action schemas, read user, workspace, pipeline, and workflow data, and launch Seqera workflows through the OOMOL oo connector when requested.
 
-## Reference(s): <br>
-- [Seqera homepage](https://seqera.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Seqera connection](https://console.oomol.com/app-connections?provider=seqera) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-seqera) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Workflow launch can change Seqera state and may incur cost.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation of the workspace, pipeline, parameters, compute environment, and expected cost before any launch.
+
+Risk: Remote pipe-to-shell installer commands can execute unreviewed code.
+
+Mitigation: Use a trusted, verified oo CLI installation method where possible and review installation steps before running them.
+
+## Reference(s):
+
+- [ClawHub Seqera skill page](https://clawhub.ai/oomol/skills/oo-seqera)
+- [Seqera homepage](https://seqera.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Seqera connection setup](https://console.oomol.com/app-connections?provider=seqera)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance, Configuration]
+
+**Output Format:** [Markdown instructions with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payloads; workflow launches require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

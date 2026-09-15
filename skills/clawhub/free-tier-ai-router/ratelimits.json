@@ -1,0 +1,158 @@
+{
+ "gemini/gemini-3.5-flash-lite": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 13.1,
+  "req_per_s": 0.61,
+  "limit_headers": {}
+ },
+ "gemini/gemini-3.6-flash": {
+  "ok": 6,
+  "n": 8,
+  "http429": 2,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "429",
+   "429"
+  ],
+  "sec": 10.0,
+  "req_per_s": 0.8,
+  "limit_headers": {}
+ },
+ "mistral/mistral-small-latest": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 3.8,
+  "req_per_s": 2.09,
+  "limit_headers": {
+   "x-ratelimit-limit-tokens-minute": "50000",
+   "x-ratelimit-remaining-tokens-minute": "49767",
+   "x-ratelimit-tokens-query-cost": "29",
+   "x-ratelimit-limit-req-minute": "50",
+   "x-ratelimit-remaining-req-minute": "42"
+  }
+ },
+ "mistral/mistral-large-latest": {
+  "ok": 4,
+  "n": 8,
+  "http429": 4,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "429",
+   "429",
+   "429",
+   "429"
+  ],
+  "sec": 4.4,
+  "req_per_s": 1.83,
+  "limit_headers": {
+   "x-ratelimit-limit-tokens-minute": "250000",
+   "x-ratelimit-remaining-tokens-minute": "249863",
+   "x-ratelimit-tokens-query-cost": "40",
+   "x-ratelimit-limit-req-minute": "4",
+   "x-ratelimit-remaining-req-minute": "0"
+  }
+ },
+ "openrouter/nvidia/nemotron-3-super-120b-a12b:free": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 58.4,
+  "req_per_s": 0.14,
+  "limit_headers": {}
+ },
+ "openrouter/inclusionai/ling-3.0-flash:free": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 8.5,
+  "req_per_s": 0.94,
+  "limit_headers": {}
+ },
+ "kilo/kilo-auto/free": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 10.9,
+  "req_per_s": 0.73,
+  "limit_headers": {}
+ },
+ "kilo/inclusionai/ling-3.0-flash:free": {
+  "ok": 8,
+  "n": 8,
+  "http429": 0,
+  "codes": [
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200",
+   "200"
+  ],
+  "sec": 10.5,
+  "req_per_s": 0.76,
+  "limit_headers": {}
+ }
+}

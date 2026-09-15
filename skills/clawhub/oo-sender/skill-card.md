@@ -1,43 +1,56 @@
-## Description: <br>
-Sender lets an agent read and manage Sender campaigns, subscribers, groups, custom fields, and workflows through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Sender through the OOMOL oo CLI to inspect action schemas and read, create, update, or remove Sender resources with confirmation for changes.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use Sender to inspect live connector schemas and then read or modify Sender account data such as subscribers, groups, campaigns, fields, and workflows through approved oo CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update subscribers, fields, or group memberships in the connected Sender account. <br>
-Mitigation: Require the agent to show the exact payload and expected effect before approving any write action. <br>
-Risk: The destructive group removal action can remove subscribers from Sender groups. <br>
-Mitigation: Confirm the target subscribers, selection criteria, and group before running destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Sender subscribers, groups, custom fields, campaigns, and automation workflows through an authenticated OOMOL connector without handling raw Sender API tokens.
 
-## Reference(s): <br>
-- [Sender homepage](https://www.sender.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sender) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that could execute mutable code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install steps first and prefer a pinned, verifiable oo CLI package or official instructions that allow inspection before execution.
+
+Risk: Sender write or destructive actions can change subscriber, group, field, campaign, or workflow data.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and expected effect with the user, and require explicit approval for destructive removals.
+
+## Reference(s):
+
+- [ClawHub Sender skill page](https://clawhub.ai/oomol/skills/oo-sender)
+- [Sender homepage](https://www.sender.net)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before constructing payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

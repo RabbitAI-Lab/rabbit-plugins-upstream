@@ -1,45 +1,56 @@
-## Description: <br>
-BetterContact (bettercontact.rocks) lets an agent check account credit balance, submit leads for waterfall enrichment, and poll enrichment results through an OOMOL-connected BetterContact account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BetterContact lets agents use an OOMOL-connected account to read account credit balances, retrieve enrichment results, and submit leads for waterfall enrichment.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate BetterContact enrichment from an agent without handling raw API tokens. It is suited for checking BetterContact credits, submitting lead enrichment requests, and retrieving enrichment status or results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires use of an OOMOL-connected BetterContact account. <br>
-Mitigation: Install only when the agent should be allowed to use that connected account. <br>
-Risk: Submitting enrichment requests can spend BetterContact credits and send lead data to BetterContact. <br>
-Mitigation: Review and approve the exact enrichment payload before write actions are run. <br>
-Risk: Connector contracts can change over time. <br>
-Mitigation: Inspect the live action schema before building each payload. <br>
+## Use Case:
 
+External users and developers use this skill to operate BetterContact through OOMOL's connected-account CLI flow, including checking credits, retrieving enrichment results, and submitting leads for enrichment.
 
-## Reference(s): <br>
-- [ClawHub BetterContact Skill Page](https://clawhub.ai/oomol/oo-bettercontact) <br>
-- [BetterContact Homepage](https://bettercontact.rocks) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and prefer a versioned, signed, or checksum-verified oo CLI installation; do not let an agent run these installers automatically.
+
+Risk: Submitting enrichment jobs changes account state and can consume BetterContact credits.
+
+Mitigation: Confirm the exact enrichment payload and expected effect with the user before sending a submit_enrichment request.
+
+## Reference(s):
+
+- [ClawHub BetterContact Skill](https://clawhub.ai/oomol/skills/oo-bettercontact)
+- [BetterContact Homepage](https://bettercontact.rocks)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON data]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from connector runs include data and meta.executionId fields when returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

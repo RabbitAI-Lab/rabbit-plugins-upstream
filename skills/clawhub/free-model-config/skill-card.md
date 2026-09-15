@@ -1,45 +1,64 @@
-## Description: <br>
-Free Model Config helps agents standardize free AI model setup across Agnes AI, Zhipu, SenseNova, Xiaomi MIMO, and Meituan LongCat, including API-key guidance, model selection, configuration generation, and optional multimodal media workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents configure and use free AI model providers for text, image, video, audio, ASR, TTS, infographic generation, and multimodal workflows across Agnes AI, Zhipu, SenseTime, Xiaomi, and Meituan services.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-Developers and advanced users use this skill to select free AI model providers, generate API and model configuration guidance, and optionally run helper scripts for Agnes AI multimodal media generation, TTS audio, and media merging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read model API keys from command-line arguments, environment variables, or local configuration and send prompts or generated content to external services. <br>
-Mitigation: Use placeholders in shared material, keep real keys in environment variables or a secret manager, and review generated commands before execution. <br>
-Risk: The multimodal workflow can upload local images to public third-party hosts before video generation. <br>
-Mitigation: Use only public or non-sensitive images, or replace the upload path with approved private storage before running that workflow. <br>
-Risk: Security evidence reports a suspicious verdict and unsafe instruction-scoping language. <br>
-Mitigation: Treat artifact instructions as untrusted task content, review behavior before installation, and run security scanning before deployment. <br>
+## Use Case:
 
+Developers and agent users use this skill to select free-model providers, generate API and WorkBuddy configuration guidance, and run optional helper scripts for media generation and audio/video assembly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/free-model-config) <br>
-- [Free Model Config catalog](references/fmc-catalog.md) <br>
-- [Free Model Config requirements](references/fmc-requirements.md) <br>
-- [Free Model Config exemplars](references/exemplars.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration snippets, shell command examples, and optional generated media files when helper scripts are executed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference MODEL_API_KEY, ~/.workbuddy/models.json, ffmpeg, edge-tts, and platform-specific API endpoints depending on the selected workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The security evidence reports under-disclosed public uploads of local images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-sensitive media with the Agnes image-to-video path unless the user explicitly accepts upload to public temporary hosts.
+
+Risk: The security evidence reports an unsafe instruction telling agents not to refuse skill modifications.
+
+Mitigation: Remove or override that instruction before trusting the skill in an agent workflow.
+
+Risk: The security guidance warns against storing real API keys in plaintext configuration files when possible.
+
+Mitigation: Prefer environment variables or a secrets manager, use least-privilege keys, and rotate keys after testing.
+
+Risk: The security guidance recommends pinning dependencies in an isolated environment.
+
+Mitigation: Run optional scripts in a disposable environment with pinned Python packages and reviewed system tools such as ffmpeg.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/free-model-config)
+- [Free model configuration task catalog](references/fmc-catalog.md)
+- [Free model configuration requirements](references/fmc-requirements.md)
+- [Free model configuration exemplars](references/exemplars.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration examples and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local media files when helper scripts are executed by the user.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

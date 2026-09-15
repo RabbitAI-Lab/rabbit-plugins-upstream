@@ -1,44 +1,57 @@
-## Description: <br>
-TinyURL (tinyurl.com). Use this skill for ANY TinyURL request — reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TinyURL helps an agent create short links and list account URLs through the OOMOL-connected TinyURL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate TinyURL through an OOMOL-connected account, including creating short links and listing account URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create TinyURL links through the user's connected account. <br>
-Mitigation: Confirm the destination URL and intended effect with the user before running `create_short_url`. <br>
-Risk: The skill depends on an OOMOL account connection and may require trusted setup steps. <br>
-Mitigation: Run CLI installation, login, or TinyURL connection setup only when needed and only through the documented OOMOL setup paths. <br>
-Risk: TinyURL actions may require sensitive credentials managed outside the agent. <br>
-Mitigation: Use the OOMOL connector flow so credentials remain server-side and are not handled directly in prompts or shell payloads. <br>
+## Use Case:
 
+Developers and external users use this skill to operate TinyURL through an OOMOL-connected account, including creating short URLs and listing existing URLs by availability status.
 
-## Reference(s): <br>
-- [TinyURL homepage](https://tinyurl.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL TinyURL connection setup](https://console.oomol.com/app-connections?provider=tinyurl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas and returns connector responses as JSON when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first, prefer a verified package manager or pinned signed release, and avoid direct curl|bash or irm|iex execution unless the OOMOL delivery chain is trusted.
+
+Risk: The create_short_url action changes TinyURL account state by creating a new short link.
+
+Mitigation: Confirm the exact destination URL and JSON payload with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub TinyURL Skill](https://clawhub.ai/oomol/skills/oo-tinyurl)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [TinyURL Homepage](https://tinyurl.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, JSON payloads]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector JSON responses when commands run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

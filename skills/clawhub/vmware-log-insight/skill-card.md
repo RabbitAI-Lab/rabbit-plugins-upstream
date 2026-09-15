@@ -1,46 +1,61 @@
-## Description: <br>
-Read-only log search and aggregation for VMware Aria Operations for Logs (vRealize Log Insight), enabling agents to investigate centralized ESXi, vCenter, and VM logs without write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to search, aggregate, and investigate centralized VMware VCF Operations for Logs data through read-only log search, aggregation, field discovery, version, and alert-history queries.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, SREs, and VMware administrators use this skill to query centralized Log Insight data, inspect raw log lines behind incidents, detect log-volume spikes, and retrieve read-only alert history for troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried appliance logs may contain sensitive production data. <br>
-Mitigation: Use a read-only Log Insight service account, scope queries to the incident window, and avoid exposing raw log output beyond the authorized troubleshooting context. <br>
-Risk: Local credential files can expose appliance credentials if filesystem permissions or secret handling are weak. <br>
-Mitigation: Keep ~/.vmware-log-insight/.env chmod 600 or inject credentials from a secret manager at process start. <br>
-Risk: Disabling TLS verification can expose credentials or log data outside controlled lab environments. <br>
-Mitigation: Leave TLS verification enabled by default and disable it only for explicitly controlled self-signed lab appliances. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect VMware log evidence during incident triage, find log-volume spikes, discover available log fields, and read alert definitions or alert history without changing the Log Insight appliance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-log-insight) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured tool-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Log Insight queries may return truncated result envelopes and completion flags that agents should surface to users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: The skill needs credentials for a VMware Log Insight appliance, and local credential files can expose secrets if handled loosely.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only Log Insight account, keep local credential and audit files private, and prefer secret-manager injection instead of storing passwords in .env.
+
+Risk: Log lines are untrusted operational data and may contain instruction-shaped text or large volumes of irrelevant content.
+
+Mitigation: Treat log output as data, bound searches with time windows and limits, report truncation explicitly, and rely on the documented sanitization and list-envelope behavior.
+
+Risk: Network access to unintended appliances can broaden the operational data exposed to the agent.
+
+Mitigation: Restrict the MCP server network path to the intended Log Insight appliances and keep TLS verification enabled except for controlled self-signed lab environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-log-insight)
+- [Capabilities](artifact/references/capabilities.md)
+- [Agent Guardrails](artifact/references/agent-guardrails.md)
+- [Setup Guide](artifact/references/setup-guide.md)
+- [CLI Reference](artifact/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with structured summaries, JSON-shaped tool results, and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Log Insight query results may be bounded, truncated, or summarized according to tool limits and returned envelopes.]
+
+## Skill Version(s):
+
+1.8.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

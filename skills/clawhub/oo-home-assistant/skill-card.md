@@ -1,45 +1,59 @@
-## Description: <br>
-Operates Home Assistant through the OOMOL home_assistant connector for reading data and running approved actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Home Assistant through OOMOL-connected actions for reading, creating, updating, and deleting Home Assistant data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Home Assistant configuration, entity states, events, services, and templates, and to run user-confirmed service calls or events through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run Home Assistant control actions that change real devices or automations. <br>
-Mitigation: Require explicit user confirmation of the exact action, target entities, payload, and expected effect before running call_service or fire_event. <br>
-Risk: The skill requires a connected Home Assistant account and should be trusted with sensitive account access. <br>
-Mitigation: Install only if the user trusts OOMOL, use the OOMOL connection flow, and avoid asking for or exposing raw Home Assistant tokens. <br>
-Risk: Dynamic templates and broad state reads may reveal sensitive details about the connected Home Assistant instance. <br>
-Mitigation: Review requested templates and read scopes before execution, and only return information relevant to the user's request. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Home Assistant state and perform Home Assistant operations through an OOMOL-connected account. It supports device control, service calls, events, scripts, templates, logs, registries, calendars, and UI-managed automations, scenes, and scripts.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-home-assistant) <br>
-- [Home Assistant Homepage](https://www.home-assistant.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector actions that return JSON responses with data and an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release and SKILL.md metadata) <br>
+Risk: Installer commands can fetch and execute remote scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer commands automatically; use a verified package or inspect and verify the installer first.
+
+Risk: The skill can control Home Assistant devices and edit or delete automations, scenes, and scripts.
+
+Mitigation: Use it only when you trust OOMOL and require explicit confirmation for service calls, script execution, event firing, writes, and deletes.
+
+Risk: Some state-changing Home Assistant actions may not be fully tagged as writes in the skill text.
+
+Mitigation: Treat any action that changes device state, fires events, executes scripts, or modifies configuration as confirmation-required even if it is not tagged.
+
+## Reference(s):
+
+- [Home Assistant](https://www.home-assistant.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-home-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Home Assistant action payloads, schema inspection commands, and confirmation requests for writes or destructive changes.]
+
+## Skill Version(s):
+
+1.0.5 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

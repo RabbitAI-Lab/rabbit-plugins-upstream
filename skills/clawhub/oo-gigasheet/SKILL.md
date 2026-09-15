@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Gigasheet"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["gigasheet"]
   icon: "https://static.oomol.com/logo/third-party/Gigasheet.svg"
 ---

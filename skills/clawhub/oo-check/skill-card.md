@@ -1,43 +1,57 @@
-## Description: <br>
-This skill helps agents use OOMOL's Check connector to inspect schemas and run supported Check actions for reading tax agency data and validating US addresses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to inspect Check action schemas and run Check tax-agency lookup, agency listing, and US address-validation actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators working with Check use this skill to retrieve or list tax agencies and validate US addresses through an OOMOL-connected Check account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected Check account. <br>
-Mitigation: Install only if OOMOL's CLI is trusted, review install commands before running them, and connect Check intentionally. <br>
-Risk: Address validation may send address data through OOMOL to Check. <br>
-Mitigation: Use address validation only when appropriate for the user's Check workflow and avoid sending unnecessary address data. <br>
+## Use Case:
 
+Developers and operators use this skill when an agent needs to work with Check data via the OOMOL `oo` CLI. It supports reading Check tax agencies, listing agencies with filters and pagination, and validating US addresses after inspecting each action's live schema.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-check) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Check homepage](https://www.checkhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; command responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The first-time setup section includes remote installer pipeline commands that execute downloaded code without integrity verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from trusted OOMOL sources and prefer official installation documentation, a package manager, or a downloaded installer whose source and integrity can be verified before execution.
+
+Risk: The skill depends on an OOMOL-connected account and the oo CLI for Check access.
+
+Mitigation: Use the skill only when the user trusts OOMOL, has intentionally connected Check, and accepts the oo CLI dependency.
+
+## Reference(s):
+
+- [Check homepage](https://www.checkhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-check)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses `oo connector schema` before constructing action payloads and `oo connector run --json` for execution responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

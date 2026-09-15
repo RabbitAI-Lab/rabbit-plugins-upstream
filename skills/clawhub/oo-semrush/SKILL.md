@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Semrush"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["semrush"]
   icon: "https://static.oomol.com/logo/third-party/semrush.svg"
 ---

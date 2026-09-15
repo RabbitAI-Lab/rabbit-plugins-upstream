@@ -1,44 +1,55 @@
-## Description: <br>
-DiscoLike helps agents discover companies and retrieve firmographic, digital footprint, SSL certificate, growth, usage, and billing data for a connected DiscoLike account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in using the OOMOL oo CLI to run DiscoLike connector actions for company discovery and business data retrieval.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to search DiscoLike for company matches and retrieve company profile, footprint, certificate, growth, and usage information from an already connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DiscoLike queries are mediated through OOMOL for the user's connected account. <br>
-Mitigation: Install and use the skill only after accepting OOMOL as an intermediary for DiscoLike access. <br>
-Risk: The get_usage action can expose account usage and billing counters. <br>
-Mitigation: Treat get_usage results as account and billing information and share them only with authorized users. <br>
-Risk: Future connector actions that write, overwrite, or delete data could affect DiscoLike state. <br>
-Mitigation: Require confirmation for write actions and explicit approval for destructive actions before execution. <br>
+## Use Case:
 
+External users, developers, and business teams use this skill to query DiscoLike through an OOMOL-connected account for company discovery, firmographic profiles, growth metrics, SSL certificate metrics, digital footprint scores, and usage counters.
 
-## Reference(s): <br>
-- [DiscoLike homepage](https://discolike.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-discolike) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include account usage and billing counters when the get_usage action is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Fallback setup instructions include remote installer commands that could be unsafe if run blindly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official install path that can be inspected and verified before running the connector.
+
+Risk: The skill operates through a connected DiscoLike account and can access account-specific usage and billing counters.
+
+Mitigation: Run only intended read actions after setup and inspect the live action schema before constructing each request.
+
+## Reference(s):
+
+- [DiscoLike homepage](https://discolike.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and an execution ID.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence.json release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

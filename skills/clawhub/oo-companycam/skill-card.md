@@ -1,43 +1,56 @@
-## Description: <br>
-Use this skill for CompanyCam requests, including reading, creating, updating, and deleting data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CompanyCam (companycam.com). Use this skill for CompanyCam requests to read, create, update, and delete data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to operate a connected CompanyCam account through OOMOL, including reading company, user, project, and tag data and managing projects or tags when explicitly requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, archive, restore, or delete CompanyCam data. <br>
-Mitigation: Require explicit confirmation of the exact target and payload before running write or destructive actions. <br>
-Risk: Authentication, connection scope, credential expiry, or billing errors can block CompanyCam actions. <br>
-Mitigation: Use the documented setup or billing fallback only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers managing CompanyCam accounts use this skill to inspect live action schemas and run account, project, tag, company, and user workflows through an OOMOL-connected CompanyCam account.
 
-## Reference(s): <br>
-- [CompanyCam Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-companycam) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [CompanyCam Homepage](https://companycam.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions run through the OOMOL oo CLI and may return connector data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands for the oo CLI that require review before execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path carefully, prefer verified package-manager or manually downloaded installer steps from OOMOL, and avoid running curl-to-bash or invoke-expression commands without verification.
+
+Risk: The skill can create, update, archive, restore, or delete CompanyCam records.
+
+Mitigation: Require explicit confirmation before any CompanyCam write, archive, restore, update, or delete action, including confirmation of the target and payload.
+
+## Reference(s):
+
+- [CompanyCam Skill Page](https://clawhub.ai/oomol/skills/oo-companycam)
+- [CompanyCam Homepage](https://companycam.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action execution; CompanyCam action responses include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

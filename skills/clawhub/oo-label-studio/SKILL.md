@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Label Studio"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["label_studio"]
   icon: "https://static.oomol.com/logo/third-party/label_studio.svg"
 ---

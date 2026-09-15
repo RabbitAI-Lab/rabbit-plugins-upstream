@@ -1,45 +1,55 @@
-## Description: <br>
-Nasdaq Data Link (data.nasdaq.com). Use this skill for ANY Nasdaq Data Link request — searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Nasdaq Data Link helps agents search and read Nasdaq Data Link data through OOMOL's oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Nasdaq Data Link through an OOMOL-connected account for ticker-focused data retrieval, datatable metadata, export status, and dataset rows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Nasdaq Data Link account and can access datasets available to that account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL and intends to query that connected Nasdaq Data Link account. <br>
-Risk: Returned Nasdaq data or datatable download links may be exposed in the agent session. <br>
-Mitigation: Treat returned rows, metadata, and download links as account-accessible data and avoid sharing them beyond the intended session or audience. <br>
-Risk: Incorrect payloads can query unintended datasets or filters. <br>
-Mitigation: Inspect the live action schema before constructing JSON payloads and confirm any write or destructive action if such actions are introduced. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect live Nasdaq connector schemas and run read-oriented Nasdaq Data Link actions for market data, datatable metadata, exports, analyst ratings, dividends, and end-of-day quotes.
 
-## Reference(s): <br>
-- [Nasdaq Data Link homepage](https://data.nasdaq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-nasdaq) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload/response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides read-oriented Nasdaq Data Link actions through the OOMOL oo CLI and may surface returned dataset rows, metadata, export status, or download links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: First-time setup includes remote installer commands that can execute changing internet-hosted code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package or release that can be verified, review installers before execution, and limit routine use to an already-installed oo CLI.
+
+Risk: Nasdaq Data Link access depends on OOMOL-managed credentials and live connector behavior.
+
+Mitigation: Inspect the live action schema before each run and confirm any action that changes state before execution.
+
+## Reference(s):
+
+- [Nasdaq Data Link](https://data.nasdaq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-nasdaq)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routine use returns oo CLI connector JSON responses when actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

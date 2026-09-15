@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Humanitix"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["humanitix"]
   icon: "https://static.oomol.com/logo/third-party/humanitix.png"
 ---

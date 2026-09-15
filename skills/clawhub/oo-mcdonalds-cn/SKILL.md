@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "McDonald's China"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["mcdonalds_cn"]
   icon: "https://static.oomol.com/logo/third-party/mcdonalds_cn.png"
 ---

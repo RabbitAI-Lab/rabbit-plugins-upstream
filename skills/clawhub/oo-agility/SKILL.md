@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Agility CMS"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["agility"]
   icon: "https://static.oomol.com/logo/third-party/agility.svg"
 ---

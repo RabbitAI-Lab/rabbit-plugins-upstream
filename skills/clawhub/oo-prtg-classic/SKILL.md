@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "PRTG Classic"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["prtg_classic"]
   icon: "https://static.oomol.com/logo/third-party/prtg_classic.svg"
 ---

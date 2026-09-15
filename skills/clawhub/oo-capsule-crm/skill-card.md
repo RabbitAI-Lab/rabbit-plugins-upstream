@@ -1,46 +1,57 @@
-## Description: <br>
-Operate Capsule CRM through an OOMOL-connected account for reading, creating, updating, deleting, listing, and searching CRM records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Capsule CRM through the OOMOL-connected oo CLI to read, create, update, delete, search, and list CRM records.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to let an agent work with Capsule CRM records through OOMOL, including parties, opportunities, tasks, and CRM reference data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and delete actions can change or remove Capsule CRM records. <br>
-Mitigation: Confirm the exact action, target record, and payload with the user before running create, update, or delete operations. <br>
-Risk: The skill requires access to a Capsule CRM account through OOMOL and may use sensitive credentials. <br>
-Mitigation: Install it only when the agent should access Capsule CRM through OOMOL, and rely on the server-side credential injection described by the release evidence. <br>
-Risk: The optional oo CLI installation command downloads and runs a remote installer. <br>
-Mitigation: Run the installer only when the CLI is missing and after reviewing OOMOL's official installation guidance. <br>
+## Use Case:
 
+Employees, external users, developers, and agents use this skill to operate Capsule CRM records through an OOMOL-connected account without handling raw credentials directly.
 
-## Reference(s): <br>
-- [ClawHub Capsule CRM Skill](https://clawhub.ai/oomol/oo-capsule-crm) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Capsule CRM Homepage](https://capsulecrm.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON responses when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The setup instructions include unverified remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed, version-pinned, checksum-verified oo CLI installation path and do not allow an agent to run the installer automatically.
+
+Risk: Write and destructive Capsule CRM actions can create, update, or delete business records.
+
+Mitigation: Confirm exact targets, payloads, and intended effects before running create, update, or delete actions.
+
+## Reference(s):
+
+- [Capsule CRM homepage](https://capsulecrm.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-capsule-crm)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON data and an executionId under meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

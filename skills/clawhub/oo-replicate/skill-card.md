@@ -1,45 +1,55 @@
-## Description: <br>
-Replicate (replicate.com). Use this skill for ANY Replicate request - reading, creating, and updating data. Whenever a task involves Replicate, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents operate Replicate through an OOMOL-connected account by inspecting live action schemas and running read or write actions for predictions, models, versions, collections, and account details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent manage Replicate account, model, collection, and prediction workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creating or canceling Replicate predictions can change account state or incur cost. <br>
-Mitigation: Confirm the exact payload, target prediction, and expected effect with the user before running write actions. <br>
-Risk: Connector action contracts may change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each action payload. <br>
-Risk: First-time setup requires installing or authenticating the oo CLI and connecting a Replicate account. <br>
-Mitigation: Run setup steps only after a matching auth, connection, or missing-CLI error and only when the user trusts OOMOL and needs the connector. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent manage Replicate resources through the OOMOL-connected oo CLI, including creating or canceling predictions and reading models, versions, collections, predictions, and account details.
 
-## Reference(s): <br>
-- [Replicate homepage](https://replicate.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-replicate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup path includes remote installer commands that execute downloaded shell or PowerShell code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and prefer a verified, versioned oo CLI release or package manager.
+
+Risk: Create and cancel actions can change Replicate account state or spend account resources.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running create_prediction or cancel_prediction.
+
+## Reference(s):
+
+- [Replicate homepage](https://replicate.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Replicate skill page](https://clawhub.ai/oomol/skills/oo-replicate)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to inspect live action schemas before constructing payloads and to confirm write or destructive actions before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,70 @@
-## Description: <br>
-Google Sheets API integration with managed OAuth for reading and writing spreadsheet data, creating sheets, applying formatting, and managing ranges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Sheets API integration with managed OAuth for reading and writing spreadsheet data, creating sheets, applying formatting, and managing ranges.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Google Sheets through Maton-managed OAuth, including reading spreadsheet data, writing values, creating sheets, applying formatting, and managing ranges. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to connected Google Sheets accounts. <br>
-Mitigation: Install only if you trust Maton with the connected account, store MATON_API_KEY as a secret, and avoid exposing it in terminal output, screenshots, logs, or support chats. <br>
-Risk: Write, clear, delete, and batch update operations can change spreadsheet content or structure. <br>
-Mitigation: Confirm spreadsheet IDs, ranges, connected accounts, and intended effects with the user before allowing mutating operations. <br>
-Risk: Multiple Google account connections can route requests to an unintended account. <br>
-Mitigation: Specify the intended Maton connection when multiple Google Sheets connections are active. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent work with Google Sheets through Maton-managed OAuth, starting with read and list operations and requiring approval before writes, new connections, or automation.
 
-## Reference(s): <br>
-- [ClawHub Google Sheets skill page](https://clawhub.ai/byungkyu/skills/google-sheets) <br>
-- [Maton website](https://maton.ai) <br>
-- [Google Sheets API REST reference](https://developers.google.com/workspace/sheets/api/reference/rest) <br>
-- [Google Sheets API spreadsheets.get](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/get) <br>
-- [Google Sheets API spreadsheets.create](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/create) <br>
-- [Google Sheets API spreadsheets.batchUpdate](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate) <br>
-- [Google Sheets API batchUpdate request types](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/request) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, HTTP endpoint examples, and Python or JavaScript code snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an active Google Sheets OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: The skill can read or modify Google Sheets data through a connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege OAuth scopes, confirm the target account, spreadsheet, range, and payload, and require explicit approval before any write or new connection.
+
+Risk: Raw API keys or copied tokens can expose long-lived credentials.
+
+Mitigation: Prefer OAuth through the Maton CLI and the operating system credential store; use raw API keys only when the CLI cannot be installed and avoid printing, exporting, or embedding credentials.
+
+Risk: Automations and triggers can create persistent data flows or repeated writes.
+
+Mitigation: Create functions, triggers, and destinations only after explicit approval, scope them narrowly, prefer platform destinations, and remove unused automation.
+
+Risk: Spreadsheet or event content can contain sensitive or adversarial data.
+
+Mitigation: Treat fetched content as untrusted data, avoid executing or interpolating it into commands, and minimize logging or forwarding of raw payloads.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-sheets)
+- [Maton Homepage](https://maton.ai)
+- [Google Sheets API Overview](https://developers.google.com/workspace/sheets/api/reference/rest)
+- [Google Sheets Values API: Get](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/get)
+- [Google Sheets Values API: Update](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/update)
+- [Google Sheets Values API: Append](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets.values/append)
+- [Google Sheets Batch Update](https://developers.google.com/workspace/sheets/api/reference/rest/v4/spreadsheets/batchUpdate)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and API request patterns]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes approval guidance for writes, OAuth connection setup, trigger use, and credential handling.]
+
+## Skill Version(s):
+
+1.2.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

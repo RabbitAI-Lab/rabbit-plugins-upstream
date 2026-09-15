@@ -1,43 +1,56 @@
-## Description: <br>
-Salesmate (salesmate.io) enables an agent to read, create, update, and delete Salesmate CRM data through the OOMOL Salesmate connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Salesmate CRM through the OOMOL oo CLI connector for reading, creating, updating, and deleting Salesmate data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Salesmate CRM through an OOMOL-connected account, including listing modules and active users, fetching companies, and creating or deleting supported CRM records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Salesmate trigger wording may cause an agent to access CRM data when a request only vaguely mentions Salesmate. <br>
-Mitigation: Install only when the agent is intended to access Salesmate, and avoid invoking the skill for vague mentions unless CRM data access is intended. <br>
-Risk: Write and destructive actions can create CRM records or delete Salesmate products. <br>
-Mitigation: Use least-privilege API credentials where possible, review proposed payloads, and require explicit approval for create, update, or delete actions before execution. <br>
+## Use Case:
 
+Developers and agent operators use this skill to inspect Salesmate action schemas and run CRM actions for companies, products, users, and modules through an OOMOL-connected Salesmate account.
 
-## Reference(s): <br>
-- [Salesmate Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-salesmate) <br>
-- [Salesmate Homepage](https://www.salesmate.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup recommends piping remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified official installation method, inspect downloaded scripts before execution, and avoid elevated shells unless they are explicitly required.
+
+Risk: Salesmate write and destructive actions can change or delete CRM records.
+
+Mitigation: Inspect the live action schema first and require explicit user confirmation for the exact payload and target before running write or delete actions.
+
+## Reference(s):
+
+- [Salesmate Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-salesmate)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Salesmate Homepage](https://www.salesmate.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Salesmate action responses are JSON returned by the oo connector run command.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

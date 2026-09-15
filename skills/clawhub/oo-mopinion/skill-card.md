@@ -1,46 +1,56 @@
-## Description: <br>
-Mopinion (mopinion.com). Use this skill for ANY Mopinion request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mopinion lets an agent use an OOMOL-connected account to read Mopinion account, deployment, dataset, report, field, and feedback data through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Mopinion account, deployment, dataset, feedback form, feedback item, and report data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require installing or updating the oo CLI with a remote installer before connector actions can run. <br>
-Mitigation: Review the oo CLI installer source and install it only from the documented OOMOL URL. <br>
-Risk: The agent can read connected Mopinion account, dataset, feedback, deployment, and report information once the user is authenticated. <br>
-Mitigation: Use the skill only with trusted agents and confirm the target account, dataset, report, or deployment before running connector actions. <br>
-Risk: Connector schemas may change over time, causing invalid or incomplete payloads if actions are called from memory. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Mopinion customer feedback, form, report, deployment, and account information from a connected Mopinion account without handling raw credentials directly.
 
-## Reference(s): <br>
-- [Mopinion ClawHub listing](https://clawhub.ai/oomol/oo-mopinion) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Mopinion homepage](https://www.mopinion.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes direct remote installer commands that can execute unverified code in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted, versioned, verifiable oo CLI installation steps and do not let an agent run curl-to-shell or Invoke-Expression installer commands automatically.
+
+Risk: The skill uses an OOMOL-mediated Mopinion connection that can access data available to the connected account.
+
+Mitigation: Connect Mopinion only after reviewing the account and data access being granted, and install the skill only when an OOMOL-mediated connection is intended.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mopinion)
+- [Mopinion Homepage](https://www.mopinion.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before constructing JSON payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

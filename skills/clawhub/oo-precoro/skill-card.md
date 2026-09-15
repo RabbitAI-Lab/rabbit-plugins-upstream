@@ -1,43 +1,60 @@
-## Description: <br>
-Precoro (precoro.com). Use this skill for Precoro requests that read, create, or update data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Precoro (precoro.com). Use this skill for ANY Precoro request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to operate Precoro through the OOMOL CLI, including catalog, supplier, purchase order, user, and warehouse lookups. It also guides schema inspection and payload review before connector actions are run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector actions can access Precoro data through the user's OOMOL account, and future connector schemas may expose create, update, or delete operations. <br>
-Mitigation: Install only when this access is intended, inspect the live connector schema before each action, and review requested payloads before running state-changing actions. <br>
-Risk: The setup path includes installing and running the oo CLI. <br>
-Mitigation: Use trusted OOMOL CLI installation sources and avoid repeating authentication or connection setup unless a command fails with the matching error. <br>
+## Use Case:
 
+Employees and operators who manage purchasing workflows use this skill to inspect live Precoro connector schemas and read or update Precoro data such as catalog items, purchase orders, suppliers, users, and warehouses through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-precoro) <br>
-- [Precoro Homepage](https://precoro.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup guidance includes direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official install documentation, prefer a non-pipe-to-shell installation path when possible, and install only from trusted OOMOL distribution channels.
+
+Risk: Precoro actions may operate with the connected account's scopes and can include state-changing operations.
+
+Mitigation: Confirm the exact action, target record, payload, and expected effect with the user before running any write-capable or destructive action.
+
+Risk: The skill depends on a correctly scoped and trusted OOMOL-connected Precoro account.
+
+Mitigation: Use the minimum Precoro connection scope needed for the task and re-check authorization or connection errors before retrying commands.
+
+## Reference(s):
+
+- [ClawHub Precoro skill](https://clawhub.ai/oomol/skills/oo-precoro)
+- [Precoro homepage](https://precoro.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON from the oo CLI; action schemas should be inspected before payload construction.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

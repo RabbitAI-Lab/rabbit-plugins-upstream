@@ -1,39 +1,56 @@
-## Description: <br>
-This skill lets agents search and read 7shifts company, location, department, role, user, and identity data through the OOMOL 7_shifts connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+7shifts helps agents retrieve 7shifts company, location, department, role, user, and identity data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to retrieve 7shifts account data through an already connected OOMOL account. It is intended for read-oriented workflows such as listing companies, locations, departments, roles, users, and the connected identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [7shifts homepage](https://www.7shifts.com/) <br>
+Developers and operators use this skill to let an agent inspect read-only 7shifts business data, including companies, departments, locations, roles, users, and the connected identity. The skill is intended for accounts where the oo CLI is installed, signed in, and connected to 7shifts.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs read-oriented connector actions after live schema inspection; credentials remain managed by the connected OOMOL account.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The first-time setup fallback includes remote installer commands that could create a supply-chain risk if an agent runs them automatically.
+
+Mitigation: Review installer commands before use, install the oo CLI only from a verified source, and avoid letting agents run curl-to-shell or irm-to-iex commands without explicit approval.
+
+Risk: The skill accesses data from the connected 7shifts account through OOMOL-managed credentials.
+
+Mitigation: Confirm the connected 7shifts account and requested data scope before running connector actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-7-shifts)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [7shifts Homepage](https://www.7shifts.com/)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions are read-oriented in the provided artifact; setup guidance may include authentication, connection, or billing remediation steps.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

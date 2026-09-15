@@ -1,42 +1,61 @@
-## Description: <br>
-PhantomBuster helps an agent read and operate PhantomBuster resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PhantomBuster (phantombuster.com). Use this skill for ANY PhantomBuster request -- reading, creating, and updating data. Whenever a task involves PhantomBuster, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect PhantomBuster action schemas and run supported read, launch, and stop operations through an OOMOL-connected PhantomBuster account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked too broadly for PhantomBuster-adjacent requests. <br>
-Mitigation: Use it only for PhantomBuster workflows and inspect the live action schema before constructing a payload. <br>
-Risk: Launch, stop, or other account-changing operations can affect PhantomBuster resources. <br>
-Mitigation: Ask for explicit user confirmation of the target, payload, and expected effect before running write actions, and keep connector permissions scoped to the intended account and work. <br>
+## Use Case:
 
+External users and developers use this skill to operate PhantomBuster through an OOMOL-connected account, including reading agent, container, organization, and agent-list data. It can also launch and stop PhantomBuster agents when the user confirms the exact payload and effect.
 
-## Reference(s): <br>
-- [PhantomBuster homepage](https://phantombuster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-phantombuster) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live schema inspection before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: The security summary flags an unsafe remote installer command for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an already trusted CLI installation when possible, and independently verify the OOMOL installer source before running installer pipelines.
+
+Risk: The skill can launch or stop PhantomBuster agents, which may change service state.
+
+Mitigation: Confirm the target, payload, and expected effect with the user before launching or stopping agents.
+
+Risk: The security summary notes that a state-changing action is under-labeled.
+
+Mitigation: Treat launch and stop operations as state-changing even when labels are incomplete, and require explicit user confirmation before execution.
+
+## Reference(s):
+
+- [PhantomBuster homepage](https://phantombuster.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-phantombuster)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include PhantomBuster connector data returned as JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

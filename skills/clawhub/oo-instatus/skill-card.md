@@ -1,42 +1,56 @@
-## Description: <br>
-Use this skill to read, create, update, and delete Instatus data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Instatus (instatus.com). Use this skill for ANY Instatus request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage Instatus status pages, components, incidents, and incident updates through the oo CLI and an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and delete actions can change Instatus status pages, incidents, components, or incident updates. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and require explicit approval before destructive delete actions. <br>
-Risk: Action payloads can drift from the connector contract if the live schema is not checked. <br>
-Mitigation: Inspect the live oo connector schema before building each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Instatus status pages, components, incidents, and incident updates through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [Instatus homepage](https://instatus.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-instatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts into shell interpreters.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, user-approved method and do not allow an agent to run installer pipes automatically.
+
+Risk: Write and destructive connector actions can create, update, or delete Instatus data.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [Instatus homepage](https://instatus.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Instatus ClawHub listing](https://clawhub.ai/oomol/skills/oo-instatus)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and a connected Instatus account before actions can run.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

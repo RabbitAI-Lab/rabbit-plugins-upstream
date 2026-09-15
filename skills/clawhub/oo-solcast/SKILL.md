@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Solcast"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["solcast"]
   icon: "https://static.oomol.com/logo/third-party/solcast.svg"
 ---

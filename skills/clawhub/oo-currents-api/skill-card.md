@@ -1,43 +1,54 @@
-## Description: <br>
-Currents API lets agents search and read Currents API news data through the OOMOL-connected `currents_api` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agents with schema-first access to Currents API news search, latest-news retrieval, and read-only discovery actions through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query Currents API news data through the OOMOL `currents_api` connector, including latest news, article search, supported categories, languages, and regions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security summary marks the release suspicious and reports high-impact moderation commands plus a review helper that can run nested Codex with full access by default. <br>
-Mitigation: Install only in trusted maintainer or development environments, disable YOLO autoreview unless full local access is intentional, and check the exact target, reason, credentials, and audit expectations before moderation commands run. <br>
-Risk: The skill requires sensitive credentials through the connected Currents API account. <br>
-Mitigation: Use the OOMOL-managed connector path rather than handling raw API tokens, and reconnect credentials only when an auth or connection error requires it. <br>
+## Use Case:
 
+Developers and external agent users use this skill to search and retrieve Currents API news data after their OOMOL account and Currents API connection are configured.
 
-## Reference(s): <br>
-- [Currents API homepage](https://currentsapi.services) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-currents-api) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to inspect live connector schemas before running read-only Currents API actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that could execute unverified code if run blindly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, version-pinned, vendor-documented method before using the skill.
+
+Risk: Authentication or Currents API connection setup could be triggered unnecessarily by an agent.
+
+Mitigation: Run authentication or connection setup only after a matching auth or connection error and let the user confirm account setup.
+
+## Reference(s):
+
+- [Currents API homepage](https://currentsapi.services)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands executed through the oo CLI return JSON with data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

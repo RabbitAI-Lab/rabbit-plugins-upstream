@@ -1,44 +1,52 @@
-## Description: <br>
-Keeper SCIM (keepersecurity.com). Use this skill for searching and reading Keeper SCIM users, groups, and service provider configuration through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to read Keeper SCIM users, groups, and service provider configuration through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Keeper SCIM directory data through OOMOL, including users, groups, and service provider configuration, without handling raw connector credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Keeper SCIM results can expose sensitive identity directory data. <br>
-Mitigation: Treat returned users, groups, and service provider configuration as sensitive and review list queries before execution. <br>
-Risk: The skill depends on an OOMOL-connected account and server-side credential injection. <br>
-Mitigation: Complete oo CLI sign-in and Keeper SCIM connection only for trusted OOMOL accounts and providers. <br>
+## Use Case:
 
+Developers, IT administrators, and support agents use this skill to retrieve Keeper SCIM users, groups, and service provider configuration from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-keeper-scim) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Keeper SCIM homepage](https://www.keepersecurity.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from the oo CLI connector, including Keeper SCIM user, group, and service provider configuration records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The first-time setup path includes remote installer commands that can execute code from URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installers automatically; install the OOMOL CLI only from a verified source with user approval, preferably with a pinned release and checksum or signature verification.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-keeper-scim)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Keeper SCIM](https://www.keepersecurity.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Keeper SCIM read requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

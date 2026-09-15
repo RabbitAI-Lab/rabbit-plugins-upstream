@@ -1,43 +1,56 @@
-## Description: <br>
-Enables agents to operate Formsite through an OOMOL-connected account for reading, creating, updating, and deleting Formsite data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Formsite (formsite.com). Use this skill for ANY Formsite request — reading, creating, updating, and deleting data. Whenever a task involves Formsite, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to inspect Formsite forms, retrieve results, and manage webhooks through OOMOL's Formsite connector. It is suited to account-connected Formsite workflows where the agent should inspect the live action schema before running read, write, or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires account access and sensitive credentials through an OOMOL-connected Formsite account. <br>
-Mitigation: Install only when the publisher and listing are trusted, review the skill files before granting account access, and rely on OOMOL's server-side credential handling rather than exposing raw tokens. <br>
-Risk: Write and destructive actions can change or remove Formsite webhook configuration. <br>
-Mitigation: Inspect the live action schema, confirm the exact payload and effect with the user, and require explicit approval before running write or destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Formsite through an OOMOL-connected account, including reading forms and results and managing Formsite webhooks through the oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub Formsite listing](https://clawhub.ai/oomol/oo-formsite) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Formsite homepage](https://www.formsite.com) <br>
-- [OOMOL Formsite connection](https://console.oomol.com/app-connections?provider=formsite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OOMOL-connected Formsite account and live schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer scripts, which the security evidence flags as suspicious if executed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or inspect and validate the installer before execution.
+
+Risk: Write and destructive Formsite actions can change or delete account data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Formsite Skill](https://clawhub.ai/oomol/skills/oo-formsite)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Formsite homepage](https://www.formsite.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON from the oo CLI connector when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

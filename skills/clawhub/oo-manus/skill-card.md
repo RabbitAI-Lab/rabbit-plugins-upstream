@@ -1,45 +1,56 @@
-## Description: <br>
-Manus (manus.im) lets an agent read, create, update, and delete Manus data through the OOMOL `oo` CLI connector instead of calling the Manus API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manus (manus.im) lets an agent read, create, update, message, stop, confirm, and delete Manus tasks and related Manus resources through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Manus tasks, projects, agents, connectors, skills, browser clients, and task messages through an OOMOL-connected account. It supports read workflows as well as user-confirmed write and destructive Manus actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run authenticated Manus actions through an OOMOL-connected account, including actions that change Manus state. <br>
-Mitigation: Inspect the live connector schema, confirm the exact payload and effect with the user, and run write actions only after user approval. <br>
-Risk: The `delete_task` action permanently deletes a stopped Manus task. <br>
-Mitigation: Confirm the target task and obtain explicit approval before running destructive actions. <br>
-Risk: The skill depends on connected account credentials and may fail when the CLI, login, connection, scope, or billing state is missing or expired. <br>
-Mitigation: Use first-time setup steps only after a matching command failure and avoid proactively opening login or connection flows. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Manus tasks, projects, connectors, skills, browser clients, custom agents, and task messages from a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-manus) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Manus homepage](https://manus.im) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: First-time setup may run unverified internet installer scripts that execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted OOMOL sources and prefer reviewing or using a verified installer instead of piping remote scripts directly into a shell.
+
+Risk: Write and destructive Manus actions can change or delete account data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-manus)
+- [Manus Homepage](https://manus.im)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI JSON responses when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

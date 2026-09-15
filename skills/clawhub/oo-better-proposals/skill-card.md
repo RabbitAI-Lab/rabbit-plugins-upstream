@@ -1,47 +1,60 @@
-## Description: <br>
-Use this Better Proposals skill for reading, creating, and updating data through a connected Better Proposals account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Better Proposals requests involving reading, creating, and updating account data through OOMOL's Better Proposals connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with a connected Better Proposals account through OOMOL, including reading account, brand, company, currency, proposal, quote, and template data and performing supported update actions when confirmed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through a connected Better Proposals account. <br>
-Mitigation: Install and use it only when you intend to let the agent access that account through OOMOL. <br>
-Risk: Read and list actions may expose proposal, company, quote, template, and account settings data. <br>
-Mitigation: Run actions only for authorized tasks and review returned data before sharing or persisting it. <br>
-Risk: Write-tagged actions can change Better Proposals account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any write-tagged action. <br>
-Risk: CLI installer and login steps affect the local environment and account connection. <br>
-Mitigation: Run setup steps only when the oo CLI or account connection is missing and the OOMOL setup is trusted. <br>
+## Use Case:
 
+External users and agents use this skill to inspect and manage Better Proposals account resources, including proposals, quotes, companies, currencies, templates, settings, and brand details. The skill routes actions through OOMOL's Better Proposals connector and asks the agent to fetch the live action schema before building payloads.
 
-## Reference(s): <br>
-- [Better Proposals](https://betterproposals.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-better-proposals) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call the oo CLI and return connector JSON responses that include data and an executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup path may lead an agent to run remote installer commands directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow the agent to run remote installer commands automatically; install the oo CLI through a verified package or manually reviewed installer.
+
+Risk: The skill operates through OOMOL as an intermediary for a Better Proposals account.
+
+Mitigation: Use the skill only when that intermediary is acceptable, and limit agent actions to clearly requested Better Proposals tasks.
+
+Risk: Better Proposals actions can read account and proposal data, and tagged write or destructive actions can change account state.
+
+Mitigation: Confirm the exact payload and intended effect before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-better-proposals)
+- [Better Proposals Homepage](https://betterproposals.io)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; connector action responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a live connector schema lookup before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

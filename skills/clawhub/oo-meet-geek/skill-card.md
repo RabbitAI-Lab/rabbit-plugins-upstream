@@ -1,43 +1,56 @@
-## Description: <br>
-MeetGeek lets an agent retrieve meetings, summaries, insights, highlights, transcripts, and team data from a connected MeetGeek account through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MeetGeek (meetgeek.ai). Use this skill for MeetGeek requests that search, read, and retrieve meeting data through the OOMOL-connected MeetGeek connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to search and read MeetGeek meeting records, transcripts, summaries, highlights, insights, and team meeting data from an already connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Meeting summaries, transcripts, highlights, and insights may contain sensitive business or personal information. <br>
-Mitigation: Use the skill only for explicit MeetGeek data requests and share retrieved meeting content only with the intended audience. <br>
-Risk: The skill retrieves data from the user's connected MeetGeek account. <br>
-Mitigation: Install and use it only when that account access is appropriate for the task, and resolve connection or credential issues through the documented setup flow only after an auth-related command failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate MeetGeek through an OOMOL-connected account, including listing meetings and retrieving meeting details, summaries, transcripts, highlights, insights, and teams.
 
-## Reference(s): <br>
-- [ClawHub MeetGeek skill listing](https://clawhub.ai/oomol/skills/oo-meet-geek) <br>
-- [MeetGeek homepage](https://meetgeek.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads are constructed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes unpinned remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or documented release path, and review the installer source before executing remote scripts.
+
+Risk: MeetGeek connector access is handled through OOMOL's connector flow.
+
+Mitigation: Use the skill only when OOMOL handling the connector flow and connected MeetGeek account data is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meet-geek)
+- [MeetGeek homepage](https://meetgeek.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, API Calls, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -87,14 +87,17 @@ vmware-monitor inventory networks [--target <name>]
 
 ```bash
 vmware-monitor health alarms [--target <name>]
-vmware-monitor health events [--hours 24] [--severity warning] [--target <name>]
+vmware-monitor health events [--hours 24] [--severity warning] [--start <iso>] [--end <iso>] [--include-routine] [--target <name>]
 vmware-monitor health sensors [--target <name>]
 vmware-monitor health services [--host <esxi-name>] [--target <name>]
 ```
 
 - `--hours`: Time range for event query (default: 24)
 - `--severity`: Minimum severity filter — `info`, `warning`, `error`, `critical` (default: `warning`)
+- `--start` / `--end`: Query a specific window instead of the last `--hours` — ISO 8601, a time with no zone is UTC (e.g. `--start 2026-09-03T12:00Z --end 2026-09-03T16:00Z`). `--start` alone runs to now.
+- `--include-routine`: List routine login/logout events too. By default they are folded and counted, because one local agent's logins can outnumber everything else
 - `--host` (services only): Filter service status to a single host by exact name (default: all hosts)
+- `sensors`: a connected host that reports no sensors is named under the table with its CIM Server (`sfcbd-watchdog`) state — ESXi reads sensors through it, so a stopped CIM Server means none are reported; a running one usually means no BMC/IPMI device. MCP `get_host_sensors` returns the same as `hosts_without_sensors` and `sensors_note`
 
 ## VM Info (Read-Only)
 
@@ -107,16 +110,52 @@ Returns detailed VM information: CPU, memory, disks, NICs, guest OS, IP, VMware 
 
 `snapshot-list` lists existing snapshots with name and creation time. No create, revert, or delete operations exist. The same data is exposed via the MCP tool `vm_list_snapshots`.
 
+```bash
+vmware-monitor snapshots backup-window <vm> [--days 30] [--cycles]
+```
+
+Infers backup windows for one VM from its snapshot task history: image-level
+backup products snapshot the VM, copy the frozen disks, then delete the
+snapshot, and vCenter records both ends. Reports four hour statistics
+(backup active / snapshot present / total window / removal itself) plus
+creations that never got a matching removal.
+
+Two lines in the output change what the numbers mean, and both are printed
+rather than left to the reader: a note when vCenter could not be read at all
+(which is not "no backups"), and a note when part of the requested window has
+already aged out of task history (`task.maxAge`, 30 days by default — the
+option is not called `vpxd.task.maxAge`; that name raises `vim.fault.InvalidName`).
+Duplicate VM names are refused rather than resolved to one. The same data is
+exposed via the MCP tool `vm_backup_snapshot_history`.
+
+## vSphere 9.1 (read-only)
+
+```bash
+vmware-monitor memory tiering [--host <esxi>] [--limit <n>] [--target <name>]
+vmware-monitor patch compliance <cluster-moid> [--target <name>]
+vmware-monitor patch last-apply <cluster-moid> [--target <name>]
+vmware-monitor deployment-size [--target <name>]
+```
+
+- `memory tiering`: Per-host memory tiering (DRAM/NVMe tiers) and NVMe uplift ratio via pyVmomi `hardware.memoryTierInfo`. Requires ESXi/vCenter **8.0U3+**; on older targets the command fails with a teaching error naming the missing property. Same data as the MCP tool `host_memory_tiering`.
+- `patch compliance`: vLCM software (patch) compliance for one cluster over vSphere Automation REST. `<cluster-moid>` is the cluster **MoID** (e.g. `domain-c123`) — get it from `inventory clusters`, not the display name. When vCenter is mid-patch it answers 503 and the command prints a "state unavailable, retry shortly" line instead of crashing; `non-compliant` shows `?` when the host-status field is unknown (never a false 0). MCP tool: `cluster_patch_compliance`.
+- `patch last-apply`: Result (status + end time) of the last vLCM remediation on one cluster. `<cluster-moid>` as above. Reports the outcome only; it never runs a remediation. MCP tool: `cluster_last_apply_result`.
+- `deployment-size`: vCenter appliance deployment size class over REST (NEW in vSphere 9.1). MCP tool: `vcenter_deployment_size`.
+
+> These four commands resolve config **without opening a SOAP session** and only ever GET, so they still degrade gracefully when vCenter is mid-patch (answering 503). The three REST commands' endpoints are spec-verified, but their JSON field names are read defensively pending a live 9.1 vCenter replay — each result carries a `note` that self-labels the parse as best-effort.
+
 ## Scanning & Daemon
 
 ```bash
 vmware-monitor scan now [--target <name>]
+vmware-monitor scan logs [--host <name>] [--lines 500] [--raw] [--target <name>]
 vmware-monitor daemon start
 vmware-monitor daemon stop
 vmware-monitor daemon status
 ```
 
-- `scan now`: Run a one-time scan of alarms, events, and host logs
+- `scan now`: Run a one-time scan of alarms and events. It does not read ESXi host logs — use `scan logs` (MCP `host_log_scan`); the daemon's host-log pass reads them too
+- `scan logs`: Read the last `--lines` lines of hostd/vmkernel/vpxa on each host (or `--host`) and list the lines matching a trouble pattern, grouped by pattern with a count, the hosts and the log time span; severity follows the level ESXi wrote on the line. `--raw` prints one row per line
 - `daemon start`: Start APScheduler-based background scanner (default: every 15 min)
 - `daemon stop`: Stop the background scanner
 - `daemon status`: Check if the daemon is running

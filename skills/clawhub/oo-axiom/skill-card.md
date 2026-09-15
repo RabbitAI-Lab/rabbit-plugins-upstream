@@ -1,46 +1,55 @@
-## Description: <br>
-This skill helps agents operate Axiom through the OOMOL oo CLI connector for reading, creating, querying, and deleting datasets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Axiom helps an agent inspect live connector schemas and operate Axiom datasets and APL queries through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Axiom datasets and run Axiom Processing Language queries through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can delete Axiom datasets when a destructive action is explicitly approved. <br>
-Mitigation: Require explicit confirmation of the target dataset and intended effect before running delete_dataset. <br>
-Risk: Write actions can alter Axiom account state. <br>
-Mitigation: Inspect the live connector schema and confirm the exact payload before running state-changing actions. <br>
-Risk: The connector operates against the user's OOMOL-connected Axiom account. <br>
-Mitigation: Install only when the user accepts connector access to the Axiom account, and avoid handling raw API tokens directly. <br>
+## Use Case:
 
+Developers and operators use this skill to list, create, retrieve, and delete Axiom datasets, and to run Axiom Processing Language queries from an agent session.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-axiom) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Axiom homepage](https://axiom.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and artifact metadata) <br>
+Risk: The setup guidance includes remote installer one-liners for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified, versioned, or signed release where available.
+
+Risk: The skill can create or delete Axiom datasets.
+
+Mitigation: Confirm the exact payload and target before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Axiom homepage](https://axiom.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Axiom skill on ClawHub](https://clawhub.ai/oomol/skills/oo-axiom)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live action schemas before constructing connector payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

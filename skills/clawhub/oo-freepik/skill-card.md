@@ -1,41 +1,56 @@
-## Description: <br>
-Magnific (Freepik) connector that lets an agent search stock images and templates, retrieve resource metadata, and create download URLs through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Magnific (Freepik) lets an agent search Freepik stock images and templates, retrieve resource metadata, and create resource download URLs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Magnific (Freepik) from an agent, including searching Freepik resources, retrieving details by resource ID, and creating download URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Freepik/Magnific requests route through OOMOL and may use a connected account to create download URLs. <br>
-Mitigation: Install and connect the OOMOL CLI only if the user trusts OOMOL and needs this integration; confirm download URL creation requests before running them. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Magnific (Freepik) from an agent workflow when they need to search resources, inspect resource details, or generate download URLs through their connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-freepik) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Magnific (Freepik) homepage](https://www.magnific.com/freepik) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include internet-downloaded installer scripts that could run arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the oo CLI installation method before use, and avoid running the installer from an elevated shell.
+
+Risk: Skill use routes requests through an OOMOL-connected Freepik account and may depend on account scopes, credentials, billing, or credits.
+
+Mitigation: Confirm the connected account, scopes, and billing posture before issuing actions that generate download URLs or consume credits.
+
+## Reference(s):
+
+- [Magnific (Freepik) Skill Page](https://clawhub.ai/oomol/skills/oo-freepik)
+- [Magnific (Freepik) Homepage](https://www.magnific.com/freepik)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON containing data and meta.executionId values from OOMOL-connected Freepik actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

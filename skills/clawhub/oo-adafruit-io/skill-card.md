@@ -1,42 +1,56 @@
-## Description: <br>
-This skill lets an agent operate Adafruit IO through an OOMOL-connected account for reading feed/account data and creating feed data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adafruit IO helps agents read, create, and update Adafruit IO data through an OOMOL-connected account and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and automation users use this skill to operate Adafruit IO through an OOMOL-connected account, including account lookup, feed discovery, feed inspection, feed data retrieval, and confirmed creation of feed data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create new Adafruit IO feed data through the connected account. <br>
-Mitigation: Confirm the feed, value, and expected effect with the user before approving write actions such as create_feed_data. <br>
-Risk: The skill depends on a signed-in OOMOL account with an active Adafruit IO connection. <br>
-Mitigation: Run setup or reconnection steps only after an action fails with an authentication, missing-scope, expired-credential, app, or billing error. <br>
+## Use Case:
 
+Developers and operators use this skill to read Adafruit IO account and feed data, list feed data, and create feed data through schema-checked oo CLI calls.
 
-## Reference(s): <br>
-- [Adafruit IO](https://io.adafruit.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adafruit-io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON data from Adafruit IO through the OOMOL oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote installer scripts that may be run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified, pinned, or signed oo CLI release.
+
+Risk: The skill can create Adafruit IO feed data.
+
+Mitigation: Confirm the exact feed, payload, and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-adafruit-io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Adafruit IO](https://io.adafruit.com/)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration]
+
+**Output Format:** [Markdown with bash commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running Adafruit IO connector actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

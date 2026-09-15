@@ -1,42 +1,57 @@
-## Description: <br>
-Enables agents to operate Quickbase through the OOMOL oo CLI for app and table discovery, record queries, and guarded record creation, updates, and deletion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quickbase (quickbase.com). Use this skill for ANY Quickbase request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to let an agent inspect Quickbase schemas, query records, and perform confirmed record mutations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route broad Quickbase requests, including writes and deletions against business data. <br>
-Mitigation: Use narrowly scoped Quickbase credentials and require an explicit app, table, record target, and user confirmation before write or delete actions. <br>
-Risk: Incorrect payloads can affect the wrong Quickbase data if action schemas or targets are assumed. <br>
-Mitigation: Inspect the live action schema before constructing payloads and confirm the exact effect for write and destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Quickbase apps and tables, query records, and run guarded create, update, or delete actions through an OOMOL-connected Quickbase account.
 
-## Reference(s): <br>
-- [ClawHub Quickbase Skill Page](https://clawhub.ai/oomol/skills/oo-quickbase) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Quickbase Homepage](https://www.quickbase.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON command output from oo connector actions when executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup can execute a remote installer immediately.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use; prefer a signed or version-pinned install method, or download and inspect the installer before running it.
+
+Risk: Write and delete actions can change or remove Quickbase records.
+
+Mitigation: Only approve write or delete commands after checking the exact table, record IDs, and payload.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-quickbase)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Quickbase](https://www.quickbase.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands that inspect schemas, run Quickbase connector actions, and report execution IDs from command output.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

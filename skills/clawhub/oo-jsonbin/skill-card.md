@@ -1,42 +1,57 @@
-## Description: <br>
-Provides agent guidance for reading, creating, updating, and deleting JSONBin.io data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+JSONBin.io helps agents create, read, update, and delete JSONBin.io bins through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to read, create, update, and delete JSONBin.io bins through an OOMOL-connected account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete JSONBin.io records through the connected account. <br>
-Mitigation: Review the exact payload and target bin before approving write actions, and require explicit approval before delete operations. <br>
-Risk: Installing the skill allows the agent to operate the user's JSONBin.io account through OOMOL. <br>
-Mitigation: Install it only for environments where that account access is intended, and keep the JSONBin.io connection scoped and reviewed. <br>
+## Use Case:
 
+Developers and automation agents use this skill to manage JSONBin.io records through OOMOL's JSONBin connector. It supports live action-schema inspection before running read, write, or delete operations.
 
-## Reference(s): <br>
-- [JSONBin.io homepage](https://jsonbin.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jsonbin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup guidance includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted, verified oo CLI release path for installation instead of allowing an agent to pipe remote scripts directly into a shell.
+
+Risk: Write and destructive actions can change or delete JSONBin.io data.
+
+Mitigation: Confirm the exact payload, target bin, and expected effect with the user before running write or delete actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jsonbin)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [JSONBin.io homepage](https://jsonbin.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before composing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

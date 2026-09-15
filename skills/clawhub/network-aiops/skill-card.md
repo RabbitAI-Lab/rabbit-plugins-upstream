@@ -1,46 +1,66 @@
-## Description: <br>
-Network Aiops helps agents inspect and operate NAPALM-supported network devices, run read-only diagnostics, back up and diff configurations, and perform governed configuration changes across Cisco, Arista, Juniper, and optional NetBox environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Network AIops helps agents operate NAPALM-supported network devices by reading device state, running diagnostics, backing up configurations, previewing diffs, and performing governed configuration changes across Cisco IOS/IOS-XE, Nexus NX-OS, IOS-XR, Arista EOS, and Juniper Junos.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Network operators, SREs, and infrastructure engineers use this skill to query live network state, diagnose interface and BGP problems, compare proposed configuration changes, and execute audited device configuration workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform production-impacting network configuration writes and does not provide an internal read-only mode or approval gate. <br>
-Mitigation: Use read-only device and NetBox credentials for routine work, grant write-capable credentials only when intended, and require an external approval process before MCP write tools are used. <br>
-Risk: Configuration backups or diffs may contain sensitive network secrets, especially if raw output is requested. <br>
-Mitigation: Avoid include_secrets=True in agent transcripts, prefer writing raw configs to operator-controlled files when needed, and keep ~/.network-aiops protected with chmod 700. <br>
-Risk: Some device drivers may be unable to arm commit-confirm revert timers, leaving configuration changes permanent on commit. <br>
-Mitigation: Check the returned commit warning and safetyNet fields, arrange out-of-band access for lockout-capable changes, and verify reachability from a new session before confirming changes. <br>
+## Use Case:
 
+Network operators, SREs, and infrastructure engineers use this skill to inspect device facts, interfaces, BGP and LLDP neighbors, routing tables, environmental health, and NetBox source-of-truth data. They can also generate backups, preview configuration diffs, and execute audited merge, replace, rollback, confirm, or undo workflows with human approval and appropriate device privileges.
 
-## Reference(s): <br>
-- [Network-AIops homepage](https://github.com/AIops-tools/Network-AIops) <br>
-- [network-aiops Capabilities](references/capabilities.md) <br>
-- [network-aiops Setup Guide](references/setup-guide.md) <br>
-- [network-aiops CLI Reference](references/cli-reference.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration snippets, and structured tool-use recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to invoke CLI or MCP operations that return live device data, diffs, backups, audit records, and configuration-change results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: The skill can perform high-impact write operations against production network devices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in controlled environments, use read-only device and NetBox credentials by default, and allow write-capable credentials only for approved change workflows.
+
+Risk: Configuration replace, merge, rollback, confirm, and undo actions can affect device reachability or network behavior.
+
+Mitigation: Require operators to run config_diff first, review the exact diff, use dry-run paths where available, and verify reachability from a new session before confirming timed commits.
+
+Risk: Credential exposure is possible if master passwords or raw configuration secrets are placed in prompts, static config, shell profiles, or hosted-model transcripts.
+
+Mitigation: Keep device passwords and NetBox tokens in the encrypted store, avoid enable secrets in config.yaml, protect NETWORK_AIOPS_MASTER_PASSWORD, and avoid include_secrets=True in hosted-model conversations.
+
+Risk: The package is installed or launched from external package resolution paths.
+
+Mitigation: Pin or verify the network-aiops package before granting write access to production devices.
+
+## Reference(s):
+
+- [Network-AIops repository](https://github.com/AIops-tools/Network-AIops)
+- [Network-AIops issues](https://github.com/AIops-tools/Network-AIops/issues)
+- [Capabilities](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, configuration snippets, and structured tool-result summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include redacted configuration text, dry-run diffs, diagnostic findings, audit and undo identifiers, and warnings for unsupported drivers or missing safety nets.]
+
+## Skill Version(s):
+
+0.12.3 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

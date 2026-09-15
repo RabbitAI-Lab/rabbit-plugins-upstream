@@ -27,7 +27,7 @@ Both run incrementally with `autoFetch` at a minimum 30-minute interval once con
 
 - ✅ **Visitor-intent signal** — companies browsing your pricing page are the warmest cold segment there is; feed the identified-visitor segment into [`../recipes/outreach-activation.md`](../recipes/outreach-activation.md) or [`../recipes/re-engagement.md`](../recipes/re-engagement.md).
 - ✅ **Free session context** — `searchSessions` and the `fetchSessions` extractor cost nothing, so page-level context (which URLs, how often, from where) is free personalization fuel.
-- ❌ **Company enrichment** — visitor records carry basic firmographics only; run identified domains through the normal ENRICH chain (`cargo` 0.5, or `companyEnrich` 0.25) for real coverage.
+- ❌ **Company enrichment** — visitor records carry basic firmographics only; run identified domains through the normal ENRICH chain (`aiArk.enrichCompany` 0.01, then `companyEnrich` 0.25) for real coverage.
 - ❌ **Workspaces without a Snitcher account** — there's no cargo-managed data here; no tracking script, no signal.
 
 ## Patterns
@@ -36,8 +36,8 @@ Both run incrementally with `autoFetch` at a minimum 30-minute interval once con
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"snitcher","actionSlug":"searchSessions","config":{}}' \
-  --record '{"workspaceUuid":"<snitcher-workspace-uuid>","organisationUuid":"<snitcher-organisation-uuid>","dateFrom":"2026-06-01","dateTo":"2026-07-09","limit":50}' \
+  --action '{"kind":"connector","integrationSlug":"snitcher","actionSlug":"searchSessions"}' \
+  --data '{"workspaceUuid":"<snitcher-workspace-uuid>","organisationUuid":"<snitcher-organisation-uuid>","dateFrom":"2026-06-01","dateTo":"2026-07-09","limit":50}' \
   --wait-until-finished
 ```
 
@@ -65,6 +65,12 @@ Both UUIDs are **Snitcher's** identifiers (workspace = the tracked site; organis
 
 - **SIGNAL stage** — visitor identification sits beside job-change, funding, and tech-intent as a trigger source ([`../references/stage-action-map.md`](../references/stage-action-map.md)); identified accounts then enter the normal ENRICH → CONTACT → VERIFY → activation spine.
 
+## Recurring use
+
+- **The extractors are the recurring surface** — `fetchOrganisations` / `fetchSessions` already sync incrementally via `autoFetch` (≥30 min); no cron, and never wrap `searchSessions` in a scheduled tool to simulate a feed. The recurring cost trap is the `fetchOrganisations` pitfall above — re-read it before enabling on a high-traffic site.
+- **In-play gate:** trigger plays off the synced segment (e.g. `last_seen` this week), gating paid downstream enrichment on the account's enrichment fields being empty — a returning visitor re-enters the segment but must not re-bill the ENRICH chain.
+- **Decay:** visit intent fades in days; a play on the fresh-visit segment beats any scheduled sweep over historical visitors.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"snitcher","actionSlug":"searchSessions","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"snitcher","actionSlug":"searchSessions"}`. **No `connectorUuid` in `config`.**

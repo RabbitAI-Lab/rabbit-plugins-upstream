@@ -1,6 +1,10 @@
 # ClawSecCheck — Frequently Asked Questions
 
-Answers to the most common questions about ClawSecCheck output, grades, and usage.
+Answers to the most common questions about ClawSecCheck output, grades, and usage —
+i.e. questions about *your audited setup*. If ClawSecCheck itself won't run, crashes,
+or OpenClaw never picks it up, that's a different problem — see
+[`docs/TROUBLESHOOTING.md`](TROUBLESHOOTING.md) instead.
+
 For the full check catalog see [`docs/CHECKS.md`](CHECKS.md).
 For the threat mapping see [`docs/THREAT_COVERAGE.md`](THREAT_COVERAGE.md).
 For all flags run `clawseccheck --help`.
@@ -38,19 +42,102 @@ calls this out explicitly: *"`UNKNOWN` ≠ `PASS`"*.
   `UNKNOWN`. Use `clawseccheck --ask` to generate the attestation template, fill it with
   your running agent, and then pass `--attest attest.json` to unlock these checks.
 
-**Effect on the score.** `UNKNOWN` findings are **excluded** from the score calculation
-entirely — they neither help nor hurt it. If most checks are `UNKNOWN`, the score covers
-only the checks that *could* be assessed.
+**Effect on the score.** An `UNKNOWN` finding never adds or subtracts a scored point — the
+severity-weighted pass-rate arithmetic simply excludes it. It is not always fully inert, though: a
+check that reports `UNKNOWN` because *its own input* was unreadable/corrupt
+(`engine_degraded`) can trip `DEGRADED_CHECK_CAP` and hard-cap the grade at F regardless of
+what did pass — see ["Why is my grade F?"](#why-is-my-grade-f). If most checks are
+`UNKNOWN`, the score covers only the checks that *could* be assessed.
 
 **What to do.** Confirm that `~/.openclaw/openclaw.json` exists and is readable by the
 current user, that `--home` points at the right directory, and — if you want the full
 picture — that you have run `--attest` with your agent's self-report.
 
+**Blind states in the Inventory-by-subject view.** `--dashboard` groups findings by
+subject rather than by individual check, so a blind subject reads as a short phrase
+instead of a bare `UNKNOWN`. From `clawseccheck --dashboard --home fixtures/home_vuln`:
+
+- `📦 Plugins — not scanned — run --full` — the plugin sweep only runs under `--full`; a
+  plain audit never looks at plugins at all.
+- `📝 Logs & trajectories — not assessed` — no verdict for that subject this run.
+- `🧩 Skills — none installed` — **not** a blind state: the subject was checked and
+  confirmed empty, shown with the same icon as a clean PASS.
+
+---
+
+## Why is there no grade at all?
+
+Because the check was not complete, and a partial check does not get to print a number.
+
+A full check is built from five layers. The first three run on their own; the last two cannot,
+because one needs your agent to answer a question about itself and the other pokes your running
+agent:
+
+| # | Layer | Runs on its own? | How to close it |
+|---|---|---|---|
+| 1 | Static: config, files, permissions | yes, **provided a config was found and could be read** | point `--home` at the directory that holds `openclaw.json`, or fix a corrupt/unparseable one |
+| 2 | Sweep of what's installed: skills + plugins | yes | `--full` |
+| 3 | Logs and trajectories: what already happened | yes, budget-bounded | `--full` |
+| 4 | Agent self-report | **no** | `--ask`, then `--attest <file>` |
+| 5 | Live behaviour test | **no** | `--canary` / `--dryrun` / `--redteam` / `--multiturn` |
+
+**A letter is issued only when all five ran.** Short of that there is no number at all — not a
+capped one, not a partial one. You get the findings, led by the most urgent one in words, plus a
+line naming exactly which layers did not run and why:
+
+```text
+Most urgent: CRITICAL — Lethal Trifecta (untrusted input × sensitive data × outbound)  [A1]
+No grade yet — 2 of 5 layers did not run: agent self-report (not submitted), live behaviour test (not submitted).
+```
+
+**Layer 1 can be missing too — an absent or unreadable `openclaw.json` withholds the letter
+entirely, it does not just lower it.** This is the common case inside a sandboxed OpenClaw
+session (`agents.defaults.sandbox.mode: non-main`), where the container never sees your real
+`~/.openclaw`:
+
+```text
+No grade yet — 4 of 5 layers did not run: static config audit (not available here), installed-
+skill/plugin sweep (not reached), agent self-report (not submitted), live behaviour test (not
+submitted).
+```
+
+Even if you separately hand in a self-report and a live-test bundle, the missing static layer
+alone still withholds the letter — there is no config-blind score to show instead (see
+["Why is my grade F?"](#why-is-my-grade-f) for why this changed from an earlier capped-F
+behaviour). If you are in a sandboxed chat session, this is expected; run the audit from the
+agent's main session or a host terminal where the real config is reachable instead.
+
+This is deliberately stronger than capping the grade. A cap still prints a number, and a number
+gets read as a score; the absence of one cannot be misread as "fine". So a bare run leaves 3 of 5
+untouched, `--full` closes one of those — the installed sweep — and leaves 2 of 5, and you close
+the last two by submitting the agent's own answers (`--attest`, `--judged-bundle`).
+
+The six "did not run" phrasings mean different things and are worth reading — collapsing them
+into one would be its own small lie about how much the report is worth:
+
+| Phrase | What it means |
+|---|---|
+| `skipped by this run's flags` | you narrowed the run — e.g. `--full --fast` |
+| `declined` | you were asked and said no |
+| `not available here` | the capability does not exist on this box (CI, for instance, has no live agent) |
+| `not submitted` | the layer's evidence was never handed in — no `--attest`, or no `liveTest` verdict in the bundle. Fixable by you, which is why it is not called "not available" (B-603) |
+| `failed` | the layer broke |
+| `not reached` | the run never got to it — e.g. the installed sweep on a bare run, which needs `--full` |
+
+**`Not fully covered: …` is a different line and can appear on a graded run too.** It means a
+layer ran without exhausting its subject — log scans are budget-bounded by construction, so
+"79 of 132 log sinks not read" is an honest disclosure, not a missing layer.
+
+**In CI this is normal and not an error.** A pipeline has no live agent, so it never earns a
+letter. Gate on findings instead: `--fail-on <severity>` exits 1 on an unsuppressed FAIL at or
+above that severity, `--exit-code` trips on any FAIL, and `--json`/`--sarif` carry
+`fail_counts_by_severity` for a finer gate. None of those need a score.
+
 ---
 
 ## Why is my grade F?
 
-The grading uses a **weighted pass-rate with hard caps** that prevent a single serious
+The grading uses a **severity-weighted pass rate with hard caps** that prevent a single serious
 failure from being diluted by many passes:
 
 | Severity of any FAIL | Score capped at | Grade ceiling |
@@ -64,21 +151,41 @@ A single CRITICAL FAIL (for example B1 — plaintext secrets, or B2 — open gat
 no auth) locks the score at or below 49, which is always an F, regardless of how well
 everything else scores.
 
-**Three more caps fire with no FAIL finding at all.** If you are hunting the report for a
+**Four more caps fire with no FAIL finding at all.** If you are hunting the report for a
 CRITICAL that explains your F and cannot find one, it is one of these. They are caps only:
 they never add or remove a scored point, they just lower the ceiling.
 
 | Signal | Score capped at | Grade ceiling | What the report says |
 |---|---|---|---|
-| A check **crashed or timed out** | 49 | F | `N check(s) crashed or timed out this run: cannot rule out a CRITICAL condition`, plus a `N checks did not run` banner above the score |
-| `openclaw.json` is present but **unreadable / unparseable** | 49 | F | `openclaw.json unreadable/unparseable this run: cannot rule out a CRITICAL condition` |
+| A check **crashed, timed out, or hit an unreadable/corrupted input it needed** | 49 | F | `N check(s) could not reach a reliable verdict this run: cannot rule out a CRITICAL condition`, plus an `N checks could not reach a reliable verdict this run` banner above the score |
 | A **corroborated runtime signal** in your own trajectory log | 79 | C | `corroborated runtime signal: …` |
+| A **live injection-test harness** (`--canary`/`--dryrun`/`--redteam`/`--multiturn`) reported a **VULNERABLE** verdict, submitted via `--judged-bundle`'s `liveTest` bucket | 49 | F | `a live injection-test scenario reported VULNERABLE (…)` |
+| A **behavioral detector** (T1/T2/T3/B191) fired — only when `--full` ran without `--fast` | 89 | B | `a behavioral detector fired (…)` |
 
-The reasoning is the same in all three cases, and it is deliberate: the audit lost
-visibility into something, and the honest assumption about an unexamined check is
-worst-case, not average-case. Otherwise "make the scanner blind" would be the cheapest way
-to improve a grade. Fix the underlying visibility problem — a quieter machine or `--debug`
-for a timeout, valid JSON for an unparseable config — and the cap lifts on the next run.
+The first row covers two shapes: the engine itself gave up on a check (a crash or a
+timeout — B-313), or a check ran fine but honestly couldn't tell you its own answer
+because something it needed to read was unreadable, corrupt, or malformed (B-399) — as
+opposed to a check finding nothing to look at, which never triggers this cap. "There was
+nothing to check" and "something broke while we tried to check" are different facts, and
+only the second one caps the grade.
+
+These rows share the same reasoning, and it is deliberate: the audit lost visibility into
+something, and the honest assumption about an unexamined check is worst-case, not
+average-case. Otherwise "make the scanner blind" would be the cheapest way to improve a
+grade. Fix the underlying visibility problem — a quieter machine or `--debug` for a
+timeout — and the cap lifts on the next run. The last two rows are different: they are
+*positive* evidence (a self-tested injection actually succeeded, or a proven-by-log
+behavioral pattern actually fired), not lost visibility — the cap lifts only by fixing
+what the test/detector found.
+
+**An absent or unreadable `openclaw.json` no longer belongs in this table.** Earlier
+versions capped that case at F/49 like the row above it; today the static layer itself
+never completes, so the run is **ungraded** — no letter at all, capped or otherwise. See
+["Why is there no grade at all?"](#why-is-there-no-grade-at-all) instead. (The one
+exception is calling `clawseccheck`'s Python API directly with your own hand-built ledger
+object omitted entirely — that bare library path still reproduces the old capped-F
+behaviour, since there is no ledger to say the layer never ran; every CLI invocation, bare
+or `--full`, goes through the ledger and is ungraded instead.)
 
 **What to look at first:**
 
@@ -95,10 +202,14 @@ for a timeout, valid JSON for an unparseable config — and the cap lifts on the
 - Secrets or tokens stored in plaintext inside `openclaw.json` or a bootstrap file (**B1**).
 - Gateway exposed with no authentication (**B2**).
 - Installed third-party skill flagged as suspicious or dangerous by the malware scan (**B13**).
-- Control-plane tools (config, cron, gateway) reachable over the HTTP gateway (**B32**).
-- A `dangerously*` sandbox escape flag is enabled (**B48**).
-- **No FAIL at all** — a check crashed or timed out, or `openclaw.json` could not be
-  parsed. See the cap table above; the report names which one it was.
+- An `ownerAllowFrom`/`autoApproveCidrs` wildcard grants owner command authority or
+  device auto-pairing to ANY sender/IP (**B48**, the wildcard-authority case
+  specifically — a plain break-glass override on its own is HIGH severity and caps
+  the grade at C, not F).
+- **No FAIL at all** — a check crashed, timed out, or hit an unreadable/corrupted input
+  it needed. See the cap table above; the report names which one it was. (If
+  `openclaw.json` itself was absent or unparseable, you get no grade at all rather than
+  an F — see ["Why is there no grade at all?"](#why-is-there-no-grade-at-all).)
 
 After fixing the underlying issue, re-run `clawseccheck` to see the new score.
 
@@ -112,12 +223,47 @@ report.
 
 **Step 1 — identify the finding you want to suppress.**
 
-Run with `--show-suppressed` to list what is currently suppressed, or look at the check
-ID (e.g. `B14`) and optionally its fingerprint in the normal report output:
+For a **bare check ID** (e.g. `B14`), just read it off the report — no further work
+needed, see below.
+
+For a **fingerprint** (to suppress one specific finding rather than the whole check),
+be aware that `--show-suppressed` only prints the fingerprint of a finding that is
+**already** suppressed — it cannot show you the fingerprint of one you haven't
+suppressed yet:
 
 ```bash
 clawseccheck --show-suppressed
 ```
+
+There are two real ways to get a fingerprint for a finding you haven't suppressed:
+
+1. **`--propose-ignore`** (recommended) computes and prints ready-to-use
+   `<id>:<fingerprint>` entries for you — but only for findings already offered to a
+   host-agent judge panel via `--judge-packet` (unsuppressed `UNKNOWN`s, or the
+   documented false-negative-prone `WARN` ids) that the panel verdicted `SAFE`, and
+   only when the finding has a single evidence entry. See
+   [`docs/OUTPUT_SCHEMA.md`](OUTPUT_SCHEMA.md) §14. This does not cover an ordinary
+   `FAIL`/`WARN` finding outside that judged flow.
+2. **Compute it yourself.** The fingerprint is `<id>:` followed by the first 8 hex
+   characters of the SHA-1 hash of the finding's exact `detail` string — the same
+   `detail` `clawseccheck --json` already prints for every finding. This works for
+   any finding, verified end to end:
+
+   ```bash
+   clawseccheck --json | python3 -c '
+   import json, hashlib, sys
+   d = json.load(sys.stdin)
+   for f in d["findings"]:
+       if f["id"] == "B14":          # the check id you want to target
+           print(f["id"] + ":" + hashlib.sha1(f["detail"].encode()).hexdigest()[:8],
+                 "--", f["detail"])
+   '
+   ```
+
+   This is the same algorithm `baseline.fingerprint()` uses internally — not a
+   documented/frozen API, so if the finding's `detail` text changes in a later
+   release the fingerprint changes with it (same caveat `--show-suppressed`'s "dead
+   entry" note already gives for any fingerprint entry).
 
 **Step 2 — add an entry to `.clawseccheckignore`.**
 
@@ -140,13 +286,31 @@ can suppress by:
   B14:ab12cd34
   ```
 
-Lines beginning with `#` are comments. The fingerprint for any finding is shown in the
-`--show-suppressed` output after the check runs.
+Lines beginning with `#` are comments. A `#` partway through a line starts a trailing
+comment on that entry instead — optional free text, or machine-parsed `author=`/`date=`/
+`expires=` fields (any order):
+
+```text
+B12:1a2b3c4d   # author=dave date=2026-09-10 expires=2026-12-10 accept it
+```
+
+`--show-suppressed` prints `author=`/`date=` next to an entry that has them (an entry with
+neither is marked `[unattributed]`), and `expires=YYYY-MM-DD` auto-expires the suppression
+— once that date passes, the finding reports normally again and `--show-suppressed` lists
+the entry separately as expired rather than as a dead entry. The fingerprint for any
+finding is shown in the `--show-suppressed` output after the check runs.
 
 **Step 3 — verify.**
 
 Re-run `clawseccheck`. Suppressed findings no longer appear in the report or affect the
 score. To confirm what is suppressed, use `--show-suppressed` again.
+
+`--show-suppressed` reports two things, and the difference matters: the entries that are
+currently suppressing a finding, and — separately — any entry that **matches nothing in
+this run**. A dead entry means either the finding is gone (you fixed it, and the line can
+be deleted) or the finding's detail text changed, so its fingerprint no longer matches and
+the suppression has quietly stopped working. Bare check ids (`B14`) never drift this way;
+fingerprints (`B14:ab12cd34`) can.
 
 > **Note on false positives.** If you believe a finding is wrong about your config,
 > please also open an issue at <https://github.com/gl0di/clawseccheck/issues> with the
@@ -164,9 +328,12 @@ score. To confirm what is suppressed, use `--show-suppressed` again.
 
 ## I get permission errors — what do I do?
 
-ClawSecCheck never changes your OpenClaw config or the files it audits — it only writes
-its own score history under `~/.clawseccheck/`. Permission errors mean the *audit* cannot
-read a file it needs to inspect.
+ClawSecCheck never changes your OpenClaw config, and by default only writes its own
+score history under `~/.clawseccheck/` — a few flags write other local files when you
+ask (`--save`, `--badge`, `--html`, `--sarif`, `--pdf`, `--monitor`), and the one
+exception that touches the audited home itself is `--apply-ignore-proposals`, opt-in
+and confirmation-gated (see above). Permission errors mean the *audit* cannot read a
+file it needs to inspect.
 
 **Most common causes and fixes:**
 
@@ -296,8 +463,12 @@ clawseccheck --home /path/to/custom/openclaw/home
 - **Non-standard install paths.** If OpenClaw was installed system-wide or in a
   non-default location, pass the path to the directory that contains `openclaw.json`.
 
-The `.clawseccheckignore` suppress-file and the `--monitor` state snapshot default to
-paths inside the home directory you specify, so they stay per-profile automatically.
+The `.clawseccheckignore` suppress-file defaults to a path inside the home directory
+you specify, so it stays per-profile automatically. The `--monitor` state snapshot does
+**not** — its default (`~/.clawseccheck/state.json`) is a single fixed path independent
+of `--home`, so auditing two different `--home` profiles with `--monitor` and no other
+change writes both to the same shared snapshot. Pass `--state PATH` explicitly per
+profile if you run `--monitor` against more than one home.
 
 ---
 

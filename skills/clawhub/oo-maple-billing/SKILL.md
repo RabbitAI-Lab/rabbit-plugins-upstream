@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Measure"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["maple_billing"]
   icon: "https://static.oomol.com/logo/third-party/maple_billing.png"
 ---

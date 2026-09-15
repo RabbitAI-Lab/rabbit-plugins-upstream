@@ -1,45 +1,56 @@
-## Description: <br>
-Algolia (algolia.com). Use this skill for ANY Algolia request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Algolia requests, including reading, creating, updating, and deleting data through an OOMOL-connected Algolia account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Algolia indices, search or browse records, and manage records, rules, and synonyms through an OOMOL-connected Algolia account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Algolia records, rules, and synonyms. <br>
-Mitigation: Review the exact action schema and payload with the user before running write actions. <br>
-Risk: The skill can delete records by filter. <br>
-Mitigation: Require explicit approval for the target index and filter before running destructive delete operations. <br>
-Risk: The skill requires sensitive Algolia credentials through the OOMOL connector. <br>
-Mitigation: Use a least-privilege Algolia API key and install only when OOMOL is trusted as the connector provider. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Algolia action schemas, search or browse indices, retrieve records, and perform confirmed write or delete actions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Algolia Skill](https://clawhub.ai/oomol/oo-algolia) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Algolia](https://www.algolia.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and an execution id when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not run the installer commands automatically; use a verified, versioned, checksum- or signature-validated oo CLI installation method.
+
+Risk: The skill can mutate Algolia account data through write and delete actions.
+
+Mitigation: Inspect the live action schema first, confirm the exact payload and expected effect with the user, and require explicit approval for destructive deletes.
+
+## Reference(s):
+
+- [ClawHub Algolia skill page](https://clawhub.ai/oomol/skills/oo-algolia)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Algolia homepage](https://www.algolia.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payload construction; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

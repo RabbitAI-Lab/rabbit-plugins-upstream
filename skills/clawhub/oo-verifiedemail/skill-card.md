@@ -1,44 +1,60 @@
-## Description: <br>
-VerifiedEmail (verified.email) lets an agent inspect VerifiedEmail schemas and run VerifiedEmail connector actions for searching, reading, entitlement lookup, and synchronous email verification through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VerifiedEmail (verified.email) helps an agent inspect schemas and run VerifiedEmail account actions through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate VerifiedEmail through an OOMOL-connected account, including listing verification resources, checking credit entitlements, retrieving downloads or lists, and verifying one to ten email addresses synchronously. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email addresses submitted for verification are sent to VerifiedEmail through the OOMOL connector. <br>
-Mitigation: Use the skill only for intended VerifiedEmail workflows and review requests before verifying sensitive contact lists. <br>
-Risk: Credentials or account connections may grant access to VerifiedEmail data and credits. <br>
-Mitigation: Keep API credentials scoped to VerifiedEmail and rely on the OOMOL-connected account flow rather than exposing raw tokens to the agent. <br>
-Risk: Actions that change service state could affect VerifiedEmail resources if added or tagged in future connector schemas. <br>
-Mitigation: Fetch the live action schema before constructing payloads and require explicit user confirmation for actions marked write or destructive. <br>
+## Use Case:
 
+Developers and operators use this skill to verify email addresses, inspect VerifiedEmail action schemas, retrieve verification lists and downloads, and check account entitlements through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-verifiedemail) <br>
-- [VerifiedEmail homepage](https://verified.email) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that execute network responses in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and prefer official, version-pinned OOMOL CLI installation instructions with checksum or signature verification.
+
+Risk: Email verification requests may expose email addresses to the VerifiedEmail service and consume account credits.
+
+Mitigation: Connect only the intended VerifiedEmail account and confirm verification payloads, especially before running verify_emails.
+
+Risk: Incorrect action payloads could produce failed or unintended connector requests.
+
+Mitigation: Inspect the live action schema with oo connector schema before constructing each request.
+
+## Reference(s):
+
+- [ClawHub VerifiedEmail Skill Listing](https://clawhub.ai/oomol/skills/oo-verifiedemail)
+- [VerifiedEmail Homepage](https://verified.email)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

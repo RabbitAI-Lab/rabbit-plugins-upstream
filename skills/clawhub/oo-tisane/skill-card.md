@@ -1,43 +1,55 @@
-## Description: <br>
-Tisane connects an agent to Tisane through the OOMOL oo CLI for text analysis, language detection, translation, paraphrasing, text extraction, similarity scoring, and entity comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tisane (tisane.ai). Use this skill for ANY Tisane request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Tisane language and content-analysis actions through an OOMOL-connected account without handling raw Tisane API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup instructions include a one-line remote installer for the oo CLI. <br>
-Mitigation: Use OOMOL's official installation guide, review the installer before running it, and verify checksums or signatures where available. <br>
-Risk: The skill requires an OOMOL-connected Tisane account and server-side credentials. <br>
-Mitigation: Install only when the publisher and connected service are trusted, and review requested actions and payloads before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Tisane through an OOMOL-connected account for text analysis, language detection, translation, paraphrasing, text extraction, semantic similarity, and entity comparison.
 
-## Reference(s): <br>
-- [Tisane homepage](https://tisane.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-tisane) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credentials through the oo CLI; action responses may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: First-time setup includes unverified remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI setup path before installing and prefer an official versioned package or verifiable installer instead of running pipe-to-shell commands directly.
+
+Risk: Submitted text is processed through OOMOL's connector and Tisane.
+
+Mitigation: Only connect an account intended for this use and submit text that is acceptable to process through those services.
+
+## Reference(s):
+
+- [Tisane homepage](https://tisane.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tisane)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON, text]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing connector payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

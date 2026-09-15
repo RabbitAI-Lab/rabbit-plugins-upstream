@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zerotoken-skill",
   "slug": "zerotoken-skill",
   "ownerHandle": null,
-  "version": "1.8.2",
-  "updatedAt": 1784874832218,
-  "contentHash": "771cd3a0b78f9d464e27d2238649fdaf2013640f29022400cfb2e7eceba8559b",
-  "fetchedAt": "2026-07-26T18:05:37.939Z"
+  "version": "1.14.0",
+  "updatedAt": 1789459849363,
+  "contentHash": "8400d4e659bfb9d88cb5f30c355eca351c66340d6b1a1f1c09745756a31f7478",
+  "fetchedAt": "2026-09-15T12:47:17.581Z"
 }

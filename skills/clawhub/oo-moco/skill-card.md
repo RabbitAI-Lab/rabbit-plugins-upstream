@@ -1,43 +1,56 @@
-## Description: <br>
-MOCO (mocoapp.com). Use this skill for MOCO searching and read-only data retrieval through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MOCO (mocoapp.com). Use this skill for MOCO requests that search and read company, contact, and user profile data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve MOCO profile, company, and contact information through the OOMOL CLI without handling raw MOCO API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may require installing the third-party oo CLI. <br>
-Mitigation: Review the oo CLI installer before running first-time setup, as recommended by the security guidance. <br>
-Risk: A future version could add write or destructive MOCO actions. <br>
-Mitigation: Require explicit user approval before executing any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve MOCO companies, contacts, and profile information through the OOMOL oo CLI after their account and MOCO connection are configured.
 
-## Reference(s): <br>
-- [MOCO homepage](https://www.mocoapp.com) <br>
-- [OOMOL oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-moco) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; current documented actions are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup path includes remote installer commands that could execute arbitrary code if run without inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified package or documented installer that can be inspected first, and avoid running installer commands from an elevated shell.
+
+Risk: MOCO actions depend on a signed-in OOMOL account and a connected MOCO credential.
+
+Mitigation: Run authentication or connection setup only after a command fails with an auth or connection error, and keep credentials managed server-side through OOMOL.
+
+## Reference(s):
+
+- [MOCO homepage](https://www.mocoapp.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-moco)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill retrieves MOCO data through read-oriented connector actions and may return JSON responses from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

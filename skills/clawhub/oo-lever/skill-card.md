@@ -1,43 +1,60 @@
-## Description: <br>
-Operates Lever through an OOMOL-connected account to read opportunities, postings, and notes, and to create opportunity notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lever (lever.co) connector skill for agent requests that read, create, or update Lever data through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Lever recruiting workflows through the OOMOL connector, including reading opportunities and postings and adding notes when confirmed by the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Lever opportunity records, such as adding a note. <br>
-Mitigation: Require the agent to preview the exact action and payload and obtain user confirmation before running any write action. <br>
-Risk: The skill has broad routing scope for Lever requests and may be selected whenever a task involves Lever. <br>
-Mitigation: Install it only when the agent is expected to handle Lever tasks, and review proposed candidate, job, offer, or pipeline changes before execution. <br>
+## Use Case:
 
+Developers, recruiting operations users, and agent builders use this skill to inspect Lever schemas, retrieve opportunities and postings, list notes, and create opportunity notes through an OOMOL-connected Lever account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-lever) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Lever Homepage](https://www.lever.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include connector action names, schema-inspection commands, and confirmation prompts for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup documents remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, verified method and do not allow an agent to run installer commands automatically.
+
+Risk: The create_opportunity_note action can change Lever data.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running any write action.
+
+Risk: Connector schemas and permissions can vary by account state, scopes, or expired credentials.
+
+Mitigation: Fetch the live action schema before building payloads and stop for user action on authentication, missing-scope, expired-credential, or billing errors.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lever)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Lever homepage](https://www.lever.co)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector commands; write actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

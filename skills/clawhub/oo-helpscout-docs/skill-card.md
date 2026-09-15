@@ -1,44 +1,53 @@
-## Description: <br>
-Help Scout Docs lets an agent search and read Help Scout Docs through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Help Scout Docs (helpscout.com). Use this skill for Help Scout Docs requests that involve searching, browsing, and retrieving documentation data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and support teams use this skill to let an agent list, search, and retrieve Help Scout Docs sites, collections, categories, and articles through an OOMOL-connected Help Scout account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Help Scout Docs through an OOMOL-connected account, which can expose private documentation available to that account. <br>
-Mitigation: Install and use it only in trusted contexts, confirm the OOMOL connection is approved, and review returned content before sharing it externally. <br>
-Risk: CLI installation, login, billing, or account-connection steps can affect the user's local environment or OOMOL account state. <br>
-Mitigation: Treat setup and recovery commands as user-approved actions, and run them only after a command fails with the matching setup, auth, connection, or billing error. <br>
-Risk: Connector payloads can fail or query the wrong scope if they are built from stale assumptions. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before building payloads and keep routine use to the documented read, list, and search actions. <br>
+## Use Case:
 
+Developers and support teams use this skill to search Help Scout Docs articles, retrieve articles by ID or article number, and browse available sites, collections, categories, and articles through the oo CLI.
 
-## Reference(s): <br>
-- [Help Scout](https://www.helpscout.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Help Scout Docs actions; inspect the live connector schema before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer endpoint before use, prefer a pinned and verifiable installer where available, and only proceed when the OOMOL account setup is trusted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-helpscout-docs)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Help Scout Docs homepage](https://www.helpscout.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides the agent to inspect live action schemas before sending connector payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

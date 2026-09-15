@@ -1,42 +1,50 @@
-## Description: <br>
-Use this skill for searching and reading Ambee data from getambee.com through the OOMOL-connected oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Ambee through an OOMOL-connected account to geocode locations and retrieve current, forecast, and historical air-quality data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query Ambee geocoding and air-quality data from a connected OOMOL account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may install the oo CLI and connect an Ambee API key through OOMOL. <br>
-Mitigation: Use a trusted installation process, review the installer source when appropriate, and connect only the intended OOMOL and Ambee accounts. <br>
-Risk: The skill requires a connected account with sensitive credentials managed outside the artifact. <br>
-Mitigation: Keep credentials in the OOMOL-managed connection flow and avoid placing raw API keys in prompts, files, or shell history. <br>
+## Use Case:
 
+External users and developers use this skill to query Ambee location and air-quality data from an OOMOL-connected account without handling raw Ambee credentials directly.
 
-## Reference(s): <br>
-- [Ambee homepage](https://www.getambee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ambee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup may lead users to run unverified remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a verified, versioned, or package-managed oo CLI installation before first use.
+
+## Reference(s):
+
+- [Ambee homepage](https://www.getambee.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses include data and meta.executionId when commands run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

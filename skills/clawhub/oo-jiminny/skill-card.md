@@ -1,43 +1,56 @@
-## Description: <br>
-Jiminny lets agents search and retrieve data from a user's OOMOL-connected Jiminny account through the oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Jiminny lets an agent search and read Jiminny activity data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and external agents use this skill to retrieve Jiminny activities, summaries, transcripts, action items, scorecards, organization details, and related account records through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Jiminny transcripts, comments, coaching feedback, scorecards, and user lists may contain sensitive business data. <br>
-Mitigation: Retrieve only the records needed for the user's task and handle returned Jiminny data as confidential account data. <br>
-Risk: Future versions could add write or destructive actions that change or remove Jiminny data. <br>
-Mitigation: Review future releases carefully and require explicit user confirmation before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Jiminny activities, summaries, transcriptions, action items, scorecards, coaching feedback, comments, listens, users, and topic trigger data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jiminny) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Jiminny homepage](https://jiminny.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses return Jiminny account data under data and an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup recommends remote installer commands that could run arbitrary code if the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified oo CLI installation path with pinned versions, checksums, signatures, or manual inspection before running installer commands.
+
+Risk: Using the skill can query Jiminny business call transcripts, scorecards, comments, users, and related activity data through OOMOL.
+
+Mitigation: Use connected accounts with appropriate authorization and review requested Jiminny data access before running connector actions.
+
+## Reference(s):
+
+- [Jiminny homepage](https://jiminny.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Jiminny skill](https://clawhub.ai/oomol/skills/oo-jiminny)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or connector responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data object and execution metadata when actions are run with JSON output.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

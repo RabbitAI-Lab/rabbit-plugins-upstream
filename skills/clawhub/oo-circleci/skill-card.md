@@ -1,46 +1,56 @@
-## Description: <br>
-CircleCI helps agents operate CircleCI through an OOMOL-connected account for project, pipeline, workflow, job, artifact, Insights, and environment-variable queries, with guarded pipeline triggering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for operating CircleCI through the OOMOL oo CLI connector, including read operations and guarded pipeline triggers.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to inspect CircleCI users, projects, pipelines, workflows, jobs, artifacts, Insights summaries, and masked project environment variables through the OOMOL CircleCI connector. It can also trigger a new project pipeline after the agent confirms the exact payload and effect with the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL brokering access to the user's CircleCI account, and returned artifacts or masked environment-variable listings may still contain sensitive project information. <br>
-Mitigation: Install only when the user trusts OOMOL for CircleCI access, keep connector scopes limited to the needed tasks, and treat returned project data as sensitive. <br>
-Risk: The trigger_pipeline action changes CircleCI state and may start jobs that consume resources or affect deployment workflows. <br>
-Mitigation: Confirm the exact project, branch, parameters, and intended effect with the user before running trigger_pipeline. <br>
-Risk: Connector payloads can be wrong if the agent relies on stale action assumptions. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect CircleCI projects, pipelines, workflows, jobs, artifacts, users, environment variables, and Insights metrics. It can also help trigger project pipelines when the user confirms the payload and intended effect.
 
-## Reference(s): <br>
-- [ClawHub CircleCI Skill Page](https://clawhub.ai/oomol/oo-circleci) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [CircleCI Homepage](https://circleci.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [CircleCI Icon](https://static.oomol.com/logo/third-party/CircleCI.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect the live connector schema before building payloads and to confirm write actions before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup flow includes remote installer commands that execute downloaded shell or PowerShell content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing and prefer an official, versioned installer or package-manager flow with integrity verification.
+
+Risk: The skill can trigger CircleCI project pipelines, which changes CircleCI state.
+
+Mitigation: Confirm the exact action payload and intended effect with the user before running a write action.
+
+## Reference(s):
+
+- [CircleCI homepage](https://circleci.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-circleci)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CircleCI connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,63 @@
-## Description: <br>
-Vmware Vks helps agents manage vSphere Kubernetes Service environments, including Supervisor clusters, vSphere Namespaces, TKC lifecycle operations, kubeconfig retrieval, Harbor checks, and storage usage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to manage vSphere Kubernetes Service Supervisor clusters, vSphere Namespaces, TKC cluster lifecycle, kubeconfig access, and Harbor registry checks.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to inspect VKS readiness and operate vSphere Namespaces and Tanzu Kubernetes clusters through guided CLI or MCP workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve kubeconfigs that contain live short-lived vCenter session tokens. <br>
-Mitigation: Require explicit approval before kubeconfig retrieval, write kubeconfigs to files instead of conversation output, and keep exported files permission-restricted with cleanup expectations. <br>
-Risk: Credential setup may place vCenter passwords in local environment files. <br>
-Mitigation: Use least-privilege vCenter accounts and prefer secret-manager or runtime environment injection over storing passwords in .env files. <br>
-Risk: TLS verification can be disabled for self-signed vCenter certificates. <br>
-Mitigation: Set verify_ssl to true with trusted certificates wherever possible and review exceptions before production use. <br>
-Risk: Write operations can change or delete VKS namespaces and TKC clusters. <br>
-Mitigation: Review dry-run plans, keep destructive actions behind confirmation, and rely on audit logging and workload guards before applying changes. <br>
+## Use Case:
 
+Developers and infrastructure engineers use this skill to operate VMware VKS environments, including compatibility checks, namespace management, TKC cluster creation and lifecycle changes, kubeconfig export, Harbor checks, and storage usage review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-vks) <br>
-- [VMware VKS homepage](https://github.com/zw008/VMware-VKS) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured CLI or MCP results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run plans, operational checks, and file paths for kubeconfig exports; agents should avoid printing live tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: The skill handles vCenter and Kubernetes management credentials, including kubeconfigs with bearer tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege service accounts, run kubeconfig retrieval only on explicit request, write credentials to owner-only short-lived files, and delete exported kubeconfigs when no longer needed.
+
+Risk: Kubeconfig export and setup workflows can overwrite local files, including existing kubeconfig paths.
+
+Mitigation: Choose explicit temporary output paths, avoid overwriting ~/.kube/config, and review file destinations before exporting credentials.
+
+Risk: Disabling TLS verification can expose infrastructure access to interception outside managed private-CA exceptions.
+
+Mitigation: Keep TLS verification enabled for CA-signed environments and allow verification bypass only under a documented private-CA exception.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-vks)
+- [Publisher Profile](https://clawhub.ai/user/zw008)
+- [Project Homepage](https://github.com/vmware-skills/VMware-VKS)
+- [Capabilities](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct explicit kubeconfig requests to owner-only output files and should report paths instead of credential contents.]
+
+## Skill Version(s):
+
+1.10.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

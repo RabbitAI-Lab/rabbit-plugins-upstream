@@ -1,43 +1,57 @@
-## Description: <br>
-Weatherbit enables an agent to retrieve current, daily, and hourly Weatherbit weather data through the OOMOL oo CLI with server-side credential injection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weatherbit (weatherbit.io). Use this skill for any Weatherbit request, including searching and reading weather data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to retrieve Weatherbit current observations and forecasts through an OOMOL-connected account without handling raw Weatherbit tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Weatherbit account and may depend on sensitive account credentials managed outside the local workspace. <br>
-Mitigation: Install and use it only when Weatherbit access through OOMOL is intended, and review any one-time authentication or connection step before approving it. <br>
-Risk: Connector setup or billing errors can block weather requests or prompt additional account actions. <br>
-Mitigation: Treat setup, connection, and billing steps as one-time account operations and perform them only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve current Weatherbit observations and daily or hourly forecasts through the OOMOL oo CLI after their Weatherbit connection is configured.
 
-## Reference(s): <br>
-- [ClawHub Weatherbit Skill](https://clawhub.ai/oomol/oo-weatherbit) <br>
-- [Weatherbit Homepage](https://www.weatherbit.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns Weatherbit responses as JSON through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup instructions can execute remote installer scripts for the OOMOL oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official installation documentation first, prefer a signed or package-managed installation path when available, and avoid running remote installer scripts automatically or with elevated privileges.
+
+Risk: Weatherbit actions depend on an installed, authenticated OOMOL oo CLI and a connected Weatherbit account.
+
+Mitigation: Run normal Weatherbit query actions only after the CLI is trusted, installed, signed in, and connected; use setup steps only after a matching authentication or connection failure.
+
+## Reference(s):
+
+- [Weatherbit homepage](https://www.weatherbit.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-weatherbit)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Weatherbit action schemas before execution and returns Weatherbit connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

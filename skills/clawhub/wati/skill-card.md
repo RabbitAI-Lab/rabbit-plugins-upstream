@@ -1,46 +1,72 @@
-## Description: <br>
-WATI (WhatsApp Team Inbox) API integration with managed authentication for sending WhatsApp messages, managing contacts, and handling templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WATI (WhatsApp Team Inbox) API integration with managed authentication for sending WhatsApp messages, managing contacts, and handling templates.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and agents use this skill to interact with WATI through Maton-managed authentication, including reading contacts and messages, managing templates and contacts, and sending approved WhatsApp messages. Write operations require explicit user approval before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY, a sensitive credential that can grant access to WATI data through Maton. <br>
-Mitigation: Keep MATON_API_KEY private, use the least-privileged account available, and avoid exposing it in logs, prompts, or shared output. <br>
-Risk: Maton proxies WATI data and manages the WATI connection for the user. <br>
-Mitigation: Install and use the skill only when the user trusts Maton to process the connected WATI account data. <br>
-Risk: Write operations can send WhatsApp messages or change contacts, templates, broadcasts, and related account data. <br>
-Mitigation: Require explicit user approval and verify recipients, message text, templates, connection IDs, and contact changes before executing create, update, delete, or send actions. <br>
+## Use Case:
 
+External users, developers, and operators use this skill to connect an authorized WATI account through Maton, inspect contacts, messages, and templates, and perform approved WhatsApp business actions.
 
-## Reference(s): <br>
-- [ClawHub Wati Skill Page](https://clawhub.ai/byungkyu/wati) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [WATI API Documentation](https://docs.wati.io/reference/introduction) <br>
-- [WATI Help Center](https://docs.wati.io/) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP, shell, Python, and JavaScript examples; API responses may be JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: The skill can act on sensitive WhatsApp business data through the user's WATI connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, connect only the intended WATI account, specify the intended connection when more than one exists, and avoid raw API keys unless the CLI cannot be used.
+
+Risk: Send, update, delete, connection, hosted function, and trigger actions can create side effects or run later with the deploying account's authority.
+
+Mitigation: Confirm every send, update, delete, new connection, hosted function, and trigger action with the user after showing the target resource, payload, intended effect, and persistence.
+
+Risk: Returned API data, uploaded files, and CSV contact lists can contain personal or business-sensitive information.
+
+Mitigation: Read or transmit only user-named data, extract the minimum fields needed, avoid dumping raw responses into logs or files, and confirm exact files, recipients, row counts, and templates before upload or send operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/wati)
+- [Maton homepage](https://maton.ai)
+- [WATI API Documentation](https://docs.wati.io/reference/introduction)
+- [WATI Help Center](https://docs.wati.io/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON payloads, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses authenticated Maton/WATI requests and asks for confirmation before writes, new connections, hosted functions, triggers, or destructive operations.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

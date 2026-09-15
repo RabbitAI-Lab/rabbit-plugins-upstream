@@ -1,44 +1,56 @@
-## Description: <br>
-MailerSend (mailersend.com). Use this skill for ANY MailerSend request, including reading, creating, and updating data through the OOMOL MailerSend connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to handle MailerSend read, create, update, and transactional email tasks through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to inspect MailerSend connector schemas, list or retrieve MailerSend resources, and send transactional email from a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected MailerSend account and may use sensitive credentials through the OOMOL connector. <br>
-Mitigation: Review requested account access before use and rely on the connector-managed credential flow rather than handling raw API tokens. <br>
-Risk: The send_email action can send transactional email and change external system state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect MailerSend schemas, read MailerSend account data, and send transactional email through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mailersend) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [MailerSend homepage](https://www.mailersend.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI commands that call MailerSend connector actions and return JSON responses from the connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path includes direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing, prefer verified oo CLI releases or package-manager installs, and use version and integrity checks where available.
+
+Risk: The send_email action sends transactional email and can affect external recipients.
+
+Mitigation: Confirm exact recipients, content, and sending account before allowing send_email to run.
+
+## Reference(s):
+
+- [ClawHub MailerSend Skill](https://clawhub.ai/oomol/skills/oo-mailersend)
+- [MailerSend Homepage](https://www.mailersend.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON data with execution metadata when run through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

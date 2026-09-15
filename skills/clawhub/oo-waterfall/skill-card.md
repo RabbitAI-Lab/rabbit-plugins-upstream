@@ -1,46 +1,56 @@
-## Description: <br>
-Operate Waterfall through an OOMOL-connected account to verify emails, check job changes, review usage, and launch or retrieve contact and company enrichment workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Waterfall enables an agent to use an OOMOL-connected account to inspect and run Waterfall connector actions for enrichment jobs, job-change checks, email verification, and account usage.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Waterfall account, enrichment, email verification, and job-change workflows through the oo CLI with an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Enrichment launch actions can start work under the connected Waterfall account and may incur account usage or cost. <br>
-Mitigation: Require explicit user confirmation of the action, payload, target account context, and expected effect before running launch_contact_enrichment or launch_company_enrichment. <br>
-Risk: The setup path includes remote oo CLI installer commands. <br>
-Mitigation: Install only when the oo CLI is missing, review the installer before execution, and proceed only when OOMOL is trusted for the deployment. <br>
-Risk: Incorrect payloads can produce unintended enrichment or verification requests. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing payloads and validate JSON inputs against that schema. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Waterfall through an OOMOL-connected account, including launching and retrieving enrichment jobs, checking job changes, verifying email deliverability, and reviewing account usage.
 
-## Reference(s): <br>
-- [ClawHub Waterfall skill](https://clawhub.ai/oomol/skills/oo-waterfall) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Waterfall homepage](https://www.waterfall.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect live connector schemas before building payloads; enrichment launch actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill is not limited to passive lookups and can launch enrichment or verification actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for action payloads and effects before running launch, verification, or other operational commands.
+
+Risk: The first-time setup section includes remote installer pipelines.
+
+Mitigation: Avoid running remote installer commands unless the installer source has been independently trusted and verified.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-waterfall)
+- [Waterfall Homepage](https://www.waterfall.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

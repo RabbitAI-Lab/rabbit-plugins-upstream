@@ -1,44 +1,60 @@
-## Description: <br>
-Operates Google Cloud STS through an OOMOL-connected `gcloud_sts` connector to exchange an OOMOL OIDC token for a Google Cloud access token. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Cloud STS support for agents using an OOMOL-connected account to inspect connector schemas and exchange OOMOL OIDC credentials for Google Cloud access tokens.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineers use this skill when they need an agent to invoke OOMOL's Google Cloud STS connector and retrieve a federated Google Cloud access token for a requested task. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can mint and return Google Cloud access tokens. <br>
-Mitigation: Confirm the user's intent before minting a token, minimize token exposure, and avoid placing returned tokens in logs or chat unless necessary for the task. <br>
-Risk: The artifact presents the token exchange as an untagged safe/read-like action. <br>
-Mitigation: Treat `get_federated_access_token` as credential-sensitive despite the read-like labeling and require explicit user confirmation for token issuance. <br>
-Risk: First-time setup may involve remote installer commands for the oo CLI. <br>
-Mitigation: Review the installer source before execution and run installation only when the CLI is missing and the user approves setup. <br>
+## Use Case:
 
+Developers and operators use this skill to run Google Cloud STS connector actions through the oo CLI for a connected OOMOL account, especially to obtain federated Google Cloud access tokens.
 
-## Reference(s): <br>
-- [Google Cloud Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Google Cloud STS on ClawHub](https://clawhub.ai/oomol/oo-gcloud-sts) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Google Cloud access tokens that must be treated as secrets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill can mint and return Google Cloud access tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm token generation with the user, treat returned tokens as secrets, and avoid logging or pasting them into transcripts.
+
+Risk: The artifact includes remote installer commands that pipe downloaded scripts into a shell.
+
+Mitigation: Prefer a verified package-manager or documented install path for the oo CLI before running connector commands.
+
+Risk: The token exchange action is described as read-like even though it returns usable cloud credentials.
+
+Mitigation: Review the live connector schema and exact payload before execution, and handle the result with credential-level safeguards.
+
+## Reference(s):
+
+- [Google Cloud Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Skill page](https://clawhub.ai/oomol/skills/oo-gcloud-sts)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Google Cloud access tokens that must be treated as secrets.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata matches)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

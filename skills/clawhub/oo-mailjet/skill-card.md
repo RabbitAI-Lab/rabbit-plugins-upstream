@@ -1,43 +1,60 @@
-## Description: <br>
-Use this skill for Mailjet requests involving reading, creating, and updating contact data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets an agent read, create, and update Mailjet contact data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Mailjet contacts through an OOMOL-connected account, including listing, retrieving, creating, and updating contacts. It is intended for agent workflows that need schema-checked Mailjet operations without handling raw Mailjet credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed write actions can create or update Mailjet contacts. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create_contact or update_contact. <br>
-Risk: Mailjet access is mediated through OOMOL and depends on the user's connected account. <br>
-Mitigation: Install or reconnect the oo CLI only when commands fail for missing CLI, authentication, connection, scope, credential, app, or billing reasons. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Mailjet contacts from an agent, including listing, retrieving, creating, and updating contact records after inspecting live action schemas.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailjet) <br>
-- [OOMOL CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mailjet homepage](https://www.mailjet.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before constructing payloads and to obtain confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: First-time setup instructions include direct internet installer commands that evidence.security flags as suspicious.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, verified installation method and review installer contents before running setup commands.
+
+Risk: Mailjet write actions can change contact records.
+
+Mitigation: Confirm every write payload and intended effect with the user before executing create or update actions.
+
+Risk: The skill relies on OOMOL as the connector layer with OOMOL-managed credentials.
+
+Mitigation: Install only when that trust relationship is acceptable for the Mailjet account.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mailjet)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Mailjet Homepage](https://www.mailjet.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and can return JSON responses from Mailjet actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

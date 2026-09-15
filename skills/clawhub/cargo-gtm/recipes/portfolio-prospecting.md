@@ -24,7 +24,7 @@ Portfolio prospecting has a specific shape that doesn't fit the generic prospect
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"peopleDataLabs","actionSlug":"queryCompanies"}' \
   --data '{
     "query": "SELECT * FROM company WHERE summary.investors LIKE %Sequoia Capital%",
     "limit": 200
@@ -46,21 +46,23 @@ For accelerator batches (e.g. YC W26), the investor field still works — accele
 
 See PDL's SQL reference for the full schema.
 
-### Step 2 — Match portfolio companies against cargo
+### Step 2 — Dedupe the portfolio against the workspace (free)
 
 ```bash
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"matchBusiness","config":{}}' \
-  --records "$(jq -c '[.results[] | {domain: .website}]' /tmp/portfolio.json)" \
-  --wait-until-finished > /tmp/matched.json
+cargo-ai storage query execute "SELECT domain FROM default.companies" > /tmp/known.json
+
+jq -c --slurpfile known /tmp/known.json \
+  '[.results[] | {domain: .website} | select(.domain as $d
+      | ($known[0].rows // [] | map(.domain)) | index($d) | not)]' \
+  /tmp/portfolio.json > /tmp/new-portfolio.json
 ```
 
 ### Step 3 — Enrich firmographics on the portfolio
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"cargo","actionSlug":"enrichBusinessFirmographics","config":{}}' \
-  --records "$(jq -c '[.results[] | select(.business_id) | {business_id}]' /tmp/matched.json)" \
+  --action '{"kind":"connector","integrationSlug":"aiArk","actionSlug":"enrichCompany"}' \
+  --records "$(cat /tmp/new-portfolio.json)" \
   --wait-until-finished > /tmp/firmo.json
 ```
 
@@ -70,7 +72,7 @@ Cap tightly — for portfolio prospecting, 1–3 contacts per company is usually
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
   --records "$(jq -c '[.results[] | {
     keywords: "Founder OR CEO OR CTO",
     company: {linkedinIds: [.linkedinId]},
@@ -83,7 +85,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"findEmail"}' \
   --records "$(jq -c '[.contacts[] | {firstName, lastName, domainName: .companyDomain, linkedinUrl: .linkedinUrl}]' /tmp/contacts.json)" \
   --wait-until-finished > /tmp/emails.json
 ```
@@ -92,14 +94,14 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
   --records "$(jq -c '[.results[] | select(.email) | {email}]' /tmp/emails.json)" \
   --wait-until-finished > /tmp/verified.json
 ```
 
 ### Step 7 — Personalize outbound (optional)
 
-Use `cargo.enrichProspectDetails` to pull recent LinkedIn posts, then `anthropic.instruct` for a personalized opener referencing the investor + recent portfolio activity. See [`../guides/writing-outreach.md`](../guides/writing-outreach.md) for prompt patterns.
+Use `linkedin.extractProfilePostActivity` (0.05/item) to pull recent LinkedIn posts, then `anthropic.instruct` for a personalized opener referencing the investor + recent portfolio activity. See [`../guides/writing-outreach.md`](../guides/writing-outreach.md) for prompt patterns.
 
 ## Credit budget
 
@@ -108,12 +110,12 @@ For 200 portfolio companies × 3 contacts each = 600 prospects:
 | Step | Cost per record | Records | Subtotal |
 |---|---|---|---|
 | 1. queryCompanies (single call returning 200) | — | 1 call | 3 |
-| 2. matchBusiness | 0.5 | 200 | 100 |
-| 3. enrichBusinessFirmographics | 0.5 | 200 | 100 |
+| 2. Dedupe against the Companies model | 0 | 200 | 0 |
+| 3. aiArk.enrichCompany | 0.01 | 200 | 2 |
 | 4. searchLeads (3 contacts each) | 0.02 | 600 | 12 |
 | 5. FullEnrich.findEmail | 1 | 600 | 600 |
 | 6. waterfall.verifyEmail | 0.1 | 600 | 60 |
-| **Total** | | | **~875 credits for 600 verified contacts at 200 portfolio companies** |
+| **Total** | | | **~677 credits for 600 verified contacts at 200 portfolio companies** |
 
 ## Discovery sequence
 
@@ -128,7 +130,7 @@ done
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Output retrieval
 
@@ -138,7 +140,7 @@ After each batch step, use `cargo-ai orchestration run download-outputs --workfl
 
 If `peopleDataLabs.queryCompanies` doesn't recognize the investor name (e.g. very small fund, regional accelerator), fall back to:
 
-- `apolloio` if its investor coverage is stronger for the niche.
+- `apolloio.enrichOrganization` / `enrichPerson` (1) — the priority stack's niche-coverage rung, and the standing example of it: Apollo's investor coverage is often stronger here than the generalist chain.
 - `firecrawl.scrape` on the investor's portfolio page (if public) → LLM extract via `anthropic.instruct`.
 - File a `cargo-ai workspaceManagement report create` if neither works — surfaces the gap to the cargo team.
 

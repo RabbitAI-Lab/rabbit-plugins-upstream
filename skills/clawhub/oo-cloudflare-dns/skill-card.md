@@ -1,41 +1,55 @@
-## Description: <br>
-Cloudflare DNS lets an agent operate Cloudflare DNS through an OOMOL-connected account using the oo CLI to list, read, create, update, and delete zones and DNS records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cloudflare DNS helps agents read, create, update, and delete Cloudflare DNS data through OOMOL's oo CLI and server-managed Cloudflare credentials.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Cloudflare accounts, zones, and DNS records, then perform approved DNS record changes through an OOMOL-connected Cloudflare DNS account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Incorrect Cloudflare DNS write or delete payloads can disrupt domains and services. <br>
-Mitigation: Review the exact target, payload, and expected effect with the user before approving create, update, or delete actions. <br>
-Risk: Cloudflare access is mediated through an OOMOL-connected account and oo CLI setup. <br>
-Mitigation: Only install the oo CLI or connect the Cloudflare DNS account when the user trusts OOMOL and intends to grant this access. <br>
+## Use Case:
 
+External developers and operators use this skill to manage Cloudflare DNS accounts, zones, and DNS records through an OOMOL-connected account. It supports read operations directly and requires confirmation before create, update, or delete DNS actions.
 
-## Reference(s): <br>
-- [Cloudflare DNS homepage](https://www.cloudflare.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector calls and JSON responses that include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: artifact metadata and release evidence) <br>
+Risk: The setup instructions include remote installer scripts that are run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation method before use and prefer a signed, pinned, or package-manager-based install when available.
+
+Risk: Cloudflare DNS create, update, and delete actions can change or remove live DNS records.
+
+Mitigation: Use a Cloudflare credential with the narrowest DNS permissions needed and require explicit user confirmation before any state-changing DNS action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cloudflare-dns)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Cloudflare](https://www.cloudflare.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce JSON command responses from the oo CLI when connector actions are run.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

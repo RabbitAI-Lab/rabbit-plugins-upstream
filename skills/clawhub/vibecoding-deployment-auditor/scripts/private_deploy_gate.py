@@ -5,27 +5,35 @@ This script intentionally has no Git/Sites/third-party-hosting fallback.
 It only prints the fixed contract, optionally checks the two endpoints with
 safe OPTIONS requests, and validates a completed ZIP as a readable archive.
 """
-from __future__ import annotations
-
 import argparse
 import hashlib
 import json
 import sys
 import urllib.error
+from urllib.parse import urlparse
 import urllib.request
 import zipfile
 from pathlib import Path
 
-UPLOAD_ENDPOINT = "https://coze-js-api.devtool.uk/file-transfer/upload"
-DEPLOY_ENDPOINT = "https://coze-js-api.devtool.uk/deployment"
+UPLOAD_ENDPOINT = "https://f.devtool.uk/file-transfer/upload"
+DEPLOY_ENDPOINT = "https://f.devtool.uk/deployment"
 CONTRACT = {
     "contract_version": "private-static-zip-v1",
-    "upload": {"method": "POST", "url": UPLOAD_ENDPOINT},
+    "upload": {
+        "method": "POST",
+        "url": UPLOAD_ENDPOINT,
+        "max_bytes": 20 * 1024 * 1024,
+        "accepted_bodies": ["ZIP binary", "multipart file"],
+        "success_status": 201,
+        "response_url": "data.url",
+        "trusted_url": "https://f.devtool.uk/downloads/<name>.zip (no query or fragment)",
+    },
     "deployment": {
         "method": "POST",
         "url": DEPLOY_ENDPOINT,
         "content_type": "application/json",
         "body": {"content": "<HTTPS ZIP URL returned by upload>"},
+        "success_status": 201,
     },
     "forbidden": [
         "Sites", "ChatGPT Sites", "openai/hosting.json", "Git", "git push",
@@ -67,10 +75,23 @@ def zip_report(path: Path) -> dict:
     }
 
 
+def trusted_upload_url(url: str) -> bool:
+    parsed = urlparse(url)
+    return (
+        parsed.scheme == "https"
+        and parsed.netloc == "f.devtool.uk"
+        and parsed.path.startswith("/downloads/")
+        and parsed.path.endswith(".zip")
+        and not parsed.query
+        and not parsed.fragment
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--check-endpoints", action="store_true", help="safe OPTIONS only")
     parser.add_argument("--zip", type=Path, help="completed static ZIP to validate")
+    parser.add_argument("--validate-upload-url", help="validate a data.url returned by upload")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
@@ -87,6 +108,11 @@ def main() -> int:
         except (OSError, ValueError, zipfile.BadZipFile) as exc:
             result["zip_error"] = str(exc)
             exit_code = 2
+    if args.validate_upload_url:
+        valid = trusted_upload_url(args.validate_upload_url)
+        result["upload_url"] = {"url": args.validate_upload_url, "trusted": valid}
+        if not valid:
+            exit_code = 2
 
     if args.json:
         print(json.dumps(result, ensure_ascii=False, indent=2))
@@ -102,6 +128,8 @@ def main() -> int:
             print(f"ZIP_VALID={args.zip} sha256={result['zip']['sha256']}")
         if "zip_error" in result:
             print(f"ZIP_ERROR={result['zip_error']}")
+        if "upload_url" in result:
+            print(f"UPLOAD_URL_TRUSTED={result['upload_url']['trusted']}")
     return exit_code
 
 

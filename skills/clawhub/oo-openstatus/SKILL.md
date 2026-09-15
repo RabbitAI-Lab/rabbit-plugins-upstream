@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OpenStatus"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["openstatus"]
   icon: "https://static.oomol.com/logo/third-party/openstatus.svg"
 ---

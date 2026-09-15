@@ -1,44 +1,57 @@
-## Description: <br>
-Semantic Scholar helps agents search, retrieve, and recommend research papers, authors, citations, references, and snippets through the OOMOL Semantic Scholar connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Semantic Scholar lets agents search and retrieve Semantic Scholar paper and author data through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, researchers, and research assistants use this skill to query Semantic Scholar from an agent workflow, including paper search, author lookup, citation and reference retrieval, title matching, snippets, and paper recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting Semantic Scholar credentials through OOMOL and uses OOMOL as an intermediary for requests. <br>
-Mitigation: Install and use it only when that intermediary model is acceptable, and connect credentials only through the documented OOMOL setup path when needed. <br>
-Risk: First-time setup may require installing the oo CLI before connector actions can run. <br>
-Mitigation: Review the oo CLI installation step before running it, and perform login or connection setup only after an authentication or connection failure. <br>
+## Use Case:
 
+Developers and agents use this skill to search Semantic Scholar, inspect paper and author records, retrieve citations and references, and generate paper recommendations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-semantic-scholar) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Semantic Scholar homepage](https://www.semanticscholar.org/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include a data payload and execution metadata when actions are run with JSON output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote installer commands that could execute arbitrary local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run the installer automatically; use a trusted installation method and review the installer source, install location, and removal path before use.
+
+Risk: The skill depends on an OOMOL-connected Semantic Scholar account or API key.
+
+Mitigation: Connect only accounts and credentials appropriate for the task, and review OOMOL account, connection, and billing state before retrying failed connector actions.
+
+## Reference(s):
+
+- [Semantic Scholar homepage](https://www.semanticscholar.org/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-semantic-scholar)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Skill icon](https://static.oomol.com/logo/third-party/semantic_scholar.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Semantic Scholar connector JSON responses containing data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

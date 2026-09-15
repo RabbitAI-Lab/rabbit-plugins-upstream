@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clawhub.ai/orionshaowswmw/skills/free-tier-ai-router/schema/answer.v1.schema.json",
+  "title": "ai_router.answer.v1",
+  "description": "Answer object emitted by `router.py \"prompt\" --json`. Exit code semantics: 0 success (text present) \u00b7 2 all routes quota-dead or failing \u00b7 3 no keys configured at all \u00b7 4 invalid providers.json. v2.5.0 adds optional grounding-contract fields (confidence/degraded/truncated/attempts/latency_s/tps); consumers must treat any of them as absent-able.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ai_router.answer.v1"
+    },
+    "text": {
+      "type": "string",
+      "description": "The answer text. Present on success."
+    },
+    "provider": {
+      "type": "string",
+      "description": "Provider that answered (e.g. mistral, mock)."
+    },
+    "model": {
+      "type": "string",
+      "description": "Model that answered."
+    },
+    "cached": {
+      "type": "boolean",
+      "description": "True when served from the local SHA-256 cache (no API call)."
+    },
+    "error": {
+      "type": "string",
+      "description": "Machine-readable error kind; present only on failure (e.g. 'invalid providers config')."
+    },
+    "detail": {
+      "type": "string",
+      "description": "Human-readable error detail; present only on failure."
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Trust hint 0..1 = measured route quality x learned reliability. Suggested gating: <0.5 regenerate, 0.5-0.75 verify, >0.75 accept. A hint, never a guarantee."
+    },
+    "degraded": {
+      "type": "boolean",
+      "description": "True when the answer came from a fallback (first-choice route(s) failed). Verify before high-stakes use."
+    },
+    "truncated": {
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "description": "True when the provider reported finish_reason=length (answer may be incomplete \u2014 extend max_tokens or abstain). null/absent when unknown."
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Routes tried before one answered. >3 suggests systemic exhaustion \u2014 consider abstaining."
+    },
+    "latency_s": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Wall-clock seconds until the answer completed."
+    },
+    "tps": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Measured output tokens/second (when the transport reported usage)."
+    }
+  }
+}

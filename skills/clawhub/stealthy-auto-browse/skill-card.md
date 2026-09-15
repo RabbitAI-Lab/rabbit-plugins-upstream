@@ -1,45 +1,72 @@
-## Description: <br>
-Provides Docker-based browser automation with Camoufox and OS-level input for authorized QA, compatibility testing, and defensive security research against systems the user owns or is permitted to test. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides headless-detection-resistant browser automation in Docker for authorized QA, compatibility testing, and defensive security research using Camoufox, OS-level input, and persistent fingerprints.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers, QA engineers, and defensive security testers use this skill to control a local browser automation service for authorized testing of anti-bot behavior, compatibility issues, and realistic browser workflows. It is intended for owned systems, in-scope security engagements, sanctioned staging environments, and controlled detection-library research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dual-use browser automation could be applied to unauthorized scraping, access-control evasion, or activity outside the approved test scope. <br>
-Mitigation: Use the skill only on systems the operator owns or has written permission to test, and keep test targets, accounts, and workflows explicitly scoped. <br>
-Risk: An exposed unauthenticated API or VNC viewer could give another party full control of the browser session. <br>
-Mitigation: Bind services to localhost, set AUTH_TOKEN, prefer Authorization headers over query-string tokens, and do not expose VNC beyond local debugging. <br>
-Risk: Page capture, screenshots, DOM inspection, cookies, storage, and logs can collect sensitive data from authorized targets. <br>
-Mitigation: Capture only what the approved test requires, use isolated test accounts, avoid persistent real session data, and remove mounted profile data after testing. <br>
-Risk: Automatic dialog acceptance or URL-triggered loaders can approve destructive actions or modify page state without fresh confirmation. <br>
-Mitigation: Disable or tightly scope dialog auto-accept before stateful workflows and mount only loader YAML that has been written or audited by the operator. <br>
+## Use Case:
 
+Developers, QA engineers, and defensive security testers use this skill to automate browser sessions against sites they own or have written authorization to test, especially when validating anti-bot compatibility or investigating false-positive headless-browser blocks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/stealthy-auto-browse) <br>
-- [Setup reference](references/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON action examples, YAML script examples, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to issue HTTP or MCP browser actions; service responses can include JSON, page text, HTML, screenshots, recordings, cookies, storage, console logs, and network logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server-resolved release evidence) <br>
+Risk: The skill can control a browser session against sites that may treat automation as sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for sites you own or have written authorization to test, and keep test scope explicit.
+
+Risk: An exposed HTTP API or noVNC viewer can give another party browser control, including access to session data.
+
+Mitigation: Bind ports to 127.0.0.1, set AUTH_TOKEN for non-local use, and avoid exposing noVNC unless it is locally confined.
+
+Risk: Persistent profiles can retain cookies, credentials, and fingerprint state beyond a test run.
+
+Mitigation: Use isolated test accounts, treat profile volumes as secrets, and remove profile data when testing concludes.
+
+Risk: Dialogs are auto-accepted by default and could approve unintended state-changing actions.
+
+Mitigation: Disable or scope dialog auto-accept before flows that might trigger confirm, permission, or beforeunload prompts.
+
+Risk: Loader files execute automatically on matching URLs and can modify page state.
+
+Mitigation: Mount only loader, profile, and media files that were written or audited for the authorized test.
+
+Risk: Container execution, network access, and mounted volumes expand the operational impact of misuse or compromise.
+
+Mitigation: Review or build the Docker image before use, pin reviewed image digests, restrict egress and mounts, and avoid privileged or unnecessary host access.
+
+## Reference(s):
+
+- [Setup](references/setup.md)
+- [Project homepage](https://github.com/psyb0t/docker-stealthy-auto-browse)
+- [Script mode control flow reference](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/script-mode.md#control-flow)
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/stealthy-auto-browse)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API examples, YAML script examples, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can guide HTTP API, MCP, Docker, script-mode, screenshot, recording, and browser-session workflows for authorized targets.]
+
+## Skill Version(s):
+
+2.6.11 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

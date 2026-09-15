@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Builder.io"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["builder_io"]
   icon: "https://static.oomol.com/logo/third-party/builder_io.svg"
 ---

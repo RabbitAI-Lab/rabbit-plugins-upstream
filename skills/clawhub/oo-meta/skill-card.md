@@ -1,45 +1,53 @@
-## Description: <br>
-Meta (business.meta.com). Use this skill for Meta requests that search or read current user, ad account, campaign, and ads insight data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta (business.meta.com) helps agents search and read Meta Graph and Ads data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Meta business data through the oo CLI after confirming the live connector schema for each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill accesses Meta business data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable intermediary for the connected Meta business account. <br>
-Risk: Connector schemas and action payloads can change over time. <br>
-Mitigation: Review the live connector schema before each action and build payloads from that schema. <br>
-Risk: Future write or destructive Meta actions could alter or remove account data. <br>
-Mitigation: Require explicit user approval before running any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Meta connector schemas, list available ad accounts and campaigns, retrieve the current Meta Graph user, and get Meta Ads insights without handling raw access tokens.
 
-## Reference(s): <br>
-- [Meta Business](https://business.meta.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected Meta account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup guidance includes remote installer commands that can execute arbitrary code if followed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and independently verify the installer source before running curl or PowerShell installer pipelines.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-meta)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Meta for Business](https://business.meta.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

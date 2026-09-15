@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "FireHydrant"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["firehydrant"]
   icon: "https://static.oomol.com/logo/third-party/firehydrant.png"
 ---

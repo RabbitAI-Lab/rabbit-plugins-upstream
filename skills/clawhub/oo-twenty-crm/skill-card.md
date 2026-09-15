@@ -1,43 +1,55 @@
-## Description: <br>
-Twenty CRM lets an agent read, create, update, and delete CRM data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Twenty CRM helps agents read, create, update, and delete Twenty CRM data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect, retrieve, create, update, and delete Twenty CRM records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Twenty CRM records through OOMOL-brokered access. <br>
-Mitigation: Review write and delete payloads carefully and require explicit user approval before running state-changing actions. <br>
-Risk: The skill depends on trusting OOMOL to broker the connected Twenty CRM account. <br>
-Mitigation: Install only when OOMOL is an approved broker for the workspace and agent-managed CRM access is intended. <br>
+## Use Case:
 
+Developers, operators, and external CRM users use this skill to manage Twenty CRM workspace records through OOMOL's connected CLI, including schema inspection and record create, retrieve, list, update, and delete workflows.
 
-## Reference(s): <br>
-- [Twenty CRM homepage](https://twenty.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-twenty-crm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and may return JSON responses from Twenty CRM actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup includes remote installer commands that run scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and prefer an official package or a downloaded, inspected, version-pinned installer with a verified checksum or signature.
+
+Risk: Write and destructive CRM actions can change or delete workspace records.
+
+Mitigation: Inspect the live action schema first and confirm the exact payload, target record, and intended effect with the user before execution.
+
+## Reference(s):
+
+- [Twenty CRM homepage](https://twenty.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live action schema inspection before payload construction; write and destructive operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,59 @@
-## Description: <br>
-Affinity (affinity.co) supports searching and reading Affinity data through the OOMOL `oo` CLI connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Affinity enables agents to search and read Affinity CRM data through OOMOL's oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Affinity connector schemas and retrieve Affinity companies, people, opportunities, lists, saved views, and field metadata from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected Affinity account. <br>
-Mitigation: Use the existing OOMOL connection flow and avoid exposing raw credentials in prompts, shell history, or generated files. <br>
-Risk: Connector schemas may change over time, causing stale payload assumptions. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing or running connector payloads. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Affinity CRM companies, people, opportunities, lists, saved views, and field metadata through an authenticated OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Affinity Skill](https://clawhub.ai/oomol/oo-affinity) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Affinity Homepage](https://www.affinity.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and an active Affinity connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: First-time setup documentation includes commands that directly execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager, a versioned installer, or a manually downloaded installer with verification where available.
+
+Risk: The skill routes Affinity access through OOMOL and depends on the user's connected Affinity data.
+
+Mitigation: Install only when the user trusts OOMOL with the Affinity data connected to the account.
+
+Risk: Future write or destructive Affinity actions could change or remove CRM data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before allowing any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub Affinity skill page](https://clawhub.ai/oomol/skills/oo-affinity)
+- [Affinity homepage](https://www.affinity.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output from connector actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses include data and execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

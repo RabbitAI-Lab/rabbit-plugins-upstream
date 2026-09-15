@@ -1,46 +1,57 @@
-## Description: <br>
-Operates Dailybot through an OOMOL-connected account for reading workspace data and sending confirmed messages or emails via the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dailybot (dailybot.com). Use this skill for ANY Dailybot request: reading, creating, and updating data through the OOMOL-connected Dailybot connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and users who manage Dailybot workspaces use this skill to inspect authenticated account, organization, team, and user data, open direct conversations, and send confirmed Dailybot messages or email notifications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a Dailybot workspace through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the user intends to let the OOMOL CLI operate that Dailybot workspace. <br>
-Risk: Write actions can send Dailybot chat messages or email notifications. <br>
-Mitigation: Review and approve the exact payload and expected effect with the user before running write actions. <br>
-Risk: Setup and connection steps may open authentication or billing flows unnecessarily. <br>
-Mitigation: Use setup, login, connection, or billing steps only after a command fails with the matching auth, connection, credit, or missing CLI error. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Dailybot action schemas and run authenticated Dailybot read and write actions through the OOMOL-connected oo CLI, including user, organization, team, conversation, email, and message workflows.
 
-## Reference(s): <br>
-- [Dailybot homepage](https://www.dailybot.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Dailybot skill page](https://clawhub.ai/oomol/oo-dailybot) <br>
-- [Dailybot metadata icon](https://static.oomol.com/logo/third-party/dailybot.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON with data and meta.executionId when the oo CLI action is executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup instructions include remote installer commands for the oo CLI, and the server security verdict flags this as suspicious pending review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer an official, versioned, signed, or checksum-verified installation path; do not allow an agent to execute remote installer commands automatically.
+
+Risk: The skill can send Dailybot messages and email notifications, which changes state in an external service.
+
+Mitigation: Confirm the exact payload, recipient, and expected effect with the user before running any write-tagged Dailybot action.
+
+## Reference(s):
+
+- [ClawHub Dailybot skill page](https://clawhub.ai/oomol/skills/oo-dailybot)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Dailybot homepage](https://www.dailybot.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON payload examples, and connector response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Dailybot actions require confirmation of the exact payload and effect before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

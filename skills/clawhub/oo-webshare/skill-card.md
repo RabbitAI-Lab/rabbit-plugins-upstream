@@ -1,46 +1,59 @@
-## Description: <br>
-Webshare (webshare.io) connector skill for searching and reading Webshare account, proxy configuration, proxy listing, and hourly usage data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Webshare helps agents read Webshare account profile, proxy configuration, proxy inventory, and hourly usage data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run read-only Webshare connector actions through an OOMOL-connected account, including profile lookup, proxy configuration, proxy listings, and hourly usage statistics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can require sensitive Webshare credentials through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the publisher and OOMOL connection flow are trusted, and rely on server-side credential injection rather than handling raw tokens. <br>
-Risk: First-time setup includes optional remote installer commands for the oo CLI. <br>
-Mitigation: Review the official install guide or verify the installer before running curl or PowerShell installer commands. <br>
-Risk: Connector actions depend on live schemas and may fail if authentication, connection scopes, credentials, or billing are not current. <br>
-Mitigation: Inspect the live connector schema before each action and use the documented setup or billing recovery steps only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and operations users use this skill to inspect Webshare account and proxy data from an OOMOL-connected Webshare account. It supports read-oriented workflows such as profile checks, proxy listing, proxy configuration lookup, and hourly usage review.
 
-## Reference(s): <br>
-- [Webshare homepage](https://www.webshare.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-webshare) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructions for invoking oo connector schema and oo connector run; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer commands that could execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup instructions before installing; prefer a verified package or separately inspected installer; do not let an agent run the installer automatically.
+
+Risk: Connector payloads can be incorrect if an action schema is assumed instead of checked.
+
+Mitigation: Inspect the live action schema before each connector run and send only payloads that match the authoritative schema.
+
+Risk: Future write or destructive connector actions could change Webshare state.
+
+Mitigation: Ask the user to confirm the exact target, payload, and effect before running any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-webshare)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Webshare Homepage](https://www.webshare.io/)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; listed connector actions are read-oriented.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
