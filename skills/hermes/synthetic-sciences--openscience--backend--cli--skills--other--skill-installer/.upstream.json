@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/skill-installer",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/skill-installer",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/skill-installer",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "a8786de54b6245eaf5635add8cfd69dc842d28fe8db6c59405d7aaf136dc69ec",
+  "fetchedAt": "2026-09-15T12:44:33.132Z"
+}

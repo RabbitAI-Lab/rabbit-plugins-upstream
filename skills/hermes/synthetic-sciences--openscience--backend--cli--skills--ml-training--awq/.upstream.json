@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/awq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/awq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/awq",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "8f3a3abe5acabecbab6547c77a1e6746270b721d5527555cbb6e4ae01f83b9b1",
+  "fetchedAt": "2026-09-15T12:44:32.938Z"
+}

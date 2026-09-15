@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/pyopenms",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/pyopenms",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/pyopenms",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "2169b6c42e15d6eb7c88627cf516f1b968fd2baaac24ce13b94c743c81cfb876",
+  "fetchedAt": "2026-09-15T12:44:33.107Z"
+}

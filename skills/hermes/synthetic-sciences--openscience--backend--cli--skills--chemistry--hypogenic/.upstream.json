@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/hypogenic",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/hypogenic",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/hypogenic",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "7aa39cf33092b06b9847429d1cebe2218b7d4f93594ab01030a18c0eedcfbc43",
+  "fetchedAt": "2026-09-15T12:44:33.023Z"
+}

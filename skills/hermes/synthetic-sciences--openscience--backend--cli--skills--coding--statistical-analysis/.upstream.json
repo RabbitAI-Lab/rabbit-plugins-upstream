@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/statistical-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/statistical-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/statistical-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "09f0aa21f58f26ba5f6065626fea61b8ee3eac3f445f60d59ec11354bc0e0cb0",
+  "fetchedAt": "2026-09-15T12:44:33.136Z"
+}

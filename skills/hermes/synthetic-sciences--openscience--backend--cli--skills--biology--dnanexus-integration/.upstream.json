@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/dnanexus-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/dnanexus-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/dnanexus-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "7741a2bb9fa07b12a57e33476af7877eb3a3ea8243af15d52248914352c0b82c",
+  "fetchedAt": "2026-09-15T12:44:32.981Z"
+}

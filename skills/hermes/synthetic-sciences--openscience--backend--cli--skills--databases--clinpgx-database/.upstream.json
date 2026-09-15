@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/clinpgx-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/clinpgx-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/clinpgx-database",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "8bc08b175afcc08eef91265bce8d26a7604731cc846a503f3c18d739af2327fb",
+  "fetchedAt": "2026-09-15T12:44:32.960Z"
+}

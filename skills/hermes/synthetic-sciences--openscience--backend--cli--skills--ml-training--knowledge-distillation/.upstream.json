@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/knowledge-distillation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/knowledge-distillation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/knowledge-distillation",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "8b41b34b6af92f3c4099dca798ad7210aa9e485758554ef66c89593b59663e63",
+  "fetchedAt": "2026-09-15T12:44:33.031Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/onekgpd",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/onekgpd",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/onekgpd",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "d9ab2f93078628eeac0e43365f100706f02a4551e4927b45079632e6ea1d0a64",
+  "fetchedAt": "2026-09-15T12:44:33.067Z"
+}

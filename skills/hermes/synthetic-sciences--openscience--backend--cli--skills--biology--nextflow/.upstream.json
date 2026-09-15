@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/nextflow",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/nextflow",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/nextflow",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "addd4987f8bcbe89e295dd775d4ac9d64433c3089772fa083d188e72d8acbde9",
+  "fetchedAt": "2026-09-15T12:44:33.063Z"
+}

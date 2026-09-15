@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/opentrons-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/opentrons-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/opentrons-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "dc78c8f7b045e92eebdb915e6eac12a71aeb0e1822b15ed32c1361fe18b5edcd",
+  "fetchedAt": "2026-09-15T12:44:33.072Z"
+}

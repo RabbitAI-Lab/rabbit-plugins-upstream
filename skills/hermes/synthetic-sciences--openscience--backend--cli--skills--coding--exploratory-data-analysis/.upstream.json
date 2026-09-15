@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/exploratory-data-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/exploratory-data-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/exploratory-data-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "594fb31b2d1b8a59f62677159ce07493a5cc8d9064968472d381b6d20ba12aa3",
+  "fetchedAt": "2026-09-15T12:44:32.994Z"
+}

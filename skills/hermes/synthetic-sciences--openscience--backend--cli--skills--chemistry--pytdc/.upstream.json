@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/pytdc",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/pytdc",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/pytdc",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "aeea8d0dde62c4eaa1ff58913c8507cc54a8c35fba1f79674db3920104286d61",
+  "fetchedAt": "2026-09-15T12:44:33.108Z"
+}

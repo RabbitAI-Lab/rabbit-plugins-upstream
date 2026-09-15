@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/qdrant",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/qdrant",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/qdrant",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "5cedb40342ccc27bbfbc87330c6cbbda3b2fbcbe4ddcb0be567e5772eecf7bb2",
+  "fetchedAt": "2026-09-15T12:44:33.112Z"
+}

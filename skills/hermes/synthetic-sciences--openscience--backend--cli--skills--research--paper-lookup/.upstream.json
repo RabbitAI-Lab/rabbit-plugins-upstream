@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/paper-lookup",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/paper-lookup",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/paper-lookup",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "c8f4ea008da5e2d3cb4fc1af28408142ee29a5cd29da7e5fa4e3cb57ecbba4c2",
+  "fetchedAt": "2026-09-15T12:44:33.077Z"
+}

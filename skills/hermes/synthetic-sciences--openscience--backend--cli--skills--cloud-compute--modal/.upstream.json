@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/modal",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/modal",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/modal",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "64cab63312a9ffa303a3431190e0dc59e12241c6b0f315b6633da72749cb3f39",
+  "fetchedAt": "2026-09-15T12:44:33.051Z"
+}

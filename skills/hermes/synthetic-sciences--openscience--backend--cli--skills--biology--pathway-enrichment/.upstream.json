@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pathway-enrichment",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pathway-enrichment",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pathway-enrichment",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "dbe101523104f5570a2d15605a0cb9156a5ad8544943f158c7f7fd357b189682",
+  "fetchedAt": "2026-09-15T12:44:33.080Z"
+}

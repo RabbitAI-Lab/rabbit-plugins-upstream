@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/axolotl",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/axolotl",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/axolotl",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "e25be5e24cdfd22f606e811064a2071a9da3384540c2e2b6a27c5bb646fc1730",
+  "fetchedAt": "2026-09-15T12:44:32.939Z"
+}

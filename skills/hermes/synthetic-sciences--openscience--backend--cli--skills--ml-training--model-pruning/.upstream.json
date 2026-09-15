@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/model-pruning",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/model-pruning",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/model-pruning",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "b551e0271237702e965b78ad84d415057b10ce8ba6e512499a4aa87732c06ae0",
+  "fetchedAt": "2026-09-15T12:44:33.052Z"
+}
